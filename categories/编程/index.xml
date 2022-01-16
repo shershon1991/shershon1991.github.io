@@ -161,6 +161,51 @@
     </item>
     
     <item>
+      <title>框架开发(五):框架开发-集成ElasticSearch</title>
+      <link>http://localhost:1313/post/godoc/%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91/5-%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91-%E9%9B%86%E6%88%90elasticsearch/</link>
+      <pubDate>Sat, 05 Jun 2021 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/post/godoc/%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91/5-%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91-%E9%9B%86%E6%88%90elasticsearch/</guid>
+      <description>1.介绍 Elasticsearch是一个分布式、可扩展、近实时的高性能搜索与数据分析引擎。在Go中经常使用的包有以下两个: 包 文档 Star 数量 olivere/elastic https://olivere.github.io/elastic/ 5.7k</description>
+    </item>
+    
+    <item>
+      <title>框架开发(四):框架开发-集成日志Logrus</title>
+      <link>http://localhost:1313/post/godoc/%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91/4-%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91-%E9%9B%86%E6%88%90%E6%97%A5%E5%BF%97logrus/</link>
+      <pubDate>Fri, 04 Jun 2021 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/post/godoc/%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91/4-%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91-%E9%9B%86%E6%88%90%E6%97%A5%E5%BF%97logrus/</guid>
+      <description>1.介绍 logrus是目前 Github 上 star 数量最多的日志库,截止今天star数量为17.3k 。logrus功能强大,性能高效,而且具有高度灵活性,提供</description>
+    </item>
+    
+    <item>
+      <title>框架开发(三):框架开发-集成Redis</title>
+      <link>http://localhost:1313/post/godoc/%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91/3-%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91-%E9%9B%86%E6%88%90redis/</link>
+      <pubDate>Thu, 03 Jun 2021 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/post/godoc/%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91/3-%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91-%E9%9B%86%E6%88%90redis/</guid>
+      <description>1.客户端介绍 redis官网推荐使用redigo(https://github.com/gomodule/redigo)，截止到今天Gith</description>
+    </item>
+    
+    <item>
+      <title>框架开发(二):框架开发-集成Gorm</title>
+      <link>http://localhost:1313/post/godoc/%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91/2-%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91-%E9%9B%86%E6%88%90gorm/</link>
+      <pubDate>Wed, 02 Jun 2021 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/post/godoc/%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91/2-%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91-%E9%9B%86%E6%88%90gorm/</guid>
+      <description>1.安装 1 2 go get -u gorm.io/gorm go get -u gorm.io/driver/mysql 2.配置相关 2.1 编写配置文件 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 [mysql] host=127.0.01 port=3306 database=test userName=root password=root charset=utf8mb4 # 表前缀 table_pre=app_ # 设置闲置的</description>
+    </item>
+    
+    <item>
+      <title>框架开发(一):框架开发-目录介绍和路由设计</title>
+      <link>http://localhost:1313/post/godoc/%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91/1-%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91-%E7%9B%AE%E5%BD%95%E4%BB%8B%E7%BB%8D%E5%92%8C%E8%B7%AF%E7%94%B1%E8%AE%BE%E8%AE%A1/</link>
+      <pubDate>Tue, 01 Jun 2021 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/post/godoc/%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91/1-%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91-%E7%9B%AE%E5%BD%95%E4%BB%8B%E7%BB%8D%E5%92%8C%E8%B7%AF%E7%94%B1%E8%AE%BE%E8%AE%A1/</guid>
+      <description>1.背景介绍 使用Go开发Web API框架，验证学习成果。在实践中学习。 2.目录介绍 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 ├── README.md</description>
+    </item>
+    
+    <item>
       <title>Go标准包(三十三):jsoniter</title>
       <link>http://localhost:1313/post/godoc/%E6%A0%87%E5%87%86%E5%8C%85/33-jsoniter/</link>
       <pubDate>Mon, 03 May 2021 00:00:00 +0000</pubDate>
