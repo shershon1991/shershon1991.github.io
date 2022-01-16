@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Go on 小山的博客</title>
+    <link>http://localhost:1313/tags/go/</link>
+    <description>Recent content in Go on 小山的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Fri, 01 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/tags/go/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Go学习(一):Mac环境下安装配置</title>
+      <link>http://localhost:1313/post/godoc/%E5%9F%BA%E7%A1%80%E7%AF%87/1-%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/</link>
+      <pubDate>Fri, 01 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/post/godoc/%E5%9F%BA%E7%A1%80%E7%AF%87/1-%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/</guid>
+      <description>1.安装 下载地址（https://golang.org/dl/） 下载之后，双击安装； 2.验证 2.1 查看版本 1 2 3 # 查看版本 ➜ ~ go version go version go1.15.5 darwin/amd64 2.2 查看</description>
+    </item>
+    
+  </channel>
+</rss>
