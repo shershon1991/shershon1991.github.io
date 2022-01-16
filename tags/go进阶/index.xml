@@ -2,26 +2,26 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Go进阶 on 小山的博客</title>
-    <link>http://localhost:1313/tags/go%E8%BF%9B%E9%98%B6/</link>
+    <link>https://shershon1991.github.io/tags/go%E8%BF%9B%E9%98%B6/</link>
     <description>Recent content in Go进阶 on 小山的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 02 Jul 2021 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/tags/go%E8%BF%9B%E9%98%B6/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 02 Jul 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://shershon1991.github.io/tags/go%E8%BF%9B%E9%98%B6/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>RPC编程(二):快速入门使用</title>
-      <link>http://localhost:1313/post/godoc/%E8%BF%9B%E9%98%B6%E7%AF%87/rpc/02-use-rpc/</link>
+      <link>https://shershon1991.github.io/post/godoc/%E8%BF%9B%E9%98%B6%E7%AF%87/rpc/02-use-rpc/</link>
       <pubDate>Fri, 02 Jul 2021 00:00:00 +0000</pubDate>
       
-      <guid>http://localhost:1313/post/godoc/%E8%BF%9B%E9%98%B6%E7%AF%87/rpc/02-use-rpc/</guid>
+      <guid>https://shershon1991.github.io/post/godoc/%E8%BF%9B%E9%98%B6%E7%AF%87/rpc/02-use-rpc/</guid>
       <description>1. 介绍 Go语言标准包(net/rpc)已经提供了对RPC的支持，而且支持三个级别的RPC：TCP、HTTP和JSONRPC。但Go语言的RP</description>
     </item>
     
     <item>
       <title>RPC编程(一):初步了解RPC</title>
-      <link>http://localhost:1313/post/godoc/%E8%BF%9B%E9%98%B6%E7%AF%87/rpc/01-understand/</link>
+      <link>https://shershon1991.github.io/post/godoc/%E8%BF%9B%E9%98%B6%E7%AF%87/rpc/01-understand/</link>
       <pubDate>Thu, 01 Jul 2021 00:00:00 +0000</pubDate>
       
-      <guid>http://localhost:1313/post/godoc/%E8%BF%9B%E9%98%B6%E7%AF%87/rpc/01-understand/</guid>
+      <guid>https://shershon1991.github.io/post/godoc/%E8%BF%9B%E9%98%B6%E7%AF%87/rpc/01-understand/</guid>
       <description>1. 什么是RPC RPC（Remote Procedure Call，远程过程调用）是一种进程间的通信方式，它是一种技术思想(概念),而不是规范，它允许程序调用另一</description>
     </item>
     
