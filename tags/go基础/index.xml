@@ -232,5 +232,14 @@
       <description>1. 程序示例 以实际代码进行讲解: 1 2 3 4 5 6 7 8 9 10 11 12 package main // 这是引入包 import &amp;#34;fmt&amp;#34; // 入口函数 func main() { // 定义变量 str := &amp;#34;hello word&amp;#34; // 输出语句 fmt.Println(str) } 2. 程序组成 2.1 包名:</description>
     </item>
     
+    <item>
+      <title>Go学习(一):Mac环境下安装配置</title>
+      <link>http://localhost:1313/post/godoc/%E5%9F%BA%E7%A1%80%E7%AF%87/1-%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/</link>
+      <pubDate>Fri, 01 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/post/godoc/%E5%9F%BA%E7%A1%80%E7%AF%87/1-%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/</guid>
+      <description>1.安装 下载地址（https://golang.org/dl/） 下载之后，双击安装； 2.验证 2.1 查看版本 1 2 3 # 查看版本 ➜ ~ go version go version go1.15.5 darwin/amd64 2.2 查看</description>
+    </item>
+    
   </channel>
 </rss>
