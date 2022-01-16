@@ -10,12 +10,10 @@
     <item>
       <title>About</title>
       <link>https://shershon1991.github.io/about/</link>
-      <pubDate>Sun, 20 Aug 2017 21:38:52 +0800</pubDate>
+      <pubDate>Sun, 16 Jan 2022 00:00:00 +0000</pubDate>
       
       <guid>https://shershon1991.github.io/about/</guid>
-      <description>Hugo is a static site engine written in Go.
-It makes use of a variety of open source projects including:
- Cobra Viper J Walter Weatherman Cast  Learn more and contribute on GitHub.</description>
+      <description>Learn more and contribute on GitHub.</description>
     </item>
     
     <item>
