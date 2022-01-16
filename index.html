@@ -534,72 +534,72 @@
 
     <article class="post">
   <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/godoc/%E5%B7%A5%E5%85%B7%E7%AF%87/01-gvm/">Go工具(一):gvm</a></h1>
+    <h1 class="post-title"><a class="post-link" href="/post/godoc/%E6%A0%87%E5%87%86%E5%8C%85/33-jsoniter/">Go标准包(三十三):jsoniter</a></h1>
     <div class="post-meta">
-      <span class="post-time"> 2021-03-01 </span>
+      <span class="post-time"> 2021-05-03 </span>
       <div class="post-category">
           <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
           <a href="/categories/go/"> Go </a>
           </div>
-        <span class="more-meta"> 913 words </span>
-        <span class="more-meta"> 2 mins read </span>
+        <span class="more-meta"> 3540 words </span>
+        <span class="more-meta"> 8 mins read </span>
     </div>
   </header>
   
   <div class="post-content">
     <div class="post-summary">
-      1. 什么是Gvm Go 语言版本管理器（Gvm）是管理 Go 语言环境的开源工具。Gvm 「pkgsets」 支持安装多个版本的 Go 并管理每个项目的模块。它最初
+      1. 介绍 json-iterator是一款快且灵活的JSON解析器,不但100%兼容标准库encoding/json,而且比其更快。虽然官网说比
     </div>
     <div class="read-more">
-      <a href="/post/godoc/%E5%B7%A5%E5%85%B7%E7%AF%87/01-gvm/" class="read-more-link">Read more...</a>
+      <a href="/post/godoc/%E6%A0%87%E5%87%86%E5%8C%85/33-jsoniter/" class="read-more-link">Read more...</a>
     </div>
   </div>
 </article>
 
     <article class="post">
   <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/godoc/%E5%AE%9E%E6%93%8D%E7%AF%87/4-%E9%81%8D%E5%8E%86%E4%BD%BF%E7%94%A8/">Go实操(四):遍历使用</a></h1>
+    <h1 class="post-title"><a class="post-link" href="/post/godoc/%E6%A0%87%E5%87%86%E5%8C%85/32-go-funk/">Go标准包(三十二):go-funk</a></h1>
     <div class="post-meta">
-      <span class="post-time"> 2021-02-04 </span>
+      <span class="post-time"> 2021-05-02 </span>
       <div class="post-category">
           <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
           <a href="/categories/go/"> Go </a>
           </div>
-        <span class="more-meta"> 1580 words </span>
-        <span class="more-meta"> 4 mins read </span>
+        <span class="more-meta"> 6405 words </span>
+        <span class="more-meta"> 13 mins read </span>
     </div>
   </header>
   
   <div class="post-content">
     <div class="post-summary">
-      1. 遍历字符串(string) 1.1 统计长度后遍历 1 2 3 4 5 6 7 8 func ForString() { str := &#34;hello word&#34; //1.统计长度后遍历 length := len(str) for i := 0; i &lt; length; i++{ fmt.Printf(
+      1. 介绍 Go-funk 是基于反射(reflect )实现的一个现代Go工具库，封装了对slice/map/struct/string等的操作。 2. 下载 1 2 3 4
     </div>
     <div class="read-more">
-      <a href="/post/godoc/%E5%AE%9E%E6%93%8D%E7%AF%87/4-%E9%81%8D%E5%8E%86%E4%BD%BF%E7%94%A8/" class="read-more-link">Read more...</a>
+      <a href="/post/godoc/%E6%A0%87%E5%87%86%E5%8C%85/32-go-funk/" class="read-more-link">Read more...</a>
     </div>
   </div>
 </article>
 
     <article class="post">
   <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/godoc/%E5%AE%9E%E6%93%8D%E7%AF%87/3-map%E4%BD%BF%E7%94%A8/">Go实操(三):Map使用</a></h1>
+    <h1 class="post-title"><a class="post-link" href="/post/godoc/%E6%A0%87%E5%87%86%E5%8C%85/31-trace/">Go标准包(三十一):trace</a></h1>
     <div class="post-meta">
-      <span class="post-time"> 2021-02-03 </span>
+      <span class="post-time"> 2021-05-01 </span>
       <div class="post-category">
           <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
           <a href="/categories/go/"> Go </a>
           </div>
-        <span class="more-meta"> 115 words </span>
-        <span class="more-meta"> 1 min read </span>
+        <span class="more-meta"> 2054 words </span>
+        <span class="more-meta"> 5 mins read </span>
     </div>
   </header>
   
   <div class="post-content">
     <div class="post-summary">
-      1.创建 1 countryMap = make(map[string]string) 2.插入 1 2 /* map 插入 key-value */ countryMap[&#34;ShengRI&#34;] = &#34;1988-04-09&#34; 3.取值 1 2 3 4 5 /* 使用 key 输出 map 值 */ for country := range countryMap { fmt.Println(&#34;Capital of&#34;,country,&#34;is&#34;,countryMap[country]) } 4.key是否存在 1 2 3 4 5 6 7 8 /* 查看
+      1. trace说明 在pprof的分析中，能够知道一段时间内的CPU占用、内存分配、协程堆栈信息。这些信息都是一段时间内数据的汇总，但是它们并没
     </div>
     <div class="read-more">
-      <a href="/post/godoc/%E5%AE%9E%E6%93%8D%E7%AF%87/3-map%E4%BD%BF%E7%94%A8/" class="read-more-link">Read more...</a>
+      <a href="/post/godoc/%E6%A0%87%E5%87%86%E5%8C%85/31-trace/" class="read-more-link">Read more...</a>
     </div>
   </div>
 </article>
