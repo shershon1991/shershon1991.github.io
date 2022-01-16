@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Go实战 on 小山的博客</title>
+    <link>http://localhost:1313/tags/go%E5%AE%9E%E6%88%98/</link>
+    <description>Recent content in Go实战 on 小山的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Fri, 06 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/tags/go%E5%AE%9E%E6%88%98/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>基金分析系统(六):通过docker-compose项目部署</title>
+      <link>http://localhost:1313/post/godoc/%E9%A1%B9%E7%9B%AE%E7%AF%87/%E7%88%AC%E8%99%AB/6-docker-push/</link>
+      <pubDate>Fri, 06 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/post/godoc/%E9%A1%B9%E7%9B%AE%E7%AF%87/%E7%88%AC%E8%99%AB/6-docker-push/</guid>
+      <description>1.项目目录 1 2 3 4 5 6 7 8 9 10 ├── Dockerfile # dockerFile文件 ├── config-dev.yaml # dev环境配置文件 ├── config-local.yaml # 本地测试文件 ├── docker-compose.yaml # docker-</description>
+    </item>
+    
+    <item>
+      <title>基金分析系统(五):爬取基金持仓信息</title>
+      <link>http://localhost:1313/post/godoc/%E9%A1%B9%E7%9B%AE%E7%AF%87/%E7%88%AC%E8%99%AB/5-fund-stock/</link>
+      <pubDate>Thu, 05 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/post/godoc/%E9%A1%B9%E7%9B%AE%E7%AF%87/%E7%88%AC%E8%99%AB/5-fund-stock/</guid>
+      <description>1. 爬取流程 2. 准备工作 2.1 分页网页 @注意：这次爬取的网页数据是通过ajax加载，所以不能直接使用OnHtml抓取。 2.2 编写结构体 1 2 3 4 5 6 7 8 9</description>
+    </item>
+    
+    <item>
+      <title>基金分析系统(四):爬取基金详情信息</title>
+      <link>http://localhost:1313/post/godoc/%E9%A1%B9%E7%9B%AE%E7%AF%87/%E7%88%AC%E8%99%AB/4-fund-detail/</link>
+      <pubDate>Wed, 04 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/post/godoc/%E9%A1%B9%E7%9B%AE%E7%AF%87/%E7%88%AC%E8%99%AB/4-fund-detail/</guid>
+      <description>1. 爬取逻辑流程 2. 准备工作 2.1 分析网页 2.2 编写结构体 根据上面的网页分析，可以根据div[class=&#39;txt_cont&#39;]选中table，然后根据</description>
+    </item>
+    
+    <item>
+      <title>基金分析系统(三):爬取基金收益榜单</title>
+      <link>http://localhost:1313/post/godoc/%E9%A1%B9%E7%9B%AE%E7%AF%87/%E7%88%AC%E8%99%AB/3-fund-top/</link>
+      <pubDate>Tue, 03 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/post/godoc/%E9%A1%B9%E7%9B%AE%E7%AF%87/%E7%88%AC%E8%99%AB/3-fund-top/</guid>
+      <description>1.流程介绍 2.页面分析 3. 爬虫脚本 3.1 编写结构体 代码文件位置：service/crawl/fund/top_crawl.go 1 2 3 4 5 6 7 8 9</description>
+    </item>
+    
+    <item>
+      <title>基金分析系统(二):通过数据模型建表</title>
+      <link>http://localhost:1313/post/godoc/%E9%A1%B9%E7%9B%AE%E7%AF%87/%E7%88%AC%E8%99%AB/2-database/</link>
+      <pubDate>Mon, 02 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/post/godoc/%E9%A1%B9%E7%9B%AE%E7%AF%87/%E7%88%AC%E8%99%AB/2-database/</guid>
+      <description>1. 介绍 数据模型指的是和表结构一一对应的结构体，通过编写结构体可通过迁移直接创建表结构,后续作为对表的增删改查的参数。 2. 用户模型 2.1 用户表 文件：</description>
+    </item>
+    
+    <item>
+      <title>基金分析系统(一):项目介绍</title>
+      <link>http://localhost:1313/post/godoc/%E9%A1%B9%E7%9B%AE%E7%AF%87/%E7%88%AC%E8%99%AB/1-desc/</link>
+      <pubDate>Sun, 01 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/post/godoc/%E9%A1%B9%E7%9B%AE%E7%AF%87/%E7%88%AC%E8%99%AB/1-desc/</guid>
+      <description>1. 项目介绍 使用Go开发《基金数据分析系统》，项目系统框架是基于gin-api-template(https://github.com/52l</description>
+    </item>
+    
+  </channel>
+</rss>
