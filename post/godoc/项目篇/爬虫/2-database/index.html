@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title> - 小山的博客</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Shershon" /><meta name="description" content="1. 介绍 数据模型指的是和表结构一一对应的结构体，通过编写结构体可通过迁移直接创建表结构,后续作为对表的增删改查的参数。 2. 用户模型 2.1 用户表 文件：" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.90.1 with theme even" />
+
+
+<link rel="canonical" href="http://localhost:1313/post/godoc/%E9%A1%B9%E7%9B%AE%E7%AF%87/%E7%88%AC%E8%99%AB/2-database/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="" />
+<meta property="og:description" content="1. 介绍 数据模型指的是和表结构一一对应的结构体，通过编写结构体可通过迁移直接创建表结构,后续作为对表的增删改查的参数。 2. 用户模型 2.1 用户表 文件：" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/post/godoc/%E9%A1%B9%E7%9B%AE%E7%AF%87/%E7%88%AC%E8%99%AB/2-database/" /><meta property="article:section" content="post" />
+
+
+
+<meta itemprop="name" content="">
+<meta itemprop="description" content="1. 介绍 数据模型指的是和表结构一一对应的结构体，通过编写结构体可通过迁移直接创建表结构,后续作为对表的增删改查的参数。 2. 用户模型 2.1 用户表 文件：">
+
+<meta itemprop="wordCount" content="5105">
+<meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content=""/>
+<meta name="twitter:description" content="1. 介绍 数据模型指的是和表结构一一对应的结构体，通过编写结构体可通过迁移直接创建表结构,后续作为对表的增删改查的参数。 2. 用户模型 2.1 用户表 文件："/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">小山的博客</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">小山的博客</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title"></h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 0001-01-01 </span>
+        
+          <span class="more-meta"> 5105 words </span>
+          <span class="more-meta"> 11 mins read </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#1-介绍">1. 介绍</a></li>
+        <li><a href="#2-用户模型">2. 用户模型</a>
+          <ul>
+            <li><a href="#21-用户表">2.1 用户表</a></li>
+            <li><a href="#22-用户信息表">2.2 用户信息表</a></li>
+          </ul>
+        </li>
+        <li><a href="#3-基金模型">3. 基金模型</a>
+          <ul>
+            <li><a href="#31-基金基础表">3.1 基金基础表</a></li>
+            <li><a href="#32-基金持仓表">3.2 基金持仓表</a></li>
+            <li><a href="#33-基金每日排行表">3.3 基金每日排行表</a></li>
+          </ul>
+        </li>
+        <li><a href="#4-股票模型">4. 股票模型</a>
+          <ul>
+            <li><a href="#41-股票基础表">4.1 股票基础表</a></li>
+            <li><a href="#42-股票行情表">4.2 股票行情表</a></li>
+          </ul>
+        </li>
+        <li><a href="#5-编写迁移代码">5. 编写迁移代码</a>
+          <ul>
+            <li><a href="#51-添加对应的方法">5.1 添加对应的方法</a></li>
+            <li><a href="#52-修改迁移入口函数">5.2 修改迁移入口函数</a></li>
+          </ul>
+        </li>
+        <li><a href="#6-启动项目">6. 启动项目</a>
+          <ul>
+            <li><a href="#61-修改配置">6.1 修改配置</a></li>
+            <li><a href="#62-自动创建表">6.2 自动创建表</a></li>
+          </ul>
+        </li>
+        <li><a href="#7-表关系图">7. 表关系图</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="1-介绍">1. 介绍</h2>
+<p>数据模型指的是和表结构一一对应的结构体，通过编写结构体可通过迁移直接创建表结构,后续作为对表的增删改查的参数。</p>
+<h2 id="2-用户模型">2. 用户模型</h2>
+<h3 id="21-用户表">2.1 用户表</h3>
+<p><strong>文件：<code>model/entity/user.go</code></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 用户表
+</span><span class="c1"></span><span class="kd">type</span> <span class="nx">User</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">global</span><span class="p">.</span><span class="nx">BaseModel</span>
+	<span class="nx">NickName</span> <span class="kt">string</span>   <span class="s">`json:&#34;nickName&#34; gorm:&#34;type:varchar(20);not null;default:&#39;&#39;;comment:昵称&#34;`</span>
+	<span class="nx">Phone</span>    <span class="kt">string</span>   <span class="s">`json:&#34;phone&#34; gorm:&#34;type:char(11);unique:un_phone;comment:手机号&#34;`</span>
+	<span class="nx">Password</span> <span class="kt">string</span>   <span class="s">`json:&#34;-&#34; gorm:&#34;type:varchar(40);comment:密码&#34;`</span>
+	<span class="nx">Status</span>   <span class="kt">int</span>      <span class="s">`json:&#34;status&#34; gorm:&#34;size:4;default:1;comment:状态 1:正常 2:白名单 3:黑名单&#34;`</span>
+	<span class="nx">UserInfo</span> <span class="nx">UserInfo</span> <span class="s">`json:&#34;userInfo&#34; gorm:&#34;-&#34;`</span>
+	<span class="nx">Token</span>    <span class="kt">string</span>   <span class="s">`json:&#34;token&#34; gorm:&#34;-&#34;`</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="22-用户信息表">2.2 用户信息表</h3>
+<p><strong>文件：<code>model/entity/user.go</code></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 用户信息表
+</span><span class="c1"></span><span class="kd">type</span> <span class="nx">UserInfo</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">global</span><span class="p">.</span><span class="nx">BaseModel</span>
+	<span class="nx">Uid</span>      <span class="kt">uint</span>   <span class="s">`json:&#34;uid&#34; gorm:&#34;comment:用户id&#34;`</span>
+	<span class="nx">Birthday</span> <span class="kt">string</span> <span class="s">`json:&#34;birthday&#34; gorm:&#34;type:varchar(10);comment:生日&#34;`</span>
+	<span class="nx">Address</span>  <span class="kt">string</span> <span class="s">`json:&#34;address&#34; gorm:&#34;type:text;comment:地址&#34;`</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="3-基金模型">3. 基金模型</h2>
+<h3 id="31-基金基础表">3.1 基金基础表</h3>
+<p><strong>文件：<code>model/entity/fund.go</code></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 基金基础信息表
+</span><span class="c1"></span><span class="kd">type</span> <span class="nx">FundBasis</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">global</span><span class="p">.</span><span class="nx">BaseModel</span>
+	<span class="nx">Code</span>            <span class="kt">string</span>  <span class="s">`json:&#34;code&#34; gorm:&#34;type:char(6);unique:un_code;comment:基金代码&#34;`</span>
+	<span class="nx">FullName</span>        <span class="kt">string</span>  <span class="s">`json:&#34;fullName&#34; gorm:&#34;type:varchar(50);comment:基金全称&#34;`</span>
+	<span class="nx">ShortName</span>       <span class="kt">string</span>  <span class="s">`json:&#34;shortName&#34; gorm:&#34;type:varchar(50);comment:基金简称&#34;`</span>
+	<span class="nx">Type</span>            <span class="kt">string</span>  <span class="s">`json:&#34;type&#34; gorm:&#34;type:varchar(50);comment:基金类型&#34;`</span>
+	<span class="nx">Company</span>         <span class="kt">string</span>  <span class="s">`json:&#34;company&#34; gorm:&#34;type:varchar(50);comment:基金公司&#34;`</span>
+	<span class="nx">ReleaseDate</span>     <span class="kt">string</span>  <span class="s">`json:&#34;releaseDate&#34; gorm:&#34;type:varchar(12);comment:发布时间&#34;`</span>
+	<span class="nx">EstablishDate</span>   <span class="kt">string</span>  <span class="s">`json:&#34;establishDate&#34; gorm:&#34;type:varchar(12);comment:成立时间&#34;`</span>
+	<span class="nx">EstablishShares</span> <span class="kt">float64</span> <span class="s">`json:&#34;establishShares&#34; gorm:&#34;type:decimal(12,4);comment:成立时规模(单位:亿份)&#34;`</span>
+	<span class="nx">ManageFeeRate</span>   <span class="kt">float64</span> <span class="s">`json:&#34;manageFeeRate&#34; gorm:&#34;type:decimal(4,2);comment:管理费率(百分比)&#34;`</span>
+	<span class="nx">CustodyFeeRate</span>  <span class="kt">float64</span> <span class="s">`json:&#34;custodyFeeRate&#34; gorm:&#34;type:decimal(4,2);comment:托管费率(百分比)&#34;`</span>
+	<span class="nx">SaleFeeRate</span>     <span class="kt">float64</span> <span class="s">`json:&#34;saleFeeRate&#34; gorm:&#34;type:decimal(4,2);comment:销售服务费率(百分比)&#34;`</span>
+	<span class="nx">Benchmark</span>       <span class="kt">string</span> <span class="s">`json:&#34;benchmark&#34; gorm:&#34;type:varchar(255);comment:业绩比较基准&#34;`</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="32-基金持仓表">3.2 基金持仓表</h3>
+<p><strong>文件：<code>model/entity/fund.go</code></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 基金股票持仓
+</span><span class="c1"></span><span class="kd">type</span> <span class="nx">FundStock</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">global</span><span class="p">.</span><span class="nx">BaseModel</span>
+	<span class="nx">FundCode</span>   <span class="kt">string</span>  <span class="s">`json:&#34;fundCode&#34; gorm:&#34;type:varchar(10);index;comment:基金code&#34;`</span>
+	<span class="nx">StockCode</span>  <span class="kt">string</span>  <span class="s">`json:&#34;stockCode&#34; gorm:&#34;type:varchar(10);index;comment:股票code&#34;`</span>
+	<span class="nx">Percentage</span> <span class="kt">float64</span> <span class="s">`json:&#34;percentage&#34; gorm:&#34;type:decimal(4,2);comment:持仓占比(百分比)&#34;`</span>
+	<span class="nx">Quantity</span>   <span class="kt">float64</span> <span class="s">`json:&#34;quantity&#34; gorm:&#34;type:decimal(5,2);comment:持股数(万股)&#34;`</span>
+	<span class="nx">Amount</span>     <span class="kt">float64</span> <span class="s">`json:&#34;amount&#34; gorm:&#34;type:decimal(5,2);comment:持股市值(万元)&#34;`</span>
+	<span class="nx">CutOffDate</span> <span class="kt">string</span>  <span class="s">`json:&#34;cutOffDate&#34; gorm:&#34;type:char(10);comment:截止时间&#34;`</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="33-基金每日排行表">3.3 基金每日排行表</h3>
+<p><strong>文件：<code>model/entity/fund.go</code></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// FundDayTop 基金每日排行
+</span><span class="c1"></span><span class="kd">type</span> <span class="nx">FundDayTop</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">global</span><span class="p">.</span><span class="nx">BaseModel</span>
+	<span class="nx">FundCode</span>         <span class="kt">string</span>  <span class="s">`json:&#34;fundCode&#34; gorm:&#34;type:varchar(10);index;comment:基金code&#34;`</span>
+	<span class="nx">FundName</span>         <span class="kt">string</span>  <span class="s">`json:&#34;fundName&#34; gorm:&#34;type:varchar(10);index;comment:基金名称&#34;`</span>
+	<span class="nx">TopDate</span>          <span class="kt">string</span>  <span class="s">`json:&#34;topDate&#34; gorm:&#34;type:varchar(12);index;comment:排名日期&#34;`</span>
+	<span class="nx">NetWorth</span>         <span class="kt">float64</span> <span class="s">`json:&#34;netWorth&#34; gorm:&#34;type:decimal(10,4);comment:单位净值&#34;`</span>
+	<span class="nx">TotalWorth</span>       <span class="kt">float64</span> <span class="s">`json:&#34;totalWorth&#34; gorm:&#34;type:decimal(10,4);comment:累计净值&#34;`</span>
+	<span class="nx">DayChange</span>        <span class="kt">float64</span> <span class="s">`json:&#34;dayChange&#34; gorm:&#34;type:decimal(10,4);comment:日增长率&#34;`</span>
+	<span class="nx">WeekChange</span>       <span class="kt">float64</span> <span class="s">`json:&#34;weekChange&#34; gorm:&#34;type:decimal(10,4);comment:近一周&#34;`</span>
+	<span class="nx">MouthChange</span>      <span class="kt">float64</span> <span class="s">`json:&#34;mouthChange&#34; gorm:&#34;type:decimal(10,4);comment:近一月&#34;`</span>
+	<span class="nx">ThreeMouthChange</span> <span class="kt">float64</span> <span class="s">`json:&#34;threeMouthChange&#34; gorm:&#34;type:decimal(10,4);comment:近3个月&#34;`</span>
+	<span class="nx">SixMouthChange</span>   <span class="kt">float64</span> <span class="s">`json:&#34;sixMouthChange&#34; gorm:&#34;type:decimal(10,4);comment:近6个月&#34;`</span>
+	<span class="nx">YearChange</span>       <span class="kt">float64</span> <span class="s">`json:&#34;yearChange&#34; gorm:&#34;type:decimal(10,4);comment:近1年&#34;`</span>
+	<span class="nx">TwoYearChange</span>    <span class="kt">float64</span> <span class="s">`json:&#34;twoYearChange&#34; gorm:&#34;type:decimal(10,4);comment:近2年&#34;`</span>
+	<span class="nx">ThreeYearChange</span>  <span class="kt">float64</span> <span class="s">`json:&#34;threeYearChange&#34; gorm:&#34;type:decimal(10,4);comment:近3年&#34;`</span>
+	<span class="nx">CurrentChange</span>    <span class="kt">float64</span> <span class="s">`json:&#34;CurrentChange&#34; gorm:&#34;type:decimal(10,4);comment:今年来&#34;`</span>
+	<span class="nx">CreateChange</span>     <span class="kt">float64</span> <span class="s">`json:&#34;createChange&#34; gorm:&#34;type:decimal(10,4);comment:成立以来&#34;`</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="4-股票模型">4. 股票模型</h2>
+<h3 id="41-股票基础表">4.1 股票基础表</h3>
+<p><strong>文件：<code>model/entity/stock.go</code></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 股票基础信息
+</span><span class="c1"></span><span class="kd">type</span> <span class="nx">Stock</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">global</span><span class="p">.</span><span class="nx">BaseModel</span>
+	<span class="nx">Code</span>           <span class="kt">string</span>  <span class="s">`json:&#34;code&#34; gorm:&#34;type:varchar(10);unique:un_code;comment:股票代码&#34;`</span>
+	<span class="nx">Name</span>           <span class="kt">string</span>  <span class="s">`json:&#34;name&#34; gorm:&#34;type:varchar(50);comment:股票名称&#34;`</span>
+	<span class="nx">Industry</span>       <span class="kt">string</span>  <span class="s">`json:&#34;industry&#34; gorm:&#34;type:varchar(20);comment:所属行业&#34;`</span>
+	<span class="nx">ExchangeCode</span>   <span class="kt">string</span>  <span class="s">`json:&#34;exchangeCode&#34; gorm:&#34;type:varchar(5);comment:所属交易所，SZ:深圳 SH:上海 HK:港股&#34;`</span>
+	<span class="nx">Tag</span>            <span class="kt">string</span>  <span class="s">`json:&#34;tag&#34; gorm:&#34;type:text;comment:所属概念&#34;`</span>
+	<span class="nx">SetUpDate</span>      <span class="kt">string</span>  <span class="s">`json:&#34;setUpDate&#34; gorm:&#34;type:char(10);comment:公司成立时间&#34;`</span>
+	<span class="nx">MarketDate</span>     <span class="kt">string</span>  <span class="s">`json:&#34;marketDate&#34; gorm:&#34;type:char(10);comment:上市时间&#34;`</span>
+	<span class="nx">MarketPE</span>       <span class="kt">float64</span> <span class="s">`json:&#34;marketPE&#34; gorm:&#34;type:decimal(10,2);comment:发行市盈率&#34;`</span>
+	<span class="nx">MarketQuantity</span> <span class="kt">float64</span> <span class="s">`json:&#34;marketQuantity&#34; gorm:&#34;type:decimal(10,2);comment:发行量(万股)&#34;`</span>
+	<span class="nx">MarketPrice</span>    <span class="kt">float64</span> <span class="s">`json:&#34;marketPrice&#34; gorm:&#34;type:decimal(10,2);comment:发行价格&#34;`</span>
+	<span class="nx">MarketAmount</span>   <span class="kt">float64</span> <span class="s">`json:&#34;marketAmount&#34; gorm:&#34;type:decimal(10,2);comment:实际募资(亿)&#34;`</span>
+	<span class="nx">Company</span>        <span class="kt">string</span>  <span class="s">`json:&#34;company&#34; gorm:&#34;type:varchar(255);comment:公司名称&#34;`</span>
+	<span class="nx">Employees</span>      <span class="kt">uint</span>    <span class="s">`json:&#34;employees&#34; gorm:&#34;comment:公司员工&#34;`</span>
+	<span class="nx">MoneyUnit</span>      <span class="kt">string</span>  <span class="s">`json:&#34;moneyUnit&#34; gorm:&#34;type:varchar(10);comment:货币单位&#34;`</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="42-股票行情表">4.2 股票行情表</h3>
+<p><strong>文件：<code>model/entity/stock.go</code></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 股票行情
+</span><span class="c1"></span><span class="kd">type</span> <span class="nx">StockQuotes</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">global</span><span class="p">.</span><span class="nx">BaseModel</span>
+	<span class="nx">StockCode</span>         <span class="kt">uint</span>    <span class="s">`json:&#34;stockCode&#34; gorm:&#34;index;comment:股票ID&#34;`</span>
+	<span class="nx">RecordDate</span>        <span class="kt">string</span>  <span class="s">`json:&#34;recordDate&#34; gorm:&#34;type:char(10);comment:记录时间&#34;`</span>
+	<span class="nx">TotalQuantity</span>     <span class="kt">float64</span> <span class="s">`json:&#34;totalQuantity&#34; gorm:&#34;type:decimal(10,2);comment:总股本(万股)&#34;`</span>
+	<span class="nx">TotalAmount</span>       <span class="kt">float64</span> <span class="s">`json:&#34;totalAmount&#34; gorm:&#34;type:decimal(10,2);comment:总市值(亿元)&#34;`</span>
+	<span class="nx">CirculateQuantity</span> <span class="kt">float64</span> <span class="s">`json:&#34;circulateQuantity&#34; gorm:&#34;type:decimal(10,2);comment:流通股本(万股)&#34;`</span>
+	<span class="nx">CirculateAmount</span>   <span class="kt">float64</span> <span class="s">`json:&#34;circulateAmount&#34; gorm:&#34;type:decimal(10,2);comment:流通市值(亿)&#34;`</span>
+	<span class="nx">TodayOpenPrice</span>    <span class="kt">float64</span> <span class="s">`json:&#34;todayOpenPrice&#34; gorm:&#34;type:decimal(10,2);comment:今日开盘价格&#34;`</span>
+	<span class="nx">TodayMaxPrice</span>     <span class="kt">float64</span> <span class="s">`json:&#34;todayMaxPrice&#34; gorm:&#34;type:decimal(10,2);comment:今日最高价格&#34;`</span>
+	<span class="nx">TodayPrice</span>        <span class="kt">float64</span> <span class="s">`json:&#34;todayPrice&#34; gorm:&#34;type:decimal(10,2);comment:今日收盘价格&#34;`</span>
+	<span class="nx">LastPrice</span>         <span class="kt">float64</span> <span class="s">`json:&#34;lastPrice&#34; gorm:&#34;type:decimal(10,2);comment:昨日收盘价格&#34;`</span>
+	<span class="nx">MoneyUnit</span>         <span class="kt">string</span>  <span class="s">`json:&#34;moneyUnit&#34; gorm:&#34;type:varchar(10);comment:货币单位&#34;`</span>
+	<span class="nx">ChangeRatio</span>       <span class="kt">float64</span> <span class="s">`json:&#34;changeRatio&#34; gorm:&#34;type:decimal(5,2);comment:换手率(百分比)&#34;`</span>
+	<span class="nx">DynamicPE</span>         <span class="kt">float64</span> <span class="s">`json:&#34;dynamicPE&#34; gorm:&#34;type:decimal(10,2);comment:市盈率(动)&#34;`</span>
+	<span class="nx">StaticPE</span>          <span class="kt">float64</span> <span class="s">`json:&#34;staticPE&#34; gorm:&#34;type:decimal(10,2);comment:市盈率(静)&#34;`</span>
+	<span class="nx">PeTtm</span>             <span class="kt">float64</span> <span class="s">`json:&#34;peTTM&#34; gorm:&#34;type:decimal(10,2);comment:市盈率(TTM)&#34;`</span>
+	<span class="nx">PB</span>                <span class="kt">float64</span> <span class="s">`json:&#34;PB&#34; gorm:&#34;type:decimal(10,2);comment:市净率&#34;`</span>
+	<span class="nx">EarningsPerShare</span>  <span class="kt">float64</span> <span class="s">`json:&#34;earningsPerShare&#34; gorm:&#34;type:decimal(10,2);comment:每股收益&#34;`</span>
+	<span class="nx">NetAssetsPerShare</span> <span class="kt">float64</span> <span class="s">`json:&#34;netAssetsPerShare&#34; gorm:&#34;type:decimal(10,2);comment:每股净资产&#34;`</span>
+	<span class="nx">Dividends</span>         <span class="kt">float64</span> <span class="s">`json:&#34;dividends&#34; gorm:&#34;type:decimal(10,2);comment:股息(TTM)&#34;`</span>
+	<span class="nx">DividendsRatio</span>    <span class="kt">float64</span> <span class="s">`json:&#34;dividendsRatio&#34; gorm:&#34;type:decimal(5,2);comment:股息率(TTM)&#34;`</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="5-编写迁移代码">5. 编写迁移代码</h2>
+<h3 id="51-添加对应的方法">5.1 添加对应的方法</h3>
+<p><strong>文件：<code>model/migrate/migrate.go</code></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 设置表信息
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">setTableOption</span><span class="p">(</span><span class="nx">tableComment</span> <span class="kt">string</span><span class="p">)</span> <span class="o">*</span><span class="nx">gorm</span><span class="p">.</span><span class="nx">DB</span> <span class="p">{</span>
+	<span class="nx">value</span> <span class="o">:=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;ENGINE=InnoDB COMMENT=&#39;%s&#39;&#34;</span><span class="p">,</span> <span class="nx">tableComment</span><span class="p">)</span>
+	<span class="k">return</span> <span class="nx">global</span><span class="p">.</span><span class="nx">GvaMysqlClient</span><span class="p">.</span><span class="nf">Set</span><span class="p">(</span><span class="s">&#34;gorm:table_options&#34;</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1">// 用户相关表
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">userMigrate</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 用户账号表
+</span><span class="c1"></span>	<span class="nx">_</span> <span class="p">=</span> <span class="nf">setTableOption</span><span class="p">(</span><span class="s">&#34;用户表&#34;</span><span class="p">).</span><span class="nf">AutoMigrate</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">entity</span><span class="p">.</span><span class="nx">User</span><span class="p">{})</span>
+	<span class="c1">// 用户信息表
+</span><span class="c1"></span>	<span class="nx">_</span> <span class="p">=</span> <span class="nf">setTableOption</span><span class="p">(</span><span class="s">&#34;用户信息表&#34;</span><span class="p">).</span><span class="nf">AutoMigrate</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">entity</span><span class="p">.</span><span class="nx">UserInfo</span><span class="p">{})</span>
+<span class="p">}</span>
+<span class="c1">// 基金表
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">fundMigrate</span><span class="p">()</span>  <span class="p">{</span>
+	<span class="c1">// 基金基础表
+</span><span class="c1"></span>	<span class="nx">_</span> <span class="p">=</span> <span class="nf">setTableOption</span><span class="p">(</span><span class="s">&#34;基金表&#34;</span><span class="p">).</span><span class="nf">AutoMigrate</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">entity</span><span class="p">.</span><span class="nx">FundBasis</span><span class="p">{})</span>
+	<span class="c1">// 基金持仓表
+</span><span class="c1"></span>	<span class="nx">_</span> <span class="p">=</span> <span class="nf">setTableOption</span><span class="p">(</span><span class="s">&#34;基金持仓表&#34;</span><span class="p">).</span><span class="nf">AutoMigrate</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">entity</span><span class="p">.</span><span class="nx">FundStock</span><span class="p">{})</span>
+  <span class="c1">// 基金每日排行  
+</span><span class="c1"></span>  <span class="nx">_</span> <span class="p">=</span> <span class="nf">setTableOption</span><span class="p">(</span><span class="s">&#34;基金每日排行&#34;</span><span class="p">).</span><span class="nf">AutoMigrate</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">entity</span><span class="p">.</span><span class="nx">FundDayTop</span><span class="p">{})</span>  
+<span class="p">}</span>
+<span class="c1">// 股票相关表
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">stockMigrate</span><span class="p">()</span>  <span class="p">{</span>
+	<span class="c1">// 股票基础表
+</span><span class="c1"></span>	<span class="nx">_</span> <span class="p">=</span> <span class="nf">setTableOption</span><span class="p">(</span><span class="s">&#34;股票表&#34;</span><span class="p">).</span><span class="nf">AutoMigrate</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">entity</span><span class="p">.</span><span class="nx">Stock</span><span class="p">{})</span>
+	<span class="c1">// 股票行情表
+</span><span class="c1"></span>	<span class="nx">_</span> <span class="p">=</span> <span class="nf">setTableOption</span><span class="p">(</span><span class="s">&#34;股票行情表&#34;</span><span class="p">).</span><span class="nf">AutoMigrate</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">entity</span><span class="p">.</span><span class="nx">StockQuotes</span><span class="p">{})</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="52-修改迁移入口函数">5.2 修改迁移入口函数</h3>
+<p><strong>文件：<code>model/migrate/migrate.go</code></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 数据表迁移
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">AutoMigrate</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 用户相关表
+</span><span class="c1"></span>	<span class="nf">userMigrate</span><span class="p">()</span>
+	<span class="c1">// 基金相关表
+</span><span class="c1"></span>	<span class="nf">fundMigrate</span><span class="p">()</span>
+	<span class="c1">// 股票相关表
+</span><span class="c1"></span>	<span class="nf">stockMigrate</span><span class="p">()</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="6-启动项目">6. 启动项目</h2>
+<h3 id="61-修改配置">6.1 修改配置</h3>
+<p><strong>文件：<code>./config.yaml</code></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nn">...</span><span class="w">
+</span><span class="w"></span><span class="nt">mysql</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">enable</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w">  </span><span class="l">....</span><span class="w">
+</span><span class="w">  </span><span class="nt">database</span><span class="p">:</span><span class="w"> </span><span class="l">fund_analye_system</span><span class="w"> </span><span class="c"># 库需要手动创建</span><span class="w">
+</span><span class="w">  </span><span class="nt">autoMigrate</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="c"># 开启时，每次服务启动都会根据实体创建/更新表结构</span><span class="w">
+</span><span class="w">  </span><span class="l">...</span><span class="w">
+</span><span class="w">  </span><span class="nt">gorm</span><span class="p">:</span><span class="w"> </span><span class="c"># </span><span class="w">
+</span><span class="w">    </span><span class="nt">tablePrefix</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;fas_&#34;</span><span class="w"> </span><span class="c">#设置表前缀</span><span class="w">
+</span><span class="w">    </span><span class="l">...</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><h3 id="62-自动创建表">6.2 自动创建表</h3>
+<p>当在配置中,打开<code>autoMigrate=true</code>时，成功启动项目后，会创建以下表信息。</p>
+<p><img src="https://gitee.com/tangxiaoshan/pic-img-bed/raw/master/go/img/20210831154957.png" alt="i"></p>
+<h2 id="7-表关系图">7. 表关系图</h2>
+<p><img src="https://gitee.com/tangxiaoshan/pic-img-bed/raw/master/go/img/20210831155140.png" alt=""></p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">Shershon</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        0001-01-01
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      
+      <nav class="post-nav">
+        <a class="prev" href="/post/godoc/%E9%A1%B9%E7%9B%AE%E7%AF%87/%E7%88%AC%E8%99%AB/1-desc/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default"></span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        <a class="next" href="/post/godoc/%E9%A1%B9%E7%9B%AE%E7%AF%87/%E7%88%AC%E8%99%AB/3-fund-top/">
+            <span class="next-text nav-default"></span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:your@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://localhost:1313" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="http://localhost:1313" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="http://localhost:1313" class="iconfont icon-facebook" title="facebook"></a>
+      <a href="http://localhost:1313" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="http://localhost:1313" class="iconfont icon-google" title="google"></a>
+      <a href="http://localhost:1313" class="iconfont icon-github" title="github"></a>
+      <a href="http://localhost:1313" class="iconfont icon-weibo" title="weibo"></a>
+      <a href="http://localhost:1313" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="http://localhost:1313" class="iconfont icon-douban" title="douban"></a>
+      <a href="http://localhost:1313" class="iconfont icon-pocket" title="pocket"></a>
+      <a href="http://localhost:1313" class="iconfont icon-tumblr" title="tumblr"></a>
+      <a href="http://localhost:1313" class="iconfont icon-instagram" title="instagram"></a>
+      <a href="http://localhost:1313" class="iconfont icon-gitlab" title="gitlab"></a>
+      <a href="http://localhost:1313" class="iconfont icon-bilibili" title="bilibili"></a>
+  <a href="http://localhost:1313/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span>Shershon</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

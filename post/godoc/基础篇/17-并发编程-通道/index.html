@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Go学习(十七):并发编程-通道 - 小山的博客</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Shershon" /><meta name="description" content="1.什么是Channel? channel即Go的通道，是协程之间的通信机制。一个channel是一条通信管道，它可以让一个协程通过它给另一个" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.90.1 with theme even" />
+
+
+<link rel="canonical" href="http://localhost:1313/post/godoc/%E5%9F%BA%E7%A1%80%E7%AF%87/17-%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-%E9%80%9A%E9%81%93/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Go学习(十七):并发编程-通道" />
+<meta property="og:description" content="1.什么是Channel? channel即Go的通道，是协程之间的通信机制。一个channel是一条通信管道，它可以让一个协程通过它给另一个" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/post/godoc/%E5%9F%BA%E7%A1%80%E7%AF%87/17-%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-%E9%80%9A%E9%81%93/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2021-01-17T00:00:00+00:00" />
+<meta property="article:modified_time" content="2021-01-17T00:00:00+00:00" />
+
+<meta itemprop="name" content="Go学习(十七):并发编程-通道">
+<meta itemprop="description" content="1.什么是Channel? channel即Go的通道，是协程之间的通信机制。一个channel是一条通信管道，它可以让一个协程通过它给另一个"><meta itemprop="datePublished" content="2021-01-17T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2021-01-17T00:00:00+00:00" />
+<meta itemprop="wordCount" content="5278">
+<meta itemprop="keywords" content="Go基础," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Go学习(十七):并发编程-通道"/>
+<meta name="twitter:description" content="1.什么是Channel? channel即Go的通道，是协程之间的通信机制。一个channel是一条通信管道，它可以让一个协程通过它给另一个"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">小山的博客</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">小山的博客</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Go学习(十七):并发编程-通道</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-01-17 </span>
+        <div class="post-category">
+            <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+            <a href="/categories/go/"> Go </a>
+            </div>
+          <span class="more-meta"> 5278 words </span>
+          <span class="more-meta"> 11 mins read </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#1什么是channel">1.什么是Channel?</a></li>
+            <li><a href="#2-创建channel">2. 创建Channel</a></li>
+            <li><a href="#3发送数据">3.发送数据</a></li>
+            <li><a href="#4普通接收">4.普通接收</a></li>
+            <li><a href="#5-循环接收">5. 循环接收</a></li>
+            <li><a href="#6-channle的阻塞特性">6. Channle的阻塞特性</a></li>
+            <li><a href="#7关闭channel">7.关闭Channel</a></li>
+            <li><a href="#8缓冲channel">8.缓冲Channel</a></li>
+            <li><a href="#9单向channel">9.单向Channel</a></li>
+            <li><a href="#10计时器与channel">10.计时器与channel</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h3 id="1什么是channel">1.什么是Channel?</h3>
+<p><code>channel</code>即<code>Go</code>的通道，是协程之间的通信机制。一个<code>channel</code>是一条通信管道，它可以让一个协程通过它给另一个协程发送数据。每个<code>channel</code>都需要指定数据类型，即<code>channel</code>可发送数据的类型。<font color=red>Go语言主张通过数据传递来实现共享内存，而不是通过共享内存来实现数据传递。</font></p>
+<h3 id="2-创建channel">2. 创建Channel</h3>
+<h4 id="21-语法">2.1 语法</h4>
+<p><font color=red> <code>channel</code>是引用类型，需要使用<code>make()</code>进行创建。</font></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 声明方式1
+</span><span class="c1"></span><span class="kd">var</span> <span class="nx">cha1</span> <span class="kd">chan</span> <span class="nx">数据类型</span> 
+<span class="nx">cha1</span> <span class="p">=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="nx">数据类型</span><span class="p">)</span>
+
+<span class="c1">// 声明方式2
+</span><span class="c1"></span><span class="nx">cha1</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="nx">数据类型</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="22-使用示例">2.2 使用示例</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;fmt&#34;</span>
+<span class="p">)</span>
+<span class="kd">type</span> <span class="nx">People</span> <span class="kd">struct</span> <span class="p">{}</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 创建一个整数型chan
+</span><span class="c1"></span>	<span class="nx">intChan</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="kt">int</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;intChan类型: %T 值: %v \n&#34;</span><span class="p">,</span><span class="nx">intChan</span><span class="p">,</span><span class="nx">intChan</span><span class="p">)</span>
+	<span class="c1">// 创建一个空接口chan,可以存放任意类型数据
+</span><span class="c1"></span>	<span class="nx">interfaceChan</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="kd">interface</span><span class="p">{})</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;interfaceChan类型: %T 值: %v \n&#34;</span><span class="p">,</span><span class="nx">interfaceChan</span><span class="p">,</span><span class="nx">interfaceChan</span><span class="p">)</span>
+	<span class="c1">// 创建一个指针chan
+</span><span class="c1"></span>	<span class="nx">peopleChan</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="o">*</span><span class="nx">People</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;peopleChan类型: %T 值: %v \n&#34;</span><span class="p">,</span><span class="nx">peopleChan</span><span class="p">,</span><span class="nx">peopleChan</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/** 输出
+</span><span class="cm"> intChan类型: chan int 值: 0xc000052060 
+</span><span class="cm"> interfaceChan类型: chan interface {} 值: 0xc0000520c0 
+</span><span class="cm"> peopleChan类型: chan *main.People 值: 0xc000052120 
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="3发送数据">3.发送数据</h3>
+<h4 id="31-语法">3.1 语法</h4>
+<p>通过<code>channel</code>发送数据需要使用特殊的操作符<code>＜-</code>，需要注意的是: <font color=red><code>channel</code>发送的值的类型必须与<code>channel</code>的元素类型一致。</font></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">channel变量名</span> <span class="o">&lt;-</span> <span class="nx">值</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="32-错误使用示例">3.2 错误使用示例</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;fmt&#34;</span>
+	<span class="s">&#34;time&#34;</span>
+<span class="p">)</span>
+<span class="kd">type</span> <span class="nx">People</span> <span class="kd">struct</span> <span class="p">{</span>
+<span class="p">}</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 创建一个整数型chan
+</span><span class="c1"></span>	<span class="nx">intChan</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="kt">int</span><span class="p">)</span>
+	<span class="c1">// 写入
+</span><span class="c1"></span>	<span class="nx">intChan</span> <span class="o">&lt;-</span> <span class="mi">5</span>
+  <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;intChan类型: %T 值: %v \n&#34;</span><span class="p">,</span> <span class="nx">intChan</span><span class="p">,</span> <span class="nx">intChan</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>上面示例运行会死锁，报错内容如下:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">fatal</span> <span class="kt">error</span><span class="p">:</span> <span class="nx">all</span> <span class="nx">goroutines</span> <span class="nx">are</span> <span class="nx">asleep</span> <span class="o">-</span> <span class="nx">deadlock</span><span class="p">!</span>
+<span class="nx">goroutine</span> <span class="mi">1</span> <span class="p">[</span><span class="kd">chan</span> <span class="nx">send</span><span class="p">]:</span>
+<span class="nx">main</span><span class="p">.</span><span class="nf">main</span><span class="p">()</span>
+        <span class="o">/</span><span class="nx">Users</span><span class="o">/</span><span class="nx">hui</span><span class="o">/</span><span class="nx">Project</span><span class="o">/</span><span class="nx">Go</span><span class="o">/</span><span class="nx">src</span><span class="o">/</span><span class="k">go</span><span class="o">-</span><span class="nx">basic</span><span class="o">/</span><span class="nx">main</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">12</span> <span class="o">+</span><span class="mh">0x59</span>
+<span class="nx">Process</span> <span class="nx">finished</span> <span class="nx">with</span> <span class="nx">exit</span> <span class="nx">code</span> <span class="mi">2</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>报错原因:</strong> <font color=red> 如果Goroutine在一个channel上发送数据，其他的Goroutine应该接收得到数据；如果没有接收，那么程序将在运行时出现死锁。</font></p>
+<h4 id="33-正确使用示例">3.3 正确使用示例</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;fmt&#34;</span>
+<span class="p">)</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 创建一个整数型chan
+</span><span class="c1"></span>	<span class="nx">intChan</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="kt">int</span><span class="p">)</span>
+	<span class="c1">// 写入数据(协程写入)
+</span><span class="c1"></span>	<span class="k">go</span> <span class="nf">sendMsg</span><span class="p">(</span><span class="nx">intChan</span><span class="p">)</span>
+	<span class="c1">// 接收数据(主线程读取)
+</span><span class="c1"></span>	<span class="nx">a</span> <span class="o">:=</span> <span class="o">&lt;-</span> <span class="nx">intChan</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;接收数据: %v \n&#34;</span><span class="p">,</span> <span class="nx">a</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;运行结束! &#34;</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="kd">func</span> <span class="nf">sendMsg</span><span class="p">(</span><span class="nx">intChan</span> <span class="kd">chan</span> <span class="kt">int</span> <span class="p">){</span>
+	<span class="c1">// 写入
+</span><span class="c1"></span>	<span class="nx">intChan</span> <span class="o">&lt;-</span> <span class="mi">5</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;写入数据: 5 &#34;</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/** 输出:
+</span><span class="cm">  写入数据: 5 
+</span><span class="cm">  接收数据: 5 
+</span><span class="cm">  运行结束! 
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="4普通接收">4.普通接收</h3>
+<p><code>channel</code>接收同样使用特殊的操作符<code>＜-</code>。</p>
+<h4 id="41-阻塞接收语法">4.1 阻塞接收语法</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 方式一: ch 指的是通道变量
+</span><span class="c1"></span><span class="nx">data</span> <span class="o">:=</span> <span class="o">&lt;-</span> <span class="nx">ch</span>
+<span class="c1">//方式二: data 表示接收到的数据。未接收到数据时，data为channel类型的零值，ok（布尔类型）表示是否接收到数据
+</span><span class="c1"></span><span class="nx">data</span><span class="p">,</span><span class="nx">ok</span> <span class="o">:=</span> <span class="o">&lt;-</span> <span class="nx">ch</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><font color=red>执行该语句时channel将会阻塞，直到接收到数据并赋值给data变量。</font></p>
+<h4 id="42-忽略接收语法">4.2 忽略接收语法</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="o">&lt;-</span> <span class="nx">ch</span>
+</code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>执行该语句时<code>channel</code>将会阻塞。其目的不在于接收<code>channel</code>中数据，而是为了阻塞<code>Goroutine</code>。</p>
+</blockquote>
+<p><font color=red>如果<code>Goroutine</code>正在等待从<code>channel</code>接收数据，而其他<code>Goroutine</code>并没有写入数据时程序将会死锁。</font></p>
+<h3 id="5-循环接收">5. 循环接收</h3>
+<p>循环接收数据，需要配合使用关闭<code>channel</code>，借助普通<code>for</code>循环和<code>for ... range</code>语句循环接收多个元素。遍历<code>channel</code>，遍历的结果就是接收到的数据，数据类型就是<code>channel</code>的数据类型。<font color=green>普通<code>for</code>循环接收<code>channel</code>数据，需要有<code>break</code>循环的条件；<code>for … range</code>会自动判断出<code>channel</code>已关闭，而无须通过判断来终止循环。</font></p>
+<h4 id="51-使用普通for接收">5.1 使用普通for接收</h4>
+<p><strong>方式一:</strong> <code>data := &lt;- ch</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<span class="kn">import</span> <span class="s">&#34;fmt&#34;</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 创建一个整数型chan
+</span><span class="c1"></span>	<span class="nx">intChan</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="kt">int</span><span class="p">)</span>
+	<span class="c1">// 写入数据(协程写入)
+</span><span class="c1"></span>	<span class="k">go</span> <span class="kd">func</span><span class="p">(</span><span class="nx">cha</span> <span class="kd">chan</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+		<span class="c1">// 写入
+</span><span class="c1"></span>		<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="mi">5</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+			<span class="nx">intChan</span> <span class="o">&lt;-</span> <span class="nx">i</span>
+			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;写入数据 -&gt;  %v \n&#34;</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span>
+		<span class="p">}</span>
+		<span class="c1">// 关闭通道
+</span><span class="c1"></span>		<span class="nb">close</span><span class="p">(</span><span class="nx">intChan</span><span class="p">)</span>
+	<span class="p">}(</span><span class="nx">intChan</span><span class="p">)</span>
+
+	<span class="c1">// 方式一: data := &lt;- ch
+</span><span class="c1"></span>	<span class="k">for</span> <span class="p">{</span>
+		<span class="c1">// 接收数据
+</span><span class="c1"></span>		<span class="nx">out</span> <span class="o">:=</span> <span class="o">&lt;-</span><span class="nx">intChan</span>
+		<span class="c1">// 判断通道是否关闭
+</span><span class="c1"></span>		<span class="c1">//如果通道关闭，则out为通道类型的零值，这里是int型，所以是0
+</span><span class="c1"></span>		<span class="k">if</span> <span class="nx">out</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">{</span>
+			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;通道已关闭&#34;</span><span class="p">)</span>
+			<span class="k">break</span>
+		<span class="p">}</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;接收数据 ==&gt; %v \n&#34;</span><span class="p">,</span> <span class="nx">out</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;程序运行结束!&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/** 输出:
+</span><span class="cm">  写入数据 -&gt;  1 
+</span><span class="cm">  接收数据 ==&gt; 1 
+</span><span class="cm">  接收数据 ==&gt; 2 
+</span><span class="cm">  写入数据 -&gt;  2 
+</span><span class="cm">  写入数据 -&gt;  3 
+</span><span class="cm">  接收数据 ==&gt; 3 
+</span><span class="cm">  接收数据 ==&gt; 4 
+</span><span class="cm">  写入数据 -&gt;  4 
+</span><span class="cm">  通道已关闭
+</span><span class="cm">  程序运行结束!
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>方式二:</strong> <code>data,ok := &lt;- ch</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<span class="kn">import</span> <span class="s">&#34;fmt&#34;</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 创建一个整数型chan
+</span><span class="c1"></span>	<span class="nx">intChan</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="kt">int</span><span class="p">)</span>
+	<span class="c1">// 写入数据(协程写入)
+</span><span class="c1"></span>	<span class="k">go</span> <span class="kd">func</span><span class="p">(</span><span class="nx">cha</span> <span class="kd">chan</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+		<span class="c1">// 写入
+</span><span class="c1"></span>		<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="mi">5</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+			<span class="nx">intChan</span> <span class="o">&lt;-</span> <span class="nx">i</span>
+			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;写入数据 -&gt;  %v \n&#34;</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span>
+		<span class="p">}</span>
+		<span class="c1">// 关闭通道
+</span><span class="c1"></span>		<span class="nb">close</span><span class="p">(</span><span class="nx">intChan</span><span class="p">)</span>
+	<span class="p">}(</span><span class="nx">intChan</span><span class="p">)</span>
+
+	<span class="c1">// 方式二: data,ok := &lt;- ch
+</span><span class="c1"></span>	<span class="k">for</span> <span class="p">{</span>
+		<span class="c1">// 接收数据
+</span><span class="c1"></span>		<span class="nx">out</span><span class="p">,</span><span class="nx">ok</span> <span class="o">:=</span> <span class="o">&lt;-</span><span class="nx">intChan</span>
+		<span class="c1">// 判断通道是否关闭,如果通道关闭，则ok为false
+</span><span class="c1"></span>		<span class="k">if</span> <span class="p">!</span><span class="nx">ok</span> <span class="p">{</span>
+			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;通道已关闭&#34;</span><span class="p">)</span>
+			<span class="k">break</span>
+		<span class="p">}</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;接收数据 ==&gt; %v \n&#34;</span><span class="p">,</span> <span class="nx">out</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;程序运行结束!&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/** 输出:
+</span><span class="cm">  写入数据 -&gt;  1 
+</span><span class="cm">  接收数据 ==&gt; 1 
+</span><span class="cm">  接收数据 ==&gt; 2 
+</span><span class="cm">  写入数据 -&gt;  2 
+</span><span class="cm">  写入数据 -&gt;  3 
+</span><span class="cm">  接收数据 ==&gt; 3 
+</span><span class="cm">  接收数据 ==&gt; 4 
+</span><span class="cm">  写入数据 -&gt;  4 
+</span><span class="cm">  通道已关闭
+</span><span class="cm">  程序运行结束!
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="52-使用forrange接收">5.2 使用for&hellip;range接收</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<span class="kn">import</span> <span class="s">&#34;fmt&#34;</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 创建一个整数型chan
+</span><span class="c1"></span>	<span class="nx">intChan</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="kt">int</span><span class="p">)</span>
+	<span class="c1">// 写入数据(协程写入)
+</span><span class="c1"></span>	<span class="k">go</span> <span class="kd">func</span><span class="p">(</span><span class="nx">cha</span> <span class="kd">chan</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+		<span class="c1">// 写入
+</span><span class="c1"></span>		<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="mi">5</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+			<span class="nx">intChan</span> <span class="o">&lt;-</span> <span class="nx">i</span>
+			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;写入数据 -&gt;  %v \n&#34;</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span>
+		<span class="p">}</span>
+		<span class="c1">// 关闭通道
+</span><span class="c1"></span>		<span class="nb">close</span><span class="p">(</span><span class="nx">intChan</span><span class="p">)</span>
+	<span class="p">}(</span><span class="nx">intChan</span><span class="p">)</span>
+	<span class="c1">// 使用 for...range接收
+</span><span class="c1"></span>	<span class="k">for</span> <span class="nx">data</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">intChan</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;接收数据 ==&gt; %v \n&#34;</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;程序运行结束!&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/** 输出:
+</span><span class="cm">  写入数据 -&gt;  1 
+</span><span class="cm">  接收数据 ==&gt; 1 
+</span><span class="cm">  接收数据 ==&gt; 2 
+</span><span class="cm">  写入数据 -&gt;  2 
+</span><span class="cm">  写入数据 -&gt;  3 
+</span><span class="cm">  接收数据 ==&gt; 3 
+</span><span class="cm">  接收数据 ==&gt; 4 
+</span><span class="cm">  写入数据 -&gt;  4 
+</span><span class="cm">  程序运行结束!
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="6-channle的阻塞特性">6. Channle的阻塞特性</h3>
+<h4 id="61-特性如下">6.1 特性如下</h4>
+<ul>
+<li><code>channel</code>默认是阻塞的。</li>
+<li>当数据被发送到<code>channel</code>时会发生阻塞，直到有其他<code>Goroutine</code>从该<code>channel</code>中读取数据。</li>
+<li>当从<code>channel</code>读取数据时，读取也会被阻塞，直到其他<code>Goroutine</code>将数据写入该<code>channel</code>。</li>
+</ul>
+<h4 id="62-特性使用">6.2 特性使用</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<span class="kn">import</span> <span class="s">&#34;fmt&#34;</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 创建一个整数型chan
+</span><span class="c1"></span>	<span class="nx">intChan</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="kt">int</span><span class="p">)</span>
+	<span class="c1">// 创建一个用于阻塞的chan
+</span><span class="c1"></span>	<span class="nx">boolChan</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="kt">bool</span><span class="p">)</span>
+
+	<span class="c1">// 创建一个写入数据的协程
+</span><span class="c1"></span>	<span class="k">go</span> <span class="kd">func</span><span class="p">(</span><span class="nx">cha</span> <span class="kd">chan</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+		<span class="c1">// 写入
+</span><span class="c1"></span>		<span class="nx">intChan</span> <span class="o">&lt;-</span> <span class="mi">50</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;写入数据50&#34;</span><span class="p">)</span>
+		<span class="c1">// 关闭通道
+</span><span class="c1"></span>		<span class="nb">close</span><span class="p">(</span><span class="nx">intChan</span><span class="p">)</span>
+	<span class="p">}(</span><span class="nx">intChan</span><span class="p">)</span>
+
+	<span class="c1">// 创建一个读取数据的协程
+</span><span class="c1"></span>	<span class="k">go</span> <span class="kd">func</span><span class="p">(</span><span class="nx">intChan</span> <span class="kd">chan</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">boolChan</span> <span class="kd">chan</span>  <span class="kt">bool</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">data</span><span class="p">,</span><span class="nx">ok</span> <span class="o">:=</span> <span class="o">&lt;-</span> <span class="nx">intChan</span>
+		<span class="k">if</span> <span class="nx">ok</span> <span class="p">{</span>
+			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;读取到数据 -&gt;  %v \n&#34;</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span>
+			<span class="c1">// 读取到数据后，给boolChan写入值
+</span><span class="c1"></span>			<span class="nx">boolChan</span> <span class="o">&lt;-</span> <span class="kc">true</span>
+			<span class="c1">// 关闭用于的阻塞的chan
+</span><span class="c1"></span>			<span class="nb">close</span><span class="p">(</span><span class="nx">boolChan</span><span class="p">)</span>
+		<span class="p">}</span>
+	<span class="p">}(</span><span class="nx">intChan</span><span class="p">,</span><span class="nx">boolChan</span><span class="p">)</span>
+	<span class="c1">// 忽略接收，达到阻塞的效果。(如果不阻塞，则会直接输出: 程序运行结束!,不会等待协程执行)
+</span><span class="c1"></span>	<span class="o">&lt;-</span> <span class="nx">boolChan</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;程序运行结束!&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/** 输出
+</span><span class="cm">  写入数据50
+</span><span class="cm">  读取到数据 -&gt;  50 
+</span><span class="cm">  程序运行结束!
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><font color=blue>阻塞channel等待匿名函数的Goroutine运行结束，防止主函数的Goroutine退出而导致匿名函数的Goroutine提前退出。</font></p>
+<h3 id="7关闭channel">7.关闭Channel</h3>
+<p>发送方写入完毕后需要主动关闭<code>channel</code>，用于通知接收方数据传递完毕。接收方通过<code>data,ok := &lt;- ch</code>判断<code>channel</code>是否关闭，如果<code>ok=false</code>，则表示<code>channel</code>已经被关闭。</p>
+<h4 id="71-使用示例">7.1 使用示例</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<span class="kn">import</span> <span class="s">&#34;fmt&#34;</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 创建一个整数型chan
+</span><span class="c1"></span>	<span class="nx">intChan</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="kt">int</span><span class="p">)</span>
+	<span class="c1">// 创建一个写入channel的协程
+</span><span class="c1"></span>	<span class="k">go</span> <span class="kd">func</span><span class="p">(</span><span class="nx">intChan</span> <span class="kd">chan</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">intChan</span> <span class="o">&lt;-</span> <span class="mi">10</span>
+		<span class="nx">intChan</span> <span class="o">&lt;-</span> <span class="mi">20</span>
+		<span class="c1">// 关闭通道
+</span><span class="c1"></span>		<span class="nb">close</span><span class="p">(</span><span class="nx">intChan</span><span class="p">)</span>
+	<span class="p">}(</span><span class="nx">intChan</span><span class="p">)</span>
+
+	<span class="c1">// 读取数据
+</span><span class="c1"></span>	<span class="nx">a</span> <span class="o">:=</span> <span class="o">&lt;-</span> <span class="nx">intChan</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;接收数据: %v \n&#34;</span><span class="p">,</span><span class="nx">a</span><span class="p">)</span>
+	<span class="nx">b</span> <span class="o">:=</span> <span class="o">&lt;-</span> <span class="nx">intChan</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;接收数据: %v \n&#34;</span><span class="p">,</span><span class="nx">b</span><span class="p">)</span>
+
+	<span class="c1">// 此时的Chan已经关闭，而且里面的数据也都已经取完
+</span><span class="c1"></span>	<span class="nx">c</span> <span class="o">:=</span> <span class="o">&lt;-</span> <span class="nx">intChan</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;接收数据: %v \n&#34;</span><span class="p">,</span><span class="nx">c</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;程序运行结束!&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/** 输出
+</span><span class="cm">  接收数据: 10 
+</span><span class="cm">  接收数据: 20 
+</span><span class="cm">  接收数据: 0 
+</span><span class="cm">  程序运行结束!
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>又上面示例可以看出: 可以从关闭后的<code>channel</code>中继续读取数据，取到的值为该类型的零值。比如整型是:0; 字符串是：&quot;&quot;</p>
+</blockquote>
+<h4 id="72-向已关闭的chan写入数据会崩溃">7.2 向已关闭的chan写入数据,会崩溃</h4>
+<p><font color=red>往关闭的channel中写入数据会报错：panic: send on closed channel。导致程序崩溃。</font></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<span class="kn">import</span> <span class="s">&#34;fmt&#34;</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 创建一个整数型chan
+</span><span class="c1"></span>	<span class="nx">intChan</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="kt">int</span><span class="p">)</span>
+	<span class="c1">// 创建一个写入channel的协程
+</span><span class="c1"></span>	<span class="k">go</span> <span class="kd">func</span><span class="p">(</span><span class="nx">intChan</span> <span class="kd">chan</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">intChan</span> <span class="o">&lt;-</span> <span class="mi">10</span>
+		<span class="c1">// 关闭通道
+</span><span class="c1"></span>		<span class="nb">close</span><span class="p">(</span><span class="nx">intChan</span><span class="p">)</span>
+    <span class="c1">// 向已关闭的chan 继续写入数据，会报错;
+</span><span class="c1"></span>		<span class="nx">intChan</span> <span class="o">&lt;-</span> <span class="mi">20</span>
+	<span class="p">}(</span><span class="nx">intChan</span><span class="p">)</span>
+	<span class="c1">// 读取数据
+</span><span class="c1"></span>	<span class="nx">a</span> <span class="o">:=</span> <span class="o">&lt;-</span> <span class="nx">intChan</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;接收数据: %v \n&#34;</span><span class="p">,</span><span class="nx">a</span><span class="p">)</span>
+	<span class="nx">b</span> <span class="o">:=</span> <span class="o">&lt;-</span> <span class="nx">intChan</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;接收数据: %v \n&#34;</span><span class="p">,</span><span class="nx">b</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;程序运行结束!&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/** 输出:
+</span><span class="cm">接收数据: 10 
+</span><span class="cm">接收数据: 0 
+</span><span class="cm">panic: send on closed channel
+</span><span class="cm">
+</span><span class="cm">goroutine 18 [running]:
+</span><span class="cm">main.main.func1(0xc000100060)
+</span><span class="cm">        /Users/hui/Project/Go/src/go-basic/main.go:14 +0x5f
+</span><span class="cm">created by main.main
+</span><span class="cm">        /Users/hui/Project/Go/src/go-basic/main.go:10 +0x6a
+</span><span class="cm">
+</span><span class="cm">Process finished with exit code 2
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="73-重复关闭chan会崩溃">7.3 重复关闭chan，会崩溃</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span><span class="p">]</span>
+<span class="kn">import</span> <span class="s">&#34;fmt&#34;</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 创建一个整数型chan
+</span><span class="c1"></span>	<span class="nx">intChan</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="kt">int</span><span class="p">)</span>
+
+	<span class="c1">// 创建一个写入channel的协程
+</span><span class="c1"></span>	<span class="k">go</span> <span class="kd">func</span><span class="p">(</span><span class="nx">intChan</span> <span class="kd">chan</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">intChan</span> <span class="o">&lt;-</span> <span class="mi">10</span>
+		<span class="c1">// 关闭通道
+</span><span class="c1"></span>		<span class="nb">close</span><span class="p">(</span><span class="nx">intChan</span><span class="p">)</span>
+	<span class="p">}(</span><span class="nx">intChan</span><span class="p">)</span>
+
+	<span class="c1">// 读取数据
+</span><span class="c1"></span>	<span class="nx">a</span> <span class="o">:=</span> <span class="o">&lt;-</span> <span class="nx">intChan</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;接收数据: %v \n&#34;</span><span class="p">,</span><span class="nx">a</span><span class="p">)</span>
+	<span class="nx">b</span> <span class="o">:=</span> <span class="o">&lt;-</span> <span class="nx">intChan</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;接收数据: %v \n&#34;</span><span class="p">,</span><span class="nx">b</span><span class="p">)</span>
+	<span class="c1">// 重复关闭(此处会报错)
+</span><span class="c1"></span>	<span class="nb">close</span><span class="p">(</span><span class="nx">intChan</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;程序运行结束!&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/** 输出
+</span><span class="cm">接收数据: 10 
+</span><span class="cm">接收数据: 0 
+</span><span class="cm">panic: close of closed channel
+</span><span class="cm">
+</span><span class="cm">goroutine 1 [running]:
+</span><span class="cm">main.main()
+</span><span class="cm">        /Users/hui/Project/Go/src/go-basic/main.go:22 +0x1cc
+</span><span class="cm">
+</span><span class="cm">Process finished with exit code 2
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="8缓冲channel">8.缓冲Channel</h3>
+<p><font color=red>默认创建的都是非缓冲<code>channel</code>，读写都是即时阻塞。缓冲<code>channel</code>自带一块缓冲区，可以暂时存储数据，如果缓冲区满了，就会发生阻塞。</font>缓冲通道在发送时无需等待接收方接收即可完成发送过程，并且不会发生阻塞，只有当缓冲区满时才会发生阻塞。同理，如果缓冲通道中有数据，接收时将不会发生阻塞，直到通道中没有数据可读时，通道将会再度阻塞。</p>
+<h4 id="81-语法">8.1 语法</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 声明 n:代表缓冲区大小
+</span><span class="c1"></span><span class="nx">cha1</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="nx">T</span><span class="p">,</span><span class="nx">n</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="82-使用示例">8.2 使用示例</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;fmt&#34;</span>
+	<span class="s">&#34;time&#34;</span>
+<span class="p">)</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;开始时间: %v \n&#34;</span><span class="p">,</span><span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Unix</span><span class="p">())</span>
+	<span class="c1">// 创建一个缓冲区为2的整数型chan
+</span><span class="c1"></span>	<span class="nx">intChan2</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="kt">int</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+	<span class="c1">// 不会发生阻塞，因为缓冲区未满
+</span><span class="c1"></span>	<span class="nx">intChan2</span> <span class="o">&lt;-</span> <span class="mi">100</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;结束时间: %v \n&#34;</span><span class="p">,</span><span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Unix</span><span class="p">())</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;intChan2  类型: %T 缓冲大小: %v \n&#34;</span><span class="p">,</span><span class="nx">intChan2</span><span class="p">,</span><span class="nb">cap</span><span class="p">(</span><span class="nx">intChan2</span><span class="p">))</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;程序运行结束!&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/**输出:
+</span><span class="cm">  开始时间: 1607496281 
+</span><span class="cm">  结束时间: 1607496281 
+</span><span class="cm">  intChan2  类型: chan int 缓冲大小: 2 
+</span><span class="cm">  程序运行结束!
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="9单向channel">9.单向Channel</h3>
+<p><code>channel</code>默认都是双向的，即可读可写。定向<code>channel</code>也叫单向<code>channel</code>，只读或只写。直接创建单向<code>channel</code>没有任何意义。通常的做法是创建双向<code>channel</code>，然后以单向<code>channel</code>的方式进行函数传递。</p>
+<h4 id="91-介绍">9.1 介绍</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 只读
+</span><span class="c1"></span><span class="nx">ch</span> <span class="o">&lt;-</span> <span class="kd">chan</span> <span class="nx">T</span>
+<span class="c1">// 只写
+</span><span class="c1"></span><span class="nx">ch</span> <span class="kd">chan</span> <span class="o">&lt;-</span> <span class="nx">T</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="91-使用">9.1 使用</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;fmt&#34;</span>
+	<span class="s">&#34;time&#34;</span>
+<span class="p">)</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 创建一个整数型chan
+</span><span class="c1"></span>	<span class="nx">intChan</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="kt">int</span><span class="p">)</span>
+	<span class="k">go</span> <span class="nf">writeChan</span><span class="p">(</span><span class="nx">intChan</span><span class="p">)</span>
+	<span class="k">go</span> <span class="nf">readChan</span><span class="p">(</span><span class="nx">intChan</span><span class="p">)</span>
+	<span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="mi">50</span> <span class="o">*</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Millisecond</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;运行结束&#34;</span><span class="p">)</span>
+
+<span class="p">}</span>
+
+<span class="c1">// 定义只读通道的函数
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">readChan</span><span class="p">(</span> <span class="nx">ch</span> <span class="o">&lt;-</span> <span class="kd">chan</span> <span class="kt">int</span><span class="p">)</span>  <span class="p">{</span>
+	<span class="k">for</span> <span class="nx">data</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">ch</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;读出数据: %v \n&#34;</span><span class="p">,</span><span class="nx">data</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+<span class="c1">// 定义只写通道的函数
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">writeChan</span><span class="p">(</span> <span class="nx">ch</span> <span class="kd">chan</span> <span class="o">&lt;-</span> <span class="kt">int</span><span class="p">){</span>
+	<span class="k">for</span> <span class="nx">i</span><span class="o">:=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span><span class="p">&lt;</span> <span class="mi">5</span> <span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="nx">ch</span> <span class="o">&lt;-</span> <span class="nx">i</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;写入数据: %v \n&#34;</span><span class="p">,</span><span class="nx">i</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="nb">close</span><span class="p">(</span><span class="nx">ch</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="10计时器与channel">10.计时器与channel</h3>
+<p>计时器类型表示单个事件。当计时器过期时，当前时间将被发送到<code>c</code>上（<code>c是一个只读channel ＜-chan time.Time，该channel中放入的是Timer结构体</code>），除非计时器是<code>After()</code>创建的。计时器必须使用<code>NewTimer()</code>或<code>After()</code>创建。</p>
+<h4 id="101-newtimer">10.1 NewTimer</h4>
+<p><code>NewTimer()</code>创建一个新的计时器，它会在至少持续时间<code>d</code>之后将当前时间发送到其<code>channel</code>上。</p>
+<p><strong>使用示例:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;fmt&#34;</span>
+	<span class="s">&#34;time&#34;</span>
+<span class="p">)</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 创建一个计时器
+</span><span class="c1"></span>	<span class="nx">timer</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">NewTimer</span><span class="p">(</span><span class="mi">5</span> <span class="o">*</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;开始时间 %v \n&#34;</span><span class="p">,</span><span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">())</span>
+	<span class="c1">// 此处会阻塞5秒
+</span><span class="c1"></span>	<span class="nx">out</span> <span class="o">:=</span> <span class="o">&lt;-</span> <span class="nx">timer</span><span class="p">.</span><span class="nx">C</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;变量out-&gt;  类型: %T 值:%v  \n&#34;</span><span class="p">,</span><span class="nx">out</span><span class="p">,</span><span class="nx">out</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;开始时间 %v \n&#34;</span><span class="p">,</span><span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">())</span>
+<span class="p">}</span>
+<span class="cm">/** 输出:
+</span><span class="cm">  开始时间 2020-12-10 10:53:22.979673 +0800 CST m=+0.000174275 
+</span><span class="cm">  变量out-&gt;  类型: time.Time 值:2020-12-10 10:53:27.980079 +0800 CST m=+5.000489969  
+</span><span class="cm">  开始时间 2020-12-10 10:53:27.980264 +0800 CST m=+5.000674880 
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="102-after">10.2 After</h4>
+<p><code>After()</code>函数相当于<code>NewTimer(d). C</code>,如下源码:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">After</span><span class="p">(</span><span class="nx">d</span> <span class="nx">Duration</span><span class="p">)</span> <span class="o">&lt;-</span><span class="kd">chan</span> <span class="nx">Time</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="nf">NewTimer</span><span class="p">(</span><span class="nx">d</span><span class="p">).</span><span class="nx">C</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>使用示例</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;fmt&#34;</span>
+	<span class="s">&#34;time&#34;</span>
+<span class="p">)</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 创建一个计时器,返回的是chan
+</span><span class="c1"></span>	<span class="nx">ch</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">After</span><span class="p">(</span><span class="mi">5</span> <span class="o">*</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;开始时间 %v \n&#34;</span><span class="p">,</span><span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">())</span>
+	<span class="c1">// 此处会阻塞5秒
+</span><span class="c1"></span>	<span class="nx">out</span> <span class="o">:=</span> <span class="o">&lt;-</span> <span class="nx">ch</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;变量out-&gt;  类型: %T 值:%v  \n&#34;</span><span class="p">,</span><span class="nx">out</span><span class="p">,</span><span class="nx">out</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;开始时间 %v \n&#34;</span><span class="p">,</span><span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">())</span>
+<span class="p">}</span>
+<span class="cm">/** 输出
+</span><span class="cm">  开始时间 2020-12-10 11:01:07.272154 +0800 CST m=+0.000153152 
+</span><span class="cm">  变量out-&gt;  类型: time.Time 值:2020-12-10 11:01:12.273034 +0800 CST m=+5.000956630  
+</span><span class="cm">  开始时间 2020-12-10 11:01:12.273153 +0800 CST m=+5.001076196 
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">Shershon</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2021-01-17
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/go%E5%9F%BA%E7%A1%80/">Go基础</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/godoc/%E5%9F%BA%E7%A1%80%E7%AF%87/18-%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-select%E5%92%8C%E9%80%9A%E9%81%93/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Go学习(十八):并发编程-select和通道</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        <a class="next" href="/post/godoc/%E5%9F%BA%E7%A1%80%E7%AF%87/16-%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-%E5%8D%8F%E7%A8%8B/">
+            <span class="next-text nav-default">Go学习(十六):并发编程-协程</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:your@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://localhost:1313" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="http://localhost:1313" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="http://localhost:1313" class="iconfont icon-facebook" title="facebook"></a>
+      <a href="http://localhost:1313" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="http://localhost:1313" class="iconfont icon-google" title="google"></a>
+      <a href="http://localhost:1313" class="iconfont icon-github" title="github"></a>
+      <a href="http://localhost:1313" class="iconfont icon-weibo" title="weibo"></a>
+      <a href="http://localhost:1313" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="http://localhost:1313" class="iconfont icon-douban" title="douban"></a>
+      <a href="http://localhost:1313" class="iconfont icon-pocket" title="pocket"></a>
+      <a href="http://localhost:1313" class="iconfont icon-tumblr" title="tumblr"></a>
+      <a href="http://localhost:1313" class="iconfont icon-instagram" title="instagram"></a>
+      <a href="http://localhost:1313" class="iconfont icon-gitlab" title="gitlab"></a>
+      <a href="http://localhost:1313" class="iconfont icon-bilibili" title="bilibili"></a>
+  <a href="http://localhost:1313/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span>Shershon</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

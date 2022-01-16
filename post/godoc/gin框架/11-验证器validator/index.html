@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Gin框架(十一):验证器(validator) - 小山的博客</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Shershon" /><meta name="description" content="1.介绍 validator是一个开源的验证器包，可以快速校验输入信息是否符合自定规则。目前Star 7.8k,源码地址: https://github.com/go-playground/validator 1.1 安装 1 go get github.com/go-playground/validator 1.2 引用" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.90.1 with theme even" />
+
+
+<link rel="canonical" href="http://localhost:1313/post/godoc/gin%E6%A1%86%E6%9E%B6/11-%E9%AA%8C%E8%AF%81%E5%99%A8validator/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Gin框架(十一):验证器(validator)" />
+<meta property="og:description" content="1.介绍 validator是一个开源的验证器包，可以快速校验输入信息是否符合自定规则。目前Star 7.8k,源码地址: https://github.com/go-playground/validator 1.1 安装 1 go get github.com/go-playground/validator 1.2 引用" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/post/godoc/gin%E6%A1%86%E6%9E%B6/11-%E9%AA%8C%E8%AF%81%E5%99%A8validator/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2021-12-11T00:00:00+00:00" />
+<meta property="article:modified_time" content="2021-12-11T00:00:00+00:00" />
+
+<meta itemprop="name" content="Gin框架(十一):验证器(validator)">
+<meta itemprop="description" content="1.介绍 validator是一个开源的验证器包，可以快速校验输入信息是否符合自定规则。目前Star 7.8k,源码地址: https://github.com/go-playground/validator 1.1 安装 1 go get github.com/go-playground/validator 1.2 引用"><meta itemprop="datePublished" content="2021-12-11T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2021-12-11T00:00:00+00:00" />
+<meta itemprop="wordCount" content="2917">
+<meta itemprop="keywords" content="Go实践,Gin," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Gin框架(十一):验证器(validator)"/>
+<meta name="twitter:description" content="1.介绍 validator是一个开源的验证器包，可以快速校验输入信息是否符合自定规则。目前Star 7.8k,源码地址: https://github.com/go-playground/validator 1.1 安装 1 go get github.com/go-playground/validator 1.2 引用"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">小山的博客</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">小山的博客</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Gin框架(十一):验证器(validator)</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-12-11 </span>
+        <div class="post-category">
+            <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+            <a href="/categories/go/"> Go </a>
+            </div>
+          <span class="more-meta"> 2917 words </span>
+          <span class="more-meta"> 6 mins read </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#1介绍">1.介绍</a></li>
+            <li><a href="#2改成中文">2.改成中文</a></li>
+            <li><a href="#3校验规则">3.校验规则</a></li>
+            <li><a href="#4自定义规则">4.自定义规则</a></li>
+            <li><a href="#5在gin中使用">5.在Gin中使用</a></li>
+            <li><a href="#6-报错显示json-tag">6. 报错显示<code>json tag</code></a></li>
+            <li><a href="#7常用标记说明">7.常用标记说明</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h3 id="1介绍">1.介绍</h3>
+<p><a href="https://github.com/go-playground/validator">validator</a>是一个开源的验证器包，可以快速校验输入信息是否符合自定规则。目前<code>Star 7.8k</code>,源码地址: <a href="https://github.com/go-playground/validator">https://github.com/go-playground/validator</a></p>
+<h4 id="11-安装">1.1 安装</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="k">go</span> <span class="nx">get</span> <span class="nx">github</span><span class="p">.</span><span class="nx">com</span><span class="o">/</span><span class="k">go</span><span class="o">-</span><span class="nx">playground</span><span class="o">/</span><span class="nx">validator</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="12-引用">1.2 引用</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">import</span> <span class="s">&#34;github.com/go-playground/validator&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="13-示例">1.3 示例</h4>
+<p><strong>代码:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;fmt&#34;</span>
+	<span class="s">&#34;github.com/gin-gonic/gin&#34;</span>
+	<span class="s">&#34;github.com/go-playground/validator/v10&#34;</span>
+<span class="p">)</span>
+<span class="c1">// 定义一个添加用户参数结构体
+</span><span class="c1"></span><span class="kd">type</span> <span class="nx">AddUserPost</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">Name</span>  <span class="kt">string</span> <span class="s">`json:&#34;name&#34; validate:&#34;required&#34;`</span>        <span class="c1">//必填
+</span><span class="c1"></span>	<span class="nx">Email</span> <span class="kt">string</span> <span class="s">`json:&#34;email&#34; validate:&#34;required,email&#34;`</span> <span class="c1">// 必填，并且格式是email
+</span><span class="c1"></span>	<span class="nx">Age</span>   <span class="kt">uint8</span>    <span class="s">`json:&#34;age&#34; validate:&#34;gte=18,lte=30&#34;`</span> <span class="c1">// 年龄范围
+</span><span class="c1"></span><span class="p">}</span>
+<span class="c1">// 简单示例
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
+	<span class="nx">engine</span><span class="p">.</span><span class="nf">POST</span><span class="p">(</span><span class="s">&#34;/valid&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+		<span class="kd">var</span> <span class="nx">adduserPost</span>  <span class="nx">AddUserPost</span>
+		<span class="c1">// 接收参数
+</span><span class="c1"></span>		<span class="nx">err</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">ShouldBindJSON</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">adduserPost</span><span class="p">)</span>
+		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+			<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span><span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;msg&#34;</span><span class="p">:</span><span class="nx">err</span><span class="p">})</span>
+			<span class="k">return</span>
+		<span class="p">}</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;adduserPost: %+v\n&#34;</span><span class="p">,</span><span class="nx">adduserPost</span><span class="p">)</span>
+		<span class="c1">// 使用Validate验证
+</span><span class="c1"></span>		<span class="nx">validate</span> <span class="o">:=</span> <span class="nx">validator</span><span class="p">.</span><span class="nf">New</span><span class="p">()</span>
+		<span class="nx">err</span> <span class="p">=</span> <span class="nx">validate</span><span class="p">.</span><span class="nf">Struct</span><span class="p">(</span><span class="nx">adduserPost</span><span class="p">)</span>
+		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+			<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span><span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;msg&#34;</span><span class="p">:</span><span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">()})</span>
+			<span class="k">return</span>
+		<span class="p">}</span>
+		<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;msg&#34;</span><span class="p">:</span><span class="s">&#34;success&#34;</span><span class="p">})</span>
+	<span class="p">})</span>
+	<span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>请求:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># email不合法时</span>
+➜ curl -X POST http://127.0.0.1:8080/valid -d <span class="s1">&#39;{&#34;name&#34;:&#34;张三&#34;,&#34;email&#34;:&#34;123&#34;,&#34;age&#34;:21}&#39;</span>
+<span class="o">{</span><span class="s2">&#34;msg&#34;</span>:<span class="s2">&#34;Key: &#39;AddUserPost.Email&#39; Error:Field validation for &#39;Email&#39; failed on the &#39;email&#39; tag&#34;</span><span class="o">}</span>
+<span class="c1"># age 不在指定范围时</span>
+➜ curl -X POST http://127.0.0.1:8080/valid -d <span class="s1">&#39;{&#34;name&#34;:&#34;张三&#34;,&#34;email&#34;:&#34;123@163.com&#34;,&#34;age&#34;:17}&#39;</span>
+<span class="o">{</span><span class="s2">&#34;msg&#34;</span>:<span class="s2">&#34;Key: &#39;AddUserPost.Age&#39; Error:Field validation for &#39;Age&#39; failed on the &#39;gte&#39; tag&#34;</span><span class="o">}</span>
+<span class="c1"># 姓名不填时</span>
+➜ curl -X POST http://127.0.0.1:8080/valid -d <span class="s1">&#39;{&#34;name&#34;:&#34;&#34;,&#34;email&#34;:&#34;123@163.com&#34;,&#34;age&#34;:20}&#39;</span>
+<span class="o">{</span><span class="s2">&#34;msg&#34;</span>:<span class="s2">&#34;Key: &#39;AddUserPost.Name&#39; Error:Field validation for &#39;Name&#39; failed on the &#39;required&#39; tag&#34;</span><span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="2改成中文">2.改成中文</h3>
+<h4 id="21-代码">2.1 代码</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;github.com/gin-gonic/gin&#34;</span>
+	<span class="s">&#34;github.com/go-playground/locales/zh&#34;</span>
+	<span class="nx">ut</span> <span class="s">&#34;github.com/go-playground/universal-translator&#34;</span>
+	<span class="s">&#34;github.com/go-playground/validator/v10&#34;</span>
+	<span class="nx">zhs</span> <span class="s">&#34;github.com/go-playground/validator/v10/translations/zh&#34;</span>
+<span class="p">)</span>
+<span class="kd">var</span> <span class="p">(</span>
+	<span class="nx">validate</span> <span class="p">=</span> <span class="nx">validator</span><span class="p">.</span><span class="nf">New</span><span class="p">()</span>          <span class="c1">// 实例化验证器
+</span><span class="c1"></span>	<span class="nx">chinese</span>  <span class="p">=</span> <span class="nx">zh</span><span class="p">.</span><span class="nf">New</span><span class="p">()</span>                 <span class="c1">// 获取中文翻译器
+</span><span class="c1"></span>	<span class="nx">uni</span>      <span class="p">=</span> <span class="nx">ut</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="nx">chinese</span><span class="p">,</span> <span class="nx">chinese</span><span class="p">)</span> <span class="c1">// 设置成中文翻译器
+</span><span class="c1"></span>	<span class="nx">trans</span><span class="p">,</span> <span class="nx">_</span> <span class="p">=</span> <span class="nx">uni</span><span class="p">.</span><span class="nf">GetTranslator</span><span class="p">(</span><span class="s">&#34;zh&#34;</span><span class="p">)</span>  <span class="c1">// 获取翻译字典
+</span><span class="c1"></span><span class="p">)</span>
+<span class="kd">type</span> <span class="nx">User</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">Name</span>  <span class="kt">string</span> <span class="s">`form:&#34;name&#34; validate:&#34;required,min=3,max=5&#34;`</span>
+	<span class="nx">Email</span> <span class="kt">string</span> <span class="s">`form:&#34;email&#34; validate:&#34;email&#34;`</span>
+	<span class="nx">Age</span>   <span class="kt">int8</span>   <span class="s">`form:&#34;age&#34; validate:&#34;gte=18,lte=20&#34;`</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
+	<span class="nx">engine</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/language&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+		<span class="kd">var</span> <span class="nx">user</span> <span class="nx">User</span>
+		<span class="nx">err</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">ShouldBindQuery</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">user</span><span class="p">)</span>
+		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+			<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;msg&#34;</span><span class="p">:</span> <span class="nx">err</span><span class="p">})</span>
+			<span class="k">return</span>
+		<span class="p">}</span>
+		<span class="c1">// 注册翻译器
+</span><span class="c1"></span>		<span class="nx">_</span> <span class="p">=</span> <span class="nx">zhs</span><span class="p">.</span><span class="nf">RegisterDefaultTranslations</span><span class="p">(</span><span class="nx">validate</span><span class="p">,</span> <span class="nx">trans</span><span class="p">)</span>
+		<span class="c1">// 使用验证器验证
+</span><span class="c1"></span>		<span class="nx">err</span> <span class="p">=</span> <span class="nx">validate</span><span class="p">.</span><span class="nf">Struct</span><span class="p">(</span><span class="nx">user</span><span class="p">)</span>
+		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+			<span class="k">if</span> <span class="nx">errors</span><span class="p">,</span> <span class="nx">ok</span> <span class="o">:=</span> <span class="nx">err</span><span class="p">.(</span><span class="nx">validator</span><span class="p">.</span><span class="nx">ValidationErrors</span><span class="p">);</span> <span class="nx">ok</span> <span class="p">{</span>
+				<span class="c1">// 翻译，并返回
+</span><span class="c1"></span>				<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span>
+					<span class="s">&#34;翻译前&#34;</span><span class="p">:</span> <span class="nx">errors</span><span class="p">.</span><span class="nf">Error</span><span class="p">(),</span>
+					<span class="s">&#34;翻译后&#34;</span><span class="p">:</span> <span class="nx">errors</span><span class="p">.</span><span class="nf">Translate</span><span class="p">(</span><span class="nx">trans</span><span class="p">),</span>
+				<span class="p">})</span>
+				<span class="k">return</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+		<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;msg&#34;</span><span class="p">:</span><span class="s">&#34;success&#34;</span><span class="p">})</span>
+	<span class="p">})</span>
+	<span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="22-请求">2.2 请求</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 不传参数</span>
+➜ curl -X GET http://127.0.0.1:8080/language
+<span class="o">{</span>
+    <span class="s2">&#34;翻译前&#34;</span>:<span class="s2">&#34;Key: &#39;User.Name&#39; Error:Field validation for &#39;Name&#39; failed on the &#39;required&#39; tag
+</span><span class="s2">Key: &#39;User.Email&#39; Error:Field validation for &#39;Email&#39; failed on the &#39;email&#39; tag
+</span><span class="s2">Key: &#39;User.Age&#39; Error:Field validation for &#39;Age&#39; failed on the &#39;gte&#39; tag&#34;</span>,
+    <span class="s2">&#34;翻译后&#34;</span>:<span class="o">{</span>
+        <span class="s2">&#34;User.Age&#34;</span>:<span class="s2">&#34;Age必须大于或等于18&#34;</span>,
+        <span class="s2">&#34;User.Email&#34;</span>:<span class="s2">&#34;Email必须是一个有效的邮箱&#34;</span>,
+        <span class="s2">&#34;User.Name&#34;</span>:<span class="s2">&#34;Name为必填字段&#34;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="3校验规则">3.校验规则</h3>
+<p>整理一些常用的规则</p>
+<table>
+<thead>
+<tr>
+<th>Tag标签</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>required</code></td>
+<td>必填</td>
+</tr>
+<tr>
+<td><code>unique</code></td>
+<td>保证唯一性,不同类型处理不同;<br/>对于<code>map，unique</code>约束没有重复的<code>value</code>值；<br/>对于数组和切片，没有重复的元素值<br/></td>
+</tr>
+<tr>
+<td><code>min</code></td>
+<td>最小值,不同类型含义不一样<br>数字类型代表最小值。<br/>字符串型代表最小字符数</td>
+</tr>
+<tr>
+<td><code>max</code></td>
+<td>最大值,不同类型含义不一样<br/>数字类型代表最大值。<br/>字符串型代表最大字符数</td>
+</tr>
+<tr>
+<td><code>gte</code></td>
+<td>大于等于参数值</td>
+</tr>
+<tr>
+<td><code>gt</code></td>
+<td>大于参数值</td>
+</tr>
+<tr>
+<td><code>lt</code></td>
+<td>小于参数值</td>
+</tr>
+<tr>
+<td><code>lte</code></td>
+<td>小于d等于参数值</td>
+</tr>
+<tr>
+<td><code>email</code></td>
+<td>使用<code>email</code>来限制字段必须是邮件形式</td>
+</tr>
+<tr>
+<td><code>oneof</code></td>
+<td>必须是指定值的其中一个，如:<code>oneof=男 女</code>,只能填男或女</td>
+</tr>
+</tbody>
+</table>
+<p><a href="https://github.com/go-playground/validator">更多规则，则可查看文档:https://github.com/go-playground/validator</a></p>
+<h3 id="4自定义规则">4.自定义规则</h3>
+<h4 id="41-代码">4.1 代码</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;fmt&#34;</span>
+	<span class="s">&#34;github.com/go-playground/validator/v10&#34;</span>
+<span class="p">)</span>
+<span class="c1">// 验证pre
+</span><span class="c1"></span><span class="kd">type</span> <span class="nx">CustomParam</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">Pre</span> <span class="kt">string</span> <span class="s">`validate:&#34;pre=go_&#34;`</span>
+<span class="p">}</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span>  <span class="p">{</span>
+	<span class="c1">// 实例化验证器
+</span><span class="c1"></span>	<span class="nx">validate</span> <span class="p">=</span> <span class="nx">validator</span><span class="p">.</span><span class="nf">New</span><span class="p">()</span>
+	<span class="c1">// 注册自定义标签
+</span><span class="c1"></span>	<span class="nx">_</span> <span class="p">=</span> <span class="nx">validate</span><span class="p">.</span><span class="nf">RegisterValidation</span><span class="p">(</span><span class="s">&#34;pre&#34;</span><span class="p">,</span> <span class="nx">ValidatePre</span><span class="p">)</span>
+	<span class="nx">cusParam</span> <span class="o">:=</span> <span class="nx">CustomParam</span><span class="p">{</span>
+		<span class="nx">Pre</span><span class="p">:</span> <span class="s">&#34;php_&#34;</span><span class="p">,</span>
+	<span class="p">}</span>
+	<span class="nx">err</span> <span class="o">:=</span> <span class="nx">validate</span><span class="p">.</span><span class="nf">Struct</span><span class="p">(</span><span class="nx">cusParam</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="c1">// 自定义验证规则
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">ValidatePre</span><span class="p">(</span><span class="nx">fl</span> <span class="nx">validator</span><span class="p">.</span><span class="nx">FieldLevel</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="nx">fl</span><span class="p">.</span><span class="nf">Field</span><span class="p">().</span><span class="nf">String</span><span class="p">()</span> <span class="o">==</span> <span class="s">&#34;go_&#34;</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="42-请求返回">4.2 请求返回</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">Key: <span class="s1">&#39;CustomParam.Pre&#39;</span> Error:Field validation <span class="k">for</span> <span class="s1">&#39;Pre&#39;</span> failed on the <span class="s1">&#39;pre&#39;</span> tag
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="5在gin中使用">5.在Gin中使用</h3>
+<h4 id="51-代码">5.1 代码</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;github.com/gin-gonic/gin&#34;</span>
+	<span class="s">&#34;github.com/gin-gonic/gin/binding&#34;</span>
+	<span class="s">&#34;github.com/go-playground/validator/v10&#34;</span>
+	<span class="s">&#34;net/http&#34;</span>
+	<span class="s">&#34;time&#34;</span>
+<span class="p">)</span>
+<span class="c1">// 定义结构体
+</span><span class="c1"></span><span class="kd">type</span> <span class="nx">User</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">Name</span> <span class="kt">string</span> <span class="s">`form:&#34;name&#34; binding:&#34;required,min=3,max=5&#34; `</span>
+	<span class="nx">BirthDate</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Time</span> <span class="s">`form:&#34;date&#34; binding:&#34;required,birth&#34; time_format:&#34;2006-01-02&#34;`</span>
+<span class="p">}</span>
+
+<span class="c1">// 运行程序
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span>  <span class="p">{</span>
+	<span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
+  <span class="c1">// 注册自定义验证标签:birth
+</span><span class="c1"></span>	<span class="k">if</span> <span class="nx">validate</span><span class="p">,</span><span class="nx">ok</span>  <span class="o">:=</span> <span class="nx">binding</span><span class="p">.</span><span class="nx">Validator</span><span class="p">.</span><span class="nf">Engine</span><span class="p">().(</span><span class="o">*</span><span class="nx">validator</span><span class="p">.</span><span class="nx">Validate</span><span class="p">);</span><span class="nx">ok</span> <span class="p">{</span>
+		<span class="nx">validate</span><span class="p">.</span><span class="nf">RegisterValidation</span><span class="p">(</span><span class="s">&#34;birth&#34;</span><span class="p">,</span><span class="nx">checkBirthDate</span><span class="p">)</span>
+	<span class="p">}</span>
+  <span class="c1">// 接收请求
+</span><span class="c1"></span>	<span class="nx">engine</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/valid&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+		<span class="kd">var</span> <span class="nx">user</span> <span class="nx">User</span>
+    <span class="c1">// 集成验证
+</span><span class="c1"></span>		<span class="nx">err</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">ShouldBindQuery</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">user</span><span class="p">)</span>
+		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+			<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusBadRequest</span><span class="p">,</span><span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;error&#34;</span><span class="p">:</span><span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">()})</span>
+			<span class="k">return</span>
+		<span class="p">}</span>
+		<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusOK</span><span class="p">,</span><span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;msg&#34;</span><span class="p">:</span><span class="s">&#34;success&#34;</span><span class="p">})</span>
+	<span class="p">})</span>
+	<span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
+<span class="p">}</span>
+<span class="c1">// 检测生日
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">checkBirthDate</span><span class="p">(</span><span class="nx">fl</span> <span class="nx">validator</span><span class="p">.</span><span class="nx">FieldLevel</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+	<span class="nx">t</span><span class="p">,</span><span class="nx">ok</span> <span class="o">:=</span> <span class="nx">fl</span><span class="p">.</span><span class="nf">Field</span><span class="p">().</span><span class="nf">Interface</span><span class="p">().(</span><span class="nx">time</span><span class="p">.</span><span class="nx">Time</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">ok</span> <span class="p">{</span>
+		<span class="c1">// 当前时间应该大于生日时间
+</span><span class="c1"></span>		<span class="k">if</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">After</span><span class="p">(</span><span class="nx">t</span><span class="p">)</span> <span class="p">{</span>
+			<span class="k">return</span> <span class="kc">true</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="kc">false</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="52-请求返回">5.2 请求返回</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># name错误时</span>
+➜  curl -X GET http://127.0.0.1:8080/valid?name<span class="o">=</span>张三<span class="p">&amp;</span><span class="nv">date</span><span class="o">=</span>2020-01-01
+<span class="o">{</span><span class="s2">&#34;error&#34;</span>:<span class="s2">&#34;Key: &#39;User.Name&#39; Error:Field validation for &#39;Name&#39; failed on the &#39;min&#39; tag&#34;</span><span class="o">}</span>
+<span class="c1"># 自定义birth格式错误时</span>
+➜  curl -X GET http://127.0.0.1:8080/valid?name<span class="o">=</span>张是三<span class="p">&amp;</span><span class="nv">date</span><span class="o">=</span><span class="m">2020</span>
+<span class="o">{</span><span class="s2">&#34;error&#34;</span>:<span class="s2">&#34;parsing time \&#34;2020\&#34; as \&#34;2006-01-02\&#34;: cannot parse \&#34;\&#34; as \&#34;-\&#34;&#34;</span><span class="o">}</span>
+<span class="c1"># 都正确</span>
+➜  curl -X GET http://127.0.0.1:8080/valid?name<span class="o">=</span>张是三<span class="p">&amp;</span><span class="nv">date</span><span class="o">=</span>2020-10-10
+<span class="o">{</span><span class="s2">&#34;msg&#34;</span>:<span class="s2">&#34;success&#34;</span><span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="6-报错显示json-tag">6. 报错显示<code>json tag</code></h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="o">...</span><span class="p">.</span>	
+ <span class="c1">// 注册一个获取json tag的自定义方法
+</span><span class="c1"></span>	<span class="nx">validate</span><span class="p">.</span><span class="nf">RegisterTagNameFunc</span><span class="p">(</span><span class="kd">func</span><span class="p">(</span><span class="nx">field</span> <span class="nx">reflect</span><span class="p">.</span><span class="nx">StructField</span><span class="p">)</span> <span class="kt">string</span> <span class="p">{</span>
+		<span class="nx">splitN</span> <span class="o">:=</span> <span class="nx">strings</span><span class="p">.</span><span class="nf">SplitN</span><span class="p">(</span><span class="nx">field</span><span class="p">.</span><span class="nx">Tag</span><span class="p">.</span><span class="nf">Get</span><span class="p">(</span><span class="s">&#34;json&#34;</span><span class="p">),</span> <span class="s">&#34;,&#34;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">splitN</span><span class="p">)</span>
+		<span class="nx">n</span> <span class="o">:=</span> <span class="nx">splitN</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+		<span class="k">if</span> <span class="nx">n</span> <span class="o">==</span> <span class="s">&#34;-&#34;</span> <span class="p">{</span>
+			<span class="k">return</span> <span class="s">&#34;&#34;</span>
+		<span class="p">}</span>
+		<span class="k">return</span> <span class="nx">n</span>
+	<span class="p">})</span>
+	<span class="nx">err</span> <span class="o">:=</span> <span class="nx">validate</span><span class="p">.</span><span class="nf">Struct</span><span class="p">(</span><span class="nx">s</span><span class="p">)</span>
+<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+  <span class="o">...</span><span class="p">.</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="7常用标记说明">7.常用标记说明</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">标记</th>
+<th style="text-align:center">标记说明</th>
+<th style="text-align:left">例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">required</td>
+<td style="text-align:center">必填</td>
+<td style="text-align:left">Field或Struct <code>validate:&quot;required&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">omitempty</td>
+<td style="text-align:center">空时忽略</td>
+<td style="text-align:left">Field或Struct <code>validate:&quot;omitempty&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">len</td>
+<td style="text-align:center">长度</td>
+<td style="text-align:left">Field <code>validate:&quot;len=0&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">eq</td>
+<td style="text-align:center">等于</td>
+<td style="text-align:left">Field <code>validate:&quot;eq=0&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">gt</td>
+<td style="text-align:center">大于</td>
+<td style="text-align:left">Field <code>validate:&quot;gt=0&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">gte</td>
+<td style="text-align:center">大于等于</td>
+<td style="text-align:left">Field <code>validate:&quot;gte=0&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">lt</td>
+<td style="text-align:center">小于</td>
+<td style="text-align:left">Field <code>validate:&quot;lt=0&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">lte</td>
+<td style="text-align:center">小于等于</td>
+<td style="text-align:left">Field <code>validate:&quot;lte=0&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">eqfield</td>
+<td style="text-align:center">同一结构体字段相等</td>
+<td style="text-align:left">Field <code>validate:&quot;eqfield=Field2&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">nefield</td>
+<td style="text-align:center">同一结构体字段不相等</td>
+<td style="text-align:left">Field <code>validate:&quot;nefield=Field2&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">gtfield</td>
+<td style="text-align:center">大于同一结构体字段</td>
+<td style="text-align:left">Field <code>validate:&quot;gtfield=Field2&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">gtefield</td>
+<td style="text-align:center">大于等于同一结构体字段</td>
+<td style="text-align:left">Field <code>validate:&quot;gtefield=Field2&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">ltfield</td>
+<td style="text-align:center">小于同一结构体字段</td>
+<td style="text-align:left">Field <code>validate:&quot;ltfield=Field2&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">ltefield</td>
+<td style="text-align:center">小于等于同一结构体字段</td>
+<td style="text-align:left">Field <code>validate:&quot;ltefield=Field2&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">eqcsfield</td>
+<td style="text-align:center">跨不同结构体字段相等</td>
+<td style="text-align:left">Struct1.Field <code>validate:&quot;eqcsfield=Struct2.Field2&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">necsfield</td>
+<td style="text-align:center">跨不同结构体字段不相等</td>
+<td style="text-align:left">Struct1.Field <code>validate:&quot;necsfield=Struct2.Field2&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">gtcsfield</td>
+<td style="text-align:center">大于跨不同结构体字段</td>
+<td style="text-align:left">Struct1.Field <code>validate:&quot;gtcsfield=Struct2.Field2&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">gtecsfield</td>
+<td style="text-align:center">大于等于跨不同结构体字段</td>
+<td style="text-align:left">Struct1.Field <code>validate:&quot;gtecsfield=Struct2.Field2&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">ltcsfield</td>
+<td style="text-align:center">小于跨不同结构体字段</td>
+<td style="text-align:left">Struct1.Field <code>validate:&quot;ltcsfield=Struct2.Field2&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">ltecsfield</td>
+<td style="text-align:center">小于等于跨不同结构体字段</td>
+<td style="text-align:left">Struct1.Field <code>validate:&quot;ltecsfield=Struct2.Field2&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">min</td>
+<td style="text-align:center">最大值</td>
+<td style="text-align:left">Field <code>validate:&quot;min=1&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">max</td>
+<td style="text-align:center">最小值</td>
+<td style="text-align:left">Field <code>validate:&quot;max=2&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">structonly</td>
+<td style="text-align:center">仅验证结构体，不验证任何结构体字段</td>
+<td style="text-align:left">Struct <code>validate:&quot;structonly&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">nostructlevel</td>
+<td style="text-align:center">不运行任何结构级别的验证</td>
+<td style="text-align:left">Struct <code>validate:&quot;nostructlevel&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">dive</td>
+<td style="text-align:center">向下延伸验证，多层向下需要多个dive标记</td>
+<td style="text-align:left">[][]string <code>validate:&quot;gt=0,dive,len=1,dive,required&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">dive Keys &amp; EndKeys</td>
+<td style="text-align:center">与dive同时使用，用于对map对象的键的和值的验证，keys为键，endkeys为值</td>
+<td style="text-align:left">map[string]string `validate:&ldquo;gt=0,dive,keys,eq=1</td>
+</tr>
+<tr>
+<td style="text-align:center">required_with</td>
+<td style="text-align:center">其他字段其中一个不为空且当前字段不为空</td>
+<td style="text-align:left">Field <code>validate:&quot;required_with=Field1 Field2&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">required_with_all</td>
+<td style="text-align:center">其他所有字段不为空且当前字段不为空</td>
+<td style="text-align:left">Field <code>validate:&quot;required_with_all=Field1 Field2&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">required_without</td>
+<td style="text-align:center">其他字段其中一个为空且当前字段不为空</td>
+<td style="text-align:left">Field `validate:&ldquo;required_without=Field1 Field2&rdquo;</td>
+</tr>
+<tr>
+<td style="text-align:center">required_without_all</td>
+<td style="text-align:center">其他所有字段为空且当前字段不为空</td>
+<td style="text-align:left">Field <code>validate:&quot;required_without_all=Field1 Field2&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">isdefault</td>
+<td style="text-align:center">是默认值</td>
+<td style="text-align:left">Field <code>validate:&quot;isdefault=0&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">oneof</td>
+<td style="text-align:center">其中之一</td>
+<td style="text-align:left">Field <code>validate:&quot;oneof=5 7 9&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">containsfield</td>
+<td style="text-align:center">字段包含另一个字段</td>
+<td style="text-align:left">Field <code>validate:&quot;containsfield=Field2&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">excludesfield</td>
+<td style="text-align:center">字段不包含另一个字段</td>
+<td style="text-align:left">Field <code>validate:&quot;excludesfield=Field2&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">unique</td>
+<td style="text-align:center">是否唯一，通常用于切片或结构体</td>
+<td style="text-align:left">Field <code>validate:&quot;unique&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">alphanum</td>
+<td style="text-align:center">字符串值是否只包含 ASCII 字母数字字符</td>
+<td style="text-align:left">Field <code>validate:&quot;alphanum&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">alphaunicode</td>
+<td style="text-align:center">字符串值是否只包含 unicode 字符</td>
+<td style="text-align:left">Field <code>validate:&quot;alphaunicode&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">alphanumunicode</td>
+<td style="text-align:center">字符串值是否只包含 unicode 字母数字字符</td>
+<td style="text-align:left">Field <code>validate:&quot;alphanumunicode&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">numeric</td>
+<td style="text-align:center">字符串值是否包含基本的数值</td>
+<td style="text-align:left">Field <code>validate:&quot;numeric&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">hexadecimal</td>
+<td style="text-align:center">字符串值是否包含有效的十六进制</td>
+<td style="text-align:left">Field <code>validate:&quot;hexadecimal&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">hexcolor</td>
+<td style="text-align:center">字符串值是否包含有效的十六进制颜色</td>
+<td style="text-align:left">Field <code>validate:&quot;hexcolor&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">lowercase</td>
+<td style="text-align:center">符串值是否只包含小写字符</td>
+<td style="text-align:left">Field <code>validate:&quot;lowercase&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">uppercase</td>
+<td style="text-align:center">符串值是否只包含大写字符</td>
+<td style="text-align:left">Field <code>validate:&quot;uppercase&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">email</td>
+<td style="text-align:center">字符串值包含一个有效的电子邮件</td>
+<td style="text-align:left">Field <code>validate:&quot;email&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">json</td>
+<td style="text-align:center">字符串值是否为有效的 JSON</td>
+<td style="text-align:left">Field <code>validate:&quot;json&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">file</td>
+<td style="text-align:center">符串值是否包含有效的文件路径，以及该文件是否存在于计算机上</td>
+<td style="text-align:left">Field <code>validate:&quot;file&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">url</td>
+<td style="text-align:center">符串值是否包含有效的 url</td>
+<td style="text-align:left">Field <code>validate:&quot;url&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">uri</td>
+<td style="text-align:center">符串值是否包含有效的 uri</td>
+<td style="text-align:left">Field <code>validate:&quot;uri&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">base64</td>
+<td style="text-align:center">字符串值是否包含有效的 base64值</td>
+<td style="text-align:left">Field <code>validate:&quot;base64&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">contains</td>
+<td style="text-align:center">字符串值包含子字符串值</td>
+<td style="text-align:left">Field <code>validate:&quot;contains=@&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">containsany</td>
+<td style="text-align:center">字符串值包含子字符串值中的任何字符</td>
+<td style="text-align:left">Field <code>validate:&quot;containsany=abc&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">containsrune</td>
+<td style="text-align:center">字符串值包含提供的特殊符号值</td>
+<td style="text-align:left">Field <code>validate:&quot;containsrune=☢&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">excludes</td>
+<td style="text-align:center">字符串值不包含子字符串值</td>
+<td style="text-align:left">Field <code>validate:&quot;excludes=@&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">excludesall</td>
+<td style="text-align:center">字符串值不包含任何子字符串值</td>
+<td style="text-align:left">Field <code>validate:&quot;excludesall=abc&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">excludesrune</td>
+<td style="text-align:center">字符串值不包含提供的特殊符号值</td>
+<td style="text-align:left">Field <code>validate:&quot;containsrune=☢&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">startswith</td>
+<td style="text-align:center">字符串以提供的字符串值开始</td>
+<td style="text-align:left">Field <code>validate:&quot;startswith=abc&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">endswith</td>
+<td style="text-align:center">字符串以提供的字符串值结束</td>
+<td style="text-align:left">Field <code>validate:&quot;endswith=abc&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">ip</td>
+<td style="text-align:center">字符串值是否包含有效的 IP 地址</td>
+<td style="text-align:left">Field <code>validate:&quot;ip&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">ipv4</td>
+<td style="text-align:center">字符串值是否包含有效的 ipv4地址</td>
+<td style="text-align:left">Field <code>validate:&quot;ipv4&quot;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">datetime</td>
+<td style="text-align:center">字符串值是否包含有效的 日期</td>
+<td style="text-align:left">Field <code>validate:&quot;datetime&quot;</code></td>
+</tr>
+</tbody>
+</table>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">Shershon</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2021-12-11
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/go%E5%AE%9E%E8%B7%B5/">Go实践</a>
+          <a href="/tags/gin/">Gin</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/godoc/gin%E6%A1%86%E6%9E%B6/12-%E6%9B%B4%E5%A4%9Ahttp%E6%9C%8D%E5%8A%A1%E4%BD%BF%E7%94%A8/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Gin框架(十二):更多HTTP服务使用</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        <a class="next" href="/post/godoc/gin%E6%A1%86%E6%9E%B6/10-%E6%97%A5%E5%BF%97%E4%BD%BF%E7%94%A8logrus&#43;lumberjack/">
+            <span class="next-text nav-default">Gin框架(十):日志使用(logrus&#43;lumberjack)</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:your@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://localhost:1313" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="http://localhost:1313" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="http://localhost:1313" class="iconfont icon-facebook" title="facebook"></a>
+      <a href="http://localhost:1313" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="http://localhost:1313" class="iconfont icon-google" title="google"></a>
+      <a href="http://localhost:1313" class="iconfont icon-github" title="github"></a>
+      <a href="http://localhost:1313" class="iconfont icon-weibo" title="weibo"></a>
+      <a href="http://localhost:1313" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="http://localhost:1313" class="iconfont icon-douban" title="douban"></a>
+      <a href="http://localhost:1313" class="iconfont icon-pocket" title="pocket"></a>
+      <a href="http://localhost:1313" class="iconfont icon-tumblr" title="tumblr"></a>
+      <a href="http://localhost:1313" class="iconfont icon-instagram" title="instagram"></a>
+      <a href="http://localhost:1313" class="iconfont icon-gitlab" title="gitlab"></a>
+      <a href="http://localhost:1313" class="iconfont icon-bilibili" title="bilibili"></a>
+  <a href="http://localhost:1313/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span>Shershon</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

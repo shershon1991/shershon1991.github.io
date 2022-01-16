@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>小山的博客</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Shershon" /><meta name="description" content="Hugo theme even example site." /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.90.1 with theme even" />
+
+
+<link rel="canonical" href="http://localhost:1313/" />
+  <link href="http://localhost:1313/index.xml" rel="alternate" type="application/rss+xml" title="小山的博客" />
+  <link href="http://localhost:1313/index.xml" rel="feed" type="application/rss+xml" title="小山的博客" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="小山的博客" />
+<meta property="og:description" content="Hugo theme even example site." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="http://localhost:1313/" />
+
+<meta itemprop="name" content="小山的博客">
+<meta itemprop="description" content="Hugo theme even example site."><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="小山的博客"/>
+<meta name="twitter:description" content="Hugo theme even example site."/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">小山的博客</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">小山的博客</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <section id="posts" class="posts">
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/godoc/gin%E6%A1%86%E6%9E%B6/%E9%9B%86%E6%88%90/05-redis/">Gin集成(五):集成Redis操作库</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2021-12-17 </span>
+      <div class="post-category">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+          <a href="/categories/go/"> Go </a>
+          </div>
+        <span class="more-meta"> 1015 words </span>
+        <span class="more-meta"> 3 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      1.介绍 redis官网推荐使用redigo(https://github.com/gomodule/redigo)，截止到今天Github S
+    </div>
+    <div class="read-more">
+      <a href="/post/godoc/gin%E6%A1%86%E6%9E%B6/%E9%9B%86%E6%88%90/05-redis/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/godoc/gin%E6%A1%86%E6%9E%B6/%E9%9B%86%E6%88%90/04-jwt/">Gin集成(四):集成JWT</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2021-12-16 </span>
+      <div class="post-category">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+          <a href="/categories/go/"> Go </a>
+          </div>
+        <span class="more-meta"> 1637 words </span>
+        <span class="more-meta"> 4 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      1. 介绍 JWT全称JSON Web Token是一种跨域认证解决方案，属于一个开放的标准，它规定了一种Token实现方式，目前多用于前后端分离项目和O
+    </div>
+    <div class="read-more">
+      <a href="/post/godoc/gin%E6%A1%86%E6%9E%B6/%E9%9B%86%E6%88%90/04-jwt/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/godoc/gin%E6%A1%86%E6%9E%B6/%E9%9B%86%E6%88%90/03-gorm/">Gin集成(三):集成全功能orm框架-gorm</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2021-12-15 </span>
+      <div class="post-category">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+          <a href="/categories/go/"> Go </a>
+          </div>
+        <span class="more-meta"> 3551 words </span>
+        <span class="more-meta"> 8 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      1. 介绍 gorm是一个使用Go语言编写的ORM框架。 它文档齐全，对开发者友好，支持主流数据库。具体使用可参考之前的文章Go常用包(十九):全功
+    </div>
+    <div class="read-more">
+      <a href="/post/godoc/gin%E6%A1%86%E6%9E%B6/%E9%9B%86%E6%88%90/03-gorm/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/godoc/gin%E6%A1%86%E6%9E%B6/%E9%9B%86%E6%88%90/02-zap/">Gin集成(二):集成高性能日志zap</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2021-12-14 </span>
+      <div class="post-category">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+          <a href="/categories/go/"> Go </a>
+          </div>
+        <span class="more-meta"> 1563 words </span>
+        <span class="more-meta"> 4 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      1.项目介绍 Gin框架学习使用,并实践常用包在Gin框架中的集成和使用。源码地址: https://github.com/52lu/gin-import-template.git 1.1 项目结构 1 2 3 4 5 6 7 8 9 10 11 12 ├── api # 接口 ├── config
+    </div>
+    <div class="read-more">
+      <a href="/post/godoc/gin%E6%A1%86%E6%9E%B6/%E9%9B%86%E6%88%90/02-zap/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/godoc/gin%E6%A1%86%E6%9E%B6/%E9%9B%86%E6%88%90/01-viper/">Gin集成(一):集成viper配置解析包</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2021-12-13 </span>
+      <div class="post-category">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+          <a href="/categories/go/"> Go </a>
+          </div>
+        <span class="more-meta"> 1425 words </span>
+        <span class="more-meta"> 3 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      1.介绍 Viper是适用于Go应用程序（包括Twelve-Factor App）的完整配置解决方案。它被设计用于在应用程序中工作，并且可以处理
+    </div>
+    <div class="read-more">
+      <a href="/post/godoc/gin%E6%A1%86%E6%9E%B6/%E9%9B%86%E6%88%90/01-viper/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/godoc/gin%E6%A1%86%E6%9E%B6/12-%E6%9B%B4%E5%A4%9Ahttp%E6%9C%8D%E5%8A%A1%E4%BD%BF%E7%94%A8/">Gin框架(十二):更多HTTP服务使用</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2021-12-12 </span>
+      <div class="post-category">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+          <a href="/categories/go/"> Go </a>
+          </div>
+        <span class="more-meta"> 823 words </span>
+        <span class="more-meta"> 2 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      1.静态文件服务 1.1 代码 1 2 3 4 5 6 7 8 9 10 11 package main import &#34;github.com/gin-gonic/gin&#34; func main() { engine := gin.Default() // 静态图片 engine.Static(&#34;/img&#34;,&#34;./public/img&#34;) // 静态文件 engine.StaticFile(&#34;/favicon.ico&#34;,&#34;./public/favicon.ico&#34;) // 启动服务 _ = engine.Run() } 1.2 目录结构 1.3 请求示例 1 2 3 4 5 # 请
+    </div>
+    <div class="read-more">
+      <a href="/post/godoc/gin%E6%A1%86%E6%9E%B6/12-%E6%9B%B4%E5%A4%9Ahttp%E6%9C%8D%E5%8A%A1%E4%BD%BF%E7%94%A8/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/godoc/gin%E6%A1%86%E6%9E%B6/11-%E9%AA%8C%E8%AF%81%E5%99%A8validator/">Gin框架(十一):验证器(validator)</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2021-12-11 </span>
+      <div class="post-category">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+          <a href="/categories/go/"> Go </a>
+          </div>
+        <span class="more-meta"> 2917 words </span>
+        <span class="more-meta"> 6 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      1.介绍 validator是一个开源的验证器包，可以快速校验输入信息是否符合自定规则。目前Star 7.8k,源码地址: https://github.com/go-playground/validator 1.1 安装 1 go get github.com/go-playground/validator 1.2 引用
+    </div>
+    <div class="read-more">
+      <a href="/post/godoc/gin%E6%A1%86%E6%9E%B6/11-%E9%AA%8C%E8%AF%81%E5%99%A8validator/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/godoc/gin%E6%A1%86%E6%9E%B6/10-%E6%97%A5%E5%BF%97%E4%BD%BF%E7%94%A8logrus&#43;lumberjack/">Gin框架(十):日志使用(logrus&#43;lumberjack)</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2021-12-10 </span>
+      <div class="post-category">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+          <a href="/categories/go/"> Go </a>
+          </div>
+        <span class="more-meta"> 2221 words </span>
+        <span class="more-meta"> 5 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      1.框架自带 gin框架自带日志记录功能,通过fmt.Fprint和fmt.Fprintf来记录日志信息，默认是将日志写到终端,可以通过gin
+    </div>
+    <div class="read-more">
+      <a href="/post/godoc/gin%E6%A1%86%E6%9E%B6/10-%E6%97%A5%E5%BF%97%E4%BD%BF%E7%94%A8logrus&#43;lumberjack/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/godoc/gin%E6%A1%86%E6%9E%B6/09-basicauth%E4%B8%AD%E9%97%B4%E4%BB%B6%E4%BD%BF%E7%94%A8/">Gin框架(九):BasicAuth中间件使用</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2021-12-09 </span>
+      <div class="post-category">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+          <a href="/categories/go/"> Go </a>
+          </div>
+        <span class="more-meta"> 313 words </span>
+        <span class="more-meta"> 1 min read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      1.什么是BasicAuth? Basic Auth是一种开放平台认证方式，简单的说就是需要你输入用户名和密码才能继续访问。 2.在单路由中使用 ​ 如果需要
+    </div>
+    <div class="read-more">
+      <a href="/post/godoc/gin%E6%A1%86%E6%9E%B6/09-basicauth%E4%B8%AD%E9%97%B4%E4%BB%B6%E4%BD%BF%E7%94%A8/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/godoc/gin%E6%A1%86%E6%9E%B6/08-%E4%B8%AD%E9%97%B4%E4%BB%B6/">Gin框架(八):中间件</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2021-12-08 </span>
+      <div class="post-category">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+          <a href="/categories/go/"> Go </a>
+          </div>
+        <span class="more-meta"> 2554 words </span>
+        <span class="more-meta"> 6 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      中间件（英语：Middleware），又译中间件、中介层，是一类提供系统软件和应用软件之间连接、便于软件各部件之间的沟通的软件，应用软件可以
+    </div>
+    <div class="read-more">
+      <a href="/post/godoc/gin%E6%A1%86%E6%9E%B6/08-%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/godoc/gin%E6%A1%86%E6%9E%B6/07-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/">Gin框架(七):文件上传</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2021-12-07 </span>
+      <div class="post-category">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+          <a href="/categories/go/"> Go </a>
+          </div>
+        <span class="more-meta"> 539 words </span>
+        <span class="more-meta"> 2 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      1.介绍 在Gin框架中已经支持文件上传，包括单文件上传和多文件上传。 2. 单文件上传 在Gin框架中可以通过FormFile(&quot;para
+    </div>
+    <div class="read-more">
+      <a href="/post/godoc/gin%E6%A1%86%E6%9E%B6/07-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/godoc/gin%E6%A1%86%E6%9E%B6/06-%E5%8F%82%E6%95%B0%E7%BB%91%E5%AE%9A/">Gin框架(六):参数绑定</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2021-12-06 </span>
+      <div class="post-category">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+          <a href="/categories/go/"> Go </a>
+          </div>
+        <span class="more-meta"> 2286 words </span>
+        <span class="more-meta"> 5 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      1.介绍 在Gin框架中参数不但能通过指定key接收,也可以直接绑定到结构体中,本篇主要讲解怎么直接绑定到结构体中,若要查看通过指定key接收
+    </div>
+    <div class="read-more">
+      <a href="/post/godoc/gin%E6%A1%86%E6%9E%B6/06-%E5%8F%82%E6%95%B0%E7%BB%91%E5%AE%9A/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/godoc/gin%E6%A1%86%E6%9E%B6/05-%E5%8F%82%E6%95%B0%E6%8E%A5%E6%94%B6/">Gin框架(五):参数接收</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2021-12-05 </span>
+      <div class="post-category">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+          <a href="/categories/go/"> Go </a>
+          </div>
+        <span class="more-meta"> 3581 words </span>
+        <span class="more-meta"> 8 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      1.路由参数 1.1 Param 当注册路由格式为:/path/:a/:b 时，:x指的就是路由参数，可以直接通过Param(&quot;x&quot;)获取值
+    </div>
+    <div class="read-more">
+      <a href="/post/godoc/gin%E6%A1%86%E6%9E%B6/05-%E5%8F%82%E6%95%B0%E6%8E%A5%E6%94%B6/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/godoc/gin%E6%A1%86%E6%9E%B6/04-%E8%B7%AF%E7%94%B1%E7%BB%84/">Gin框架(四):路由组</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2021-12-04 </span>
+      <div class="post-category">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+          <a href="/categories/go/"> Go </a>
+          </div>
+        <span class="more-meta"> 1300 words </span>
+        <span class="more-meta"> 3 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      1.什么是路由组? 从字面意思理解,路由组指的就是一组路由。那么什么样的路由可以归类到一组呢？在实际使用中，比较常见的场景的是根据版本分组。比
+    </div>
+    <div class="read-more">
+      <a href="/post/godoc/gin%E6%A1%86%E6%9E%B6/04-%E8%B7%AF%E7%94%B1%E7%BB%84/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/godoc/gin%E6%A1%86%E6%9E%B6/03-%E8%B7%AF%E7%94%B1%E5%88%9D%E4%BD%BF%E7%94%A8/">Gin框架(三):路由初使用</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2021-12-03 </span>
+      <div class="post-category">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+          <a href="/categories/go/"> Go </a>
+          </div>
+        <span class="more-meta"> 3496 words </span>
+        <span class="more-meta"> 7 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      1.介绍 Gin框架的路由功能是基于httprouter(https://github.com/julienschmidt/httproute
+    </div>
+    <div class="read-more">
+      <a href="/post/godoc/gin%E6%A1%86%E6%9E%B6/03-%E8%B7%AF%E7%94%B1%E5%88%9D%E4%BD%BF%E7%94%A8/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/godoc/gin%E6%A1%86%E6%9E%B6/02-%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B%E5%88%86%E6%9E%90/">Gin框架(二):启动流程分析</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2021-12-02 </span>
+      <div class="post-category">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+          <a href="/categories/go/"> Go </a>
+          </div>
+        <span class="more-meta"> 1760 words </span>
+        <span class="more-meta"> 4 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      1.启动服务 1.1 服务源码 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 package main // 引入gin框架 import &#34;github.com/gin-gonic/gin&#34; func main() { // 创建一个默认的路由引擎 engine := gin.Default() // 注册Get路由 engine.GET(&#34;/&#34;, func(ctx *gin.Context) { ctx.JSON(200,gin.H{ &
+    </div>
+    <div class="read-more">
+      <a href="/post/godoc/gin%E6%A1%86%E6%9E%B6/02-%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B%E5%88%86%E6%9E%90/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/godoc/gin%E6%A1%86%E6%9E%B6/01-%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/">Gin框架(一):快速入门</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2021-12-01 </span>
+      <div class="post-category">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+          <a href="/categories/go/"> Go </a>
+          </div>
+        <span class="more-meta"> 425 words </span>
+        <span class="more-meta"> 1 min read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      1.什么是Gin Gin 是一个用Go (Golang)编写的 开源web 框架。 目前在GitHub Start 47.4K, 它是一个类似于 martini 但拥有更好性能的 API 框架，路由解析由
+    </div>
+    <div class="read-more">
+      <a href="/post/godoc/gin%E6%A1%86%E6%9E%B6/01-%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/godoc/%E5%9F%BA%E7%A1%80%E7%AF%87/27-%E5%8F%8D%E5%B0%84%E4%BD%BF%E7%94%A8/">Go学习(二十七):反射使用</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2021-01-27 </span>
+      <div class="post-category">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+          <a href="/categories/go/"> Go </a>
+          </div>
+        <span class="more-meta"> 4269 words </span>
+        <span class="more-meta"> 9 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      1.介绍 Go语言实现了反射，所谓反射就是动态运行时的状态。我们一般用到的包是reflect包，reflect 实现了运行时的反射能力，能够让程
+    </div>
+    <div class="read-more">
+      <a href="/post/godoc/%E5%9F%BA%E7%A1%80%E7%AF%87/27-%E5%8F%8D%E5%B0%84%E4%BD%BF%E7%94%A8/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/godoc/%E5%9F%BA%E7%A1%80%E7%AF%87/26-md5-sha1-base64/">Go学习(二十六):Md5-Sha1-Base64</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2021-01-26 </span>
+      <div class="post-category">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+          <a href="/categories/go/"> Go </a>
+          </div>
+        <span class="more-meta"> 645 words </span>
+        <span class="more-meta"> 2 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      1.生成Md5 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 package main import ( &#34;crypto/md5&#34; &#34;fmt&#34; &#34;io&#34; ) func main() { str := &#34;Hello Word&#34; // 方法一 sum := md5.Sum([]byte(str)) // 转成16进制 md51 := fmt.Sprintf(&#34;%x&#34;, sum)
+    </div>
+    <div class="read-more">
+      <a href="/post/godoc/%E5%9F%BA%E7%A1%80%E7%AF%87/26-md5-sha1-base64/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/godoc/%E5%9F%BA%E7%A1%80%E7%AF%87/25-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%8D%AE%E5%BA%93-mysql/">Go学习(二十五):操作数据库-MYSQL</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2021-01-25 </span>
+      <div class="post-category">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+          <a href="/categories/go/"> Go </a>
+          </div>
+        <span class="more-meta"> 2446 words </span>
+        <span class="more-meta"> 5 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      1.介绍 Go官方提供了database包，database包下有sql/driver。该包用来定义操作数据库的接口，这保证了无论使用哪种数据
+    </div>
+    <div class="read-more">
+      <a href="/post/godoc/%E5%9F%BA%E7%A1%80%E7%AF%87/25-%E6%93%8D%E4%BD%9C%E6%95%B0%E6%8D%AE%E5%BA%93-mysql/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
+    </section>
+  
+  <nav class="pagination">
+    
+    <a class="next" href="/page/2/">
+        <span class="next-text">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+  </nav>
+        </div>
+        
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:your@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://localhost:1313" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="http://localhost:1313" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="http://localhost:1313" class="iconfont icon-facebook" title="facebook"></a>
+      <a href="http://localhost:1313" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="http://localhost:1313" class="iconfont icon-google" title="google"></a>
+      <a href="http://localhost:1313" class="iconfont icon-github" title="github"></a>
+      <a href="http://localhost:1313" class="iconfont icon-weibo" title="weibo"></a>
+      <a href="http://localhost:1313" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="http://localhost:1313" class="iconfont icon-douban" title="douban"></a>
+      <a href="http://localhost:1313" class="iconfont icon-pocket" title="pocket"></a>
+      <a href="http://localhost:1313" class="iconfont icon-tumblr" title="tumblr"></a>
+      <a href="http://localhost:1313" class="iconfont icon-instagram" title="instagram"></a>
+      <a href="http://localhost:1313" class="iconfont icon-gitlab" title="gitlab"></a>
+      <a href="http://localhost:1313" class="iconfont icon-bilibili" title="bilibili"></a>
+  <a href="http://localhost:1313/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span>Shershon</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

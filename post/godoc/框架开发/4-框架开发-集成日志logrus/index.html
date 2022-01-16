@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title> - 小山的博客</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Shershon" /><meta name="description" content="1.介绍 logrus是目前 Github 上 star 数量最多的日志库,截止今天star数量为17.3k 。logrus功能强大,性能高效,而且具有高度灵活性,提供" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.90.1 with theme even" />
+
+
+<link rel="canonical" href="http://localhost:1313/post/godoc/%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91/4-%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91-%E9%9B%86%E6%88%90%E6%97%A5%E5%BF%97logrus/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="" />
+<meta property="og:description" content="1.介绍 logrus是目前 Github 上 star 数量最多的日志库,截止今天star数量为17.3k 。logrus功能强大,性能高效,而且具有高度灵活性,提供" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/post/godoc/%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91/4-%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91-%E9%9B%86%E6%88%90%E6%97%A5%E5%BF%97logrus/" /><meta property="article:section" content="post" />
+
+
+
+<meta itemprop="name" content="">
+<meta itemprop="description" content="1.介绍 logrus是目前 Github 上 star 数量最多的日志库,截止今天star数量为17.3k 。logrus功能强大,性能高效,而且具有高度灵活性,提供">
+
+<meta itemprop="wordCount" content="1835">
+<meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content=""/>
+<meta name="twitter:description" content="1.介绍 logrus是目前 Github 上 star 数量最多的日志库,截止今天star数量为17.3k 。logrus功能强大,性能高效,而且具有高度灵活性,提供"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">小山的博客</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">小山的博客</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title"></h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 0001-01-01 </span>
+        
+          <span class="more-meta"> 1835 words </span>
+          <span class="more-meta"> 4 mins read </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#1介绍">1.介绍</a></li>
+            <li><a href="#2安装">2.安装</a></li>
+            <li><a href="#3编写配置">3.编写配置</a></li>
+            <li><a href="#4使用">4.使用</a></li>
+            <li><a href="#5效果图">5.效果图</a></li>
+            <li><a href="#6相关地址">6.相关地址</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h3 id="1介绍">1.介绍</h3>
+<p><code>logrus</code>是目前 Github 上 star 数量最多的日志库,截止今天<code>star数量为17.3k </code>。<code>logrus</code>功能强大,性能高效,而且具有高度灵活性,提供了自定义插件的功能。</p>
+<p><a href="https://github.com/sirupsen/logrus">logrus源码:https://github.com/sirupsen/logrus</a></p>
+<h4 id="1特性总览">1.特性总览</h4>
+<ul>
+<li>完全兼容<code> golang</code> 标准库日志模块，<code>logrus </code>拥有六种日志级别：<code>debug、info、warn、error、fatal 和 panic</code>，这是<code> golang</code> 标准库日志模块的<code>API</code>的超集.如果您的项目使用标准库日志模块,完全可以以最低的代价迁移到<code> logrus</code> 上。</li>
+<li>可扩展的 Hook 机制：允许使用者通过 hook 的方式将日志分发到任意地方,如本地文件系统、标准输出、<code>logstash</code>、<code>elasticsearch</code>或者<code>mq</code>等,或者通过 hook 定义日志内容和格式等.</li>
+<li>可选的日志输出格式：logrus 内置了两种日志格式,<code>JSONFormatter</code>和<code>TextFormatter</code>,如果这两个格式不满足需求,可以自己动手实现接口 Formatter,来定义自己的日志格式.</li>
+<li><code>Field</code>机制：<code>logrus</code>鼓励通过 Field 机制进行精细化的、结构化的日志记录,而不是通过冗长的消息来记录日志.</li>
+<li><code>logrus</code>是一个可插拔的、结构化的日志框架.</li>
+<li></li>
+</ul>
+<h3 id="2安装">2.安装</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="k">go</span> <span class="nx">get</span> <span class="nx">github</span><span class="p">.</span><span class="nx">com</span><span class="o">/</span><span class="nx">sirupsen</span><span class="o">/</span><span class="nx">logrus</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="3编写配置">3.编写配置</h3>
+<h4 id="31-编写ini">3.1 编写<code>*.ini</code></h4>
+<p><code>app/config/dev.ini</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-ini" data-lang="ini"><span class="k">[log]</span>
+<span class="c1">#日志目录</span>
+<span class="na">path</span><span class="o">=</span><span class="s">/Users/hui/Project/Go/self/goe/log</span>
+<span class="c1"># 日志级别</span>
+<span class="na">level</span><span class="o">=</span><span class="s">debug</span>
+<span class="c1"># 日志格式: json,text,customize</span>
+<span class="na">formatter</span><span class="o">=</span><span class="s">json</span>
+<span class="c1"># 输出类型: 1:控制台，2:日志文件</span>
+<span class="na">output_type</span><span class="o">=</span><span class="s">2</span>
+<span class="c1"># 打开日志记录的行数；true:开启，false:关闭。默认关闭</span>
+<span class="na">report_caller</span><span class="o">=</span><span class="s">true</span>
+<span class="c1"># 日志后缀格式</span>
+<span class="na">suffix_format</span><span class="o">=</span><span class="s">%Y%m%d</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="32-编写配置结构体">3.2 编写配置结构体</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="cm">/**
+</span><span class="cm"> * @description: 日志配置
+</span><span class="cm"> * @user: Mr.LiuQH
+</span><span class="cm"> */</span>
+<span class="kd">type</span> <span class="nx">LogrusConfig</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">Path</span>         <span class="kt">string</span> <span class="s">`ini:&#34;path&#34;`</span>
+	<span class="nx">Level</span>        <span class="kt">string</span> <span class="s">`ini:&#34;level&#34;`</span>
+	<span class="nx">Formatter</span>    <span class="kt">string</span> <span class="s">`ini:&#34;formatter&#34;`</span>
+	<span class="nx">OutputType</span>   <span class="kt">string</span> <span class="s">`ini:&#34;output_type&#34;`</span>
+	<span class="nx">ReportCaller</span> <span class="kt">bool</span>   <span class="s">`ini:&#34;report_caller&#34;`</span>
+	<span class="nx">Suffix</span>       <span class="kt">string</span> <span class="s">`ini:&#34;suffix_format&#34;`</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="33-映射配置">3.3 映射配置</h4>
+<p><code>app/app.go</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 定义全局变量
+</span><span class="c1"></span><span class="kd">var</span> <span class="nx">LogrusConfigInstance</span> <span class="p">=</span> <span class="o">&amp;</span><span class="nx">config</span><span class="p">.</span><span class="nx">LogrusConfig</span><span class="p">{}</span>
+<span class="c1">// 把ini配置映射到结构体
+</span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">app</span> <span class="o">*</span><span class="nx">App</span><span class="p">)</span> <span class="nf">loadConfig</span><span class="p">()</span> <span class="p">{</span>
+	<span class="o">...</span>
+	<span class="c1">// 加载日志配置
+</span><span class="c1"></span>	<span class="nx">err</span> <span class="p">=</span> <span class="nx">cfg</span><span class="p">.</span><span class="nf">Section</span><span class="p">(</span><span class="s">&#34;log&#34;</span><span class="p">).</span><span class="nf">MapTo</span><span class="p">(</span><span class="nx">LogrusConfigInstance</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">BusErrorInstance</span><span class="p">.</span><span class="nf">ThrowError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="33-初始化全局logger">3.3 初始化全局Logger</h4>
+<p><code>源文件</code>:https://github.com/52lu/goe/blob/master/app/initialize.go</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">setLoggerInstance</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 设置日志级别
+</span><span class="c1"></span>	<span class="kd">var</span> <span class="nx">level</span> <span class="nx">logrus</span><span class="p">.</span><span class="nx">Level</span>
+	<span class="nx">err</span> <span class="o">:=</span> <span class="nx">level</span><span class="p">.</span><span class="nf">UnmarshalText</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="nx">LogrusConfigInstance</span><span class="p">.</span><span class="nx">Level</span><span class="p">))</span>
+	<span class="nx">BusErrorInstance</span><span class="p">.</span><span class="nf">ThrowError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+	<span class="nx">LoggerClient</span><span class="p">.</span><span class="nf">SetLevel</span><span class="p">(</span><span class="nx">level</span><span class="p">)</span>
+	<span class="c1">// 设置日志格式
+</span><span class="c1"></span>	<span class="k">if</span> <span class="nx">LogrusConfigInstance</span><span class="p">.</span><span class="nx">Formatter</span> <span class="o">==</span> <span class="s">&#34;json&#34;</span> <span class="p">{</span>
+		<span class="nx">LoggerClient</span><span class="p">.</span><span class="nf">SetFormatter</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">logrus</span><span class="p">.</span><span class="nx">JSONFormatter</span><span class="p">{})</span>
+	<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="nx">LogrusConfigInstance</span><span class="p">.</span><span class="nx">Formatter</span> <span class="o">==</span> <span class="s">&#34;text&#34;</span> <span class="p">{</span>
+		<span class="nx">LoggerClient</span><span class="p">.</span><span class="nf">SetFormatter</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">logrus</span><span class="p">.</span><span class="nx">TextFormatter</span><span class="p">{})</span>
+	<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="nx">LogrusConfigInstance</span><span class="p">.</span><span class="nx">Formatter</span> <span class="o">==</span> <span class="s">&#34;customize&#34;</span> <span class="p">{</span>
+		<span class="nx">LoggerClient</span><span class="p">.</span><span class="nf">SetFormatter</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">CustomizeFormat</span><span class="p">{})</span>
+	<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+		<span class="nx">BusErrorInstance</span><span class="p">.</span><span class="nf">ThrowError</span><span class="p">(</span><span class="nx">errors</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="s">&#34;log formatter must json|text|customize&#34;</span><span class="p">))</span>
+	<span class="p">}</span>
+	<span class="c1">// 打开日志记录的行数；true:开启，false:关闭。默认关闭
+</span><span class="c1"></span>	<span class="k">if</span> <span class="nx">LogrusConfigInstance</span><span class="p">.</span><span class="nx">ReportCaller</span> <span class="p">{</span>
+		<span class="nx">LoggerClient</span><span class="p">.</span><span class="nf">SetReportCaller</span><span class="p">(</span><span class="nx">LogrusConfigInstance</span><span class="p">.</span><span class="nx">ReportCaller</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="c1">// 设置日志输出方式
+</span><span class="c1"></span>	<span class="k">switch</span> <span class="nx">LogrusConfigInstance</span><span class="p">.</span><span class="nx">OutputType</span> <span class="p">{</span>
+	<span class="k">case</span> <span class="s">&#34;1&#34;</span><span class="p">:</span>
+		<span class="c1">// 控制台
+</span><span class="c1"></span>		<span class="nx">LoggerClient</span><span class="p">.</span><span class="nf">SetOutput</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stdout</span><span class="p">)</span>
+	<span class="k">case</span> <span class="s">&#34;2&#34;</span><span class="p">:</span>
+    <span class="c1">// 文件(日志分类配置)
+</span><span class="c1"></span>		<span class="nf">Log2FileByClass</span><span class="p">()</span>
+	<span class="k">default</span><span class="p">:</span>
+		<span class="c1">// 默认写到控制台
+</span><span class="c1"></span>		<span class="nx">LoggerClient</span><span class="p">.</span><span class="nf">SetOutput</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stdout</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="34-日志分类和自定义格式">3.4 日志分类和自定义格式</h4>
+<p><code>源文件</code>:https://github.com/52lu/goe/blob/master/app/initialize.go</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span><span class="lnt">73
+</span><span class="lnt">74
+</span><span class="lnt">75
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="cm">/**
+</span><span class="cm"> * @Author Mr.LiuQH
+</span><span class="cm"> * @Description 日志相关
+</span><span class="cm"> * @Date 2021/3/8 2:35 下午
+</span><span class="cm"> **/</span>
+<span class="kn">package</span> <span class="nx">common</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;fmt&#34;</span>
+	<span class="nx">goFileRotatelogs</span> <span class="s">&#34;github.com/lestrrat/go-file-rotatelogs&#34;</span>
+	<span class="s">&#34;github.com/rifflock/lfshook&#34;</span>
+	<span class="s">&#34;github.com/sirupsen/logrus&#34;</span>
+	<span class="s">&#34;path&#34;</span>
+	<span class="s">&#34;strings&#34;</span>
+	<span class="s">&#34;time&#34;</span>
+<span class="p">)</span>
+
+<span class="kd">type</span> <span class="nx">CustomizeFormat</span> <span class="kd">struct</span> <span class="p">{</span>
+<span class="p">}</span>
+
+<span class="cm">/**
+</span><span class="cm"> * @description: 自定义格式输出
+</span><span class="cm"> * @user: Mr.LiuQH
+</span><span class="cm"> * @receiver c CustomizeFormat
+</span><span class="cm"> * @param entry
+</span><span class="cm"> * @return []byte
+</span><span class="cm"> * @return error
+</span><span class="cm"> * @date 2021-03-08 15:53:29
+</span><span class="cm"> */</span>
+<span class="kd">func</span> <span class="p">(</span><span class="nx">c</span> <span class="nx">CustomizeFormat</span><span class="p">)</span> <span class="nf">Format</span><span class="p">(</span><span class="nx">entry</span> <span class="o">*</span><span class="nx">logrus</span><span class="p">.</span><span class="nx">Entry</span><span class="p">)</span> <span class="p">([]</span><span class="kt">byte</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">msg</span> <span class="o">:=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;[%s] [%s] %s \n&#34;</span><span class="p">,</span>
+		<span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Local</span><span class="p">().</span><span class="nf">Format</span><span class="p">(</span><span class="s">&#34;2006-01-02 15:04:05&#34;</span><span class="p">),</span>
+		<span class="nx">strings</span><span class="p">.</span><span class="nf">ToUpper</span><span class="p">(</span><span class="nx">entry</span><span class="p">.</span><span class="nx">Level</span><span class="p">.</span><span class="nf">String</span><span class="p">()),</span>
+		<span class="nx">entry</span><span class="p">.</span><span class="nx">Message</span><span class="p">,</span>
+	<span class="p">)</span>
+	<span class="k">return</span> <span class="p">[]</span><span class="nb">byte</span><span class="p">(</span><span class="nx">msg</span><span class="p">),</span> <span class="kc">nil</span>
+<span class="p">}</span>
+
+<span class="cm">/**
+</span><span class="cm"> * @description: 写入日志并分割
+</span><span class="cm"> * @user: Mr.LiuQH
+</span><span class="cm"> * @param save
+</span><span class="cm"> * @date 2021-03-08 15:16:32
+</span><span class="cm"> */</span>
+<span class="kd">func</span> <span class="nf">Log2FileByClass</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">lfhook</span> <span class="o">:=</span> <span class="nx">lfshook</span><span class="p">.</span><span class="nf">NewHook</span><span class="p">(</span><span class="nx">lfshook</span><span class="p">.</span><span class="nx">WriterMap</span><span class="p">{</span>
+		<span class="nx">logrus</span><span class="p">.</span><span class="nx">DebugLevel</span><span class="p">:</span> <span class="nf">splitConfig</span><span class="p">(</span><span class="s">&#34;debug&#34;</span><span class="p">),</span>
+		<span class="nx">logrus</span><span class="p">.</span><span class="nx">InfoLevel</span><span class="p">:</span>  <span class="nf">splitConfig</span><span class="p">(</span><span class="s">&#34;info&#34;</span><span class="p">),</span>
+		<span class="nx">logrus</span><span class="p">.</span><span class="nx">WarnLevel</span><span class="p">:</span>  <span class="nf">splitConfig</span><span class="p">(</span><span class="s">&#34;warn&#34;</span><span class="p">),</span>
+		<span class="nx">logrus</span><span class="p">.</span><span class="nx">ErrorLevel</span><span class="p">:</span> <span class="nf">splitConfig</span><span class="p">(</span><span class="s">&#34;error&#34;</span><span class="p">),</span>
+		<span class="nx">logrus</span><span class="p">.</span><span class="nx">FatalLevel</span><span class="p">:</span> <span class="nf">splitConfig</span><span class="p">(</span><span class="s">&#34;fatal&#34;</span><span class="p">),</span>
+		<span class="nx">logrus</span><span class="p">.</span><span class="nx">PanicLevel</span><span class="p">:</span> <span class="nf">splitConfig</span><span class="p">(</span><span class="s">&#34;painc&#34;</span><span class="p">),</span>
+	<span class="p">},</span> <span class="nx">LoggerClient</span><span class="p">.</span><span class="nx">Formatter</span><span class="p">)</span>
+	<span class="nx">LoggerClient</span><span class="p">.</span><span class="nf">AddHook</span><span class="p">(</span><span class="nx">lfhook</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="cm">/**
+</span><span class="cm"> * @description: 分割文件配置
+</span><span class="cm"> * @user: Mr.LiuQH
+</span><span class="cm"> * @param level
+</span><span class="cm"> * @return *goFileRotatelogs.RotateLogs
+</span><span class="cm"> * @date 2021-03-08 15:49:08
+</span><span class="cm"> */</span>
+<span class="kd">func</span> <span class="nf">splitConfig</span><span class="p">(</span><span class="nx">level</span> <span class="kt">string</span><span class="p">)</span> <span class="o">*</span><span class="nx">goFileRotatelogs</span><span class="p">.</span><span class="nx">RotateLogs</span> <span class="p">{</span>
+	<span class="c1">// 拼凑日志名
+</span><span class="c1"></span>	<span class="nx">logFile</span> <span class="o">:=</span> <span class="nx">path</span><span class="p">.</span><span class="nf">Join</span><span class="p">(</span><span class="nx">LogrusConfigInstance</span><span class="p">.</span><span class="nx">Path</span><span class="p">,</span> <span class="nx">level</span><span class="p">)</span>
+	<span class="nx">logs</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">goFileRotatelogs</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span>
+		<span class="c1">// 文件名
+</span><span class="c1"></span>		<span class="nx">logFile</span><span class="o">+</span><span class="s">&#34;-&#34;</span><span class="o">+</span><span class="nx">LogrusConfigInstance</span><span class="p">.</span><span class="nx">Suffix</span><span class="p">,</span>
+		<span class="c1">// 生成软链，指向最新日志文件
+</span><span class="c1"></span>		<span class="nx">goFileRotatelogs</span><span class="p">.</span><span class="nf">WithLinkName</span><span class="p">(</span><span class="nx">logFile</span><span class="p">),</span>
+	<span class="p">)</span>
+	<span class="nx">BusErrorInstance</span><span class="p">.</span><span class="nf">ThrowError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+	<span class="k">return</span> <span class="nx">logs</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="4使用">4.使用</h3>
+<p><code>源文件</code>:https://github.com/52lu/goe/blob/master/app/controllers/v1/log.go</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="cm">/**
+</span><span class="cm"> * @Author Mr.LiuQH
+</span><span class="cm"> * @Description 日志集成使用
+</span><span class="cm"> * @Date 2021/3/8 2:15 下午
+</span><span class="cm"> **/</span>
+<span class="kn">package</span> <span class="nx">v1</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;github.com/sirupsen/logrus&#34;</span>
+	<span class="p">.</span> <span class="s">&#34;goe/app/common&#34;</span>
+<span class="p">)</span>
+<span class="kd">type</span> <span class="nx">LogController</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">BaseController</span>
+<span class="p">}</span>
+<span class="kd">func</span> <span class="nf">init</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">RouteListInstance</span><span class="p">.</span><span class="nf">AddRoute</span><span class="p">(</span><span class="s">&#34;v1&#34;</span><span class="p">,</span><span class="s">&#34;log&#34;</span><span class="p">,</span><span class="o">&amp;</span><span class="nx">LogController</span><span class="p">{})</span>
+<span class="p">}</span>
+<span class="cm">/**
+</span><span class="cm"> * @description: 测试logrus使用
+</span><span class="cm"> * @user: Mr.LiuQH
+</span><span class="cm"> * @receiver l LogController
+</span><span class="cm"> * @return error
+</span><span class="cm"> * @date 2021-03-08 14:22:45
+</span><span class="cm"> */</span>
+<span class="kd">func</span> <span class="p">(</span><span class="nx">l</span> <span class="nx">LogController</span><span class="p">)</span> <span class="nf">Test</span><span class="p">()</span> <span class="kt">error</span>  <span class="p">{</span>
+	<span class="c1">// 简短消息记录
+</span><span class="c1"></span>	<span class="nx">LoggerClient</span><span class="p">.</span><span class="nf">Trace</span><span class="p">(</span><span class="s">&#34;这是Trace,日志信息&#34;</span><span class="p">)</span>
+	<span class="nx">LoggerClient</span><span class="p">.</span><span class="nf">Debug</span><span class="p">(</span><span class="s">&#34;这是Debug,日志信息&#34;</span><span class="p">)</span>
+	<span class="nx">LoggerClient</span><span class="p">.</span><span class="nf">Info</span><span class="p">(</span><span class="s">&#34;这是Info,日志信息&#34;</span><span class="p">)</span>
+	<span class="nx">LoggerClient</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="s">&#34;这是Error,日志信息&#34;</span><span class="p">)</span>
+	<span class="nx">LoggerClient</span><span class="p">.</span><span class="nf">Warn</span><span class="p">(</span><span class="s">&#34;这是Warn,日志信息&#34;</span><span class="p">)</span>
+	<span class="c1">//记录结构化数据
+</span><span class="c1"></span>	<span class="nx">LoggerClient</span><span class="p">.</span><span class="nf">WithFields</span><span class="p">(</span><span class="nx">logrus</span><span class="p">.</span><span class="nx">Fields</span><span class="p">{</span>
+		<span class="s">&#34;uerName&#34;</span><span class="p">:</span><span class="s">&#34;zhangsan&#34;</span><span class="p">,</span>
+		<span class="s">&#34;age&#34;</span><span class="p">:</span><span class="mi">28</span><span class="p">,</span>
+		<span class="s">&#34;pice&#34;</span><span class="p">:</span><span class="mf">500.12</span><span class="p">,</span>
+		<span class="s">&#34;likes&#34;</span><span class="p">:[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;游戏&#34;</span><span class="p">,</span><span class="s">&#34;旅游&#34;</span><span class="p">},</span>
+	<span class="p">}).</span><span class="nf">Info</span><span class="p">(</span><span class="s">&#34;记录结构化数据&#34;</span><span class="p">)</span>
+	<span class="k">return</span>  <span class="nx">l</span><span class="p">.</span><span class="nf">Success</span><span class="p">(</span><span class="kc">nil</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="5效果图">5.效果图</h3>
+<p><img src="https://gitee.com/tangxiaoshan/pic-img-bed/raw/master/go/img/image-20210308164422910.png" alt="image-20210308164422910"></p>
+<h3 id="6相关地址">6.相关地址</h3>
+<p><a href="https://github.com/52lu/goe">源代码: https://github.com/52lu/goe</a></p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">Shershon</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        0001-01-01
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      
+      <nav class="post-nav">
+        <a class="prev" href="/post/godoc/%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91/3-%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91-%E9%9B%86%E6%88%90redis/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default"></span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        <a class="next" href="/post/godoc/%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91/5-%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91-%E9%9B%86%E6%88%90elasticsearch/">
+            <span class="next-text nav-default"></span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:your@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://localhost:1313" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="http://localhost:1313" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="http://localhost:1313" class="iconfont icon-facebook" title="facebook"></a>
+      <a href="http://localhost:1313" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="http://localhost:1313" class="iconfont icon-google" title="google"></a>
+      <a href="http://localhost:1313" class="iconfont icon-github" title="github"></a>
+      <a href="http://localhost:1313" class="iconfont icon-weibo" title="weibo"></a>
+      <a href="http://localhost:1313" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="http://localhost:1313" class="iconfont icon-douban" title="douban"></a>
+      <a href="http://localhost:1313" class="iconfont icon-pocket" title="pocket"></a>
+      <a href="http://localhost:1313" class="iconfont icon-tumblr" title="tumblr"></a>
+      <a href="http://localhost:1313" class="iconfont icon-instagram" title="instagram"></a>
+      <a href="http://localhost:1313" class="iconfont icon-gitlab" title="gitlab"></a>
+      <a href="http://localhost:1313" class="iconfont icon-bilibili" title="bilibili"></a>
+  <a href="http://localhost:1313/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span>Shershon</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

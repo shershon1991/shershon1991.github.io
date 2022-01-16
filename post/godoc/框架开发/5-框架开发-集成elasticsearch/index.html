@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title> - 小山的博客</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Shershon" /><meta name="description" content="1.介绍 Elasticsearch是一个分布式、可扩展、近实时的高性能搜索与数据分析引擎。在Go中经常使用的包有以下两个: 包 文档 Star 数量 olivere/elastic https://olivere.github.io/elastic/ 5.7k" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.90.1 with theme even" />
+
+
+<link rel="canonical" href="http://localhost:1313/post/godoc/%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91/5-%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91-%E9%9B%86%E6%88%90elasticsearch/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="" />
+<meta property="og:description" content="1.介绍 Elasticsearch是一个分布式、可扩展、近实时的高性能搜索与数据分析引擎。在Go中经常使用的包有以下两个: 包 文档 Star 数量 olivere/elastic https://olivere.github.io/elastic/ 5.7k" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/post/godoc/%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91/5-%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91-%E9%9B%86%E6%88%90elasticsearch/" /><meta property="article:section" content="post" />
+
+
+
+<meta itemprop="name" content="">
+<meta itemprop="description" content="1.介绍 Elasticsearch是一个分布式、可扩展、近实时的高性能搜索与数据分析引擎。在Go中经常使用的包有以下两个: 包 文档 Star 数量 olivere/elastic https://olivere.github.io/elastic/ 5.7k">
+
+<meta itemprop="wordCount" content="1638">
+<meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content=""/>
+<meta name="twitter:description" content="1.介绍 Elasticsearch是一个分布式、可扩展、近实时的高性能搜索与数据分析引擎。在Go中经常使用的包有以下两个: 包 文档 Star 数量 olivere/elastic https://olivere.github.io/elastic/ 5.7k"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">小山的博客</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">小山的博客</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title"></h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 0001-01-01 </span>
+        
+          <span class="more-meta"> 1638 words </span>
+          <span class="more-meta"> 4 mins read </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#1介绍">1.介绍</a></li>
+            <li><a href="#2安装">2.安装</a></li>
+            <li><a href="#3配置">3.配置</a></li>
+            <li><a href="#4初始化客户端">4.初始化客户端</a></li>
+            <li><a href="#5使用">5.使用</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h3 id="1介绍">1.介绍</h3>
+<p><code>Elasticsearch</code>是一个分布式、可扩展、近实时的高性能搜索与数据分析引擎。在<code>Go</code>中经常使用的包有以下两个:</p>
+<table>
+<thead>
+<tr>
+<th>包</th>
+<th>文档</th>
+<th>Star 数量</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/olivere/elastic">olivere/elastic</a></td>
+<td><a href="https://olivere.github.io/elastic/">https://olivere.github.io/elastic/</a></td>
+<td>5.7k</td>
+</tr>
+<tr>
+<td><a href="https://github.com/elastic/go-elasticsearch">elastic/go-elasticsearch</a></td>
+<td><a href="https://github.com/elastic/go-elasticsearch">https://github.com/elastic/go-elasticsearch</a></td>
+<td>3.2k</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2安装">2.安装</h3>
+<p>这里使用<code>olivere/elastic</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 安装v7的版本</span>
+go get github.com/olivere/elastic/v7
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="3配置">3.配置</h3>
+<h4 id="31-编写配置文件">3.1 编写配置文件</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-ini" data-lang="ini"><span class="k">[elastic]</span>
+<span class="c1"># 是否开启</span>
+<span class="na">enabled</span><span class="o">=</span><span class="s">true</span>
+<span class="c1">#es服务地址</span>
+<span class="na">url</span><span class="o">=</span><span class="s">http://127.0.0.1:9200</span>
+<span class="c1"># 是否转换请求地址，默认为true,当等于true时 请求http://ip:port/_nodes/http，将其返回的url作为请求路径</span>
+<span class="na">sniffer_enabled</span><span class="o">=</span><span class="s">false</span>
+<span class="c1"># 心跳检查,间隔时间</span>
+<span class="na">health_check_interval</span><span class="o">=</span><span class="s">5s</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="32-编写配置结构体">3.2 编写配置结构体</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="cm">/**
+</span><span class="cm"> * @description: ES配置
+</span><span class="cm"> * @user: Mr.LiuQH
+</span><span class="cm"> */</span>
+<span class="kd">type</span> <span class="nx">ElasticConfig</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">Enabled</span>             <span class="kt">bool</span>   <span class="s">`ini:&#34;enabled&#34;`</span>
+	<span class="nx">Url</span>                 <span class="kt">string</span> <span class="s">`ini:&#34;url&#34;`</span>
+	<span class="nx">SnifferEnabled</span>      <span class="kt">bool</span>   <span class="s">`ini:&#34;sniffer_enabled&#34;`</span>
+	<span class="nx">HealthCheckInterval</span> <span class="kt">string</span> <span class="s">`ini:&#34;health_check_interval&#34;`</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="33-加载配置">3.3 加载配置</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="cm">/**
+</span><span class="cm"> * @description: 加载配置文件
+</span><span class="cm"> * @user: Mr.LiuQH
+</span><span class="cm"> * @receiver app
+</span><span class="cm"> * @date 2021-02-04 15:29:17
+</span><span class="cm"> */</span>
+<span class="kd">func</span> <span class="p">(</span><span class="nx">app</span> <span class="o">*</span><span class="nx">App</span><span class="p">)</span> <span class="nf">loadConfig</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">iniPath</span> <span class="o">:=</span> <span class="nx">ConfigPath</span> <span class="o">+</span> <span class="nx">app</span><span class="p">.</span><span class="nx">Env</span> <span class="o">+</span> <span class="s">&#34;.ini&#34;</span>
+	<span class="nx">CliInfoInstance</span><span class="p">.</span><span class="nx">ConfigFile</span> <span class="p">=</span> <span class="nx">iniPath</span>
+	<span class="nx">cfg</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ini</span><span class="p">.</span><span class="nf">Load</span><span class="p">(</span><span class="nx">iniPath</span><span class="p">)</span>
+	<span class="nx">BusErrorInstance</span><span class="p">.</span><span class="nf">ThrowError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+	<span class="nx">err</span> <span class="p">=</span> <span class="nx">cfg</span><span class="p">.</span><span class="nf">Section</span><span class="p">(</span><span class="s">&#34;app&#34;</span><span class="p">).</span><span class="nf">MapTo</span><span class="p">(</span><span class="nx">app</span><span class="p">)</span>
+	<span class="c1">// 加载mysql配置
+</span><span class="c1"></span>	<span class="nx">err</span> <span class="p">=</span> <span class="nx">cfg</span><span class="p">.</span><span class="nf">Section</span><span class="p">(</span><span class="s">&#34;mysql&#34;</span><span class="p">).</span><span class="nf">MapTo</span><span class="p">(</span><span class="nx">MysqlConfigInstance</span><span class="p">)</span>
+	<span class="c1">// 加载redis配置
+</span><span class="c1"></span>	<span class="nx">err</span> <span class="p">=</span> <span class="nx">cfg</span><span class="p">.</span><span class="nf">Section</span><span class="p">(</span><span class="s">&#34;redis&#34;</span><span class="p">).</span><span class="nf">MapTo</span><span class="p">(</span><span class="nx">RedisConfigInstance</span><span class="p">)</span>
+	<span class="c1">// 加载日志配置
+</span><span class="c1"></span>	<span class="nx">err</span> <span class="p">=</span> <span class="nx">cfg</span><span class="p">.</span><span class="nf">Section</span><span class="p">(</span><span class="s">&#34;log&#34;</span><span class="p">).</span><span class="nf">MapTo</span><span class="p">(</span><span class="nx">LogrusConfigInstance</span><span class="p">)</span>
+	<span class="c1">// 加载ES配置
+</span><span class="c1"></span>	<span class="nx">err</span> <span class="p">=</span> <span class="nx">cfg</span><span class="p">.</span><span class="nf">Section</span><span class="p">(</span><span class="s">&#34;elastic&#34;</span><span class="p">).</span><span class="nf">MapTo</span><span class="p">(</span><span class="nx">ElasticConfigInstance</span><span class="p">)</span>
+	<span class="nx">BusErrorInstance</span><span class="p">.</span><span class="nf">ThrowError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="4初始化客户端">4.初始化客户端</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go">
+<span class="cm">/**
+</span><span class="cm"> * @description:
+</span><span class="cm"> * @user: Mr.LiuQH
+</span><span class="cm"> * @date 2021-03-11 15:56:48
+</span><span class="cm"> */</span>
+<span class="kd">func</span> <span class="nf">connectElastic</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">duration</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">ParseDuration</span><span class="p">(</span><span class="nx">ElasticConfigInstance</span><span class="p">.</span><span class="nx">HealthCheckInterval</span><span class="p">)</span>
+	<span class="nx">BusErrorInstance</span><span class="p">.</span><span class="nf">ThrowError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+  <span class="c1">// ElasticClient是全局变量
+</span><span class="c1"></span>	<span class="nx">ElasticClient</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">elastic</span><span class="p">.</span><span class="nf">NewClient</span><span class="p">(</span>
+		<span class="nx">elastic</span><span class="p">.</span><span class="nf">SetURL</span><span class="p">(</span><span class="nx">ElasticConfigInstance</span><span class="p">.</span><span class="nx">Url</span><span class="p">),</span>
+		<span class="nx">elastic</span><span class="p">.</span><span class="nf">SetSniff</span><span class="p">(</span><span class="nx">ElasticConfigInstance</span><span class="p">.</span><span class="nx">SnifferEnabled</span><span class="p">),</span>
+		<span class="nx">elastic</span><span class="p">.</span><span class="nf">SetHealthcheckInterval</span><span class="p">(</span><span class="nx">duration</span><span class="p">),</span>
+		<span class="nx">elastic</span><span class="p">.</span><span class="nf">SetErrorLog</span><span class="p">(</span><span class="nx">log</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stderr</span><span class="p">,</span> <span class="s">&#34;ES &#34;</span><span class="p">,</span> <span class="nx">log</span><span class="p">.</span><span class="nx">LstdFlags</span><span class="p">)),</span>
+		<span class="nx">elastic</span><span class="p">.</span><span class="nf">SetInfoLog</span><span class="p">(</span><span class="nx">log</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stdout</span><span class="p">,</span> <span class="s">&#34; &#34;</span><span class="p">,</span> <span class="nx">log</span><span class="p">.</span><span class="nx">LstdFlags</span><span class="p">)),</span>
+	<span class="p">)</span>
+	<span class="nx">BusErrorInstance</span><span class="p">.</span><span class="nf">ThrowError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+	<span class="nx">res</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ElasticClient</span><span class="p">.</span><span class="nf">ClusterHealth</span><span class="p">().</span><span class="nf">Index</span><span class="p">(</span><span class="s">&#34;test&#34;</span><span class="p">).</span><span class="nf">Level</span><span class="p">(</span><span class="s">&#34;shards&#34;</span><span class="p">).</span><span class="nf">Pretty</span><span class="p">(</span><span class="kc">true</span><span class="p">).</span><span class="nf">Do</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">TODO</span><span class="p">())</span>
+	<span class="nx">LoggerClient</span><span class="p">.</span><span class="nf">Info</span><span class="p">(</span><span class="s">&#34;es:%v&#34;</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="5使用">5.使用</h3>
+<p><a href="https://github.com/52lu/goe/blob/master/app/controllers/v1/elastic.go">示例源码地址(https://github.com/52lu/goe/blob/master/app/controllers/v1/elastic.go)</a></p>
+<h4 id="51-创建索引">5.1 创建索引</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go">
+<span class="c1">// 定义用户mapping
+</span><span class="c1"></span><span class="kd">const</span> <span class="nx">userMapping</span> <span class="p">=</span> <span class="s">`
+</span><span class="s">{
+</span><span class="s">    &#34;mappings&#34;:{
+</span><span class="s">        &#34;properties&#34;:{
+</span><span class="s">            &#34;name&#34;:{
+</span><span class="s">                &#34;type&#34;:&#34;text&#34;
+</span><span class="s">            },
+</span><span class="s">            &#34;age&#34;:{
+</span><span class="s">                &#34;type&#34;:&#34;byte&#34;
+</span><span class="s">            },
+</span><span class="s">            &#34;phone&#34;:{
+</span><span class="s">                &#34;type&#34;:&#34;text&#34;
+</span><span class="s">            },
+</span><span class="s">            &#34;birth&#34;:{
+</span><span class="s">                &#34;type&#34;:&#34;date&#34;
+</span><span class="s">            },
+</span><span class="s">            &#34;height&#34;:{
+</span><span class="s">                &#34;type&#34;:&#34;float&#34;
+</span><span class="s">            },
+</span><span class="s">            &#34;smoke&#34;:{
+</span><span class="s">                &#34;type&#34;:&#34;boolean&#34;
+</span><span class="s">            },
+</span><span class="s">            &#34;home&#34;:{
+</span><span class="s">                &#34;type&#34;:&#34;geo_point&#34;
+</span><span class="s">            }
+</span><span class="s">        }
+</span><span class="s">    }
+</span><span class="s">}`</span>
+
+<span class="c1">// 定义索引名
+</span><span class="c1"></span><span class="kd">const</span> <span class="nx">userIndex</span> <span class="p">=</span> <span class="s">&#34;go-user&#34;</span>
+<span class="kd">var</span> <span class="nx">esCtx</span> <span class="p">=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">Background</span><span class="p">()</span>
+<span class="c1">// 创建索引
+</span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">e</span> <span class="nx">ElasticController</span><span class="p">)</span> <span class="nf">CreateIndex</span><span class="p">()</span> <span class="kt">error</span> <span class="p">{</span>
+	<span class="nx">exist</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ElasticClient</span><span class="p">.</span><span class="nf">IndexExists</span><span class="p">(</span><span class="nx">userIndex</span><span class="p">).</span><span class="nf">Do</span><span class="p">(</span><span class="nx">esCtx</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nx">e</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">())</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="nx">exist</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nx">e</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="s">&#34;索引已经存在，无需重复创建!&#34;</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="c1">// 创建索引
+</span><span class="c1"></span>	<span class="nx">res</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ElasticClient</span><span class="p">.</span><span class="nf">CreateIndex</span><span class="p">(</span><span class="nx">userIndex</span><span class="p">).</span><span class="nf">BodyString</span><span class="p">(</span><span class="nx">userMapping</span><span class="p">).</span><span class="nf">Do</span><span class="p">(</span><span class="nx">esCtx</span><span class="p">)</span>
+	<span class="nx">LoggerClient</span><span class="p">.</span><span class="nf">WithFields</span><span class="p">(</span><span class="nx">logrus</span><span class="p">.</span><span class="nx">Fields</span><span class="p">{</span>
+		<span class="s">&#34;res&#34;</span><span class="p">:</span> <span class="nx">res</span><span class="p">,</span>
+	<span class="p">}).</span><span class="nf">Info</span><span class="p">(</span><span class="s">&#34;es返回&#34;</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nx">e</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">())</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="nx">e</span><span class="p">.</span><span class="nf">Success</span><span class="p">(</span><span class="nx">res</span><span class="p">)</span>
+<span class="p">}</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="52-添加">5.2 添加</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">User</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">Name</span>   <span class="kt">string</span>    <span class="s">`json:&#34;name&#34;`</span>
+	<span class="nx">Age</span>    <span class="kt">int</span>       <span class="s">`json:&#34;age&#34;`</span>
+	<span class="nx">Phone</span>  <span class="kt">string</span>    <span class="s">`json:&#34;phone&#34;`</span>
+	<span class="nx">Birth</span>  <span class="nx">time</span><span class="p">.</span><span class="nx">Time</span> <span class="s">`json:&#34;birth&#34;`</span>
+	<span class="nx">Height</span> <span class="kt">float32</span>   <span class="s">`json:&#34;height&#34;`</span>
+	<span class="nx">Smoke</span>  <span class="kt">bool</span>      <span class="s">`json:&#34;smoke&#34;`</span>
+	<span class="nx">Home</span>   <span class="kt">string</span>    <span class="s">`json:&#34;home&#34;`</span>
+<span class="p">}</span>
+
+<span class="c1">// 添加文档
+</span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">e</span> <span class="nx">ElasticController</span><span class="p">)</span> <span class="nf">AddOneDoc</span><span class="p">()</span> <span class="kt">error</span> <span class="p">{</span>
+	<span class="c1">// 定义上下文
+</span><span class="c1"></span>	<span class="nx">loc</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">LoadLocation</span><span class="p">(</span><span class="s">&#34;Local&#34;</span><span class="p">)</span>
+	<span class="nx">birth</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">ParseInLocation</span><span class="p">(</span><span class="s">&#34;2006-01-02&#34;</span><span class="p">,</span> <span class="s">&#34;1991-04-25&#34;</span><span class="p">,</span> <span class="nx">loc</span><span class="p">)</span>
+	<span class="nx">userOne</span> <span class="o">:=</span> <span class="nx">User</span><span class="p">{</span><span class="s">&#34;张三&#34;</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="s">&#34;17600000000&#34;</span><span class="p">,</span> <span class="nx">birth</span><span class="p">,</span> <span class="mf">170.5</span><span class="p">,</span> <span class="kc">false</span><span class="p">,</span> <span class="s">&#34;41.40338,2.17403&#34;</span><span class="p">}</span>
+	<span class="nx">do</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ElasticClient</span><span class="p">.</span><span class="nf">Index</span><span class="p">().</span><span class="nf">Index</span><span class="p">(</span><span class="nx">userIndex</span><span class="p">).</span><span class="nf">Id</span><span class="p">(</span><span class="nx">strconv</span><span class="p">.</span><span class="nf">FormatInt</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">UnixNano</span><span class="p">(),</span> <span class="mi">10</span><span class="p">)).</span><span class="nf">BodyJson</span><span class="p">(</span><span class="nx">userOne</span><span class="p">).</span><span class="nf">Do</span><span class="p">(</span><span class="nx">esCtx</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nx">e</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">())</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="nx">e</span><span class="p">.</span><span class="nf">Success</span><span class="p">(</span><span class="nx">do</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="53-批量添加">5.3 批量添加</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 批量添加
+</span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">e</span> <span class="nx">ElasticController</span><span class="p">)</span> <span class="nf">BatchAddDoc</span><span class="p">()</span> <span class="kt">error</span> <span class="p">{</span>
+	<span class="nx">userBulk</span> <span class="o">:=</span> <span class="nx">ElasticClient</span><span class="p">.</span><span class="nf">Bulk</span><span class="p">().</span><span class="nf">Index</span><span class="p">(</span><span class="nx">userIndex</span><span class="p">)</span>
+	<span class="nx">loc</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">LoadLocation</span><span class="p">(</span><span class="s">&#34;Local&#34;</span><span class="p">)</span>
+	<span class="c1">// 生日
+</span><span class="c1"></span>	<span class="nx">birthSlice</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;1991-04-25&#34;</span><span class="p">,</span> <span class="s">&#34;1990-01-15&#34;</span><span class="p">,</span> <span class="s">&#34;1989-11-05&#34;</span><span class="p">,</span> <span class="s">&#34;1988-01-25&#34;</span><span class="p">,</span> <span class="s">&#34;1994-10-12&#34;</span><span class="p">}</span>
+	<span class="c1">// 姓名
+</span><span class="c1"></span>	<span class="nx">nameSlice</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;李四&#34;</span><span class="p">,</span> <span class="s">&#34;张飞&#34;</span><span class="p">,</span> <span class="s">&#34;赵云&#34;</span><span class="p">,</span> <span class="s">&#34;关羽&#34;</span><span class="p">,</span> <span class="s">&#34;刘备&#34;</span><span class="p">}</span>
+	<span class="nx">rand</span><span class="p">.</span><span class="nf">Seed</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Unix</span><span class="p">())</span>
+	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="mi">20</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="nx">birth</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">ParseInLocation</span><span class="p">(</span><span class="s">&#34;2006-01-02&#34;</span><span class="p">,</span> <span class="nx">birthSlice</span><span class="p">[</span><span class="nx">rand</span><span class="p">.</span><span class="nf">Intn</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nx">birthSlice</span><span class="p">))],</span> <span class="nx">loc</span><span class="p">)</span>
+		<span class="nx">height</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">strconv</span><span class="p">.</span><span class="nf">ParseFloat</span><span class="p">(</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;%.2f&#34;</span><span class="p">,</span> <span class="nx">rand</span><span class="p">.</span><span class="nf">Float32</span><span class="p">()</span><span class="o">+</span><span class="mf">175.0</span><span class="p">),</span> <span class="mi">32</span><span class="p">)</span>
+		<span class="nx">user</span> <span class="o">:=</span> <span class="nx">User</span><span class="p">{</span>
+			<span class="nx">nameSlice</span><span class="p">[</span><span class="nx">rand</span><span class="p">.</span><span class="nf">Intn</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nx">nameSlice</span><span class="p">))],</span>
+			<span class="nx">rand</span><span class="p">.</span><span class="nf">Intn</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">+</span> <span class="mi">18</span><span class="p">,</span>
+			<span class="s">&#34;1760000000&#34;</span> <span class="o">+</span> <span class="nx">strconv</span><span class="p">.</span><span class="nf">Itoa</span><span class="p">(</span><span class="nx">i</span><span class="p">),</span>
+			<span class="nx">birth</span><span class="p">,</span>
+			<span class="nb">float32</span><span class="p">(</span><span class="nx">height</span><span class="p">),</span>
+			<span class="kc">false</span><span class="p">,</span>
+			<span class="s">&#34;41.40338,2.17403&#34;</span><span class="p">,</span>
+		<span class="p">}</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">user</span><span class="p">,</span> <span class="nx">userBulk</span><span class="p">)</span>
+		<span class="nx">doc</span> <span class="o">:=</span> <span class="nx">elastic</span><span class="p">.</span><span class="nf">NewBulkIndexRequest</span><span class="p">().</span><span class="nf">Id</span><span class="p">(</span><span class="nx">strconv</span><span class="p">.</span><span class="nf">FormatInt</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">UnixNano</span><span class="p">(),</span> <span class="mi">10</span><span class="p">)).</span><span class="nf">Doc</span><span class="p">(</span><span class="nx">user</span><span class="p">)</span>
+		<span class="nx">userBulk</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="nx">doc</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="nx">userBulk</span><span class="p">.</span><span class="nf">NumberOfActions</span><span class="p">()</span> <span class="p">&lt;</span> <span class="mi">0</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nx">e</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="s">&#34;没有要保存的数据&#34;</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">userBulk</span><span class="p">.</span><span class="nf">Do</span><span class="p">(</span><span class="nx">esCtx</span><span class="p">);</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nx">e</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">())</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="nx">e</span><span class="p">.</span><span class="nf">Success</span><span class="p">(</span><span class="kc">nil</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="54-查询">5.4 查询</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 根据名字查询
+</span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">e</span> <span class="nx">ElasticController</span><span class="p">)</span> <span class="nf">Get</span><span class="p">()</span> <span class="kt">error</span> <span class="p">{</span>
+	<span class="nx">name</span> <span class="o">:=</span> <span class="nx">e</span><span class="p">.</span><span class="nf">GetParam</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">)</span>
+	<span class="nx">list</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ElasticClient</span><span class="p">.</span><span class="nf">Search</span><span class="p">().</span><span class="nf">Index</span><span class="p">(</span><span class="nx">userIndex</span><span class="p">).</span>
+		<span class="nf">Query</span><span class="p">(</span><span class="nx">elastic</span><span class="p">.</span><span class="nf">NewMatchQuery</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">,</span> <span class="nx">name</span><span class="p">)).</span>
+		<span class="nf">Sort</span><span class="p">(</span><span class="s">&#34;age&#34;</span><span class="p">,</span> <span class="kc">true</span><span class="p">).</span> <span class="c1">//根据age字段，正序
+</span><span class="c1"></span>		<span class="nf">From</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span> <span class="c1">// 从第几条开始取
+</span><span class="c1"></span>		<span class="nf">Size</span><span class="p">(</span><span class="mi">20</span><span class="p">).</span> <span class="c1">// 每页数量
+</span><span class="c1"></span>		<span class="nf">Pretty</span><span class="p">(</span><span class="kc">true</span><span class="p">).</span> <span class="c1">//返回json格式
+</span><span class="c1"></span>		<span class="nf">Do</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">Background</span><span class="p">())</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nx">e</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">())</span>
+	<span class="p">}</span>
+	<span class="kd">var</span> <span class="nx">userDto</span> <span class="nx">User</span>
+	<span class="kd">var</span> <span class="nx">userList</span> <span class="p">[]</span><span class="nx">User</span>
+	<span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">v</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">list</span><span class="p">.</span><span class="nf">Each</span><span class="p">(</span><span class="nx">reflect</span><span class="p">.</span><span class="nf">TypeOf</span><span class="p">(</span><span class="nx">userDto</span><span class="p">))</span> <span class="p">{</span>
+		<span class="nx">tmp</span> <span class="o">:=</span> <span class="nx">v</span><span class="p">.(</span><span class="nx">User</span><span class="p">)</span>
+		<span class="nx">userList</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">userList</span><span class="p">,</span> <span class="nx">tmp</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="c1">// 遍历获取结果
+</span><span class="c1"></span>	<span class="k">return</span> <span class="nx">e</span><span class="p">.</span><span class="nf">Success</span><span class="p">(</span><span class="nx">userList</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="55-删除">5.5 删除</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 删除
+</span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">e</span> <span class="nx">ElasticController</span><span class="p">)</span> <span class="nf">Del</span><span class="p">()</span> <span class="kt">error</span> <span class="p">{</span>
+	<span class="nx">id</span> <span class="o">:=</span> <span class="nx">e</span><span class="p">.</span><span class="nf">GetParam</span><span class="p">(</span><span class="s">&#34;id&#34;</span><span class="p">)</span>
+	<span class="nx">name</span> <span class="o">:=</span> <span class="nx">e</span><span class="p">.</span><span class="nf">GetParam</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">)</span>
+	<span class="nx">age</span> <span class="o">:=</span> <span class="nx">e</span><span class="p">.</span><span class="nf">GetParam</span><span class="p">(</span><span class="s">&#34;age&#34;</span><span class="p">)</span>
+	<span class="kd">var</span> <span class="nx">do</span> <span class="kd">interface</span><span class="p">{}</span>
+	<span class="kd">var</span> <span class="nx">err</span> <span class="kt">error</span>
+	<span class="k">if</span> <span class="nx">id</span> <span class="o">!=</span> <span class="s">&#34;&#34;</span> <span class="p">{</span>
+		<span class="c1">// 根据主键删除
+</span><span class="c1"></span>		<span class="nx">do</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">ElasticClient</span><span class="p">.</span><span class="nf">Delete</span><span class="p">().</span><span class="nf">Index</span><span class="p">(</span><span class="nx">userIndex</span><span class="p">).</span><span class="nf">Id</span><span class="p">(</span><span class="nx">id</span><span class="p">).</span><span class="nf">Do</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">Background</span><span class="p">())</span>
+	<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="nx">name</span> <span class="o">!=</span> <span class="s">&#34;&#34;</span> <span class="o">&amp;&amp;</span> <span class="nx">age</span> <span class="o">!=</span> <span class="s">&#34;&#34;</span> <span class="p">{</span>
+		<span class="c1">// 根据名称和年龄删除
+</span><span class="c1"></span>		<span class="nx">do</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">ElasticClient</span><span class="p">.</span><span class="nf">DeleteByQuery</span><span class="p">().</span><span class="nf">Index</span><span class="p">(</span><span class="nx">userIndex</span><span class="p">).</span>
+			<span class="nf">Query</span><span class="p">(</span><span class="nx">elastic</span><span class="p">.</span><span class="nf">NewMatchQuery</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">,</span> <span class="nx">name</span><span class="p">)).</span>
+			<span class="nf">Query</span><span class="p">(</span><span class="nx">elastic</span><span class="p">.</span><span class="nf">NewTermQuery</span><span class="p">(</span><span class="s">&#34;age&#34;</span><span class="p">,</span> <span class="nx">age</span><span class="p">)).</span>
+			<span class="nf">Do</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">Background</span><span class="p">())</span>
+	<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nx">e</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="s">&#34;缺少参数信息&#34;</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nx">e</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">())</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="nx">e</span><span class="p">.</span><span class="nf">Success</span><span class="p">(</span><span class="nx">do</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="56-更新">5.6 更新</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 更新
+</span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">e</span> <span class="nx">ElasticController</span><span class="p">)</span> <span class="nf">Update</span><span class="p">()</span> <span class="kt">error</span> <span class="p">{</span>
+	<span class="nx">id</span> <span class="o">:=</span> <span class="nx">e</span><span class="p">.</span><span class="nf">GetParam</span><span class="p">(</span><span class="s">&#34;id&#34;</span><span class="p">)</span>
+	<span class="nx">phone</span> <span class="o">:=</span> <span class="nx">e</span><span class="p">.</span><span class="nf">GetParam</span><span class="p">(</span><span class="s">&#34;phone&#34;</span><span class="p">)</span>
+	<span class="kd">var</span> <span class="nx">do</span> <span class="kd">interface</span><span class="p">{}</span>
+	<span class="kd">var</span> <span class="nx">err</span> <span class="kt">error</span>
+	<span class="k">if</span> <span class="nx">id</span> <span class="o">!=</span> <span class="s">&#34;&#34;</span> <span class="p">{</span>
+		<span class="c1">// 根据主键更新
+</span><span class="c1"></span>		<span class="nx">do</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">ElasticClient</span><span class="p">.</span><span class="nf">Update</span><span class="p">().</span><span class="nf">Index</span><span class="p">(</span><span class="nx">userIndex</span><span class="p">).</span><span class="nf">Id</span><span class="p">(</span><span class="nx">id</span><span class="p">).</span>
+			<span class="nf">Script</span><span class="p">(</span><span class="nx">elastic</span><span class="p">.</span><span class="nf">NewScript</span><span class="p">(</span><span class="s">&#34;ctx._source.age=73&#34;</span><span class="p">)).</span>
+			<span class="nf">Script</span><span class="p">(</span><span class="nx">elastic</span><span class="p">.</span><span class="nf">NewScript</span><span class="p">(</span><span class="s">&#34;ctx._source.phone=&#39;110110110110&#39;&#34;</span><span class="p">)).</span>
+			<span class="nf">Do</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">Background</span><span class="p">())</span>
+	<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="nx">phone</span> <span class="o">!=</span> <span class="s">&#34;&#34;</span> <span class="p">{</span>
+		<span class="c1">// 根据非ID条件更新
+</span><span class="c1"></span>		<span class="nx">do</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">ElasticClient</span><span class="p">.</span><span class="nf">UpdateByQuery</span><span class="p">(</span><span class="nx">userIndex</span><span class="p">).</span><span class="nf">Query</span><span class="p">(</span><span class="nx">elastic</span><span class="p">.</span><span class="nf">NewTermQuery</span><span class="p">(</span><span class="s">&#34;phone&#34;</span><span class="p">,</span> <span class="nx">phone</span><span class="p">)).</span>
+			<span class="c1">// 通过脚本更新字段name
+</span><span class="c1"></span>			<span class="nf">Script</span><span class="p">(</span><span class="nx">elastic</span><span class="p">.</span><span class="nf">NewScript</span><span class="p">(</span><span class="s">&#34;ctx._source.name=&#39;龙少爷&#39;&#34;</span><span class="p">)).</span>
+			<span class="c1">// 如果文档版本冲突继续执行
+</span><span class="c1"></span>			<span class="nf">ProceedOnVersionConflict</span><span class="p">().</span>
+			<span class="nf">Do</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">Background</span><span class="p">())</span>
+	<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nx">e</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="s">&#34;缺少参数信息&#34;</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nx">e</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">())</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="nx">e</span><span class="p">.</span><span class="nf">Success</span><span class="p">(</span><span class="nx">do</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">Shershon</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        0001-01-01
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      
+      <nav class="post-nav">
+        <a class="prev" href="/post/godoc/%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91/4-%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91-%E9%9B%86%E6%88%90%E6%97%A5%E5%BF%97logrus/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default"></span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        <a class="next" href="/post/godoc/%E8%BF%9B%E9%98%B6%E7%AF%87/rpc/01-understand/">
+            <span class="next-text nav-default"></span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:your@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://localhost:1313" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="http://localhost:1313" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="http://localhost:1313" class="iconfont icon-facebook" title="facebook"></a>
+      <a href="http://localhost:1313" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="http://localhost:1313" class="iconfont icon-google" title="google"></a>
+      <a href="http://localhost:1313" class="iconfont icon-github" title="github"></a>
+      <a href="http://localhost:1313" class="iconfont icon-weibo" title="weibo"></a>
+      <a href="http://localhost:1313" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="http://localhost:1313" class="iconfont icon-douban" title="douban"></a>
+      <a href="http://localhost:1313" class="iconfont icon-pocket" title="pocket"></a>
+      <a href="http://localhost:1313" class="iconfont icon-tumblr" title="tumblr"></a>
+      <a href="http://localhost:1313" class="iconfont icon-instagram" title="instagram"></a>
+      <a href="http://localhost:1313" class="iconfont icon-gitlab" title="gitlab"></a>
+      <a href="http://localhost:1313" class="iconfont icon-bilibili" title="bilibili"></a>
+  <a href="http://localhost:1313/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span>Shershon</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

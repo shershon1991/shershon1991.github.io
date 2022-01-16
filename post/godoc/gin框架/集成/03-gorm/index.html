@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Gin集成(三):集成全功能orm框架-gorm - 小山的博客</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Shershon" /><meta name="description" content="1. 介绍 gorm是一个使用Go语言编写的ORM框架。 它文档齐全，对开发者友好，支持主流数据库。具体使用可参考之前的文章Go常用包(十九):全功" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.90.1 with theme even" />
+
+
+<link rel="canonical" href="http://localhost:1313/post/godoc/gin%E6%A1%86%E6%9E%B6/%E9%9B%86%E6%88%90/03-gorm/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Gin集成(三):集成全功能orm框架-gorm" />
+<meta property="og:description" content="1. 介绍 gorm是一个使用Go语言编写的ORM框架。 它文档齐全，对开发者友好，支持主流数据库。具体使用可参考之前的文章Go常用包(十九):全功" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/post/godoc/gin%E6%A1%86%E6%9E%B6/%E9%9B%86%E6%88%90/03-gorm/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2021-12-15T00:00:00+00:00" />
+<meta property="article:modified_time" content="2021-12-15T00:00:00+00:00" />
+
+<meta itemprop="name" content="Gin集成(三):集成全功能orm框架-gorm">
+<meta itemprop="description" content="1. 介绍 gorm是一个使用Go语言编写的ORM框架。 它文档齐全，对开发者友好，支持主流数据库。具体使用可参考之前的文章Go常用包(十九):全功"><meta itemprop="datePublished" content="2021-12-15T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2021-12-15T00:00:00+00:00" />
+<meta itemprop="wordCount" content="3551">
+<meta itemprop="keywords" content="Go实践,Gin," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Gin集成(三):集成全功能orm框架-gorm"/>
+<meta name="twitter:description" content="1. 介绍 gorm是一个使用Go语言编写的ORM框架。 它文档齐全，对开发者友好，支持主流数据库。具体使用可参考之前的文章Go常用包(十九):全功"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">小山的博客</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">小山的博客</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Gin集成(三):集成全功能orm框架-gorm</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-12-15 </span>
+        <div class="post-category">
+            <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+            <a href="/categories/go/"> Go </a>
+            </div>
+          <span class="more-meta"> 3551 words </span>
+          <span class="more-meta"> 8 mins read </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#1-介绍">1. 介绍</a>
+          <ul>
+            <li><a href="#11-集成流程">1.1 集成流程</a></li>
+            <li><a href="#12-涉及目录">1.2 涉及目录</a></li>
+          </ul>
+        </li>
+        <li><a href="#2-配置">2. 配置</a>
+          <ul>
+            <li><a href="#21-编辑主配置configyaml">2.1 编辑主配置<code>./config.yaml</code></a></li>
+            <li><a href="#22-编辑结构体">2.2 编辑结构体</a></li>
+            <li><a href="#23-嵌入主配置">2.3 嵌入主配置</a></li>
+            <li><a href="#24-定义全局变量">2.4 定义全局变量</a></li>
+          </ul>
+        </li>
+        <li><a href="#3代码实现">3.代码实现</a>
+          <ul>
+            <li><a href="#31--集成入口">3.1  集成入口</a></li>
+            <li><a href="#32-重写默认logger">3.2 重写默认<code>Logger</code></a></li>
+            <li><a href="#33-数据迁移automigrate-">3.3 数据迁移<code>AutoMigrate </code></a></li>
+          </ul>
+        </li>
+        <li><a href="#4-场景示例">4. 场景示例</a>
+          <ul>
+            <li><a href="#41-调用流程">4.1 调用流程</a></li>
+            <li><a href="#42-代码实现">4.2 代码实现</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="1-介绍">1. 介绍</h2>
+<p><code>gorm</code>是一个使用<code>Go</code>语言编写的<code>ORM</code>框架。 它文档齐全，对开发者友好，支持主流数据库。具体使用可参考之前的文章<a href="https://mp.weixin.qq.com/s/uQ3KOpRwtwNQoeAjNSne9A">Go常用包(十九):全功能ORM框架(gorm)</a></p>
+<h3 id="11-集成流程">1.1 集成流程</h3>
+<p><img src="https://gitee.com/tangxiaoshan/pic-img-bed/raw/master/go/img/20210717125819.png" alt=""></p>
+<h3 id="12-涉及目录">1.2 涉及目录</h3>
+<p><img src="https://gitee.com/tangxiaoshan/pic-img-bed/raw/master/go/img/20210717135522.png" alt=""></p>
+<h2 id="2-配置">2. 配置</h2>
+<h3 id="21-编辑主配置configyaml">2.1 编辑主配置<code>./config.yaml</code></h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">mysql</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="m">127.0.0.1</span><span class="w">
+</span><span class="w">  </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">3306</span><span class="w">
+</span><span class="w">  </span><span class="nt">user</span><span class="p">:</span><span class="w"> </span><span class="l">root</span><span class="w">
+</span><span class="w">  </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l">root</span><span class="w">
+</span><span class="w">  </span><span class="nt">database</span><span class="p">:</span><span class="w"> </span><span class="l">test</span><span class="w">
+</span><span class="w">  </span><span class="nt">charset: utf8mb4 # 要支持完整的UTF-8编码,需设置成</span><span class="p">:</span><span class="w"> </span><span class="l">utf8mb4</span><span class="w">
+</span><span class="w">  </span><span class="nt">parseTime</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="c"># 解析time.Time类型</span><span class="w">
+</span><span class="w">  </span><span class="nt">timeZone: Local # 时区,若设置 Asia/Shanghai,需写成</span><span class="p">:</span><span class="w"> </span><span class="l">Asia%2fShanghai</span><span class="w">
+</span><span class="w">  </span><span class="nt">defaultStringSize</span><span class="p">:</span><span class="w"> </span><span class="m">255</span><span class="w"> </span><span class="c"># string 类型字段的默认长度</span><span class="w">
+</span><span class="w">  </span><span class="nt">disableDatetimePrecision</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="c"># 禁用 datetime 精度，MySQL 5.6 之前的数据库不支持</span><span class="w">
+</span><span class="w">  </span><span class="nt">skipInitializeWithVersion</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w"> </span><span class="c"># 根据当前 MySQL 版本自动配置</span><span class="w">
+</span><span class="w">  </span><span class="nt">autoMigrate</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="c"># 开启时，每次服务启动都会根据实体创建/更新表结构</span><span class="w">
+</span><span class="w">  </span><span class="nt">slowSql</span><span class="p">:</span><span class="w"> </span><span class="l">50ms</span><span class="w"> </span><span class="c"># 慢sql时间。单位毫秒</span><span class="w">
+</span><span class="w">  </span><span class="nt">logLevel</span><span class="p">:</span><span class="w"> </span><span class="l">info</span><span class="w"> </span><span class="c"># error、info、warn</span><span class="w">
+</span><span class="w">  </span><span class="nt">ignoreRecordNotFoundError</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="c"># 是否忽略ErrRecordNotFound(未查到记录错误)</span><span class="w">
+</span><span class="w">  </span><span class="nt">gorm</span><span class="p">:</span><span class="w"> </span><span class="c"># gorm配置项disableForeignKeyConstraintWhenMigrating</span><span class="w">
+</span><span class="w">    </span><span class="nt">skipDefaultTx</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w"> </span><span class="c"># 是否跳过默认事务</span><span class="w">
+</span><span class="w">    </span><span class="nt">tablePrefix</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;app_&#34;</span><span class="w"> </span><span class="c">#表前缀</span><span class="w">
+</span><span class="w">    </span><span class="nt">singularTable</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="c"># 是否使用单数表名(默认复数)，启用后，User结构体表将是user</span><span class="w">
+</span><span class="w">    </span><span class="nt">coverLogger</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="c"># 是否覆盖默认logger</span><span class="w">
+</span><span class="w">    </span><span class="nt">prepareStmt</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w"> </span><span class="c"># 执行任何SQL时都会创建一个prepared statement并将其缓存，以提高后续的效率</span><span class="w">
+</span><span class="w">    </span><span class="nt">disableForeignKeyConstraintWhenMigrating</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="c">#在AutoMigrate 或 CreateTable 时，GORM 会自动创建外键约束，若要禁用该特性，可将其设置为 true</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><h3 id="22-编辑结构体">2.2 编辑结构体</h3>
+<p><strong>新增<code>./config/mysql.go</code>文件:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="cm">/**
+</span><span class="cm"> * @Description mysql配置信息
+</span><span class="cm"> **/</span>
+<span class="kn">package</span> <span class="nx">config</span>
+
+<span class="kn">import</span> <span class="s">&#34;time&#34;</span>
+
+<span class="c1">// MySQL信息
+</span><span class="c1"></span><span class="kd">type</span> <span class="nx">mysql</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">Host</span>                      <span class="kt">string</span>        <span class="s">`yaml:&#34;host&#34;`</span>
+	<span class="nx">Port</span>                      <span class="kt">string</span>        <span class="s">`yaml:&#34;port&#34;`</span>
+	<span class="nx">User</span>                      <span class="kt">string</span>        <span class="s">`yaml:&#34;user&#34;`</span>
+	<span class="nx">Password</span>                  <span class="kt">string</span>        <span class="s">`yaml:&#34;password&#34;`</span>
+	<span class="nx">Database</span>                  <span class="kt">string</span>        <span class="s">`yaml:&#34;database&#34;`</span>
+	<span class="nx">Charset</span>                   <span class="kt">string</span>        <span class="s">`yaml:&#34;charset&#34;`</span>                   <span class="c1">//要支持完整的UTF-8编码,需设置成: utf8mb4
+</span><span class="c1"></span>	<span class="nx">AutoMigrate</span>               <span class="kt">bool</span>          <span class="s">`yaml:&#34;autoMigrate&#34;`</span>               <span class="c1">// 初始化时调用数据迁移
+</span><span class="c1"></span>	<span class="nx">ParseTime</span>                 <span class="kt">bool</span>          <span class="s">`yaml:&#34;parseTime&#34;`</span>                 <span class="c1">//解析time.Time类型
+</span><span class="c1"></span>	<span class="nx">TimeZone</span>                  <span class="kt">string</span>        <span class="s">`yaml:&#34;timeZone&#34;`</span>                  <span class="c1">// 时区,若设置 Asia/Shanghai,需写成: Asia%2fShanghai
+</span><span class="c1"></span>	<span class="nx">DefaultStringSize</span>         <span class="kt">uint</span>          <span class="s">`yaml:&#34;defaultStringSize&#34;`</span>         <span class="c1">// string 类型字段的默认长度
+</span><span class="c1"></span>	<span class="nx">DisableDatetimePrecision</span>  <span class="kt">bool</span>          <span class="s">`yaml:&#34;disableDatetimePrecision&#34;`</span>  <span class="c1">// 禁用 datetime 精度
+</span><span class="c1"></span>	<span class="nx">SkipInitializeWithVersion</span> <span class="kt">bool</span>          <span class="s">`yaml:&#34;skipInitializeWithVersion&#34;`</span> <span class="c1">// 根据当前 MySQL 版本自动配置
+</span><span class="c1"></span>	<span class="nx">Gorm</span>                      <span class="nx">gorm</span>          <span class="s">`yaml:&#34;gorm&#34;`</span>
+	<span class="nx">SlowSql</span>                   <span class="nx">time</span><span class="p">.</span><span class="nx">Duration</span> <span class="s">`yaml:&#34;slowSql&#34;`</span>                   <span class="c1">//慢SQL
+</span><span class="c1"></span>	<span class="nx">LogLevel</span>                  <span class="kt">string</span>        <span class="s">`yaml:&#34;logLevel&#34;`</span>                  <span class="c1">// 日志记录级别
+</span><span class="c1"></span>	<span class="nx">IgnoreRecordNotFoundError</span> <span class="kt">bool</span>          <span class="s">`yaml:&#34;ignoreRecordNotFoundError&#34;`</span> <span class="c1">// 是否忽略ErrRecordNotFound(未查到记录错误)
+</span><span class="c1"></span><span class="p">}</span>
+<span class="c1">// gorm 配置信息
+</span><span class="c1"></span><span class="kd">type</span> <span class="nx">gorm</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">SkipDefaultTx</span>   <span class="kt">bool</span>   <span class="s">`yaml:&#34;skipDefaultTx&#34;`</span>                            <span class="c1">//是否跳过默认事务
+</span><span class="c1"></span>	<span class="nx">CoverLogger</span>     <span class="kt">bool</span>   <span class="s">`yaml:&#34;coverLogger&#34;`</span>                              <span class="c1">//是否覆盖默认logger
+</span><span class="c1"></span>	<span class="nx">PreparedStmt</span>    <span class="kt">bool</span>   <span class="s">`yaml:&#34;prepareStmt&#34;`</span>                              <span class="c1">// 设置SQL缓存
+</span><span class="c1"></span>	<span class="nx">CloseForeignKey</span> <span class="kt">bool</span>   <span class="s">`yaml:&#34;disableForeignKeyConstraintWhenMigrating&#34;`</span> <span class="c1">// 禁用外键约束
+</span><span class="c1"></span>	<span class="nx">TablePrefix</span>     <span class="kt">string</span> <span class="s">`yaml:&#34;tablePrefix&#34;`</span>                              <span class="c1">// 表前缀
+</span><span class="c1"></span>	<span class="nx">SingularTable</span>   <span class="kt">bool</span>   <span class="s">`yaml:&#34;singularTable&#34;`</span>                            <span class="c1">//是否使用单数表名(默认复数)，启用后，User结构体表将是user
+</span><span class="c1"></span><span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="23-嵌入主配置">2.3 嵌入主配置</h3>
+<p><strong>编辑文件:<code>./config/app.go</code></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="o">...</span>
+<span class="c1">// ServerConfig 配置信息
+</span><span class="c1"></span><span class="kd">type</span> <span class="nx">ServerConfig</span> <span class="kd">struct</span> <span class="p">{</span>
+  <span class="o">...</span><span class="p">.</span>
+	<span class="nx">Mysql</span> <span class="nx">mysql</span> <span class="s">`yaml:&#34;mysql&#34;`</span> <span class="c1">// 嵌入MySQL配置
+</span><span class="c1"></span><span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="24-定义全局变量">2.4 定义全局变量</h3>
+<p><strong>编辑文件:<code>./global/global.go</code></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 变量
+</span><span class="c1"></span><span class="kd">var</span> <span class="p">(</span>
+	<span class="o">...</span>
+	<span class="nx">GvaMysqlClient</span> <span class="o">*</span><span class="nx">gorm</span><span class="p">.</span><span class="nx">DB</span>            <span class="c1">//Mysql客户端
+</span><span class="c1"></span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="3代码实现">3.代码实现</h2>
+<h3 id="31--集成入口">3.1  集成入口</h3>
+<h4 id="1-编辑-maingo">1. 编辑 <code>main.go</code></h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">init</span><span class="p">()</span> <span class="p">{</span>
+	<span class="o">...</span>
+	<span class="c1">// 初始化gorm
+</span><span class="c1"></span>	<span class="nx">initialize</span><span class="p">.</span><span class="nf">InitGorm</span><span class="p">()</span>
+<span class="p">}</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 启动服务
+</span><span class="c1"></span>	<span class="o">...</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="2-initializeinitgorm">2. <code>initialize.InitGorm()</code></h4>
+<p><strong>新增文件:<code>./initialize/gorm.go</code></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 初始化mysql客户端
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">InitGorm</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">mysqlConfig</span> <span class="o">:=</span> <span class="nx">global</span><span class="p">.</span><span class="nx">GvaConfig</span><span class="p">.</span><span class="nx">Mysql</span>
+	<span class="c1">// user:pass@tcp(127.0.0.1:3306)/dbname?charset=utf8mb4&amp;parseTime=True&amp;loc=Local
+</span><span class="c1"></span>	<span class="nx">dsn</span> <span class="o">:=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;%s:%s@tcp(%s:%s)/%s?charset=%s&amp;parseTime=%t&amp;loc=%s&#34;</span><span class="p">,</span>
+		<span class="nx">mysqlConfig</span><span class="p">.</span><span class="nx">User</span><span class="p">,</span> <span class="nx">mysqlConfig</span><span class="p">.</span><span class="nx">Password</span><span class="p">,</span> <span class="nx">mysqlConfig</span><span class="p">.</span><span class="nx">Host</span><span class="p">,</span> <span class="nx">mysqlConfig</span><span class="p">.</span><span class="nx">Port</span><span class="p">,</span> <span class="nx">mysqlConfig</span><span class="p">.</span><span class="nx">Database</span><span class="p">,</span> <span class="nx">mysqlConfig</span><span class="p">.</span><span class="nx">Charset</span><span class="p">,</span>
+		<span class="nx">mysqlConfig</span><span class="p">.</span><span class="nx">ParseTime</span><span class="p">,</span> <span class="nx">mysqlConfig</span><span class="p">.</span><span class="nx">TimeZone</span><span class="p">)</span>
+	<span class="c1">// 设置gorm配置
+</span><span class="c1"></span>	<span class="nx">gormConfig</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">gorm</span><span class="p">.</span><span class="nx">Config</span><span class="p">{</span>
+		<span class="nx">SkipDefaultTransaction</span><span class="p">:</span> <span class="nx">mysqlConfig</span><span class="p">.</span><span class="nx">Gorm</span><span class="p">.</span><span class="nx">SkipDefaultTx</span><span class="p">,</span> <span class="c1">//是否跳过默认事务
+</span><span class="c1"></span>		<span class="c1">// 命名策略
+</span><span class="c1"></span>		<span class="nx">NamingStrategy</span><span class="p">:</span> <span class="nx">schema</span><span class="p">.</span><span class="nx">NamingStrategy</span><span class="p">{</span>
+			<span class="nx">TablePrefix</span><span class="p">:</span>   <span class="nx">mysqlConfig</span><span class="p">.</span><span class="nx">Gorm</span><span class="p">.</span><span class="nx">TablePrefix</span><span class="p">,</span>
+			<span class="nx">SingularTable</span><span class="p">:</span> <span class="nx">mysqlConfig</span><span class="p">.</span><span class="nx">Gorm</span><span class="p">.</span><span class="nx">SingularTable</span><span class="p">,</span>
+		<span class="p">},</span>
+		<span class="c1">// 执行任何SQL时都会创建一个prepared statement并将其缓存，以提高后续的效率
+</span><span class="c1"></span>		<span class="nx">PrepareStmt</span><span class="p">:</span> <span class="nx">mysqlConfig</span><span class="p">.</span><span class="nx">Gorm</span><span class="p">.</span><span class="nx">PreparedStmt</span><span class="p">,</span>
+		<span class="c1">//在AutoMigrate 或 CreateTable 时，GORM 会自动创建外键约束，若要禁用该特性，可将其设置为 true
+</span><span class="c1"></span>		<span class="nx">DisableForeignKeyConstraintWhenMigrating</span><span class="p">:</span> <span class="nx">mysqlConfig</span><span class="p">.</span><span class="nx">Gorm</span><span class="p">.</span><span class="nx">CloseForeignKey</span><span class="p">,</span>
+	<span class="p">}</span>
+	<span class="c1">// 是否覆盖默认sql配置
+</span><span class="c1"></span>	<span class="k">if</span> <span class="nx">mysqlConfig</span><span class="p">.</span><span class="nx">Gorm</span><span class="p">.</span><span class="nx">CoverLogger</span> <span class="p">{</span>
+		<span class="nf">setNewLogger</span><span class="p">(</span><span class="nx">gormConfig</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="nx">client</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">gorm</span><span class="p">.</span><span class="nf">Open</span><span class="p">(</span><span class="nx">mysql</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="nx">mysql</span><span class="p">.</span><span class="nx">Config</span><span class="p">{</span>
+		<span class="nx">DSN</span><span class="p">:</span>                       <span class="nx">dsn</span><span class="p">,</span>
+		<span class="nx">DefaultStringSize</span><span class="p">:</span>         <span class="nx">mysqlConfig</span><span class="p">.</span><span class="nx">DefaultStringSize</span><span class="p">,</span>
+		<span class="nx">DisableDatetimePrecision</span><span class="p">:</span>  <span class="nx">mysqlConfig</span><span class="p">.</span><span class="nx">DisableDatetimePrecision</span><span class="p">,</span>
+		<span class="nx">SkipInitializeWithVersion</span><span class="p">:</span> <span class="nx">mysqlConfig</span><span class="p">.</span><span class="nx">SkipInitializeWithVersion</span><span class="p">,</span>
+	<span class="p">}),</span> <span class="nx">gormConfig</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nb">panic</span><span class="p">(</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;创建mysql客户端失败: %s&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">))</span>
+	<span class="p">}</span>
+	<span class="c1">// 赋值给全局变量
+</span><span class="c1"></span>	<span class="nx">global</span><span class="p">.</span><span class="nx">GvaMysqlClient</span> <span class="p">=</span> <span class="nx">client</span>
+	<span class="c1">// 是否调用数据迁移
+</span><span class="c1"></span>	<span class="k">if</span> <span class="nx">mysqlConfig</span><span class="p">.</span><span class="nx">AutoMigrate</span> <span class="p">{</span>
+		<span class="nx">core</span><span class="p">.</span><span class="nf">AutoMigrate</span><span class="p">()</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="32-重写默认logger">3.2 重写默认<code>Logger</code></h3>
+<p><code>Gorm</code> 有一个 <a href="https://github.com/go-gorm/gorm/blob/master/logger/logger.go">默认 logger 实现</a>，默认情况下，它会打印慢 <code>SQL</code> 和错误到控制台，也可以重写覆盖，实现写入到单独文件。</p>
+<p><strong>编辑文件:<code>./initialize/gorm.go</code></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 设置新的Logger
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">setNewLogger</span><span class="p">(</span><span class="nx">gConfig</span> <span class="o">*</span><span class="nx">gorm</span><span class="p">.</span><span class="nx">Config</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">logPath</span> <span class="o">:=</span> <span class="nx">global</span><span class="p">.</span><span class="nx">GvaConfig</span><span class="p">.</span><span class="nx">Log</span><span class="p">.</span><span class="nx">Path</span>
+	<span class="nx">file</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nf">OpenFile</span><span class="p">(</span><span class="nx">logPath</span><span class="o">+</span><span class="s">&#34;/sql.log&#34;</span><span class="p">,</span> <span class="nx">os</span><span class="p">.</span><span class="nx">O_RDWR</span><span class="p">|</span><span class="nx">os</span><span class="p">.</span><span class="nx">O_CREATE</span><span class="p">|</span><span class="nx">os</span><span class="p">.</span><span class="nx">O_APPEND</span><span class="p">,</span> <span class="nx">os</span><span class="p">.</span><span class="nx">ModePerm</span><span class="p">)</span>
+	<span class="c1">// 日志级别映射 error、info、warn
+</span><span class="c1"></span>	<span class="nx">logLevelMap</span> <span class="o">:=</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="nx">logger</span><span class="p">.</span><span class="nx">LogLevel</span><span class="p">{</span>
+		<span class="s">&#34;error&#34;</span><span class="p">:</span> <span class="nx">logger</span><span class="p">.</span><span class="nx">Error</span><span class="p">,</span>
+		<span class="s">&#34;info&#34;</span><span class="p">:</span>  <span class="nx">logger</span><span class="p">.</span><span class="nx">Info</span><span class="p">,</span>
+		<span class="s">&#34;warn&#34;</span><span class="p">:</span>  <span class="nx">logger</span><span class="p">.</span><span class="nx">Warn</span><span class="p">,</span>
+	<span class="p">}</span>
+	<span class="kd">var</span> <span class="nx">logLevel</span> <span class="nx">logger</span><span class="p">.</span><span class="nx">LogLevel</span>
+	<span class="kd">var</span> <span class="nx">ok</span> <span class="kt">bool</span>
+	<span class="k">if</span> <span class="nx">logLevel</span><span class="p">,</span> <span class="nx">ok</span> <span class="p">=</span> <span class="nx">logLevelMap</span><span class="p">[</span><span class="nx">global</span><span class="p">.</span><span class="nx">GvaConfig</span><span class="p">.</span><span class="nx">Mysql</span><span class="p">.</span><span class="nx">LogLevel</span><span class="p">];</span> <span class="p">!</span><span class="nx">ok</span> <span class="p">{</span>
+		<span class="nx">logLevel</span> <span class="p">=</span> <span class="nx">logger</span><span class="p">.</span><span class="nx">Error</span>
+	<span class="p">}</span>
+	<span class="nx">newLogger</span> <span class="o">:=</span> <span class="nx">logger</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="nx">log</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="nx">file</span><span class="p">,</span> <span class="s">&#34;\r\n&#34;</span><span class="p">,</span> <span class="nx">log</span><span class="p">.</span><span class="nx">LstdFlags</span><span class="p">),</span> <span class="nx">logger</span><span class="p">.</span><span class="nx">Config</span><span class="p">{</span>
+		<span class="nx">SlowThreshold</span><span class="p">:</span>             <span class="nx">global</span><span class="p">.</span><span class="nx">GvaConfig</span><span class="p">.</span><span class="nx">Mysql</span><span class="p">.</span><span class="nx">SlowSql</span><span class="p">,</span>                   <span class="c1">//慢SQL时间
+</span><span class="c1"></span>		<span class="nx">LogLevel</span><span class="p">:</span>                  <span class="nx">logLevel</span><span class="p">,</span>                                         <span class="c1">// 记录日志级别
+</span><span class="c1"></span>		<span class="nx">IgnoreRecordNotFoundError</span><span class="p">:</span> <span class="nx">global</span><span class="p">.</span><span class="nx">GvaConfig</span><span class="p">.</span><span class="nx">Mysql</span><span class="p">.</span><span class="nx">IgnoreRecordNotFoundError</span><span class="p">,</span> <span class="c1">// 是否忽略ErrRecordNotFound(未查到记录错误)
+</span><span class="c1"></span>		<span class="nx">Colorful</span><span class="p">:</span>                  <span class="kc">false</span><span class="p">,</span>                                            <span class="c1">// 开关颜色
+</span><span class="c1"></span>	<span class="p">})</span>
+	<span class="nx">gConfig</span><span class="p">.</span><span class="nx">Logger</span> <span class="p">=</span> <span class="nx">newLogger</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="33-数据迁移automigrate-">3.3 数据迁移<code>AutoMigrate </code></h3>
+<h4 id="1-新增实体">1. 新增实体</h4>
+<p><strong>新增文件:<code>./model/entity/user.go</code></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="cm">/**
+</span><span class="cm"> * @Description 用户相关的实体
+</span><span class="cm"> **/</span>
+<span class="kn">package</span> <span class="nx">entity</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;52lu/go-import-template/global&#34;</span>
+<span class="p">)</span>
+
+<span class="c1">// 用户表
+</span><span class="c1"></span><span class="kd">type</span> <span class="nx">User</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">global</span><span class="p">.</span><span class="nx">BaseModel</span>
+	<span class="nx">NickName</span> <span class="kt">string</span>   <span class="s">`json:&#34;nickName&#34; gorm:&#34;type:varchar(20);not null;default:&#39;&#39;;comment:昵称&#34;`</span>
+	<span class="nx">Phone</span>    <span class="kt">string</span>   <span class="s">`json:&#34;phone&#34; gorm:&#34;type:char(11);unique:un_phone;comment:手机号&#34;`</span>
+	<span class="nx">Password</span> <span class="kt">string</span>   <span class="s">`json:&#34;password&#34; gorm:&#34;type:varchar(20);comment:密码&#34;`</span>
+	<span class="nx">Status</span>   <span class="kt">int</span>      <span class="s">`json:&#34;status&#34; gorm:&#34;size:4;default:1;comment:状态 1:正常 2:白名单 3:黑名单&#34;`</span>
+	<span class="nx">UserInfo</span> <span class="nx">UserInfo</span> <span class="s">`json:&#34;userInfo&#34; gorm:&#34;-&#34;`</span>
+<span class="p">}</span>
+
+<span class="c1">// 用户信息表
+</span><span class="c1"></span><span class="kd">type</span> <span class="nx">UserInfo</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">global</span><span class="p">.</span><span class="nx">BaseModel</span>
+	<span class="nx">Uid</span>      <span class="kt">uint</span>   <span class="s">`json:&#34;uid&#34; gorm:&#34;comment:用户id&#34;`</span>
+	<span class="nx">Birthday</span> <span class="kt">string</span> <span class="s">`json:&#34;birthday&#34; gorm:&#34;type:varchar(10);comment:生日&#34;`</span>
+	<span class="nx">Address</span>  <span class="kt">string</span> <span class="s">`json:&#34;address&#34; gorm:&#34;type:text;comment:地址&#34;`</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="2-迁移代码">2. 迁移代码</h4>
+<p><strong>新增文件:<code>./core/gorm_migrate.go</code></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="cm">/**
+</span><span class="cm"> * @Description mysql迁移
+</span><span class="cm"> **/</span>
+<span class="kn">package</span> <span class="nx">core</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;52lu/go-import-template/global&#34;</span>
+	<span class="s">&#34;52lu/go-import-template/model/entity&#34;</span>
+	<span class="s">&#34;fmt&#34;</span>
+	<span class="s">&#34;gorm.io/gorm&#34;</span>
+<span class="p">)</span>
+<span class="c1">// 设置表信息
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">setTableOption</span><span class="p">(</span><span class="nx">tableComment</span> <span class="kt">string</span><span class="p">)</span> <span class="o">*</span><span class="nx">gorm</span><span class="p">.</span><span class="nx">DB</span> <span class="p">{</span>
+	<span class="nx">value</span> <span class="o">:=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;ENGINE=InnoDB COMMENT=&#39;%s&#39;&#34;</span><span class="p">,</span> <span class="nx">tableComment</span><span class="p">)</span>
+	<span class="k">return</span> <span class="nx">global</span><span class="p">.</span><span class="nx">GvaMysqlClient</span><span class="p">.</span><span class="nf">Set</span><span class="p">(</span><span class="s">&#34;gorm:table_options&#34;</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="c1">// 用户相关表
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">userTable</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 用户账号表
+</span><span class="c1"></span>	<span class="nx">_</span> <span class="p">=</span> <span class="nf">setTableOption</span><span class="p">(</span><span class="s">&#34;用户表&#34;</span><span class="p">).</span><span class="nf">AutoMigrate</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">entity</span><span class="p">.</span><span class="nx">User</span><span class="p">{})</span>
+	<span class="c1">// 用户信息表
+</span><span class="c1"></span>	<span class="nx">_</span> <span class="p">=</span> <span class="nf">setTableOption</span><span class="p">(</span><span class="s">&#34;用户信息表&#34;</span><span class="p">).</span><span class="nf">AutoMigrate</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">entity</span><span class="p">.</span><span class="nx">UserInfo</span><span class="p">{})</span>
+<span class="p">}</span>
+<span class="c1">// 数据表迁移
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">AutoMigrate</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 创建用户相关表
+</span><span class="c1"></span>	<span class="nf">userTable</span><span class="p">()</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="4-场景示例">4. 场景示例</h2>
+<p>下面以登录和注册场景，演示使用和请求流程。</p>
+<h3 id="41-调用流程">4.1 调用流程</h3>
+<p><img src="https://gitee.com/tangxiaoshan/pic-img-bed/raw/master/go/img/20210719112514.png" alt=""></p>
+<h3 id="42-代码实现">4.2 代码实现</h3>
+<h4 id="1-编辑api">1. 编辑api</h4>
+<p><strong>新建<code>./api/v1/user_api.go</code></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="cm">/**
+</span><span class="cm"> * @Description 用户相关接口
+</span><span class="cm"> **/</span>
+<span class="kn">package</span> <span class="nx">v1</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;52lu/go-import-template/global&#34;</span>
+	<span class="s">&#34;52lu/go-import-template/model/entity&#34;</span>
+	<span class="s">&#34;52lu/go-import-template/model/request&#34;</span>
+	<span class="s">&#34;52lu/go-import-template/model/response&#34;</span>
+	<span class="s">&#34;52lu/go-import-template/service&#34;</span>
+	<span class="s">&#34;fmt&#34;</span>
+	<span class="s">&#34;github.com/gin-gonic/gin&#34;</span>
+	<span class="s">&#34;go.uber.org/zap&#34;</span>
+<span class="p">)</span>
+
+<span class="cm">/**
+</span><span class="cm"> * @description:  用户注册
+</span><span class="cm"> * @param ctx
+</span><span class="cm"> */</span>
+<span class="kd">func</span> <span class="nf">Register</span><span class="p">(</span><span class="nx">ctx</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// 绑定参数
+</span><span class="c1"></span>	<span class="kd">var</span> <span class="nx">registerParam</span> <span class="nx">request</span><span class="p">.</span><span class="nx">RegisterParam</span>
+	<span class="nx">_</span> <span class="p">=</span> <span class="nx">ctx</span><span class="p">.</span><span class="nf">ShouldBindJSON</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">registerParam</span><span class="p">)</span>
+	<span class="c1">// todo 参数校验
+</span><span class="c1"></span>	<span class="c1">// 调用注册
+</span><span class="c1"></span>	<span class="nx">register</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">service</span><span class="p">.</span><span class="nf">Register</span><span class="p">(</span><span class="nx">registerParam</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">response</span><span class="p">.</span><span class="nf">Fail</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="s">&#34;注册失败!&#34;</span><span class="p">)</span>
+		<span class="k">return</span>
+	<span class="p">}</span>
+	<span class="nx">response</span><span class="p">.</span><span class="nf">OkWithData</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="nx">register</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="cm">/**
+</span><span class="cm"> * @description:  用户账号密码登录
+</span><span class="cm"> * @param ctx
+</span><span class="cm"> */</span>
+<span class="kd">func</span> <span class="nf">Login</span><span class="p">(</span><span class="nx">ctx</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// 绑定参数
+</span><span class="c1"></span>	<span class="kd">var</span> <span class="nx">loginParam</span> <span class="nx">request</span><span class="p">.</span><span class="nx">LoginParam</span>
+	<span class="nx">_</span> <span class="p">=</span> <span class="nx">ctx</span><span class="p">.</span><span class="nf">ShouldBindJSON</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">loginParam</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;参数:&#34;</span><span class="p">,</span> <span class="nx">loginParam</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">loginParam</span><span class="p">.</span><span class="nx">Password</span> <span class="o">==</span> <span class="s">&#34;&#34;</span> <span class="o">||</span> <span class="nx">loginParam</span><span class="p">.</span><span class="nx">Phone</span> <span class="o">==</span> <span class="s">&#34;&#34;</span> <span class="p">{</span>
+		<span class="nx">response</span><span class="p">.</span><span class="nf">Fail</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="s">&#34;手机号和密码不能为空！&#34;</span><span class="p">)</span>
+		<span class="k">return</span>
+	<span class="p">}</span>
+	<span class="c1">// 调用登录服务
+</span><span class="c1"></span>	<span class="nx">userRecord</span> <span class="o">:=</span> <span class="nx">entity</span><span class="p">.</span><span class="nx">User</span><span class="p">{</span><span class="nx">Phone</span><span class="p">:</span> <span class="nx">loginParam</span><span class="p">.</span><span class="nx">Phone</span><span class="p">,</span> <span class="nx">Password</span><span class="p">:</span> <span class="nx">loginParam</span><span class="p">.</span><span class="nx">Password</span><span class="p">}</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">service</span><span class="p">.</span><span class="nf">LoginPwd</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">userRecord</span><span class="p">);</span><span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">global</span><span class="p">.</span><span class="nx">GvaLogger</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="s">&#34;登录失败:&#34;</span><span class="p">,</span><span class="nx">zap</span><span class="p">.</span><span class="nf">Any</span><span class="p">(</span><span class="s">&#34;user&#34;</span><span class="p">,</span><span class="nx">userRecord</span><span class="p">))</span>
+		<span class="nx">response</span><span class="p">.</span><span class="nf">Fail</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="s">&#34;登录失败,账号或者密码错误!&#34;</span><span class="p">)</span>
+		<span class="k">return</span>
+	<span class="p">}</span>
+	<span class="nx">response</span><span class="p">.</span><span class="nf">OkWithData</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">userRecord</span><span class="p">)</span>
+<span class="p">}</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="2-注册路由">2. 注册路由</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">router</span>
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="nx">v1</span> <span class="s">&#34;52lu/go-import-template/api/v1&#34;</span>
+	<span class="s">&#34;github.com/gin-gonic/gin&#34;</span>
+<span class="p">)</span>
+<span class="cm">/**
+</span><span class="cm"> * @description: 用户相关的路由
+</span><span class="cm"> * @param engine
+</span><span class="cm"> */</span>
+<span class="kd">func</span> <span class="nf">InitUserRouter</span><span class="p">(</span><span class="nx">engine</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Engine</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// 不需要登录的路由
+</span><span class="c1"></span>	<span class="nx">noLoginGroup</span> <span class="o">:=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Group</span><span class="p">(</span><span class="s">&#34;v1/user&#34;</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="c1">// 登录
+</span><span class="c1"></span>		<span class="nx">noLoginGroup</span><span class="p">.</span><span class="nf">POST</span><span class="p">(</span><span class="s">&#34;login&#34;</span><span class="p">,</span> <span class="nx">v1</span><span class="p">.</span><span class="nx">Login</span><span class="p">)</span>
+		<span class="c1">// 注册
+</span><span class="c1"></span>		<span class="nx">noLoginGroup</span><span class="p">.</span><span class="nf">POST</span><span class="p">(</span><span class="s">&#34;register&#34;</span><span class="p">,</span> <span class="nx">v1</span><span class="p">.</span><span class="nx">Register</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="3业务处理">3.业务处理</h4>
+<p><strong>新建:<code>./service/user.go</code></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="cm">/**
+</span><span class="cm"> * @Description TODO
+</span><span class="cm"> **/</span>
+<span class="kn">package</span> <span class="nx">service</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;52lu/go-import-template/global&#34;</span>
+	<span class="s">&#34;52lu/go-import-template/model/entity&#34;</span>
+	<span class="s">&#34;52lu/go-import-template/model/request&#34;</span>
+	<span class="s">&#34;gorm.io/gorm&#34;</span>
+<span class="p">)</span>
+
+<span class="cm">/**
+</span><span class="cm"> * @description: 账户密码登录
+</span><span class="cm"> * @param user
+</span><span class="cm"> */</span>
+<span class="kd">func</span> <span class="nf">LoginPwd</span><span class="p">(</span><span class="nx">user</span> <span class="o">*</span><span class="nx">entity</span><span class="p">.</span><span class="nx">User</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
+	<span class="c1">//校验账户和密码
+</span><span class="c1"></span>	<span class="nx">result</span> <span class="o">:=</span> <span class="nx">global</span><span class="p">.</span><span class="nx">GvaMysqlClient</span><span class="p">.</span><span class="nf">Where</span><span class="p">(</span><span class="s">&#34;phone=? and password=?&#34;</span><span class="p">,</span> <span class="nx">user</span><span class="p">.</span><span class="nx">Phone</span><span class="p">,</span> <span class="nx">user</span><span class="p">.</span><span class="nx">Password</span><span class="p">).</span>
+		<span class="nf">First</span><span class="p">(</span><span class="nx">user</span><span class="p">)</span>
+	<span class="k">return</span> <span class="nx">result</span><span class="p">.</span><span class="nx">Error</span>
+<span class="p">}</span>
+
+<span class="c1">// 注册用户
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">Register</span><span class="p">(</span><span class="nx">param</span> <span class="nx">request</span><span class="p">.</span><span class="nx">RegisterParam</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="nx">entity</span><span class="p">.</span><span class="nx">User</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">user</span> <span class="o">:=</span> <span class="nx">entity</span><span class="p">.</span><span class="nx">User</span><span class="p">{</span>
+		<span class="nx">NickName</span><span class="p">:</span> <span class="nx">param</span><span class="p">.</span><span class="nx">NickName</span><span class="p">,</span>
+		<span class="nx">Phone</span><span class="p">:</span>    <span class="nx">param</span><span class="p">.</span><span class="nx">Phone</span><span class="p">,</span>
+		<span class="nx">Password</span><span class="p">:</span> <span class="nx">param</span><span class="p">.</span><span class="nx">Password</span><span class="p">,</span>
+	<span class="p">}</span>
+	<span class="nx">_</span> <span class="p">=</span> <span class="nx">global</span><span class="p">.</span><span class="nx">GvaMysqlClient</span><span class="p">.</span><span class="nf">Transaction</span><span class="p">(</span><span class="kd">func</span><span class="p">(</span><span class="nx">tx</span> <span class="o">*</span><span class="nx">gorm</span><span class="p">.</span><span class="nx">DB</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">tx</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">user</span><span class="p">).</span><span class="nx">Error</span><span class="p">;</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+			<span class="nx">global</span><span class="p">.</span><span class="nx">GvaLogger</span><span class="p">.</span><span class="nf">Sugar</span><span class="p">().</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;新增用户失败: %s&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+			<span class="k">return</span> <span class="nx">err</span>
+		<span class="p">}</span>
+		<span class="nx">userInfo</span> <span class="o">:=</span> <span class="nx">entity</span><span class="p">.</span><span class="nx">UserInfo</span><span class="p">{</span>
+			<span class="nx">Uid</span><span class="p">:</span>      <span class="nx">user</span><span class="p">.</span><span class="nx">ID</span><span class="p">,</span>
+			<span class="nx">Birthday</span><span class="p">:</span> <span class="nx">param</span><span class="p">.</span><span class="nx">Birthday</span><span class="p">,</span>
+			<span class="nx">Address</span><span class="p">:</span>  <span class="nx">param</span><span class="p">.</span><span class="nx">Address</span><span class="p">,</span>
+		<span class="p">}</span>
+		<span class="k">if</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">tx</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">userInfo</span><span class="p">).</span><span class="nx">Error</span><span class="p">;</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+			<span class="nx">global</span><span class="p">.</span><span class="nx">GvaLogger</span><span class="p">.</span><span class="nf">Sugar</span><span class="p">().</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;新增用户信息失败: %s&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+			<span class="k">return</span> <span class="nx">err</span>
+		<span class="p">}</span>
+		<span class="nx">user</span><span class="p">.</span><span class="nx">UserInfo</span> <span class="p">=</span> <span class="nx">userInfo</span>
+		<span class="k">return</span> <span class="kc">nil</span>
+	<span class="p">})</span>
+	<span class="k">return</span> <span class="o">&amp;</span><span class="nx">user</span><span class="p">,</span> <span class="kc">nil</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">Shershon</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2021-12-15
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/go%E5%AE%9E%E8%B7%B5/">Go实践</a>
+          <a href="/tags/gin/">Gin</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/godoc/gin%E6%A1%86%E6%9E%B6/%E9%9B%86%E6%88%90/04-jwt/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Gin集成(四):集成JWT</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        <a class="next" href="/post/godoc/gin%E6%A1%86%E6%9E%B6/%E9%9B%86%E6%88%90/02-zap/">
+            <span class="next-text nav-default">Gin集成(二):集成高性能日志zap</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:your@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://localhost:1313" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="http://localhost:1313" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="http://localhost:1313" class="iconfont icon-facebook" title="facebook"></a>
+      <a href="http://localhost:1313" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="http://localhost:1313" class="iconfont icon-google" title="google"></a>
+      <a href="http://localhost:1313" class="iconfont icon-github" title="github"></a>
+      <a href="http://localhost:1313" class="iconfont icon-weibo" title="weibo"></a>
+      <a href="http://localhost:1313" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="http://localhost:1313" class="iconfont icon-douban" title="douban"></a>
+      <a href="http://localhost:1313" class="iconfont icon-pocket" title="pocket"></a>
+      <a href="http://localhost:1313" class="iconfont icon-tumblr" title="tumblr"></a>
+      <a href="http://localhost:1313" class="iconfont icon-instagram" title="instagram"></a>
+      <a href="http://localhost:1313" class="iconfont icon-gitlab" title="gitlab"></a>
+      <a href="http://localhost:1313" class="iconfont icon-bilibili" title="bilibili"></a>
+  <a href="http://localhost:1313/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span>Shershon</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

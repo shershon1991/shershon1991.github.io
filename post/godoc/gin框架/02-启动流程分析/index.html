@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Gin框架(二):启动流程分析 - 小山的博客</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Shershon" /><meta name="description" content="1.启动服务 1.1 服务源码 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 package main // 引入gin框架 import &amp;#34;github.com/gin-gonic/gin&amp;#34; func main() { // 创建一个默认的路由引擎 engine := gin.Default() // 注册Get路由 engine.GET(&amp;#34;/&amp;#34;, func(ctx *gin.Context) { ctx.JSON(200,gin.H{ &amp;" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.90.1 with theme even" />
+
+
+<link rel="canonical" href="http://localhost:1313/post/godoc/gin%E6%A1%86%E6%9E%B6/02-%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B%E5%88%86%E6%9E%90/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Gin框架(二):启动流程分析" />
+<meta property="og:description" content="1.启动服务 1.1 服务源码 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 package main // 引入gin框架 import &#34;github.com/gin-gonic/gin&#34; func main() { // 创建一个默认的路由引擎 engine := gin.Default() // 注册Get路由 engine.GET(&#34;/&#34;, func(ctx *gin.Context) { ctx.JSON(200,gin.H{ &" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/post/godoc/gin%E6%A1%86%E6%9E%B6/02-%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B%E5%88%86%E6%9E%90/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2021-12-02T00:00:00+00:00" />
+<meta property="article:modified_time" content="2021-12-02T00:00:00+00:00" />
+
+<meta itemprop="name" content="Gin框架(二):启动流程分析">
+<meta itemprop="description" content="1.启动服务 1.1 服务源码 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 package main // 引入gin框架 import &#34;github.com/gin-gonic/gin&#34; func main() { // 创建一个默认的路由引擎 engine := gin.Default() // 注册Get路由 engine.GET(&#34;/&#34;, func(ctx *gin.Context) { ctx.JSON(200,gin.H{ &"><meta itemprop="datePublished" content="2021-12-02T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2021-12-02T00:00:00+00:00" />
+<meta itemprop="wordCount" content="1760">
+<meta itemprop="keywords" content="Go实践,Gin," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Gin框架(二):启动流程分析"/>
+<meta name="twitter:description" content="1.启动服务 1.1 服务源码 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 package main // 引入gin框架 import &#34;github.com/gin-gonic/gin&#34; func main() { // 创建一个默认的路由引擎 engine := gin.Default() // 注册Get路由 engine.GET(&#34;/&#34;, func(ctx *gin.Context) { ctx.JSON(200,gin.H{ &"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">小山的博客</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">小山的博客</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Gin框架(二):启动流程分析</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-12-02 </span>
+        <div class="post-category">
+            <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+            <a href="/categories/go/"> Go </a>
+            </div>
+          <span class="more-meta"> 1760 words </span>
+          <span class="more-meta"> 4 mins read </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#1启动服务">1.启动服务</a></li>
+            <li><a href="#2代码分析">2.代码分析</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h3 id="1启动服务">1.启动服务</h3>
+<h4 id="11-服务源码">1.1 服务源码</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<span class="c1">// 引入gin框架
+</span><span class="c1"></span><span class="kn">import</span> <span class="s">&#34;github.com/gin-gonic/gin&#34;</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 创建一个默认的路由引擎
+</span><span class="c1"></span>	<span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
+	<span class="c1">// 注册Get路由
+</span><span class="c1"></span>	<span class="nx">engine</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">ctx</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">ctx</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span>
+			<span class="s">&#34;msg&#34;</span><span class="p">:</span><span class="s">&#34;请求成功&#34;</span><span class="p">,</span>
+		<span class="p">})</span>
+	<span class="p">})</span>
+  <span class="c1">// 默认监听的是 0.0.0.0:8080
+</span><span class="c1"></span>	<span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="12-启动输出">1.2 启动输出</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">➜ go run main.go 
+<span class="o">[</span>GIN-debug<span class="o">]</span> <span class="o">[</span>WARNING<span class="o">]</span> Creating an Engine instance with the Logger and Recovery middleware already attached.
+
+<span class="o">[</span>GIN-debug<span class="o">]</span> <span class="o">[</span>WARNING<span class="o">]</span> Running in <span class="s2">&#34;debug&#34;</span> mode. Switch to <span class="s2">&#34;release&#34;</span> mode in production.
+ - using env:   <span class="nb">export</span> <span class="nv">GIN_MODE</span><span class="o">=</span>release
+ - using code:  gin.SetMode<span class="o">(</span>gin.ReleaseMode<span class="o">)</span>
+
+<span class="o">[</span>GIN-debug<span class="o">]</span> GET    /                         --&gt; main.main.func1 <span class="o">(</span><span class="m">3</span> handlers<span class="o">)</span>
+<span class="o">[</span>GIN-debug<span class="o">]</span> Environment variable PORT is undefined. Using port :8080 by default
+<span class="o">[</span>GIN-debug<span class="o">]</span> Listening and serving HTTP on :8080
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="2代码分析">2.代码分析</h3>
+<h4 id="21-import-githubcomgin-gonicgin">2.1 import &ldquo;github.com/gin-gonic/gin&rdquo;</h4>
+<p>在引入<code>Gin</code>框架时，包内相关的<code>init()</code>方法都会被执行；经查找发现下面两个<code>init</code>方法;</p>
+<p><strong>a. 第一个init方法</strong></p>
+<p>方法位置: <code>github.com/gin-gonic/gin/context_appengine.go</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">gin</span>
+<span class="kd">func</span> <span class="nf">init</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// 设置AppEngine = true
+</span><span class="c1"></span>	<span class="nx">defaultAppEngine</span> <span class="p">=</span> <span class="kc">true</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>b. 第二个init方法</strong></p>
+<p>方法位置: <code>github.com/gin-gonic/gin/mode.go</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">init</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// 设置服务的运行模式，默认是DebugMode
+</span><span class="c1"></span>  <span class="c1">// 分别有三种模式:DebugMode=0(开发模式)、releaseCode=1(生产模式)、testCode=2(测试模式)
+</span><span class="c1"></span>	<span class="nx">mode</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nf">Getenv</span><span class="p">(</span><span class="nx">EnvGinMode</span><span class="p">)</span>
+	<span class="nf">SetMode</span><span class="p">(</span><span class="nx">mode</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="22-gindefault">2.2 gin.Default()</h4>
+<p><strong>gin.Default源码如下:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">Default</span><span class="p">()</span> <span class="o">*</span><span class="nx">Engine</span> <span class="p">{</span>
+  <span class="c1">// 打印gin-debug信息
+</span><span class="c1"></span>	<span class="nf">debugPrintWARNINGDefault</span><span class="p">()</span>
+  <span class="c1">// 新建一个无路由无中间的引擎
+</span><span class="c1"></span>	<span class="nx">engine</span> <span class="o">:=</span> <span class="nf">New</span><span class="p">()</span>
+  <span class="c1">// 注册全局日志和异常捕获中间件
+</span><span class="c1"></span>	<span class="nx">engine</span><span class="p">.</span><span class="nf">Use</span><span class="p">(</span><span class="nf">Logger</span><span class="p">(),</span> <span class="nf">Recovery</span><span class="p">())</span>
+	<span class="k">return</span> <span class="nx">engine</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><font color=red>@注意: Gin框架中注册中间件是通过	engine.Use(xx)的方式。 </font></p>
+<h4 id="23-engineget">2.3 engine.GET(&quot;/&quot;,&hellip;)</h4>
+<h5 id="1源码">1.源码</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 注册一个匹配路径(relativePath)的Get请求路由
+</span><span class="c1">// handlers是对应的处理逻辑
+</span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">group</span> <span class="o">*</span><span class="nx">RouterGroup</span><span class="p">)</span> <span class="nf">GET</span><span class="p">(</span><span class="nx">relativePath</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">handlers</span> <span class="o">...</span><span class="nx">HandlerFunc</span><span class="p">)</span> <span class="nx">IRoutes</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="nx">group</span><span class="p">.</span><span class="nf">handle</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nx">MethodGet</span><span class="p">,</span> <span class="nx">relativePath</span><span class="p">,</span> <span class="nx">handlers</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>在上述示例代码中我们注册了一个匹配根目录(<code>&quot;/&quot;</code>)的路由，处理<code>handlers</code>是匿名函数,直接调用<code>ctx.JSON</code>返回<code>json</code>格式的数据；</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 注册Get路由
+</span><span class="c1"></span><span class="nx">engine</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">ctx</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span>
+    <span class="s">&#34;msg&#34;</span><span class="p">:</span><span class="s">&#34;请求成功&#34;</span><span class="p">,</span>
+  <span class="p">})</span>
+<span class="p">})</span>
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="2-多种返回格式">2. 多种返回格式</h5>
+<p>在<code>gin.Context</code>支持多种返回格式,整理常用的返回格式如下:</p>
+<table>
+<thead>
+<tr>
+<th>方法名</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ctx.XML(code int, obj interface{})</code></td>
+<td>返回<code>xml</code></td>
+</tr>
+<tr>
+<td><code>ctx.AsciiJSON(code int, obj interface{})</code></td>
+<td>返回<code>json</code>,将使特殊字符编码</td>
+</tr>
+<tr>
+<td><code>ctx.PureJSON(code int, obj interface{})</code></td>
+<td>返回<code>json</code>，有<code>html</code>的不转义。</td>
+</tr>
+</tbody>
+</table>
+<h5 id="3jsonasciijsonpurejson-对比">3.Json、AsciiJSON、PureJSON 对比</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<span class="kn">import</span> <span class="s">&#34;github.com/gin-gonic/gin&#34;</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 创建一个默认的路由引擎
+</span><span class="c1"></span>	<span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
+	<span class="c1">// 注册Get路由
+</span><span class="c1"></span>	<span class="nx">engine</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">ctx</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">key</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">ctx</span><span class="p">.</span><span class="nf">GetQuery</span><span class="p">(</span><span class="s">&#34;key&#34;</span><span class="p">)</span>
+		<span class="nx">msgBody</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span>
+			<span class="s">&#34;msg&#34;</span><span class="p">:</span> <span class="s">&#34;请求成功&#34;</span><span class="p">,</span>
+			<span class="s">&#34;html&#34;</span><span class="p">:</span><span class="s">&#34;&lt;span&gt;我是一段html代码&lt;/span&gt;&#34;</span><span class="p">,</span>
+		<span class="p">}</span>
+		<span class="k">switch</span> <span class="nx">key</span> <span class="p">{</span>
+		<span class="k">case</span> <span class="s">&#34;1&#34;</span><span class="p">:</span>
+			<span class="nx">msgBody</span><span class="p">[</span><span class="s">&#34;method&#34;</span><span class="p">]</span> <span class="p">=</span> <span class="s">&#34;ctx.JSON&#34;</span>
+			<span class="nx">ctx</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">msgBody</span><span class="p">)</span>
+		<span class="k">case</span> <span class="s">&#34;2&#34;</span><span class="p">:</span>
+			<span class="nx">msgBody</span><span class="p">[</span><span class="s">&#34;method&#34;</span><span class="p">]</span> <span class="p">=</span> <span class="s">&#34;ctx.PureJSON&#34;</span>
+			<span class="nx">ctx</span><span class="p">.</span><span class="nf">PureJSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">msgBody</span><span class="p">)</span>
+		<span class="k">case</span> <span class="s">&#34;3&#34;</span><span class="p">:</span>
+			<span class="nx">msgBody</span><span class="p">[</span><span class="s">&#34;method&#34;</span><span class="p">]</span> <span class="p">=</span> <span class="s">&#34;ctx.AsciiJSON&#34;</span>
+			<span class="nx">ctx</span><span class="p">.</span><span class="nf">AsciiJSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">msgBody</span><span class="p">)</span>
+		<span class="k">default</span><span class="p">:</span>
+			<span class="nx">ctx</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span>
+				<span class="s">&#34;msg&#34;</span><span class="p">:</span> <span class="s">&#34;请求失败&#34;</span><span class="p">,</span>
+			<span class="p">})</span>
+		<span class="p">}</span>
+		<span class="k">return</span>
+	<span class="p">})</span>
+	<span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
+<span class="p">}</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>请求返回:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">➜  ~ curl http://127.0.0.1:8080/<span class="se">\?</span>key<span class="se">\=</span><span class="m">1</span>
+<span class="o">{</span><span class="s2">&#34;html&#34;</span>:<span class="s2">&#34;\u003cspan\u003e我是一段html代码\u003c/span\u003e&#34;</span>,<span class="s2">&#34;method&#34;</span>:<span class="s2">&#34;ctx.JSON&#34;</span>,<span class="s2">&#34;msg&#34;</span>:<span class="s2">&#34;请求成功&#34;</span><span class="o">}</span>%
+
+➜  ~ curl http://127.0.0.1:8080/<span class="se">\?</span>key<span class="se">\=</span><span class="m">2</span>
+<span class="o">{</span><span class="s2">&#34;html&#34;</span>:<span class="s2">&#34;&lt;span&gt;我是一段html代码&lt;/span&gt;&#34;</span>,<span class="s2">&#34;method&#34;</span>:<span class="s2">&#34;ctx.PureJSON&#34;</span>,<span class="s2">&#34;msg&#34;</span>:<span class="s2">&#34;请求成功&#34;</span><span class="o">}</span>
+
+➜  ~ curl http://127.0.0.1:8080/<span class="se">\?</span>key<span class="se">\=</span><span class="m">3</span>
+<span class="o">{</span><span class="s2">&#34;html&#34;</span>:<span class="s2">&#34;\u003cspan\u003e\u6211\u662f\u4e00\u6bb5html\u4ee3\u7801\u003c/span\u003e&#34;</span>,<span class="s2">&#34;method&#34;</span>:<span class="s2">&#34;ctx.AsciiJSON&#34;</span>,<span class="s2">&#34;msg&#34;</span>:<span class="s2">&#34;\u8bf7\u6c42\u6210\u529f&#34;</span><span class="o">}</span>%
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>总结</strong></p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>现象</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ctx.JSON</code></td>
+<td>默认会把<code>html</code>转成<code>unicode</code>字符,对汉字不做额外处理</td>
+</tr>
+<tr>
+<td><code>ctx.PureJSON</code></td>
+<td>会把<code>html</code>原样返回，,对汉字不做额外处理</td>
+</tr>
+<tr>
+<td><code>ctx.AsciiJSON</code></td>
+<td>会对汉字和<code>html</code>都做处理。</td>
+</tr>
+</tbody>
+</table>
+<h4 id="24-enginerun">2.4 engine.Run()</h4>
+<h5 id="1run源码如下">1.<code>Run</code>源码如下</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Go" data-lang="Go"><span class="kd">func</span> <span class="p">(</span><span class="nx">engine</span> <span class="o">*</span><span class="nx">Engine</span><span class="p">)</span> <span class="nf">Run</span><span class="p">(</span><span class="nx">addr</span> <span class="o">...</span><span class="kt">string</span><span class="p">)</span> <span class="p">(</span><span class="nx">err</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// 延迟关闭输出ERROR类型的日志信息
+</span><span class="c1"></span>	<span class="k">defer</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span> <span class="nf">debugPrintError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">}()</span>
+  <span class="c1">// 设置CIDR（无类型域间路由)信息，默认返回: 0.0.0.0/0
+</span><span class="c1"></span>	<span class="nx">trustedCIDRs</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">prepareTrustedCIDRs</span><span class="p">()</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nx">err</span>
+	<span class="p">}</span>
+	<span class="nx">engine</span><span class="p">.</span><span class="nx">trustedCIDRs</span> <span class="p">=</span> <span class="nx">trustedCIDRs</span>
+  <span class="c1">// 设置监听IP和端口信息，默认是&#34;:8080&#34;
+</span><span class="c1"></span>	<span class="nx">address</span> <span class="o">:=</span> <span class="nf">resolveAddress</span><span class="p">(</span><span class="nx">addr</span><span class="p">)</span>
+	<span class="nf">debugPrint</span><span class="p">(</span><span class="s">&#34;Listening and serving HTTP on %s\n&#34;</span><span class="p">,</span> <span class="nx">address</span><span class="p">)</span>
+  <span class="c1">// 启动服务
+</span><span class="c1"></span>	<span class="nx">err</span> <span class="p">=</span> <span class="nx">http</span><span class="p">.</span><span class="nf">ListenAndServe</span><span class="p">(</span><span class="nx">address</span><span class="p">,</span> <span class="nx">engine</span><span class="p">)</span>
+	<span class="k">return</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="2为什么默认监听是8080">2.为什么默认监听是&quot;:8080&quot;</h5>
+<p>在<code>Run</code>方法中调用<code> resolveAddress(addr)</code>,该方法源码如下:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 接收一个字符串切片参数
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">resolveAddress</span><span class="p">(</span><span class="nx">addr</span> <span class="p">[]</span><span class="kt">string</span><span class="p">)</span> <span class="kt">string</span> <span class="p">{</span>
+  <span class="c1">// 如果参数长度为0，默认监听8080
+</span><span class="c1"></span>	<span class="k">switch</span> <span class="nb">len</span><span class="p">(</span><span class="nx">addr</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">case</span> <span class="mi">0</span><span class="p">:</span>
+		<span class="k">if</span> <span class="nx">port</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nf">Getenv</span><span class="p">(</span><span class="s">&#34;PORT&#34;</span><span class="p">);</span> <span class="nx">port</span> <span class="o">!=</span> <span class="s">&#34;&#34;</span> <span class="p">{</span>
+			<span class="nf">debugPrint</span><span class="p">(</span><span class="s">&#34;Environment variable PORT=\&#34;%s\&#34;&#34;</span><span class="p">,</span> <span class="nx">port</span><span class="p">)</span>
+			<span class="k">return</span> <span class="s">&#34;:&#34;</span> <span class="o">+</span> <span class="nx">port</span>
+		<span class="p">}</span>
+		<span class="nf">debugPrint</span><span class="p">(</span><span class="s">&#34;Environment variable PORT is undefined. Using port :8080 by default&#34;</span><span class="p">)</span>
+		<span class="k">return</span> <span class="s">&#34;:8080&#34;</span>
+	<span class="k">case</span> <span class="mi">1</span><span class="p">:</span>
+      <span class="c1">// 如果参数长度为1，监听IP和端口
+</span><span class="c1"></span>		<span class="k">return</span> <span class="nx">addr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+	<span class="k">default</span><span class="p">:</span>
+     <span class="c1">//  如果参数长度大于1，则报错
+</span><span class="c1"></span>		<span class="nb">panic</span><span class="p">(</span><span class="s">&#34;too many parameters&#34;</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">Shershon</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2021-12-02
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/go%E5%AE%9E%E8%B7%B5/">Go实践</a>
+          <a href="/tags/gin/">Gin</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/godoc/gin%E6%A1%86%E6%9E%B6/03-%E8%B7%AF%E7%94%B1%E5%88%9D%E4%BD%BF%E7%94%A8/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Gin框架(三):路由初使用</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        <a class="next" href="/post/godoc/gin%E6%A1%86%E6%9E%B6/01-%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/">
+            <span class="next-text nav-default">Gin框架(一):快速入门</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:your@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://localhost:1313" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="http://localhost:1313" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="http://localhost:1313" class="iconfont icon-facebook" title="facebook"></a>
+      <a href="http://localhost:1313" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="http://localhost:1313" class="iconfont icon-google" title="google"></a>
+      <a href="http://localhost:1313" class="iconfont icon-github" title="github"></a>
+      <a href="http://localhost:1313" class="iconfont icon-weibo" title="weibo"></a>
+      <a href="http://localhost:1313" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="http://localhost:1313" class="iconfont icon-douban" title="douban"></a>
+      <a href="http://localhost:1313" class="iconfont icon-pocket" title="pocket"></a>
+      <a href="http://localhost:1313" class="iconfont icon-tumblr" title="tumblr"></a>
+      <a href="http://localhost:1313" class="iconfont icon-instagram" title="instagram"></a>
+      <a href="http://localhost:1313" class="iconfont icon-gitlab" title="gitlab"></a>
+      <a href="http://localhost:1313" class="iconfont icon-bilibili" title="bilibili"></a>
+  <a href="http://localhost:1313/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span>Shershon</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

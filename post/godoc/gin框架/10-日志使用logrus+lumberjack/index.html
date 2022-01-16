@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Gin框架(十):日志使用(logrus&#43;lumberjack) - 小山的博客</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Shershon" /><meta name="description" content="1.框架自带 gin框架自带日志记录功能,通过fmt.Fprint和fmt.Fprintf来记录日志信息，默认是将日志写到终端,可以通过gin" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.90.1 with theme even" />
+
+
+<link rel="canonical" href="http://localhost:1313/post/godoc/gin%E6%A1%86%E6%9E%B6/10-%E6%97%A5%E5%BF%97%E4%BD%BF%E7%94%A8logrus&#43;lumberjack/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Gin框架(十):日志使用(logrus&#43;lumberjack)" />
+<meta property="og:description" content="1.框架自带 gin框架自带日志记录功能,通过fmt.Fprint和fmt.Fprintf来记录日志信息，默认是将日志写到终端,可以通过gin" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/post/godoc/gin%E6%A1%86%E6%9E%B6/10-%E6%97%A5%E5%BF%97%E4%BD%BF%E7%94%A8logrus&#43;lumberjack/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2021-12-10T00:00:00+00:00" />
+<meta property="article:modified_time" content="2021-12-10T00:00:00+00:00" />
+
+<meta itemprop="name" content="Gin框架(十):日志使用(logrus&#43;lumberjack)">
+<meta itemprop="description" content="1.框架自带 gin框架自带日志记录功能,通过fmt.Fprint和fmt.Fprintf来记录日志信息，默认是将日志写到终端,可以通过gin"><meta itemprop="datePublished" content="2021-12-10T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2021-12-10T00:00:00+00:00" />
+<meta itemprop="wordCount" content="2221">
+<meta itemprop="keywords" content="Go实践,Gin," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Gin框架(十):日志使用(logrus&#43;lumberjack)"/>
+<meta name="twitter:description" content="1.框架自带 gin框架自带日志记录功能,通过fmt.Fprint和fmt.Fprintf来记录日志信息，默认是将日志写到终端,可以通过gin"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">小山的博客</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">小山的博客</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Gin框架(十):日志使用(logrus&#43;lumberjack)</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-12-10 </span>
+        <div class="post-category">
+            <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+            <a href="/categories/go/"> Go </a>
+            </div>
+          <span class="more-meta"> 2221 words </span>
+          <span class="more-meta"> 5 mins read </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#1框架自带">1.框架自带</a></li>
+            <li><a href="#2集成logrus">2.集成logrus</a></li>
+            <li><a href="#3压缩滚动">3.压缩滚动</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h3 id="1框架自带">1.框架自带</h3>
+<p><code>gin</code>框架自带日志记录功能,通过<code>fmt.Fprint</code>和<code>fmt.Fprintf</code>来记录日志信息，默认是将日志写到终端,可以通过<code>gin.DefaultWriter</code>来设置写入文件。</p>
+<h4 id="11-终端禁用颜色">1.1 终端禁用颜色</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"> <span class="nx">gin</span><span class="p">.</span><span class="nf">DisableConsoleColor</span><span class="p">()</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="12-只写入文件">1.2 只写入文件</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 日志记录使用
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span>  <span class="p">{</span>
+  <span class="c1">// 禁用控制台颜色，将日志写入文件时不需要控制台颜色
+</span><span class="c1"></span>	<span class="nx">gin</span><span class="p">.</span><span class="nf">DisableConsoleColor</span><span class="p">()</span>
+	<span class="c1">// 记录到指定文件
+</span><span class="c1"></span>	<span class="nx">f</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="s">&#34;gin.log&#34;</span><span class="p">)</span>
+	<span class="nx">gin</span><span class="p">.</span><span class="nx">DefaultWriter</span> <span class="p">=</span> <span class="nx">io</span><span class="p">.</span><span class="nf">MultiWriter</span><span class="p">(</span><span class="nx">f</span><span class="p">)</span>
+	<span class="c1">// 创建容器
+</span><span class="c1"></span>	<span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
+	<span class="nx">engine</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/log&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+		<span class="c1">// 记录日志
+</span><span class="c1"></span>		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprint</span><span class="p">(</span><span class="nx">gin</span><span class="p">.</span><span class="nx">DefaultWriter</span><span class="p">,</span><span class="s">&#34;[gin-log] 日志测试使用 \n&#34;</span><span class="p">)</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintf</span><span class="p">(</span><span class="nx">gin</span><span class="p">.</span><span class="nx">DefaultWriter</span><span class="p">,</span> <span class="s">&#34;[gin-log] Method: %v \n&#34;</span><span class="p">,</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Request</span><span class="p">.</span><span class="nx">Method</span><span class="p">)</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintf</span><span class="p">(</span><span class="nx">gin</span><span class="p">.</span><span class="nx">DefaultWriter</span><span class="p">,</span> <span class="s">&#34;[gin-log] Url: %v \n&#34;</span><span class="p">,</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Request</span><span class="p">.</span><span class="nx">URL</span><span class="p">)</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintf</span><span class="p">(</span><span class="nx">gin</span><span class="p">.</span><span class="nx">DefaultWriter</span><span class="p">,</span> <span class="s">&#34;[gin-log] Header: %v \n&#34;</span><span class="p">,</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Request</span><span class="p">.</span><span class="nx">Header</span><span class="p">)</span>
+		<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;msg&#34;</span><span class="p">:</span><span class="s">&#34;success&#34;</span><span class="p">})</span>
+	<span class="p">})</span>
+	<span class="c1">// 启动服务
+</span><span class="c1"></span>	<span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>请求效果</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1">## 查看文件内容</span>
+➜ cat gin.log
+<span class="o">[</span>GIN-debug<span class="o">]</span> <span class="o">[</span>WARNING<span class="o">]</span> Creating an Engine instance with the Logger and Recovery middleware already attached.
+
+<span class="o">[</span>GIN-debug<span class="o">]</span> <span class="o">[</span>WARNING<span class="o">]</span> Running in <span class="s2">&#34;debug&#34;</span> mode. Switch to <span class="s2">&#34;release&#34;</span> mode in production.
+ - using env:	<span class="nb">export</span> <span class="nv">GIN_MODE</span><span class="o">=</span>release
+ - using code:	gin.SetMode<span class="o">(</span>gin.ReleaseMode<span class="o">)</span>
+
+<span class="o">[</span>GIN-debug<span class="o">]</span> GET    /log                      --&gt; go-use/practise.printOutFile.func1 <span class="o">(</span><span class="m">3</span> handlers<span class="o">)</span>
+<span class="o">[</span>GIN-debug<span class="o">]</span> Environment variable PORT is undefined. Using port :8080 by default
+<span class="o">[</span>GIN-debug<span class="o">]</span> Listening and serving HTTP on :8080
+<span class="o">[</span>gin-log<span class="o">]</span> 日志测试使用
+<span class="o">[</span>gin-log<span class="o">]</span> Method: GET
+<span class="o">[</span>gin-log<span class="o">]</span> Url: /log
+<span class="o">[</span>gin-log<span class="o">]</span> Header: map<span class="o">[</span>Accept:<span class="o">[</span>text/html,application/xhtml+xml,application/xml<span class="p">;</span><span class="nv">q</span><span class="o">=</span>0.9,image/avif,image/webp,image/apng,*/*<span class="p">;</span><span class="nv">q</span><span class="o">=</span>0.8,application/signed-exchange<span class="p">;</span><span class="nv">v</span><span class="o">=</span>b3<span class="p">;</span><span class="nv">q</span><span class="o">=</span>0.9<span class="o">]</span> Accept-Encoding:<span class="o">[</span>gzip, deflate, br<span class="o">]</span> Accept-Language:<span class="o">[</span>zh-CN,zh<span class="p">;</span><span class="nv">q</span><span class="o">=</span>0.9,en<span class="p">;</span><span class="nv">q</span><span class="o">=</span>0.8,zh-TW<span class="p">;</span><span class="nv">q</span><span class="o">=</span>0.7<span class="o">]</span> Cache-Control:<span class="o">[</span>max-age<span class="o">=</span>0<span class="o">]</span> Connection:<span class="o">[</span>keep-alive<span class="o">]</span> Sec-Ch-Ua:<span class="o">[</span><span class="s2">&#34; Not A;Brand&#34;</span><span class="p">;</span><span class="nv">v</span><span class="o">=</span><span class="s2">&#34;99&#34;</span>, <span class="s2">&#34;Chromium&#34;</span><span class="p">;</span><span class="nv">v</span><span class="o">=</span><span class="s2">&#34;90&#34;</span>, <span class="s2">&#34;Google Chrome&#34;</span><span class="p">;</span><span class="nv">v</span><span class="o">=</span><span class="s2">&#34;90&#34;</span><span class="o">]</span> Sec-Ch-Ua-Mobile:<span class="o">[</span>?0<span class="o">]</span> Sec-Fetch-Dest:<span class="o">[</span>document<span class="o">]</span> Sec-Fetch-Mode:<span class="o">[</span>navigate<span class="o">]</span> Sec-Fetch-Site:<span class="o">[</span>none<span class="o">]</span> Sec-Fetch-User:<span class="o">[</span>?1<span class="o">]</span> Upgrade-Insecure-Requests:<span class="o">[</span>1<span class="o">]</span> User-Agent:<span class="o">[</span>Mozilla/5.0 <span class="o">(</span>Macintosh<span class="p">;</span> Intel Mac OS X 10_15_7<span class="o">)</span> AppleWebKit/537.36 <span class="o">(</span>KHTML, like Gecko<span class="o">)</span> Chrome/90.0.4430.212 Safari/537.36<span class="o">]]</span>
+<span class="o">[</span>GIN<span class="o">]</span> 2021/05/25 - 17:59:53 <span class="p">|</span> <span class="m">200</span> <span class="p">|</span>     455.954µs <span class="p">|</span>       127.0.0.1 <span class="p">|</span> GET      <span class="s2">&#34;/log&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="13-同时写入文件和终端">1.3 同时写入文件和终端</h4>
+<p>如果想将日志同时写入文件和终端,只需要修改上述代码中的<code>io.MultiWriter(f)</code>即可，修改成以下内容</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span>  <span class="p">{</span>
+  <span class="o">...</span>
+	<span class="nx">f</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="s">&#34;gin.log&#34;</span><span class="p">)</span>
+  	<span class="c1">// 同时将日志写入文件和控制台
+</span><span class="c1"></span>	<span class="nx">gin</span><span class="p">.</span><span class="nx">DefaultWriter</span> <span class="p">=</span> <span class="nx">io</span><span class="p">.</span><span class="nf">MultiWriter</span><span class="p">(</span><span class="nx">f</span><span class="p">,</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stdout</span><span class="p">)</span>
+	<span class="o">...</span>
+	<span class="c1">// 启动服务
+</span><span class="c1"></span>	<span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="2集成logrus">2.集成logrus</h3>
+<p><code>logrus</code>可能是<code> Go</code> 目前最受欢迎的第三方日志库。目前<code>Github Star = 17.9k</code>,源码地址:https://github.com/sirupsen/logrus</p>
+<h4 id="21-安装">2.1 安装</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">go get -u github.com/sirupsen/logrus
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="22-设置属性">2.2 设置属性</h4>
+<p>创建<code>logrus_use.go</code>文件，编写代码如下:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;github.com/sirupsen/logrus&#34;</span>
+	<span class="s">&#34;os&#34;</span>
+	<span class="s">&#34;path&#34;</span>
+<span class="p">)</span>
+<span class="kd">var</span> <span class="p">(</span>
+	<span class="nx">logPath</span> <span class="p">=</span> <span class="s">&#34;./log&#34;</span>
+	<span class="nx">logFile</span> <span class="p">=</span> <span class="s">&#34;gin.log&#34;</span>
+<span class="p">)</span>
+<span class="kd">var</span> <span class="nx">LogInstance</span> <span class="p">=</span> <span class="nx">logrus</span><span class="p">.</span><span class="nf">New</span><span class="p">()</span>
+<span class="kd">func</span> <span class="nf">init</span><span class="p">()</span>  <span class="p">{</span>
+	<span class="c1">// 打开文件
+</span><span class="c1"></span>	<span class="nx">logFileName</span> <span class="o">:=</span> <span class="nx">path</span><span class="p">.</span><span class="nf">Join</span><span class="p">(</span><span class="nx">logPath</span><span class="p">,</span> <span class="nx">logFile</span><span class="p">)</span>
+	<span class="nx">fileWriter</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nf">OpenFile</span><span class="p">(</span><span class="nx">logFileName</span><span class="p">,</span> <span class="nx">os</span><span class="p">.</span><span class="nx">O_APPEND</span><span class="p">|</span><span class="nx">os</span><span class="p">.</span><span class="nx">O_WRONLY</span><span class="p">|</span><span class="nx">os</span><span class="p">.</span><span class="nx">O_CREATE</span><span class="p">,</span> <span class="nx">os</span><span class="p">.</span><span class="nx">ModePerm</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nb">panic</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="c1">// 设置日志输出到文件
+</span><span class="c1"></span>	<span class="nx">LogInstance</span><span class="p">.</span><span class="nf">SetOutput</span><span class="p">(</span><span class="nx">fileWriter</span><span class="p">)</span>
+	<span class="c1">// 设置日志输出格式
+</span><span class="c1"></span>	<span class="nx">LogInstance</span><span class="p">.</span><span class="nf">SetFormatter</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">logrus</span><span class="p">.</span><span class="nx">JSONFormatter</span><span class="p">{})</span>
+	<span class="c1">// 设置日志记录级别
+</span><span class="c1"></span>	<span class="nx">LogInstance</span><span class="p">.</span><span class="nf">SetLevel</span><span class="p">(</span><span class="nx">logrus</span><span class="p">.</span><span class="nx">DebugLevel</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="23-使用">2.3 使用</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;github.com/gin-gonic/gin&#34;</span>
+	<span class="s">&#34;github.com/sirupsen/logrus&#34;</span>
+<span class="p">)</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
+	<span class="nx">engine</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/log&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+		<span class="c1">// Warning级别日志
+</span><span class="c1"></span>		<span class="nx">LogInstance</span><span class="p">.</span><span class="nf">WithFields</span><span class="p">(</span><span class="nx">logrus</span><span class="p">.</span><span class="nx">Fields</span><span class="p">{</span>
+			<span class="s">&#34;Method&#34;</span><span class="p">:</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Request</span><span class="p">.</span><span class="nx">Method</span><span class="p">,</span>
+		<span class="p">}).</span><span class="nf">Warning</span><span class="p">(</span><span class="s">&#34;Warning级别日志&#34;</span><span class="p">)</span>
+
+		<span class="c1">// Error级别日志
+</span><span class="c1"></span>		<span class="nx">LogInstance</span><span class="p">.</span><span class="nf">WithFields</span><span class="p">(</span><span class="nx">logrus</span><span class="p">.</span><span class="nx">Fields</span><span class="p">{</span>
+			<span class="s">&#34;param-name&#34;</span><span class="p">:</span> <span class="nx">context</span><span class="p">.</span><span class="nf">DefaultQuery</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">,</span><span class="s">&#34;&#34;</span><span class="p">),</span>
+		<span class="p">}).</span><span class="nf">Error</span><span class="p">(</span><span class="s">&#34;Error级别日志&#34;</span><span class="p">)</span>
+
+		<span class="k">if</span> <span class="nx">context</span><span class="p">.</span><span class="nf">DefaultQuery</span><span class="p">(</span><span class="s">&#34;key&#34;</span><span class="p">,</span><span class="s">&#34;&#34;</span><span class="p">)</span> <span class="o">==</span> <span class="s">&#34;1&#34;</span> <span class="p">{</span>
+			<span class="c1">// Fatal级别日志(此类日志会让服务结束)
+</span><span class="c1"></span>			<span class="nx">LogInstance</span><span class="p">.</span><span class="nf">WithFields</span><span class="p">(</span><span class="nx">logrus</span><span class="p">.</span><span class="nx">Fields</span><span class="p">{</span>
+				<span class="s">&#34;Host&#34;</span><span class="p">:</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Request</span><span class="p">.</span><span class="nx">Host</span><span class="p">,</span>
+			<span class="p">}).</span><span class="nf">Fatal</span><span class="p">(</span><span class="s">&#34;Fatal级别日志&#34;</span><span class="p">)</span>
+		<span class="p">}</span>
+
+		<span class="c1">// info级别日志
+</span><span class="c1"></span>		<span class="nx">LogInstance</span><span class="p">.</span><span class="nf">WithFields</span><span class="p">(</span><span class="nx">logrus</span><span class="p">.</span><span class="nx">Fields</span><span class="p">{</span>
+			<span class="s">&#34;code&#34;</span><span class="p">:</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Writer</span><span class="p">.</span><span class="nf">Status</span><span class="p">(),</span>
+			<span class="s">&#34;url&#34;</span> <span class="p">:</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Request</span><span class="p">.</span><span class="nx">URL</span><span class="p">.</span><span class="nx">Path</span><span class="p">,</span>
+			<span class="s">&#34;method&#34;</span> <span class="p">:</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Request</span><span class="p">.</span><span class="nx">Method</span><span class="p">,</span>
+		<span class="p">}).</span><span class="nf">Info</span><span class="p">(</span><span class="s">&#34;info级别日志&#34;</span><span class="p">)</span>
+		<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;msg&#34;</span><span class="p">:</span><span class="s">&#34;success&#34;</span><span class="p">})</span>
+	<span class="p">})</span>
+	<span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="24-日志内容">2.4 日志内容</h4>
+<p>日志文件:<code>log/gin.log</code></p>
+<h5 id="json格式">JSON格式</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="p">{</span><span class="nt">&#34;Method&#34;</span><span class="p">:</span><span class="s2">&#34;GET&#34;</span><span class="p">,</span><span class="nt">&#34;level&#34;</span><span class="p">:</span><span class="s2">&#34;warning&#34;</span><span class="p">,</span><span class="nt">&#34;msg&#34;</span><span class="p">:</span><span class="s2">&#34;Warning级别日志&#34;</span><span class="p">,</span><span class="nt">&#34;time&#34;</span><span class="p">:</span><span class="s2">&#34;2021-05-27T16:06:30+08:00&#34;</span><span class="p">}</span>
+<span class="p">{</span><span class="nt">&#34;level&#34;</span><span class="p">:</span><span class="s2">&#34;error&#34;</span><span class="p">,</span><span class="nt">&#34;msg&#34;</span><span class="p">:</span><span class="s2">&#34;Error级别日志&#34;</span><span class="p">,</span><span class="nt">&#34;param-name&#34;</span><span class="p">:</span><span class="s2">&#34;&#34;</span><span class="p">,</span><span class="nt">&#34;time&#34;</span><span class="p">:</span><span class="s2">&#34;2021-05-27T16:06:30+08:00&#34;</span><span class="p">}</span>
+<span class="p">{</span><span class="nt">&#34;code&#34;</span><span class="p">:</span><span class="mi">200</span><span class="p">,</span><span class="nt">&#34;level&#34;</span><span class="p">:</span><span class="s2">&#34;info&#34;</span><span class="p">,</span><span class="nt">&#34;method&#34;</span><span class="p">:</span><span class="s2">&#34;GET&#34;</span><span class="p">,</span><span class="nt">&#34;msg&#34;</span><span class="p">:</span><span class="s2">&#34;info级别日志&#34;</span><span class="p">,</span><span class="nt">&#34;time&#34;</span><span class="p">:</span><span class="s2">&#34;2021-05-27T16:06:30+08:00&#34;</span><span class="p">,</span><span class="nt">&#34;url&#34;</span><span class="p">:</span><span class="s2">&#34;/log&#34;</span><span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="text格式">Text格式</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="nv">time</span><span class="o">=</span><span class="s2">&#34;2021-05-27T16:35:16+08:00&#34;</span> <span class="nv">level</span><span class="o">=</span>warning <span class="nv">msg</span><span class="o">=</span><span class="s2">&#34;Warning级别日志&#34;</span> <span class="nv">Method</span><span class="o">=</span>GET
+<span class="nv">time</span><span class="o">=</span><span class="s2">&#34;2021-05-27T16:35:16+08:00&#34;</span> <span class="nv">level</span><span class="o">=</span>error <span class="nv">msg</span><span class="o">=</span><span class="s2">&#34;Error级别日志&#34;</span> param-name<span class="o">=</span>
+<span class="nv">time</span><span class="o">=</span><span class="s2">&#34;2021-05-27T16:35:16+08:00&#34;</span> <span class="nv">level</span><span class="o">=</span>info <span class="nv">msg</span><span class="o">=</span><span class="s2">&#34;info级别日志&#34;</span> <span class="nv">code</span><span class="o">=</span><span class="m">200</span> <span class="nv">method</span><span class="o">=</span>GET <span class="nv">url</span><span class="o">=</span>/log
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="3压缩滚动">3.压缩滚动</h3>
+<p><a href="https://github.com/natefinch/lumberjack">Lumberjack:https://github.com/natefinch/lumberjack</a>是一个<code>Go</code>包，用于将日志写入滚动文件。</p>
+<h4 id="31-安装">3.1 安装</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"> go get -u github.com/natefinch/lumberjack
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="32-导入">3.2 导入</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">import</span> <span class="s">&#34;github.com/natefinch/lumberjack&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="33-使用">3.3 使用</h4>
+<p>修改<code>logrus_use.go</code>文件代码</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;github.com/natefinch/lumberjack&#34;</span>
+	<span class="s">&#34;github.com/sirupsen/logrus&#34;</span>
+	<span class="s">&#34;path&#34;</span>
+<span class="p">)</span>
+<span class="kd">var</span> <span class="p">(</span>
+	<span class="nx">logPath</span> <span class="p">=</span> <span class="s">&#34;./log&#34;</span>
+	<span class="nx">logFile</span> <span class="p">=</span> <span class="s">&#34;gin.log&#34;</span>
+<span class="p">)</span>
+<span class="kd">var</span> <span class="nx">LogInstance</span> <span class="p">=</span> <span class="nx">logrus</span><span class="p">.</span><span class="nf">New</span><span class="p">()</span>
+<span class="c1">// 日志初始化
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">init</span><span class="p">()</span>  <span class="p">{</span>
+	<span class="c1">// 打开文件
+</span><span class="c1"></span>	<span class="nx">logFileName</span> <span class="o">:=</span> <span class="nx">path</span><span class="p">.</span><span class="nf">Join</span><span class="p">(</span><span class="nx">logPath</span><span class="p">,</span> <span class="nx">logFile</span><span class="p">)</span>
+	<span class="c1">// 使用滚动压缩方式记录日志
+</span><span class="c1"></span>	<span class="nf">rolling</span><span class="p">(</span><span class="nx">logFileName</span><span class="p">)</span>
+	<span class="c1">// 设置日志输出JSON格式
+</span><span class="c1"></span>	<span class="c1">//LogInstance.SetFormatter(&amp;logrus.JSONFormatter{})
+</span><span class="c1"></span>	<span class="nx">LogInstance</span><span class="p">.</span><span class="nf">SetFormatter</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">logrus</span><span class="p">.</span><span class="nx">TextFormatter</span><span class="p">{})</span>
+	<span class="c1">// 设置日志记录级别
+</span><span class="c1"></span>	<span class="nx">LogInstance</span><span class="p">.</span><span class="nf">SetLevel</span><span class="p">(</span><span class="nx">logrus</span><span class="p">.</span><span class="nx">DebugLevel</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="c1">// 日志滚动设置
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">rolling</span><span class="p">(</span><span class="nx">logFile</span> <span class="kt">string</span><span class="p">)</span>  <span class="p">{</span>
+	<span class="c1">// 设置输出
+</span><span class="c1"></span>	<span class="nx">LogInstance</span><span class="p">.</span><span class="nf">SetOutput</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">lumberjack</span><span class="p">.</span><span class="nx">Logger</span><span class="p">{</span>
+		<span class="nx">Filename</span><span class="p">:</span><span class="nx">logFile</span><span class="p">,</span> <span class="c1">//日志文件位置
+</span><span class="c1"></span>		<span class="nx">MaxSize</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span><span class="c1">// 单文件最大容量,单位是MB
+</span><span class="c1"></span>		<span class="nx">MaxBackups</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span><span class="c1">// 最大保留过期文件个数
+</span><span class="c1"></span>		<span class="nx">MaxAge</span><span class="p">:</span> <span class="mi">1</span> <span class="p">,</span><span class="c1">// 保留过期文件的最大时间间隔,单位是天
+</span><span class="c1"></span>		<span class="nx">Compress</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span><span class="c1">// 是否需要压缩滚动日志, 使用的 gzip 压缩
+</span><span class="c1"></span>	<span class="p">})</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>main.go 代码</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;github.com/gin-gonic/gin&#34;</span>
+	<span class="s">&#34;github.com/sirupsen/logrus&#34;</span>
+	<span class="s">&#34;strings&#34;</span>
+<span class="p">)</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
+	<span class="nx">engine</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/log&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+		<span class="c1">// Warning级别日志
+</span><span class="c1"></span>		<span class="nx">LogInstance</span><span class="p">.</span><span class="nf">WithFields</span><span class="p">(</span><span class="nx">logrus</span><span class="p">.</span><span class="nx">Fields</span><span class="p">{</span>
+			<span class="s">&#34;Method&#34;</span><span class="p">:</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Request</span><span class="p">.</span><span class="nx">Method</span><span class="p">,</span>
+		<span class="p">}).</span><span class="nf">Warning</span><span class="p">(</span><span class="s">&#34;Warning级别日志&#34;</span><span class="p">)</span>
+
+		<span class="c1">// Error级别日志
+</span><span class="c1"></span>		<span class="nx">LogInstance</span><span class="p">.</span><span class="nf">WithFields</span><span class="p">(</span><span class="nx">logrus</span><span class="p">.</span><span class="nx">Fields</span><span class="p">{</span>
+			<span class="s">&#34;param-name&#34;</span><span class="p">:</span> <span class="nx">context</span><span class="p">.</span><span class="nf">DefaultQuery</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">,</span><span class="s">&#34;&#34;</span><span class="p">),</span>
+		<span class="p">}).</span><span class="nf">Error</span><span class="p">(</span><span class="s">&#34;Error级别日志&#34;</span><span class="p">)</span>
+
+		<span class="k">if</span> <span class="nx">context</span><span class="p">.</span><span class="nf">DefaultQuery</span><span class="p">(</span><span class="s">&#34;key&#34;</span><span class="p">,</span><span class="s">&#34;&#34;</span><span class="p">)</span> <span class="o">==</span> <span class="s">&#34;1&#34;</span> <span class="p">{</span>
+			<span class="c1">// Fatal级别日志(此类日志会让服务结束)
+</span><span class="c1"></span>			<span class="nx">LogInstance</span><span class="p">.</span><span class="nf">WithFields</span><span class="p">(</span><span class="nx">logrus</span><span class="p">.</span><span class="nx">Fields</span><span class="p">{</span>
+				<span class="s">&#34;Host&#34;</span><span class="p">:</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Request</span><span class="p">.</span><span class="nx">Host</span><span class="p">,</span>
+			<span class="p">}).</span><span class="nf">Fatal</span><span class="p">(</span><span class="s">&#34;Fatal级别日志&#34;</span><span class="p">)</span>
+		<span class="p">}</span>
+
+		<span class="c1">// info级别日志
+</span><span class="c1"></span>		<span class="nx">LogInstance</span><span class="p">.</span><span class="nf">WithFields</span><span class="p">(</span><span class="nx">logrus</span><span class="p">.</span><span class="nx">Fields</span><span class="p">{</span>
+			<span class="s">&#34;code&#34;</span><span class="p">:</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Writer</span><span class="p">.</span><span class="nf">Status</span><span class="p">(),</span>
+			<span class="s">&#34;url&#34;</span> <span class="p">:</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Request</span><span class="p">.</span><span class="nx">URL</span><span class="p">.</span><span class="nx">Path</span><span class="p">,</span>
+			<span class="s">&#34;context&#34;</span> <span class="p">:</span> <span class="nx">strings</span><span class="p">.</span><span class="nf">Repeat</span><span class="p">(</span><span class="s">&#34;测试&#34;</span><span class="p">,</span><span class="mi">50000</span><span class="p">),</span><span class="c1">// 重复
+</span><span class="c1"></span>		<span class="p">}).</span><span class="nf">Info</span><span class="p">(</span><span class="s">&#34;info级别日志&#34;</span><span class="p">)</span>
+		<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;msg&#34;</span><span class="p">:</span><span class="s">&#34;success&#34;</span><span class="p">})</span>
+	<span class="p">})</span>
+	<span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
+<span class="p">}</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="34-效果">3.4 效果</h4>
+<p><img src="https://gitee.com/tangxiaoshan/pic-img-bed/raw/master/go/img/20210527185343.png" alt=""></p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">Shershon</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2021-12-10
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/go%E5%AE%9E%E8%B7%B5/">Go实践</a>
+          <a href="/tags/gin/">Gin</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/godoc/gin%E6%A1%86%E6%9E%B6/11-%E9%AA%8C%E8%AF%81%E5%99%A8validator/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Gin框架(十一):验证器(validator)</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        <a class="next" href="/post/godoc/gin%E6%A1%86%E6%9E%B6/09-basicauth%E4%B8%AD%E9%97%B4%E4%BB%B6%E4%BD%BF%E7%94%A8/">
+            <span class="next-text nav-default">Gin框架(九):BasicAuth中间件使用</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:your@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://localhost:1313" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="http://localhost:1313" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="http://localhost:1313" class="iconfont icon-facebook" title="facebook"></a>
+      <a href="http://localhost:1313" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="http://localhost:1313" class="iconfont icon-google" title="google"></a>
+      <a href="http://localhost:1313" class="iconfont icon-github" title="github"></a>
+      <a href="http://localhost:1313" class="iconfont icon-weibo" title="weibo"></a>
+      <a href="http://localhost:1313" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="http://localhost:1313" class="iconfont icon-douban" title="douban"></a>
+      <a href="http://localhost:1313" class="iconfont icon-pocket" title="pocket"></a>
+      <a href="http://localhost:1313" class="iconfont icon-tumblr" title="tumblr"></a>
+      <a href="http://localhost:1313" class="iconfont icon-instagram" title="instagram"></a>
+      <a href="http://localhost:1313" class="iconfont icon-gitlab" title="gitlab"></a>
+      <a href="http://localhost:1313" class="iconfont icon-bilibili" title="bilibili"></a>
+  <a href="http://localhost:1313/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span>Shershon</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

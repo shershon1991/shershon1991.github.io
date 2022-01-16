@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Go学习(二十七):反射使用 - 小山的博客</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Shershon" /><meta name="description" content="1.介绍 Go语言实现了反射，所谓反射就是动态运行时的状态。我们一般用到的包是reflect包，reflect 实现了运行时的反射能力，能够让程" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.90.1 with theme even" />
+
+
+<link rel="canonical" href="http://localhost:1313/post/godoc/%E5%9F%BA%E7%A1%80%E7%AF%87/27-%E5%8F%8D%E5%B0%84%E4%BD%BF%E7%94%A8/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Go学习(二十七):反射使用" />
+<meta property="og:description" content="1.介绍 Go语言实现了反射，所谓反射就是动态运行时的状态。我们一般用到的包是reflect包，reflect 实现了运行时的反射能力，能够让程" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/post/godoc/%E5%9F%BA%E7%A1%80%E7%AF%87/27-%E5%8F%8D%E5%B0%84%E4%BD%BF%E7%94%A8/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2021-01-27T00:00:00+00:00" />
+<meta property="article:modified_time" content="2021-01-27T00:00:00+00:00" />
+
+<meta itemprop="name" content="Go学习(二十七):反射使用">
+<meta itemprop="description" content="1.介绍 Go语言实现了反射，所谓反射就是动态运行时的状态。我们一般用到的包是reflect包，reflect 实现了运行时的反射能力，能够让程"><meta itemprop="datePublished" content="2021-01-27T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2021-01-27T00:00:00+00:00" />
+<meta itemprop="wordCount" content="4269">
+<meta itemprop="keywords" content="Go基础," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Go学习(二十七):反射使用"/>
+<meta name="twitter:description" content="1.介绍 Go语言实现了反射，所谓反射就是动态运行时的状态。我们一般用到的包是reflect包，reflect 实现了运行时的反射能力，能够让程"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">小山的博客</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">小山的博客</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Go学习(二十七):反射使用</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-01-27 </span>
+        <div class="post-category">
+            <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+            <a href="/categories/go/"> Go </a>
+            </div>
+          <span class="more-meta"> 4269 words </span>
+          <span class="more-meta"> 9 mins read </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#1介绍">1.介绍</a></li>
+            <li><a href="#2reflecttype">2.reflect.Type</a></li>
+            <li><a href="#3reflectvalue">3.reflect.Value</a></li>
+            <li><a href="#4实践场景">4.实践场景</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h3 id="1介绍">1.介绍</h3>
+<p><code>Go</code>语言实现了反射，所谓反射就是动态运行时的状态。我们一般用到的包是<code>reflect</code>包，<a href="https://golang.org/pkg/reflect/"><code>reflect</code></a> 实现了运行时的反射能力，能够让程序操作不同类型的对象。反射包中有两对非常重要的函数和类型，两个函数分别是：</p>
+<table>
+<thead>
+<tr>
+<th>方法名</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>reflect.TypeOf</code></td>
+<td>可以获得任意值的类型对象,返回类型:<code>reflect.Type</code></td>
+</tr>
+<tr>
+<td><code>reflect.ValueOf</code></td>
+<td>可以获得任意值的值对象,返回类型:<code>reflect.Value</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>反射包中的所有方法基本都是围绕着 <code>reflect.Type</code> 和 <code>reflect.Value</code> 两个类型设计的。我们通过 <code>reflect.TypeOf</code>、<code>reflect.ValueOf </code>可以将一个普通的变量转换成反射包中提供的 <code>reflect.Type</code> 和 <code>reflect.Value</code>，随后就可以使用反射包中的方法对它们进行复杂的操作。</p>
+</blockquote>
+<h3 id="2reflecttype">2.reflect.Type</h3>
+<p>类型 <a href="https://draveness.me/golang/tree/reflect.Type"><code>reflect.Type</code></a> 是反射包定义的一个接口，我们可以使用 <a href="https://draveness.me/golang/tree/reflect.TypeOf"><code>reflect.TypeOf</code></a> 函数获取任意变量的类型，<a href="https://draveness.me/golang/tree/reflect.Type"><code>reflect.Type</code></a> 接口中定义了一些方法,常用的如下:</p>
+<h4 id="21-常用方法列表">2.1 常用方法列表</h4>
+<table>
+<thead>
+<tr>
+<th>方法名</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Kind() Kind</code></td>
+<td>返回该变量的的具体分类</td>
+</tr>
+<tr>
+<td><code>Name() string</code></td>
+<td>Name返回该类型在自身包内的类型名，如果是未命名类型会返回&quot;&quot;</td>
+</tr>
+<tr>
+<td><code>NumField() int</code></td>
+<td>返回 <code>struct</code> 字段数量，不是 <code>struct</code> 会 <code>panic</code></td>
+</tr>
+<tr>
+<td><code>Implements(u Type) bool</code></td>
+<td>检查当前类型有没有实现接口 <code>u</code></td>
+</tr>
+<tr>
+<td><code>Field(i int) StructField</code></td>
+<td>返回<code>struct</code> 类型的第<code> i</code> 个字段，不是<code>struct</code> 会 <code>panic</code>，<br/><code>i</code> 越界也会<code>panic</code></td>
+</tr>
+<tr>
+<td><code>Key() Type</code></td>
+<td>返回<code>map</code> 的<code>key</code> 的类型，不是<code>map</code>会<code>panic</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="22-使用示例">2.2 使用示例</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;fmt&#34;</span>
+	<span class="s">&#34;reflect&#34;</span>
+<span class="p">)</span>
+<span class="kd">type</span> <span class="nx">People</span> <span class="kd">interface</span> <span class="p">{</span>
+	<span class="nf">Eat</span><span class="p">(</span><span class="nx">str</span> <span class="kt">string</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="kd">type</span> <span class="nx">User</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">Name</span> <span class="kt">string</span>
+	<span class="nx">Age</span>  <span class="kt">int</span>
+<span class="p">}</span>
+<span class="kd">func</span> <span class="p">(</span><span class="nx">u</span> <span class="nx">User</span><span class="p">)</span> <span class="nf">Eat</span><span class="p">(</span><span class="nx">str</span> <span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;吃&#34;</span> <span class="o">+</span> <span class="nx">str</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="kd">var</span> <span class="nx">user</span> <span class="nx">User</span>
+	<span class="nx">userTypeOf</span> <span class="o">:=</span> <span class="nx">reflect</span><span class="p">.</span><span class="nf">TypeOf</span><span class="p">(</span><span class="nx">user</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;typeOf:%T v:%v\n&#34;</span><span class="p">,</span> <span class="nx">userTypeOf</span><span class="p">,</span> <span class="nx">userTypeOf</span><span class="p">)</span>
+	<span class="c1">// 获取类型分类
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;kind:%T v:%v\n&#34;</span><span class="p">,</span> <span class="nx">userTypeOf</span><span class="p">.</span><span class="nf">Kind</span><span class="p">(),</span> <span class="nx">userTypeOf</span><span class="p">.</span><span class="nf">Kind</span><span class="p">())</span>
+	<span class="c1">// 获取类型名称
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;name:%T v:%v\n&#34;</span><span class="p">,</span> <span class="nx">userTypeOf</span><span class="p">.</span><span class="nf">Name</span><span class="p">(),</span> <span class="nx">userTypeOf</span><span class="p">.</span><span class="nf">Name</span><span class="p">())</span>
+	<span class="c1">// 判断类型是否实现接口People
+</span><span class="c1"></span>	<span class="nx">implements</span> <span class="o">:=</span> <span class="nx">userTypeOf</span><span class="p">.</span><span class="nf">Implements</span><span class="p">(</span><span class="nx">reflect</span><span class="p">.</span><span class="nf">TypeOf</span><span class="p">((</span><span class="o">*</span><span class="nx">People</span><span class="p">)(</span><span class="kc">nil</span><span class="p">)).</span><span class="nf">Elem</span><span class="p">())</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;变量user是否实现接口People : %t\n&#34;</span><span class="p">,</span> <span class="nx">implements</span><span class="p">)</span>
+	<span class="c1">// 变量结构体user的字段数量
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;变量结构体user的字段数量: %d \n&#34;</span><span class="p">,</span> <span class="nx">userTypeOf</span><span class="p">.</span><span class="nf">NumField</span><span class="p">())</span>
+	<span class="c1">// 打印结构体字段
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;打印结构体user第%d个字段: %v \n&#34;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span><span class="nx">userTypeOf</span><span class="p">.</span><span class="nf">Field</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="nx">Name</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;打印结构体user第%d个字段: %v \n&#34;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span><span class="nx">userTypeOf</span><span class="p">.</span><span class="nf">Field</span><span class="p">(</span><span class="mi">1</span><span class="p">).</span><span class="nx">Name</span><span class="p">)</span>
+	<span class="nx">map1</span> <span class="o">:=</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">int</span> <span class="p">{</span>
+		<span class="s">&#34;张三&#34;</span><span class="p">:</span> <span class="mi">19</span><span class="p">,</span>
+		<span class="s">&#34;李四&#34;</span><span class="p">:</span> <span class="mi">23</span><span class="p">,</span>
+	<span class="p">}</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;打印map的key类型: %v \n&#34;</span><span class="p">,</span> <span class="nx">reflect</span><span class="p">.</span><span class="nf">TypeOf</span><span class="p">(</span><span class="nx">map1</span><span class="p">).</span><span class="nf">Key</span><span class="p">())</span>
+<span class="p">}</span>
+
+<span class="cm">/**输出
+</span><span class="cm">typeOf:*reflect.rtype v:main.User
+</span><span class="cm">kind:reflect.Kind v:struct
+</span><span class="cm">name:string v:User
+</span><span class="cm">变量user是否实现接口People : true
+</span><span class="cm">变量结构体user的字段数量: 2 
+</span><span class="cm">打印结构体user第0个字段: Name 
+</span><span class="cm">打印结构体user第1个字段: Age 
+</span><span class="cm">打印map的key类型: string 
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="23-kind类型整理">2.3 Kind类型整理</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">Kind</span> <span class="kt">uint</span>
+<span class="kd">const</span> <span class="p">(</span>
+    <span class="nx">Invalid</span> <span class="nx">Kind</span> <span class="p">=</span> <span class="kc">iota</span>  <span class="c1">// 非法类型
+</span><span class="c1"></span>    <span class="nx">Bool</span>                 <span class="c1">// 布尔型
+</span><span class="c1"></span>    <span class="nx">Int</span>                  <span class="c1">// 有符号整型
+</span><span class="c1"></span>    <span class="nx">Int8</span>                 <span class="c1">// 有符号8位整型
+</span><span class="c1"></span>    <span class="nx">Int16</span>                <span class="c1">// 有符号16位整型
+</span><span class="c1"></span>    <span class="nx">Int32</span>                <span class="c1">// 有符号32位整型
+</span><span class="c1"></span>    <span class="nx">Int64</span>                <span class="c1">// 有符号64位整型
+</span><span class="c1"></span>    <span class="nx">Uint</span>                 <span class="c1">// 无符号整型
+</span><span class="c1"></span>    <span class="nx">Uint8</span>                <span class="c1">// 无符号8位整型
+</span><span class="c1"></span>    <span class="nx">Uint16</span>               <span class="c1">// 无符号16位整型
+</span><span class="c1"></span>    <span class="nx">Uint32</span>               <span class="c1">// 无符号32位整型
+</span><span class="c1"></span>    <span class="nx">Uint64</span>               <span class="c1">// 无符号64位整型
+</span><span class="c1"></span>    <span class="nx">Uintptr</span>              <span class="c1">// 指针
+</span><span class="c1"></span>    <span class="nx">Float32</span>              <span class="c1">// 单精度浮点数
+</span><span class="c1"></span>    <span class="nx">Float64</span>              <span class="c1">// 双精度浮点数
+</span><span class="c1"></span>    <span class="nx">Complex64</span>            <span class="c1">// 64位复数类型
+</span><span class="c1"></span>    <span class="nx">Complex128</span>           <span class="c1">// 128位复数类型
+</span><span class="c1"></span>    <span class="nx">Array</span>                <span class="c1">// 数组
+</span><span class="c1"></span>    <span class="nx">Chan</span>                 <span class="c1">// 通道
+</span><span class="c1"></span>    <span class="nx">Func</span>                 <span class="c1">// 函数
+</span><span class="c1"></span>    <span class="nx">Interface</span>            <span class="c1">// 接口
+</span><span class="c1"></span>    <span class="nx">Map</span>                  <span class="c1">// 映射
+</span><span class="c1"></span>    <span class="nx">Ptr</span>                  <span class="c1">// 指针
+</span><span class="c1"></span>    <span class="nx">Slice</span>                <span class="c1">// 切片
+</span><span class="c1"></span>    <span class="nx">String</span>               <span class="c1">// 字符串
+</span><span class="c1"></span>    <span class="nx">Struct</span>               <span class="c1">// 结构体
+</span><span class="c1"></span>    <span class="nx">UnsafePointer</span>        <span class="c1">// 底层指针
+</span><span class="c1"></span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="3reflectvalue">3.reflect.Value</h3>
+<p>反射包中<code>Value</code>的类型与<code>Type</code>不同，它被声明成了结构体。这个结构体没有对外暴露的字段，但是提供了获取或者写入数据的方法。</p>
+<h4 id="31-常用方法列表">3.1 常用方法列表</h4>
+<table>
+<thead>
+<tr>
+<th>方法名</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Call(in []Value) []Value</code></td>
+<td>调用方法,第一个参数是<code>in[0]</code>，第二个是<code>in[1]</code>，以此类推</td>
+</tr>
+<tr>
+<td><code>Field(i int) StructField</code></td>
+<td>返回<code>struct</code> 类型的第<code> i</code> 个字段的值，不是<code>struct</code> 会 <code>panic</code>，<br/><code>i</code> 越界也会<code>panic</code>。</td>
+</tr>
+<tr>
+<td><code>FieldByName(name string) Value</code></td>
+<td>根据字段名查找值，前提类型是<code>struct</code></td>
+</tr>
+<tr>
+<td><code>Index(i int) Value</code></td>
+<td>返回第 <code>i</code> 个元素,主要用于遍历,不能越界。<br/>前提类型是<code>Array, Slice, String</code>之一，</td>
+</tr>
+<tr>
+<td><code>IsNil() bool</code></td>
+<td>返回值是否为<code>nil</code>。如果值类型不是通道（<code>channel</code>）、函数、<br>接口、<code>map</code>、指针或 切片时发生<code>panic</code>，类似于语言层的<code>v== nil</code>操作。<strong>常被用于判断指针是否为空。</strong></td>
+</tr>
+<tr>
+<td><code>IsValid() bool</code></td>
+<td>返回v是否持有一个值。如果<code>v</code>是<code>Value</code>零值会返回假，<br><code>此时v除了IsValid、String、Kind之外的方法都会导致panic</code>。<strong>常被用于判定返回值是否有效</strong></td>
+</tr>
+<tr>
+<td><code>MapIndex(key Value) Value</code></td>
+<td>根据索引获取对应的值,前提类型是<code>map</code></td>
+</tr>
+<tr>
+<td><code>MapKeys() []Value</code></td>
+<td>返回<code>map</code>中所有的<code>key</code>,返回类型是切片<code>slice</code></td>
+</tr>
+<tr>
+<td><code>Set(x Value)</code></td>
+<td>通过反射修改值。</td>
+</tr>
+<tr>
+<td><code>Type() Type</code></td>
+<td>获取值的类型</td>
+</tr>
+</tbody>
+</table>
+<h4 id="32-使用示例">3.2 使用示例</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;fmt&#34;</span>
+	<span class="s">&#34;reflect&#34;</span>
+<span class="p">)</span>
+<span class="kd">type</span> <span class="nx">User</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">Name</span> <span class="kt">string</span>
+	<span class="nx">Age</span>  <span class="kt">int</span>
+<span class="p">}</span>
+<span class="kd">func</span> <span class="p">(</span><span class="nx">u</span> <span class="nx">User</span><span class="p">)</span> <span class="nf">Eat</span><span class="p">(</span><span class="nx">str</span> <span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;调用函数: 吃&#34;</span> <span class="o">+</span> <span class="nx">str</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">user</span> <span class="o">:=</span> <span class="nx">User</span><span class="p">{</span><span class="s">&#34;张福生&#34;</span><span class="p">,</span> <span class="mi">30</span><span class="p">}</span>
+	<span class="nx">userValOf</span> <span class="o">:=</span> <span class="nx">reflect</span><span class="p">.</span><span class="nf">ValueOf</span><span class="p">(</span><span class="nx">user</span><span class="p">)</span>
+	<span class="c1">// 调用方法
+</span><span class="c1"></span>	<span class="nx">param</span> <span class="o">:=</span> <span class="p">[]</span><span class="nx">reflect</span><span class="p">.</span><span class="nx">Value</span><span class="p">{</span><span class="nx">reflect</span><span class="p">.</span><span class="nf">ValueOf</span><span class="p">(</span><span class="s">&#34;香蕉&#34;</span><span class="p">)}</span>
+	<span class="nx">userValOf</span><span class="p">.</span><span class="nf">MethodByName</span><span class="p">(</span><span class="s">&#34;Eat&#34;</span><span class="p">).</span><span class="nf">Call</span><span class="p">(</span><span class="nx">param</span><span class="p">)</span>
+	<span class="c1">// 打印结构体的值
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;打印结构体user第%d个字段值v: %v\n&#34;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">userValOf</span><span class="p">.</span><span class="nf">Field</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;打印结构体user第%d个字段值v: %v\n&#34;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span> <span class="nx">userValOf</span><span class="p">.</span><span class="nf">Field</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+	<span class="c1">// 根据属性值打印结构体的值
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;打印结构体user字段%s的值v: %v\n&#34;</span><span class="p">,</span> <span class="s">&#34;Age&#34;</span><span class="p">,</span><span class="nx">userValOf</span><span class="p">.</span><span class="nf">FieldByName</span><span class="p">(</span><span class="s">&#34;Age&#34;</span><span class="p">))</span>
+	<span class="c1">// 返回第 i 个元素,主要用于遍历,不能越界。前提类型是Array, Slice, String之一，
+</span><span class="c1"></span>	<span class="nx">strSlice</span> <span class="o">:=</span><span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;你&#34;</span><span class="p">,</span><span class="s">&#34;我&#34;</span><span class="p">,</span><span class="s">&#34;他&#34;</span><span class="p">,</span><span class="s">&#34;!&#34;</span><span class="p">}</span>
+	<span class="nx">strSliceValOf</span> <span class="o">:=</span> <span class="nx">reflect</span><span class="p">.</span><span class="nf">ValueOf</span><span class="p">(</span><span class="nx">strSlice</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;打印字符串第%d个元素值v: %v\n&#34;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span><span class="nx">strSliceValOf</span><span class="p">.</span><span class="nf">Index</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;打印字符串第%d个元素值v: %v\n&#34;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span><span class="nx">strSliceValOf</span><span class="p">.</span><span class="nf">Index</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;打印字符串第%d个元素值v: %v\n&#34;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span><span class="nx">strSliceValOf</span><span class="p">.</span><span class="nf">Index</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+
+	<span class="c1">// IsNil: 判断是否是nil
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;变量strSlice的值是否是nil: %t\n&#34;</span><span class="p">,</span><span class="nx">strSliceValOf</span><span class="p">.</span><span class="nf">IsNil</span><span class="p">())</span>
+	<span class="kd">var</span> <span class="nx">u</span> <span class="p">[]</span><span class="nx">User</span>
+	<span class="nx">uuOf</span> <span class="o">:=</span> <span class="nx">reflect</span><span class="p">.</span><span class="nf">ValueOf</span><span class="p">(</span><span class="nx">u</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;IsNil: 变量u的值是否是nil: %t\n&#34;</span><span class="p">,</span><span class="nx">uuOf</span><span class="p">.</span><span class="nf">IsNil</span><span class="p">())</span>
+	<span class="c1">// IsValid：判断返回值是否有效
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;存在的方法: %t\n&#34;</span><span class="p">,</span><span class="nx">userValOf</span><span class="p">.</span><span class="nf">MethodByName</span><span class="p">(</span><span class="s">&#34;Eat&#34;</span><span class="p">).</span><span class="nf">IsValid</span><span class="p">())</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;不存在的方法: %t\n&#34;</span><span class="p">,</span><span class="nx">userValOf</span><span class="p">.</span><span class="nf">MethodByName</span><span class="p">(</span><span class="s">&#34;A&#34;</span><span class="p">).</span><span class="nf">IsValid</span><span class="p">())</span>
+
+	<span class="c1">// #############  针对map的操作  #############
+</span><span class="c1"></span>	<span class="nx">map1</span> <span class="o">:=</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">{</span>
+		<span class="s">&#34;姓名&#34;</span><span class="p">:</span> <span class="s">&#34;张三&#34;</span><span class="p">,</span>
+		<span class="s">&#34;phone&#34;</span><span class="p">:</span> <span class="s">&#34;176666666666&#34;</span><span class="p">,</span>
+		<span class="s">&#34;?&#34;</span><span class="p">:</span> <span class="s">&#34;ABC&#34;</span><span class="p">,</span>
+	<span class="p">}</span>
+	<span class="nx">mapValOf</span> <span class="o">:=</span> <span class="nx">reflect</span><span class="p">.</span><span class="nf">ValueOf</span><span class="p">(</span><span class="nx">map1</span><span class="p">)</span>
+	<span class="c1">// 根据索引获取对应的值
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;根据索引获取map值，key=%s,v=%s \n&#34;</span><span class="p">,</span><span class="s">&#34;姓名&#34;</span><span class="p">,</span><span class="nx">mapValOf</span><span class="p">.</span><span class="nf">MapIndex</span><span class="p">(</span><span class="nx">reflect</span><span class="p">.</span><span class="nf">ValueOf</span><span class="p">(</span><span class="s">&#34;姓名&#34;</span><span class="p">)))</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;根据索引获取map值，key=%s,v=%s \n&#34;</span><span class="p">,</span><span class="s">&#34;phone&#34;</span><span class="p">,</span><span class="nx">mapValOf</span><span class="p">.</span><span class="nf">MapIndex</span><span class="p">(</span><span class="nx">reflect</span><span class="p">.</span><span class="nf">ValueOf</span><span class="p">(</span><span class="s">&#34;phone&#34;</span><span class="p">)))</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;根据索引获取map值，key=%s,v=%s \n&#34;</span><span class="p">,</span><span class="s">&#34;?&#34;</span><span class="p">,</span><span class="nx">mapValOf</span><span class="p">.</span><span class="nf">MapIndex</span><span class="p">(</span><span class="nx">reflect</span><span class="p">.</span><span class="nf">ValueOf</span><span class="p">(</span><span class="s">&#34;?&#34;</span><span class="p">)))</span>
+	<span class="c1">// 返回map中所有的key,返回类型是切片slice
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;返回map中所有的key: %+v 类型:%T \n&#34;</span><span class="p">,</span><span class="nx">mapValOf</span><span class="p">.</span><span class="nf">MapKeys</span><span class="p">(),</span><span class="nx">mapValOf</span><span class="p">.</span><span class="nf">MapKeys</span><span class="p">())</span>
+	<span class="c1">// 通过反射修改值
+</span><span class="c1"></span>	<span class="nx">num</span> <span class="o">:=</span> <span class="mi">10</span>
+	<span class="nx">numValOf</span> <span class="o">:=</span> <span class="nx">reflect</span><span class="p">.</span><span class="nf">ValueOf</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">num</span><span class="p">)</span><span class="c1">//注意这里需要传地址
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;修改前的值: %v \n&#34;</span><span class="p">,</span><span class="nx">num</span><span class="p">)</span>
+	<span class="nx">numValOf</span><span class="p">.</span><span class="nf">Elem</span><span class="p">().</span><span class="nf">Set</span><span class="p">(</span><span class="nx">reflect</span><span class="p">.</span><span class="nf">ValueOf</span><span class="p">(</span><span class="mi">100</span><span class="p">))</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;修改后的值: %v \n&#34;</span><span class="p">,</span><span class="nx">num</span><span class="p">)</span>
+	<span class="c1">// 获取值的类型
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;获取mapValOf值的类型: %v \n&#34;</span><span class="p">,</span><span class="nx">mapValOf</span><span class="p">.</span><span class="nf">Type</span><span class="p">())</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>输出:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">调用函数: 吃香蕉
+打印结构体user第0个字段值v: 张福生
+打印结构体user第1个字段值v: 30
+打印结构体user字段Age的值v: 30
+打印字符串第0个元素值v: 你
+打印字符串第1个元素值v: 我
+打印字符串第3个元素值v: 他
+变量strSlice的值是否是nil: false
+IsNil: 变量u的值是否是nil: true
+存在的方法: true
+不存在的方法: false
+根据索引获取map值，key=姓名,v=张三 
+根据索引获取map值，key=phone,v=176666666666 
+根据索引获取map值，key=?,v=ABC 
+返回map中所有的key: [姓名 phone ?] 类型:[]reflect.Value 
+修改前的值: 10 
+修改后的值: 100 
+获取mapValOf值的类型: map[string]string 
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="4实践场景">4.实践场景</h3>
+<h4 id="41-动态调用结构体方法">4.1 动态调用结构体方法</h4>
+<p>使用<code>MethodByName(&quot;xx&quot;).Call(param)</code>调用函数</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="cm">/**
+</span><span class="cm"> * @Author Mr.LiuQH
+</span><span class="cm"> * @Description 反射学习使用
+</span><span class="cm"> * @Date 2021/2/2 10:50 上午
+</span><span class="cm"> **/</span>
+<span class="kn">package</span> <span class="nx">main</span>
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;fmt&#34;</span>
+	<span class="s">&#34;reflect&#34;</span>
+<span class="p">)</span>
+<span class="kd">type</span> <span class="nx">People</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">Name</span> <span class="kt">string</span>
+<span class="p">}</span>
+<span class="kd">func</span> <span class="p">(</span><span class="nx">p</span> <span class="nx">People</span><span class="p">)</span> <span class="nf">GetName</span><span class="p">()</span> <span class="kt">string</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="nx">p</span><span class="p">.</span><span class="nx">Name</span>
+<span class="p">}</span>
+<span class="kd">func</span> <span class="p">(</span><span class="nx">p</span> <span class="nx">People</span><span class="p">)</span> <span class="nf">Tell</span><span class="p">(</span><span class="nx">toName</span><span class="p">,</span> <span class="nx">context</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">string</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="nx">p</span><span class="p">.</span><span class="nx">Name</span><span class="o">+</span><span class="s">&#34;告诉%s,%s&#34;</span><span class="p">,</span> <span class="nx">toName</span><span class="p">,</span> <span class="nx">context</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">p</span> <span class="o">:=</span> <span class="nx">People</span><span class="p">{</span><span class="s">&#34;张三&#34;</span><span class="p">}</span>
+	<span class="nx">peopleValOf</span> <span class="o">:=</span> <span class="nx">reflect</span><span class="p">.</span><span class="nf">ValueOf</span><span class="p">(</span><span class="nx">p</span><span class="p">)</span>
+	<span class="c1">// 通过反射调用方法(无参数)
+</span><span class="c1"></span>	<span class="nx">call</span> <span class="o">:=</span> <span class="nx">peopleValOf</span><span class="p">.</span><span class="nf">MethodByName</span><span class="p">(</span><span class="s">&#34;GetName&#34;</span><span class="p">).</span><span class="nf">Call</span><span class="p">(</span><span class="kc">nil</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;无参函数调用,返回: %v %T \n&#34;</span><span class="p">,</span> <span class="nx">call</span><span class="p">,</span> <span class="nx">call</span><span class="p">)</span>
+
+	<span class="c1">// 通过反射调用方法(有参数)
+</span><span class="c1"></span>	<span class="nx">param</span> <span class="o">:=</span> <span class="p">[]</span><span class="nx">reflect</span><span class="p">.</span><span class="nx">Value</span><span class="p">{</span>
+		<span class="nx">reflect</span><span class="p">.</span><span class="nf">ValueOf</span><span class="p">(</span><span class="s">&#34;小明&#34;</span><span class="p">),</span>
+		<span class="nx">reflect</span><span class="p">.</span><span class="nf">ValueOf</span><span class="p">(</span><span class="s">&#34;你通过考试了！&#34;</span><span class="p">),</span>
+	<span class="p">}</span>
+	<span class="nx">values</span> <span class="o">:=</span> <span class="nx">peopleValOf</span><span class="p">.</span><span class="nf">MethodByName</span><span class="p">(</span><span class="s">&#34;Tell&#34;</span><span class="p">).</span><span class="nf">Call</span><span class="p">(</span><span class="nx">param</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;有参函数调用,返回: %v %T \n&#34;</span><span class="p">,</span> <span class="nx">values</span><span class="p">,</span> <span class="nx">values</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">无参函数调用,返回: [张三] []reflect.Value 
+</span><span class="cm">有参函数调用,返回: [张三告诉小明,你通过考试了！] []reflect.Value 
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="42-处理错误结果">4.2 处理错误结果</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;errors&#34;</span>
+	<span class="s">&#34;fmt&#34;</span>
+	<span class="s">&#34;reflect&#34;</span>
+<span class="p">)</span>
+<span class="kd">type</span> <span class="nx">People</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">Name</span> <span class="kt">string</span>
+<span class="p">}</span>
+<span class="kd">func</span> <span class="p">(</span><span class="nx">p</span> <span class="nx">People</span><span class="p">)</span><span class="nf">ThrowError</span><span class="p">()</span><span class="kt">error</span>  <span class="p">{</span>
+	<span class="k">return</span> <span class="nx">errors</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="s">&#34;测试错误抛出&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">p</span> <span class="o">:=</span> <span class="nx">People</span><span class="p">{</span><span class="s">&#34;张三&#34;</span><span class="p">}</span>
+	<span class="nx">peopleValOf</span> <span class="o">:=</span> <span class="nx">reflect</span><span class="p">.</span><span class="nf">ValueOf</span><span class="p">(</span><span class="nx">p</span><span class="p">)</span>
+	<span class="nx">ret</span> <span class="o">:=</span> <span class="nx">peopleValOf</span><span class="p">.</span><span class="nf">MethodByName</span><span class="p">(</span><span class="s">&#34;ThrowError&#34;</span><span class="p">).</span><span class="nf">Call</span><span class="p">(</span><span class="kc">nil</span><span class="p">)</span>
+	<span class="c1">// 返回值也是 Value 类型，对于错误，可以转为 interface 之后断言
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;errValue: %v 类型转换: %T&#34;</span><span class="p">,</span> <span class="nx">ret</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nx">ret</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nf">Interface</span><span class="p">().(</span><span class="kt">error</span><span class="p">))</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="43-解析结构体标签">4.3 解析结构体标签</h4>
+<p>使用<code>field.Tag.Lookup()</code>或<code>field.Tag.Get()</code>查找对应的标签值</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;fmt&#34;</span>
+	<span class="s">&#34;reflect&#34;</span>
+<span class="p">)</span>
+<span class="kd">type</span> <span class="nx">People</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">Name</span> <span class="kt">string</span> <span class="s">`json:&#34;name&#34; db:&#34;t_name&#34;`</span>
+	<span class="nx">Age</span> <span class="kt">int</span> <span class="s">`json:&#34;age&#34; db:&#34;t_age&#34;`</span>
+<span class="p">}</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">p</span> <span class="o">:=</span> <span class="nx">People</span><span class="p">{</span><span class="s">&#34;张三&#34;</span><span class="p">,</span><span class="mi">23</span><span class="p">}</span>
+	<span class="nx">peopleTypeOf</span> <span class="o">:=</span> <span class="nx">reflect</span><span class="p">.</span><span class="nf">TypeOf</span><span class="p">(</span><span class="nx">p</span><span class="p">)</span>
+	<span class="c1">// 获取结构体字段数量
+</span><span class="c1"></span>	<span class="nx">fieldNum</span> <span class="o">:=</span> <span class="nx">peopleTypeOf</span><span class="p">.</span><span class="nf">NumField</span><span class="p">()</span>
+	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="nx">fieldNum</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="c1">// 获取结构体中，第i个字段的值
+</span><span class="c1"></span>		<span class="nx">field</span> <span class="o">:=</span> <span class="nx">peopleTypeOf</span><span class="p">.</span><span class="nf">Field</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span>
+		<span class="c1">// 获取json标签对应的值(方法一)
+</span><span class="c1"></span>		<span class="k">if</span> <span class="nx">lookup</span><span class="p">,</span> <span class="nx">ok</span> <span class="o">:=</span> <span class="nx">field</span><span class="p">.</span><span class="nx">Tag</span><span class="p">.</span><span class="nf">Lookup</span><span class="p">(</span><span class="s">&#34;json&#34;</span><span class="p">);</span><span class="nx">ok</span> <span class="p">{</span>
+			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;字段 %v, 对应的json-tag: %s \n&#34;</span> <span class="p">,</span><span class="nx">field</span><span class="p">.</span><span class="nx">Name</span><span class="p">,</span> <span class="nx">lookup</span><span class="p">)</span>
+		<span class="p">}</span>
+		<span class="c1">// 获取db标签对应的值(方法二)
+</span><span class="c1"></span>		<span class="nx">dbTag</span> <span class="o">:=</span> <span class="nx">field</span><span class="p">.</span><span class="nx">Tag</span><span class="p">.</span><span class="nf">Get</span><span class="p">(</span><span class="s">&#34;db&#34;</span><span class="p">)</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;字段 %v, 对应的db-tag: %s \n&#34;</span> <span class="p">,</span><span class="nx">field</span><span class="p">.</span><span class="nx">Name</span><span class="p">,</span> <span class="nx">dbTag</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">字段 Name, 对应的json-tag: name 
+</span><span class="cm">字段 Name, 对应的db-tag: t_name 
+</span><span class="cm">字段 Age, 对应的json-tag: age 
+</span><span class="cm">字段 Age, 对应的db-tag: t_age 
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="44-判断是否实现接口">4.4 判断是否实现接口</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;fmt&#34;</span>
+	<span class="s">&#34;reflect&#34;</span>
+<span class="p">)</span>
+<span class="kd">type</span> <span class="nx">People</span> <span class="kd">interface</span> <span class="p">{</span>
+	<span class="nf">Eat</span><span class="p">(</span><span class="nx">str</span> <span class="kt">string</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="kd">type</span> <span class="nx">User</span> <span class="kd">struct</span> <span class="p">{}</span>
+<span class="kd">func</span> <span class="p">(</span><span class="nx">u</span> <span class="nx">User</span><span class="p">)</span> <span class="nf">Eat</span><span class="p">(</span><span class="nx">str</span> <span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;吃&#34;</span> <span class="o">+</span> <span class="nx">str</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">user</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">User</span><span class="p">{}</span>
+	<span class="c1">// 当变量不是传指针时，Eat方法的接收方是指针，则没有实现接口
+</span><span class="c1"></span>	<span class="nx">userTypeOf</span> <span class="o">:=</span> <span class="nx">reflect</span><span class="p">.</span><span class="nf">TypeOf</span><span class="p">(</span><span class="nx">user</span><span class="p">)</span>
+	<span class="c1">// 判断类型是否实现接口People
+</span><span class="c1"></span>	<span class="nx">implements</span> <span class="o">:=</span> <span class="nx">userTypeOf</span><span class="p">.</span><span class="nf">Implements</span><span class="p">(</span><span class="nx">reflect</span><span class="p">.</span><span class="nf">TypeOf</span><span class="p">((</span><span class="o">*</span><span class="nx">People</span><span class="p">)(</span><span class="kc">nil</span><span class="p">)).</span><span class="nf">Elem</span><span class="p">())</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;变量user是否实现接口People : %t\n&#34;</span><span class="p">,</span> <span class="nx">implements</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="c1">// 输出: 变量user是否实现接口People : false
+</span></code></pre></td></tr></table>
+</div>
+</div>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">Shershon</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2021-01-27
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/go%E5%9F%BA%E7%A1%80/">Go基础</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/godoc/gin%E6%A1%86%E6%9E%B6/01-%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Gin框架(一):快速入门</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        <a class="next" href="/post/godoc/%E5%9F%BA%E7%A1%80%E7%AF%87/26-md5-sha1-base64/">
+            <span class="next-text nav-default">Go学习(二十六):Md5-Sha1-Base64</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:your@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://localhost:1313" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="http://localhost:1313" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="http://localhost:1313" class="iconfont icon-facebook" title="facebook"></a>
+      <a href="http://localhost:1313" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="http://localhost:1313" class="iconfont icon-google" title="google"></a>
+      <a href="http://localhost:1313" class="iconfont icon-github" title="github"></a>
+      <a href="http://localhost:1313" class="iconfont icon-weibo" title="weibo"></a>
+      <a href="http://localhost:1313" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="http://localhost:1313" class="iconfont icon-douban" title="douban"></a>
+      <a href="http://localhost:1313" class="iconfont icon-pocket" title="pocket"></a>
+      <a href="http://localhost:1313" class="iconfont icon-tumblr" title="tumblr"></a>
+      <a href="http://localhost:1313" class="iconfont icon-instagram" title="instagram"></a>
+      <a href="http://localhost:1313" class="iconfont icon-gitlab" title="gitlab"></a>
+      <a href="http://localhost:1313" class="iconfont icon-bilibili" title="bilibili"></a>
+  <a href="http://localhost:1313/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span>Shershon</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

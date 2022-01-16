@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title> - 小山的博客</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Shershon" /><meta name="description" content="1. 介绍 gorm是一个使用Go语言编写的ORM框架。 它文档齐全，对开发者友好，支持主流数据库。官方中文文档 https://gorm.io/zh_CN/docs/index.html 2. 安装 1 2 go get -u gorm.io/gorm go get -u gorm.io/driver/sqlite 3. 连接M" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.90.1 with theme even" />
+
+
+<link rel="canonical" href="http://localhost:1313/post/godoc/%E6%A0%87%E5%87%86%E5%8C%85/19-gorm/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="" />
+<meta property="og:description" content="1. 介绍 gorm是一个使用Go语言编写的ORM框架。 它文档齐全，对开发者友好，支持主流数据库。官方中文文档 https://gorm.io/zh_CN/docs/index.html 2. 安装 1 2 go get -u gorm.io/gorm go get -u gorm.io/driver/sqlite 3. 连接M" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/post/godoc/%E6%A0%87%E5%87%86%E5%8C%85/19-gorm/" /><meta property="article:section" content="post" />
+
+
+
+<meta itemprop="name" content="">
+<meta itemprop="description" content="1. 介绍 gorm是一个使用Go语言编写的ORM框架。 它文档齐全，对开发者友好，支持主流数据库。官方中文文档 https://gorm.io/zh_CN/docs/index.html 2. 安装 1 2 go get -u gorm.io/gorm go get -u gorm.io/driver/sqlite 3. 连接M">
+
+<meta itemprop="wordCount" content="5642">
+<meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content=""/>
+<meta name="twitter:description" content="1. 介绍 gorm是一个使用Go语言编写的ORM框架。 它文档齐全，对开发者友好，支持主流数据库。官方中文文档 https://gorm.io/zh_CN/docs/index.html 2. 安装 1 2 go get -u gorm.io/gorm go get -u gorm.io/driver/sqlite 3. 连接M"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">小山的博客</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">小山的博客</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title"></h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 0001-01-01 </span>
+        
+          <span class="more-meta"> 5642 words </span>
+          <span class="more-meta"> 12 mins read </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#1-介绍">1. 介绍</a></li>
+            <li><a href="#2-安装">2. 安装</a></li>
+            <li><a href="#3-连接mysql">3. 连接MYSQL</a></li>
+            <li><a href="#4-声明模型">4. 声明模型</a></li>
+            <li><a href="#5-迁移">5. 迁移</a></li>
+            <li><a href="#6crud">6.CRUD</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h3 id="1-介绍">1. 介绍</h3>
+<p><code>gorm</code>是一个使用<code>Go</code>语言编写的<code>ORM</code>框架。 它文档齐全，对开发者友好，支持主流数据库。<a href="https://gorm.io/zh_CN/docs/index.html">官方中文文档 https://gorm.io/zh_CN/docs/index.html</a></p>
+<h3 id="2-安装">2. 安装</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="k">go</span> <span class="nx">get</span> <span class="o">-</span><span class="nx">u</span> <span class="nx">gorm</span><span class="p">.</span><span class="nx">io</span><span class="o">/</span><span class="nx">gorm</span>
+<span class="k">go</span> <span class="nx">get</span> <span class="o">-</span><span class="nx">u</span> <span class="nx">gorm</span><span class="p">.</span><span class="nx">io</span><span class="o">/</span><span class="nx">driver</span><span class="o">/</span><span class="nx">sqlite</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="3-连接mysql">3. 连接MYSQL</h3>
+<p><code>GORM</code> 官方支持的数据库类型有： <code>MySQL, PostgreSQL, SQlite, SQL Server</code>,这里只讲常见的<code>MYSQL</code>。其他类型数据库参见<a href="https://gorm.io/zh_CN/docs/connecting_to_the_database.html">官方文档</a>。</p>
+<h4 id="31-安装mysql依赖">3.1 安装<code>mysql</code>依赖</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">go get -u gorm.io/driver/mysql
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="32-建立连接">3.2 建立连接</h4>
+<h5 id="a-默认连接">a. 默认连接</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 默认连接
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">ConnectMysqlByDefault</span><span class="p">(</span><span class="nx">host</span><span class="p">,</span> <span class="nx">port</span><span class="p">,</span> <span class="nx">user</span><span class="p">,</span> <span class="nx">pass</span><span class="p">,</span> <span class="nx">dbname</span> <span class="kt">string</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="nx">gorm</span><span class="p">.</span><span class="nx">DB</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// user:pass@tcp(127.0.0.1:3306)/dbname?charset=utf8mb4&amp;parseTime=True&amp;loc=Local
+</span><span class="c1"></span>	<span class="nx">dns</span> <span class="o">:=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&amp;parseTime=True&amp;loc=Local&#34;</span><span class="p">,</span>
+		<span class="nx">user</span><span class="p">,</span> <span class="nx">pass</span><span class="p">,</span> <span class="nx">host</span><span class="p">,</span> <span class="nx">port</span><span class="p">,</span> <span class="nx">dbname</span><span class="p">)</span>
+	<span class="k">return</span> <span class="nx">gorm</span><span class="p">.</span><span class="nf">Open</span><span class="p">(</span><span class="nx">mysql</span><span class="p">.</span><span class="nf">Open</span><span class="p">(</span><span class="nx">dns</span><span class="p">),</span> <span class="o">&amp;</span><span class="nx">gorm</span><span class="p">.</span><span class="nx">Config</span><span class="p">{})</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="b-自定义配置连接">b. 自定义配置连接</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 自定义配置连接
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">ConnectMysqlByCustom</span><span class="p">(</span><span class="nx">host</span><span class="p">,</span> <span class="nx">port</span><span class="p">,</span> <span class="nx">user</span><span class="p">,</span> <span class="nx">pass</span><span class="p">,</span> <span class="nx">dbname</span> <span class="kt">string</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="nx">gorm</span><span class="p">.</span><span class="nx">DB</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// user:pass@tcp(127.0.0.1:3306)/dbname?charset=utf8mb4&amp;parseTime=True&amp;loc=Local
+</span><span class="c1"></span>	<span class="nx">dns</span> <span class="o">:=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&amp;parseTime=True&amp;loc=Local&#34;</span><span class="p">,</span>
+		<span class="nx">user</span><span class="p">,</span> <span class="nx">pass</span><span class="p">,</span> <span class="nx">host</span><span class="p">,</span> <span class="nx">port</span><span class="p">,</span> <span class="nx">dbname</span><span class="p">)</span>
+	<span class="k">return</span> <span class="nx">gorm</span><span class="p">.</span><span class="nf">Open</span><span class="p">(</span><span class="nx">mysql</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="nx">mysql</span><span class="p">.</span><span class="nx">Config</span><span class="p">{</span>
+		<span class="nx">DSN</span><span class="p">:</span>                       <span class="nx">dns</span><span class="p">,</span>
+		<span class="nx">DefaultStringSize</span><span class="p">:</span>         <span class="mi">256</span><span class="p">,</span>   <span class="c1">// string 类型字段的默认长度
+</span><span class="c1"></span>		<span class="nx">DisableDatetimePrecision</span><span class="p">:</span>  <span class="kc">true</span><span class="p">,</span>  <span class="c1">//禁用 datetime 精度，MySQL 5.6 之前的数据库不支持
+</span><span class="c1"></span>		<span class="nx">DontSupportRenameIndex</span><span class="p">:</span>    <span class="kc">true</span><span class="p">,</span>  <span class="c1">//重命名索引时采用删除并新建的方式，MySQL 5.7 之前的数据库和 MariaDB 不支持重命名索引
+</span><span class="c1"></span>		<span class="nx">DontSupportRenameColumn</span><span class="p">:</span>   <span class="kc">true</span><span class="p">,</span>  <span class="c1">//用change重命名列，MySQL8之前的数据库和 MariaDB 不支持重命名列
+</span><span class="c1"></span>		<span class="nx">SkipInitializeWithVersion</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span> <span class="c1">// 根据当前 MySQL 版本自动配置
+</span><span class="c1"></span>	<span class="p">}))</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="c-基于databasesql连接">c. 基于<code>database/sql</code>连接</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 基于database/sql连接，进行二次封装
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">ConnectMysqlByDatabaseSql</span><span class="p">(</span><span class="nx">host</span><span class="p">,</span> <span class="nx">port</span><span class="p">,</span> <span class="nx">user</span><span class="p">,</span> <span class="nx">pass</span><span class="p">,</span> <span class="nx">dbname</span> <span class="kt">string</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="nx">gorm</span><span class="p">.</span><span class="nx">DB</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">dns</span> <span class="o">:=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&amp;parseTime=True&amp;loc=Local&#34;</span><span class="p">,</span>
+		<span class="nx">user</span><span class="p">,</span> <span class="nx">pass</span><span class="p">,</span> <span class="nx">host</span><span class="p">,</span> <span class="nx">port</span><span class="p">,</span> <span class="nx">dbname</span><span class="p">)</span>
+	<span class="nx">db</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">sql</span><span class="p">.</span><span class="nf">Open</span><span class="p">(</span><span class="s">&#34;mysql&#34;</span><span class="p">,</span> <span class="nx">dns</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">err</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="nx">gorm</span><span class="p">.</span><span class="nf">Open</span><span class="p">(</span><span class="nx">mysql</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="nx">mysql</span><span class="p">.</span><span class="nx">Config</span><span class="p">{</span><span class="nx">Conn</span><span class="p">:</span> <span class="nx">db</span><span class="p">}))</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><a href="https://gorm.io/zh_CN/docs/gorm_config.html"><code>gorm.Config</code>配置使用,参见官方文档: https://gorm.io/zh_CN/docs/gorm_config.html</a></p>
+<h3 id="4-声明模型">4. 声明模型</h3>
+<h4 id="41-什么是模型">4.1 什么是模型</h4>
+<p>模型其实就是标准的结构体(<code>struct</code>),其属性和表结构的字段按照 <strong><font color=red>gorm约定</font></strong> 一一对应。约定如下:</p>
+<ul>
+<li><code>gorm</code>使用<code>ID</code>作为主键,对应表中的<code>id</code>。</li>
+<li>使用结构体名的 <code>蛇形复数</code> 作为表名。对于结构体 <code>User</code>，根据约定，其表名为 <code>users</code></li>
+<li>使用 <code>CreatedAt</code>、<code>UpdatedAt</code> 字段追踪创建、更新时间。</li>
+</ul>
+<p><code>gorm</code> 定义一个 <code>gorm.Model</code> 结构体，其包括字段 <code>ID</code>、<code>CreatedAt</code>、<code>UpdatedAt</code>、<code>DeletedAt</code>,其他结构体直接匿名嵌套即可。</p>
+<h4 id="42-字段标签">4.2 字段标签</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">标签名</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>column</code></td>
+<td style="text-align:left">指定 db 列名</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>type</code></td>
+<td style="text-align:left">列数据类型，推荐使用兼容性好的通用类型，例如：所有数据库都支持 bool、int、uint、float、string、time、bytes 并且可以和其他标签一起使用，例如：<code>not null</code>、<code>size</code>, <code>autoIncrement</code>… 像 <code>varbinary(8)</code> 这样指定数据库数据类型也是支持的。在使用指定数据库数据类型时，它需要是完整的数据库数据类型，如：<code>MEDIUMINT UNSIGNED not NULL AUTO_INCREMENT</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>size</code></td>
+<td style="text-align:left">指定列大小，例如：<code>size:256</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>primaryKey</code></td>
+<td style="text-align:left">指定列为主键</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>unique</code></td>
+<td style="text-align:left">指定列为唯一</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>default</code></td>
+<td style="text-align:left">指定列的默认值</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>not null</code></td>
+<td style="text-align:left">指定列为 NOT NULL</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>autoIncrement</code></td>
+<td style="text-align:left">指定列为自动增长</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>comment</code></td>
+<td style="text-align:left">迁移时为字段添加注释</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>index</code></td>
+<td style="text-align:left">根据参数创建索引，多个字段使用相同的名称则创建复合索引，查看 <a href="https://gorm.io/zh_CN/docs/indexes.html">索引</a> 获取详情</td>
+</tr>
+</tbody>
+</table>
+<p><a href="https://gorm.io/zh_CN/docs/models.html">更多约定，请查看官方文档</a></p>
+<h4 id="43-创建用户模型">4.3 创建用户模型</h4>
+<p>按照<code>gorm</code>约定创建用户模型,便于后面使用。用户模型如下</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 用户模型
+</span><span class="c1"></span><span class="kd">type</span> <span class="nx">User</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">gorm</span><span class="p">.</span><span class="nx">Model</span>
+	<span class="nx">NickName</span>     <span class="kt">string</span>         <span class="s">`gorm:&#34;type:varchar(20);not null;default:&#39;&#39;;comment:昵称&#34;`</span>
+	<span class="nx">Age</span>          <span class="kt">uint8</span>          <span class="s">`gorm:&#34;size:4;comment:年龄&#34;`</span>
+	<span class="nx">Phone</span>        <span class="kt">string</span>         <span class="s">`gorm:&#34;type:char(11);index:un_phone;comment:手机号&#34;`</span>
+	<span class="nx">MemberNumber</span> <span class="kt">string</span>         <span class="s">`gorm:&#34;type:varchar(20);index:un_phone;comment:会员编号&#34;`</span>
+	<span class="nx">Birthday</span>     <span class="nx">sql</span><span class="p">.</span><span class="nx">NullString</span> <span class="s">`gorm:&#34;type:varchar(10);comment:生日&#34;`</span>
+	<span class="nx">ActivatedAt</span>  <span class="nx">sql</span><span class="p">.</span><span class="nx">NullTime</span>   <span class="s">`gorm:&#34;comment:激活时间&#34;`</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="5-迁移">5. 迁移</h3>
+<h4 id="51-根据模型生成表结构">5.1 根据模型生成表结构</h4>
+<p>根据上面创建的用户模型<code>User</code>，生成对应的表结构</p>
+<p><strong>a. 代码</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 自动迁移schema,(根据结构体创建或者更新schema)
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">GormAutoMigrate</span><span class="p">(</span><span class="nx">host</span><span class="p">,</span> <span class="nx">port</span><span class="p">,</span> <span class="nx">use</span><span class="p">,</span> <span class="nx">pass</span><span class="p">,</span> <span class="nx">database</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
+  <span class="c1">// ConnectMysqlByDefault 代码参见上面的: 默认连接
+</span><span class="c1"></span>	<span class="nx">mysqlByDefault</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nf">ConnectMysqlByDefault</span><span class="p">(</span><span class="nx">host</span><span class="p">,</span> <span class="nx">port</span><span class="p">,</span> <span class="nx">use</span><span class="p">,</span> <span class="nx">pass</span><span class="p">,</span> <span class="nx">database</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nx">err</span>
+	<span class="p">}</span>
+	<span class="c1">// 指定引擎和表备注
+</span><span class="c1"></span>	<span class="nx">err</span> <span class="p">=</span> <span class="nx">mysqlByDefault</span><span class="p">.</span><span class="nf">Set</span><span class="p">(</span><span class="s">&#34;gorm:table_options&#34;</span><span class="p">,</span> <span class="s">&#34;ENGINE=InnoDB COMMENT=&#39;用户表&#39;&#34;</span><span class="p">).</span><span class="nf">AutoMigrate</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">User</span><span class="p">{})</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nx">err</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="kc">nil</span>
+<span class="p">}</span>
+
+<span class="c1">// 测试迁移
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestAutoMigrate</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">host</span> <span class="o">:=</span> <span class="s">&#34;127.0.0.1&#34;</span>
+	<span class="nx">use</span><span class="p">,</span><span class="nx">pass</span><span class="p">,</span><span class="nx">port</span><span class="p">,</span><span class="nx">database</span> <span class="o">:=</span> <span class="s">&#34;root&#34;</span><span class="p">,</span><span class="s">&#34;root&#34;</span><span class="p">,</span><span class="s">&#34;3306&#34;</span><span class="p">,</span><span class="s">&#34;test&#34;</span>
+	<span class="nx">err</span> <span class="o">:=</span> <span class="nx">gorme</span><span class="p">.</span><span class="nf">GormAutoMigrate</span><span class="p">(</span><span class="nx">host</span><span class="p">,</span> <span class="nx">port</span><span class="p">,</span> <span class="nx">use</span><span class="p">,</span> <span class="nx">pass</span><span class="p">,</span> <span class="nx">database</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">t</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;创建表结构完成!&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>b. 生成的表结构如下:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="o">`</span><span class="n">users</span><span class="o">`</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">id</span><span class="o">`</span><span class="w"> </span><span class="nb">bigint</span><span class="w"> </span><span class="n">unsigned</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="n">AUTO_INCREMENT</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">created_at</span><span class="o">`</span><span class="w"> </span><span class="n">datetime</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">updated_at</span><span class="o">`</span><span class="w"> </span><span class="n">datetime</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">deleted_at</span><span class="o">`</span><span class="w"> </span><span class="n">datetime</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">nick_name</span><span class="o">`</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span><span class="w"> </span><span class="k">COLLATE</span><span class="w"> </span><span class="n">utf8mb4_bin</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;昵称&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">age</span><span class="o">`</span><span class="w"> </span><span class="n">tinyint</span><span class="w"> </span><span class="n">unsigned</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;年龄&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">phone</span><span class="o">`</span><span class="w"> </span><span class="nb">char</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span><span class="w"> </span><span class="k">COLLATE</span><span class="w"> </span><span class="n">utf8mb4_bin</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;手机号&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">member_number</span><span class="o">`</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span><span class="w"> </span><span class="k">COLLATE</span><span class="w"> </span><span class="n">utf8mb4_bin</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;会员编号&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">birthday</span><span class="o">`</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="w"> </span><span class="k">COLLATE</span><span class="w"> </span><span class="n">utf8mb4_bin</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;生日&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">activated_at</span><span class="o">`</span><span class="w"> </span><span class="n">datetime</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">COMMENT</span><span class="w"> </span><span class="s1">&#39;激活时间&#39;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="o">`</span><span class="n">id</span><span class="o">`</span><span class="p">),</span><span class="w">
+</span><span class="w">  </span><span class="k">KEY</span><span class="w"> </span><span class="o">`</span><span class="n">idx_users_deleted_at</span><span class="o">`</span><span class="w"> </span><span class="p">(</span><span class="o">`</span><span class="n">deleted_at</span><span class="o">`</span><span class="p">),</span><span class="w">
+</span><span class="w">  </span><span class="k">KEY</span><span class="w"> </span><span class="o">`</span><span class="n">un_phone</span><span class="o">`</span><span class="w"> </span><span class="p">(</span><span class="o">`</span><span class="n">phone</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">member_number</span><span class="o">`</span><span class="p">)</span><span class="w">
+</span><span class="w"></span><span class="p">)</span><span class="w"> </span><span class="n">ENGINE</span><span class="o">=</span><span class="n">InnoDB</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="n">CHARSET</span><span class="o">=</span><span class="n">utf8mb4</span><span class="w"> </span><span class="k">COLLATE</span><span class="o">=</span><span class="n">utf8mb4_bin</span><span class="w"> </span><span class="k">COMMENT</span><span class="o">=</span><span class="s1">&#39;用户表&#39;</span><span class="p">;</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><h3 id="6crud">6.CRUD</h3>
+<h4 id="61-初始化客户端">6.1 初始化客户端</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 定义包内全局变量
+</span><span class="c1"></span><span class="kd">var</span> <span class="nx">mysqlClient</span> <span class="o">*</span><span class="nx">gorm</span><span class="p">.</span><span class="nx">DB</span>
+<span class="c1">// 初始化mysql客户端
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">init</span><span class="p">()</span>  <span class="p">{</span>
+	<span class="c1">// 连接客户端
+</span><span class="c1"></span>	<span class="nx">host</span> <span class="o">:=</span> <span class="s">&#34;127.0.0.1&#34;</span>
+	<span class="nx">user</span><span class="p">,</span> <span class="nx">pass</span><span class="p">,</span> <span class="nx">port</span><span class="p">,</span> <span class="nx">database</span> <span class="o">:=</span> <span class="s">&#34;root&#34;</span><span class="p">,</span> <span class="s">&#34;root&#34;</span><span class="p">,</span> <span class="s">&#34;3306&#34;</span><span class="p">,</span> <span class="s">&#34;test&#34;</span>
+	<span class="nx">databaseSql</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">gorme</span><span class="p">.</span><span class="nf">ConnectMysqlByDatabaseSql</span><span class="p">(</span><span class="nx">host</span><span class="p">,</span> <span class="nx">port</span><span class="p">,</span> <span class="nx">user</span><span class="p">,</span> <span class="nx">pass</span><span class="p">,</span> <span class="nx">database</span><span class="p">)</span>
+	<span class="nx">mysqlClient</span> <span class="p">=</span> <span class="nx">databaseSql</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="62-单条插入">6.2 单条插入</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 保存一条记录
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestAddOne</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// 初始化结构体
+</span><span class="c1"></span>	<span class="nx">userRow</span> <span class="o">:=</span> <span class="nx">gorme</span><span class="p">.</span><span class="nx">User</span><span class="p">{</span>
+		<span class="nx">NickName</span><span class="p">:</span>     <span class="s">&#34;李四&#34;</span><span class="p">,</span>
+		<span class="nx">Age</span><span class="p">:</span>          <span class="mi">18</span><span class="p">,</span>
+		<span class="nx">Phone</span><span class="p">:</span>        <span class="s">&#34;12340000&#34;</span><span class="p">,</span>
+		<span class="nx">MemberNumber</span><span class="p">:</span> <span class="s">&#34;A0001&#34;</span><span class="p">,</span>
+		<span class="nx">Birthday</span><span class="p">:</span>     <span class="nx">sql</span><span class="p">.</span><span class="nx">NullString</span><span class="p">{</span><span class="nx">String</span><span class="p">:</span> <span class="s">&#34;1991-03-04&#34;</span><span class="p">,</span><span class="nx">Valid</span><span class="p">:</span> <span class="kc">true</span><span class="p">},</span>
+		<span class="nx">ActivatedAt</span><span class="p">:</span>  <span class="nx">sql</span><span class="p">.</span><span class="nx">NullTime</span><span class="p">{</span><span class="nx">Time</span><span class="p">:</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">(),</span><span class="nx">Valid</span><span class="p">:</span> <span class="kc">true</span><span class="p">},</span>
+	<span class="p">}</span>
+	<span class="c1">// 传入指针
+</span><span class="c1"></span>	<span class="nx">result</span> <span class="o">:=</span> <span class="nx">mysqlClient</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">userRow</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">result</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;id: &#34;</span><span class="p">,</span><span class="nx">userRow</span><span class="p">.</span><span class="nx">ID</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;插入记录错误: &#34;</span><span class="p">,</span><span class="nx">result</span><span class="p">.</span><span class="nx">Error</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;插入记录的条数: &#34;</span><span class="p">,</span><span class="nx">result</span><span class="p">.</span><span class="nx">RowsAffected</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/*** 输出
+</span><span class="cm">=== RUN   TestAddOne
+</span><span class="cm">&amp;{0xc000184240 &lt;nil&gt; 1 0xc0001a21c0 0}
+</span><span class="cm">id:  1
+</span><span class="cm">插入记录错误:  &lt;nil&gt;
+</span><span class="cm">插入记录的条数:  1
+</span><span class="cm">--- PASS: TestAddOne (0.04s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="63-批量插入">6.3 批量插入</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 批量插入
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestBatchInsert</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// 定义user 切片
+</span><span class="c1"></span>	 <span class="nx">userRows</span> <span class="o">:=</span> <span class="p">[]</span><span class="nx">gorme</span><span class="p">.</span><span class="nx">User</span><span class="p">{</span>
+		<span class="p">{</span><span class="nx">NickName</span><span class="p">:</span> <span class="s">&#34;路人甲&#34;</span><span class="p">,</span> <span class="nx">Age</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span> <span class="nx">Phone</span><span class="p">:</span> <span class="s">&#34;20000000&#34;</span><span class="p">,</span> <span class="nx">MemberNumber</span><span class="p">:</span> <span class="s">&#34;A0002&#34;</span><span class="p">},</span>
+		<span class="p">{</span><span class="nx">NickName</span><span class="p">:</span> <span class="s">&#34;路人乙&#34;</span><span class="p">,</span> <span class="nx">Age</span><span class="p">:</span> <span class="mi">22</span><span class="p">,</span> <span class="nx">Phone</span><span class="p">:</span> <span class="s">&#34;30000000&#34;</span><span class="p">,</span> <span class="nx">MemberNumber</span><span class="p">:</span> <span class="s">&#34;A0003&#34;</span><span class="p">},</span>
+		<span class="p">{</span><span class="nx">NickName</span><span class="p">:</span> <span class="s">&#34;路人丙&#34;</span><span class="p">,</span> <span class="nx">Age</span><span class="p">:</span> <span class="mi">24</span><span class="p">,</span> <span class="nx">Phone</span><span class="p">:</span> <span class="s">&#34;40000000&#34;</span><span class="p">,</span> <span class="nx">MemberNumber</span><span class="p">:</span> <span class="s">&#34;A0004&#34;</span><span class="p">},</span>
+	<span class="p">}</span>
+	<span class="c1">// 保存
+</span><span class="c1"></span>	<span class="nx">result</span> <span class="o">:=</span> <span class="nx">mysqlClient</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">userRows</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;插入记录错误: &#34;</span><span class="p">,</span> <span class="nx">result</span><span class="p">.</span><span class="nx">Error</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;插入记录的条数: &#34;</span><span class="p">,</span> <span class="nx">result</span><span class="p">.</span><span class="nx">RowsAffected</span><span class="p">)</span>
+	<span class="c1">// 打印ID
+</span><span class="c1"></span>	<span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">row</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">userRows</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;插入ID: &#34;</span><span class="p">,</span> <span class="nx">row</span><span class="p">.</span><span class="nx">ID</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+<span class="cm">/** 输出
+</span><span class="cm">=== RUN   TestBatchInsert
+</span><span class="cm">插入记录错误:  &lt;nil&gt;
+</span><span class="cm">插入记录的条数:  3
+</span><span class="cm">插入ID:  4
+</span><span class="cm">插入ID:  5
+</span><span class="cm">插入ID:  6
+</span><span class="cm">--- PASS: TestBatchInsert (0.02s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><a href="https://gorm.io/zh_CN/docs/create.html">更新插入方式，参见文档: https://gorm.io/zh_CN/docs/create.html</a></p>
+<h4 id="64-查询">6.4 查询</h4>
+<h5 id="a-单条记录-firsttakelast">a. 单条记录: <code>First</code>、<code>Take</code>、<code>Last</code></h5>
+<ul>
+<li><code>First</code>:  获取第一条记录（主键升序）</li>
+<li><code>Take</code>: 获取一条记录，没有指定排序字段</li>
+<li><code>Last</code>: 获取最后一条记录（主键降序）</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 使用提供的First、Take、Last，查询单条记录
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestGetOne</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// 定义对应的结构体变量存储结果
+</span><span class="c1"></span>	<span class="kd">var</span> <span class="nx">firstUser</span> <span class="nx">gorme</span><span class="p">.</span><span class="nx">User</span>
+	<span class="kd">var</span> <span class="nx">taskUser</span> <span class="nx">gorme</span><span class="p">.</span><span class="nx">User</span>
+	<span class="kd">var</span> <span class="nx">lastUser</span> <span class="nx">gorme</span><span class="p">.</span><span class="nx">User</span>
+	<span class="kd">var</span> <span class="nx">result</span> <span class="o">*</span><span class="nx">gorm</span><span class="p">.</span><span class="nx">DB</span>
+	<span class="c1">// 获取第一条记录（主键升序） SELECT * FROM users ORDER BY id LIMIT 1;
+</span><span class="c1"></span>	<span class="nx">result</span> <span class="p">=</span> <span class="nx">mysqlClient</span><span class="p">.</span><span class="nf">First</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">firstUser</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;First Result: %+v\n&#34;</span><span class="p">,</span> <span class="nx">result</span><span class="p">.</span><span class="nx">RowsAffected</span><span class="p">)</span>
+	<span class="c1">// 获取一条记录，没有指定排序字段 SELECT * FROM users LIMIT 1;
+</span><span class="c1"></span>	<span class="nx">result</span> <span class="p">=</span> <span class="nx">mysqlClient</span><span class="p">.</span><span class="nf">Take</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">taskUser</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;Take Result: %+v\n&#34;</span><span class="p">,</span> <span class="nx">result</span><span class="p">.</span><span class="nx">RowsAffected</span><span class="p">)</span>
+	<span class="c1">// 获取最后一条记录（主键降序）SELECT * FROM users ORDER BY id DESC LIMIT 1;
+</span><span class="c1"></span>	<span class="nx">result</span> <span class="p">=</span> <span class="nx">mysqlClient</span><span class="p">.</span><span class="nf">Last</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">lastUser</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;lastUser Result: %+v\n&#34;</span><span class="p">,</span> <span class="nx">result</span><span class="p">.</span><span class="nx">RowsAffected</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><font color=red>@注意: 如果表里没有数据，会报错<code>result.Error返回:ErrRecordNotFound</code></font>,可以使用下面语句检查错误。如果想避免<code>ErrRecordNotFound</code>错误，你可以使用<code>Find</code>,如:<code>db.Limit(1).Find(&amp;user)</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 检查 ErrRecordNotFound 错误
+</span><span class="c1"></span><span class="nx">errors</span><span class="p">.</span><span class="nf">Is</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">Error</span><span class="p">,</span> <span class="nx">gorm</span><span class="p">.</span><span class="nx">ErrRecordNotFound</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="b-多条记录-find">b. 多条记录: Find</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 使用Find(默认查询的是检索全部)
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestGetByFind</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="kd">var</span> <span class="nx">userList</span> <span class="p">[]</span><span class="nx">gorme</span><span class="p">.</span><span class="nx">User</span>
+	<span class="c1">// 指针查询字段
+</span><span class="c1"></span>	<span class="nx">result</span> <span class="o">:=</span> <span class="nx">mysqlClient</span><span class="p">.</span><span class="nf">Select</span><span class="p">(</span><span class="s">&#34;id&#34;</span><span class="p">,</span> <span class="s">&#34;nick_name&#34;</span><span class="p">).</span><span class="nf">Find</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">userList</span><span class="p">)</span>
+	<span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">user</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">userList</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;id: %d nick_name: %s \n&#34;</span><span class="p">,</span> <span class="nx">user</span><span class="p">.</span><span class="nx">ID</span><span class="p">,</span><span class="nx">user</span><span class="p">.</span><span class="nx">NickName</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;查询记录数: &#34;</span><span class="p">,</span> <span class="nx">result</span><span class="p">.</span><span class="nx">RowsAffected</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;查询错误: &#34;</span><span class="p">,</span> <span class="nx">result</span><span class="p">.</span><span class="nx">Error</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/** 输出
+</span><span class="cm">=== RUN   TestGetByFind
+</span><span class="cm">id: 2 nick_name: 李四 
+</span><span class="cm">id: 3 nick_name: 张三 
+</span><span class="cm">id: 4 nick_name: 路人甲 
+</span><span class="cm">id: 5 nick_name: 路人乙 
+</span><span class="cm">id: 6 nick_name: 路人丙 
+</span><span class="cm">查询记录数:  5
+</span><span class="cm">查询错误:  &lt;nil&gt;
+</span><span class="cm">--- PASS: TestGetByFind (0.00s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="c-条件查询">c. 条件查询</h5>
+<p><strong>1. String条件</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 根据String条件查询
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestGetByStringWhere</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// 定义对应的结构体变量
+</span><span class="c1"></span>	<span class="kd">var</span> <span class="nx">user</span> <span class="nx">gorme</span><span class="p">.</span><span class="nx">User</span>
+	<span class="kd">var</span> <span class="nx">userList</span> <span class="p">[]</span><span class="nx">gorme</span><span class="p">.</span><span class="nx">User</span>
+	<span class="kd">var</span> <span class="nx">result</span> <span class="o">*</span><span class="nx">gorm</span><span class="p">.</span><span class="nx">DB</span>
+	<span class="c1">// 字符串条件查询一条
+</span><span class="c1"></span>	<span class="nx">result</span> <span class="p">=</span> <span class="nx">mysqlClient</span><span class="p">.</span><span class="nf">Where</span><span class="p">(</span><span class="s">&#34;nick_name = ?&#34;</span><span class="p">,</span> <span class="s">&#34;张三&#34;</span><span class="p">).</span><span class="nf">First</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">user</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;Res1: %v err:%v \n&#34;</span><span class="p">,</span> <span class="nx">result</span><span class="p">.</span><span class="nx">RowsAffected</span><span class="p">,</span><span class="nx">result</span><span class="p">.</span><span class="nx">Error</span><span class="p">)</span>
+	<span class="c1">// 字符串条件查询多条
+</span><span class="c1"></span>	<span class="nx">result</span> <span class="p">=</span> <span class="nx">mysqlClient</span><span class="p">.</span><span class="nf">Where</span><span class="p">(</span><span class="s">&#34;nick_name &lt;&gt; ?&#34;</span><span class="p">,</span> <span class="s">&#34;张三&#34;</span><span class="p">).</span><span class="nf">Find</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">userList</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;Res2: %v err:%v \n&#34;</span><span class="p">,</span> <span class="nx">result</span><span class="p">.</span><span class="nx">RowsAffected</span><span class="p">,</span><span class="nx">result</span><span class="p">.</span><span class="nx">Error</span><span class="p">)</span>
+	<span class="c1">// 多个条件
+</span><span class="c1"></span>	<span class="nx">result</span> <span class="p">=</span> <span class="nx">mysqlClient</span><span class="p">.</span><span class="nf">Where</span><span class="p">(</span><span class="s">&#34;nick_name = ? and age &gt;= ?&#34;</span><span class="p">,</span> <span class="s">&#34;张三&#34;</span><span class="p">,</span> <span class="mi">18</span><span class="p">).</span><span class="nf">First</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">user</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;Res3: %v err:%v \n&#34;</span><span class="p">,</span> <span class="nx">result</span><span class="p">.</span><span class="nx">RowsAffected</span><span class="p">,</span><span class="nx">result</span><span class="p">.</span><span class="nx">Error</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/** 输出
+</span><span class="cm">=== RUN   TestGetByStringWhere
+</span><span class="cm">Res1: 1 err:&lt;nil&gt; 
+</span><span class="cm">Res2: 4 err:&lt;nil&gt; 
+</span><span class="cm">Res3: 1 err:&lt;nil&gt; 
+</span><span class="cm">--- PASS: TestGetByStringWhere (0.02s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>2. Struct和Map条件</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 根据struct和map 条件查询结果
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestGetByStructAndMapWhere</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// 定义对应的结构体变量
+</span><span class="c1"></span>	<span class="kd">var</span> <span class="nx">user</span> <span class="nx">gorme</span><span class="p">.</span><span class="nx">User</span>
+	<span class="kd">var</span> <span class="nx">userList</span> <span class="p">[]</span><span class="nx">gorme</span><span class="p">.</span><span class="nx">User</span>
+	<span class="kd">var</span> <span class="nx">result</span> <span class="o">*</span><span class="nx">gorm</span><span class="p">.</span><span class="nx">DB</span>
+	<span class="c1">// 结构体条件
+</span><span class="c1"></span>	<span class="nx">result</span> <span class="p">=</span> <span class="nx">mysqlClient</span><span class="p">.</span><span class="nf">Where</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">gorme</span><span class="p">.</span><span class="nx">User</span><span class="p">{</span><span class="nx">NickName</span><span class="p">:</span> <span class="s">&#34;张三&#34;</span><span class="p">,</span><span class="nx">Age</span><span class="p">:</span> <span class="mi">18</span><span class="p">}).</span><span class="nf">First</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">user</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;结构体条件: %+v err:%v \n&#34;</span><span class="p">,</span> <span class="nx">result</span><span class="p">.</span><span class="nx">RowsAffected</span><span class="p">,</span><span class="nx">result</span><span class="p">.</span><span class="nx">Error</span><span class="p">)</span>
+	<span class="c1">// map条件
+</span><span class="c1"></span>	<span class="nx">result</span> <span class="p">=</span> <span class="nx">mysqlClient</span><span class="p">.</span><span class="nf">Where</span><span class="p">(</span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kd">interface</span><span class="p">{}{</span><span class="s">&#34;age&#34;</span><span class="p">:</span><span class="mi">18</span><span class="p">}).</span><span class="nf">Find</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">userList</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;map条件: %+v err:%v \n&#34;</span><span class="p">,</span> <span class="nx">result</span><span class="p">.</span><span class="nx">RowsAffected</span><span class="p">,</span><span class="nx">result</span><span class="p">.</span><span class="nx">Error</span><span class="p">)</span>
+	<span class="c1">// 主键切片
+</span><span class="c1"></span>	<span class="nx">result</span> <span class="p">=</span> <span class="nx">mysqlClient</span><span class="p">.</span><span class="nf">Where</span><span class="p">([]</span><span class="kt">int64</span><span class="p">{</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">}).</span><span class="nf">Find</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">userList</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;主键切片: %+v err:%v \n&#34;</span><span class="p">,</span> <span class="nx">result</span><span class="p">.</span><span class="nx">RowsAffected</span><span class="p">,</span><span class="nx">result</span><span class="p">.</span><span class="nx">Error</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/** 输出
+</span><span class="cm">=== RUN   TestGetByStructAndMapWhere
+</span><span class="cm">结构体条件: 1 err:&lt;nil&gt; 
+</span><span class="cm">map条件: 3 err:&lt;nil&gt; 
+</span><span class="cm">主键切片: 4 err:&lt;nil&gt; 
+</span><span class="cm">--- PASS: TestGetByStructAndMapWhere (0.01s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p><font color=red>@注意</font> 当使用结构作为条件查询时，<code>GORM</code> 只会查询非零值字段。这意味着如果您的字段值为 <code>0</code>、<code>''</code>、<code>false</code> 或其他 <a href="https://tour.golang.org/basics/12">零值</a>，该字段不会被用于构建查询条件，例如：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">db</span><span class="p">.</span><span class="nf">Where</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">User</span><span class="p">{</span><span class="nx">NickName</span><span class="p">:</span> <span class="s">&#34;张三&#34;</span><span class="p">,</span> <span class="nx">Age</span><span class="p">:</span> <span class="mi">0</span><span class="p">}).</span><span class="nf">Find</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">users</span><span class="p">)</span>
+<span class="c1">// SELECT * FROM users WHERE name = &#34;张三&#34;;
+</span></code></pre></td></tr></table>
+</div>
+</div></blockquote>
+<p><a href="https://gorm.io/zh_CN/docs/query.html">更多查询规则和方法，见: https://gorm.io/zh_CN/docs/query.html</a></p>
+<h4 id="65-更新">6.5 更新</h4>
+<h5 id="a-更新单个字段">a. 更新单个字段</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 更新单个字段
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestUpdateColumn</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="kd">var</span> <span class="nx">result</span> <span class="o">*</span><span class="nx">gorm</span><span class="p">.</span><span class="nx">DB</span>
+	<span class="c1">// 字符串条件更新
+</span><span class="c1"></span>	<span class="c1">// UPDATE users SET nick_name=&#39;张三A&#39;, updated_at=当前时间 WHERE nick_name=&#39;张三;
+</span><span class="c1"></span>	<span class="nx">result</span> <span class="p">=</span> <span class="nx">mysqlClient</span><span class="p">.</span><span class="nf">Model</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">gorme</span><span class="p">.</span><span class="nx">User</span><span class="p">{}).</span><span class="nf">Where</span><span class="p">(</span><span class="s">&#34;nick_name = ?&#34;</span><span class="p">,</span> <span class="s">&#34;张三&#34;</span><span class="p">).</span>
+		<span class="nf">Update</span><span class="p">(</span><span class="s">&#34;nick_name&#34;</span><span class="p">,</span> <span class="s">&#34;张三A&#34;</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;条件更新: %+v err:%v \n&#34;</span><span class="p">,</span> <span class="nx">result</span><span class="p">.</span><span class="nx">RowsAffected</span><span class="p">,</span> <span class="nx">result</span><span class="p">.</span><span class="nx">Error</span><span class="p">)</span>
+	<span class="c1">// 结构体条件更新
+</span><span class="c1"></span>	<span class="c1">// UPDATE users SET age=28, updated_at=当前时间 WHERE member_number=&#39;A0001;
+</span><span class="c1"></span>	<span class="nx">result</span> <span class="p">=</span> <span class="nx">mysqlClient</span><span class="p">.</span><span class="nf">Model</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">gorme</span><span class="p">.</span><span class="nx">User</span><span class="p">{}).</span><span class="nf">Where</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">gorme</span><span class="p">.</span><span class="nx">User</span><span class="p">{</span><span class="nx">MemberNumber</span><span class="p">:</span> <span class="s">&#34;A0001&#34;</span><span class="p">}).</span><span class="nf">Update</span><span class="p">(</span><span class="s">&#34;age&#34;</span><span class="p">,</span><span class="mi">28</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;结构体条件更新: %+v err:%v \n&#34;</span><span class="p">,</span> <span class="nx">result</span><span class="p">.</span><span class="nx">RowsAffected</span><span class="p">,</span> <span class="nx">result</span><span class="p">.</span><span class="nx">Error</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/** 输出
+</span><span class="cm">=== RUN   TestUpdateColumn
+</span><span class="cm">条件更新: 1 err:&lt;nil&gt; 
+</span><span class="cm">结构体条件更新: 1 err:&lt;nil&gt; 
+</span><span class="cm">--- PASS: TestUpdateColumn (0.06s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="b-更新多个字段">b. 更新多个字段</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 更新多个字段
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestUpdateMultipleColumn</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="kd">var</span> <span class="nx">result</span> <span class="o">*</span><span class="nx">gorm</span><span class="p">.</span><span class="nx">DB</span>
+	<span class="c1">// 使用map
+</span><span class="c1"></span>	<span class="nx">updateMap</span> <span class="o">:=</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kd">interface</span><span class="p">{}{</span>
+		<span class="s">&#34;age&#34;</span><span class="p">:</span>      <span class="mi">32</span><span class="p">,</span>
+		<span class="s">&#34;birthday&#34;</span><span class="p">:</span> <span class="s">&#34;1991-01-05&#34;</span><span class="p">,</span>
+	<span class="p">}</span>
+	<span class="c1">// UPDATE users SET age=32,birthday=&#39;1991-01-05&#39;,updated_at=当前时间 WHERE id=6;
+</span><span class="c1"></span>	<span class="nx">result</span> <span class="p">=</span> <span class="nx">mysqlClient</span><span class="p">.</span><span class="nf">Model</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">gorme</span><span class="p">.</span><span class="nx">User</span><span class="p">{}).</span><span class="nf">Where</span><span class="p">(</span><span class="s">&#34;id = ?&#34;</span><span class="p">,</span> <span class="mi">6</span><span class="p">).</span><span class="nf">Updates</span><span class="p">(</span><span class="nx">updateMap</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;使用map结构更新: %+v err:%v \n&#34;</span><span class="p">,</span> <span class="nx">result</span><span class="p">.</span><span class="nx">RowsAffected</span><span class="p">,</span> <span class="nx">result</span><span class="p">.</span><span class="nx">Error</span><span class="p">)</span>
+	<span class="c1">// 使用结构体(不使用Select)
+</span><span class="c1"></span>	<span class="nx">updateUser</span> <span class="o">:=</span> <span class="nx">gorme</span><span class="p">.</span><span class="nx">User</span><span class="p">{</span>
+		<span class="nx">Birthday</span><span class="p">:</span> <span class="nx">sql</span><span class="p">.</span><span class="nx">NullString</span><span class="p">{</span><span class="nx">String</span><span class="p">:</span> <span class="s">&#34;1993-10-10&#34;</span><span class="p">,</span> <span class="nx">Valid</span><span class="p">:</span> <span class="kc">true</span><span class="p">},</span>
+		<span class="nx">Age</span><span class="p">:</span>      <span class="mi">0</span><span class="p">,</span>
+	<span class="p">}</span>
+	<span class="c1">// @注意这里的age=0不会更新到MySQL
+</span><span class="c1"></span>	<span class="c1">// UPDATE users SET birthday=&#39;1993-09-09&#39;,updated_at=当前时间 WHERE id=5;
+</span><span class="c1"></span>	<span class="nx">result</span> <span class="p">=</span> <span class="nx">mysqlClient</span><span class="p">.</span><span class="nf">Model</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">gorme</span><span class="p">.</span><span class="nx">User</span><span class="p">{}).</span><span class="nf">Where</span><span class="p">(</span><span class="s">&#34;id = ?&#34;</span><span class="p">,</span> <span class="mi">5</span><span class="p">).</span><span class="nf">Updates</span><span class="p">(</span><span class="nx">updateUser</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;使用struct结构更新: %+v err:%v \n&#34;</span><span class="p">,</span> <span class="nx">result</span><span class="p">.</span><span class="nx">RowsAffected</span><span class="p">,</span> <span class="nx">result</span><span class="p">.</span><span class="nx">Error</span><span class="p">)</span>
+	<span class="c1">// 使用结构体(使用Select)
+</span><span class="c1"></span>	<span class="nx">updateUser2</span> <span class="o">:=</span> <span class="nx">gorme</span><span class="p">.</span><span class="nx">User</span><span class="p">{</span>
+		<span class="nx">Birthday</span><span class="p">:</span> <span class="nx">sql</span><span class="p">.</span><span class="nx">NullString</span><span class="p">{</span><span class="nx">String</span><span class="p">:</span> <span class="s">&#34;1993-09-09&#34;</span><span class="p">,</span> <span class="nx">Valid</span><span class="p">:</span> <span class="kc">true</span><span class="p">},</span>
+		<span class="nx">Age</span><span class="p">:</span>      <span class="mi">0</span><span class="p">,</span>
+	<span class="p">}</span>
+	<span class="c1">// UPDATE users SET birthday=&#39;1993-09-09&#39;,age=0,updated_at=当前时间 WHERE id=4;
+</span><span class="c1"></span>	<span class="nx">result</span> <span class="p">=</span> <span class="nx">mysqlClient</span><span class="p">.</span><span class="nf">Model</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">gorme</span><span class="p">.</span><span class="nx">User</span><span class="p">{}).</span>
+		<span class="nf">Select</span><span class="p">(</span><span class="s">&#34;birthday&#34;</span><span class="p">,</span> <span class="s">&#34;age&#34;</span><span class="p">).</span> <span class="c1">//指定要更新的字段
+</span><span class="c1"></span>		<span class="nf">Where</span><span class="p">(</span><span class="s">&#34;id = ?&#34;</span><span class="p">,</span> <span class="mi">4</span><span class="p">).</span><span class="nf">Updates</span><span class="p">(</span><span class="nx">updateUser2</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;使用struct结构更新2: %+v err:%v \n&#34;</span><span class="p">,</span> <span class="nx">result</span><span class="p">.</span><span class="nx">RowsAffected</span><span class="p">,</span> <span class="nx">result</span><span class="p">.</span><span class="nx">Error</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="66-删除">6.6 删除</h4>
+<h5 id="a-软删除">a. 软删除</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 删除数据
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestSoftDel</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="kd">var</span> <span class="nx">result</span> <span class="o">*</span><span class="nx">gorm</span><span class="p">.</span><span class="nx">DB</span>
+	<span class="c1">// 根据主键，删除一条记录
+</span><span class="c1"></span>	<span class="nx">result</span> <span class="p">=</span> <span class="nx">mysqlClient</span><span class="p">.</span><span class="nf">Delete</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">gorme</span><span class="p">.</span><span class="nx">User</span><span class="p">{},</span><span class="mi">1</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;根据主键删除一条: %+v err:%v \n&#34;</span><span class="p">,</span> <span class="nx">result</span><span class="p">.</span><span class="nx">RowsAffected</span><span class="p">,</span> <span class="nx">result</span><span class="p">.</span><span class="nx">Error</span><span class="p">)</span>
+	<span class="c1">// 根据主键切片，删除多条记录
+</span><span class="c1"></span>	<span class="nx">result</span> <span class="p">=</span> <span class="nx">mysqlClient</span><span class="p">.</span><span class="nf">Delete</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">gorme</span><span class="p">.</span><span class="nx">User</span><span class="p">{},[]</span><span class="kt">int64</span><span class="p">{</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">})</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;根据主键切片删除多条: %+v err:%v \n&#34;</span><span class="p">,</span> <span class="nx">result</span><span class="p">.</span><span class="nx">RowsAffected</span><span class="p">,</span> <span class="nx">result</span><span class="p">.</span><span class="nx">Error</span><span class="p">)</span>
+	<span class="c1">// 根据条件删除
+</span><span class="c1"></span>	<span class="nx">result</span> <span class="p">=</span> <span class="nx">mysqlClient</span><span class="p">.</span><span class="nf">Where</span><span class="p">(</span><span class="s">&#34;age = ?&#34;</span><span class="p">,</span><span class="mi">0</span><span class="p">).</span><span class="nf">Delete</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">gorme</span><span class="p">.</span><span class="nx">User</span><span class="p">{})</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;根据条件删除: %+v err:%v \n&#34;</span><span class="p">,</span> <span class="nx">result</span><span class="p">.</span><span class="nx">RowsAffected</span><span class="p">,</span> <span class="nx">result</span><span class="p">.</span><span class="nx">Error</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p><font color=red>执行上面代码后，发现表里面的记录依然存在，而<code>DeletedAt</code> 置为当前时间。原因是<code>user</code>模型中包含了一个 <code>gorm.DeletedAt</code> 字段，它将自动获得软删除的能力！</font></p>
+</blockquote>
+<h5 id="b-永久删除">b. 永久删除</h5>
+<p>可以使用 <code>Unscoped</code> 永久删除匹配的记录。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 删除数据(硬删除)
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestStrongDel</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="kd">var</span> <span class="nx">result</span> <span class="o">*</span><span class="nx">gorm</span><span class="p">.</span><span class="nx">DB</span>
+	<span class="nx">result</span> <span class="p">=</span> <span class="nx">mysqlClient</span><span class="p">.</span><span class="nf">Unscoped</span><span class="p">().</span><span class="nf">Delete</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">gorme</span><span class="p">.</span><span class="nx">User</span><span class="p">{},</span> <span class="mi">1</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;硬删除: %+v err:%v \n&#34;</span><span class="p">,</span> <span class="nx">result</span><span class="p">.</span><span class="nx">RowsAffected</span><span class="p">,</span> <span class="nx">result</span><span class="p">.</span><span class="nx">Error</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="67-事务">6.7 事务</h4>
+<h5 id="a-使用transaction">a. 使用<code>Transaction</code></h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 事务使用(Transaction)
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestTransaction</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">err</span> <span class="o">:=</span> <span class="nx">mysqlClient</span><span class="p">.</span><span class="nf">Transaction</span><span class="p">(</span><span class="kd">func</span><span class="p">(</span><span class="nx">tx</span> <span class="o">*</span><span class="nx">gorm</span><span class="p">.</span><span class="nx">DB</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
+		<span class="c1">//在事务中执行一些 db 操作（从这里开始，您应该使用 &#39;tx&#39; 而不是 &#39;db&#39;）
+</span><span class="c1"></span>		<span class="c1">// 创建用户记录
+</span><span class="c1"></span>		<span class="nx">user</span> <span class="o">:=</span> <span class="nx">gorme</span><span class="p">.</span><span class="nx">User</span><span class="p">{</span><span class="nx">NickName</span><span class="p">:</span> <span class="s">&#34;老王&#34;</span><span class="p">,</span> <span class="nx">Age</span><span class="p">:</span> <span class="mi">48</span><span class="p">}</span>
+		<span class="k">if</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">tx</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">user</span><span class="p">).</span><span class="nx">Error</span><span class="p">;</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+			<span class="c1">// 回滚事务
+</span><span class="c1"></span>			<span class="k">return</span> <span class="nx">err</span>
+		<span class="p">}</span>
+		<span class="c1">// 创建用户地址
+</span><span class="c1"></span>		<span class="nx">userAddress</span> <span class="o">:=</span> <span class="nx">gorme</span><span class="p">.</span><span class="nx">UserAddress</span><span class="p">{</span><span class="nx">Uid</span><span class="p">:</span> <span class="nx">user</span><span class="p">.</span><span class="nx">ID</span><span class="p">,</span> <span class="nx">Province</span><span class="p">:</span> <span class="s">&#34;北京&#34;</span><span class="p">,</span> <span class="nx">City</span><span class="p">:</span> <span class="s">&#34;北京&#34;</span><span class="p">,</span> <span class="nx">Area</span><span class="p">:</span> <span class="s">&#34;海淀区&#34;</span><span class="p">}</span>
+		<span class="k">if</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">tx</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">userAddress</span><span class="p">).</span><span class="nx">Error</span><span class="p">;</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+			<span class="c1">// 回滚事务
+</span><span class="c1"></span>			<span class="k">return</span> <span class="nx">err</span>
+		<span class="p">}</span>
+		<span class="k">return</span> <span class="kc">nil</span>
+	<span class="p">})</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">t</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;执行完成&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="b-手动事务">b. 手动事务</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 手动事务
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestUseManualTx</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// 用户表
+</span><span class="c1"></span>	<span class="nx">user</span> <span class="o">:=</span> <span class="nx">gorme</span><span class="p">.</span><span class="nx">User</span><span class="p">{</span><span class="nx">NickName</span><span class="p">:</span> <span class="s">&#34;小丽&#34;</span><span class="p">,</span> <span class="nx">Age</span><span class="p">:</span> <span class="mi">19</span><span class="p">}</span>
+	<span class="c1">// 开启事务
+</span><span class="c1"></span>	<span class="nx">tx</span> <span class="o">:=</span> <span class="nx">mysqlClient</span><span class="p">.</span><span class="nf">Begin</span><span class="p">()</span>
+	<span class="c1">// 添加用户
+</span><span class="c1"></span>	<span class="k">if</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">tx</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">user</span><span class="p">).</span><span class="nx">Error</span><span class="p">;</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="c1">// 遇到错误时回滚事务
+</span><span class="c1"></span>		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;添加用户失败: &#34;</span><span class="p">,</span><span class="nx">err</span><span class="p">)</span>
+		<span class="nx">tx</span><span class="p">.</span><span class="nf">Rollback</span><span class="p">()</span>
+	<span class="p">}</span>
+	<span class="c1">// 用户地址表
+</span><span class="c1"></span>	<span class="nx">userAddress</span> <span class="o">:=</span> <span class="nx">gorme</span><span class="p">.</span><span class="nx">UserAddress</span><span class="p">{</span><span class="nx">Uid</span><span class="p">:</span> <span class="nx">user</span><span class="p">.</span><span class="nx">ID</span><span class="p">,</span> <span class="nx">Province</span><span class="p">:</span> <span class="s">&#34;北京&#34;</span><span class="p">,</span> <span class="nx">City</span><span class="p">:</span> <span class="s">&#34;北京&#34;</span><span class="p">,</span> <span class="nx">Area</span><span class="p">:</span> <span class="s">&#34;昌平区&#34;</span><span class="p">}</span>
+	<span class="c1">// 添加用户地址
+</span><span class="c1"></span>	<span class="k">if</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">tx</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">userAddress</span><span class="p">).</span><span class="nx">Error</span><span class="p">;</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="c1">// 遇到错误时回滚事务
+</span><span class="c1"></span>		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;添加用户地址失败: &#34;</span><span class="p">,</span><span class="nx">err</span><span class="p">)</span>
+		<span class="nx">tx</span><span class="p">.</span><span class="nf">Rollback</span><span class="p">()</span>
+	<span class="p">}</span>
+	<span class="c1">// 提交事务
+</span><span class="c1"></span>	<span class="nx">tx</span><span class="p">.</span><span class="nf">Commit</span><span class="p">()</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;执行完成&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><font color=red>@注意: 在实践中发现，执行时虽然事务失败，但是主键依然递增。具体看下图效果:</font></p>
+<p><img src="https://gitee.com/tangxiaoshan/pic-img-bed/raw/master/go/img/20210714184151.png" alt=""></p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">Shershon</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        0001-01-01
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      
+      <nav class="post-nav">
+        <a class="prev" href="/post/godoc/%E6%A0%87%E5%87%86%E5%8C%85/18-encoding-json/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default"></span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        <a class="next" href="/post/godoc/%E6%A0%87%E5%87%86%E5%8C%85/2-strconv%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BD%AC%E6%8D%A2/">
+            <span class="next-text nav-default"></span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:your@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://localhost:1313" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="http://localhost:1313" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="http://localhost:1313" class="iconfont icon-facebook" title="facebook"></a>
+      <a href="http://localhost:1313" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="http://localhost:1313" class="iconfont icon-google" title="google"></a>
+      <a href="http://localhost:1313" class="iconfont icon-github" title="github"></a>
+      <a href="http://localhost:1313" class="iconfont icon-weibo" title="weibo"></a>
+      <a href="http://localhost:1313" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="http://localhost:1313" class="iconfont icon-douban" title="douban"></a>
+      <a href="http://localhost:1313" class="iconfont icon-pocket" title="pocket"></a>
+      <a href="http://localhost:1313" class="iconfont icon-tumblr" title="tumblr"></a>
+      <a href="http://localhost:1313" class="iconfont icon-instagram" title="instagram"></a>
+      <a href="http://localhost:1313" class="iconfont icon-gitlab" title="gitlab"></a>
+      <a href="http://localhost:1313" class="iconfont icon-bilibili" title="bilibili"></a>
+  <a href="http://localhost:1313/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span>Shershon</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

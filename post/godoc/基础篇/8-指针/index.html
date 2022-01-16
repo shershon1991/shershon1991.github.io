@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Go学习(八):指针 - 小山的博客</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Shershon" /><meta name="description" content="1.什么是指针？ 指针是存储另一个变量的内存地址的变量。变量是一种使用方便的占位符，变量都指向计算机的内存地址。一个指针变量可以指向任何一个值" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.90.1 with theme even" />
+
+
+<link rel="canonical" href="http://localhost:1313/post/godoc/%E5%9F%BA%E7%A1%80%E7%AF%87/8-%E6%8C%87%E9%92%88/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Go学习(八):指针" />
+<meta property="og:description" content="1.什么是指针？ 指针是存储另一个变量的内存地址的变量。变量是一种使用方便的占位符，变量都指向计算机的内存地址。一个指针变量可以指向任何一个值" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/post/godoc/%E5%9F%BA%E7%A1%80%E7%AF%87/8-%E6%8C%87%E9%92%88/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2021-01-08T00:00:00+00:00" />
+<meta property="article:modified_time" content="2021-01-08T00:00:00+00:00" />
+
+<meta itemprop="name" content="Go学习(八):指针">
+<meta itemprop="description" content="1.什么是指针？ 指针是存储另一个变量的内存地址的变量。变量是一种使用方便的占位符，变量都指向计算机的内存地址。一个指针变量可以指向任何一个值"><meta itemprop="datePublished" content="2021-01-08T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2021-01-08T00:00:00+00:00" />
+<meta itemprop="wordCount" content="1931">
+<meta itemprop="keywords" content="Go基础," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Go学习(八):指针"/>
+<meta name="twitter:description" content="1.什么是指针？ 指针是存储另一个变量的内存地址的变量。变量是一种使用方便的占位符，变量都指向计算机的内存地址。一个指针变量可以指向任何一个值"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">小山的博客</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">小山的博客</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Go学习(八):指针</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-01-08 </span>
+        <div class="post-category">
+            <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+            <a href="/categories/go/"> Go </a>
+            </div>
+          <span class="more-meta"> 1931 words </span>
+          <span class="more-meta"> 4 mins read </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#1什么是指针">1.什么是指针？</a></li>
+            <li><a href="#2-声明指针">2. 声明指针</a></li>
+            <li><a href="#3空指针">3.空指针</a></li>
+            <li><a href="#4使用指针">4.使用指针</a></li>
+            <li><a href="#5指针数组">5.指针数组</a></li>
+            <li><a href="#6指针的指针">6.指针的指针</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h3 id="1什么是指针">1.什么是指针？</h3>
+<p>指针是存储另一个变量的内存地址的变量。变量是一种使用方便的占位符，变量都指向计算机的内存地址。一个指针变量可以指向任何一个值的内存地址。</p>
+<p>例如：变量a的值为100，存储在内存地址<code>0x1040a124</code>。变量b持有a的地址，则b被认为指向a。如下图</p>
+<p><img src="https://gitee.com/tangxiaoshan/pic-img-bed/raw/master/go/img/image-20201120232747090.png" alt="image-20201120232747090"></p>
+<p>在Go语言中使用取地址符<code>（＆）</code>来获取变量的地址，一个变量前使用<code>＆</code>，会返回该变量的内存地址。如下程序获取变量a的内存地址</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+
+<span class="kn">import</span> <span class="s">&#34;fmt&#34;</span>
+
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">a</span> <span class="o">:=</span> <span class="mi">1</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;指针地址: %p&#34;</span><span class="p">,</span><span class="o">&amp;</span><span class="nx">a</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="c1">// 输出: 指针地址: 0xc00001c080
+</span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p><code>Go</code>语言指针的最大特点是：指针不能运算。</p>
+</blockquote>
+<h3 id="2-声明指针">2. 声明指针</h3>
+<h4 id="21-语法">2.1 语法</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">指针变量名</span> <span class="o">*</span><span class="nx">指针类型</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>使用示例</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+
+<span class="kn">import</span> <span class="s">&#34;fmt&#34;</span>
+
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 声明一个变量
+</span><span class="c1"></span>	<span class="nx">a</span> <span class="o">:=</span> <span class="mi">100</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;变量a--&gt; 类型: %T, 值: %v 内存地址: %p \n&#34;</span><span class="p">,</span><span class="nx">a</span><span class="p">,</span><span class="nx">a</span><span class="p">,</span><span class="o">&amp;</span><span class="nx">a</span><span class="p">)</span>
+	<span class="c1">// 声明一个指向整型的指针变量
+</span><span class="c1"></span>	<span class="kd">var</span> <span class="nx">p</span> <span class="o">*</span><span class="kt">int</span>
+	<span class="c1">// 取出变量a的内存地址，赋值给指针变量p
+</span><span class="c1"></span>	<span class="nx">p</span> <span class="p">=</span> <span class="o">&amp;</span><span class="nx">a</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;指针变量p--&gt; 类型: %T, 值: %v 指针指向的值:%v \n&#34;</span><span class="p">,</span><span class="nx">p</span><span class="p">,</span><span class="nx">p</span><span class="p">,</span><span class="o">*</span><span class="nx">p</span><span class="p">)</span>
+	<span class="c1">// 通过指针变量修改变量a的值
+</span><span class="c1"></span>	<span class="o">*</span><span class="nx">p</span> <span class="p">=</span> <span class="mi">50</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;通过指针变量p修改变量a的值--&gt; 类型: %T, 值: %v 内存地址: %p \n&#34;</span><span class="p">,</span><span class="nx">a</span><span class="p">,</span><span class="nx">a</span><span class="p">,</span><span class="o">&amp;</span><span class="nx">a</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/** 输出:
+</span><span class="cm">变量a--&gt; 类型: int, 值: 100 内存地址: 0xc00001c080 
+</span><span class="cm">指针变量p--&gt; 类型: *int, 值: 0xc00001c080 指针指向的值:100 
+</span><span class="cm">通过指针变量p修改变量a的值--&gt; 类型: int, 值: 50 内存地址: 0xc00001c080 
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="22-指针地址和指针类型">2.2 指针地址和指针类型</h4>
+<p>每个变量在运行时都拥有一个地址，这个地址代表变量在内存中的位置。Go语言中使用<code>&amp;</code>操作符放在变量前面对变量进行<code>取地址</code>操作。</p>
+<p>格式如下:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">ptr</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">v</span>
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li><code>v</code>： 代表被取地址的变量。</li>
+<li><code>ptr</code>： 储存变量<code>v</code>的内存地址，<font color=red>它的类型为<code>*T</code>,被称为T的指针类型。<code>*</code>代表指针</font></li>
+</ul>
+<h3 id="3空指针">3.空指针</h3>
+<p>在Go语言中，当一个指针被定义后没有分配到任何变量时，它的值为<code>nil</code>。<code>nil指针也称为空指针</code>。nil在概念上和其他语言的<code>null、None、NULL</code>一样，都指代零值或空值。</p>
+<h4 id="31-空指针判断">3.1 空指针判断</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="k">if</span> <span class="p">(</span><span class="nx">ptr</span> <span class="o">!=</span> <span class="kc">nil</span><span class="p">)</span> <span class="c1">// ptr不是空指针
+</span><span class="c1"></span><span class="k">if</span> <span class="p">(</span><span class="nx">ptr</span> <span class="o">==</span> <span class="kc">nil</span><span class="p">)</span> <span class="c1">// ptr是空指针
+</span></code></pre></td></tr></table>
+</div>
+</div><h3 id="4使用指针">4.使用指针</h3>
+<h4 id="41-使用指针修改变量的值">4.1 使用指针修改变量的值</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+
+<span class="kn">import</span> <span class="s">&#34;fmt&#34;</span>
+
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 声明一个变量
+</span><span class="c1"></span>	<span class="nx">a</span> <span class="o">:=</span> <span class="mi">100</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;变量a--&gt; 类型: %T, 值: %v 内存地址: %p \n&#34;</span><span class="p">,</span><span class="nx">a</span><span class="p">,</span><span class="nx">a</span><span class="p">,</span><span class="o">&amp;</span><span class="nx">a</span><span class="p">)</span>
+	<span class="c1">// 声明一个指向变量a的指针变量
+</span><span class="c1"></span>	<span class="kd">var</span> <span class="nx">p</span> <span class="p">=</span> <span class="o">&amp;</span><span class="nx">a</span>
+	<span class="c1">// 通过指针变量修改变量a的值
+</span><span class="c1"></span>	<span class="o">*</span><span class="nx">p</span> <span class="p">=</span> <span class="mi">50</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;通过指针变量p修改变量a的值--&gt; 类型: %T, 值: %v 内存地址: %p \n&#34;</span><span class="p">,</span><span class="nx">a</span><span class="p">,</span><span class="nx">a</span><span class="p">,</span><span class="o">&amp;</span><span class="nx">a</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/**输出:
+</span><span class="cm">变量a--&gt; 类型: int, 值: 100 内存地址: 0xc00001c080 
+</span><span class="cm">通过指针变量p修改变量a的值--&gt; 类型: int, 值: 50 内存地址: 0xc00001c080 
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="42-使用指针作为函数的参数">4.2 使用指针作为函数的参数</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+
+<span class="kn">import</span> <span class="s">&#34;fmt&#34;</span>
+
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 声明一个变量
+</span><span class="c1"></span>	<span class="nx">a</span> <span class="o">:=</span> <span class="mi">100</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;变量a--&gt; 类型: %T, 值: %v 内存地址: %p \n&#34;</span><span class="p">,</span><span class="nx">a</span><span class="p">,</span><span class="nx">a</span><span class="p">,</span><span class="o">&amp;</span><span class="nx">a</span><span class="p">)</span>
+	<span class="c1">// 调用函数，变量是指针
+</span><span class="c1"></span>	<span class="nf">usePointParam</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">a</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;调用函数后，a的值--&gt; 类型: %T, 值: %v 内存地址: %p \n&#34;</span><span class="p">,</span><span class="nx">a</span><span class="p">,</span><span class="nx">a</span><span class="p">,</span><span class="o">&amp;</span><span class="nx">a</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="c1">// 声明一个函数接收指针变量
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">usePointParam</span><span class="p">(</span><span class="nx">val</span> <span class="o">*</span><span class="kt">int</span><span class="p">)</span>  <span class="p">{</span>
+	<span class="o">*</span><span class="nx">val</span> <span class="o">++</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">变量a--&gt; 类型: int, 值: 100 内存地址: 0xc0000b6008 
+</span><span class="cm">调用函数后，a的值--&gt; 类型: int, 值: 101 内存地址: 0xc0000b6008 
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="5指针数组">5.指针数组</h3>
+<h4 id="51-概念">5.1 概念</h4>
+<p>指针数组: 就是元素为指针类型的数组。</p>
+<p>**定义指针数组: **</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">ptr</span> <span class="p">[</span><span class="nx">n</span><span class="p">]</span><span class="o">*</span><span class="nx">T</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="52-使用">5.2 使用</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<span class="kn">import</span> <span class="s">&#34;fmt&#34;</span>
+
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 声明一个数组
+</span><span class="c1"></span>	<span class="nx">arr</span> <span class="o">:=</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;PHP&#34;</span><span class="p">,</span><span class="s">&#34;GO&#34;</span><span class="p">,</span><span class="s">&#34;JAVA&#34;</span><span class="p">}</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;arr类型: %T arr类型值: %v \n&#34;</span><span class="p">,</span><span class="nx">arr</span><span class="p">,</span><span class="nx">arr</span><span class="p">)</span>
+	<span class="c1">// 声明一个指针数组 ptrArr
+</span><span class="c1"></span>	<span class="kd">var</span> <span class="nx">ptrArr</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">*</span><span class="kt">string</span>
+	<span class="c1">// 将数组中每个元素地址存到指针数组中:ptrArr
+</span><span class="c1"></span>	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="p">&lt;</span><span class="mi">3</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="nx">ptrArr</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="p">=</span> <span class="o">&amp;</span><span class="nx">arr</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span>
+	<span class="p">}</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;ptrArr类型: %T ptrArr类型值: %v \n&#34;</span><span class="p">,</span><span class="nx">ptrArr</span><span class="p">,</span><span class="nx">ptrArr</span><span class="p">)</span>
+
+	<span class="c1">// 通过指针数组修改对应的元素值
+</span><span class="c1"></span>	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="p">&lt;</span><span class="mi">3</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="nx">a</span> <span class="o">:=</span>  <span class="nx">ptrArr</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span>
+		<span class="c1">// 通过指针修改原数组的值
+</span><span class="c1"></span>		<span class="o">*</span><span class="nx">a</span> <span class="o">+=</span> <span class="s">&#34;-v&#34;</span>
+		<span class="nx">ptrArr</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="p">=</span> <span class="nx">a</span>
+	<span class="p">}</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;修改后: arr类型: %T arr类型值: %v \n&#34;</span><span class="p">,</span><span class="nx">arr</span><span class="p">,</span><span class="nx">arr</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">arr类型: [3]string arr类型值: [PHP GO JAVA] 
+</span><span class="cm">ptrArr类型: [3]*string ptrArr类型值: [0xc000090180 0xc000090190 0xc0000901a0] 
+</span><span class="cm">修改后: arr类型: [3]string arr类型值: [PHP-v GO-v JAVA-v] 
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="6指针的指针">6.指针的指针</h3>
+<h4 id="61-概念">6.1 概念</h4>
+<p><font color=red>如果一个指针变量存放的又是另一个指针变量的地址，则称这个指针变量为指向指针的指针变量。</font>当定义一个指向指针的指针变量时，第一个指针存放第二个指针的地址，第二个指针存放变量的地址,如下图所示:</p>
+<p><img src="https://gitee.com/tangxiaoshan/pic-img-bed/raw/master/go/img/image-20201122002402455.png" alt="image-20201122002402455"></p>
+<h4 id="62-使用">6.2 使用</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<span class="kn">import</span> <span class="s">&#34;fmt&#34;</span>
+
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 声明一个指向整型int的指针变量
+</span><span class="c1"></span>	<span class="kd">var</span> <span class="nx">ptr</span> <span class="o">*</span><span class="kt">int</span>
+	<span class="c1">// 声明一个指向整型int的指针的指针变量
+</span><span class="c1"></span>	<span class="kd">var</span> <span class="nx">ptrr</span> <span class="o">**</span><span class="kt">int</span>
+	<span class="c1">// 定义一个整型变量
+</span><span class="c1"></span>	<span class="nx">a</span> <span class="o">:=</span> <span class="mi">10</span>
+	<span class="nx">ptr</span> <span class="p">=</span> <span class="o">&amp;</span><span class="nx">a</span>
+	<span class="nx">ptrr</span> <span class="p">=</span> <span class="o">&amp;</span><span class="nx">ptr</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;ptr 类型: %T 值：%v \n&#34;</span><span class="p">,</span><span class="nx">ptr</span><span class="p">,</span><span class="o">*</span><span class="nx">ptr</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;ptrr 类型: %T 值：%v&#34;</span><span class="p">,</span><span class="nx">ptrr</span><span class="p">,</span><span class="o">**</span><span class="nx">ptrr</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/* 输出:
+</span><span class="cm">ptr 类型: *int 值：10 
+</span><span class="cm">ptrr 类型: **int 值：10
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">Shershon</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2021-01-08
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/go%E5%9F%BA%E7%A1%80/">Go基础</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/godoc/%E5%9F%BA%E7%A1%80%E7%AF%87/9-%E6%95%B0%E7%BB%84%E4%BD%BF%E7%94%A8/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Go学习(九):数组使用</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        <a class="next" href="/post/godoc/%E5%9F%BA%E7%A1%80%E7%AF%87/7-%E9%97%AD%E5%8C%85/">
+            <span class="next-text nav-default">Go学习(七):闭包使用</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:your@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://localhost:1313" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="http://localhost:1313" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="http://localhost:1313" class="iconfont icon-facebook" title="facebook"></a>
+      <a href="http://localhost:1313" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="http://localhost:1313" class="iconfont icon-google" title="google"></a>
+      <a href="http://localhost:1313" class="iconfont icon-github" title="github"></a>
+      <a href="http://localhost:1313" class="iconfont icon-weibo" title="weibo"></a>
+      <a href="http://localhost:1313" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="http://localhost:1313" class="iconfont icon-douban" title="douban"></a>
+      <a href="http://localhost:1313" class="iconfont icon-pocket" title="pocket"></a>
+      <a href="http://localhost:1313" class="iconfont icon-tumblr" title="tumblr"></a>
+      <a href="http://localhost:1313" class="iconfont icon-instagram" title="instagram"></a>
+      <a href="http://localhost:1313" class="iconfont icon-gitlab" title="gitlab"></a>
+      <a href="http://localhost:1313" class="iconfont icon-bilibili" title="bilibili"></a>
+  <a href="http://localhost:1313/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span>Shershon</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

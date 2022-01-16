@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title> - 小山的博客</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Shershon" /><meta name="description" content="1.介绍 os包中提供了操作系统函数的接口，是一个比较重要的包。它的作用主要是在服务器上进行系统的基本操作，如文件操作、目录操作、执行命令、信" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.90.1 with theme even" />
+
+
+<link rel="canonical" href="http://localhost:1313/post/godoc/%E6%A0%87%E5%87%86%E5%8C%85/15-os/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="" />
+<meta property="og:description" content="1.介绍 os包中提供了操作系统函数的接口，是一个比较重要的包。它的作用主要是在服务器上进行系统的基本操作，如文件操作、目录操作、执行命令、信" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/post/godoc/%E6%A0%87%E5%87%86%E5%8C%85/15-os/" /><meta property="article:section" content="post" />
+
+
+
+<meta itemprop="name" content="">
+<meta itemprop="description" content="1.介绍 os包中提供了操作系统函数的接口，是一个比较重要的包。它的作用主要是在服务器上进行系统的基本操作，如文件操作、目录操作、执行命令、信">
+
+<meta itemprop="wordCount" content="2523">
+<meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content=""/>
+<meta name="twitter:description" content="1.介绍 os包中提供了操作系统函数的接口，是一个比较重要的包。它的作用主要是在服务器上进行系统的基本操作，如文件操作、目录操作、执行命令、信"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">小山的博客</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">小山的博客</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title"></h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 0001-01-01 </span>
+        
+          <span class="more-meta"> 2523 words </span>
+          <span class="more-meta"> 6 mins read </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#1介绍">1.介绍</a></li>
+            <li><a href="#2-系统信息">2. 系统信息</a></li>
+            <li><a href="#3环境变量">3.环境变量</a></li>
+            <li><a href="#4文件相关">4.文件相关</a></li>
+            <li><a href="#5进程相关">5.进程相关</a></li>
+            <li><a href="#6-执行命令">6. 执行命令</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h3 id="1介绍">1.介绍</h3>
+<p><code>os</code>包中提供了操作系统函数的接口，是一个比较重要的包。它的作用主要是在服务器上进行系统的基本操作，如文件操作、目录操作、执行命令、信号与中断、进程、系统状态等等。下面分模块归纳一些常用函数。</p>
+<h3 id="2-系统信息">2. 系统信息</h3>
+<h4 id="21-函数列表">2.1 函数列表</h4>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Hostname()</code></td>
+<td>获取当前主机名</td>
+</tr>
+<tr>
+<td><code>Getpid()</code></td>
+<td>返回调用者所在进程的进程ID</td>
+</tr>
+<tr>
+<td><code>Getppid()</code></td>
+<td>返回调用者所在进程的父进程的进程ID</td>
+</tr>
+<tr>
+<td><code>Exit()</code></td>
+<td>让程序以状态码code退出。状态码0表示成功，非0表示出错。<br/>code取值范围： <code>[0,125]</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="22-代码示例">2.2 代码示例</h4>
+<p><strong>a. 示例一</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 系统相关
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestSystemInfo</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">hostname</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nf">Hostname</span><span class="p">()</span>
+	<span class="c1">// 主机名: huideMacBook-Pro.local
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;主机名:%v \n&#34;</span><span class="p">,</span> <span class="nx">hostname</span><span class="p">)</span>
+	<span class="c1">// 调用者所在进程的进程ID: 42862
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;调用者所在进程的进程ID: %v \n&#34;</span><span class="p">,</span> <span class="nx">os</span><span class="p">.</span><span class="nf">Getpid</span><span class="p">())</span>
+	<span class="c1">// 调用者所在进程的进程的父进程ID: 42861 
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;调用者所在进程的进程的父进程ID: %v \n&#34;</span><span class="p">,</span> <span class="nx">os</span><span class="p">.</span><span class="nf">Getppid</span><span class="p">())</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>b. 示例二</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">TestExit</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;调用前打印...&#34;</span><span class="p">)</span>
+	<span class="c1">// 调用退出程序：code范围应在 0 &lt;= x &lt;= 125
+</span><span class="c1"></span>	<span class="nx">os</span><span class="p">.</span><span class="nf">Exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+	<span class="c1">// 后面代码不会执行
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;调用后，这里不会输出&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/** 输出
+</span><span class="cm">=== RUN   TestExit
+</span><span class="cm">调用前打印...
+</span><span class="cm">
+</span><span class="cm">Process finished with exit code 0
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="3环境变量">3.环境变量</h3>
+<h4 id="31-函数列表">3.1 函数列表</h4>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Environ()</code></td>
+<td>获取所有环境变量</td>
+</tr>
+<tr>
+<td><code>Setenv(key, value string)</code></td>
+<td>设置环境变量</td>
+</tr>
+<tr>
+<td><code>Getenv(key string)</code></td>
+<td>获取环境变量</td>
+</tr>
+<tr>
+<td><code>Clearenv()</code></td>
+<td>清空所有环境变量</td>
+</tr>
+</tbody>
+</table>
+<h4 id="32-代码示例">3.2 代码示例</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 环境变量相关
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestEnv</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// 所有环境变量
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;所有环境变量:%+v \n&#34;</span><span class="p">,</span> <span class="nx">os</span><span class="p">.</span><span class="nf">Environ</span><span class="p">())</span>
+	<span class="c1">// 设置环境变量
+</span><span class="c1"></span>	<span class="nx">_</span> <span class="p">=</span> <span class="nx">os</span><span class="p">.</span><span class="nf">Setenv</span><span class="p">(</span><span class="s">&#34;my-name&#34;</span><span class="p">,</span> <span class="s">&#34;张三&#34;</span><span class="p">)</span>
+	<span class="c1">// 获取环境变量
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;获取环境变量: %v \n&#34;</span><span class="p">,</span> <span class="nx">os</span><span class="p">.</span><span class="nf">Getenv</span><span class="p">(</span><span class="s">&#34;my-name&#34;</span><span class="p">))</span>
+	<span class="c1">// 清空所有环境变量
+</span><span class="c1"></span>	<span class="nx">os</span><span class="p">.</span><span class="nf">Clearenv</span><span class="p">()</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;清空环境变量后:%+v \n&#34;</span><span class="p">,</span> <span class="nx">os</span><span class="p">.</span><span class="nf">Environ</span><span class="p">())</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>**输出: **</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="o">===</span> RUN   TestEnv
+所有环境变量:<span class="o">[</span><span class="nv">PATH</span><span class="o">=</span>/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin <span class="nv">__CFBundleIdentifier</span><span class="o">=</span>com.jetbrains.goland <span class="nv">SHELL</span><span class="o">=</span>/bin/zsh <span class="nv">SECURITYSESSIONID</span><span class="o">=</span>186a6 <span class="nv">GOPATH</span><span class="o">=</span>/Users/hui/go <span class="nv">TERM</span><span class="o">=</span>xterm-256color <span class="nv">USER</span><span class="o">=</span>hui <span class="nv">GOROOT</span><span class="o">=</span>/usr/local/go <span class="nv">TMPDIR</span><span class="o">=</span>/var/folders/8f/vnx2y1h57nzbd2p4vtcl6hv80000gn/T/ <span class="nv">LaunchInstanceID</span><span class="o">=</span>D9F74359-45B7-45F3-B74C-67CEA4DB8D9D <span class="nv">COMMAND_MODE</span><span class="o">=</span>unix2003 <span class="nv">GO111MODULE</span><span class="o">=</span>on <span class="nv">SSH_AUTH_SOCK</span><span class="o">=</span>/private/tmp/com.apple.launchd.5K5WgUh7Hh/Listeners <span class="nv">GOPROXY</span><span class="o">=</span>https://goproxy.cn,direct <span class="nv">XPC_FLAGS</span><span class="o">=</span>0x0 <span class="nv">__CF_USER_TEXT_ENCODING</span><span class="o">=</span>0x1F5:0x19:0x34 <span class="nv">LOGNAME</span><span class="o">=</span>hui <span class="nv">XPC_SERVICE_NAME</span><span class="o">=</span>application.com.jetbrains.goland.15834002.15834933 <span class="nv">PWD</span><span class="o">=</span>/Users/hui/Project/Go/gin-learn/test <span class="nv">HOME</span><span class="o">=</span>/Users/hui <span class="nv">GOARCH</span><span class="o">=</span>amd64 <span class="nv">GOBIN</span><span class="o">=</span>/Users/hui/Project/Go/gopath/bin <span class="nv">GOCACHE</span><span class="o">=</span>/Users/hui/Library/Caches/go-build <span class="nv">GOENV</span><span class="o">=</span>/Users/hui/Library/Application Support/go/env <span class="nv">GOHOSTARCH</span><span class="o">=</span>amd64 <span class="nv">GOHOSTOS</span><span class="o">=</span>darwin <span class="nv">GOMODCACHE</span><span class="o">=</span>/Users/hui/go/pkg/mod <span class="nv">GOOS</span><span class="o">=</span>darwin <span class="nv">GOSUMDB</span><span class="o">=</span>sum.golang.org <span class="nv">GOTOOLDIR</span><span class="o">=</span>/usr/local/go/pkg/tool/darwin_amd64 <span class="nv">GCCGO</span><span class="o">=</span>gccgo <span class="nv">AR</span><span class="o">=</span>ar <span class="nv">CC</span><span class="o">=</span>clang <span class="nv">CXX</span><span class="o">=</span>clang++ <span class="nv">CGO_ENABLED</span><span class="o">=</span>1<span class="o">]</span> 
+获取环境变量: 张三 
+清空环境变量后:<span class="o">[]</span> 
+--- PASS: TestEnv <span class="o">(</span>0.00s<span class="o">)</span>
+PASS
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="4文件相关">4.文件相关</h3>
+<p>关于文件相关的函数，参见之前的文章 <a href="https://mp.weixin.qq.com/s/Hk4TrpqjuD_0WI1KlDw0Aw">Go学习(二十四):文件操作</a></p>
+<h3 id="5进程相关">5.进程相关</h3>
+<h4 id="51-方法列表">5.1 方法列表</h4>
+<table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>os.StartProcess(..) (*Process, error) </code></td>
+<td>根据提供的参数创建一个新进程</td>
+</tr>
+<tr>
+<td><code>p.Signal(sig Signal) </code></td>
+<td>向进程发送一个信号</td>
+</tr>
+<tr>
+<td><code>p.Wait()</code></td>
+<td>阻塞到进程退出,返回类型<code>*os.ProcessState</code></td>
+</tr>
+<tr>
+<td><code>ps.Pid()</code></td>
+<td>返回一个已退出进程的id</td>
+</tr>
+<tr>
+<td><code>ps.Exited()</code></td>
+<td>报告进程是否已退出</td>
+</tr>
+<tr>
+<td><code>ps.Success()</code></td>
+<td>报告进程是否成功退出，在Unix中状态码0代表退出。</td>
+</tr>
+<tr>
+<td><code>ps.SystemTime()</code></td>
+<td>退出进程及子进程耗费的系统CPU时间</td>
+</tr>
+<tr>
+<td><code>ps.UserTime()</code></td>
+<td>退出进程及子进程耗费的用户CPU时间</td>
+</tr>
+<tr>
+<td><code>ps.String()</code></td>
+<td>退出进程的状态信息</td>
+</tr>
+</tbody>
+</table>
+<p><font color=red>上表中p代表: <code>*os.Process</code>,  ps代表: <code>*os.ProcessState</code></font></p>
+<h4 id="52-代码示例">5.2 代码示例</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">TestCreateProcess</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// 创建一个新进程执行； ls /
+</span><span class="c1"></span>	<span class="nx">args</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;/&#34;</span><span class="p">}</span>
+	<span class="nx">process</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nf">StartProcess</span><span class="p">(</span><span class="s">&#34;/bin/ls&#34;</span><span class="p">,</span> <span class="nx">args</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">os</span><span class="p">.</span><span class="nx">ProcAttr</span><span class="p">{})</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">t</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="s">&#34;创建新进程失败: &#34;</span> <span class="o">+</span> <span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">())</span>
+		<span class="k">return</span>
+	<span class="p">}</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;当前新线程信息: %+v \n&#34;</span><span class="p">,</span> <span class="nx">process</span><span class="p">)</span>
+
+	<span class="c1">// 2秒后向进程发送信号
+</span><span class="c1"></span>	<span class="nx">time</span><span class="p">.</span><span class="nf">AfterFunc</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">,</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;发送进程退出信号...&#34;</span><span class="p">)</span>
+		<span class="nx">_</span> <span class="p">=</span> <span class="nx">process</span><span class="p">.</span><span class="nf">Signal</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Kill</span><span class="p">)</span>
+	<span class="p">})</span>
+	<span class="c1">// 手动阻塞看是否执行：发送信号
+</span><span class="c1"></span>	<span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">)</span>
+
+	<span class="c1">// 等待进程退出,返回ProcessState类型
+</span><span class="c1"></span>	<span class="nx">processState</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">process</span><span class="p">.</span><span class="nf">Wait</span><span class="p">()</span>
+	<span class="c1">// 返回一个已退出进程的id
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;当前进程Id: %v \n&#34;</span><span class="p">,</span> <span class="nx">processState</span><span class="p">.</span><span class="nf">Pid</span><span class="p">())</span>
+	<span class="c1">// 报告进程是否已退出
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;进程是否已退出: %v \n&#34;</span><span class="p">,</span> <span class="nx">processState</span><span class="p">.</span><span class="nf">Exited</span><span class="p">())</span>
+	<span class="c1">// 报告进程是否成功退出，如在Unix里以状态码0退出。
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;进程是否成功退出: %v \n&#34;</span><span class="p">,</span> <span class="nx">processState</span><span class="p">.</span><span class="nf">Success</span><span class="p">())</span>
+	<span class="c1">// 返回已退出进程及其子进程耗费的系统CPU时间。
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;进程及子进程耗费系统CPU时间: %v \n&#34;</span><span class="p">,</span> <span class="nx">processState</span><span class="p">.</span><span class="nf">SystemTime</span><span class="p">())</span>
+	<span class="c1">// 返回已退出进程及其子进程耗费的用户CPU时间。
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;进程及子进程耗费用户CPU时间: %v \n&#34;</span><span class="p">,</span> <span class="nx">processState</span><span class="p">.</span><span class="nf">UserTime</span><span class="p">())</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;进程状态: %s \n&#34;</span><span class="p">,</span><span class="nx">processState</span><span class="p">.</span><span class="nf">String</span><span class="p">())</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>输出:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="o">===</span> RUN   TestCreateProcess
+当前新线程信息: <span class="p">&amp;</span><span class="o">{</span>Pid:46859 handle:0 isdone:0 sigMu:<span class="o">{</span>w:<span class="o">{</span>state:0 sema:0<span class="o">}</span> writerSem:0 readerSem:0 readerCount:0 readerWait:0<span class="o">}}</span> 
+当前进程Id: <span class="m">46859</span> 
+进程是否已退出: <span class="nb">true</span> 
+进程是否成功退出: <span class="nb">true</span> 
+进程及子进程耗费系统CPU时间: 1.563ms 
+进程及子进程耗费用户CPU时间: 503µs 
+发送进程退出信号...
+进程状态: <span class="nb">exit</span> status <span class="m">0</span> 
+--- PASS: TestCreateProcess <span class="o">(</span>3.00s<span class="o">)</span>
+PASS
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="6-执行命令">6. 执行命令</h3>
+<p><code>os/exec</code>包执行外部命令。它包装了<code>os.StartProcess</code>函数以便更容易的修正输入和输出，使用管道连接<code>I/O</code>，以及其它的一些优化。</p>
+<h4 id="61-方法列表">6.1 方法列表</h4>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>LookPath(file string) (string, error)</code></td>
+<td>在环境变量<code>PATH</code>中搜索可执行文件</td>
+</tr>
+<tr>
+<td><code>(c *Cmd) Run() error</code></td>
+<td>执行c包含的命令，并阻塞直到完成</td>
+</tr>
+<tr>
+<td><code>(c *Cmd) Start() error</code></td>
+<td>执行c包含的命令即刻返回，但不会等待该命令完成。</td>
+</tr>
+<tr>
+<td><code>(c *Cmd) Wait() error</code></td>
+<td>会阻塞直到该命令执行完成,和<code>Start()</code>结合使用</td>
+</tr>
+<tr>
+<td><code>(c *Cmd) Output() ([]byte, error)</code></td>
+<td>执行命令并返回标准输出的切片</td>
+</tr>
+<tr>
+<td><code>(c *Cmd) CombinedOutput() ([]byte, error)</code></td>
+<td>执行命令并返回标准输出和错误输出合并的切片。</td>
+</tr>
+</tbody>
+</table>
+<h4 id="62-使用示例">6.2 使用示例</h4>
+<h5 id="1-lookpath">1. LookPath</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 在环境变量PATH中搜索可执行文件
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestLookPath</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">path</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">exec</span><span class="p">.</span><span class="nf">LookPath</span><span class="p">(</span><span class="s">&#34;go&#34;</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">t</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">path</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/** 输出
+</span><span class="cm">=== RUN   TestLookPath
+</span><span class="cm">/usr/local/go/bin/go
+</span><span class="cm">--- PASS: TestLookPath (0.00s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="2run">2.Run</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 使用Run()执行命令
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestRun</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// 执行: go version
+</span><span class="c1"></span>	<span class="nx">cmd</span> <span class="o">:=</span> <span class="nx">exec</span><span class="p">.</span><span class="nf">Command</span><span class="p">(</span><span class="s">&#34;sleep&#34;</span><span class="p">,</span> <span class="s">&#34;3s&#34;</span><span class="p">)</span>
+	<span class="c1">// 具体执行
+</span><span class="c1"></span>	<span class="nx">err</span> <span class="o">:=</span> <span class="nx">cmd</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">t</span><span class="p">.</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;执行失败:%v\n&#34;</span><span class="p">,</span><span class="nx">err</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;cmd.Path: %v \n&#34;</span><span class="p">,</span><span class="nx">cmd</span><span class="p">.</span><span class="nx">Path</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;cmd.Args: %v \n&#34;</span><span class="p">,</span><span class="nx">cmd</span><span class="p">.</span><span class="nx">Args</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/** 输出
+</span><span class="cm">=== RUN   TestRun
+</span><span class="cm">cmd.Path: /bin/sleep 
+</span><span class="cm">cmd.Args: [sleep 3s] 
+</span><span class="cm">--- PASS: TestRun (3.01s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="3-start">3. Start</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 使用Start执行命令
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestStart</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// 执行: go version
+</span><span class="c1"></span>	<span class="nx">cmd</span> <span class="o">:=</span> <span class="nx">exec</span><span class="p">.</span><span class="nf">Command</span><span class="p">(</span><span class="s">&#34;sleep&#34;</span><span class="p">,</span> <span class="s">&#34;3s&#34;</span><span class="p">)</span>
+	<span class="c1">// Start开始执行c包含的命令，但并不会等待该命令完成即返回
+</span><span class="c1"></span>	<span class="nx">err</span> <span class="o">:=</span> <span class="nx">cmd</span><span class="p">.</span><span class="nf">Start</span><span class="p">()</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">t</span><span class="p">.</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;执行失败:%v\n&#34;</span><span class="p">,</span><span class="nx">err</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="c1">//Wait会阻塞直到该命令执行完成
+</span><span class="c1"></span>	<span class="nx">err</span> <span class="p">=</span> <span class="nx">cmd</span><span class="p">.</span><span class="nf">Wait</span><span class="p">()</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;执行完成: %v \n&#34;</span><span class="p">,</span><span class="nx">err</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;cmd.Path: %v \n&#34;</span><span class="p">,</span><span class="nx">cmd</span><span class="p">.</span><span class="nx">Path</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;cmd.Args: %v \n&#34;</span><span class="p">,</span><span class="nx">cmd</span><span class="p">.</span><span class="nx">Args</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="cm">/** 输出
+</span><span class="cm">=== RUN   TestStart
+</span><span class="cm">执行完成: &lt;nil&gt; 
+</span><span class="cm">cmd.Path: /bin/sleep 
+</span><span class="cm">cmd.Args: [sleep 3s] 
+</span><span class="cm">--- PASS: TestStart (3.00s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="4output">4.Output</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 执行命令并获取输出结果
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestOutput</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// 执行: go version
+</span><span class="c1"></span>	<span class="nx">output</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">exec</span><span class="p">.</span><span class="nf">Command</span><span class="p">(</span><span class="s">&#34;go&#34;</span><span class="p">,</span> <span class="s">&#34;version&#34;</span><span class="p">).</span><span class="nf">Output</span><span class="p">()</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;结果: %s \n&#34;</span><span class="p">,</span><span class="nx">output</span><span class="p">)</span>
+	<span class="c1">// 执行: du -sh .
+</span><span class="c1"></span>	<span class="nx">output2</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">exec</span><span class="p">.</span><span class="nf">Command</span><span class="p">(</span><span class="s">&#34;du&#34;</span><span class="p">,</span> <span class="s">&#34;-sh&#34;</span><span class="p">,</span><span class="s">&#34;.&#34;</span><span class="p">).</span><span class="nf">Output</span><span class="p">()</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;结果: %s \n&#34;</span><span class="p">,</span><span class="nx">output2</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="cm">/** 输出
+</span><span class="cm">=== RUN   TestOutput
+</span><span class="cm">结果: go version go1.15.5 darwin/amd64
+</span><span class="cm"> 
+</span><span class="cm">结果:  36K	.
+</span><span class="cm"> 
+</span><span class="cm">--- PASS: TestOutput (0.02s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="5combinedoutput">5.CombinedOutput</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 执行命令并返回标准输出和错误输出合并的切片
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestCombinedOutput</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// 执行: go version-1 故意写错
+</span><span class="c1"></span>	<span class="nx">output</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">exec</span><span class="p">.</span><span class="nf">Command</span><span class="p">(</span><span class="s">&#34;go&#34;</span><span class="p">,</span> <span class="s">&#34;version-1&#34;</span><span class="p">).</span><span class="nf">CombinedOutput</span><span class="p">()</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;结果: %s \n&#34;</span><span class="p">,</span><span class="nx">output</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="cm">/** 输出
+</span><span class="cm">=== RUN   TestCombinedOutput
+</span><span class="cm">结果: go version-1: unknown command
+</span><span class="cm">Run &#39;go help&#39; for usage.
+</span><span class="cm"> 
+</span><span class="cm">--- PASS: TestCombinedOutput (0.01s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">Shershon</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        0001-01-01
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      
+      <nav class="post-nav">
+        <a class="prev" href="/post/godoc/%E6%A0%87%E5%87%86%E5%8C%85/14-bigcache/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default"></span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        <a class="next" href="/post/godoc/%E6%A0%87%E5%87%86%E5%8C%85/16-crypto-aes/">
+            <span class="next-text nav-default"></span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:your@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://localhost:1313" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="http://localhost:1313" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="http://localhost:1313" class="iconfont icon-facebook" title="facebook"></a>
+      <a href="http://localhost:1313" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="http://localhost:1313" class="iconfont icon-google" title="google"></a>
+      <a href="http://localhost:1313" class="iconfont icon-github" title="github"></a>
+      <a href="http://localhost:1313" class="iconfont icon-weibo" title="weibo"></a>
+      <a href="http://localhost:1313" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="http://localhost:1313" class="iconfont icon-douban" title="douban"></a>
+      <a href="http://localhost:1313" class="iconfont icon-pocket" title="pocket"></a>
+      <a href="http://localhost:1313" class="iconfont icon-tumblr" title="tumblr"></a>
+      <a href="http://localhost:1313" class="iconfont icon-instagram" title="instagram"></a>
+      <a href="http://localhost:1313" class="iconfont icon-gitlab" title="gitlab"></a>
+      <a href="http://localhost:1313" class="iconfont icon-bilibili" title="bilibili"></a>
+  <a href="http://localhost:1313/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span>Shershon</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

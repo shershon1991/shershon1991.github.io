@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title> - 小山的博客</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Shershon" /><meta name="description" content="1.输出控制台 1.1 Printf Printf根据format参数生成格式化的字符串并写入标准输出。返回写入的字节数和遇到的任何错误。 1.format格式 动" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.90.1 with theme even" />
+
+
+<link rel="canonical" href="http://localhost:1313/post/godoc/%E6%A0%87%E5%87%86%E5%8C%85/4-fmt%E6%A0%BC%E5%BC%8F%E5%8C%96%E8%BE%93%E5%87%BA/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="" />
+<meta property="og:description" content="1.输出控制台 1.1 Printf Printf根据format参数生成格式化的字符串并写入标准输出。返回写入的字节数和遇到的任何错误。 1.format格式 动" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/post/godoc/%E6%A0%87%E5%87%86%E5%8C%85/4-fmt%E6%A0%BC%E5%BC%8F%E5%8C%96%E8%BE%93%E5%87%BA/" /><meta property="article:section" content="post" />
+
+
+
+<meta itemprop="name" content="">
+<meta itemprop="description" content="1.输出控制台 1.1 Printf Printf根据format参数生成格式化的字符串并写入标准输出。返回写入的字节数和遇到的任何错误。 1.format格式 动">
+
+<meta itemprop="wordCount" content="2539">
+<meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content=""/>
+<meta name="twitter:description" content="1.输出控制台 1.1 Printf Printf根据format参数生成格式化的字符串并写入标准输出。返回写入的字节数和遇到的任何错误。 1.format格式 动"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">小山的博客</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">小山的博客</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title"></h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 0001-01-01 </span>
+        
+          <span class="more-meta"> 2539 words </span>
+          <span class="more-meta"> 6 mins read </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#1输出控制台">1.输出控制台</a></li>
+            <li><a href="#2输出到文件">2.输出到文件</a></li>
+            <li><a href="#3生成字符串">3.生成字符串</a></li>
+            <li><a href="#4生成错误类型">4.生成错误类型</a></li>
+            <li><a href="#5接收控制台输入">5.接收控制台输入</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h3 id="1输出控制台">1.输出控制台</h3>
+<h4 id="11-printf">1.1 <code>Printf</code></h4>
+<p><code>Printf</code>根据<code>format</code>参数生成格式化的字符串并写入标准输出。返回写入的字节数和遇到的任何错误。</p>
+<h5 id="1format格式">1.<code>format</code>格式</h5>
+<table>
+<thead>
+<tr>
+<th>动  词</th>
+<th>功  能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>%v </code></td>
+<td>按值的本来值输出</td>
+</tr>
+<tr>
+<td><code>%+v</code></td>
+<td>在 %v 基础上，对结构体字段名和值进行展开</td>
+</tr>
+<tr>
+<td><code>%#v</code></td>
+<td>输出 Go 语言语法格式的值</td>
+</tr>
+<tr>
+<td><code>%T </code></td>
+<td>输出 Go 语言语法格式的类型和值</td>
+</tr>
+<tr>
+<td><code>%% </code></td>
+<td>输出 % 本体</td>
+</tr>
+<tr>
+<td><code>%b </code></td>
+<td>整型以二进制方式显示</td>
+</tr>
+<tr>
+<td><code>%o </code></td>
+<td>整型以八进制方式显示</td>
+</tr>
+<tr>
+<td><code>%d </code></td>
+<td>整型以十进制方式显示</td>
+</tr>
+<tr>
+<td><code>%x </code></td>
+<td>整型以十六进制方式显示</td>
+</tr>
+<tr>
+<td><code>%X </code></td>
+<td>整型以十六进制、字母大写方式显示</td>
+</tr>
+<tr>
+<td><code>%U </code></td>
+<td>Unicode 字符</td>
+</tr>
+<tr>
+<td><code>%f </code></td>
+<td>浮点数</td>
+</tr>
+<tr>
+<td><code>%p </code></td>
+<td>指针，十六进制方式显示</td>
+</tr>
+<tr>
+<td><code>%c </code></td>
+<td>数值对应的 Unicode 编码字符</td>
+</tr>
+<tr>
+<td><code>%s </code></td>
+<td>直接输出字符串或者[]byte</td>
+</tr>
+<tr>
+<td><code>%t </code></td>
+<td>输出值的 true 或 false</td>
+</tr>
+</tbody>
+</table>
+<h5 id="2打印字符串">2.打印字符串</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">str</span> <span class="o">:=</span> <span class="s">&#34;hello word&#34;</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%%s-&gt; %s \n&#34;</span><span class="p">,</span><span class="nx">str</span><span class="p">)</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%%v-&gt; %v \n&#34;</span><span class="p">,</span><span class="nx">str</span><span class="p">)</span>
+<span class="cm">/**输出
+</span><span class="cm">%s-&gt; hello word 
+</span><span class="cm">%v-&gt; hello word 
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="3打印布尔类型">3.打印布尔类型</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%%t-&gt; %t \n&#34;</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="4打印浮点型">4.打印浮点型</h5>
+<table>
+<thead>
+<tr>
+<th>格式</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>%f</code></td>
+<td>默认宽度，默认精度</td>
+</tr>
+<tr>
+<td><code>%9f</code></td>
+<td>宽度9，默认精度</td>
+</tr>
+<tr>
+<td><code>%.2f</code></td>
+<td>默认宽度，精度2</td>
+</tr>
+<tr>
+<td><code>%9.2f</code></td>
+<td>宽度9，精度2</td>
+</tr>
+<tr>
+<td><code>%9.f</code></td>
+<td>宽度9，精度0</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">f</span> <span class="o">:=</span> <span class="mf">1.234567890</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;默认宽度，默认精度:%f \n&#34;</span><span class="p">,</span> <span class="nx">f</span><span class="p">)</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;宽度9，默认精度:%9f \n&#34;</span><span class="p">,</span> <span class="nx">f</span><span class="p">)</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;默认宽度，精度2:%.2f \n&#34;</span><span class="p">,</span> <span class="nx">f</span><span class="p">)</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;宽度9，精度2:%9.2f \n&#34;</span><span class="p">,</span> <span class="nx">f</span><span class="p">)</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;宽度9，精度0 :%9.f \n&#34;</span><span class="p">,</span> <span class="nx">f</span><span class="p">)</span>
+<span class="cm">/**输出
+</span><span class="cm">默认宽度，默认精度:1.234568 
+</span><span class="cm">宽度9，默认精度: 1.234568 
+</span><span class="cm">默认宽度，精度2:1.23 
+</span><span class="cm">宽度9，精度2:     1.23 
+</span><span class="cm">宽度9，精度0 :        1 
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="5打印整数">5.打印整数</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 定义一个整数变量
+</span><span class="c1"></span><span class="nx">a</span> <span class="o">:=</span> <span class="mi">54321</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;十进制:%d\n&#34;</span><span class="p">,</span><span class="nx">a</span><span class="p">)</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;二进制:%b\n&#34;</span><span class="p">,</span><span class="nx">a</span><span class="p">)</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;八进制:%o\n&#34;</span><span class="p">,</span><span class="nx">a</span><span class="p">)</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;十六进制:%x\n&#34;</span><span class="p">,</span><span class="nx">a</span><span class="p">)</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;十六进制,字母大写:%X\n&#34;</span><span class="p">,</span><span class="nx">a</span><span class="p">)</span>
+<span class="cm">/**输出
+</span><span class="cm">十进制:54321
+</span><span class="cm">二进制:1101010000110001
+</span><span class="cm">八进制:152061
+</span><span class="cm">十六进制:d431
+</span><span class="cm">十六进制,字母大写:D431
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="6打印指针">6.打印指针</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">str</span> <span class="o">:=</span> <span class="s">&#34;hello&#34;</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;打印指针:%p\n&#34;</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">str</span><span class="p">)</span>
+<span class="c1">//输出: 打印指针:0xc000098d50
+</span></code></pre></td></tr></table>
+</div>
+</div><h5 id="7打印变量类型">7.打印变量类型</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 数组
+</span><span class="c1"></span><span class="nx">arr</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">}</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;arr类型: %T\n&#34;</span><span class="p">,</span> <span class="nx">arr</span><span class="p">)</span>
+<span class="c1">// 映射
+</span><span class="c1"></span><span class="nx">map1</span> <span class="o">:=</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span>
+	<span class="s">&#34;张三&#34;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+	<span class="s">&#34;李四&#34;</span><span class="p">:</span> <span class="mi">23</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;map1类型: %T\n&#34;</span><span class="p">,</span> <span class="nx">map1</span><span class="p">)</span>
+<span class="c1">// 匿名结构体
+</span><span class="c1"></span><span class="nx">fruit</span> <span class="o">:=</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">name</span>  <span class="kt">string</span>
+	<span class="nx">price</span> <span class="kt">float64</span>
+<span class="p">}{</span><span class="s">&#34;香蕉&#34;</span><span class="p">,</span> <span class="mf">4.99</span><span class="p">}</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;fruit类型: %T\n&#34;</span><span class="p">,</span> <span class="nx">fruit</span><span class="p">)</span>
+<span class="cm">/**输出
+</span><span class="cm">arr类型: []int
+</span><span class="cm">map1类型: map[string]int
+</span><span class="cm">fruit类型: struct { name string; price float64 }
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="8打印结构体">8.打印结构体</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 定义一个匿名结构体
+</span><span class="c1"></span><span class="nx">people</span> <span class="o">:=</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">name</span><span class="p">,</span> <span class="nx">home</span><span class="p">,</span> <span class="nx">school</span> <span class="kt">string</span>
+<span class="p">}{</span><span class="s">&#34;张三&#34;</span><span class="p">,</span> <span class="s">&#34;北京&#34;</span><span class="p">,</span> <span class="s">&#34;北京大学&#34;</span><span class="p">}</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%v\n&#34;</span><span class="p">,</span> <span class="nx">people</span><span class="p">)</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%+v\n&#34;</span><span class="p">,</span> <span class="nx">people</span><span class="p">)</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%#v\n&#34;</span><span class="p">,</span> <span class="nx">people</span><span class="p">)</span>
+<span class="cm">/**输出
+</span><span class="cm">{张三 北京 北京大学}
+</span><span class="cm">{name:张三 home:北京 school:北京大学}
+</span><span class="cm">struct { name string; home string; school string }{name:&#34;张三&#34;, home:&#34;北京&#34;, school:&#34;北京大学&#34;}
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="9打印unicode">9.打印<code>Unicode</code></h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%U\n&#34;</span><span class="p">,</span> <span class="sc">&#39;A&#39;</span><span class="p">)</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%c\n&#34;</span><span class="p">,</span> <span class="mi">65</span><span class="p">)</span>
+<span class="cm">/**输出
+</span><span class="cm">U+0041
+</span><span class="cm">A
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="12-print">1.2 <code>Print</code></h4>
+<p><code>Print</code>: 采用默认格式将其参数格式化并写入标准输出。如果两个相邻的参数都不是字符串，会在它们的输出之间添加空格。</p>
+<h5 id="1打印相邻的字符串">1.打印相邻的字符串</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Print</span><span class="p">(</span><span class="s">&#34;hello&#34;</span><span class="p">,</span><span class="s">&#34;word&#34;</span><span class="p">,</span><span class="s">&#34;!&#34;</span><span class="p">)</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Print</span><span class="p">(</span><span class="s">&#34;hello&#34;</span><span class="p">,</span><span class="s">&#34;word&#34;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="s">&#34;!&#34;</span><span class="p">)</span>
+<span class="c1">// 输出: helloword2 3!helloword!
+</span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>如果两个相邻的参数<font color=red>都不是字符串</font>，会在它们的输出之间添加空格,<font color=red>注意的是,不会自动换行。</font></p>
+</blockquote>
+<h4 id="13-println">1.3 <code>Println</code></h4>
+<p><code>Println</code>: 采用默认格式将其参数格式化并写入标准输出。<font color=red>总是会在相邻参数的输出之间添加空格并在输出结束后添加换行符。</font></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;hello&#34;</span><span class="p">,</span><span class="s">&#34;word&#34;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="s">&#34;!&#34;</span><span class="p">)</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;hello&#34;</span><span class="p">,</span><span class="s">&#34;word&#34;</span><span class="p">,</span><span class="s">&#34;!&#34;</span><span class="p">)</span>
+<span class="cm">/**输出
+</span><span class="cm">hello word 2 3 !
+</span><span class="cm">hello word !
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="2输出到文件">2.输出到文件</h3>
+<table>
+<thead>
+<tr>
+<th>方法名</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Fprintln</code></td>
+<td>功能和<code>Println</code>一样,但可以输出到文件</td>
+</tr>
+<tr>
+<td><code>Fprintf</code></td>
+<td>功能和<code>Printf</code>一样,但可以输出到文件</td>
+</tr>
+<tr>
+<td><code>Fprint</code></td>
+<td>功能和<code>Print</code>一样,但可以输出到文件</td>
+</tr>
+</tbody>
+</table>
+<p><font color=red>上述方法，不但可以输出到文件，也可以输出到控制台。</font></p>
+<h4 id="21-输出到控制台">2.1 输出到控制台</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">_</span><span class="p">,</span> <span class="nx">_</span> <span class="p">=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintln</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stdout</span><span class="p">,</span> <span class="s">&#34;hello&#34;</span><span class="p">,</span><span class="s">&#34;go&#34;</span><span class="p">)</span>
+<span class="nx">_</span><span class="p">,</span> <span class="nx">_</span> <span class="p">=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintln</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stdout</span><span class="p">,</span>  <span class="s">&#34;hello&#34;</span><span class="p">,</span><span class="s">&#34;php&#34;</span><span class="p">)</span>
+<span class="cm">/** 输出
+</span><span class="cm">hello go
+</span><span class="cm">hello php
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="22-输出到文件">2.2 输出到文件</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 打开文件
+</span><span class="c1"></span><span class="nx">file</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nf">OpenFile</span><span class="p">(</span><span class="s">&#34;./test.log&#34;</span><span class="p">,</span> <span class="nx">os</span><span class="p">.</span><span class="nx">O_APPEND</span><span class="p">|</span><span class="nx">os</span><span class="p">.</span><span class="nx">O_CREATE</span><span class="p">|</span><span class="nx">os</span><span class="p">.</span><span class="nx">O_WRONLY</span><span class="p">,</span> <span class="nx">os</span><span class="p">.</span><span class="nx">ModePerm</span><span class="p">)</span>
+<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">())</span>
+<span class="p">}</span>
+<span class="c1">// 写入文件
+</span><span class="c1"></span><span class="nx">_</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintln</span><span class="p">(</span><span class="nx">file</span><span class="p">,</span> <span class="s">&#34;hello&#34;</span><span class="p">,</span> <span class="s">&#34;word&#34;</span><span class="p">)</span>
+<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">())</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="3生成字符串">3.生成字符串</h3>
+<table>
+<thead>
+<tr>
+<th>方法名</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Sprintf</code></td>
+<td>同<code>Printf</code>一样,但是结果不输出到控制台,而是直接返回</td>
+</tr>
+<tr>
+<td><code>Sprint</code></td>
+<td>同<code>Print</code>一样,但是结果不输出到控制台,而是直接返回</td>
+</tr>
+<tr>
+<td><code>Sprintln</code></td>
+<td>同<code>Println</code>一样,但是结果不输出到控制台,而是直接返回</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">sprintf</span> <span class="o">:=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;水果:%s 价格:%.3f&#34;</span><span class="p">,</span> <span class="s">&#34;香蕉&#34;</span><span class="p">,</span> <span class="mf">1.99</span><span class="p">)</span>
+<span class="nx">sprint</span> <span class="o">:=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprint</span><span class="p">(</span><span class="s">&#34;I&#34;</span><span class="p">,</span> <span class="s">&#34;LOVE&#34;</span><span class="p">,</span> <span class="s">&#34;YOU&#34;</span><span class="p">)</span>
+<span class="nx">sprintln</span> <span class="o">:=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintln</span><span class="p">(</span><span class="s">&#34;I&#34;</span><span class="p">,</span> <span class="s">&#34;LOVE&#34;</span><span class="p">,</span> <span class="s">&#34;YOU&#34;</span><span class="p">)</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;Sprintf:%s\n&#34;</span><span class="p">,</span><span class="nx">sprintf</span><span class="p">)</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;sprint:%s\n&#34;</span><span class="p">,</span><span class="nx">sprint</span><span class="p">)</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;sprintln:%s\n&#34;</span><span class="p">,</span><span class="nx">sprintln</span><span class="p">)</span>
+<span class="cm">/**输出
+</span><span class="cm">Sprintf:水果:香蕉 价格:1.990
+</span><span class="cm">sprint:ILOVEYOU
+</span><span class="cm">sprintln:I LOVE YOU
+</span><span class="cm">*/</span>
+
+<span class="nx">safeConnect</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="4生成错误类型">4.生成错误类型</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 返回错误类型
+</span><span class="c1"></span><span class="nx">err</span> <span class="o">:=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;错误信息:%s&#34;</span><span class="p">,</span> <span class="s">&#34;参数不全&#34;</span><span class="p">)</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;类型:%T   内容: %v&#34;</span><span class="p">,</span><span class="nx">err</span><span class="p">,</span><span class="nx">err</span><span class="p">)</span>
+<span class="c1">//输出: 类型:*errors.errorString   内容: 错误信息:参数不全
+</span></code></pre></td></tr></table>
+</div>
+</div><h3 id="5接收控制台输入">5.接收控制台输入</h3>
+<h4 id="51-scan">5.1 <code>Scan</code></h4>
+<p>接收终端输入，按照参数输入顺序赋值，参数间以空格(或换行)间隔，如果输入的参数少于接收的参数则会报错。类型不一致时也会报错。<font color=red>当参数输入数量不够时，换行时会继续等待输入。</font></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span>  <span class="p">{</span>
+	<span class="kd">var</span> <span class="p">(</span>
+		<span class="nx">name</span>   <span class="kt">string</span>
+		<span class="nx">age</span>    <span class="kt">int64</span>
+		<span class="nx">isBody</span> <span class="kt">bool</span>
+	<span class="p">)</span>
+	<span class="nx">_</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Scan</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">name</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">age</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">isBody</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">())</span>
+		<span class="k">return</span>
+	<span class="p">}</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;name:%s age: %d isBody:%t&#34;</span><span class="p">,</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">age</span><span class="p">,</span> <span class="nx">isBody</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="c1">//启动后，依次输入：张三 22 true
+</span><span class="c1">// 输出: name:张三 age: 22 isBody:true
+</span></code></pre></td></tr></table>
+</div>
+</div><h4 id="52-scanf">5.2 <code>Scanf</code></h4>
+<p>接收终端输入,按照<code>format</code>参数指定的格式接收参数.<font color=red>当参数输入数量不够时，换行时会直接输出.</font></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span>  <span class="p">{</span>
+	<span class="kd">var</span> <span class="p">(</span>
+		<span class="nx">name</span>   <span class="kt">string</span>
+		<span class="nx">age</span>    <span class="kt">int</span>
+		<span class="nx">isBody</span> <span class="kt">bool</span>
+	<span class="p">)</span>
+	<span class="nx">_</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Scanf</span><span class="p">(</span><span class="s">&#34;a:%s b:%d c:%t&#34;</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">name</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">age</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">isBody</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+		<span class="k">return</span>
+	<span class="p">}</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;name:%s age:%d isBody:%t&#34;</span><span class="p">,</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">age</span><span class="p">,</span> <span class="nx">isBody</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/*
+</span><span class="cm">当输入-&gt; 张三 23 true 报错: input does not match format 
+</span><span class="cm">当输入-&gt; a:张三 b:23 c:true 输出: name:张三 age:23 isBody:true
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="53-scanln">5.3 <code>Scanln</code></h4>
+<p><code>Scanln</code>类似<code>Scan</code>，它在遇到换行时才停止扫描。最后一个数据后面必须有换行或者到达结束位置。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span>  <span class="p">{</span>
+	<span class="kd">var</span> <span class="p">(</span>
+		<span class="nx">name</span>   <span class="kt">string</span>
+		<span class="nx">age</span>    <span class="kt">int64</span>
+		<span class="nx">isBody</span> <span class="kt">bool</span>
+	<span class="p">)</span>
+	<span class="nx">_</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Scanln</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">name</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">age</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">isBody</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+		<span class="k">return</span>
+	<span class="p">}</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;name:%s age: %d isBody:%t&#34;</span><span class="p">,</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">age</span><span class="p">,</span> <span class="nx">isBody</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/*
+</span><span class="cm">当输入-&gt; 张三 23  报错: unexpected newline
+</span><span class="cm">当输入-&gt; 李四 74 true 输出: name:李四 age: 74 isBody:true
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">Shershon</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        0001-01-01
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      
+      <nav class="post-nav">
+        <a class="prev" href="/post/godoc/%E6%A0%87%E5%87%86%E5%8C%85/33-jsoniter/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default"></span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        <a class="next" href="/post/godoc/%E6%A0%87%E5%87%86%E5%8C%85/5-ioutilio%E6%93%8D%E4%BD%9C%E5%87%BD%E6%95%B0%E9%9B%86/">
+            <span class="next-text nav-default"></span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:your@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://localhost:1313" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="http://localhost:1313" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="http://localhost:1313" class="iconfont icon-facebook" title="facebook"></a>
+      <a href="http://localhost:1313" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="http://localhost:1313" class="iconfont icon-google" title="google"></a>
+      <a href="http://localhost:1313" class="iconfont icon-github" title="github"></a>
+      <a href="http://localhost:1313" class="iconfont icon-weibo" title="weibo"></a>
+      <a href="http://localhost:1313" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="http://localhost:1313" class="iconfont icon-douban" title="douban"></a>
+      <a href="http://localhost:1313" class="iconfont icon-pocket" title="pocket"></a>
+      <a href="http://localhost:1313" class="iconfont icon-tumblr" title="tumblr"></a>
+      <a href="http://localhost:1313" class="iconfont icon-instagram" title="instagram"></a>
+      <a href="http://localhost:1313" class="iconfont icon-gitlab" title="gitlab"></a>
+      <a href="http://localhost:1313" class="iconfont icon-bilibili" title="bilibili"></a>
+  <a href="http://localhost:1313/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span>Shershon</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

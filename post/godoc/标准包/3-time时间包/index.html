@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title> - 小山的博客</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Shershon" /><meta name="description" content="1.获取时间 1.1 当前时间 1 2 3 4 5 6 7 8 9 10 11 12 13 14 unix := time.Now().Unix() fmt.Printf(&amp;#34;当前时间戳(单位秒): %v \n&amp;#34;,unix) nano := time.Now().UnixNano() fmt.Printf" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.90.1 with theme even" />
+
+
+<link rel="canonical" href="http://localhost:1313/post/godoc/%E6%A0%87%E5%87%86%E5%8C%85/3-time%E6%97%B6%E9%97%B4%E5%8C%85/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="" />
+<meta property="og:description" content="1.获取时间 1.1 当前时间 1 2 3 4 5 6 7 8 9 10 11 12 13 14 unix := time.Now().Unix() fmt.Printf(&#34;当前时间戳(单位秒): %v \n&#34;,unix) nano := time.Now().UnixNano() fmt.Printf" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/post/godoc/%E6%A0%87%E5%87%86%E5%8C%85/3-time%E6%97%B6%E9%97%B4%E5%8C%85/" /><meta property="article:section" content="post" />
+
+
+
+<meta itemprop="name" content="">
+<meta itemprop="description" content="1.获取时间 1.1 当前时间 1 2 3 4 5 6 7 8 9 10 11 12 13 14 unix := time.Now().Unix() fmt.Printf(&#34;当前时间戳(单位秒): %v \n&#34;,unix) nano := time.Now().UnixNano() fmt.Printf">
+
+<meta itemprop="wordCount" content="2477">
+<meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content=""/>
+<meta name="twitter:description" content="1.获取时间 1.1 当前时间 1 2 3 4 5 6 7 8 9 10 11 12 13 14 unix := time.Now().Unix() fmt.Printf(&#34;当前时间戳(单位秒): %v \n&#34;,unix) nano := time.Now().UnixNano() fmt.Printf"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">小山的博客</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">小山的博客</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title"></h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 0001-01-01 </span>
+        
+          <span class="more-meta"> 2477 words </span>
+          <span class="more-meta"> 5 mins read </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#1获取时间">1.获取时间</a></li>
+            <li><a href="#2字符串转时间">2.字符串转时间</a></li>
+            <li><a href="#3时间比较">3.时间比较</a></li>
+            <li><a href="#4时间计算">4.时间计算</a></li>
+            <li><a href="#5定时器">5.定时器</a></li>
+            <li><a href="#6延迟执行">6.延迟执行</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h3 id="1获取时间">1.获取时间</h3>
+<h4 id="11-当前时间">1.1 当前时间</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">unix</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Unix</span><span class="p">()</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;当前时间戳(单位秒): %v \n&#34;</span><span class="p">,</span><span class="nx">unix</span><span class="p">)</span>
+<span class="nx">nano</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">UnixNano</span><span class="p">()</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;当前时间戳(单位纳秒): %v\n&#34;</span><span class="p">,</span><span class="nx">nano</span><span class="p">)</span>
+<span class="nx">format</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Format</span><span class="p">(</span><span class="s">&#34;2006-01-02 15:04:05&#34;</span><span class="p">)</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;当前时间(Y-m-d H:i:s): %v\n&#34;</span><span class="p">,</span><span class="nx">format</span><span class="p">)</span>
+<span class="nx">format2</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Format</span><span class="p">(</span><span class="s">&#34;20060102150405&#34;</span><span class="p">)</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;当前时间(YmdHis): %v\n&#34;</span><span class="p">,</span><span class="nx">format2</span><span class="p">)</span>
+<span class="cm">/**
+</span><span class="cm">当前时间戳(单位秒): 1616251448 
+</span><span class="cm">当前时间戳(单位纳秒): 1616251448041163000
+</span><span class="cm">当前时间(Y-m-d H:i:s): 2021-03-20 22:44:08
+</span><span class="cm">当前时间(YmdHis): 20210320224408
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="12-当前年月日时分秒星期几">1.2 当前年、月、日、时、分、秒、星期几</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">format</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Format</span><span class="p">(</span><span class="s">&#34;2006-01-02 15:04:05&#34;</span><span class="p">)</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;当前时间(Y-m-d H:i:s): %v\n&#34;</span><span class="p">,</span><span class="nx">format</span><span class="p">)</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;当前年: %v\n&#34;</span><span class="p">,</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Year</span><span class="p">())</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;当前月: %v\n&#34;</span><span class="p">,</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Month</span><span class="p">())</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;当前日: %v\n&#34;</span><span class="p">,</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Day</span><span class="p">())</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;当前小时: %v\n&#34;</span><span class="p">,</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Hour</span><span class="p">())</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;当前分钟: %v\n&#34;</span><span class="p">,</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Minute</span><span class="p">())</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;当前秒: %v\n&#34;</span><span class="p">,</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Second</span><span class="p">())</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;当前星期几: %v\n&#34;</span><span class="p">,</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Weekday</span><span class="p">())</span>
+<span class="cm">/**输出
+</span><span class="cm">当前时间(Y-m-d H:i:s): 2021-03-21 17:32:24
+</span><span class="cm">当前年: 2021
+</span><span class="cm">当前月: March
+</span><span class="cm">当前日: 21
+</span><span class="cm">当前小时: 17
+</span><span class="cm">当前分钟: 32
+</span><span class="cm">当前秒: 24
+</span><span class="cm">当前星期几: Sunday
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="13-获取时分秒">1.3 获取时分秒</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">now</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">()</span>
+<span class="nx">hour</span><span class="p">,</span> <span class="nx">min</span><span class="p">,</span> <span class="nx">sec</span> <span class="o">:=</span> <span class="nx">now</span><span class="p">.</span><span class="nf">Clock</span><span class="p">()</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;时间:%v   huor: %v min:%v sec:%v \n&#34;</span><span class="p">,</span><span class="nx">now</span><span class="p">,</span><span class="nx">hour</span><span class="p">,</span><span class="nx">min</span><span class="p">,</span><span class="nx">sec</span><span class="p">)</span>
+<span class="c1">//时间:2021-03-22 23:18:43.245006 +0800 CST m=+0.000108086   huor: 23 min:18 sec:43
+</span></code></pre></td></tr></table>
+</div>
+</div><h4 id="14-创建指定时间">1.4 创建指定时间</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">date</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Date</span><span class="p">(</span><span class="mi">2020</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">23</span><span class="p">,</span><span class="mi">13</span><span class="p">,</span><span class="mi">53</span><span class="p">,</span><span class="mi">32</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="nx">time</span><span class="p">.</span><span class="nx">Local</span><span class="p">)</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;类型: %T , %v &#34;</span><span class="p">,</span><span class="nx">date</span><span class="p">,</span><span class="nx">date</span><span class="p">)</span>
+<span class="c1">// 输出:类型: time.Time , 2020-08-23 13:53:32 +0800 CST 
+</span></code></pre></td></tr></table>
+</div>
+</div><h4 id="15-获取所属第几周">1.5 获取所属第几周</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 获取当前时间是，今年的第几周
+</span><span class="c1"></span><span class="nx">week</span><span class="p">,</span> <span class="nx">w</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">ISOWeek</span><span class="p">()</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;year: %v w:%v \n&#34;</span><span class="p">,</span><span class="nx">week</span><span class="p">,</span><span class="nx">w</span><span class="p">)</span>
+<span class="c1">// year: 2021 w:12 
+</span></code></pre></td></tr></table>
+</div>
+</div><h4 id="16-获取x年的第几天">1.6 获取x年的第几天</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">num</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">YearDay</span><span class="p">()</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;今天是今年的第 %v 天 \n&#34;</span><span class="p">,</span><span class="nx">num</span><span class="p">)</span>
+<span class="c1">// 今天是今年的第 81 天 
+</span></code></pre></td></tr></table>
+</div>
+</div><h3 id="2字符串转时间">2.字符串转时间</h3>
+<h4 id="21-字符串转时间类型">2.1 字符串转时间类型</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">str</span> <span class="o">:=</span> <span class="s">&#34;1616319808&#34;</span>
+<span class="nx">unix</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">strconv</span><span class="p">.</span><span class="nf">ParseInt</span><span class="p">(</span><span class="nx">str</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">64</span><span class="p">)</span>
+<span class="nx">format</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Unix</span><span class="p">(</span><span class="nx">unix</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;字符串时间戳-&gt; 类型:%T 值:%v \n&#34;</span><span class="p">,</span><span class="nx">format</span><span class="p">,</span><span class="nx">format</span><span class="p">)</span>
+<span class="c1">// 字符串时间,
+</span><span class="c1"></span><span class="nx">strDate</span> <span class="o">:=</span> <span class="s">&#34;2019-04-10 12:54:03&#34;</span>
+<span class="c1">// 注意layout格式需要和字符串时间格式一致
+</span><span class="c1"></span><span class="nx">location</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Parse</span><span class="p">(</span><span class="s">&#34;2006-01-02 15:04:05&#34;</span><span class="p">,</span> <span class="nx">strDate</span><span class="p">)</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;字符串时间-&gt; 类型:%T 值:%v \n&#34;</span><span class="p">,</span><span class="nx">location</span><span class="p">,</span><span class="nx">location</span><span class="p">)</span>
+<span class="cm">/**
+</span><span class="cm">字符串时间戳-&gt; 类型:time.Time 值:2021-03-21 17:43:28 +0800 CST 
+</span><span class="cm">字符串时间-&gt; 类型:time.Time 值:2019-04-10 12:54:03 +0000 UTC 
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="22-格式化时间">2.2 格式化时间</h4>
+<p><code>Format</code>根据<code>layout</code>指定的格式返回<code>t</code>代表的时间点的格式化文本表示；<code>Format</code>中内置了几个固定的<code>layout</code>常量。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">const</span> <span class="p">(</span>
+	<span class="nx">ANSIC</span>       <span class="p">=</span> <span class="s">&#34;Mon Jan _2 15:04:05 2006&#34;</span>
+	<span class="nx">UnixDate</span>    <span class="p">=</span> <span class="s">&#34;Mon Jan _2 15:04:05 MST 2006&#34;</span>
+	<span class="nx">RubyDate</span>    <span class="p">=</span> <span class="s">&#34;Mon Jan 02 15:04:05 -0700 2006&#34;</span>
+	<span class="nx">RFC822</span>      <span class="p">=</span> <span class="s">&#34;02 Jan 06 15:04 MST&#34;</span>
+	<span class="nx">RFC822Z</span>     <span class="p">=</span> <span class="s">&#34;02 Jan 06 15:04 -0700&#34;</span> <span class="c1">// RFC822 with numeric zone
+</span><span class="c1"></span>	<span class="nx">RFC850</span>      <span class="p">=</span> <span class="s">&#34;Monday, 02-Jan-06 15:04:05 MST&#34;</span>
+	<span class="nx">RFC1123</span>     <span class="p">=</span> <span class="s">&#34;Mon, 02 Jan 2006 15:04:05 MST&#34;</span>
+	<span class="nx">RFC1123Z</span>    <span class="p">=</span> <span class="s">&#34;Mon, 02 Jan 2006 15:04:05 -0700&#34;</span> <span class="c1">// RFC1123 with numeric zone
+</span><span class="c1"></span>	<span class="nx">RFC3339</span>     <span class="p">=</span> <span class="s">&#34;2006-01-02T15:04:05Z07:00&#34;</span>
+	<span class="nx">RFC3339Nano</span> <span class="p">=</span> <span class="s">&#34;2006-01-02T15:04:05.999999999Z07:00&#34;</span>
+	<span class="nx">Kitchen</span>     <span class="p">=</span> <span class="s">&#34;3:04PM&#34;</span>
+	<span class="c1">// Handy time stamps.
+</span><span class="c1"></span>	<span class="nx">Stamp</span>      <span class="p">=</span> <span class="s">&#34;Jan _2 15:04:05&#34;</span>
+	<span class="nx">StampMilli</span> <span class="p">=</span> <span class="s">&#34;Jan _2 15:04:05.000&#34;</span>
+	<span class="nx">StampMicro</span> <span class="p">=</span> <span class="s">&#34;Jan _2 15:04:05.000000&#34;</span>
+	<span class="nx">StampNano</span>  <span class="p">=</span> <span class="s">&#34;Jan _2 15:04:05.000000000&#34;</span>
+<span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>使用:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 将字符时间: 2020-09-12 14:34:10 转成 20200912143410
+</span><span class="c1"></span><span class="nx">strDate</span> <span class="o">:=</span> <span class="s">&#34;2020-09-12 14:34:10&#34;</span>
+<span class="c1">// 1.先转成时间类型
+</span><span class="c1"></span><span class="nx">location</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">ParseInLocation</span><span class="p">(</span><span class="s">&#34;2006-01-02 15:04:05&#34;</span><span class="p">,</span> <span class="nx">strDate</span><span class="p">,</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Local</span><span class="p">)</span>
+<span class="c1">// 2.再格式化
+</span><span class="c1"></span><span class="nx">format</span> <span class="o">:=</span> <span class="nx">location</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span><span class="s">&#34;20060102150405&#34;</span><span class="p">)</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">format</span><span class="p">)</span>
+<span class="c1">// 输出:20200912143410
+</span></code></pre></td></tr></table>
+</div>
+</div><h3 id="3时间比较">3.时间比较</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">strDate</span> <span class="o">:=</span> <span class="s">&#34;2020-09-12 12:00:00&#34;</span>
+<span class="nx">strDate2</span> <span class="o">:=</span> <span class="s">&#34;2020-09-12 12:00:00&#34;</span>
+<span class="c1">// 1.先转成时间类型
+</span><span class="c1"></span><span class="nx">time1</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">ParseInLocation</span><span class="p">(</span><span class="s">&#34;2006-01-02 15:04:05&#34;</span><span class="p">,</span> <span class="nx">strDate</span><span class="p">,</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Local</span><span class="p">)</span>
+<span class="nx">time2</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">ParseInLocation</span><span class="p">(</span><span class="s">&#34;2006-01-02 15:04:05&#34;</span><span class="p">,</span> <span class="nx">strDate2</span><span class="p">,</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Local</span><span class="p">)</span>
+<span class="c1">// 2.比较 strDate2 &gt; strDate ?
+</span><span class="c1"></span><span class="nx">before</span> <span class="o">:=</span> <span class="nx">time1</span><span class="p">.</span><span class="nf">Before</span><span class="p">(</span><span class="nx">time2</span><span class="p">)</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;strDate2 &gt; strDate ? %t \n&#34;</span><span class="p">,</span><span class="nx">before</span><span class="p">)</span>
+<span class="c1">// 3.比较 strDate2 = strDate ?
+</span><span class="c1"></span><span class="nx">equal</span> <span class="o">:=</span> <span class="nx">time1</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">time2</span><span class="p">)</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;strDate2 = strDate ? %t \n&#34;</span><span class="p">,</span><span class="nx">equal</span><span class="p">)</span>
+<span class="cm">/**输出
+</span><span class="cm">strDate2 &gt; strDate ? false 
+</span><span class="cm">strDate2 = strDate ? true 
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="4时间计算">4.时间计算</h3>
+<h4 id="41-时间相加">4.1 时间相加</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">now</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">()</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;现在的时间: %v \n&#34;</span><span class="p">,</span><span class="nx">now</span><span class="p">)</span>
+<span class="c1">// 十分钟前
+</span><span class="c1"></span><span class="nx">duration</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">ParseDuration</span><span class="p">(</span><span class="s">&#34;-10m&#34;</span><span class="p">)</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;十分钟前: %v \n&#34;</span><span class="p">,</span> <span class="nx">now</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="nx">duration</span><span class="p">))</span>
+<span class="c1">// 一小时前
+</span><span class="c1"></span><span class="nx">duration2</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">ParseDuration</span><span class="p">(</span><span class="s">&#34;-1h&#34;</span><span class="p">)</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;一小时前: %v \n&#34;</span><span class="p">,</span> <span class="nx">now</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="nx">duration2</span><span class="p">))</span>
+<span class="c1">// 一天后
+</span><span class="c1"></span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;一天后: %v \n&#34;</span><span class="p">,</span> <span class="nx">now</span><span class="p">.</span><span class="nf">AddDate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;一月后: %v \n&#34;</span><span class="p">,</span> <span class="nx">now</span><span class="p">.</span><span class="nf">AddDate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;一年后: %v \n&#34;</span><span class="p">,</span> <span class="nx">now</span><span class="p">.</span><span class="nf">AddDate</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
+<span class="cm">/**
+</span><span class="cm">现在的时间: 2021-03-22 22:54:16.008615 +0800 CST m=+0.000092572 
+</span><span class="cm">十分钟前: 2021-03-22 22:44:16.008615 +0800 CST m=-599.999907428 
+</span><span class="cm">一小时前: 2021-03-22 21:54:16.008615 +0800 CST m=-3599.999907428 
+</span><span class="cm">一天后: 2021-03-23 22:54:16.008615 +0800 CST 
+</span><span class="cm">一月后: 2021-04-22 22:54:16.008615 +0800 CST 
+</span><span class="cm">一年后: 2022-03-22 22:54:16.008615 +0800 CST 
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="42-时间相减">4.2 时间相减</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">day1</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">ParseInLocation</span><span class="p">(</span><span class="s">&#34;2006-01-02 15:04:05&#34;</span><span class="p">,</span> <span class="s">&#34;2020-11-02 12:00:00&#34;</span><span class="p">,</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Local</span><span class="p">)</span>
+<span class="nx">day2</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">ParseInLocation</span><span class="p">(</span><span class="s">&#34;2006-01-02 15:04:05&#34;</span><span class="p">,</span> <span class="s">&#34;2020-11-02 15:00:00&#34;</span><span class="p">,</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Local</span><span class="p">)</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;相差几秒: %v \n&#34;</span><span class="p">,</span><span class="nx">day2</span><span class="p">.</span><span class="nf">Sub</span><span class="p">(</span><span class="nx">day1</span><span class="p">).</span><span class="nf">Seconds</span><span class="p">())</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;相差多少分钟: %v \n&#34;</span><span class="p">,</span><span class="nx">day2</span><span class="p">.</span><span class="nf">Sub</span><span class="p">(</span><span class="nx">day1</span><span class="p">).</span><span class="nf">Minutes</span><span class="p">())</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;相差多少小时: %v \n&#34;</span><span class="p">,</span><span class="nx">day2</span><span class="p">.</span><span class="nf">Sub</span><span class="p">(</span><span class="nx">day1</span><span class="p">).</span><span class="nf">Hours</span><span class="p">())</span>
+<span class="cm">/**
+</span><span class="cm">相差几秒: 10800 
+</span><span class="cm">相差多少分钟: 180 
+</span><span class="cm">相差多少小时: 3 
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="5定时器">5.定时器</h3>
+<h4 id="51-newticker">5.1 NewTicker</h4>
+<p><code>NewTicker</code>返回一个新的<code>Ticker</code>，该<code>Ticker</code>包含一个通道字段，并会每隔时间段<code>d</code>就向该通道发送当时的时间。它会调整时间间隔或者丢弃<code>tick</code>信息以适应反应慢的接收者。如果<code>d&lt;=0会panic</code>。关闭该<code>Ticker</code>可以释放相关资源。</p>
+<p>** 使用示例**</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 创建定时器，间隔设置每秒
+</span><span class="c1"></span>	<span class="nx">ticker</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">NewTicker</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">)</span>
+	<span class="c1">// 启动一个协程，打印定时器里面的时间
+</span><span class="c1"></span>	<span class="k">go</span> <span class="kd">func</span><span class="p">(</span><span class="nx">ticker</span> <span class="o">*</span><span class="nx">time</span><span class="p">.</span><span class="nx">Ticker</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="mi">3</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="o">&lt;-</span><span class="nx">ticker</span><span class="p">.</span><span class="nx">C</span><span class="p">)</span>
+		<span class="p">}</span>
+		<span class="c1">// 关闭定时器
+</span><span class="c1"></span>		<span class="nx">ticker</span><span class="p">.</span><span class="nf">Stop</span><span class="p">()</span>
+	<span class="p">}(</span><span class="nx">ticker</span><span class="p">)</span>
+	<span class="c1">// 手动阻塞
+</span><span class="c1"></span>	<span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;end&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">2021-03-30 11:33:23.704677 +0800 CST m=+1.003656575
+</span><span class="cm">2021-03-30 11:33:24.704695 +0800 CST m=+2.003675713
+</span><span class="cm">2021-03-30 11:33:25.704271 +0800 CST m=+3.003275554
+</span><span class="cm">end
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="52-tick">5.2 Tick</h4>
+<p><code>Tick</code>是<code>NewTicker</code>的封装，只提供对<code>Ticker</code>通道的访问。如果不需要关闭<code>Ticker</code>，本函数就很方便。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 创建定时器，间隔设置每秒
+</span><span class="c1"></span>	<span class="nx">chTime</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Tick</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">)</span>
+	<span class="c1">// 启动一个协程，打印定时器里面的时间
+</span><span class="c1"></span>	<span class="k">go</span> <span class="kd">func</span><span class="p">(</span><span class="nx">ch</span> <span class="o">&lt;-</span> <span class="kd">chan</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Time</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="mi">3</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="o">&lt;-</span><span class="nx">ch</span><span class="p">)</span>
+		<span class="p">}</span>
+	<span class="p">}(</span><span class="nx">chTime</span><span class="p">)</span>
+	<span class="c1">// 手动阻塞
+</span><span class="c1"></span>	<span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;end&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="6延迟执行">6.延迟执行</h3>
+<h4 id="61-newtimer">6.1 NewTimer</h4>
+<p><code>NewTimer</code>创建一个<code>Timer</code>，它会在指定时间后，向其自身的<code>C</code>字段发送当时的时间。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;开始时间: %v \n&#34;</span><span class="p">,</span><span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">())</span>
+	<span class="nx">timer</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">NewTimer</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nx">Second</span> <span class="o">*</span> <span class="mi">3</span><span class="p">)</span>
+	<span class="c1">// 此处会阻塞，直到timer.C中有数据写入
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;timer通道里的时间: %v \n&#34;</span><span class="p">,</span> <span class="o">&lt;-</span> <span class="nx">timer</span><span class="p">.</span><span class="nx">C</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">开始时间: 2021-03-30 14:27:04.966887 +0800 CST m=+0.001502710 
+</span><span class="cm">timer通道里的时间: 2021-03-30 14:27:07.970134 +0800 CST m=+3.004701898 
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="62-after">6.2 After</h4>
+<p><code>After()</code>函数相当于<code>NewTimer(d). C</code>,如下源码:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">After</span><span class="p">(</span><span class="nx">d</span> <span class="nx">Duration</span><span class="p">)</span> <span class="o">&lt;-</span><span class="kd">chan</span> <span class="nx">Time</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="nf">NewTimer</span><span class="p">(</span><span class="nx">d</span><span class="p">).</span><span class="nx">C</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>使用示例</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 创建一个计时器,返回的是chan
+</span><span class="c1"></span>	<span class="nx">ch</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">After</span><span class="p">(</span><span class="mi">5</span> <span class="o">*</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;开始时间 %v \n&#34;</span><span class="p">,</span><span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">())</span>
+	<span class="c1">// 此处会阻塞5秒
+</span><span class="c1"></span>	<span class="nx">out</span> <span class="o">:=</span> <span class="o">&lt;-</span> <span class="nx">ch</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;变量out-&gt;  类型: %T 值:%v  \n&#34;</span><span class="p">,</span><span class="nx">out</span><span class="p">,</span><span class="nx">out</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;开始时间 %v \n&#34;</span><span class="p">,</span><span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">())</span>
+<span class="p">}</span>
+<span class="cm">/** 输出
+</span><span class="cm">  开始时间 2020-12-10 11:01:07.272154 +0800 CST m=+0.000153152 
+</span><span class="cm">  变量out-&gt;  类型: time.Time 值:2020-12-10 11:01:12.273034 +0800 CST m=+5.000956630  
+</span><span class="cm">  开始时间 2020-12-10 11:01:12.273153 +0800 CST m=+5.001076196 
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">Shershon</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        0001-01-01
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      
+      <nav class="post-nav">
+        <a class="prev" href="/post/godoc/%E6%A0%87%E5%87%86%E5%8C%85/29-pprof/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default"></span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        <a class="next" href="/post/godoc/%E6%A0%87%E5%87%86%E5%8C%85/30-pprof-2/">
+            <span class="next-text nav-default"></span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:your@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://localhost:1313" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="http://localhost:1313" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="http://localhost:1313" class="iconfont icon-facebook" title="facebook"></a>
+      <a href="http://localhost:1313" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="http://localhost:1313" class="iconfont icon-google" title="google"></a>
+      <a href="http://localhost:1313" class="iconfont icon-github" title="github"></a>
+      <a href="http://localhost:1313" class="iconfont icon-weibo" title="weibo"></a>
+      <a href="http://localhost:1313" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="http://localhost:1313" class="iconfont icon-douban" title="douban"></a>
+      <a href="http://localhost:1313" class="iconfont icon-pocket" title="pocket"></a>
+      <a href="http://localhost:1313" class="iconfont icon-tumblr" title="tumblr"></a>
+      <a href="http://localhost:1313" class="iconfont icon-instagram" title="instagram"></a>
+      <a href="http://localhost:1313" class="iconfont icon-gitlab" title="gitlab"></a>
+      <a href="http://localhost:1313" class="iconfont icon-bilibili" title="bilibili"></a>
+  <a href="http://localhost:1313/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span>Shershon</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

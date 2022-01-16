@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title> - 小山的博客</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Shershon" /><meta name="description" content="1.背景介绍 使用Go开发Web API框架，验证学习成果。在实践中学习。 2.目录介绍 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 ├── README.md" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.90.1 with theme even" />
+
+
+<link rel="canonical" href="http://localhost:1313/post/godoc/%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91/1-%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91-%E7%9B%AE%E5%BD%95%E4%BB%8B%E7%BB%8D%E5%92%8C%E8%B7%AF%E7%94%B1%E8%AE%BE%E8%AE%A1/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="" />
+<meta property="og:description" content="1.背景介绍 使用Go开发Web API框架，验证学习成果。在实践中学习。 2.目录介绍 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 ├── README.md" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/post/godoc/%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91/1-%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91-%E7%9B%AE%E5%BD%95%E4%BB%8B%E7%BB%8D%E5%92%8C%E8%B7%AF%E7%94%B1%E8%AE%BE%E8%AE%A1/" /><meta property="article:section" content="post" />
+
+
+
+<meta itemprop="name" content="">
+<meta itemprop="description" content="1.背景介绍 使用Go开发Web API框架，验证学习成果。在实践中学习。 2.目录介绍 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 ├── README.md">
+
+<meta itemprop="wordCount" content="1311">
+<meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content=""/>
+<meta name="twitter:description" content="1.背景介绍 使用Go开发Web API框架，验证学习成果。在实践中学习。 2.目录介绍 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 ├── README.md"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">小山的博客</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">小山的博客</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title"></h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 0001-01-01 </span>
+        
+          <span class="more-meta"> 1311 words </span>
+          <span class="more-meta"> 3 mins read </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#1背景介绍">1.背景介绍</a></li>
+            <li><a href="#2目录介绍">2.目录介绍</a></li>
+            <li><a href="#3-启动流程">3. 启动流程</a></li>
+            <li><a href="#4路由设计">4.路由设计</a></li>
+            <li><a href="#源码地址">源码地址</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h3 id="1背景介绍">1.背景介绍</h3>
+<p>使用<code>Go</code>开发<code>Web API</code>框架，验证学习成果。在实践中学习。</p>
+<h3 id="2目录介绍">2.目录介绍</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">├── README.md
+├── app
+│   ├── app.go //主程序文件
+│   ├── common // 公共文件
+│   │   ├── base_controller.go // 控制器基类
+│   │   ├── base_model.go // 模型基类
+│   │   ├── error.go // 错误处理
+│   │   ├── global.go // 全局变量
+│   │   ├── response_code.go // api返回code定义
+│   │   └── router.go // 路由解析
+│   ├── config // 配置目录
+│   │   ├── dev.ini // 测试环境配置(默认加载)
+│   │   ├── local.ini // 本地环境配置
+│   │   └── mysql_config.go
+│   ├── controllers // 控制器目录
+│   │   ├── v1 
+│   │   └── v2
+│   ├── models // 数据库模型文件
+│   │   └── user.go
+│   └── static // 静态资源目录
+│       └── a.png
+├── go.mod
+├── go.sum
+├── main.go // 启动文件
+└── test // 测试目录
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="3-启动流程">3. 启动流程</h3>
+<p><img src="https://gitee.com/tangxiaoshan/pic-img-bed/raw/master/go/img/image-20210222151006966.png" alt="image-20210222151006966"></p>
+<h3 id="4路由设计">4.路由设计</h3>
+<p>框架设计的路由支持<code>Api</code>多版本,以及版本间的兼容性。</p>
+<h4 id="41-期望效果">4.1 期望效果</h4>
+<p><img src="https://gitee.com/tangxiaoshan/pic-img-bed/raw/master/go/img/image-20210222153003507.png" alt="image-20210222153003507"></p>
+<h4 id="42-定义路由结构体">4.2 定义路由结构体</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 定义路由储存组
+</span><span class="c1"></span><span class="kd">type</span> <span class="nx">RouteList</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="c1">//Route map[版本][控制器]处理器
+</span><span class="c1"></span>	<span class="nx">Route</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kd">interface</span><span class="p">{}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="43-添加注册路由方法">4.3 添加注册路由方法</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="cm">/**
+</span><span class="cm"> * @description: 注册路由
+</span><span class="cm"> * @user: Mr.LiuQH
+</span><span class="cm"> * @receiver receiver RouteConfig
+</span><span class="cm"> */</span>
+<span class="kd">func</span> <span class="p">(</span><span class="nx">receiver</span> <span class="o">*</span><span class="nx">RouteList</span><span class="p">)</span> <span class="nf">AddRoute</span><span class="p">(</span><span class="nx">version</span><span class="p">,</span> <span class="nx">pattern</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">controller</span> <span class="kd">interface</span><span class="p">{})</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="nx">receiver</span><span class="p">.</span><span class="nx">Route</span><span class="p">[</span><span class="nx">version</span><span class="p">]</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">receiver</span><span class="p">.</span><span class="nx">Route</span><span class="p">[</span><span class="nx">version</span><span class="p">]</span> <span class="p">=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kd">interface</span><span class="p">{})</span>
+	<span class="p">}</span>
+	<span class="nx">receiver</span><span class="p">.</span><span class="nx">Route</span><span class="p">[</span><span class="nx">version</span><span class="p">][</span><span class="nx">pattern</span><span class="p">]</span> <span class="p">=</span> <span class="nx">controller</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="44-路由注册">4.4 路由注册</h4>
+<p>在<code>app.go</code>主程序文件中，通过<code>import _ 包路径</code>的方式，执行控制器包中的<code>init()</code>,从而达到自动注册路由。</p>
+<p><strong>文件:</strong>  <code>app/app.go</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">app</span>
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="o">...</span>
+	<span class="nx">_</span> <span class="s">&#34;goe/app/controllers/v1&#34;</span>
+	<span class="nx">_</span> <span class="s">&#34;goe/app/controllers/v2&#34;</span>
+  <span class="o">...</span>
+<span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>文件:</strong>  <code>app/controller/v1/Test.go</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="cm">/**
+</span><span class="cm"> * @Author Mr.LiuQH
+</span><span class="cm"> * @Description V1版本，Test控制器
+</span><span class="cm"> * @Date 2021/2/19 4:21 下午
+</span><span class="cm"> **/</span>
+<span class="kn">package</span> <span class="nx">v1</span>
+<span class="kn">import</span> <span class="s">&#34;goe/app/common&#34;</span>
+<span class="kd">type</span> <span class="nx">TestController</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">common</span><span class="p">.</span><span class="nx">BaseController</span>
+<span class="p">}</span>
+<span class="kd">func</span> <span class="nf">init</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// 注册路由
+</span><span class="c1"></span>	<span class="nx">common</span><span class="p">.</span><span class="nx">RouteListInstance</span><span class="p">.</span><span class="nf">AddRoute</span><span class="p">(</span><span class="s">&#34;v1&#34;</span><span class="p">,</span><span class="s">&#34;test&#34;</span><span class="p">,</span><span class="o">&amp;</span><span class="nx">TestController</span><span class="p">{})</span>
+<span class="p">}</span>
+<span class="kd">func</span> <span class="p">(</span><span class="nx">t</span> <span class="nx">TestController</span><span class="p">)</span> <span class="nf">Hello</span><span class="p">()</span> <span class="kt">error</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="nx">t</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="s">&#34;v1 hello&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="kd">func</span> <span class="p">(</span><span class="nx">t</span> <span class="nx">TestController</span><span class="p">)</span> <span class="nf">Run</span><span class="p">()</span> <span class="kt">error</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="nx">t</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="s">&#34;v1 Run&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>文件:</strong>  <code>app/controller/v2/Test.go</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="cm">/**
+</span><span class="cm"> * @Author Mr.LiuQH
+</span><span class="cm"> * @Description V2版本，Test控制器
+</span><span class="cm"> * @Date 2021/2/19 4:21 下午
+</span><span class="cm"> **/</span>
+<span class="kn">package</span> <span class="nx">v2</span>
+<span class="kn">import</span> <span class="s">&#34;goe/app/common&#34;</span>
+<span class="kd">type</span> <span class="nx">TestController</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">common</span><span class="p">.</span><span class="nx">BaseController</span>
+<span class="p">}</span>
+<span class="kd">func</span> <span class="nf">init</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">common</span><span class="p">.</span><span class="nx">RouteListInstance</span><span class="p">.</span><span class="nf">AddRoute</span><span class="p">(</span><span class="s">&#34;v2&#34;</span><span class="p">,</span><span class="s">&#34;test&#34;</span><span class="p">,</span><span class="o">&amp;</span><span class="nx">TestController</span><span class="p">{})</span>
+<span class="p">}</span>
+<span class="kd">func</span> <span class="p">(</span><span class="nx">t</span> <span class="nx">TestController</span><span class="p">)</span> <span class="nf">Hello</span><span class="p">()</span> <span class="kt">error</span>  <span class="p">{</span>
+	<span class="k">return</span> <span class="nx">t</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="s">&#34;v2 hello&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="44-路由解析">4.4 路由解析</h4>
+<p>每个<code>Http</code>请求，最终都会被<code>ServeHTTP</code>处理。</p>
+<p><strong>文件:</strong>  <code>app/common/router.go</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="cm">/**
+</span><span class="cm"> * @description: 处理接收请求
+</span><span class="cm"> * @user: Mr.LiuQH
+</span><span class="cm"> * @receiver receiver
+</span><span class="cm"> * @param w
+</span><span class="cm"> * @param r
+</span><span class="cm"> */</span>
+<span class="kd">func</span> <span class="p">(</span><span class="nx">receiver</span> <span class="o">*</span><span class="nx">RouteList</span><span class="p">)</span> <span class="nf">ServeHTTP</span><span class="p">(</span><span class="nx">w</span> <span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="nx">r</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// 初始化业务类属性
+</span><span class="c1"></span>	<span class="nx">BusErrorInstance</span><span class="p">.</span><span class="nx">Response</span> <span class="p">=</span> <span class="nx">w</span>
+	<span class="c1">// 捕获请求过程中的错误
+</span><span class="c1"></span>	<span class="k">defer</span> <span class="nx">BusErrorInstance</span><span class="p">.</span><span class="nf">CatchError</span><span class="p">()</span>
+	<span class="c1">// 静态路由解析
+</span><span class="c1"></span>	<span class="nx">isStaticReq</span> <span class="o">:=</span> <span class="nf">staticForWard</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">r</span><span class="p">)</span>
+	<span class="k">if</span> <span class="p">!</span><span class="nx">isStaticReq</span> <span class="p">{</span>
+		<span class="c1">// 动态路由解析
+</span><span class="c1"></span>		<span class="nf">routeForWard</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">r</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="1静态路由解析">1.静态路由解析</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="cm">/**
+</span><span class="cm"> * @description: 静态路由解析
+</span><span class="cm"> * @user: Mr.LiuQH
+</span><span class="cm"> * @param w
+</span><span class="cm"> * @param r
+</span><span class="cm"> * @return bool
+</span><span class="cm"> * @date 2021-02-22 11:36:37
+</span><span class="cm"> */</span>
+<span class="kd">func</span> <span class="nf">staticForWard</span><span class="p">(</span><span class="nx">w</span> <span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="nx">r</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="nx">strings</span><span class="p">.</span><span class="nf">HasPrefix</span><span class="p">(</span><span class="nx">r</span><span class="p">.</span><span class="nx">URL</span><span class="p">.</span><span class="nf">String</span><span class="p">(),</span> <span class="s">&#34;/static/&#34;</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">prefixHttp</span> <span class="o">:=</span> <span class="nx">http</span><span class="p">.</span><span class="nf">StripPrefix</span><span class="p">(</span><span class="s">&#34;/static/&#34;</span><span class="p">,</span> <span class="nx">http</span><span class="p">.</span><span class="nf">FileServer</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nf">Dir</span><span class="p">(</span><span class="s">&#34;app/static&#34;</span><span class="p">)))</span>
+		<span class="nx">prefixHttp</span><span class="p">.</span><span class="nf">ServeHTTP</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">r</span><span class="p">)</span>
+		<span class="k">return</span> <span class="kc">true</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="kc">false</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="2动态路由解析">2.动态路由解析</h5>
+<p>根据控制器和版本，找到对应的处理器，然后通过反射，调用对应的方法.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="cm">/**
+</span><span class="cm"> * @description: 动态路由转发
+</span><span class="cm"> * @user: Mr.LiuQH
+</span><span class="cm"> * @param urlPath
+</span><span class="cm"> * @return string
+</span><span class="cm"> * @return string
+</span><span class="cm"> * @date 2021-02-03 15:29:09
+</span><span class="cm"> */</span>
+<span class="kd">func</span> <span class="nf">routeForWard</span><span class="p">(</span><span class="nx">w</span> <span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="nx">r</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">urlPath</span> <span class="o">:=</span> <span class="nx">r</span><span class="p">.</span><span class="nx">URL</span><span class="p">.</span><span class="nx">Path</span>
+	<span class="k">if</span> <span class="nx">urlPath</span> <span class="o">==</span> <span class="s">&#34;/favicon.ico&#34;</span> <span class="p">{</span>
+		<span class="k">return</span>
+	<span class="p">}</span>
+	<span class="c1">// 路由解析
+</span><span class="c1"></span>	<span class="nx">split</span> <span class="o">:=</span> <span class="nx">strings</span><span class="p">.</span><span class="nf">Split</span><span class="p">(</span><span class="nx">r</span><span class="p">.</span><span class="nx">URL</span><span class="p">.</span><span class="nx">Path</span><span class="p">,</span> <span class="s">&#34;/&#34;</span><span class="p">)</span>
+	<span class="nx">controller</span><span class="p">,</span> <span class="nx">methodName</span> <span class="o">:=</span> <span class="nx">split</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nx">strings</span><span class="p">.</span><span class="nf">Title</span><span class="p">(</span><span class="nx">split</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+	<span class="k">if</span> <span class="nx">controller</span> <span class="o">==</span> <span class="s">&#34;&#34;</span> <span class="o">||</span> <span class="nx">methodName</span> <span class="o">==</span> <span class="s">&#34;&#34;</span> <span class="p">{</span>
+		<span class="nx">http</span><span class="p">.</span><span class="nf">NotFound</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">r</span><span class="p">)</span>
+		<span class="k">return</span>
+	<span class="p">}</span>
+	<span class="c1">// 解析参数
+</span><span class="c1"></span>	<span class="nx">parseError</span> <span class="o">:=</span> <span class="nx">r</span><span class="p">.</span><span class="nf">ParseForm</span><span class="p">()</span>
+	<span class="k">if</span> <span class="nx">parseError</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nb">panic</span><span class="p">(</span><span class="s">&#34;参数解析失败:&#34;</span> <span class="o">+</span> <span class="nx">parseError</span><span class="p">.</span><span class="nf">Error</span><span class="p">())</span>
+	<span class="p">}</span>
+	<span class="c1">// 获取版本号
+</span><span class="c1"></span>	<span class="nx">version</span> <span class="o">:=</span> <span class="nf">getVersion</span><span class="p">(</span><span class="nx">r</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;version:&#34;</span> <span class="o">+</span> <span class="nx">version</span><span class="p">)</span>
+	<span class="c1">//  匹配路由
+</span><span class="c1"></span>	<span class="nx">controllerValType</span> <span class="o">:=</span> <span class="nf">matchControllerObj</span><span class="p">(</span><span class="nx">version</span><span class="p">,</span> <span class="nx">controller</span><span class="p">,</span> <span class="nx">methodName</span><span class="p">)</span>
+	<span class="c1">// 保存请求上下文到控制器基类
+</span><span class="c1"></span>	<span class="nx">controllerValType</span><span class="p">.</span><span class="nf">Elem</span><span class="p">().</span><span class="nf">FieldByName</span><span class="p">(</span><span class="s">&#34;Response&#34;</span><span class="p">).</span><span class="nf">Set</span><span class="p">(</span><span class="nx">reflect</span><span class="p">.</span><span class="nf">ValueOf</span><span class="p">(</span><span class="nx">w</span><span class="p">))</span>
+	<span class="nx">controllerValType</span><span class="p">.</span><span class="nf">Elem</span><span class="p">().</span><span class="nf">FieldByName</span><span class="p">(</span><span class="s">&#34;Request&#34;</span><span class="p">).</span><span class="nf">Set</span><span class="p">(</span><span class="nx">reflect</span><span class="p">.</span><span class="nf">ValueOf</span><span class="p">(</span><span class="nx">r</span><span class="p">))</span>
+	<span class="nx">BusErrorInstance</span><span class="p">.</span><span class="nx">Response</span> <span class="p">=</span> <span class="nx">w</span>
+	<span class="c1">// 调用方法
+</span><span class="c1"></span>	<span class="nx">controllerValType</span><span class="p">.</span><span class="nf">MethodByName</span><span class="p">(</span><span class="nx">methodName</span><span class="p">).</span><span class="nf">Call</span><span class="p">(</span><span class="kc">nil</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="cm">/**
+</span><span class="cm"> * @description: 匹配路由
+</span><span class="cm"> * @user: Mr.LiuQH
+</span><span class="cm"> * @param version
+</span><span class="cm"> * @param controller
+</span><span class="cm"> * @param methodName
+</span><span class="cm"> * @return interface{}
+</span><span class="cm"> * @date 2021-02-19 18:35:07
+</span><span class="cm"> */</span>
+<span class="kd">func</span> <span class="nf">matchControllerObj</span><span class="p">(</span><span class="nx">version</span><span class="p">,</span> <span class="nx">controller</span><span class="p">,</span> <span class="nx">methodName</span> <span class="kt">string</span><span class="p">)</span> <span class="nx">reflect</span><span class="p">.</span><span class="nx">Value</span> <span class="p">{</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;进入匹配路由: version:%s controller:%s  methodName:%s \n&#34;</span><span class="p">,</span> <span class="nx">version</span><span class="p">,</span> <span class="nx">controller</span><span class="p">,</span> <span class="nx">methodName</span><span class="p">)</span>
+	<span class="nx">vGroup</span><span class="p">,</span> <span class="nx">ok</span> <span class="o">:=</span> <span class="nx">RouteListInstance</span><span class="p">.</span><span class="nx">Route</span><span class="p">[</span><span class="nx">version</span><span class="p">]</span>
+	<span class="k">if</span> <span class="p">!</span><span class="nx">ok</span> <span class="p">{</span>
+		<span class="nb">panic</span><span class="p">(</span><span class="nx">ReqVersionNotExist</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="nx">verNumStr</span> <span class="o">:=</span> <span class="nx">strings</span><span class="p">.</span><span class="nf">Trim</span><span class="p">(</span><span class="nx">version</span><span class="p">,</span> <span class="s">&#34;ver&#34;</span><span class="p">)</span>
+	<span class="nx">verNum</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">strconv</span><span class="p">.</span><span class="nf">Atoi</span><span class="p">(</span><span class="nx">verNumStr</span><span class="p">)</span>
+	<span class="c1">// 匹配路由
+</span><span class="c1"></span>	<span class="nx">controllerStruct</span><span class="p">,</span> <span class="nx">ok</span> <span class="o">:=</span> <span class="nx">vGroup</span><span class="p">[</span><span class="nx">controller</span><span class="p">]</span>
+  <span class="c1">// 当前版本没有，则找下个版本
+</span><span class="c1"></span>	<span class="k">if</span> <span class="p">!</span><span class="nx">ok</span> <span class="o">&amp;&amp;</span> <span class="nx">verNum</span> <span class="p">&gt;</span> <span class="mi">1</span> <span class="p">{</span>
+		<span class="nx">newVer</span> <span class="o">:=</span> <span class="s">&#34;v&#34;</span> <span class="o">+</span> <span class="nx">strconv</span><span class="p">.</span><span class="nf">Itoa</span><span class="p">(</span><span class="nx">verNum</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+		<span class="k">return</span> <span class="nf">matchControllerObj</span><span class="p">(</span><span class="nx">newVer</span><span class="p">,</span> <span class="nx">controller</span><span class="p">,</span> <span class="nx">methodName</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="nx">controllerValType</span> <span class="o">:=</span> <span class="nx">reflect</span><span class="p">.</span><span class="nf">ValueOf</span><span class="p">(</span><span class="nx">controllerStruct</span><span class="p">)</span>
+	<span class="c1">// 判断方法是否存在
+</span><span class="c1"></span>	<span class="nx">valid</span> <span class="o">:=</span> <span class="nx">controllerValType</span><span class="p">.</span><span class="nf">MethodByName</span><span class="p">(</span><span class="nx">methodName</span><span class="p">).</span><span class="nf">IsValid</span><span class="p">()</span>
+	<span class="k">if</span> <span class="p">!</span><span class="nx">valid</span> <span class="p">{</span>
+		<span class="nb">panic</span><span class="p">(</span><span class="nx">ReqMethodNotFoundMsg</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="nx">controllerValType</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="源码地址">源码地址</h3>
+<p><a href="https://github.com/52lu/goe"> https://github.com/52lu/goe</a></p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">Shershon</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        0001-01-01
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      
+      <nav class="post-nav">
+        <a class="prev" href="/post/godoc/%E6%A0%87%E5%87%86%E5%8C%85/9-flag/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default"></span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        <a class="next" href="/post/godoc/%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91/2-%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91-%E9%9B%86%E6%88%90gorm/">
+            <span class="next-text nav-default"></span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:your@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://localhost:1313" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="http://localhost:1313" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="http://localhost:1313" class="iconfont icon-facebook" title="facebook"></a>
+      <a href="http://localhost:1313" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="http://localhost:1313" class="iconfont icon-google" title="google"></a>
+      <a href="http://localhost:1313" class="iconfont icon-github" title="github"></a>
+      <a href="http://localhost:1313" class="iconfont icon-weibo" title="weibo"></a>
+      <a href="http://localhost:1313" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="http://localhost:1313" class="iconfont icon-douban" title="douban"></a>
+      <a href="http://localhost:1313" class="iconfont icon-pocket" title="pocket"></a>
+      <a href="http://localhost:1313" class="iconfont icon-tumblr" title="tumblr"></a>
+      <a href="http://localhost:1313" class="iconfont icon-instagram" title="instagram"></a>
+      <a href="http://localhost:1313" class="iconfont icon-gitlab" title="gitlab"></a>
+      <a href="http://localhost:1313" class="iconfont icon-bilibili" title="bilibili"></a>
+  <a href="http://localhost:1313/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span>Shershon</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>
