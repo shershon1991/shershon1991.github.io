@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Go工具 on 小山的博客</title>
+    <link>http://localhost:1313/tags/go%E5%B7%A5%E5%85%B7/</link>
+    <description>Recent content in Go工具 on 小山的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Mon, 01 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/tags/go%E5%B7%A5%E5%85%B7/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Go工具(一):gvm</title>
+      <link>http://localhost:1313/post/godoc/%E5%B7%A5%E5%85%B7%E7%AF%87/01-gvm/</link>
+      <pubDate>Mon, 01 Mar 2021 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/post/godoc/%E5%B7%A5%E5%85%B7%E7%AF%87/01-gvm/</guid>
+      <description>1. 什么是Gvm Go 语言版本管理器（Gvm）是管理 Go 语言环境的开源工具。Gvm 「pkgsets」 支持安装多个版本的 Go 并管理每个项目的模块。它最初</description>
+    </item>
+    
+  </channel>
+</rss>

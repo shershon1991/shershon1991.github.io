@@ -184,6 +184,20 @@
   </url>
   
   <url>
+    <loc>http://localhost:1313/tags/go%E5%B7%A5%E5%85%B7/</loc>
+    <lastmod>2021-03-01T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://localhost:1313/post/godoc/%E5%B7%A5%E5%85%B7%E7%AF%87/01-gvm/</loc>
+    <lastmod>2021-03-01T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
     <loc>http://localhost:1313/tags/go%E5%AE%9E%E6%93%8D/</loc>
     <lastmod>2021-02-04T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
@@ -409,12 +423,6 @@
   
   <url>
     <loc>http://localhost:1313/post/godoc/%E5%9F%BA%E7%A1%80%E7%AF%87/13-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E4%B9%8B-%E6%96%B9%E6%B3%95/</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>http://localhost:1313/post/godoc/%E5%B7%A5%E5%85%B7%E7%AF%87/01-gvm/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
