@@ -49,7 +49,7 @@
 <meta itemprop="name" content="Go学习(十一):映射(map)">
 <meta itemprop="description" content="1.定义 map是一种集合，可以像遍历数组或切片那样去遍历它。因为map是由Hash表实现的，所以对map的读取顺序不固定。 1.1 注意事项 map是"><meta itemprop="datePublished" content="2021-01-11T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2021-01-11T00:00:00+00:00" />
-<meta itemprop="wordCount" content="2770">
+<meta itemprop="wordCount" content="2803">
 <meta itemprop="keywords" content="Go基础," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go学习(十一):映射(map)"/>
 <meta name="twitter:description" content="1.定义 map是一种集合，可以像遍历数组或切片那样去遍历它。因为map是由Hash表实现的，所以对map的读取顺序不固定。 1.1 注意事项 map是"/>
@@ -137,7 +137,7 @@
             <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
             <a href="/categories/go/"> Go </a>
             </div>
-          <span class="more-meta"> 2770 words </span>
+          <span class="more-meta"> 2803 words </span>
           <span class="more-meta"> 6 mins read </span>
         
       </div>
@@ -175,13 +175,14 @@
 <p>map是一种集合，可以像遍历数组或切片那样去遍历它。<code>因为map是由Hash表实现的，所以对map的读取顺序不固定。</code></p>
 <h4 id="11-注意事项">1.1 注意事项</h4>
 <ul>
-<li>map是无序的，每次打印出来的map都会不一样，它不能通过index获取，而必须通过key获取。</li>
+<li>map是无序的，每次打印出来的map都会不一样，它不能通过index获取，而必须通过key获取。返回顺序未知，因此每次打印的顺序可能不一样。</li>
 <li><code>map</code>的长度是不固定的，和切片一样可以扩展。<code>内置的len()函数同样适用于map，返回map拥有的键值对的数量。</code></li>
 <li>同一个<code>map</code>中<code>key</code>必须保证唯一。</li>
 <li><code>key</code>的数据类型必须是可参与比较运算的类型，也就是支持==或!=操作的类型。</li>
 <li>引用类型则不能作为key的数据类型。</li>
 <li>map的value可以是任何数据类型。</li>
 <li>map和切片一样，也是一种引用类型。</li>
+<li>map是非并发安全的。</li>
 </ul>
 <h3 id="2-声明语法">2. 声明语法</h3>
 <p>可以使用<code>var</code>关键字来定义map，也可以使用内建函数<code>make()</code>。</p>
