@@ -223,7 +223,7 @@
     <div class="post-content">
       <h2 id="1-调用图说明">1. 调用图说明</h2>
 <h3 id="11-示例图">1.1 示例图</h3>
-<p><img src="https://gitee.com/tangxiaoshan/pic-img-bed/raw/master/go/img/image-20211116183312048.png" alt=""></p>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/image-20211116183312048.png" alt=""></p>
 <h3 id="12-节点颜色">1.2 节点颜色</h3>
 <ul>
 <li>红色代表累计值cum为正，并且很大；</li>
@@ -253,7 +253,7 @@
 </ul>
 <h2 id="2-火焰图说明">2. 火焰图说明</h2>
 <h3 id="21-示例图">2.1 示例图</h3>
-<p><img src="https://gitee.com/tangxiaoshan/pic-img-bed/raw/master/go/img/image-20211116190502651.png" alt=""></p>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/image-20211116190502651.png" alt=""></p>
 <h3 id="22-含义说明">2.2 含义说明</h3>
 <ul>
 <li>最上方的<code>root</code>框代表整个程序的开始，其他的框都代表一个函数。</li>
@@ -364,7 +364,7 @@ Total: 5.17MB
 <pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="o">(</span>pprof<span class="o">)</span> web
 </code></pre></td></tr></table>
 </div>
-</div><p><img src="https://gitee.com/tangxiaoshan/pic-img-bed/raw/master/go/img/image-20211116211916470.png" alt="image-20211116211916470"></p>
+</div><p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/image-20211116211916470.png" alt="image-20211116211916470"></p>
 <h2 id="4-排查cpu占用高">4. 排查CPU占用高</h2>
 <h3 id="41-进入交互式">4.1 进入交互式</h3>
 <div class="highlight"><div class="chroma">
@@ -471,7 +471,7 @@ Total: 15.76s
 </code></pre></td></tr></table>
 </div>
 </div><p><strong><font color=red>@注:需要安装graphviz</font></strong></p>
-<p><img src="https://gitee.com/tangxiaoshan/pic-img-bed/raw/master/go/img/image-20211116210821560.png" alt=""></p>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/image-20211116210821560.png" alt=""></p>
 <h2 id="5-排查协程泄露">5. 排查协程泄露</h2>
 <blockquote>
 <p>分析协程栈有两方面的作用，一是查看协程的数量，查看协程是否泄漏。二是查看当前大量的协程在执行哪些函数，判断当前协程是否健康。</p>
@@ -582,7 +582,7 @@ Total: <span class="m">37</span>
 <pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="o">(</span>pprof<span class="o">)</span> web
 </code></pre></td></tr></table>
 </div>
-</div><p><img src="https://gitee.com/tangxiaoshan/pic-img-bed/raw/master/go/img/image-20211116215540363.png" alt=""></p>
+</div><p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/image-20211116215540363.png" alt=""></p>
 <h3 id="56-base基准分析">5.6 base基准分析</h3>
 <p>除了上面的分析方法，<code>pprof</code>还提供了更强大的工具用于对比前后特征文件的不同。下例使用了<code>-base</code>标志，后跟基准特征文件。</p>
 <div class="highlight"><div class="chroma">
@@ -741,7 +741,7 @@ Total: 37.09s
 <pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="o">(</span>pprof<span class="o">)</span> web
 </code></pre></td></tr></table>
 </div>
-</div><p><img src="https://gitee.com/tangxiaoshan/pic-img-bed/raw/master/go/img/image-20211117151609825.png" alt="image-20211117151609825"></p>
+</div><p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/image-20211117151609825.png" alt="image-20211117151609825"></p>
 <h2 id="7-排查阻塞操作">7. 排查阻塞操作</h2>
 <p>在程序中，除了锁的争用会导致阻塞之外，很多逻辑都会导致阻塞，比如网络请求超时、IO阻塞等。<font color=red><b>需要注意的是：默认不开启阻塞分析，需要调用runtime.SetMutexProfileFraction进行设置。</b></font>开启方式如下:</p>
 <div class="highlight"><div class="chroma">
@@ -762,9 +762,9 @@ Total: 37.09s
 </div>
 </div><h3 id="71-查看debugpprof">7.1 查看<code>/debug/pprof</code></h3>
 <h4 id="1-当前阻塞数量">1. 当前阻塞数量</h4>
-<p><img src="https://gitee.com/tangxiaoshan/pic-img-bed/raw/master/go/img/image-20211117163248036.png" alt=""></p>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/image-20211117163248036.png" alt=""></p>
 <h4 id="2-具体阻塞位置">2. 具体阻塞位置</h4>
-<p><img src="https://gitee.com/tangxiaoshan/pic-img-bed/raw/master/go/img/image-20211117190151155.png" alt=""></p>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/image-20211117190151155.png" alt=""></p>
 <h3 id="72-进入交互式">7.2 进入交互式</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -904,7 +904,7 @@ Total: 59.75s
 </code></pre></td></tr></table>
 </div>
 </div><h3 id="75-在浏览器中查看">7.5 在浏览器中查看</h3>
-<p><img src="https://gitee.com/tangxiaoshan/pic-img-bed/raw/master/go/img/image-20211117190256045.png" alt=""></p>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/image-20211117190256045.png" alt=""></p>
 
     </div>
 

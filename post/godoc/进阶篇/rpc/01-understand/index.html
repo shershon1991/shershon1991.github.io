@@ -184,13 +184,13 @@
 <p><strong><font color=red>通俗的解释：客户端在不知道调用细节的情况下，调用存在于远程计算机上的某个对象，就像调用本地应用程序中的对象一样。</font></strong></p>
 </blockquote>
 <h2 id="2远程调用和本地调用">2.远程调用和本地调用</h2>
-<p><img src="https://gitee.com/tangxiaoshan/pic-img-bed/raw/master/go/img/image-20211213233936190.png" alt=""></p>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/image-20211213233936190.png" alt=""></p>
 <h2 id="3-http和rpc区别">3. HTTP和RPC区别</h2>
 <h3 id="31-从概念区分">3.1 从概念区分</h3>
 <blockquote>
 <p><strong>一句话概括:</strong> <code>RPC</code>是概念，<code>HTTP</code>是协议，<code>RPC</code>通信协议，可以基于<code>HTTP协议</code>，也可以基于<code>TCP、UDP</code>。</p>
 </blockquote>
-<p><img src="https://gitee.com/tangxiaoshan/pic-img-bed/raw/master/go/img/image-20211215000307020.png" alt="RPC的传输协议&序列化协议包含"></p>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/image-20211215000307020.png" alt="RPC的传输协议&序列化协议包含"></p>
 <p><font cololr=red><code>RPC</code>调用协议通常包含<code>传输协议 和 序列化协议</code>,常用的传输协议是<code>TCP</code>、常用的序列化协议是<code>Protobuf</code>，当然也支持其他协议，具体可见上图。</font></p>
 <h3 id="32-从传输协议上区分">3.2 从传输协议上区分</h3>
 <ul>
@@ -236,7 +236,7 @@ User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (
 <p><code>HTTP</code>位于应用层协议，<code>RPC</code>常用的自定义<code>TCP</code>位于传输层协议，完整的<code>OSI</code>七层网络模型，如下图:</p>
 <p><img src="https://pica.zhimg.com/80/v2-dae27091708599d4d7f9b24b2fe06eec_1440w.jpg?source=1940ef5c" alt=""></p>
 <h2 id="4-rpc调用流程图">4. RPC调用流程图</h2>
-<p><img src="https://gitee.com/tangxiaoshan/pic-img-bed/raw/master/go/img/image-20220102220036498.png" alt="RPC调用流程图"></p>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/image-20220102220036498.png" alt="RPC调用流程图"></p>
 <h2 id="5-常见的rpc框架">5. 常见的RPC框架</h2>
 <h3 id="51-跟语言绑定框架">5.1 跟语言绑定框架</h3>
 <ul>

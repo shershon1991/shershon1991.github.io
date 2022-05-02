@@ -175,7 +175,7 @@
 <blockquote>
 <p>基数树（<code>Radix Tree</code>）又称为<code>PAT</code>位树（<code>Patricia Trie or crit bit tree</code>），是一种更节省空间的前缀树（<code>Trie Tree</code>）。对于基数树的每个节点，如果该节点是唯一的子树的话，就和父节点合并。</p>
 </blockquote>
-<p><img src="https://gitee.com/tangxiaoshan/pic-img-bed/raw/master/go/img/image-20210425225051144.png" alt="image-20210425225051144"></p>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/image-20210425225051144.png" alt="image-20210425225051144"></p>
 <h3 id="2http方法">2.HTTP方法</h3>
 <p>在<code>Gin</code>框架中对<code>HTTP</code>常见相关方法(<code>GET、POST、PUT、DELETE、HEAD等</code>)已经做了封装，直接调用就会快速注册相关路由，源码所在文件位置:<code>github.com/gin-gonic/gin/routergroup.go</code></p>
 <h5 id="21-使用示例">2.1 使用示例</h5>
@@ -501,7 +501,7 @@ Content-Length: <span class="m">38</span>
 </code></pre></td></tr></table>
 </div>
 </div><p><font color=red>@注意:当注册路由路径是：<code>/path</code>时,不会匹配<code>/path/</code>,用命令请求则返回<code>&lt;a href=&quot;/test&quot;&gt;Moved Permanently&lt;/a&gt;</code>,但是用浏览器请求则会正常返回。</font><font color=green>原因: <code>httprouter</code>默认开启自动重定向,<code>/path/</code>会被重定向到<code>/path</code>,如下图所示:</font></p>
-<p><img src="https://gitee.com/tangxiaoshan/pic-img-bed/raw/master/go/img/image-20210426202030006.png" alt="image-20210426202030006"></p>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/image-20210426202030006.png" alt="image-20210426202030006"></p>
 <h4 id="42-param">4.2 <code>:param</code></h4>
 <blockquote>
 <p><code>:param</code> : 都是参数的名称</p>

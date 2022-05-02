@@ -175,7 +175,7 @@
       <h3 id="1什么是指针">1.什么是指针？</h3>
 <p>指针是存储另一个变量的内存地址的变量。变量是一种使用方便的占位符，变量都指向计算机的内存地址。一个指针变量可以指向任何一个值的内存地址。</p>
 <p>例如：变量a的值为100，存储在内存地址<code>0x1040a124</code>。变量b持有a的地址，则b被认为指向a。如下图</p>
-<p><img src="https://gitee.com/tangxiaoshan/pic-img-bed/raw/master/go/img/image-20201120232747090.png" alt="image-20201120232747090"></p>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/image-20201120232747090.png" alt="image-20201120232747090"></p>
 <p>在Go语言中使用取地址符<code>（＆）</code>来获取变量的地址，一个变量前使用<code>＆</code>，会返回该变量的内存地址。如下程序获取变量a的内存地址</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -464,7 +464,7 @@
 </div><h3 id="6指针的指针">6.指针的指针</h3>
 <h4 id="61-概念">6.1 概念</h4>
 <p><font color=red>如果一个指针变量存放的又是另一个指针变量的地址，则称这个指针变量为指向指针的指针变量。</font>当定义一个指向指针的指针变量时，第一个指针存放第二个指针的地址，第二个指针存放变量的地址,如下图所示:</p>
-<p><img src="https://gitee.com/tangxiaoshan/pic-img-bed/raw/master/go/img/image-20201122002402455.png" alt="image-20201122002402455"></p>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/image-20201122002402455.png" alt="image-20201122002402455"></p>
 <h4 id="62-使用">6.2 使用</h4>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">

@@ -198,7 +198,7 @@
 <p>在一些情况下我们需要通过程序操作 <code>Excel</code> 文档，例如：打开读取已有 <code>Excel</code>文档内容、创建新的 <code>Excel</code> 文档、基于已有文档（模版）生成新的 <code>Excel</code> 文档、向 <code>Excel </code>文档中插入图片、图表和表格等元素，有时还需要跨平台实现这些操作。使用 <code>Excelize</code> 可以方便的满足上述需求。</p>
 <h3 id="13-性能数据">1.3 性能数据</h3>
 <p>下面的性能数据展示了创建 <code>N</code> 行 <code>50</code> 列工作表所执行时间和内存使用情况，其中单元格的值均为 6 个文本字符。测试环境基于普通个人计算机 (OS: macOS Big Sur version 11.2, CPU: 3.4 GHz Intel Core i5, RAM: 16 GB 2400 MHz DDR4, HDD: 1 TB, Go Version: <code>go1.15.7 darwin/amd64</code>, Commit: <a href="https://github.com/360EntSecGroup-Skylar/excelize/tree/23c73ab527731f9d414e81f7ea15e2ae1a72a290"><code>23c73ab</code></a>)。具体数据会因机器而异，但趋势应该是一样的。</p>
-<p><img src="https://gitee.com/tangxiaoshan/pic-img-bed/raw/master/go/img/20210720164600.png" alt="写入性能"></p>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/20210720164600.png" alt="写入性能"></p>
 <p><a href="https://xuri.me/excelize/zh-hans/performance.html">更多性能数据查看: https://xuri.me/excelize/zh-hans/performance.html</a></p>
 <h2 id="2-安装">2. 安装</h2>
 <p><strong>使用最新版本 Excelize 要求您使用的 Go 语言为 1.15 或更高版本。</strong></p>
@@ -284,7 +284,7 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><img src="https://gitee.com/tangxiaoshan/pic-img-bed/raw/master/go/img/20210720114541.png" alt="运行结果" />
+</div><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/20210720114541.png" alt="运行结果" />
 <h3 id="32-按行赋值写入setsheetrow">3.2 按行赋值写入(<code>SetSheetRow</code>)</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -342,7 +342,7 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><p><img src="https://gitee.com/tangxiaoshan/pic-img-bed/raw/master/go/img/20210720153912.png" alt="运行结果"></p>
+</div><p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/20210720153912.png" alt="运行结果"></p>
 <h3 id="33-按行流式写入newstreamwriter">3.3 按行流式写入(<code>NewStreamWriter</code>)</h3>
 <p>当写入表格的内容很大时，推荐使用流式写入，可以有效防止内存溢出。</p>
 <div class="highlight"><div class="chroma">
