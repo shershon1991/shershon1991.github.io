@@ -168,7 +168,7 @@
   </div>
 </div>
   <div class="post-outdated">
-    <div class="hint">
+    <div class="warn">
       <p>【注意】最后更新于 <span class="timeago" datetime="2021-12-08T00:00:00" title="December 8, 2021">December 8, 2021</span>，文中内容可能已过时，请谨慎使用。</p>
     </div>
   </div>
@@ -201,11 +201,11 @@
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">Default</span><span class="p">()</span> <span class="o">*</span><span class="nx">Engine</span> <span class="p">{</span>
-  <span class="c1">// 打印debug信息
+ 	<span class="c1">// 打印debug信息
 </span><span class="c1"></span>	<span class="nf">debugPrintWARNINGDefault</span><span class="p">()</span>
-  <span class="c1">// 创建引擎
+ 	<span class="c1">// 创建引擎
 </span><span class="c1"></span>	<span class="nx">engine</span> <span class="o">:=</span> <span class="nf">New</span><span class="p">()</span>
-  <span class="c1">// 注册全局中间件
+ 	<span class="c1">// 注册全局中间件
 </span><span class="c1"></span>	<span class="nx">engine</span><span class="p">.</span><span class="nf">Use</span><span class="p">(</span><span class="nf">Logger</span><span class="p">(),</span> <span class="nf">Recovery</span><span class="p">())</span>
 	<span class="k">return</span> <span class="nx">engine</span>
 <span class="p">}</span>
@@ -260,7 +260,7 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span>  <span class="p">{</span>
 	<span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">New</span><span class="p">()</span>
-  <span class="c1">// 声明路由后，通过Use注册中间件
+ 	<span class="c1">// 声明路由后，通过Use注册中间件
 </span><span class="c1"></span>	<span class="nx">v1Group</span> <span class="o">:=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Group</span><span class="p">(</span><span class="s">&#34;/v1&#34;</span><span class="p">).</span><span class="nf">Use</span><span class="p">(</span><span class="nx">gin</span><span class="p">.</span><span class="nf">Logger</span><span class="p">())</span>
 	<span class="p">{</span>
 		<span class="nx">v1Group</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/middleGroup&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
@@ -292,9 +292,9 @@
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">MiddleName</span><span class="p">()</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">HandlerFunc</span> <span class="p">{</span>
 	<span class="k">return</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
 		<span class="c1">// 请求前业务逻辑...
-</span><span class="c1"></span>    <span class="c1">// 继续往下执行
+</span><span class="c1"></span>   		<span class="c1">// 继续往下执行
 </span><span class="c1"></span>		<span class="nx">context</span><span class="p">.</span><span class="nf">Next</span><span class="p">()</span>
-    <span class="c1">// context.Abort() 停止往下执行
+   		<span class="c1">// context.Abort() 停止往下执行
 </span><span class="c1"></span>		<span class="c1">// 请求后业务逻辑...
 </span><span class="c1"></span>		<span class="nx">end</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Unix</span><span class="p">()</span>
 		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;接口耗时:%v 秒 \n&#34;</span><span class="p">,</span> <span class="nx">end</span> <span class="o">-</span> <span class="nx">t</span><span class="p">)</span>

@@ -49,7 +49,7 @@
 <meta itemprop="name" content="Gin框架(十):日志使用(logrus&#43;lumberjack)">
 <meta itemprop="description" content="1.框架自带 gin框架自带日志记录功能,通过fmt.Fprint和fmt.Fprintf来记录日志信息，默认是将日志写到终端,可以通过gin"><meta itemprop="datePublished" content="2021-12-10T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2021-12-10T00:00:00+00:00" />
-<meta itemprop="wordCount" content="2221">
+<meta itemprop="wordCount" content="2236">
 <meta itemprop="keywords" content="Go实践,Gin," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Gin框架(十):日志使用(logrus&#43;lumberjack)"/>
 <meta name="twitter:description" content="1.框架自带 gin框架自带日志记录功能,通过fmt.Fprint和fmt.Fprintf来记录日志信息，默认是将日志写到终端,可以通过gin"/>
@@ -137,7 +137,7 @@
             <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
             <a href="/categories/go/"> Go </a>
             </div>
-          <span class="more-meta"> 约 2221 字 </span>
+          <span class="more-meta"> 约 2236 字 </span>
           <span class="more-meta"> 预计阅读 5 分钟 </span>
         
       </div>
@@ -164,7 +164,7 @@
   </div>
 </div>
   <div class="post-outdated">
-    <div class="hint">
+    <div class="warn">
       <p>【注意】最后更新于 <span class="timeago" datetime="2021-12-10T00:00:00" title="December 10, 2021">December 10, 2021</span>，文中内容可能已过时，请谨慎使用。</p>
     </div>
   </div>
@@ -216,11 +216,11 @@
 </span><span class="c1"></span>	<span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
 	<span class="nx">engine</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/log&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
 		<span class="c1">// 记录日志
-</span><span class="c1"></span>		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprint</span><span class="p">(</span><span class="nx">gin</span><span class="p">.</span><span class="nx">DefaultWriter</span><span class="p">,</span><span class="s">&#34;[gin-log] 日志测试使用 \n&#34;</span><span class="p">)</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintf</span><span class="p">(</span><span class="nx">gin</span><span class="p">.</span><span class="nx">DefaultWriter</span><span class="p">,</span> <span class="s">&#34;[gin-log] Method: %v \n&#34;</span><span class="p">,</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Request</span><span class="p">.</span><span class="nx">Method</span><span class="p">)</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintf</span><span class="p">(</span><span class="nx">gin</span><span class="p">.</span><span class="nx">DefaultWriter</span><span class="p">,</span> <span class="s">&#34;[gin-log] Url: %v \n&#34;</span><span class="p">,</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Request</span><span class="p">.</span><span class="nx">URL</span><span class="p">)</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintf</span><span class="p">(</span><span class="nx">gin</span><span class="p">.</span><span class="nx">DefaultWriter</span><span class="p">,</span> <span class="s">&#34;[gin-log] Header: %v \n&#34;</span><span class="p">,</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Request</span><span class="p">.</span><span class="nx">Header</span><span class="p">)</span>
-		<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;msg&#34;</span><span class="p">:</span><span class="s">&#34;success&#34;</span><span class="p">})</span>
+</span><span class="c1"></span>		<span class="nx">_</span><span class="p">,</span> <span class="nx">_</span> <span class="p">=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintf</span><span class="p">(</span><span class="nx">gin</span><span class="p">.</span><span class="nx">DefaultWriter</span><span class="p">,</span> <span class="s">&#34;[gin-log] 日志测试使用 \n&#34;</span><span class="p">)</span>
+		<span class="nx">_</span><span class="p">,</span> <span class="nx">_</span> <span class="p">=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintf</span><span class="p">(</span><span class="nx">gin</span><span class="p">.</span><span class="nx">DefaultWriter</span><span class="p">,</span> <span class="s">&#34;[gin-log] Method: %v \n&#34;</span><span class="p">,</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Request</span><span class="p">.</span><span class="nx">Method</span><span class="p">)</span>
+		<span class="nx">_</span><span class="p">,</span> <span class="nx">_</span> <span class="p">=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintf</span><span class="p">(</span><span class="nx">gin</span><span class="p">.</span><span class="nx">DefaultWriter</span><span class="p">,</span> <span class="s">&#34;[gin-log] Url: %v \n&#34;</span><span class="p">,</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Request</span><span class="p">.</span><span class="nx">URL</span><span class="p">)</span>
+		<span class="nx">_</span><span class="p">,</span> <span class="nx">_</span> <span class="p">=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintf</span><span class="p">(</span><span class="nx">gin</span><span class="p">.</span><span class="nx">DefaultWriter</span><span class="p">,</span> <span class="s">&#34;[gin-log] Header: %v \n&#34;</span><span class="p">,</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Request</span><span class="p">.</span><span class="nx">Header</span><span class="p">)</span>
+		<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;msg&#34;</span><span class="p">:</span> <span class="s">&#34;success&#34;</span><span class="p">})</span>
 	<span class="p">})</span>
 	<span class="c1">// 启动服务
 </span><span class="c1"></span>	<span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
@@ -293,7 +293,7 @@
 </code></pre></td></tr></table>
 </div>
 </div><h3 id="2集成logrus">2.集成logrus</h3>
-<p><code>logrus</code>可能是<code> Go</code> 目前最受欢迎的第三方日志库。目前<code>Github Star = 17.9k</code>,源码地址:https://github.com/sirupsen/logrus</p>
+<p><code>logrus</code>可能是<code> Go</code> 目前最受欢迎的第三方日志库。目前<code>Github Star = 17.9k</code>,源码地址:<a href="https://github.com/sirupsen/logrus">https://github.com/sirupsen/logrus</a></p>
 <h4 id="21-安装">2.1 安装</h4>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">

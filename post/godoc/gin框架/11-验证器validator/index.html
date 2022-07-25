@@ -49,7 +49,7 @@
 <meta itemprop="name" content="Gin框架(十一):验证器(validator)">
 <meta itemprop="description" content="1.介绍 validator是一个开源的验证器包，可以快速校验输入信息是否符合自定规则。目前Star 7.8k,源码地址: https://github.com/go-playground/validator 1.1 安装 1 go get github.com/go-playground/validator 1.2 引用"><meta itemprop="datePublished" content="2021-12-11T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2021-12-11T00:00:00+00:00" />
-<meta itemprop="wordCount" content="2917">
+<meta itemprop="wordCount" content="2918">
 <meta itemprop="keywords" content="Go实践,Gin," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Gin框架(十一):验证器(validator)"/>
 <meta name="twitter:description" content="1.介绍 validator是一个开源的验证器包，可以快速校验输入信息是否符合自定规则。目前Star 7.8k,源码地址: https://github.com/go-playground/validator 1.1 安装 1 go get github.com/go-playground/validator 1.2 引用"/>
@@ -137,7 +137,7 @@
             <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
             <a href="/categories/go/"> Go </a>
             </div>
-          <span class="more-meta"> 约 2917 字 </span>
+          <span class="more-meta"> 约 2918 字 </span>
           <span class="more-meta"> 预计阅读 6 分钟 </span>
         
       </div>
@@ -168,7 +168,7 @@
   </div>
 </div>
   <div class="post-outdated">
-    <div class="hint">
+    <div class="warn">
       <p>【注意】最后更新于 <span class="timeago" datetime="2021-12-11T00:00:00" title="December 11, 2021">December 11, 2021</span>，文中内容可能已过时，请谨慎使用。</p>
     </div>
   </div>
@@ -471,7 +471,7 @@
 </tr>
 <tr>
 <td><code>lte</code></td>
-<td>小于d等于参数值</td>
+<td>小于等于参数值</td>
 </tr>
 <tr>
 <td><code>email</code></td>
@@ -619,7 +619,7 @@
 	<span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
   <span class="c1">// 注册自定义验证标签:birth
 </span><span class="c1"></span>	<span class="k">if</span> <span class="nx">validate</span><span class="p">,</span><span class="nx">ok</span>  <span class="o">:=</span> <span class="nx">binding</span><span class="p">.</span><span class="nx">Validator</span><span class="p">.</span><span class="nf">Engine</span><span class="p">().(</span><span class="o">*</span><span class="nx">validator</span><span class="p">.</span><span class="nx">Validate</span><span class="p">);</span><span class="nx">ok</span> <span class="p">{</span>
-		<span class="nx">validate</span><span class="p">.</span><span class="nf">RegisterValidation</span><span class="p">(</span><span class="s">&#34;birth&#34;</span><span class="p">,</span><span class="nx">checkBirthDate</span><span class="p">)</span>
+		<span class="nx">_</span> <span class="p">=</span> <span class="nx">validate</span><span class="p">.</span><span class="nf">RegisterValidation</span><span class="p">(</span><span class="s">&#34;birth&#34;</span><span class="p">,</span><span class="nx">checkBirthDate</span><span class="p">)</span>
 	<span class="p">}</span>
   <span class="c1">// 接收请求
 </span><span class="c1"></span>	<span class="nx">engine</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/valid&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>

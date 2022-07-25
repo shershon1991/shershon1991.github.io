@@ -49,7 +49,7 @@
 <meta itemprop="name" content="Gin框架(二):启动流程分析">
 <meta itemprop="description" content="1.启动服务 1.1 服务源码 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 package main // 引入gin框架 import &#34;github.com/gin-gonic/gin&#34; func main() { // 创建一个默认的路由引擎 engine := gin.Default() // 注册Get路由 engine.GET(&#34;/&#34;, func(ctx *gin.Context) { ctx.JSON(200,gin.H{ &"><meta itemprop="datePublished" content="2021-12-02T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2021-12-02T00:00:00+00:00" />
-<meta itemprop="wordCount" content="1760">
+<meta itemprop="wordCount" content="1761">
 <meta itemprop="keywords" content="Go实践,Gin," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Gin框架(二):启动流程分析"/>
 <meta name="twitter:description" content="1.启动服务 1.1 服务源码 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 package main // 引入gin框架 import &#34;github.com/gin-gonic/gin&#34; func main() { // 创建一个默认的路由引擎 engine := gin.Default() // 注册Get路由 engine.GET(&#34;/&#34;, func(ctx *gin.Context) { ctx.JSON(200,gin.H{ &"/>
@@ -137,7 +137,7 @@
             <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
             <a href="/categories/go/"> Go </a>
             </div>
-          <span class="more-meta"> 约 1760 字 </span>
+          <span class="more-meta"> 约 1761 字 </span>
           <span class="more-meta"> 预计阅读 4 分钟 </span>
         
       </div>
@@ -163,7 +163,7 @@
   </div>
 </div>
   <div class="post-outdated">
-    <div class="hint">
+    <div class="warn">
       <p>【注意】最后更新于 <span class="timeago" datetime="2021-12-02T00:00:00" title="December 2, 2021">December 2, 2021</span>，文中内容可能已过时，请谨慎使用。</p>
     </div>
   </div>
@@ -354,7 +354,7 @@
 </tr>
 <tr>
 <td><code>ctx.AsciiJSON(code int, obj interface{})</code></td>
-<td>返回<code>json</code>,将使特殊字符编码</td>
+<td>返回<code>json</code>,将使用特殊字符编码</td>
 </tr>
 <tr>
 <td><code>ctx.PureJSON(code int, obj interface{})</code></td>
