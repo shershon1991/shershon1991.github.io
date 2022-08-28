@@ -16,7 +16,7 @@
   </url>
   
   <url>
-    <loc>https://shershon1991.github.io/tags/gin/</loc>
+    <loc>https://shershon1991.github.io/tags/gin%E9%9B%86%E6%88%90/</loc>
     <lastmod>2021-12-17T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -38,13 +38,6 @@
   
   <url>
     <loc>https://shershon1991.github.io/</loc>
-    <lastmod>2021-12-17T00:00:00+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://shershon1991.github.io/tags/go%E5%AE%9E%E8%B7%B5/</loc>
     <lastmod>2021-12-17T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -95,6 +88,13 @@
   <url>
     <loc>https://shershon1991.github.io/post/godoc/gin%E6%A1%86%E6%9E%B6/%E9%9B%86%E6%88%90/01-viper/</loc>
     <lastmod>2021-12-13T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://shershon1991.github.io/tags/gin%E6%A1%86%E6%9E%B6/</loc>
+    <lastmod>2021-12-12T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -249,6 +249,13 @@
   <url>
     <loc>https://shershon1991.github.io/post/godoc/%E8%BF%9B%E9%98%B6%E7%AF%87/rpc/01-understand/</loc>
     <lastmod>2021-07-01T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://shershon1991.github.io/tags/go%E5%AE%9E%E8%B7%B5/</loc>
+    <lastmod>2021-06-05T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
