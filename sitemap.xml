@@ -10,83 +10,90 @@
   
   <url>
     <loc>https://shershon1991.github.io/categories/</loc>
-    <lastmod>2021-12-17T00:00:00+00:00</lastmod>
+    <lastmod>2022-08-28T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://shershon1991.github.io/tags/gin%E9%9B%86%E6%88%90/</loc>
-    <lastmod>2021-12-17T00:00:00+00:00</lastmod>
+    <lastmod>2022-08-28T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>https://shershon1991.github.io/post/godoc/gin%E6%A1%86%E6%9E%B6/%E9%9B%86%E6%88%90/05-redis/</loc>
-    <lastmod>2021-12-17T00:00:00+00:00</lastmod>
+    <loc>https://shershon1991.github.io/post/godoc/gin%E9%9B%86%E6%88%90/06-es/</loc>
+    <lastmod>2022-08-28T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://shershon1991.github.io/categories/go/</loc>
-    <lastmod>2021-12-17T00:00:00+00:00</lastmod>
+    <lastmod>2022-08-28T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://shershon1991.github.io/</loc>
-    <lastmod>2021-12-17T00:00:00+00:00</lastmod>
+    <lastmod>2022-08-28T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://shershon1991.github.io/post/</loc>
-    <lastmod>2021-12-17T00:00:00+00:00</lastmod>
+    <lastmod>2022-08-28T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://shershon1991.github.io/tags/</loc>
-    <lastmod>2021-12-17T00:00:00+00:00</lastmod>
+    <lastmod>2022-08-28T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://shershon1991.github.io/categories/%E7%BC%96%E7%A8%8B/</loc>
+    <lastmod>2022-08-28T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://shershon1991.github.io/post/godoc/gin%E9%9B%86%E6%88%90/05-redis/</loc>
     <lastmod>2021-12-17T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>https://shershon1991.github.io/post/godoc/gin%E6%A1%86%E6%9E%B6/%E9%9B%86%E6%88%90/04-jwt/</loc>
+    <loc>https://shershon1991.github.io/post/godoc/gin%E9%9B%86%E6%88%90/04-jwt/</loc>
     <lastmod>2021-12-16T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>https://shershon1991.github.io/post/godoc/gin%E6%A1%86%E6%9E%B6/%E9%9B%86%E6%88%90/03-gorm/</loc>
+    <loc>https://shershon1991.github.io/post/godoc/gin%E9%9B%86%E6%88%90/03-gorm/</loc>
     <lastmod>2021-12-15T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>https://shershon1991.github.io/post/godoc/gin%E6%A1%86%E6%9E%B6/%E9%9B%86%E6%88%90/02-zap/</loc>
+    <loc>https://shershon1991.github.io/post/godoc/gin%E9%9B%86%E6%88%90/02-zap/</loc>
     <lastmod>2021-12-14T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>https://shershon1991.github.io/post/godoc/gin%E6%A1%86%E6%9E%B6/%E9%9B%86%E6%88%90/01-viper/</loc>
+    <loc>https://shershon1991.github.io/post/godoc/gin%E9%9B%86%E6%88%90/01-viper/</loc>
     <lastmod>2021-12-13T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -249,13 +256,6 @@
   <url>
     <loc>https://shershon1991.github.io/post/godoc/%E8%BF%9B%E9%98%B6%E7%AF%87/rpc/01-understand/</loc>
     <lastmod>2021-07-01T00:00:00+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://shershon1991.github.io/tags/go%E5%AE%9E%E8%B7%B5/</loc>
-    <lastmod>2021-06-05T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>

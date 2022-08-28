@@ -6,7 +6,7 @@
     <description>Recent content on Go学习</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 17 Dec 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://shershon1991.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 28 Aug 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://shershon1991.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>关于</title>
       <link>https://shershon1991.github.io/about/</link>
@@ -17,47 +17,56 @@
     </item>
     
     <item>
+      <title>Gin集成(六):集成ES</title>
+      <link>https://shershon1991.github.io/post/godoc/gin%E9%9B%86%E6%88%90/06-es/</link>
+      <pubDate>Sun, 28 Aug 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://shershon1991.github.io/post/godoc/gin%E9%9B%86%E6%88%90/06-es/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Gin集成(五):集成Redis操作库</title>
-      <link>https://shershon1991.github.io/post/godoc/gin%E6%A1%86%E6%9E%B6/%E9%9B%86%E6%88%90/05-redis/</link>
+      <link>https://shershon1991.github.io/post/godoc/gin%E9%9B%86%E6%88%90/05-redis/</link>
       <pubDate>Fri, 17 Dec 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://shershon1991.github.io/post/godoc/gin%E6%A1%86%E6%9E%B6/%E9%9B%86%E6%88%90/05-redis/</guid>
+      <guid>https://shershon1991.github.io/post/godoc/gin%E9%9B%86%E6%88%90/05-redis/</guid>
       <description>1.介绍 redis官网推荐使用redigo(https://github.com/gomodule/redigo)，截止到今天Github S</description>
     </item>
     
     <item>
       <title>Gin集成(四):集成JWT</title>
-      <link>https://shershon1991.github.io/post/godoc/gin%E6%A1%86%E6%9E%B6/%E9%9B%86%E6%88%90/04-jwt/</link>
+      <link>https://shershon1991.github.io/post/godoc/gin%E9%9B%86%E6%88%90/04-jwt/</link>
       <pubDate>Thu, 16 Dec 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://shershon1991.github.io/post/godoc/gin%E6%A1%86%E6%9E%B6/%E9%9B%86%E6%88%90/04-jwt/</guid>
+      <guid>https://shershon1991.github.io/post/godoc/gin%E9%9B%86%E6%88%90/04-jwt/</guid>
       <description>1. 介绍 JWT全称JSON Web Token是一种跨域认证解决方案，属于一个开放的标准，它规定了一种Token实现方式，目前多用于前后端分离项目和O</description>
     </item>
     
     <item>
       <title>Gin集成(三):集成全功能orm框架-gorm</title>
-      <link>https://shershon1991.github.io/post/godoc/gin%E6%A1%86%E6%9E%B6/%E9%9B%86%E6%88%90/03-gorm/</link>
+      <link>https://shershon1991.github.io/post/godoc/gin%E9%9B%86%E6%88%90/03-gorm/</link>
       <pubDate>Wed, 15 Dec 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://shershon1991.github.io/post/godoc/gin%E6%A1%86%E6%9E%B6/%E9%9B%86%E6%88%90/03-gorm/</guid>
+      <guid>https://shershon1991.github.io/post/godoc/gin%E9%9B%86%E6%88%90/03-gorm/</guid>
       <description>1. 介绍 gorm是一个使用Go语言编写的ORM框架。 它文档齐全，对开发者友好，支持主流数据库。具体使用可参考之前的文章Go常用包(十九):全功</description>
     </item>
     
     <item>
       <title>Gin集成(二):集成高性能日志zap</title>
-      <link>https://shershon1991.github.io/post/godoc/gin%E6%A1%86%E6%9E%B6/%E9%9B%86%E6%88%90/02-zap/</link>
+      <link>https://shershon1991.github.io/post/godoc/gin%E9%9B%86%E6%88%90/02-zap/</link>
       <pubDate>Tue, 14 Dec 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://shershon1991.github.io/post/godoc/gin%E6%A1%86%E6%9E%B6/%E9%9B%86%E6%88%90/02-zap/</guid>
+      <guid>https://shershon1991.github.io/post/godoc/gin%E9%9B%86%E6%88%90/02-zap/</guid>
       <description>1.项目介绍 Gin框架学习使用,并实践常用包在Gin框架中的集成和使用。源码地址: https://github.com/shershon1991/gin-api-template.git 1.1 项目结构 1 2 3 4 5 6 7 8 9 10 11 12 ├── api # 接口 ├── config</description>
     </item>
     
     <item>
       <title>Gin集成(一):集成viper配置解析包</title>
-      <link>https://shershon1991.github.io/post/godoc/gin%E6%A1%86%E6%9E%B6/%E9%9B%86%E6%88%90/01-viper/</link>
+      <link>https://shershon1991.github.io/post/godoc/gin%E9%9B%86%E6%88%90/01-viper/</link>
       <pubDate>Mon, 13 Dec 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://shershon1991.github.io/post/godoc/gin%E6%A1%86%E6%9E%B6/%E9%9B%86%E6%88%90/01-viper/</guid>
+      <guid>https://shershon1991.github.io/post/godoc/gin%E9%9B%86%E6%88%90/01-viper/</guid>
       <description>1.介绍 Viper是适用于Go应用程序（包括Twelve-Factor App）的完整配置解决方案。它被设计用于在应用程序中工作，并且可以处理</description>
     </item>
     
