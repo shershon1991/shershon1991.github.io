@@ -8,12 +8,12 @@
     <language>en</language>
     <lastBuildDate>Sun, 28 Aug 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://shershon1991.github.io/categories/go/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Gin集成(六):集成ES</title>
+      <title>Gin集成(六):集成ElasticSearch</title>
       <link>https://shershon1991.github.io/post/godoc/gin%E9%9B%86%E6%88%90/06-es/</link>
       <pubDate>Sun, 28 Aug 2022 00:00:00 +0000</pubDate>
       
       <guid>https://shershon1991.github.io/post/godoc/gin%E9%9B%86%E6%88%90/06-es/</guid>
-      <description></description>
+      <description>1.介绍 ElasticSearch是一个分布式、可扩展、近实时的高性能搜索与数据分析引擎。在Go中经常使用的包有以下两个: 包 文档 Star 数量 olivere/elastic https://olivere.github.io/elastic/ 5.7k</description>
     </item>
     
     <item>
