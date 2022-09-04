@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>基金分析系统(五):爬取基金持仓信息 - Learn Go</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Learn Go" /><meta name="description" content="1. 爬取流程 2. 准备工作 2.1 分页网页 @注意：这次爬取的网页数据是通过ajax加载，所以不能直接使用OnHtml抓取。 2.2 编写结构体 1 2 3 4 5 6 7 8 9" /><meta name="keywords" content="博客, Learn Go, hugo" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.90.1 with theme even" />
+
+
+<link rel="canonical" href="https://shershon1991.github.io/post/%E9%A1%B9%E7%9B%AE%E7%AF%87/%E7%88%AC%E8%99%AB/5-fund-stock/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="基金分析系统(五):爬取基金持仓信息" />
+<meta property="og:description" content="1. 爬取流程 2. 准备工作 2.1 分页网页 @注意：这次爬取的网页数据是通过ajax加载，所以不能直接使用OnHtml抓取。 2.2 编写结构体 1 2 3 4 5 6 7 8 9" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://shershon1991.github.io/post/%E9%A1%B9%E7%9B%AE%E7%AF%87/%E7%88%AC%E8%99%AB/5-fund-stock/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2021-08-05T00:00:00+00:00" />
+<meta property="article:modified_time" content="2021-08-05T00:00:00+00:00" />
+
+<meta itemprop="name" content="基金分析系统(五):爬取基金持仓信息">
+<meta itemprop="description" content="1. 爬取流程 2. 准备工作 2.1 分页网页 @注意：这次爬取的网页数据是通过ajax加载，所以不能直接使用OnHtml抓取。 2.2 编写结构体 1 2 3 4 5 6 7 8 9"><meta itemprop="datePublished" content="2021-08-05T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2021-08-05T00:00:00+00:00" />
+<meta itemprop="wordCount" content="1668">
+<meta itemprop="keywords" content="Go实战," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="基金分析系统(五):爬取基金持仓信息"/>
+<meta name="twitter:description" content="1. 爬取流程 2. 准备工作 2.1 分页网页 @注意：这次爬取的网页数据是通过ajax加载，所以不能直接使用OnHtml抓取。 2.2 编写结构体 1 2 3 4 5 6 7 8 9"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Learn Go</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">首页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Learn Go</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">首页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">基金分析系统(五):爬取基金持仓信息</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-08-05 </span>
+        <div class="post-category">
+            <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+            <a href="/categories/go/"> Go </a>
+            </div>
+          <span class="more-meta"> 约 1668 字 </span>
+          <span class="more-meta"> 预计阅读 4 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#1-爬取流程">1. 爬取流程</a></li>
+        <li><a href="#2-准备工作">2. 准备工作</a>
+          <ul>
+            <li><a href="#21-分页网页">2.1 分页网页</a></li>
+            <li><a href="#22-编写结构体">2.2 编写结构体</a></li>
+          </ul>
+        </li>
+        <li><a href="#3-代码实现">3. 代码实现</a>
+          <ul>
+            <li><a href="#31-请求流程图">3.1 请求流程图</a></li>
+            <li><a href="#32-抓取入口函数">3.2 抓取入口函数</a></li>
+            <li><a href="#33-开启协程分组抓取">3.3 开启协程分组抓取</a></li>
+            <li><a href="#34-爬取函数crawlhtml">3.4 爬取函数(<code>CrawlHtml</code>)</a></li>
+            <li><a href="#35-数据清洗convertentity">3.5 数据清洗(<code>ConvertEntity</code>)</a></li>
+            <li><a href="#36-保存入库savetodb">3.6 保存入库(<code>saveToDb</code>)</a></li>
+          </ul>
+        </li>
+        <li><a href="#4-添加定时任务">4. 添加定时任务</a></li>
+        <li><a href="#5-运行效果">5. 运行效果</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+  <div class="post-outdated">
+    <div class="warn">
+      <p>【注意】最后更新于 <span class="timeago" datetime="2021-08-05T00:00:00" title="August 5, 2021">August 5, 2021</span>，文中内容可能已过时，请谨慎使用。</p>
+    </div>
+  </div>
+    <div class="post-content">
+      <h2 id="1-爬取流程">1. 爬取流程</h2>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/20210907115003.png" alt="爬取流程"></p>
+<h2 id="2-准备工作">2. 准备工作</h2>
+<h3 id="21-分页网页">2.1 分页网页</h3>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/20210907115245.png" alt="页面数据展示"></p>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/20210907115624.png" alt="数据接口返回"></p>
+<p><font color=red>@注意：这次爬取的网页数据是通过ajax加载，所以不能直接使用OnHtml抓取。</font></p>
+<h3 id="22-编写结构体">2.2 编写结构体</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 对应表中的每一tr
+</span><span class="c1"></span><span class="kd">type</span> <span class="nx">StockPercentageRow</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">StockCode</span>  <span class="kt">string</span> <span class="s">`selector:&#34;td:nth-of-type(2)&#34;`</span>
+	<span class="nx">StockName</span>  <span class="kt">string</span> <span class="s">`selector:&#34;td:nth-of-type(3)&#34;`</span>
+	<span class="nx">Percentage</span> <span class="kt">string</span> <span class="s">`selector:&#34;td:nth-of-type(7)&#34;`</span>
+	<span class="nx">Quantity</span>   <span class="kt">string</span> <span class="s">`selector:&#34;td:nth-of-type(8)&#34;`</span>
+	<span class="nx">Amount</span>     <span class="kt">string</span> <span class="s">`selector:&#34;td:nth-of-type(9)&#34;`</span>
+<span class="p">}</span>
+<span class="c1">// 对应整个table
+</span><span class="c1"></span><span class="kd">type</span> <span class="nx">StockPercentageRowsCrawl</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">Rows</span>       <span class="p">[]</span><span class="nx">StockPercentageRow</span> <span class="s">`selector:&#34;tr&#34;`</span>
+	<span class="nx">FundCode</span>   <span class="kt">string</span>
+	<span class="nx">CutOffDate</span> <span class="kt">string</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="3-代码实现">3. 代码实现</h2>
+<h3 id="31-请求流程图">3.1 请求流程图</h3>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/20210907161728.png" alt="请求流程图"></p>
+<h3 id="32-抓取入口函数">3.2 抓取入口函数</h3>
+<p><strong>文件位置：<code>crontab/fund_stock_cron.go</code></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">FundStockCron</span> <span class="kd">struct</span> <span class="p">{</span>
+<span class="p">}</span>
+
+<span class="c1">// 声明并发等待组
+</span><span class="c1"></span><span class="kd">var</span> <span class="nx">wg</span> <span class="nx">sync</span><span class="p">.</span><span class="nx">WaitGroup</span>
+
+<span class="c1">// 每次任务抓取总数量
+</span><span class="c1"></span><span class="kd">var</span> <span class="nx">perTaskTotal</span> <span class="p">=</span> <span class="mi">50</span>
+
+<span class="c1">// 记录每次任务对应的基金code
+</span><span class="c1"></span><span class="kd">var</span> <span class="nx">fundCodeChannel</span> <span class="p">=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="p">[]</span><span class="kt">string</span><span class="p">,</span> <span class="nx">perTaskTotal</span><span class="p">)</span>
+
+<span class="c1">// 定时任务启动入口
+</span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">c</span> <span class="nx">FundStockCron</span><span class="p">)</span> <span class="nf">Run</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">btime</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">UnixMilli</span><span class="p">()</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;基金持仓-股票定时任务准备执行....&#34;</span><span class="p">)</span>
+	<span class="nx">pageNum</span> <span class="o">:=</span> <span class="mi">10</span>
+	<span class="nx">totalPage</span> <span class="o">:=</span> <span class="nb">int</span><span class="p">(</span><span class="nx">math</span><span class="p">.</span><span class="nf">Ceil</span><span class="p">(</span><span class="nb">float64</span><span class="p">(</span><span class="nx">perTaskTotal</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float64</span><span class="p">(</span><span class="nx">pageNum</span><span class="p">)))</span>
+	<span class="c1">// 开启协程分组抓取
+</span><span class="c1"></span>	<span class="c1">// 创建数据通道
+</span><span class="c1"></span>	<span class="kd">var</span> <span class="nx">dataChan</span> <span class="p">=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="p">[][]</span><span class="nx">entity</span><span class="p">.</span><span class="nx">FundStock</span><span class="p">,</span> <span class="nx">perTaskTotal</span><span class="o">/</span><span class="nx">pageNum</span><span class="p">)</span>
+	<span class="nf">runWithGoroutine</span><span class="p">(</span><span class="nx">dataChan</span><span class="p">,</span> <span class="nx">totalPage</span><span class="p">,</span> <span class="nx">pageNum</span><span class="p">)</span>
+	<span class="c1">// 读取通道，数据入库
+</span><span class="c1"></span>	<span class="nf">saveToDb</span><span class="p">(</span><span class="nx">dataChan</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;基金持仓股票-定时任务执行完成，耗时:%vms\n&#34;</span><span class="p">,</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">UnixMilli</span><span class="p">()</span><span class="o">-</span><span class="nx">btime</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="33-开启协程分组抓取">3.3 开启协程分组抓取</h3>
+<p><strong>文件位置：<code>crontab/fund_stock_cron.go</code></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 开启协程分组抓取
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">runWithGoroutine</span><span class="p">(</span><span class="nx">dataChan</span> <span class="kd">chan</span> <span class="p">[][]</span><span class="nx">entity</span><span class="p">.</span><span class="nx">FundStock</span><span class="p">,</span> <span class="nx">totalPage</span><span class="p">,</span> <span class="nx">pageNum</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// 延迟关闭chan
+</span><span class="c1"></span>	<span class="k">defer</span> <span class="nb">close</span><span class="p">(</span><span class="nx">dataChan</span><span class="p">)</span>
+	<span class="k">defer</span> <span class="nb">close</span><span class="p">(</span><span class="nx">fundCodeChannel</span><span class="p">)</span>
+	<span class="c1">// 开启协程抓取
+</span><span class="c1"></span>	<span class="nx">wg</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="nx">totalPage</span><span class="p">)</span>
+	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;=</span> <span class="nx">totalPage</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="nx">page</span> <span class="o">:=</span> <span class="nx">i</span>
+		<span class="k">go</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+			<span class="c1">// 获取对应页数的code
+</span><span class="c1"></span>			<span class="nx">fundStocks</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">dao</span><span class="p">.</span><span class="nf">FindNoSyncFundStockByPage</span><span class="p">(</span><span class="nx">page</span><span class="p">,</span> <span class="nx">pageNum</span><span class="p">)</span>
+			<span class="k">if</span> <span class="nx">err</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
+				<span class="kd">var</span> <span class="nx">fundStockList</span> <span class="p">[][]</span><span class="nx">entity</span><span class="p">.</span><span class="nx">FundStock</span>
+				<span class="kd">var</span> <span class="nx">fundCodes</span> <span class="p">[]</span><span class="kt">string</span>
+				<span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">val</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">fundStocks</span> <span class="p">{</span>
+					<span class="nx">rows</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">fund</span><span class="p">.</span><span class="nx">StockPercentageRowsCrawl</span><span class="p">{}</span>
+					<span class="nx">rows</span><span class="p">.</span><span class="nf">CrawlHtml</span><span class="p">(</span><span class="nx">val</span><span class="p">.</span><span class="nx">Code</span><span class="p">)</span>
+					<span class="nx">fundCodes</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">fundCodes</span><span class="p">,</span> <span class="nx">val</span><span class="p">.</span><span class="nx">Code</span><span class="p">)</span>
+					<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nx">rows</span><span class="p">.</span><span class="nx">Rows</span><span class="p">)</span> <span class="p">&gt;</span> <span class="mi">0</span> <span class="p">{</span>
+						<span class="nx">convertEntity</span> <span class="o">:=</span> <span class="nx">rows</span><span class="p">.</span><span class="nf">ConvertEntity</span><span class="p">()</span>
+						<span class="nx">fundStockList</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">fundStockList</span><span class="p">,</span> <span class="nx">convertEntity</span><span class="p">)</span>
+					<span class="p">}</span>
+				<span class="p">}</span>
+				<span class="c1">// 数据存入通道
+</span><span class="c1"></span>				<span class="nx">dataChan</span> <span class="o">&lt;-</span> <span class="nx">fundStockList</span>
+				<span class="nx">fundCodeChannel</span> <span class="o">&lt;-</span> <span class="nx">fundCodes</span>
+			<span class="p">}</span>
+			<span class="c1">// 并发等待组减一
+</span><span class="c1"></span>			<span class="nx">wg</span><span class="p">.</span><span class="nf">Done</span><span class="p">()</span>
+		<span class="p">}()</span>
+	<span class="p">}</span>
+	<span class="nx">wg</span><span class="p">.</span><span class="nf">Wait</span><span class="p">()</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="34-爬取函数crawlhtml">3.4 爬取函数(<code>CrawlHtml</code>)</h3>
+<p><strong>文件位置: <code>service/crawl/fund/stock_crawl.go</code></strong></p>
+<p><font color=red>@注意：这次爬取的网页数据是通过ajax加载，所以不能直接使用OnHtml抓取。</font></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 爬取信息
+</span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">c</span> <span class="o">*</span><span class="nx">StockPercentageRowsCrawl</span><span class="p">)</span> <span class="nf">CrawlHtml</span><span class="p">(</span><span class="nx">fundCode</span> <span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">collector</span> <span class="o">:=</span> <span class="nx">colly</span><span class="p">.</span><span class="nf">NewCollector</span><span class="p">(</span><span class="nx">colly</span><span class="p">.</span><span class="nf">UserAgent</span><span class="p">(</span><span class="nx">crawl</span><span class="p">.</span><span class="nx">UserAgent</span><span class="p">),</span> <span class="nx">colly</span><span class="p">.</span><span class="nf">Async</span><span class="p">(</span><span class="kc">true</span><span class="p">))</span>
+	<span class="c1">// 开启限速
+</span><span class="c1"></span>	<span class="nx">err</span> <span class="o">:=</span> <span class="nx">collector</span><span class="p">.</span><span class="nf">Limit</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">colly</span><span class="p">.</span><span class="nx">LimitRule</span><span class="p">{</span>
+		<span class="nx">DomainGlob</span><span class="p">:</span>  <span class="s">&#34;*fundf10.eastmoney.*&#34;</span><span class="p">,</span>
+		<span class="nx">Delay</span><span class="p">:</span>       <span class="mi">500</span> <span class="o">*</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Millisecond</span><span class="p">,</span>
+		<span class="nx">RandomDelay</span><span class="p">:</span> <span class="mi">500</span> <span class="o">*</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Millisecond</span><span class="p">,</span>
+		<span class="nx">Parallelism</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+	<span class="p">})</span>
+	<span class="nx">collector</span><span class="p">.</span><span class="nf">OnRequest</span><span class="p">(</span><span class="kd">func</span><span class="p">(</span><span class="nx">request</span> <span class="o">*</span><span class="nx">colly</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;url:&#34;</span><span class="p">,</span> <span class="nx">request</span><span class="p">.</span><span class="nx">URL</span><span class="p">)</span>
+	<span class="p">})</span>
+	<span class="c1">// 处理返回的数据
+</span><span class="c1"></span>	<span class="nx">collector</span><span class="p">.</span><span class="nf">OnResponse</span><span class="p">(</span><span class="kd">func</span><span class="p">(</span><span class="nx">response</span> <span class="o">*</span><span class="nx">colly</span><span class="p">.</span><span class="nx">Response</span><span class="p">)</span> <span class="p">{</span>
+		<span class="c1">// 替换字符串
+</span><span class="c1"></span>		<span class="nx">compile</span> <span class="o">:=</span> <span class="nx">regexp</span><span class="p">.</span><span class="nf">MustCompile</span><span class="p">(</span><span class="s">`var apidata=\{ content:&#34;(.*)&#34;,arryear:`</span><span class="p">)</span>
+		<span class="nx">matchResult</span> <span class="o">:=</span> <span class="nx">compile</span><span class="p">.</span><span class="nf">FindAllStringSubmatch</span><span class="p">(</span><span class="nb">string</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">Body</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+		<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nx">matchResult</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">{</span>
+			<span class="k">return</span>
+		<span class="p">}</span>
+		<span class="nx">htmlString</span> <span class="o">:=</span> <span class="nx">matchResult</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+		<span class="nx">htmlString</span> <span class="p">=</span> <span class="nx">strings</span><span class="p">.</span><span class="nf">ReplaceAll</span><span class="p">(</span><span class="nx">htmlString</span><span class="p">,</span> <span class="s">&#34;%&#34;</span><span class="p">,</span> <span class="s">&#34;&#34;</span><span class="p">)</span>
+		<span class="nx">htmlString</span> <span class="p">=</span> <span class="nx">strings</span><span class="p">.</span><span class="nf">ReplaceAll</span><span class="p">(</span><span class="nx">htmlString</span><span class="p">,</span> <span class="s">&#34;,&#34;</span><span class="p">,</span> <span class="s">&#34;&#34;</span><span class="p">)</span>
+		<span class="nx">doc</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">goquery</span><span class="p">.</span><span class="nf">NewDocumentFromReader</span><span class="p">(</span><span class="nx">bytes</span><span class="p">.</span><span class="nf">NewBuffer</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="nx">htmlString</span><span class="p">)))</span>
+		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+			<span class="k">return</span>
+		<span class="p">}</span>
+		<span class="nx">docSelection</span> <span class="o">:=</span> <span class="nx">doc</span><span class="p">.</span><span class="nf">Find</span><span class="p">(</span><span class="s">&#34;div[class=&#39;box&#39;]&#34;</span><span class="p">).</span><span class="nf">First</span><span class="p">()</span>
+		<span class="nx">e</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">colly</span><span class="p">.</span><span class="nx">HTMLElement</span><span class="p">{</span>
+			<span class="nx">DOM</span><span class="p">:</span> <span class="nx">docSelection</span><span class="p">.</span><span class="nf">Find</span><span class="p">(</span><span class="s">&#34;table&#34;</span><span class="p">),</span>
+		<span class="p">}</span>
+		<span class="nx">err</span> <span class="p">=</span> <span class="nx">e</span><span class="p">.</span><span class="nf">Unmarshal</span><span class="p">(</span><span class="nx">c</span><span class="p">)</span>
+		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+			<span class="nx">global</span><span class="p">.</span><span class="nx">GvaLogger</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="s">&#34;爬虫解析失败&#34;</span><span class="p">,</span> <span class="nx">zap</span><span class="p">.</span><span class="nf">String</span><span class="p">(</span><span class="s">&#34;error&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">()))</span>
+			<span class="k">return</span>
+		<span class="p">}</span>
+		<span class="c1">// 过滤header
+</span><span class="c1"></span>		<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nx">c</span><span class="p">.</span><span class="nx">Rows</span><span class="p">)</span> <span class="p">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="nx">c</span><span class="p">.</span><span class="nx">Rows</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">StockCode</span> <span class="o">==</span> <span class="s">&#34;&#34;</span> <span class="p">{</span>
+			<span class="nx">c</span><span class="p">.</span><span class="nx">Rows</span> <span class="p">=</span> <span class="nx">c</span><span class="p">.</span><span class="nx">Rows</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+		<span class="p">}</span>
+		<span class="c1">// 获取持仓季度时间信息
+</span><span class="c1"></span>		<span class="nx">c</span><span class="p">.</span><span class="nx">CutOffDate</span> <span class="p">=</span> <span class="nx">docSelection</span><span class="p">.</span><span class="nf">Find</span><span class="p">(</span><span class="s">&#34;h4 label&#34;</span><span class="p">).</span><span class="nf">Eq</span><span class="p">(</span><span class="mi">1</span><span class="p">).</span><span class="nf">Find</span><span class="p">(</span><span class="s">&#34;font&#34;</span><span class="p">).</span><span class="nf">Text</span><span class="p">()</span>
+		<span class="c1">// 补充额外信息
+</span><span class="c1"></span>		<span class="nx">c</span><span class="p">.</span><span class="nx">FundCode</span> <span class="p">=</span> <span class="nx">fundCode</span>
+	<span class="p">})</span>
+ <span class="c1">//topline=30 代表持仓前30的股票
+</span><span class="c1"></span>	<span class="nx">err</span> <span class="p">=</span> <span class="nx">collector</span><span class="p">.</span><span class="nf">Visit</span><span class="p">(</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;https://fundf10.eastmoney.com/FundArchivesDatas.aspx?type=jjcc&amp;code=%s&amp;topline=30&#34;</span><span class="p">,</span> <span class="nx">fundCode</span><span class="p">))</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">global</span><span class="p">.</span><span class="nx">GvaLogger</span><span class="p">.</span><span class="nf">Sugar</span><span class="p">().</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;CrawlHtml error:%s&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="nx">collector</span><span class="p">.</span><span class="nf">Wait</span><span class="p">()</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="35-数据清洗convertentity">3.5 数据清洗(<code>ConvertEntity</code>)</h3>
+<p><strong>文件位置: <code>service/crawl/fund/stock_crawl.go</code></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="p">(</span><span class="nx">c</span> <span class="nx">StockPercentageRowsCrawl</span><span class="p">)</span> <span class="nf">ConvertEntity</span><span class="p">()</span> <span class="p">[]</span><span class="nx">entity</span><span class="p">.</span><span class="nx">FundStock</span> <span class="p">{</span>
+	<span class="kd">var</span> <span class="nx">fundStocks</span> <span class="p">[]</span><span class="nx">entity</span><span class="p">.</span><span class="nx">FundStock</span>
+	<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nx">c</span><span class="p">.</span><span class="nx">Rows</span><span class="p">)</span> <span class="p">&lt;</span> <span class="mi">1</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="p">[]</span><span class="nx">entity</span><span class="p">.</span><span class="nx">FundStock</span><span class="p">{}</span>
+	<span class="p">}</span>
+	<span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">row</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">c</span><span class="p">.</span><span class="nx">Rows</span> <span class="p">{</span>
+		<span class="nx">item</span> <span class="o">:=</span> <span class="nx">entity</span><span class="p">.</span><span class="nx">FundStock</span><span class="p">{</span>
+			<span class="nx">FundCode</span><span class="p">:</span>   <span class="nx">c</span><span class="p">.</span><span class="nx">FundCode</span><span class="p">,</span>
+			<span class="nx">StockCode</span><span class="p">:</span>  <span class="nx">row</span><span class="p">.</span><span class="nx">StockCode</span><span class="p">,</span>
+			<span class="nx">StockName</span><span class="p">:</span>  <span class="nx">row</span><span class="p">.</span><span class="nx">StockName</span><span class="p">,</span>
+			<span class="nx">CutOffDate</span><span class="p">:</span> <span class="nx">c</span><span class="p">.</span><span class="nx">CutOffDate</span><span class="p">,</span>
+		<span class="p">}</span>
+		<span class="c1">// 提取交易所信息
+</span><span class="c1"></span>		<span class="c1">// 提取交易所信息
+</span><span class="c1"></span>		<span class="nx">compile</span> <span class="o">:=</span> <span class="nx">regexp</span><span class="p">.</span><span class="nf">MustCompile</span><span class="p">(</span><span class="s">`com\/([a-zA-Z]+)\d+\.html`</span><span class="p">)</span>
+		<span class="nx">stringSubMatch</span> <span class="o">:=</span> <span class="nx">compile</span><span class="p">.</span><span class="nf">FindAllStringSubmatch</span><span class="p">(</span><span class="nx">row</span><span class="p">.</span><span class="nx">StockHref</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+		<span class="k">if</span> <span class="nx">stringSubMatch</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+			 <span class="nx">item</span><span class="p">.</span><span class="nx">StockExchange</span> <span class="p">=</span> <span class="nx">strings</span><span class="p">.</span><span class="nf">ToUpper</span><span class="p">(</span><span class="nx">stringSubMatch</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+		<span class="p">}</span>
+		<span class="c1">// 字符串转浮点型
+</span><span class="c1"></span>		<span class="nx">item</span><span class="p">.</span><span class="nx">Percentage</span><span class="p">,</span> <span class="nx">_</span> <span class="p">=</span> <span class="nx">strconv</span><span class="p">.</span><span class="nf">ParseFloat</span><span class="p">(</span><span class="nx">row</span><span class="p">.</span><span class="nx">Percentage</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+		<span class="nx">item</span><span class="p">.</span><span class="nx">Quantity</span><span class="p">,</span> <span class="nx">_</span> <span class="p">=</span> <span class="nx">strconv</span><span class="p">.</span><span class="nf">ParseFloat</span><span class="p">(</span><span class="nx">row</span><span class="p">.</span><span class="nx">Quantity</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+		<span class="nx">item</span><span class="p">.</span><span class="nx">Amount</span><span class="p">,</span> <span class="nx">_</span> <span class="p">=</span> <span class="nx">strconv</span><span class="p">.</span><span class="nf">ParseFloat</span><span class="p">(</span><span class="nx">row</span><span class="p">.</span><span class="nx">Amount</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+		<span class="nx">fundStocks</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">fundStocks</span><span class="p">,</span> <span class="nx">item</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="nx">fundStocks</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="36-保存入库savetodb">3.6 保存入库(<code>saveToDb</code>)</h3>
+<p><strong>文件位置：<code>crontab/fund_stock_cron.go</code></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 保存入库
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">saveToDb</span><span class="p">(</span><span class="nx">dataChan</span> <span class="kd">chan</span> <span class="p">[][]</span><span class="nx">entity</span><span class="p">.</span><span class="nx">FundStock</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// 声明基金持仓股票实体列表
+</span><span class="c1"></span>	<span class="nx">fundStockRows</span> <span class="o">:=</span> <span class="p">[]</span><span class="nx">entity</span><span class="p">.</span><span class="nx">FundStock</span><span class="p">{}</span>
+	<span class="c1">// 声明股票实体列表
+</span><span class="c1"></span>	<span class="nx">stockRows</span> <span class="o">:=</span> <span class="p">[]</span><span class="nx">entity</span><span class="p">.</span><span class="nx">Stock</span><span class="p">{}</span>
+	<span class="c1">// 声明股票实体列表
+</span><span class="c1"></span>	<span class="nx">checkExistKey</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kd">struct</span><span class="p">{},</span> <span class="nx">perTaskTotal</span><span class="p">)</span>
+	<span class="c1">// 遍历
+</span><span class="c1"></span>	<span class="k">for</span> <span class="nx">fundStockGroup</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">dataChan</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">fundStockList</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">fundStockGroup</span> <span class="p">{</span>
+			<span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">fundStock</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">fundStockList</span> <span class="p">{</span>
+				<span class="nx">stockCode</span> <span class="o">:=</span> <span class="nx">fundStock</span><span class="p">.</span><span class="nx">StockCode</span>
+				<span class="nx">fundStockRows</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">fundStockRows</span><span class="p">,</span> <span class="nx">fundStock</span><span class="p">)</span>
+				<span class="c1">// 判断是否已经存在
+</span><span class="c1"></span>				<span class="k">if</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">ok</span> <span class="o">:=</span> <span class="nx">checkExistKey</span><span class="p">[</span><span class="nx">stockCode</span><span class="p">];</span> <span class="p">!</span><span class="nx">ok</span> <span class="p">{</span>
+					<span class="nx">stockRows</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">stockRows</span><span class="p">,</span> <span class="nx">entity</span><span class="p">.</span><span class="nx">Stock</span><span class="p">{</span>
+						<span class="nx">Code</span><span class="p">:</span>         <span class="nx">fundStock</span><span class="p">.</span><span class="nx">StockCode</span><span class="p">,</span>
+						<span class="nx">Name</span><span class="p">:</span>         <span class="nx">fundStock</span><span class="p">.</span><span class="nx">StockName</span><span class="p">,</span>
+						<span class="nx">ExchangeCode</span><span class="p">:</span> <span class="nx">fundStock</span><span class="p">.</span><span class="nx">StockExchange</span><span class="p">,</span>
+					<span class="p">})</span>
+					<span class="nx">checkExistKey</span><span class="p">[</span><span class="nx">stockCode</span><span class="p">]</span> <span class="p">=</span> <span class="kd">struct</span><span class="p">{}{}</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="kd">var</span> <span class="nx">codeList</span> <span class="p">[]</span><span class="kt">string</span>
+	<span class="k">for</span> <span class="nx">val</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">fundCodeChannel</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">c</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">val</span> <span class="p">{</span>
+			<span class="nx">codeList</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">codeList</span><span class="p">,</span> <span class="nx">c</span><span class="p">)</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+
+	<span class="c1">// 入库
+</span><span class="c1"></span>	<span class="k">if</span> <span class="nx">save</span> <span class="o">:=</span> <span class="nx">global</span><span class="p">.</span><span class="nx">GvaMysqlClient</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="nx">fundStockRows</span><span class="p">);</span> <span class="nx">save</span><span class="p">.</span><span class="nx">Error</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">global</span><span class="p">.</span><span class="nx">GvaLogger</span><span class="p">.</span><span class="nf">Sugar</span><span class="p">().</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;基金持仓入库失败:%s&#34;</span><span class="p">,</span> <span class="nx">save</span><span class="p">.</span><span class="nx">Error</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="c1">// 批量更新
+</span><span class="c1"></span>	<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nx">codeList</span><span class="p">)</span> <span class="p">&gt;</span> <span class="mi">0</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="nx">up</span> <span class="o">:=</span> <span class="nx">global</span><span class="p">.</span><span class="nx">GvaMysqlClient</span><span class="p">.</span><span class="nf">Model</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">entity</span><span class="p">.</span><span class="nx">FundBasis</span><span class="p">{}).</span><span class="nf">Where</span><span class="p">(</span><span class="s">&#34;`code` in ?&#34;</span><span class="p">,</span> <span class="nx">codeList</span><span class="p">).</span>
+			<span class="nf">Update</span><span class="p">(</span><span class="s">&#34;sync_stock&#34;</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span> <span class="nx">up</span><span class="p">.</span><span class="nx">Error</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+			<span class="nx">global</span><span class="p">.</span><span class="nx">GvaLogger</span><span class="p">.</span><span class="nf">Sugar</span><span class="p">().</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;信息更新失败:%s&#34;</span><span class="p">,</span> <span class="nx">up</span><span class="p">.</span><span class="nx">Error</span><span class="p">)</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="nx">save</span> <span class="o">:=</span> <span class="nx">global</span><span class="p">.</span><span class="nx">GvaMysqlClient</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="nx">stockRows</span><span class="p">);</span> <span class="nx">save</span><span class="p">.</span><span class="nx">Error</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">global</span><span class="p">.</span><span class="nx">GvaLogger</span><span class="p">.</span><span class="nf">Sugar</span><span class="p">().</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;股票信息入库失败:%s&#34;</span><span class="p">,</span> <span class="nx">save</span><span class="p">.</span><span class="nx">Error</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="4-添加定时任务">4. 添加定时任务</h2>
+<p><strong>文件位置：<code>initialize/cron.go</code></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 添加Job任务
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">addJob</span><span class="p">(</span><span class="nx">c</span> <span class="o">*</span><span class="nx">cron</span><span class="p">.</span><span class="nx">Cron</span><span class="p">)</span> <span class="p">{</span>
+   <span class="o">...</span>
+  <span class="c1">// 爬取基金持仓信息信息(每天 20:30)
+</span><span class="c1"></span> 	<span class="nx">_</span><span class="p">,</span> <span class="nx">_</span> <span class="p">=</span> <span class="nx">c</span><span class="p">.</span><span class="nf">AddJob</span><span class="p">(</span><span class="s">&#34;0 30 20 */1 * *&#34;</span><span class="p">,</span> <span class="nx">crontab</span><span class="p">.</span><span class="nx">FundStockCron</span><span class="p">{})</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="5-运行效果">5. 运行效果</h2>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/20210907163940.png" alt=""></p>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/20210907163708.png" alt=""></p>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/20210907164350.png" alt=""></p>
+<p><font color=red size=4><b>关注公众号【<font color=blue>shershon</font>】,回复【<font color=blue>基金</font>】获取源码地址。</b></font></p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Learn Go</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2021-08-05
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/go%E5%AE%9E%E6%88%98/">Go实战</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/%E9%A1%B9%E7%9B%AE%E7%AF%87/%E7%88%AC%E8%99%AB/6-docker-push/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">基金分析系统(六):通过docker-compose项目部署</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/%E9%A1%B9%E7%9B%AE%E7%AF%87/%E7%88%AC%E8%99%AB/4-fund-detail/">
+            <span class="next-text nav-default">基金分析系统(四):爬取基金详情信息</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/shershon1991" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/shershon520" class="iconfont icon-zhihu" title="zhihu"></a>
+  <a href="https://shershon1991.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2021 - 
+    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span>Learn Go</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.min.js" integrity="sha256-jwCP0NAdCBloaIWTWHmW4i3snUNMHUNO+jr9rYd2iOI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.locales.min.js" integrity="sha256-ZwofwC1Lf/faQCzN7nZtfijVV6hSwxjQMwXL4gn9qU8=" crossorigin="anonymous"></script>
+  <script><!-- NOTE: timeago.js uses the language code format like "zh_CN" (underscore and case sensitive) -->
+    var languageCode = "en".replace(/-/g, '_').replace(/_(.*)/, function ($0, $1) {return $0.replace($1, $1.toUpperCase());});
+    timeago().render(document.querySelectorAll('.timeago'), languageCode);
+    timeago.cancel();  
+  </script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

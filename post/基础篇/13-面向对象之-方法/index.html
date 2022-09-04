@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title> - Learn Go</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Learn Go" /><meta name="description" content="Go没有沿袭传统面向对象编程中的诸多概念，也没有提供类(class)，但是它提供了结构体(struct)，方法(method)可以在结构体上" /><meta name="keywords" content="博客, Learn Go, hugo" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.90.1 with theme even" />
+
+
+<link rel="canonical" href="https://shershon1991.github.io/post/%E5%9F%BA%E7%A1%80%E7%AF%87/13-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E4%B9%8B-%E6%96%B9%E6%B3%95/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="" />
+<meta property="og:description" content="Go没有沿袭传统面向对象编程中的诸多概念，也没有提供类(class)，但是它提供了结构体(struct)，方法(method)可以在结构体上" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://shershon1991.github.io/post/%E5%9F%BA%E7%A1%80%E7%AF%87/13-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E4%B9%8B-%E6%96%B9%E6%B3%95/" /><meta property="article:section" content="post" />
+
+
+
+<meta itemprop="name" content="">
+<meta itemprop="description" content="Go没有沿袭传统面向对象编程中的诸多概念，也没有提供类(class)，但是它提供了结构体(struct)，方法(method)可以在结构体上">
+
+<meta itemprop="wordCount" content="1692">
+<meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content=""/>
+<meta name="twitter:description" content="Go没有沿袭传统面向对象编程中的诸多概念，也没有提供类(class)，但是它提供了结构体(struct)，方法(method)可以在结构体上"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Learn Go</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">首页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Learn Go</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">首页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title"></h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 0001-01-01 </span>
+        
+          <span class="more-meta"> 约 1692 字 </span>
+          <span class="more-meta"> 预计阅读 4 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#1介绍">1.介绍</a></li>
+            <li><a href="#2-使用">2. 使用</a></li>
+            <li><a href="#3方法继承">3.方法继承</a></li>
+            <li><a href="#4-方法重写">4 .方法重写</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+  <div class="post-outdated">
+    <div class="warn">
+      <p>【注意】最后更新于 <span class="timeago" datetime="0001-01-01T00:00:00" title="January 1, 0001">January 1, 0001</span>，文中内容可能已过时，请谨慎使用。</p>
+    </div>
+  </div>
+    <div class="post-content">
+      <p>Go没有沿袭传统面向对象编程中的诸多概念，也没有提供类<code>(class)</code>，但是它提供了结构体<code>(struct)</code>，方法<code>(method)</code>可以在结构体上添加。与类相似，结构体提供了捆绑数据和方法的行为。</p>
+<h3 id="1介绍">1.介绍</h3>
+<h4 id="11-概念">1.1 概念</h4>
+<p>Go语言同时有函数和方法，方法的本质是函数，但是方法和函数又有所不同。</p>
+<h4 id="12-方法和函数的区别">1.2 方法和函数的区别</h4>
+<ul>
+<li>函数<code>(function)</code>是一段具有独立功能的代码，可以被反复多次调用，从而实现代码复用。</li>
+<li>方法<code>(method)</code>是一个类的行为功能，只有该类的对象才能调用。</li>
+<li>方法有接受者，而函数无接受者。</li>
+<li>函数不可以重名，而方法可以重名。<font color=red>只要接受者不同，方法名就可以相同。</font></li>
+</ul>
+<h3 id="2-使用">2. 使用</h3>
+<h4 id="21-基本语法">2.1 基本语法</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="p">(</span><span class="nx">接收器变量</span> <span class="nx">接收器类型</span><span class="p">)</span> <span class="nx">方法名</span><span class="p">(</span><span class="nx">参数列表</span><span class="p">)</span> <span class="p">(</span><span class="nx">返回参数</span><span class="p">)</span> <span class="p">{</span>
+     <span class="nx">函数体</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>接收器变量：接收器变量在命名时，官方建议使用接收器类型的第一个小写字母，而不是self、this之类的命名。例如:  <font color=blue>Socket类型的接收器变量应该命名为s，Connector类型的接收器变量应该命名为c等。</font></li>
+<li>接收器类型：接收器类型和参数类似，可以是指针类型和非指针类型。</li>
+<li>方法名、参数列表、返回参数：格式与函数定义一致。</li>
+</ul>
+<h4 id="22-使用示例">2.2 使用示例</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<span class="kn">import</span> <span class="s">&#34;fmt&#34;</span>
+<span class="c1">// 定义一个结构体
+</span><span class="c1"></span><span class="kd">type</span> <span class="nx">Student</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">name</span> <span class="kt">string</span>
+	<span class="nx">age</span>  <span class="kt">int</span>
+<span class="p">}</span>
+<span class="c1">// 定义一个方法(接收器为Student的指针)
+</span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">Student</span><span class="p">)</span><span class="nf">updateName</span><span class="p">(</span><span class="nx">newName</span> <span class="kt">string</span><span class="p">)</span>  <span class="p">{</span>
+	<span class="nx">s</span><span class="p">.</span><span class="nx">name</span> <span class="p">=</span> <span class="nx">newName</span>
+<span class="p">}</span>
+<span class="c1">// 定义一个方法(接收器为Student)
+</span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="nx">Student</span><span class="p">)</span> <span class="nf">updateAge</span><span class="p">(</span><span class="nx">newAge</span> <span class="kt">int</span><span class="p">)</span>  <span class="p">{</span>
+	<span class="nx">s</span><span class="p">.</span><span class="nx">age</span> <span class="p">=</span> <span class="nx">newAge</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;修改结构体s的age -&gt; %v \n&#34;</span><span class="p">,</span><span class="nx">s</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 初始化结构体
+</span><span class="c1"></span>	<span class="nx">s</span> <span class="o">:=</span> <span class="nx">Student</span><span class="p">{</span><span class="s">&#34;张三&#34;</span><span class="p">,</span><span class="mi">20</span><span class="p">}</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;结构体初始化s -&gt; %v \n&#34;</span><span class="p">,</span><span class="nx">s</span><span class="p">)</span>
+
+	<span class="c1">// 通过方法修改名称
+</span><span class="c1"></span>	<span class="nx">s</span><span class="p">.</span><span class="nf">updateName</span><span class="p">(</span><span class="s">&#34;张三新名&#34;</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;调用updateName后 -&gt; %v \n&#34;</span><span class="p">,</span><span class="nx">s</span><span class="p">)</span>
+
+	<span class="c1">// 通过方法修改年龄
+</span><span class="c1"></span>	<span class="nx">s</span><span class="p">.</span><span class="nf">updateAge</span><span class="p">(</span><span class="mi">22</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;调用updateAge后 -&gt; %v \n&#34;</span><span class="p">,</span><span class="nx">s</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/** 输出:
+</span><span class="cm">结构体初始化s -&gt; {张三 20} 
+</span><span class="cm">调用updateName后 -&gt; {张三新名 20} 
+</span><span class="cm">修改结构体s的age -&gt; {张三新名 22} 
+</span><span class="cm">调用updateAge后 -&gt; {张三新名 20} 
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>**通过上述示例可以看出: **<font color=red>若方法的接受者不是指针，实际只是获取了一个拷贝，而不能真正改变接受者中原来的数据。</font></p>
+<h3 id="3方法继承">3.方法继承</h3>
+<p>方法是可以继承的，如果匿名字段实现了一个方法，那么包含这个匿名字段的struct也能调用该匿名字段中的方法。</p>
+<h4 id="31-使用示例">3.1 使用示例</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<span class="kn">import</span> <span class="s">&#34;fmt&#34;</span>
+<span class="c1">// 定义一个人类结构体
+</span><span class="c1"></span><span class="kd">type</span> <span class="nx">People</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">name</span><span class="p">,</span> <span class="nx">position</span> <span class="kt">string</span>
+	<span class="nx">age</span>            <span class="kt">int</span>
+<span class="p">}</span>
+<span class="c1">// 定义一个学生结构体
+</span><span class="c1"></span><span class="kd">type</span> <span class="nx">Student</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">People</span>
+<span class="p">}</span>
+<span class="kd">type</span> <span class="nx">Teacher</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">People</span>
+<span class="p">}</span>
+<span class="c1">// 定义一个方法
+</span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">p</span> <span class="nx">People</span><span class="p">)</span> <span class="nf">say</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;我叫 %s  %d岁 从事: %s \n&#34;</span><span class="p">,</span> <span class="nx">p</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span><span class="nx">p</span><span class="p">.</span><span class="nx">age</span><span class="p">,</span><span class="nx">p</span><span class="p">.</span><span class="nx">position</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">student</span> <span class="o">:=</span> <span class="nx">Student</span><span class="p">{</span><span class="nx">People</span><span class="p">{</span><span class="s">&#34;张三&#34;</span><span class="p">,</span><span class="s">&#34;学生&#34;</span><span class="p">,</span><span class="mi">15</span><span class="p">}}</span>
+	<span class="nx">teacher</span> <span class="o">:=</span> <span class="nx">Teacher</span><span class="p">{</span><span class="nx">People</span><span class="p">{</span><span class="s">&#34;李杨&#34;</span><span class="p">,</span><span class="s">&#34;老师&#34;</span><span class="p">,</span><span class="mi">35</span><span class="p">}}</span>
+	<span class="c1">// 调用方法(继承父类)
+</span><span class="c1"></span>	<span class="nx">student</span><span class="p">.</span><span class="nf">say</span><span class="p">()</span>
+	<span class="nx">teacher</span><span class="p">.</span><span class="nf">say</span><span class="p">()</span>
+<span class="p">}</span>
+<span class="cm">/** 输出
+</span><span class="cm">  我叫 张三  15岁 从事: 学生 
+</span><span class="cm">  我叫 李杨  35岁 从事: 老师
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="4-方法重写">4 .方法重写</h3>
+<p>在Go语言中，方法重写是指一个包含了匿名字段的<code>struct</code>也实现了该匿名字段实现的方法（即子类也实现了父类的方法）</p>
+<h4 id="41-使用示例">4.1 使用示例</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<span class="kn">import</span> <span class="s">&#34;fmt&#34;</span>
+<span class="c1">// 定义一个人类结构体
+</span><span class="c1"></span><span class="kd">type</span> <span class="nx">People</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">name</span><span class="p">,</span> <span class="nx">position</span> <span class="kt">string</span>
+	<span class="nx">age</span>            <span class="kt">int</span>
+<span class="p">}</span>
+<span class="c1">// 定义一个学生结构体
+</span><span class="c1"></span><span class="kd">type</span> <span class="nx">Student</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">People</span>
+<span class="p">}</span>
+<span class="c1">// 定义一个老师结构体
+</span><span class="c1"></span><span class="kd">type</span> <span class="nx">Teacher</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">People</span>
+<span class="p">}</span>
+<span class="c1">// 定义一个方法
+</span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">p</span> <span class="nx">People</span><span class="p">)</span> <span class="nf">say</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;我叫 %s  %d岁 从事: %s \n&#34;</span><span class="p">,</span> <span class="nx">p</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span> <span class="nx">p</span><span class="p">.</span><span class="nx">age</span><span class="p">,</span> <span class="nx">p</span><span class="p">.</span><span class="nx">position</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="c1">// 学生(子类)重写People(父类)的say方法
+</span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="nx">Student</span><span class="p">)</span> <span class="nf">say</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;我是一名学生,名字叫: %s 今年: %d岁 \n&#34;</span><span class="p">,</span> <span class="nx">s</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span> <span class="nx">s</span><span class="p">.</span><span class="nx">age</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">student</span> <span class="o">:=</span> <span class="nx">Student</span><span class="p">{</span><span class="nx">People</span><span class="p">{</span><span class="s">&#34;张三&#34;</span><span class="p">,</span> <span class="s">&#34;学生&#34;</span><span class="p">,</span> <span class="mi">15</span><span class="p">}}</span>
+	<span class="nx">teacher</span> <span class="o">:=</span> <span class="nx">Teacher</span><span class="p">{</span><span class="nx">People</span><span class="p">{</span><span class="s">&#34;李杨&#34;</span><span class="p">,</span> <span class="s">&#34;老师&#34;</span><span class="p">,</span> <span class="mi">35</span><span class="p">}}</span>
+	<span class="c1">// 调用方法(重写父类方法)
+</span><span class="c1"></span>	<span class="nx">student</span><span class="p">.</span><span class="nf">say</span><span class="p">()</span>
+	<span class="c1">// 调用方法(继承父类)
+</span><span class="c1"></span>	<span class="nx">teacher</span><span class="p">.</span><span class="nf">say</span><span class="p">()</span>
+<span class="p">}</span>
+<span class="cm">/** 输出
+</span><span class="cm">  我是一名学生,名字叫: 张三 今年: 15岁 
+</span><span class="cm">  我叫 李杨  35岁 从事: 老师 
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><font color=red><strong>当结构体存在继承关系时，方法调用按照就近原则。</strong></font></p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Learn Go</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        0001-01-01
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      
+      <nav class="post-nav">
+        <a class="prev" href="/post/%E5%9F%BA%E7%A1%80%E7%AF%87/1-%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Go学习(一):Mac环境下安装配置</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/shershon1991" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/shershon520" class="iconfont icon-zhihu" title="zhihu"></a>
+  <a href="https://shershon1991.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2021 - 
+    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span>Learn Go</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.min.js" integrity="sha256-jwCP0NAdCBloaIWTWHmW4i3snUNMHUNO+jr9rYd2iOI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.locales.min.js" integrity="sha256-ZwofwC1Lf/faQCzN7nZtfijVV6hSwxjQMwXL4gn9qU8=" crossorigin="anonymous"></script>
+  <script><!-- NOTE: timeago.js uses the language code format like "zh_CN" (underscore and case sensitive) -->
+    var languageCode = "en".replace(/-/g, '_').replace(/_(.*)/, function ($0, $1) {return $0.replace($1, $1.toUpperCase());});
+    timeago().render(document.querySelectorAll('.timeago'), languageCode);
+    timeago.cancel();  
+  </script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

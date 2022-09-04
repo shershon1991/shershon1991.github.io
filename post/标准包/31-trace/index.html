@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Go标准包(三十一):trace - Learn Go</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Learn Go" /><meta name="description" content="1. trace说明 在pprof的分析中，能够知道一段时间内的CPU占用、内存分配、协程堆栈信息。这些信息都是一段时间内数据的汇总，但是它们并没" /><meta name="keywords" content="博客, Learn Go, hugo" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.90.1 with theme even" />
+
+
+<link rel="canonical" href="https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/31-trace/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Go标准包(三十一):trace" />
+<meta property="og:description" content="1. trace说明 在pprof的分析中，能够知道一段时间内的CPU占用、内存分配、协程堆栈信息。这些信息都是一段时间内数据的汇总，但是它们并没" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/31-trace/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2021-05-01T00:00:00+00:00" />
+<meta property="article:modified_time" content="2021-05-01T00:00:00+00:00" />
+
+<meta itemprop="name" content="Go标准包(三十一):trace">
+<meta itemprop="description" content="1. trace说明 在pprof的分析中，能够知道一段时间内的CPU占用、内存分配、协程堆栈信息。这些信息都是一段时间内数据的汇总，但是它们并没"><meta itemprop="datePublished" content="2021-05-01T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2021-05-01T00:00:00+00:00" />
+<meta itemprop="wordCount" content="2054">
+<meta itemprop="keywords" content="Go标准包," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Go标准包(三十一):trace"/>
+<meta name="twitter:description" content="1. trace说明 在pprof的分析中，能够知道一段时间内的CPU占用、内存分配、协程堆栈信息。这些信息都是一段时间内数据的汇总，但是它们并没"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Learn Go</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">首页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Learn Go</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">首页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Go标准包(三十一):trace</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-05-01 </span>
+        <div class="post-category">
+            <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+            <a href="/categories/go/"> Go </a>
+            </div>
+          <span class="more-meta"> 约 2054 字 </span>
+          <span class="more-meta"> 预计阅读 5 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#1-trace说明">1. trace说明</a></li>
+        <li><a href="#2-收集trace样本">2. 收集trace样本</a>
+          <ul>
+            <li><a href="#21-调用runtimetrace包">2.1 调用<code>runtime/trace</code>包</a></li>
+            <li><a href="#22-调用nethttppprof">2.2 调用<code>net/http/pprof</code></a></li>
+            <li><a href="#23-在单元测试中使用-trace">2.3 在单元测试中使用<code>-trace</code></a></li>
+          </ul>
+        </li>
+        <li><a href="#3-分析trace样本">3. 分析trace样本</a>
+          <ul>
+            <li><a href="#31-第一步-分析文件">3.1 第一步: 分析文件</a></li>
+            <li><a href="#32-第二步在浏览器中打开">3.2 第二步:在浏览器中打开</a></li>
+          </ul>
+        </li>
+        <li><a href="#4-view-trace查看跟踪">4. <code>View trace</code>查看跟踪</a>
+          <ul>
+            <li><a href="#41-数据栏总览">4.1 数据栏总览</a></li>
+            <li><a href="#42-某一时刻协程整体运行情况">4.2 某一时刻协程整体运行情况</a></li>
+            <li><a href="#43-某一时刻堆内存">4.3 某一时刻堆内存</a></li>
+            <li><a href="#44-某一时刻系统线程">4.4 某一时刻系统线程</a></li>
+            <li><a href="#45-查看垃圾回收">4.5 查看垃圾回收</a></li>
+            <li><a href="#46-查看具体协程运行信息">4.6 查看具体协程运行信息</a></li>
+          </ul>
+        </li>
+        <li><a href="#5-协程分析goroutine-analysis">5. 协程分析(<code>Goroutine analysis</code>)</a>
+          <ul>
+            <li><a href="#51-详情查看">5.1 详情查看</a></li>
+            <li><a href="#52-字段说明">5.2 字段说明</a></li>
+          </ul>
+        </li>
+        <li><a href="#6用户自定义任务">6.用户自定义任务</a>
+          <ul>
+            <li><a href="#61-代码详情">6.1 代码详情</a></li>
+            <li><a href="#62-查看详情">6.2 查看详情</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+  <div class="post-outdated">
+    <div class="warn">
+      <p>【注意】最后更新于 <span class="timeago" datetime="2021-05-01T00:00:00" title="May 1, 2021">May 1, 2021</span>，文中内容可能已过时，请谨慎使用。</p>
+    </div>
+  </div>
+    <div class="post-content">
+      <h2 id="1-trace说明">1. trace说明</h2>
+<p>在<code>pprof</code>的分析中，能够知道一段时间内的<code>CPU</code>占用、内存分配、协程堆栈信息。这些信息都是一段时间内数据的汇总，但是它们并没有提供整个周期内发生的事件，例如指定的<code>Goroutines</code>何时执行、执行了多长时间、什么时候陷入了堵塞、什么时候解除了堵塞、<code>GC</code>如何影响单个<code>Goroutine</code>的执行、<code>STW</code>中断花费的时间是否太长等。这就是在Go1.5之后推出的<code>trace</code>工具的强大之处，它提供了指定时间内程序发生的事件的完整信息，这些事件信息包括：</p>
+<ul>
+<li>协程的创建、开始和结束。</li>
+<li>协程的堵塞——系统调用、通道、锁。</li>
+<li>网络I/O相关事件。</li>
+<li>系统调用事件。</li>
+<li>垃圾回收相关事件。</li>
+</ul>
+<h2 id="2-收集trace样本">2. 收集trace样本</h2>
+<p>收集<code>trace</code>文件的方式和收集<code>pprof</code>特征文件的方式非常相似，有两种主要的方式</p>
+<h3 id="21-调用runtimetrace包">2.1 调用<code>runtime/trace</code>包</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 创建文件
+</span><span class="c1"></span><span class="nx">file</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nf">OpenFile</span><span class="p">(</span><span class="s">&#34;./trace.out&#34;</span><span class="p">,</span> <span class="nx">os</span><span class="p">.</span><span class="nx">O_APPEND</span><span class="p">|</span><span class="nx">os</span><span class="p">.</span><span class="nx">O_CREATE</span><span class="p">,</span> <span class="nx">os</span><span class="p">.</span><span class="nx">ModePerm</span><span class="p">)</span>
+<span class="c1">// 开启
+</span><span class="c1"></span><span class="k">if</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">trace</span><span class="p">.</span><span class="nf">Start</span><span class="p">(</span><span class="nx">file</span><span class="p">);</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;trace start err &#34;</span><span class="p">,</span><span class="nx">err</span><span class="p">)</span>
+    <span class="k">return</span>
+<span class="p">}</span>
+<span class="c1">// 关闭
+</span><span class="c1"></span><span class="k">defer</span> <span class="nx">trace</span><span class="p">.</span><span class="nf">Stop</span><span class="p">()</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="22-调用nethttppprof">2.2 调用<code>net/http/pprof</code></h3>
+<p><code>net/http/pprof</code>库中集成了<code>trace</code>的接口，下例获取<code>30s</code>内的<code>trace</code>事件并存储到<code>trace.out</code>文件中。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">curl -o trace.out http://127.0.0.1:6060/debug/pprof/trace?seconds<span class="o">=</span><span class="m">30</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="23-在单元测试中使用-trace">2.3 在单元测试中使用<code>-trace</code></h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">//  trace.out:是生成的文件名  test/trace_test.go：是测试文件
+</span><span class="c1"></span><span class="k">go</span> <span class="nx">test</span> <span class="o">-</span><span class="nx">trace</span> <span class="nx">trace</span><span class="p">.</span><span class="nx">out</span> <span class="nx">test</span><span class="o">/</span><span class="nx">trace_test</span><span class="p">.</span><span class="k">go</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="3-分析trace样本">3. 分析trace样本</h2>
+<blockquote>
+<p>分析<code>trace</code>样本,语法格式: <code>go tool trace trace文件</code></p>
+</blockquote>
+<h3 id="31-第一步-分析文件">3.1 第一步: 分析文件</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 分析文件trace2.out，会生成一个链接</span>
+➜ go tool trace trace2.out
+2021/11/18 19:45:53 Parsing trace...
+2021/11/18 19:45:53 Splitting trace...
+2021/11/18 19:45:54 Opening browser. Trace viewer is listening on http://127.0.0.1:65154
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="32-第二步在浏览器中打开">3.2 第二步:在浏览器中打开</h3>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/image-20211118195302295.png" alt="分析维度"></p>
+<p><strong>分析维度说明</strong></p>
+<ul>
+<li><code>View trace</code>：查看跟踪</li>
+<li><code>Goroutine analysis</code>：<code>Goroutine</code> 分析</li>
+<li><code>Network blocking profile</code>：网络阻塞概况</li>
+<li><code>Synchronization blocking profile</code>：同步阻塞概况</li>
+<li><code>Syscall blocking profile</code>：系统调用阻塞概况</li>
+<li><code>Scheduler latency profile</code>：调度延迟概况</li>
+<li><code>User defined tasks</code>：用户自定义任务</li>
+<li><code>User defined regions</code>：用户自定义区域</li>
+<li><code>Minimum mutator utilization</code>：最低 Mutator 利用率</li>
+</ul>
+<h2 id="4-view-trace查看跟踪">4. <code>View trace</code>查看跟踪</h2>
+<h3 id="41-数据栏总览">4.1 数据栏总览</h3>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/image-20211129142153290.png" alt=""></p>
+<p><strong>含义说明：</strong></p>
+<ul>
+<li>时间线: 显示执行的时间，上图可以看出程序整体运行时间在 <code>0s~20s</code>之间，可以用过放大查看具体某个时间点，运行情况。</li>
+<li><code>Goroutines</code>: 显示在执行期间的每个<code>Goroutine </code>运行阶段有多少个协程在运行，其包含 GC 等待（<code>GCWaiting</code>）、可运行（<code>Runnable</code>）、运行中（<code>Running</code>）这三种状态。</li>
+<li>堆内存：包含当前堆使用量(<code>Allocated</code>)和下一次垃圾回收的目标大小(<code>NextGC</code>)统计。</li>
+<li>系统线程：显示在执行期间有多少个线程在运行，其包含正在调用 <code>Syscall（InSyscall）</code>、运行中（<code>Running</code>）这两种状态。</li>
+<li><code>GC</code>: 执行垃圾回收的次数和具体时间点，由上图可以看出每次执行GC时，堆内存都会下降。</li>
+<li>逻辑处理器: 默认显示系统核心数量，可以通过<code>runtime.GOMAXPROCS(n)</code>来控制数量。</li>
+</ul>
+<blockquote>
+<p>快捷键:  <strong><code>w(放大)、s(缩小)、a(左移)、d(右移)</code></strong></p>
+</blockquote>
+<h3 id="42-某一时刻协程整体运行情况">4.2 某一时刻协程整体运行情况</h3>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/image-20211129191945502.png" alt=""></p>
+<blockquote>
+<p><strong>由上图可以看出，这个时刻(<code>946.662607</code>):  运行中的协程数量为2、可运行的协程数量为1、等待GC的协程为0</strong></p>
+</blockquote>
+<h3 id="43-某一时刻堆内存">4.3 某一时刻堆内存</h3>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/image-20211129221151476.png" alt=""></p>
+<h3 id="44-某一时刻系统线程">4.4 某一时刻系统线程</h3>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/image-20211129222055337.png" alt=""></p>
+<h3 id="45-查看垃圾回收">4.5 查看垃圾回收</h3>
+<h4 id="1单个垃圾回收">1.单个垃圾回收</h4>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/image-20211129230729540.png" alt=""></p>
+<h4 id="2查看多个垃圾回收">2.查看多个垃圾回收</h4>
+<blockquote>
+<p>选中多个垃圾回收，则可查看多个垃圾回收信息</p>
+</blockquote>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/image-20211129231221679.png" alt=""></p>
+<h4 id="3部分协程功能说明">3.部分协程功能说明</h4>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/image-20211130.png" alt=""></p>
+<ul>
+<li>
+<p><strong><code>proc start</code></strong>: 代表启动新线程或从系统调用恢复。</p>
+</li>
+<li>
+<p><strong><code>proc stop</code></strong>: 代表线程在系统调用中被阻塞或线程退出。</p>
+</li>
+<li>
+<p><strong><code>GC(dedicated、fractional、idle)</code></strong>：在标记阶段<code>GC</code>分为三种不同的 <code>mark worker</code> 模式; 它们代表着不同的专注程度，其中 <code>dedicated</code> 模式最专注，是完整的 GC 回收行为，<code>fractional </code>只会干部分的 GC 行为，<code>idle </code>最轻松。</p>
+</li>
+<li>
+<p><strong><code>MARK ASSIST</code></strong>： 在分配内存过程中重新标记内存(<code>mark the memory</code>)的goroutine</p>
+</li>
+<li>
+<p><strong><code>STW (sweep termination)</code></strong>: 代表<code>STW</code>扫描阶段终止。</p>
+</li>
+<li>
+<p><strong><code>STW (mark termination)</code></strong>: 代表<code>STW</code>标记阶段终止。</p>
+</li>
+<li>
+<p><strong><code>runtime.gcBgMarkWorker</code></strong>： 帮助标记内存的专用后台goroutine</p>
+</li>
+<li>
+<p><strong><code>runtime.bgsweep</code></strong>: 执行垃圾清理的goroutine。</p>
+</li>
+<li>
+<p><strong><code>runtime.bgscavenge</code></strong>: gc碎片清理的goroutine。</p>
+</li>
+<li>
+<p><strong><code>syscall</code></strong>: 代表goroutine在进行系统调用。</p>
+</li>
+<li>
+<p><strong><code>sysexit</code></strong>: 代表<code>goroutine</code>在<code>syscall</code>中被取消或阻塞。</p>
+</li>
+</ul>
+<h3 id="46-查看具体协程运行信息">4.6 查看具体协程运行信息</h3>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/image-20211129183333708.png" alt=""></p>
+<p><strong>含义说明：</strong></p>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Start</code></td>
+<td>开始时间</td>
+</tr>
+<tr>
+<td><code>Wall Duration</code></td>
+<td>持续时间</td>
+</tr>
+<tr>
+<td><code>Self Time</code></td>
+<td>执行时间</td>
+</tr>
+<tr>
+<td><code>Start Stack Trace</code></td>
+<td>开始时的堆栈信息</td>
+</tr>
+<tr>
+<td><code>End Stack Trace</code></td>
+<td>结束时的堆栈信息</td>
+</tr>
+<tr>
+<td><code>Incoming flow</code></td>
+<td>输入流</td>
+</tr>
+<tr>
+<td><code>Outgoing flow</code></td>
+<td>输出流</td>
+</tr>
+<tr>
+<td><code>Preceding events</code></td>
+<td>之前的事件</td>
+</tr>
+<tr>
+<td><code>Following events</code></td>
+<td>之后的事件</td>
+</tr>
+<tr>
+<td><code>All connected</code></td>
+<td>所有连接的事件</td>
+</tr>
+</tbody>
+</table>
+<h2 id="5-协程分析goroutine-analysis">5. 协程分析(<code>Goroutine analysis</code>)</h2>
+<h3 id="51-详情查看">5.1 详情查看</h3>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/image-20211130103051365.png" alt=""></p>
+<h3 id="52-字段说明">5.2 字段说明</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">名称</th>
+<th style="text-align:left">含义</th>
+<th style="text-align:left">耗时</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>Execution Time</code></td>
+<td style="text-align:left">执行时间</td>
+<td style="text-align:left">151µs</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Network Wait Time</code></td>
+<td style="text-align:left">网络等待时间</td>
+<td style="text-align:left">0ns</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Sync Block Time</code></td>
+<td style="text-align:left">同步阻塞时间</td>
+<td style="text-align:left">19s</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Blocking Syscall Time</code></td>
+<td style="text-align:left">调用阻塞时间</td>
+<td style="text-align:left">0ns</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Scheduler Wait Time</code></td>
+<td style="text-align:left">调度等待时间</td>
+<td style="text-align:left">24µs</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>GC Sweeping</code></td>
+<td style="text-align:left">GC 清扫</td>
+<td style="text-align:left">0ns</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>GC Pause</code></td>
+<td style="text-align:left">GC 暂停</td>
+<td style="text-align:left">12ms</td>
+</tr>
+</tbody>
+</table>
+<h2 id="6用户自定义任务">6.用户自定义任务</h2>
+<h3 id="61-代码详情">6.1 代码详情</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;context&#34;</span>
+	<span class="s">&#34;fmt&#34;</span>
+	<span class="s">&#34;os&#34;</span>
+	<span class="s">&#34;runtime/trace&#34;</span>
+	<span class="s">&#34;sync&#34;</span>
+<span class="p">)</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">file</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="s">&#34;./mytask.out&#34;</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%v\n&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+		<span class="k">return</span>
+	<span class="p">}</span>
+	<span class="k">defer</span> <span class="nx">file</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
+	<span class="nx">err</span> <span class="p">=</span> <span class="nx">trace</span><span class="p">.</span><span class="nf">Start</span><span class="p">(</span><span class="nx">file</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%v\n&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+		<span class="k">return</span>
+	<span class="p">}</span>
+	<span class="k">defer</span> <span class="nx">trace</span><span class="p">.</span><span class="nf">Stop</span><span class="p">()</span>
+
+	<span class="c1">// 创建自定义任务
+</span><span class="c1"></span>	<span class="nx">ctx</span><span class="p">,</span> <span class="nx">task</span> <span class="o">:=</span> <span class="nx">trace</span><span class="p">.</span><span class="nf">NewTask</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">Background</span><span class="p">(),</span> <span class="s">&#34;myTask&#34;</span><span class="p">)</span>
+	<span class="k">defer</span> <span class="nx">task</span><span class="p">.</span><span class="nf">End</span><span class="p">()</span>
+	<span class="kd">var</span> <span class="nx">wg</span> <span class="nx">sync</span><span class="p">.</span><span class="nx">WaitGroup</span>
+	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="mi">10</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="nx">gn</span> <span class="o">:=</span> <span class="nx">i</span>
+		<span class="c1">// 启动协程
+</span><span class="c1"></span>		<span class="nx">wg</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+		<span class="k">go</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">defer</span> <span class="nx">wg</span><span class="p">.</span><span class="nf">Done</span><span class="p">()</span>
+			<span class="nx">trace</span><span class="p">.</span><span class="nf">WithRegion</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;goroutine-%d&#34;</span><span class="p">,</span><span class="nx">gn</span><span class="p">),</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+				<span class="nx">sum</span> <span class="o">:=</span> <span class="mi">0</span>
+				<span class="k">for</span> <span class="nx">n</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">n</span> <span class="p">&lt;</span> <span class="mi">1000000</span><span class="p">;</span> <span class="nx">n</span><span class="o">++</span> <span class="p">{</span>
+					<span class="nx">sum</span> <span class="p">=</span> <span class="nx">sum</span> <span class="o">+</span> <span class="nx">n</span>
+				<span class="p">}</span>
+				<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;sum = &#34;</span><span class="p">,</span><span class="nx">sum</span><span class="p">)</span>
+			<span class="p">})</span>
+		<span class="p">}()</span>
+	<span class="p">}</span>
+	<span class="nx">wg</span><span class="p">.</span><span class="nf">Wait</span><span class="p">()</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;run ok!&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="62-查看详情">6.2 查看详情</h3>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/image-20211130224039381.png" alt=""></p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Learn Go</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2021-05-01
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/go%E6%A0%87%E5%87%86%E5%8C%85/">Go标准包</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/%E6%A0%87%E5%87%86%E5%8C%85/32-go-funk/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Go标准包(三十二):go-funk</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/%E6%A0%87%E5%87%86%E5%8C%85/30-pprof-2/">
+            <span class="next-text nav-default">Go标准包(三十):pprof-2</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/shershon1991" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/shershon520" class="iconfont icon-zhihu" title="zhihu"></a>
+  <a href="https://shershon1991.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2021 - 
+    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span>Learn Go</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.min.js" integrity="sha256-jwCP0NAdCBloaIWTWHmW4i3snUNMHUNO+jr9rYd2iOI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.locales.min.js" integrity="sha256-ZwofwC1Lf/faQCzN7nZtfijVV6hSwxjQMwXL4gn9qU8=" crossorigin="anonymous"></script>
+  <script><!-- NOTE: timeago.js uses the language code format like "zh_CN" (underscore and case sensitive) -->
+    var languageCode = "en".replace(/-/g, '_').replace(/_(.*)/, function ($0, $1) {return $0.replace($1, $1.toUpperCase());});
+    timeago().render(document.querySelectorAll('.timeago'), languageCode);
+    timeago.cancel();  
+  </script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

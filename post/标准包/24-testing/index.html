@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Go标准包(二十四):testing - Learn Go</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Learn Go" /><meta name="description" content="1. 介绍 testing 包为Go 语言提供自动化测试的支持。通过 go test 命令来执行单元测试文件，单元测试文件命名格式为: xxx_test.go,在单元测试文件中," /><meta name="keywords" content="博客, Learn Go, hugo" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.90.1 with theme even" />
+
+
+<link rel="canonical" href="https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/24-testing/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Go标准包(二十四):testing" />
+<meta property="og:description" content="1. 介绍 testing 包为Go 语言提供自动化测试的支持。通过 go test 命令来执行单元测试文件，单元测试文件命名格式为: xxx_test.go,在单元测试文件中," />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/24-testing/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2021-04-24T00:00:00+00:00" />
+<meta property="article:modified_time" content="2021-04-24T00:00:00+00:00" />
+
+<meta itemprop="name" content="Go标准包(二十四):testing">
+<meta itemprop="description" content="1. 介绍 testing 包为Go 语言提供自动化测试的支持。通过 go test 命令来执行单元测试文件，单元测试文件命名格式为: xxx_test.go,在单元测试文件中,"><meta itemprop="datePublished" content="2021-04-24T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2021-04-24T00:00:00+00:00" />
+<meta itemprop="wordCount" content="3420">
+<meta itemprop="keywords" content="Go标准包," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Go标准包(二十四):testing"/>
+<meta name="twitter:description" content="1. 介绍 testing 包为Go 语言提供自动化测试的支持。通过 go test 命令来执行单元测试文件，单元测试文件命名格式为: xxx_test.go,在单元测试文件中,"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Learn Go</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">首页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Learn Go</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">首页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Go标准包(二十四):testing</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-04-24 </span>
+        <div class="post-category">
+            <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+            <a href="/categories/go/"> Go </a>
+            </div>
+          <span class="more-meta"> 约 3420 字 </span>
+          <span class="more-meta"> 预计阅读 7 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#1-介绍">1. 介绍</a></li>
+        <li><a href="#2-功能测试">2. 功能测试</a>
+          <ul>
+            <li><a href="#21-编写规范">2.1 编写规范</a></li>
+            <li><a href="#22-测试示例">2.2 测试示例</a></li>
+            <li><a href="#23-子测试">2.3 子测试</a></li>
+          </ul>
+        </li>
+        <li><a href="#3-基准测试">3. 基准测试</a>
+          <ul>
+            <li><a href="#31-编写规范">3.1 编写规范</a></li>
+            <li><a href="#32-测试示例">3.2 测试示例</a></li>
+            <li><a href="#33-提高精准度">3.3 提高精准度</a></li>
+            <li><a href="#34-计时方法">3.4 计时方法</a></li>
+            <li><a href="#35-并行测试">3.5 并行测试</a></li>
+          </ul>
+        </li>
+        <li><a href="#4-报告函数">4. 报告函数</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+  <div class="post-outdated">
+    <div class="warn">
+      <p>【注意】最后更新于 <span class="timeago" datetime="2021-04-24T00:00:00" title="April 24, 2021">April 24, 2021</span>，文中内容可能已过时，请谨慎使用。</p>
+    </div>
+  </div>
+    <div class="post-content">
+      <h2 id="1-介绍">1. 介绍</h2>
+<p><code>testing</code> 包为<code>Go</code> 语言提供自动化测试的支持。通过 <code>go test</code> 命令来执行单元测试文件，<strong>单元测试文件命名格式为: <code>xxx_test.go</code></strong>,在单元测试文件中,根据测试类型不同可以分为:<strong>功能测试函数、基准测试函数</strong>,区别如下:</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>函数格式</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>功能测试函数</td>
+<td><code>TestXXX(t *testing.T)</code></td>
+<td>测试函数功能是否正常</td>
+</tr>
+<tr>
+<td>基准测试函数</td>
+<td><code>BenchmarkXXX(b *testing.B)</code></td>
+<td>测试函数的性能</td>
+</tr>
+</tbody>
+</table>
+<h2 id="2-功能测试">2. 功能测试</h2>
+<h3 id="21-编写规范">2.1 编写规范</h3>
+<h4 id="1-函数格式">1. 函数格式</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 导入测试包
+</span><span class="c1"></span><span class="kn">import</span> <span class="s">&#34;testing&#34;</span>
+<span class="c1">// 功能测试函数名
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestName</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">t</span><span class="p">.</span><span class="nf">Log</span><span class="p">(</span><span class="s">&#34;附加的日志信息&#34;</span><span class="p">)</span>
+	<span class="c1">// 功能逻辑代码
+</span><span class="c1"></span>	<span class="k">if</span> <span class="kc">true</span> <span class="p">{</span>
+		<span class="c1">// 错误时调用t.Error
+</span><span class="c1"></span>		<span class="nx">t</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="s">&#34;报告测试失败&#34;</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>整理规则如下:</strong></p>
+<ul>
+<li>每个测试函数必须导入<code>testing</code>包</li>
+<li>函数的名字必须以<code>Test</code>开头，<strong>可选的后缀名必须以大写字母开头</strong></li>
+<li>参数为<code>t *testing.T</code></li>
+<li>函数没有返回参数</li>
+</ul>
+<h4 id="2-运行格式">2. 运行格式</h4>
+<p>通过在<code>go test</code>命令后添加<code>-run</code>参数，其值对应的是个正则表达式，只有匹配上的函数才会被<code>go test</code>命令执行，如下示例:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 执行命令</span>
+go <span class="nb">test</span> -run<span class="o">=</span>? 文件<span class="o">[</span>目录<span class="o">]</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><strong><code>-run值说明</code></strong></p>
+<table>
+<thead>
+<tr>
+<th>值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>go test -run=.</code></td>
+<td>执行当前目录下所有测试文件中的<code>TestXX</code>函数</td>
+</tr>
+<tr>
+<td><code>go test -run=Pass</code></td>
+<td>执行当前目录下所有测试文件中的<code>TestPass*</code>函数</td>
+</tr>
+<tr>
+<td><code>go test -run=. a_test.go</code></td>
+<td>执行文件<code>a_test.go</code>中的<code>TestXX</code>函数</td>
+</tr>
+</tbody>
+</table>
+<h3 id="22-测试示例">2.2 测试示例</h3>
+<h4 id="1-代码详情">1. 代码详情</h4>
+<p><strong>文件名:<code>go_test.go </code></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">test</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;testing&#34;</span>
+<span class="p">)</span>
+
+<span class="c1">// 通过测试函数
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestPass</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">t</span><span class="p">.</span><span class="nf">Log</span><span class="p">(</span><span class="s">&#34;这个是通过测试函数&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1">// 不通过测试函数
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestFail</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">t</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="s">&#34;运行测试失败！&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="2-运行全部函数">2. 运行全部函数</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">➜  go <span class="nb">test</span> go_test.go -v
+<span class="o">===</span> RUN   TestPass
+    go_test.go:9: 这个是通过测试函数
+--- PASS: TestPass <span class="o">(</span>0.00s<span class="o">)</span>
+<span class="o">===</span> RUN   TestFail
+    go_test.go:14: 运行测试失败！
+--- FAIL: TestFail <span class="o">(</span>0.00s<span class="o">)</span>
+FAIL
+FAIL    command-line-arguments  1.635s
+FAIL
+</code></pre></td></tr></table>
+</div>
+</div><p><font color=red><b><code>go test</code>命令添加<code>-v</code>参数，可以查看测试函数名称和运行时间</b></font></p>
+<h4 id="3-运行指定函数">3. 运行指定函数</h4>
+<p><font color=red><code>go test</code>命令后添加<code>-run</code>参数，其值对应的是个正则表达式，只有匹配上的函数才会被<code>go test</code>命令执行，如下示例:</font></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 只执行函数TestPass</span>
+➜ go <span class="nb">test</span> go_test.go -v -run<span class="o">=</span><span class="s2">&#34;Pass&#34;</span>
+<span class="o">===</span> RUN   TestPass
+    more_func_test.go:9: 这个是通过测试函数
+--- PASS: TestPass <span class="o">(</span>0.00s<span class="o">)</span>
+PASS
+ok      command-line-arguments  0.889s
+<span class="c1"># 只执行TestFail函数</span>
+➜  go <span class="nb">test</span> go_test.go -v -run<span class="o">=</span><span class="s2">&#34;Fail&#34;</span>
+<span class="o">===</span> RUN   TestFail
+    more_func_test.go:14: 运行测试失败！
+--- FAIL: TestFail <span class="o">(</span>0.00s<span class="o">)</span>
+FAIL
+FAIL    command-line-arguments  0.198s
+FAIL
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="23-子测试">2.3 子测试</h3>
+<p>从<code>Go1.7+</code>后新增了子测试，我们可以通过使用<code>t.Run</code>来执行子测试,具体使用如下:</p>
+<h4 id="1-代码">1. 代码</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">test</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;testing&#34;</span>
+<span class="p">)</span>
+
+<span class="c1">// 子测试使用
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestSubtest</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// 子测试A
+</span><span class="c1"></span>	<span class="nx">t</span><span class="p">.</span><span class="nf">Run</span><span class="p">(</span><span class="s">&#34;subA&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">t</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="s">&#34;subA测试失败&#34;</span><span class="p">)</span>
+	<span class="p">})</span>
+	<span class="c1">// 子测试B
+</span><span class="c1"></span>	<span class="nx">t</span><span class="p">.</span><span class="nf">Run</span><span class="p">(</span><span class="s">&#34;subB&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">t</span><span class="p">.</span><span class="nf">Log</span><span class="p">(</span><span class="s">&#34;subB测试成功！&#34;</span><span class="p">)</span>
+	<span class="p">})</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="2-运行">2. 运行</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">➜ go <span class="nb">test</span> sub_test.go -v                    
+<span class="o">===</span> RUN   <span class="nv">TestSubtest</span>
+<span class="o">===</span> RUN   TestSubtest/subA
+    sub_test.go:11: <span class="nv">subA测试失败</span>
+<span class="o">===</span> RUN   TestSubtest/subB
+    sub_test.go:15: subB测试成功！
+--- FAIL: TestSubtest <span class="o">(</span>0.00s<span class="o">)</span>
+    --- FAIL: TestSubtest/subA <span class="o">(</span>0.00s<span class="o">)</span>
+    --- PASS: TestSubtest/subB <span class="o">(</span>0.00s<span class="o">)</span>
+FAIL
+FAIL    command-line-arguments  0.851s
+FAIL
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="3-基准测试">3. 基准测试</h2>
+<h3 id="31-编写规范">3.1 编写规范</h3>
+<h4 id="1-函数格式-1">1. 函数格式</h4>
+<p>基准测试就是在一定的工作负载之下检测程序性能的一种方法。基准测试函数的格式如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 导入测试包
+</span><span class="c1"></span><span class="kn">import</span> <span class="s">&#34;testing&#34;</span>
+<span class="c1">// 功能测试函数名
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">BenchmarkName</span><span class="p">(</span><span class="nx">b</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">B</span><span class="p">){</span>
+   <span class="c1">// 被测试代码放到循环内 
+</span><span class="c1"></span>    <span class="k">for</span> <span class="nx">i</span><span class="o">:=</span><span class="mi">0</span><span class="p">;</span><span class="nx">i</span><span class="p">&lt;</span><span class="nx">b</span><span class="p">.</span><span class="nx">N</span><span class="p">;</span><span class="nx">i</span><span class="o">++</span><span class="p">{</span>
+     <span class="c1">// 具体业务函数
+</span><span class="c1"></span>   <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>整理规则如下:</strong></p>
+<ul>
+<li>每个测试函数必须导入<code>testing</code>包</li>
+<li>函数的名字必须以<code>Benchmark</code>开头，<strong>可选的后缀名必须以大写字母开头</strong></li>
+<li>参数为<code>t *testing.B</code></li>
+<li><code>b.N</code>是基准测试框架提供的，表示循环的次数，</li>
+<li>函数没有返回参数</li>
+</ul>
+<h4 id="2-运行格式-1">2. 运行格式</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 执行命令</span>
+go <span class="nb">test</span> -bench<span class="o">=</span>? 文件<span class="o">[</span>目录<span class="o">]</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>在<code>Go</code>中我们还是通过<code>go test</code>来执行基准测试，区别是需要加上参数<code>-bench=?</code>,而其中的<code>?</code>代表匹配函数名的正则表达式，匹配规则如下:</p>
+<table>
+<thead>
+<tr>
+<th><code>?=</code></th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-bench=.</code></td>
+<td>代表执行所有函数</td>
+</tr>
+<tr>
+<td><code>-bench=Sub</code></td>
+<td>代表执行所有<code>BenchmarkSub*</code>的函数</td>
+</tr>
+</tbody>
+</table>
+<h3 id="32-测试示例">3.2 测试示例</h3>
+<h4 id="1-代码详情-1">1. 代码详情</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">tmp</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;testing&#34;</span>
+<span class="p">)</span>
+
+<span class="c1">// 变量赋值
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">BenchmarkVar</span><span class="p">(</span><span class="nx">b</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">B</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">strSlice</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">string</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="nx">b</span><span class="p">.</span><span class="nx">N</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="nx">strSlice</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">strSlice</span><span class="p">,</span><span class="s">&#34;go&#34;</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+<span class="c1">// 字符串拼接
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">BenchmarkMulti</span><span class="p">(</span><span class="nx">b</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">B</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">str</span> <span class="o">:=</span> <span class="s">&#34;&#34;</span>
+	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="nx">b</span><span class="p">.</span><span class="nx">N</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="nx">str</span> <span class="p">=</span> <span class="nx">str</span> <span class="o">+</span> <span class="nx">strconv</span><span class="p">.</span><span class="nf">Itoa</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><font color=red><b>@注意: 默认情况下，每个基准测试至少运行1秒。如果在Benchmark函数返回时没有到1秒，则b.N的值会增加，并且函数会再次运行。</b></font></p>
+<h4 id="2-运行全部函数-1">2. 运行全部函数</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 执行/test/bench_test.go文件中的所有Benchmark*函数</span>
+➜ go <span class="nb">test</span> -bench<span class="o">=</span>. ./test/bench_test.go 
+goos: darwin
+goarch: amd64
+cpu: Intel<span class="o">(</span>R<span class="o">)</span> Core<span class="o">(</span>TM<span class="o">)</span> i7-8750H CPU @ 2.20GHz
+BenchmarkSum-12         <span class="m">1000000000</span>               0.2574 ns/op
+BenchmarkMulti-12       <span class="m">1000000000</span>               0.2529 ns/op
+PASS
+ok      command-line-arguments  1.187s
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="3-运行指定函数-1">3. 运行指定函数</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 只匹配BenchmarkSum*的函数</span>
+➜ go <span class="nb">test</span> -bench<span class="o">=</span>Sum ./test/bench_test.go
+goos: darwin
+goarch: amd64
+cpu: Intel<span class="o">(</span>R<span class="o">)</span> Core<span class="o">(</span>TM<span class="o">)</span> i7-8750H CPU @ 2.20GHz
+BenchmarkSum-12         <span class="m">1000000000</span>               0.2588 ns/op
+PASS
+ok      command-line-arguments  0.457s
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="4-测试结果说明">4. 测试结果说明</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">goos: darwin <span class="c1"># 执行系统,常用的值：linux, windows, drawin (macOS)</span>
+goarch: amd64 <span class="c1"># CPU 架构,常用的值 amd64, arm64, i386, armhf</span>
+cpu: Intel<span class="o">(</span>R<span class="o">)</span> Core<span class="o">(</span>TM<span class="o">)</span> i7-8750H CPU @ 2.20GHz <span class="c1"># CPU信息</span>
+<span class="c1">#-12代表对应的 GOMAXPROCS 的值 </span>
+BenchmarkVar-12         23692479<span class="o">(</span>执行次数<span class="o">)</span>   48.77 ns/op <span class="c1">#(每次耗时48.77ns)</span>
+BenchmarkMulti-12         <span class="m">348254</span>          <span class="m">110975</span> ns/op
+PASS
+ok      command-line-arguments  43.349s
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="5-更多维度数据">5. 更多维度数据</h4>
+<p>可以通过添加参数<code>-benchmem</code>来获取更多的性能数据，执行如下:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">➜ go <span class="nb">test</span> -bench<span class="o">=</span>. ./test/bench_test.go  -benchmem
+goos: darwin
+goarch: amd64
+cpu: Intel<span class="o">(</span>R<span class="o">)</span> Core<span class="o">(</span>TM<span class="o">)</span> i7-8750H CPU @ 2.20GHz
+BenchmarkVar-12    <span class="m">18029002</span>   59.87 ns/op    <span class="m">89</span> B/op      <span class="m">0</span> allocs/op
+BenchmarkMulti-12  <span class="m">330717</span>     <span class="m">102558</span> ns/op   <span class="m">900342</span> B/op  <span class="m">2</span> allocs/op
+PASS
+ok      command-line-arguments  36.462s
+</code></pre></td></tr></table>
+</div>
+</div><table>
+<thead>
+<tr>
+<th>指标</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>x ns/op</code></td>
+<td>每次执行耗时<code>x ns</code></td>
+</tr>
+<tr>
+<td><code>x B/op</code></td>
+<td>每次操作内存分配了<code>x</code>字节</td>
+</tr>
+<tr>
+<td><code>x allocs/op</code></td>
+<td>每次操作进行了<code>x</code>次内存分配</td>
+</tr>
+</tbody>
+</table>
+<h3 id="33-提高精准度">3.3 提高精准度</h3>
+<h4 id="1-提高运行时间">1. 提高运行时间</h4>
+<p>默认情况下，每个基准测试至少运行1秒。如果在<code>Benchmark</code>函数返回时没有到1秒，则<code>b.N</code>的值会自增加，并且函数再次运行。如果想运行更长时间，可以通过参数<code>-benchtime</code>设置，如<code>-benchtime=5s代表最少运行5秒</code>，下面是两种情况的使用方法</p>
+<p><strong>a. 被测代码详情</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">test</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;fmt&#34;</span>
+	<span class="s">&#34;testing&#34;</span>
+<span class="p">)</span>
+<span class="c1">// 测试函数Sprintf性能
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">BenchmarkCompute</span><span class="p">(</span><span class="nx">b</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">B</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">b</span><span class="p">.</span><span class="nf">Logf</span><span class="p">(</span><span class="s">&#34;b.N=%d&#34;</span><span class="p">,</span><span class="nx">b</span><span class="p">.</span><span class="nx">N</span><span class="p">)</span>
+	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="nx">b</span><span class="p">.</span><span class="nx">N</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="nx">_</span> <span class="p">=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;成绩:%d&#34;</span><span class="p">,</span><span class="mi">80</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>b. 默认运行时间</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 默认运行</span>
+➜ go <span class="nb">test</span> -bench<span class="o">=</span>Compute ./test/bench_test.go              
+goarch: amd64
+cpu: Intel<span class="o">(</span>R<span class="o">)</span> Core<span class="o">(</span>TM<span class="o">)</span> i7-8750H CPU @ 2.20GHz
+BenchmarkCompute-12     <span class="m">13177644</span>                81.26 ns/op
+--- BENCH: BenchmarkCompute-12
+    bench_test.go:10: b.N<span class="o">=</span><span class="m">1</span>
+    bench_test.go:10: b.N<span class="o">=</span><span class="m">100</span>
+    bench_test.go:10: b.N<span class="o">=</span><span class="m">10000</span>
+    bench_test.go:10: b.N<span class="o">=</span><span class="m">1000000</span>
+    bench_test.go:10: b.N<span class="o">=</span><span class="m">13177644</span>
+PASS
+ok      command-line-arguments  1.556s
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>b. 设置至少运行时间</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 通过参数-benchtime=5s，设置至少运行5秒</span>
+➜ go <span class="nb">test</span> -bench<span class="o">=</span>Compute ./test/bench_test.go -benchtime<span class="o">=</span>5s
+goos: darwin
+goarch: amd64
+cpu: Intel<span class="o">(</span>R<span class="o">)</span> Core<span class="o">(</span>TM<span class="o">)</span> i7-8750H CPU @ 2.20GHz
+BenchmarkCompute-12     <span class="m">69329104</span>                82.30 ns/op
+--- BENCH: BenchmarkCompute-12
+    bench_test.go:10: b.N<span class="o">=</span><span class="m">1</span>
+    bench_test.go:10: b.N<span class="o">=</span><span class="m">100</span>
+    bench_test.go:10: b.N<span class="o">=</span><span class="m">10000</span>
+    bench_test.go:10: b.N<span class="o">=</span><span class="m">1000000</span>
+    bench_test.go:10: b.N<span class="o">=</span><span class="m">69329104</span>
+PASS
+ok      command-line-arguments  6.208s
+</code></pre></td></tr></table>
+</div>
+</div><p><font color=red><b>@注意:通过上面代码发现不管是运行1.5秒还是运行6.2秒，每次消耗时间没有太大差异，从侧面说明被测函数性能稳定。</b></font></p>
+<h4 id="2-设置次数运行结果">2. 设置次数运行结果</h4>
+<p>默认每次都是运行一次基准测试函数活的一次运行的结果,但是可以通过参数<code>-count</code>来设置获取运行多次的结果，具体使用如下:</p>
+<p><strong>执行上面示例:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># -count=5</span>
+➜ go <span class="nb">test</span> -bench<span class="o">=</span>Compute ./test/bench_test.go -count<span class="o">=</span><span class="m">5</span>
+goos: darwin
+goarch: amd64
+cpu: Intel<span class="o">(</span>R<span class="o">)</span> Core<span class="o">(</span>TM<span class="o">)</span> i7-8750H CPU @ 2.20GHz
+BenchmarkCompute-12     <span class="m">13069844</span>                81.35 ns/op
+BenchmarkCompute-12     <span class="m">14387593</span>                81.51 ns/op
+BenchmarkCompute-12     <span class="m">14359526</span>                82.72 ns/op
+BenchmarkCompute-12     <span class="m">14074830</span>                83.99 ns/op
+BenchmarkCompute-12     <span class="m">14114455</span>                81.53 ns/op
+PASS
+ok      command-line-arguments  6.523s
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="34-计时方法">3.4 计时方法</h3>
+<h4 id="1-函数列表">1. 函数列表</h4>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ResetTimer</code></td>
+<td>重置计时器</td>
+</tr>
+<tr>
+<td><code>StartTimer</code></td>
+<td>控制开始计时</td>
+</tr>
+<tr>
+<td><code>StopTimer</code></td>
+<td>控制停止计时</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>进行基准测试之前可能会做一些准备，比如构建测试数据等，这些准备也需要消耗时间，所以需要把这部分时间排除在外。这时候我们可以使用 <code>ResetTimer</code> 方法来重置计时器，避免准备数据的耗时对测试数据造成干扰</p>
+</blockquote>
+<h4 id="2-使用示例">2. 使用示例</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 重置时间使用
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">BenchmarkTime</span><span class="p">(</span><span class="nx">b</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">B</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// 准备工作
+</span><span class="c1"></span>	<span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nx">Second</span> <span class="o">*</span> <span class="mi">3</span><span class="p">)</span>
+	<span class="c1">// 重置时间
+</span><span class="c1"></span>	<span class="nx">b</span><span class="p">.</span><span class="nf">ResetTimer</span><span class="p">()</span>
+	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="nx">b</span><span class="p">.</span><span class="nx">N</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="nx">_</span> <span class="p">=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;hello:%v&#34;</span><span class="p">,</span><span class="s">&#34;word&#34;</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="35-并行测试">3.5 并行测试</h3>
+<p>在基准测试中可以使用<code>RunParallel</code>函数,来运行并行测试，它创建多个<code>goroutine</code>，并在其中分配<code>b.N</code>个迭代。 <code>goroutine</code>的数量默认为<code>GOMAXPROCS</code>。要想增加非<code>CPU</code>基准测试的并行度，可以在调用<code>RunParallel</code>之前调用<code>SetParallelism</code>。 也可以通过<code>-cpu=</code>来设置使用。函数签名具体如下:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="p">(</span><span class="nx">b</span> <span class="o">*</span><span class="nx">B</span><span class="p">)</span> <span class="nf">RunParallel</span><span class="p">(</span><span class="nx">body</span> <span class="kd">func</span><span class="p">(</span><span class="o">*</span><span class="nx">PB</span><span class="p">))</span>
+</code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p><code>body</code>将在每个<code>goroutine</code>中运行。它应该设置任何<code>goroutine-loca</code>l状态，然后迭代直到<code>pb.Next</code>返回<code>false</code>。它不应使用<code>StartTimer</code>，<code>StopTimer</code>或<code>ResetTimer</code>函数，因为它们具有全局作用。它也不应调用运行。</p>
+</blockquote>
+<h4 id="1-函数格式-2">1. 函数格式</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">BenchmarkXXX</span><span class="p">(</span><span class="nx">b</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">B</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// b.SetParallelism(1) // 设置使用的CPU数
+</span><span class="c1"></span>	<span class="nx">b</span><span class="p">.</span><span class="nf">RunParallel</span><span class="p">(</span><span class="kd">func</span><span class="p">(</span><span class="nx">pb</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">PB</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="nx">pb</span><span class="p">.</span><span class="nf">Next</span><span class="p">()</span> <span class="p">{</span>
+			<span class="c1">// 调用具体函数
+</span><span class="c1"></span>		<span class="p">}</span>
+	<span class="p">})</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="2-代码示例">2. 代码示例</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 并行测试
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">BenchmarkParallel</span><span class="p">(</span><span class="nx">b</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">B</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">b</span><span class="p">.</span><span class="nf">RunParallel</span><span class="p">(</span><span class="kd">func</span><span class="p">(</span><span class="nx">pb</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">PB</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="nx">pb</span><span class="p">.</span><span class="nf">Next</span><span class="p">()</span> <span class="p">{</span>
+			<span class="nx">_</span> <span class="p">=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;成绩:%d&#34;</span><span class="p">,</span><span class="mi">80</span><span class="p">)</span>
+		<span class="p">}</span>
+	<span class="p">})</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="4-运行测试">4. 运行测试</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 不带-cpu</span>
+➜ go <span class="nb">test</span> -bench<span class="o">=</span>Parallel ./test/bench_test.go
+goos: darwin
+goarch: amd64
+cpu: Intel<span class="o">(</span>R<span class="o">)</span> Core<span class="o">(</span>TM<span class="o">)</span> i7-8750H CPU @ 2.20GHz
+BenchmarkParallel-12            <span class="m">50117173</span>                22.84 ns/op
+PASS
+ok      command-line-arguments  1.788s
+<span class="c1"># 设置CPU=4</span>
+➜ go <span class="nb">test</span> -bench<span class="o">=</span>Parallel ./test/bench_test.go -cpu<span class="o">=</span><span class="m">4</span>
+goos: darwin
+goarch: amd64
+cpu: Intel<span class="o">(</span>R<span class="o">)</span> Core<span class="o">(</span>TM<span class="o">)</span> i7-8750H CPU @ 2.20GHz
+BenchmarkParallel-4     <span class="m">35953536</span>                32.66 ns/op
+PASS
+ok      command-line-arguments  4.240s
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="4-报告函数">4. 报告函数</h2>
+<p><code>类型testing.T和testing.B</code>都继承了类型<code>testing.common</code>,<code>testing.common</code>常用的报告函数，整理如下:</p>
+<table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Fail</code></td>
+<td>测试失败，但是后续代码依然会执行</td>
+</tr>
+<tr>
+<td><code>FailNow</code></td>
+<td>测试失败，并中断代码执行</td>
+</tr>
+<tr>
+<td><code>SkipNow</code></td>
+<td>跳过测试，中断代码执行，并且不会标识测试失败</td>
+</tr>
+<tr>
+<td><code>Log</code></td>
+<td>输出信息</td>
+</tr>
+<tr>
+<td><code>Logf</code></td>
+<td>输出格式化的信息</td>
+</tr>
+<tr>
+<td><code>Skip</code></td>
+<td>相当于<code>Log + SkipNow</code></td>
+</tr>
+<tr>
+<td><code>Skipf</code></td>
+<td>相当于 <code>Logf + SkipNow</code></td>
+</tr>
+<tr>
+<td><code>Error</code></td>
+<td>相当于 <code>Log + Fail</code></td>
+</tr>
+<tr>
+<td><code>Errorf</code></td>
+<td>相当于 <code>Logf + Fail</code></td>
+</tr>
+<tr>
+<td><code>Fatal</code></td>
+<td>相当于<code> Log + FailNow</code></td>
+</tr>
+<tr>
+<td><code>Fatalf</code></td>
+<td>相当于 <code>Logf + FailNow</code></td>
+</tr>
+</tbody>
+</table>
+<p><font color=red><b>@注意: 上表中说的测试中断，都是指中断其所在的测试函数。</b></font></p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Learn Go</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2021-04-24
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/go%E6%A0%87%E5%87%86%E5%8C%85/">Go标准包</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/%E6%A0%87%E5%87%86%E5%8C%85/25-es/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Go标准包(二十五):es</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/%E6%A0%87%E5%87%86%E5%8C%85/23-go-redis/">
+            <span class="next-text nav-default">Go标准包(二十三):go-redis</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/shershon1991" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/shershon520" class="iconfont icon-zhihu" title="zhihu"></a>
+  <a href="https://shershon1991.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2021 - 
+    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span>Learn Go</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.min.js" integrity="sha256-jwCP0NAdCBloaIWTWHmW4i3snUNMHUNO+jr9rYd2iOI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.locales.min.js" integrity="sha256-ZwofwC1Lf/faQCzN7nZtfijVV6hSwxjQMwXL4gn9qU8=" crossorigin="anonymous"></script>
+  <script><!-- NOTE: timeago.js uses the language code format like "zh_CN" (underscore and case sensitive) -->
+    var languageCode = "en".replace(/-/g, '_').replace(/_(.*)/, function ($0, $1) {return $0.replace($1, $1.toUpperCase());});
+    timeago().render(document.querySelectorAll('.timeago'), languageCode);
+    timeago.cancel();  
+  </script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

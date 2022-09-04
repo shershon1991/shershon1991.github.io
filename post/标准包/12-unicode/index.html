@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Go标准包(十二):unicode - Learn Go</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Learn Go" /><meta name="description" content="1.介绍 unicode包提供了诸多处理rune字符相关功能的函数（比如区分字母和数字，或者是字母的大写和小写转换等) 2.判断函数 2.1 是否为空格" /><meta name="keywords" content="博客, Learn Go, hugo" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.90.1 with theme even" />
+
+
+<link rel="canonical" href="https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/12-unicode/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Go标准包(十二):unicode" />
+<meta property="og:description" content="1.介绍 unicode包提供了诸多处理rune字符相关功能的函数（比如区分字母和数字，或者是字母的大写和小写转换等) 2.判断函数 2.1 是否为空格" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/12-unicode/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2021-04-12T00:00:00+00:00" />
+<meta property="article:modified_time" content="2021-04-12T00:00:00+00:00" />
+
+<meta itemprop="name" content="Go标准包(十二):unicode">
+<meta itemprop="description" content="1.介绍 unicode包提供了诸多处理rune字符相关功能的函数（比如区分字母和数字，或者是字母的大写和小写转换等) 2.判断函数 2.1 是否为空格"><meta itemprop="datePublished" content="2021-04-12T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2021-04-12T00:00:00+00:00" />
+<meta itemprop="wordCount" content="909">
+<meta itemprop="keywords" content="Go标准包," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Go标准包(十二):unicode"/>
+<meta name="twitter:description" content="1.介绍 unicode包提供了诸多处理rune字符相关功能的函数（比如区分字母和数字，或者是字母的大写和小写转换等) 2.判断函数 2.1 是否为空格"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Learn Go</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">首页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Learn Go</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">首页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Go标准包(十二):unicode</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-04-12 </span>
+        <div class="post-category">
+            <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+            <a href="/categories/go/"> Go </a>
+            </div>
+          <span class="more-meta"> 约 909 字 </span>
+          <span class="more-meta"> 预计阅读 2 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#1介绍">1.介绍</a></li>
+            <li><a href="#2判断函数">2.判断函数</a></li>
+            <li><a href="#3-转换函数">3. 转换函数</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+  <div class="post-outdated">
+    <div class="warn">
+      <p>【注意】最后更新于 <span class="timeago" datetime="2021-04-12T00:00:00" title="April 12, 2021">April 12, 2021</span>，文中内容可能已过时，请谨慎使用。</p>
+    </div>
+  </div>
+    <div class="post-content">
+      <h3 id="1介绍">1.介绍</h3>
+<p><code>unicode</code>包提供了诸多处理<code>rune</code>字符相关功能的函数（比如区分字母和数字，或者是字母的大写和小写转换等)</p>
+<h3 id="2判断函数">2.判断函数</h3>
+<h4 id="21-是否为空格isspace">2.1 是否为空格(<code>IsSpace</code>)</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">TestJudge</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">rune1</span> <span class="o">:=</span> <span class="sc">&#39; &#39;</span>
+	<span class="nx">rune2</span> <span class="o">:=</span> <span class="sc">&#39;h&#39;</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;[%c] 是空格? %t\n&#34;</span><span class="p">,</span><span class="nx">rune1</span><span class="p">,</span><span class="nx">unicode</span><span class="p">.</span><span class="nf">IsSpace</span><span class="p">(</span><span class="nx">rune1</span><span class="p">))</span>
+  <span class="c1">// 输出 [ ] 是空格? true
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;[%c] 是空格? %t\n&#34;</span><span class="p">,</span><span class="nx">rune2</span><span class="p">,</span><span class="nx">unicode</span><span class="p">.</span><span class="nf">IsSpace</span><span class="p">(</span><span class="nx">rune2</span><span class="p">))</span>
+  <span class="c1">// 输出 [h] 是空格? false
+</span><span class="c1"></span><span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="22-是否为十进制数isdigit">2.2 是否为十进制数(<code>IsDigit</code>)</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">d1</span> <span class="o">:=</span> <span class="sc">&#39;1&#39;</span>
+<span class="nx">d2</span> <span class="o">:=</span> <span class="sc">&#39;w&#39;</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;[%c] 是十进制数? %t\n&#34;</span><span class="p">,</span><span class="nx">d1</span><span class="p">,</span><span class="nx">unicode</span><span class="p">.</span><span class="nf">IsDigit</span><span class="p">(</span><span class="nx">d1</span><span class="p">))</span>
+<span class="c1">// 输出: [1] 是十进制数? true
+</span><span class="c1"></span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;[%c] 是十进制数? %t\n&#34;</span><span class="p">,</span><span class="nx">d2</span><span class="p">,</span><span class="nx">unicode</span><span class="p">.</span><span class="nf">IsDigit</span><span class="p">(</span><span class="nx">d2</span><span class="p">))</span>
+<span class="c1">// 输出: [w] 是十进制数? false
+</span></code></pre></td></tr></table>
+</div>
+</div><h4 id="23-是否为数字isnumber">2.3 是否为数字(<code>IsNumber</code>)</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">d1</span> <span class="o">:=</span> <span class="sc">&#39;1&#39;</span>
+<span class="nx">d2</span> <span class="o">:=</span> <span class="sc">&#39;w&#39;</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;[%c] 是数字? %t\n&#34;</span><span class="p">,</span><span class="nx">d1</span><span class="p">,</span><span class="nx">unicode</span><span class="p">.</span><span class="nf">IsNumber</span><span class="p">(</span><span class="nx">d1</span><span class="p">))</span>
+<span class="c1">// 输出: [1] 是数字? true
+</span><span class="c1"></span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;[%c] 是数字? %t\n&#34;</span><span class="p">,</span><span class="nx">d2</span><span class="p">,</span><span class="nx">unicode</span><span class="p">.</span><span class="nf">IsNumber</span><span class="p">(</span><span class="nx">d2</span><span class="p">))</span>
+<span class="c1">// 输出: [w] 是数字? false
+</span></code></pre></td></tr></table>
+</div>
+</div><h4 id="24-是否为字母字符isletter">2.4 是否为字母字符(<code>IsLetter</code>)</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 是否为字母字符
+</span><span class="c1"></span><span class="nx">str1</span> <span class="o">:=</span> <span class="sc">&#39;刘&#39;</span>
+<span class="nx">str2</span> <span class="o">:=</span> <span class="sc">&#39;l&#39;</span>
+<span class="nx">str3</span> <span class="o">:=</span> <span class="sc">&#39;W&#39;</span>
+<span class="nx">str4</span> <span class="o">:=</span> <span class="sc">&#39;!&#39;</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;[%c] 是字母? %t\n&#34;</span><span class="p">,</span><span class="nx">str1</span><span class="p">,</span><span class="nx">unicode</span><span class="p">.</span><span class="nf">IsLetter</span><span class="p">(</span><span class="nx">str1</span><span class="p">))</span>
+<span class="c1">// [刘] 是字母? true
+</span><span class="c1"></span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;[%c] 是字母? %t\n&#34;</span><span class="p">,</span><span class="nx">str2</span><span class="p">,</span><span class="nx">unicode</span><span class="p">.</span><span class="nf">IsLetter</span><span class="p">(</span><span class="nx">str2</span><span class="p">))</span>
+<span class="c1">// [l] 是字母? true
+</span><span class="c1"></span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;[%c] 是字母? %t\n&#34;</span><span class="p">,</span><span class="nx">str3</span><span class="p">,</span><span class="nx">unicode</span><span class="p">.</span><span class="nf">IsLetter</span><span class="p">(</span><span class="nx">str3</span><span class="p">))</span>
+<span class="c1">// [W] 是字母? true
+</span><span class="c1"></span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;[%c] 是字母? %t\n&#34;</span><span class="p">,</span><span class="nx">str4</span><span class="p">,</span><span class="nx">unicode</span><span class="p">.</span><span class="nf">IsLetter</span><span class="p">(</span><span class="nx">str4</span><span class="p">))</span>
+<span class="c1">// [!] 是字母? false
+</span></code></pre></td></tr></table>
+</div>
+</div><p><font color=red>@注意: 汉字也是一个字母字符</font></p>
+<h4 id="25-是否为标点符号ispunct">2.5 是否为标点符号(<code>IsPunct</code>)</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">str1</span> <span class="o">:=</span> <span class="sc">&#39;刘&#39;</span>
+<span class="nx">str2</span> <span class="o">:=</span> <span class="sc">&#39;l&#39;</span>
+<span class="nx">str3</span> <span class="o">:=</span> <span class="sc">&#39;!&#39;</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;[%c] 是标点符号? %t\n&#34;</span><span class="p">,</span><span class="nx">str1</span><span class="p">,</span><span class="nx">unicode</span><span class="p">.</span><span class="nf">IsPunct</span><span class="p">(</span><span class="nx">str1</span><span class="p">))</span>
+<span class="c1">// [刘] 是标点符号? false
+</span><span class="c1"></span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;[%c] 是标点符号? %t\n&#34;</span><span class="p">,</span><span class="nx">str2</span><span class="p">,</span><span class="nx">unicode</span><span class="p">.</span><span class="nf">IsPunct</span><span class="p">(</span><span class="nx">str2</span><span class="p">))</span>
+<span class="c1">// [l] 是标点符号? false
+</span><span class="c1"></span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;[%c] 是标点符号? %t\n&#34;</span><span class="p">,</span><span class="nx">str3</span><span class="p">,</span><span class="nx">unicode</span><span class="p">.</span><span class="nf">IsPunct</span><span class="p">(</span><span class="nx">str3</span><span class="p">))</span>
+<span class="c1">// [!] 是标点符号? true
+</span></code></pre></td></tr></table>
+</div>
+</div><h4 id="26-是否为小写字母islower">2.6 是否为小写字母(<code>IsLower</code>)</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">str1</span> <span class="o">:=</span> <span class="sc">&#39;刘&#39;</span>
+<span class="nx">str2</span> <span class="o">:=</span> <span class="sc">&#39;l&#39;</span>
+<span class="nx">str3</span> <span class="o">:=</span> <span class="sc">&#39;W&#39;</span>
+<span class="nx">str4</span> <span class="o">:=</span> <span class="sc">&#39;!&#39;</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;[%c] 是小写字母? %t\n&#34;</span><span class="p">,</span> <span class="nx">str1</span><span class="p">,</span> <span class="nx">unicode</span><span class="p">.</span><span class="nf">IsLower</span><span class="p">(</span><span class="nx">str1</span><span class="p">))</span>
+<span class="c1">// [刘] 是小写字母? false
+</span><span class="c1"></span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;[%c] 是小写字母? %t\n&#34;</span><span class="p">,</span> <span class="nx">str2</span><span class="p">,</span> <span class="nx">unicode</span><span class="p">.</span><span class="nf">IsLower</span><span class="p">(</span><span class="nx">str2</span><span class="p">))</span>
+<span class="c1">// [l] 是小写字母? true
+</span><span class="c1"></span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;[%c] 是小写字母? %t\n&#34;</span><span class="p">,</span> <span class="nx">str3</span><span class="p">,</span> <span class="nx">unicode</span><span class="p">.</span><span class="nf">IsLower</span><span class="p">(</span><span class="nx">str3</span><span class="p">))</span>
+<span class="c1">// [W] 是小写字母? false
+</span><span class="c1"></span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;[%c] 是小写字母? %t\n&#34;</span><span class="p">,</span> <span class="nx">str4</span><span class="p">,</span> <span class="nx">unicode</span><span class="p">.</span><span class="nf">IsLower</span><span class="p">(</span><span class="nx">str4</span><span class="p">))</span>
+<span class="c1">// [!] 是小写字母? false
+</span></code></pre></td></tr></table>
+</div>
+</div><h4 id="27--是否为大写字母isupper">2.7  是否为大写字母(<code>IsUpper</code>)</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">str1</span> <span class="o">:=</span> <span class="sc">&#39;刘&#39;</span>
+<span class="nx">str2</span> <span class="o">:=</span> <span class="sc">&#39;l&#39;</span>
+<span class="nx">str3</span> <span class="o">:=</span> <span class="sc">&#39;W&#39;</span>
+<span class="nx">str4</span> <span class="o">:=</span> <span class="sc">&#39;!&#39;</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;[%c] 是大写字母? %t\n&#34;</span><span class="p">,</span> <span class="nx">str1</span><span class="p">,</span> <span class="nx">unicode</span><span class="p">.</span><span class="nf">IsUpper</span><span class="p">(</span><span class="nx">str1</span><span class="p">))</span>
+<span class="c1">// [刘] 是大写字母? false
+</span><span class="c1"></span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;[%c] 是大写字母? %t\n&#34;</span><span class="p">,</span> <span class="nx">str2</span><span class="p">,</span> <span class="nx">unicode</span><span class="p">.</span><span class="nf">IsUpper</span><span class="p">(</span><span class="nx">str2</span><span class="p">))</span>
+<span class="c1">// [l] 是大写字母? false
+</span><span class="c1"></span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;[%c] 是大写字母? %t\n&#34;</span><span class="p">,</span> <span class="nx">str3</span><span class="p">,</span> <span class="nx">unicode</span><span class="p">.</span><span class="nf">IsUpper</span><span class="p">(</span><span class="nx">str3</span><span class="p">))</span>
+<span class="c1">// [W] 是大写字母? true
+</span><span class="c1"></span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;[%c] 是大写字母? %t\n&#34;</span><span class="p">,</span> <span class="nx">str4</span><span class="p">,</span> <span class="nx">unicode</span><span class="p">.</span><span class="nf">IsUpper</span><span class="p">(</span><span class="nx">str4</span><span class="p">))</span>
+<span class="c1">// [!] 是大写字母? false
+</span></code></pre></td></tr></table>
+</div>
+</div><h4 id="28-是否为汉字">2.8 是否为汉字</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">str1</span> <span class="o">:=</span> <span class="sc">&#39;刘&#39;</span>
+<span class="nx">str2</span> <span class="o">:=</span> <span class="sc">&#39;l&#39;</span>
+<span class="nx">str3</span> <span class="o">:=</span> <span class="sc">&#39;!&#39;</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;[%c] 是汉字? %t\n&#34;</span><span class="p">,</span> <span class="nx">str1</span><span class="p">,</span> <span class="nx">unicode</span><span class="p">.</span><span class="nf">Is</span><span class="p">(</span><span class="nx">unicode</span><span class="p">.</span><span class="nx">Scripts</span><span class="p">[</span><span class="s">&#34;Han&#34;</span><span class="p">],</span> <span class="nx">str1</span><span class="p">))</span>
+<span class="c1">// [刘] 是汉字? true
+</span><span class="c1"></span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;[%c] 是汉字? %t\n&#34;</span><span class="p">,</span> <span class="nx">str2</span><span class="p">,</span> <span class="nx">unicode</span><span class="p">.</span><span class="nf">Is</span><span class="p">(</span><span class="nx">unicode</span><span class="p">.</span><span class="nx">Scripts</span><span class="p">[</span><span class="s">&#34;Han&#34;</span><span class="p">],</span> <span class="nx">str2</span><span class="p">))</span>
+<span class="c1">// [l] 是汉字? false
+</span><span class="c1"></span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;[%c] 是汉字? %t\n&#34;</span><span class="p">,</span> <span class="nx">str3</span><span class="p">,</span> <span class="nx">unicode</span><span class="p">.</span><span class="nf">Is</span><span class="p">(</span><span class="nx">unicode</span><span class="p">.</span><span class="nx">Scripts</span><span class="p">[</span><span class="s">&#34;Han&#34;</span><span class="p">],</span> <span class="nx">str3</span><span class="p">))</span>
+<span class="c1">// [!] 是汉字? false
+</span></code></pre></td></tr></table>
+</div>
+</div><h3 id="3-转换函数">3. 转换函数</h3>
+<h4 id="31-转成小写tolower">3.1 转成小写(<code>ToLower</code>)</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">str1</span> <span class="o">:=</span> <span class="sc">&#39;W&#39;</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;[%c] 转成小写: %c \n&#34;</span><span class="p">,</span> <span class="nx">str1</span><span class="p">,</span> <span class="nx">unicode</span><span class="p">.</span><span class="nf">ToLower</span><span class="p">(</span><span class="nx">str1</span><span class="p">))</span>
+<span class="c1">// [W] 转成小写: w 
+</span></code></pre></td></tr></table>
+</div>
+</div><h4 id="32-转成大写toupper">3.2 转成大写(<code>ToUpper</code>)</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">str2</span> <span class="o">:=</span> <span class="sc">&#39;a&#39;</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;[%c] 转成大写: %c \n&#34;</span><span class="p">,</span> <span class="nx">str2</span><span class="p">,</span> <span class="nx">unicode</span><span class="p">.</span><span class="nf">ToUpper</span><span class="p">(</span><span class="nx">str2</span><span class="p">))</span>
+<span class="c1">// [a] 转成大写: A
+</span></code></pre></td></tr></table>
+</div>
+</div>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Learn Go</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2021-04-12
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/go%E6%A0%87%E5%87%86%E5%8C%85/">Go标准包</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/%E6%A0%87%E5%87%86%E5%8C%85/13-zap/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Go标准包(十三):zap</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/%E6%A0%87%E5%87%86%E5%8C%85/11-sort/">
+            <span class="next-text nav-default">Go标准包(十一):sort</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/shershon1991" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/shershon520" class="iconfont icon-zhihu" title="zhihu"></a>
+  <a href="https://shershon1991.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2021 - 
+    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span>Learn Go</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.min.js" integrity="sha256-jwCP0NAdCBloaIWTWHmW4i3snUNMHUNO+jr9rYd2iOI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.locales.min.js" integrity="sha256-ZwofwC1Lf/faQCzN7nZtfijVV6hSwxjQMwXL4gn9qU8=" crossorigin="anonymous"></script>
+  <script><!-- NOTE: timeago.js uses the language code format like "zh_CN" (underscore and case sensitive) -->
+    var languageCode = "en".replace(/-/g, '_').replace(/_(.*)/, function ($0, $1) {return $0.replace($1, $1.toUpperCase());});
+    timeago().render(document.querySelectorAll('.timeago'), languageCode);
+    timeago.cancel();  
+  </script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

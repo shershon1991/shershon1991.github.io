@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Go标准包(二十一):excel - Learn Go</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Learn Go" /><meta name="description" content="1. 介绍 1. 1 什么是Excelize Excelize 是 Go 语言编写的用于操作 Office Excel 文档基础库，基于 ECMA-376，ISO/IEC 29500 国际标准。可以使用它来读取、写" /><meta name="keywords" content="博客, Learn Go, hugo" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.90.1 with theme even" />
+
+
+<link rel="canonical" href="https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/21-excel/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Go标准包(二十一):excel" />
+<meta property="og:description" content="1. 介绍 1. 1 什么是Excelize Excelize 是 Go 语言编写的用于操作 Office Excel 文档基础库，基于 ECMA-376，ISO/IEC 29500 国际标准。可以使用它来读取、写" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/21-excel/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2021-04-21T00:00:00+00:00" />
+<meta property="article:modified_time" content="2021-04-21T00:00:00+00:00" />
+
+<meta itemprop="name" content="Go标准包(二十一):excel">
+<meta itemprop="description" content="1. 介绍 1. 1 什么是Excelize Excelize 是 Go 语言编写的用于操作 Office Excel 文档基础库，基于 ECMA-376，ISO/IEC 29500 国际标准。可以使用它来读取、写"><meta itemprop="datePublished" content="2021-04-21T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2021-04-21T00:00:00+00:00" />
+<meta itemprop="wordCount" content="2020">
+<meta itemprop="keywords" content="Go标准包," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Go标准包(二十一):excel"/>
+<meta name="twitter:description" content="1. 介绍 1. 1 什么是Excelize Excelize 是 Go 语言编写的用于操作 Office Excel 文档基础库，基于 ECMA-376，ISO/IEC 29500 国际标准。可以使用它来读取、写"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Learn Go</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">首页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Learn Go</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">首页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Go标准包(二十一):excel</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-04-21 </span>
+        <div class="post-category">
+            <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+            <a href="/categories/go/"> Go </a>
+            </div>
+          <span class="more-meta"> 约 2020 字 </span>
+          <span class="more-meta"> 预计阅读 5 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#1-介绍">1. 介绍</a>
+          <ul>
+            <li><a href="#1-1-什么是excelize">1. 1 什么是<code>Excelize</code></a></li>
+            <li><a href="#12-为什么用excelize">1.2 为什么用<code>Excelize</code></a></li>
+            <li><a href="#13-性能数据">1.3 性能数据</a></li>
+          </ul>
+        </li>
+        <li><a href="#2-安装">2. 安装</a>
+          <ul>
+            <li><a href="#21-安装命令">2.1 安装命令</a></li>
+            <li><a href="#22-go-modules-安装">2.2 Go Modules 安装</a></li>
+          </ul>
+        </li>
+        <li><a href="#3-表格写入">3. 表格写入</a>
+          <ul>
+            <li><a href="#31-单赋值写入setcellvalue">3.1 单赋值写入(<code>SetCellValue</code>)</a></li>
+            <li><a href="#32-按行赋值写入setsheetrow">3.2 按行赋值写入(<code>SetSheetRow</code>)</a></li>
+            <li><a href="#33-按行流式写入newstreamwriter">3.3 按行流式写入(<code>NewStreamWriter</code>)</a></li>
+          </ul>
+        </li>
+        <li><a href="#4-读取">4. 读取</a>
+          <ul>
+            <li><a href="#41-代码">4.1 代码</a></li>
+            <li><a href="#42-运行结果">4.2 运行结果</a></li>
+          </ul>
+        </li>
+        <li><a href="#5-更多使用">5. 更多使用</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+  <div class="post-outdated">
+    <div class="warn">
+      <p>【注意】最后更新于 <span class="timeago" datetime="2021-04-21T00:00:00" title="April 21, 2021">April 21, 2021</span>，文中内容可能已过时，请谨慎使用。</p>
+    </div>
+  </div>
+    <div class="post-content">
+      <h2 id="1-介绍">1. 介绍</h2>
+<h3 id="1-1-什么是excelize">1. 1 什么是<code>Excelize</code></h3>
+<p><code>Excelize</code> 是 <code>Go</code> 语言编写的用于操作 <code>Office Excel </code>文档基础库，基于 <code>ECMA-376，ISO/IEC 29500</code> 国际标准。可以使用它来读取、写入由 <code>Microsoft Excel™ 2007</code> 及以上版本创建的电子表格文档。支持<code> XLSX / XLSM / XLTM / XLTX</code> 等多种文档格式，高度兼容带有样式、图片(表)、透视表、切片器等复杂组件的文档，并提供流式读写 <code>API</code>，用于处理包含大规模数据的工作簿。可应用于各类报表平台、云计算、边缘计算等系统。使用本类库要求使用的 <code>Go 语言为 1.15 或更高版本</code>。</p>
+<p><a href="https://github.com/qax-os/excelize">**源代码: https://github.com/qax-os/excelize **</a></p>
+<p><a href="https://xuri.me/excelize/zh-hans/">文档:https://xuri.me/excelize/zh-hans/</a></p>
+<h3 id="12-为什么用excelize">1.2 为什么用<code>Excelize</code></h3>
+<p>在一些情况下我们需要通过程序操作 <code>Excel</code> 文档，例如：打开读取已有 <code>Excel</code>文档内容、创建新的 <code>Excel</code> 文档、基于已有文档（模版）生成新的 <code>Excel</code> 文档、向 <code>Excel </code>文档中插入图片、图表和表格等元素，有时还需要跨平台实现这些操作。使用 <code>Excelize</code> 可以方便的满足上述需求。</p>
+<h3 id="13-性能数据">1.3 性能数据</h3>
+<p>下面的性能数据展示了创建 <code>N</code> 行 <code>50</code> 列工作表所执行时间和内存使用情况，其中单元格的值均为 6 个文本字符。测试环境基于普通个人计算机 (OS: macOS Big Sur version 11.2, CPU: 3.4 GHz Intel Core i5, RAM: 16 GB 2400 MHz DDR4, HDD: 1 TB, Go Version: <code>go1.15.7 darwin/amd64</code>, Commit: <a href="https://github.com/360EntSecGroup-Skylar/excelize/tree/23c73ab527731f9d414e81f7ea15e2ae1a72a290"><code>23c73ab</code></a>)。具体数据会因机器而异，但趋势应该是一样的。</p>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/20210720164600.png" alt="写入性能"></p>
+<p><a href="https://xuri.me/excelize/zh-hans/performance.html">更多性能数据查看: https://xuri.me/excelize/zh-hans/performance.html</a></p>
+<h2 id="2-安装">2. 安装</h2>
+<p><strong>使用最新版本 Excelize 要求您使用的 Go 语言为 1.15 或更高版本。</strong></p>
+<h3 id="21-安装命令">2.1 安装命令</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="k">go</span> <span class="nx">get</span> <span class="nx">github</span><span class="p">.</span><span class="nx">com</span><span class="o">/</span><span class="nx">xuri</span><span class="o">/</span><span class="nx">excelize</span><span class="o">/</span><span class="nx">v2</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="22-go-modules-安装">2.2 Go Modules 安装</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// go get github.com/360EntSecGroup-Skylar/excelize/v2
+</span><span class="c1">// 原地址已变更
+</span><span class="c1"></span><span class="k">go</span> <span class="nx">get</span> <span class="nx">github</span><span class="p">.</span><span class="nx">com</span><span class="o">/</span><span class="nx">xuri</span><span class="o">/</span><span class="nx">excelize</span><span class="o">/</span><span class="nx">v2</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="3-表格写入">3. 表格写入</h2>
+<h3 id="31-单赋值写入setcellvalue">3.1 单赋值写入(<code>SetCellValue</code>)</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">excelize</span>
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;fmt&#34;</span>
+	<span class="s">&#34;github.com/360EntSecGroup-Skylar/excelize/v2&#34;</span>
+	<span class="s">&#34;testing&#34;</span>
+<span class="p">)</span>
+<span class="c1">// 表格写入(单个赋值)
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestWriteExcelBySetCellValue</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">excel</span> <span class="o">:=</span> <span class="nx">excelize</span><span class="p">.</span><span class="nf">NewFile</span><span class="p">()</span>
+	<span class="c1">// 创建一个工作表
+</span><span class="c1"></span>	<span class="nx">sheet</span> <span class="o">:=</span> <span class="nx">excel</span><span class="p">.</span><span class="nf">NewSheet</span><span class="p">(</span><span class="s">&#34;学校&#34;</span><span class="p">)</span>
+	<span class="c1">// 设置新建工作表(学校)的内容
+</span><span class="c1"></span>	<span class="nx">_</span> <span class="p">=</span> <span class="nx">excel</span><span class="p">.</span><span class="nf">SetCellValue</span><span class="p">(</span><span class="s">&#34;学校&#34;</span><span class="p">,</span> <span class="s">&#34;A2&#34;</span><span class="p">,</span> <span class="s">&#34;北京大学&#34;</span><span class="p">)</span>
+	<span class="nx">_</span> <span class="p">=</span> <span class="nx">excel</span><span class="p">.</span><span class="nf">SetCellValue</span><span class="p">(</span><span class="s">&#34;学校&#34;</span><span class="p">,</span> <span class="s">&#34;A3&#34;</span><span class="p">,</span> <span class="s">&#34;南京大学&#34;</span><span class="p">)</span>
+	<span class="c1">// 设置sheet1的内容(默认创建)
+</span><span class="c1"></span>	<span class="nx">excel</span><span class="p">.</span><span class="nf">SetCellValue</span><span class="p">(</span><span class="s">&#34;Sheet1&#34;</span><span class="p">,</span><span class="s">&#34;A1&#34;</span><span class="p">,</span><span class="s">&#34;张三&#34;</span><span class="p">)</span>
+	<span class="nx">excel</span><span class="p">.</span><span class="nf">SetCellValue</span><span class="p">(</span><span class="s">&#34;Sheet1&#34;</span><span class="p">,</span><span class="s">&#34;A2&#34;</span><span class="p">,</span><span class="s">&#34;小明&#34;</span><span class="p">)</span>
+	<span class="c1">// 设置默认工作表
+</span><span class="c1"></span>	<span class="nx">excel</span><span class="p">.</span><span class="nf">SetActiveSheet</span><span class="p">(</span><span class="nx">sheet</span><span class="p">)</span>
+	<span class="c1">// 保存表格
+</span><span class="c1"></span>	<span class="k">if</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">excel</span><span class="p">.</span><span class="nf">SaveAs</span><span class="p">(</span><span class="s">&#34;../../tmp/test.xlsx&#34;</span><span class="p">);</span><span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">t</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+		<span class="k">return</span>
+	<span class="p">}</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;执行完成&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/20210720114541.png" alt="运行结果" />
+<h3 id="32-按行赋值写入setsheetrow">3.2 按行赋值写入(<code>SetSheetRow</code>)</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 表格写入(按行写入)
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestWriteByLine</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">excel</span> <span class="o">:=</span> <span class="nx">excelize</span><span class="p">.</span><span class="nf">NewFile</span><span class="p">()</span>
+	<span class="c1">// 写入标题
+</span><span class="c1"></span>	<span class="nx">titleSlice</span> <span class="o">:=</span> <span class="p">[]</span><span class="kd">interface</span><span class="p">{}{</span><span class="s">&#34;序号&#34;</span><span class="p">,</span> <span class="s">&#34;姓名&#34;</span><span class="p">,</span> <span class="s">&#34;年龄&#34;</span><span class="p">,</span> <span class="s">&#34;性别&#34;</span><span class="p">}</span>
+	<span class="nx">_</span> <span class="p">=</span> <span class="nx">excel</span><span class="p">.</span><span class="nf">SetSheetRow</span><span class="p">(</span><span class="s">&#34;Sheet1&#34;</span><span class="p">,</span> <span class="s">&#34;A1&#34;</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">titleSlice</span><span class="p">)</span>
+	<span class="nx">data</span> <span class="o">:=</span> <span class="p">[]</span><span class="kd">interface</span><span class="p">{}{</span>
+		<span class="p">[]</span><span class="kd">interface</span><span class="p">{}{</span><span class="mi">1</span><span class="p">,</span> <span class="s">&#34;张三&#34;</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="s">&#34;男&#34;</span><span class="p">},</span>
+		<span class="p">[]</span><span class="kd">interface</span><span class="p">{}{</span><span class="mi">2</span><span class="p">,</span> <span class="s">&#34;小丽&#34;</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="s">&#34;女&#34;</span><span class="p">},</span>
+		<span class="p">[]</span><span class="kd">interface</span><span class="p">{}{</span><span class="mi">3</span><span class="p">,</span> <span class="s">&#34;小明&#34;</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="s">&#34;男&#34;</span><span class="p">},</span>
+	<span class="p">}</span>
+	<span class="c1">// 遍历写入数据
+</span><span class="c1"></span>	<span class="k">for</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">datum</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">data</span> <span class="p">{</span>
+		<span class="nx">axis</span> <span class="o">:=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;A%d&#34;</span><span class="p">,</span> <span class="nx">key</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span>
+		<span class="c1">// 利用断言，转换类型
+</span><span class="c1"></span>		<span class="nx">tmp</span><span class="p">,</span><span class="nx">_</span> <span class="o">:=</span> <span class="nx">datum</span><span class="p">.([]</span><span class="kd">interface</span><span class="p">{})</span>
+		<span class="nx">_</span> <span class="p">=</span> <span class="nx">excel</span><span class="p">.</span><span class="nf">SetSheetRow</span><span class="p">(</span><span class="s">&#34;Sheet1&#34;</span><span class="p">,</span> <span class="nx">axis</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">tmp</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="c1">// 保存表格
+</span><span class="c1"></span>	<span class="k">if</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">excel</span><span class="p">.</span><span class="nf">SaveAs</span><span class="p">(</span><span class="s">&#34;../../tmp/line.xlsx&#34;</span><span class="p">);</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">t</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+		<span class="k">return</span>
+	<span class="p">}</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;执行完成&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/20210720153912.png" alt="运行结果"></p>
+<h3 id="33-按行流式写入newstreamwriter">3.3 按行流式写入(<code>NewStreamWriter</code>)</h3>
+<p>当写入表格的内容很大时，推荐使用流式写入，可以有效防止内存溢出。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 表格写入(按行流式写入)
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestWriteByStream</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">excel</span> <span class="o">:=</span> <span class="nx">excelize</span><span class="p">.</span><span class="nf">NewFile</span><span class="p">()</span>
+	<span class="c1">// 获取流式写入器
+</span><span class="c1"></span>	<span class="nx">streamWriter</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">excel</span><span class="p">.</span><span class="nf">NewStreamWriter</span><span class="p">(</span><span class="s">&#34;Sheet1&#34;</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">t</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="s">&#34;获取流式写入器失败: &#34;</span> <span class="o">+</span> <span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">())</span>
+		<span class="k">return</span>
+	<span class="p">}</span>
+	<span class="c1">// 按行写入
+</span><span class="c1"></span>	<span class="k">if</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">streamWriter</span><span class="p">.</span><span class="nf">SetRow</span><span class="p">(</span><span class="s">&#34;A1&#34;</span><span class="p">,</span> <span class="p">[]</span><span class="kd">interface</span><span class="p">{}{</span><span class="s">&#34;序号&#34;</span><span class="p">,</span> <span class="s">&#34;商品码&#34;</span><span class="p">,</span> <span class="s">&#34;价格&#34;</span><span class="p">});</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">t</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="s">&#34;获取流式写入器失败: &#34;</span> <span class="o">+</span> <span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">())</span>
+		<span class="k">return</span>
+	<span class="p">}</span>
+	<span class="c1">// 制作数据
+</span><span class="c1"></span>	<span class="c1">// 设置随机因子
+</span><span class="c1"></span>	<span class="nx">rand</span><span class="p">.</span><span class="nf">Seed</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Unix</span><span class="p">())</span>
+	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">2</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="mi">500000</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="nx">tmp</span> <span class="o">:=</span> <span class="p">[]</span><span class="kd">interface</span><span class="p">{}{</span>
+			<span class="nx">i</span><span class="p">,</span>
+			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;P-%d&#34;</span><span class="p">,</span> <span class="nx">rand</span><span class="p">.</span><span class="nf">Intn</span><span class="p">(</span><span class="mi">100000000</span><span class="p">)),</span>
+			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;%.2f&#34;</span><span class="p">,</span> <span class="nb">float64</span><span class="p">(</span><span class="nx">rand</span><span class="p">.</span><span class="nf">Intn</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span><span class="o">+</span><span class="nx">rand</span><span class="p">.</span><span class="nf">Float64</span><span class="p">()),</span>
+		<span class="p">}</span>
+		<span class="nx">_</span> <span class="p">=</span> <span class="nx">streamWriter</span><span class="p">.</span><span class="nf">SetRow</span><span class="p">(</span><span class="s">&#34;A&#34;</span><span class="o">+</span><span class="nx">strconv</span><span class="p">.</span><span class="nf">Itoa</span><span class="p">(</span><span class="nx">i</span><span class="p">),</span> <span class="nx">tmp</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="c1">// 调用 Flush 函数来结束流式写入过程
+</span><span class="c1"></span>	<span class="k">if</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">streamWriter</span><span class="p">.</span><span class="nf">Flush</span><span class="p">();</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">t</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="s">&#34;结束流式写入失败: &#34;</span> <span class="o">+</span> <span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">())</span>
+		<span class="k">return</span>
+	<span class="p">}</span>
+	<span class="c1">// 保存表格
+</span><span class="c1"></span>	<span class="k">if</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">excel</span><span class="p">.</span><span class="nf">SaveAs</span><span class="p">(</span><span class="s">&#34;../../tmp/stream.xlsx&#34;</span><span class="p">);</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">t</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+		<span class="k">return</span>
+	<span class="p">}</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;执行完成&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><font color=red>@@注意: 使用流式写入器，必须调用 <a href="https://xuri.me/excelize/zh-hans/stream.html#Flush"><code>Flush</code></a> 函数来结束流式写入过程，并需要确所保写入的行号是递增的，普通 API 不能与流式 API 混合使用在工作表中写入数据。</font></p>
+<p><strong>运行耗时:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="o">===</span> RUN   TestWriteByStream
+执行完成
+--- PASS: TestWriteByStream <span class="o">(</span>2.66s<span class="o">)</span>
+PASS
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="4-读取">4. 读取</h2>
+<h3 id="41-代码">4.1 代码</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 读取表格
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestRead</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// 打开表格文件
+</span><span class="c1"></span>	<span class="nx">openFile</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">excelize</span><span class="p">.</span><span class="nf">OpenFile</span><span class="p">(</span><span class="s">&#34;../../tmp/line.xlsx&#34;</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">t</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="s">&#34;打开表格文件失败: &#34;</span> <span class="o">+</span> <span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">())</span>
+		<span class="k">return</span>
+	<span class="p">}</span>
+	<span class="c1">// 读取指定工作表所有数据
+</span><span class="c1"></span>	<span class="nx">rows</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">openFile</span><span class="p">.</span><span class="nf">GetRows</span><span class="p">(</span><span class="s">&#34;Sheet1&#34;</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">t</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="s">&#34;读取失败: &#34;</span> <span class="o">+</span> <span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">())</span>
+		<span class="k">return</span>
+	<span class="p">}</span>
+	<span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">row</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">rows</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%+v\n&#34;</span><span class="p">,</span><span class="nx">row</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;执行完成!&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="42-运行结果">4.2 运行结果</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="o">===</span> RUN   TestRead
+<span class="o">[</span>序号 姓名 年龄 性别<span class="o">]</span>
+<span class="o">[</span><span class="m">1</span> 张三 <span class="m">19</span> 男<span class="o">]</span>
+<span class="o">[</span><span class="m">2</span> 小丽 <span class="m">18</span> 女<span class="o">]</span>
+<span class="o">[</span><span class="m">3</span> 小明 <span class="m">20</span> 男<span class="o">]</span>
+执行完成!
+--- PASS: TestRead <span class="o">(</span>0.00s<span class="o">)</span>
+PASS
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="5-更多使用">5. 更多使用</h2>
+<p><a href="https://xuri.me/excelize/zh-hans/">更多复杂使用,可查看官方中文文档: https://xuri.me/excelize/zh-hans/</a></p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Learn Go</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2021-04-21
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/go%E6%A0%87%E5%87%86%E5%8C%85/">Go标准包</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/%E6%A0%87%E5%87%86%E5%8C%85/22-jwt-go/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Go标准包(二十二):jwt-go</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/%E6%A0%87%E5%87%86%E5%8C%85/20-math/">
+            <span class="next-text nav-default">Go标准包(二十):math</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/shershon1991" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/shershon520" class="iconfont icon-zhihu" title="zhihu"></a>
+  <a href="https://shershon1991.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2021 - 
+    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span>Learn Go</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.min.js" integrity="sha256-jwCP0NAdCBloaIWTWHmW4i3snUNMHUNO+jr9rYd2iOI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.locales.min.js" integrity="sha256-ZwofwC1Lf/faQCzN7nZtfijVV6hSwxjQMwXL4gn9qU8=" crossorigin="anonymous"></script>
+  <script><!-- NOTE: timeago.js uses the language code format like "zh_CN" (underscore and case sensitive) -->
+    var languageCode = "en".replace(/-/g, '_').replace(/_(.*)/, function ($0, $1) {return $0.replace($1, $1.toUpperCase());});
+    timeago().render(document.querySelectorAll('.timeago'), languageCode);
+    timeago.cancel();  
+  </script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

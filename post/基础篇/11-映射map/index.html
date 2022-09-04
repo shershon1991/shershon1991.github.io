@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Go学习(十一):映射(map) - Learn Go</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Learn Go" /><meta name="description" content="1.定义 map是一种集合，可以像遍历数组或切片那样去遍历它。因为map是由Hash表实现的，所以对map的读取顺序不固定。 1.1 注意事项 map是" /><meta name="keywords" content="博客, Learn Go, hugo" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.90.1 with theme even" />
+
+
+<link rel="canonical" href="https://shershon1991.github.io/post/%E5%9F%BA%E7%A1%80%E7%AF%87/11-%E6%98%A0%E5%B0%84map/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Go学习(十一):映射(map)" />
+<meta property="og:description" content="1.定义 map是一种集合，可以像遍历数组或切片那样去遍历它。因为map是由Hash表实现的，所以对map的读取顺序不固定。 1.1 注意事项 map是" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://shershon1991.github.io/post/%E5%9F%BA%E7%A1%80%E7%AF%87/11-%E6%98%A0%E5%B0%84map/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2021-01-11T00:00:00+00:00" />
+<meta property="article:modified_time" content="2021-01-11T00:00:00+00:00" />
+
+<meta itemprop="name" content="Go学习(十一):映射(map)">
+<meta itemprop="description" content="1.定义 map是一种集合，可以像遍历数组或切片那样去遍历它。因为map是由Hash表实现的，所以对map的读取顺序不固定。 1.1 注意事项 map是"><meta itemprop="datePublished" content="2021-01-11T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2021-01-11T00:00:00+00:00" />
+<meta itemprop="wordCount" content="2803">
+<meta itemprop="keywords" content="Go基础," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Go学习(十一):映射(map)"/>
+<meta name="twitter:description" content="1.定义 map是一种集合，可以像遍历数组或切片那样去遍历它。因为map是由Hash表实现的，所以对map的读取顺序不固定。 1.1 注意事项 map是"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Learn Go</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">首页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Learn Go</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">首页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Go学习(十一):映射(map)</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-01-11 </span>
+        <div class="post-category">
+            <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+            <a href="/categories/go/"> Go </a>
+            </div>
+          <span class="more-meta"> 约 2803 字 </span>
+          <span class="more-meta"> 预计阅读 6 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#1定义">1.定义</a></li>
+            <li><a href="#2-声明语法">2. 声明语法</a></li>
+            <li><a href="#3遍历map">3.遍历Map</a></li>
+            <li><a href="#4操作map">4.操作map</a></li>
+            <li><a href="#5map是引用类型">5.map是引用类型</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+  <div class="post-outdated">
+    <div class="warn">
+      <p>【注意】最后更新于 <span class="timeago" datetime="2021-01-11T00:00:00" title="January 11, 2021">January 11, 2021</span>，文中内容可能已过时，请谨慎使用。</p>
+    </div>
+  </div>
+    <div class="post-content">
+      <h3 id="1定义">1.定义</h3>
+<p>map是一种集合，可以像遍历数组或切片那样去遍历它。<code>因为map是由Hash表实现的，所以对map的读取顺序不固定。</code></p>
+<h4 id="11-注意事项">1.1 注意事项</h4>
+<ul>
+<li>map是无序的，每次打印出来的map都会不一样，它不能通过index获取，而必须通过key获取。返回顺序未知，因此每次打印的顺序可能不一样。</li>
+<li><code>map</code>的长度是不固定的，和切片一样可以扩展。<code>内置的len()函数同样适用于map，返回map拥有的键值对的数量。</code></li>
+<li>同一个<code>map</code>中<code>key</code>必须保证唯一。</li>
+<li><code>key</code>的数据类型必须是可参与比较运算的类型，也就是支持==或!=操作的类型。</li>
+<li>引用类型则不能作为key的数据类型。</li>
+<li>map的value可以是任何数据类型。</li>
+<li>map和切片一样，也是一种引用类型。</li>
+<li>map是非并发安全的。</li>
+</ul>
+<h3 id="2-声明语法">2. 声明语法</h3>
+<p>可以使用<code>var</code>关键字来定义map，也可以使用内建函数<code>make()</code>。</p>
+<p><font color=red>使用var关键字声明map，未初始化的map的默认值是nil,不能存放键值对。如果要使用map存储键值对，必须在声明时初始化，或者使用make()函数分配到内存空间。</font></p>
+<h4 id="21-声明初始化">2.1 声明初始化</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<span class="kn">import</span> <span class="s">&#34;fmt&#34;</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span>  <span class="p">{</span>
+	<span class="c1">// 声明的同时初始化
+</span><span class="c1"></span>	<span class="kd">var</span> <span class="nx">ageMap</span> <span class="p">=</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">int</span> <span class="p">{</span>
+		<span class="s">&#34;张三&#34;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+		<span class="s">&#34;李四&#34;</span><span class="p">:</span> <span class="mi">23</span><span class="p">,</span>
+		<span class="s">&#34;王五&#34;</span><span class="p">:</span> <span class="mi">33</span><span class="p">,</span>
+	<span class="p">}</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;变量ageMap--&gt; 值: %v 类型: %T \n&#34;</span><span class="p">,</span><span class="nx">ageMap</span><span class="p">,</span><span class="nx">ageMap</span><span class="p">)</span>
+
+	<span class="c1">// 短变量声明初始化
+</span><span class="c1"></span>	<span class="nx">ageMap2</span> <span class="o">:=</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="s">&#34;张三&#34;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span> <span class="s">&#34;李四&#34;</span><span class="p">:</span> <span class="mi">23</span><span class="p">,</span> <span class="s">&#34;王五&#34;</span><span class="p">:</span> <span class="mi">33</span><span class="p">,}</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;变量ageMap2--&gt; 值: %v 类型: %T&#34;</span><span class="p">,</span><span class="nx">ageMap2</span><span class="p">,</span><span class="nx">ageMap2</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">变量ageMap--&gt; 值: map[张三:20 李四:23 王五:33] 类型: map[string]int 
+</span><span class="cm">变量ageMap2--&gt; 值: map[张三:20 李四:23 王五:33] 类型: map[string]int
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="22-使用make">2.2 使用make</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<span class="kn">import</span> <span class="s">&#34;fmt&#34;</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span>  <span class="p">{</span>
+	<span class="c1">// 先创建后赋值
+</span><span class="c1"></span>	<span class="nx">ageMap</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">int</span><span class="p">)</span>
+	<span class="nx">ageMap</span><span class="p">[</span><span class="s">&#34;张三&#34;</span><span class="p">]</span> <span class="p">=</span> <span class="mi">20</span>
+	<span class="nx">ageMap</span><span class="p">[</span><span class="s">&#34;李四&#34;</span><span class="p">]</span> <span class="p">=</span> <span class="mi">23</span>
+	<span class="nx">ageMap</span><span class="p">[</span><span class="s">&#34;王五&#34;</span><span class="p">]</span> <span class="p">=</span> <span class="mi">23</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;变量ageMap-- 值: %v 类型: %T&#34;</span><span class="p">,</span><span class="nx">ageMap</span><span class="p">,</span><span class="nx">ageMap</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="c1">// 输出: 变量ageMap--&gt; 值: map[张三:20 李四:23 王五:23] 类型: map[string]int
+</span></code></pre></td></tr></table>
+</div>
+</div><h3 id="3遍历map">3.遍历Map</h3>
+<h4 id="31-遍历基础map">3.1 遍历基础map</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<span class="kn">import</span> <span class="s">&#34;fmt&#34;</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span>  <span class="p">{</span>
+	<span class="c1">// 短变量声明初始化
+</span><span class="c1"></span>	<span class="nx">ageMap</span> <span class="o">:=</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="s">&#34;张三&#34;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span> <span class="s">&#34;李四&#34;</span><span class="p">:</span> <span class="mi">23</span><span class="p">,</span> <span class="s">&#34;王五&#34;</span><span class="p">:</span> <span class="mi">33</span><span class="p">,}</span>
+	<span class="c1">// 遍历
+</span><span class="c1"></span>	<span class="k">for</span> <span class="nx">k</span><span class="p">,</span> <span class="nx">v</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">ageMap</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;k-&gt; 值: %v v--&gt; %v \n&#34;</span><span class="p">,</span><span class="nx">k</span><span class="p">,</span><span class="nx">v</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">姓名: 张三 年龄: 20 
+</span><span class="cm">姓名: 李四 年龄: 23 
+</span><span class="cm">姓名: 王五 年龄: 33 
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="32-遍历嵌套map">3.2 遍历嵌套map</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+
+<span class="kn">import</span> <span class="s">&#34;fmt&#34;</span>
+
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 声明嵌套map
+</span><span class="c1"></span>	<span class="nx">productMap</span> <span class="o">:=</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">float32</span><span class="p">{</span>
+		<span class="s">&#34;水果&#34;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#34;香蕉&#34;</span><span class="p">:</span> <span class="mf">3.22</span><span class="p">,</span> <span class="s">&#34;苹果&#34;</span><span class="p">:</span> <span class="mf">1.88</span><span class="p">,</span> <span class="s">&#34;葡萄&#34;</span><span class="p">:</span> <span class="mf">2.49</span><span class="p">},</span>
+		<span class="s">&#34;家具&#34;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#34;桌子&#34;</span><span class="p">:</span> <span class="mf">66.00</span><span class="p">,</span> <span class="s">&#34;凳子&#34;</span><span class="p">:</span> <span class="mf">12.00</span><span class="p">,</span> <span class="s">&#34;沙发&#34;</span><span class="p">:</span> <span class="mf">999.00</span><span class="p">},</span>
+		<span class="s">&#34;手机&#34;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#34;小米10&#34;</span><span class="p">:</span> <span class="mf">3813.00</span><span class="p">,</span> <span class="s">&#34;华为P40&#34;</span><span class="p">:</span> <span class="mf">5781.00</span><span class="p">,</span> <span class="s">&#34;iphone12&#34;</span><span class="p">:</span> <span class="mf">7823.00</span><span class="p">},</span>
+	<span class="p">}</span>
+	<span class="c1">// 遍历
+</span><span class="c1"></span>	<span class="k">for</span> <span class="nx">class</span><span class="p">,</span> <span class="nx">product</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">productMap</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">price</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">product</span> <span class="p">{</span>
+			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;分类: %s 产品:%s 价格: %0.2f \n&#34;</span><span class="p">,</span><span class="nx">class</span><span class="p">,</span><span class="nx">name</span><span class="p">,</span><span class="nx">price</span><span class="p">)</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">分类: 水果 产品:苹果 价格: 1.88 
+</span><span class="cm">分类: 水果 产品:葡萄 价格: 2.49 
+</span><span class="cm">分类: 水果 产品:香蕉 价格: 3.22 
+</span><span class="cm">分类: 家具 产品:桌子 价格: 66.00 
+</span><span class="cm">分类: 家具 产品:凳子 价格: 12.00 
+</span><span class="cm">分类: 家具 产品:沙发 价格: 999.00 
+</span><span class="cm">分类: 手机 产品:小米10 价格: 3813.00 
+</span><span class="cm">分类: 手机 产品:华为P40 价格: 5781.00 
+</span><span class="cm">分类: 手机 产品:iphone12 价格: 7823.00 
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="4操作map">4.操作map</h3>
+<h4 id="41-判断key是否存在">4.1 判断key是否存在</h4>
+<p>通过<code>value, ok := map[key]获知key/value是否存在</code>。ok是bool型，如果ok是true，则该键值对存在，否则不存在。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<span class="kn">import</span> <span class="s">&#34;fmt&#34;</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 声明map
+</span><span class="c1"></span>	<span class="nx">fruitMap</span> <span class="o">:=</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">float32</span><span class="p">{</span><span class="s">&#34;香蕉&#34;</span><span class="p">:</span> <span class="mf">3.22</span><span class="p">,</span> <span class="s">&#34;苹果&#34;</span><span class="p">:</span> <span class="mf">1.88</span><span class="p">,</span> <span class="s">&#34;葡萄&#34;</span><span class="p">:</span> <span class="mf">2.49</span><span class="p">}</span>
+
+	<span class="c1">// 存在: ok=true  存在: ok=false
+</span><span class="c1"></span>	<span class="nx">price</span><span class="p">,</span><span class="nx">ok</span> <span class="o">:=</span> <span class="nx">fruitMap</span><span class="p">[</span><span class="s">&#34;香蕉&#34;</span><span class="p">]</span>
+	<span class="k">if</span> <span class="nx">ok</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;香蕉存在！价格: %.2f \n&#34;</span><span class="p">,</span><span class="nx">price</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="nx">price2</span><span class="p">,</span><span class="nx">ok2</span> <span class="o">:=</span> <span class="nx">fruitMap</span><span class="p">[</span><span class="s">&#34;樱桃&#34;</span><span class="p">]</span>
+	<span class="k">if</span> <span class="nx">ok2</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;樱桃存在！价格: %.2f \n&#34;</span><span class="p">,</span><span class="nx">price2</span><span class="p">)</span>
+	<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;樱桃不存在! \n&#34;</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="c1">// 简写
+</span><span class="c1"></span>	<span class="k">if</span> <span class="nx">price</span><span class="p">,</span><span class="nx">ok</span> <span class="o">:=</span> <span class="nx">fruitMap</span><span class="p">[</span><span class="s">&#34;苹果&#34;</span><span class="p">];</span><span class="nx">ok</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;苹果存在！价格: %.2f \n&#34;</span><span class="p">,</span><span class="nx">price</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">  香蕉存在！价格: 3.22 
+</span><span class="cm">  樱桃不存在! 
+</span><span class="cm">  苹果存在！价格: 1.88 
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="42-删除">4.2 删除</h4>
+<p><code>delete(map, key) </code>函数用于删除集合的某个元素，参数为<code>map</code>和其对应的<code>key</code>。删除函数不返回任何值。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<span class="kn">import</span> <span class="s">&#34;fmt&#34;</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 声明map
+</span><span class="c1"></span>	<span class="nx">fruitMap</span> <span class="o">:=</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">float32</span><span class="p">{</span><span class="s">&#34;香蕉&#34;</span><span class="p">:</span> <span class="mf">3.22</span><span class="p">,</span> <span class="s">&#34;苹果&#34;</span><span class="p">:</span> <span class="mf">1.88</span><span class="p">,</span> <span class="s">&#34;葡萄&#34;</span><span class="p">:</span> <span class="mf">2.49</span><span class="p">,</span><span class="s">&#34;梨&#34;</span><span class="p">:</span><span class="mf">4.13</span><span class="p">}</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;删除前--&gt;fruitMap = %v \n&#34;</span><span class="p">,</span><span class="nx">fruitMap</span><span class="p">)</span>
+	<span class="c1">// 删除苹果
+</span><span class="c1"></span>	<span class="nb">delete</span><span class="p">(</span><span class="nx">fruitMap</span><span class="p">,</span><span class="s">&#34;苹果&#34;</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;删除后--&gt;fruitMap = %v \n&#34;</span><span class="p">,</span><span class="nx">fruitMap</span><span class="p">)</span>
+	<span class="c1">// 清空map
+</span><span class="c1"></span>	<span class="nx">fruitMap</span> <span class="p">=</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">float32</span><span class="p">{}</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;清空后--&gt;fruitMap = %v \n&#34;</span><span class="p">,</span><span class="nx">fruitMap</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">  删除前--&gt;fruitMap = map[梨:4.13 苹果:1.88 葡萄:2.49 香蕉:3.22] 
+</span><span class="cm">  删除后--&gt;fruitMap = map[梨:4.13 葡萄:2.49 香蕉:3.22] 
+</span><span class="cm">  清空后--&gt;fruitMap = map[] 
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="5map是引用类型">5.map是引用类型</h3>
+<p>map与切片相似，都是引用类型。将一个map赋值给一个新的变量时，它们指向同一块内存（底层数据结构）。因此，修改两个变量的内容都能够引起它们所指向的数据发生变化。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<span class="kn">import</span> <span class="s">&#34;fmt&#34;</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 声明map
+</span><span class="c1"></span>	<span class="nx">fruitMap</span> <span class="o">:=</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">float32</span><span class="p">{</span><span class="s">&#34;香蕉&#34;</span><span class="p">:</span> <span class="mf">3.22</span><span class="p">,</span> <span class="s">&#34;苹果&#34;</span><span class="p">:</span> <span class="mf">1.88</span><span class="p">,</span> <span class="s">&#34;葡萄&#34;</span><span class="p">:</span> <span class="mf">2.49</span><span class="p">,</span><span class="s">&#34;梨&#34;</span><span class="p">:</span><span class="mf">4.13</span><span class="p">}</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;调用函数前--&gt;fruitMap = %v \n&#34;</span><span class="p">,</span><span class="nx">fruitMap</span><span class="p">)</span>
+	<span class="c1">// 调用函数
+</span><span class="c1"></span>	<span class="nf">testMap</span><span class="p">(</span><span class="nx">fruitMap</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;调用函数后--&gt;fruitMap = %v \n&#34;</span><span class="p">,</span><span class="nx">fruitMap</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="c1">// map是引用类型，函数改变他的值外层变量也会变
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">testMap</span><span class="p">(</span><span class="nx">fruitMap</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">float32</span><span class="p">){</span>
+	<span class="nx">fruitMap</span><span class="p">[</span><span class="s">&#34;香蕉&#34;</span><span class="p">]</span> <span class="p">=</span> <span class="mf">5.99</span>
+<span class="p">}</span>
+
+<span class="cm">/**输出
+</span><span class="cm">  调用函数前--&gt;fruitMap = map[梨:4.13 苹果:1.88 葡萄:2.49 香蕉:3.22] 
+</span><span class="cm">  调用函数后--&gt;fruitMap = map[梨:4.13 苹果:1.88 葡萄:2.49 香蕉:5.99] 
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Learn Go</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2021-01-11
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/go%E5%9F%BA%E7%A1%80/">Go基础</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/%E5%9F%BA%E7%A1%80%E7%AF%87/12-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E4%B9%8B-%E7%BB%93%E6%9E%84%E4%BD%93/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Go学习(十三):面向对象-方法(method)</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/%E5%9F%BA%E7%A1%80%E7%AF%87/10-%E5%88%87%E7%89%87/">
+            <span class="next-text nav-default">Go学习(十):切片(slice)</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/shershon1991" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/shershon520" class="iconfont icon-zhihu" title="zhihu"></a>
+  <a href="https://shershon1991.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2021 - 
+    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span>Learn Go</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.min.js" integrity="sha256-jwCP0NAdCBloaIWTWHmW4i3snUNMHUNO+jr9rYd2iOI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.locales.min.js" integrity="sha256-ZwofwC1Lf/faQCzN7nZtfijVV6hSwxjQMwXL4gn9qU8=" crossorigin="anonymous"></script>
+  <script><!-- NOTE: timeago.js uses the language code format like "zh_CN" (underscore and case sensitive) -->
+    var languageCode = "en".replace(/-/g, '_').replace(/_(.*)/, function ($0, $1) {return $0.replace($1, $1.toUpperCase());});
+    timeago().render(document.querySelectorAll('.timeago'), languageCode);
+    timeago.cancel();  
+  </script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

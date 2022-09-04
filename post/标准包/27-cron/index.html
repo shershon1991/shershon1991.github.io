@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Go标准包(二十七):cron - Learn Go</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Learn Go" /><meta name="description" content="1.介绍 在Linux中，通过crontab命令使任务在约定的时间执行已经计划好的工作，而Go由于语言的特性，不适合直接使用crontab来管" /><meta name="keywords" content="博客, Learn Go, hugo" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.90.1 with theme even" />
+
+
+<link rel="canonical" href="https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/27-cron/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Go标准包(二十七):cron" />
+<meta property="og:description" content="1.介绍 在Linux中，通过crontab命令使任务在约定的时间执行已经计划好的工作，而Go由于语言的特性，不适合直接使用crontab来管" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/27-cron/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2021-04-27T00:00:00+00:00" />
+<meta property="article:modified_time" content="2021-04-27T00:00:00+00:00" />
+
+<meta itemprop="name" content="Go标准包(二十七):cron">
+<meta itemprop="description" content="1.介绍 在Linux中，通过crontab命令使任务在约定的时间执行已经计划好的工作，而Go由于语言的特性，不适合直接使用crontab来管"><meta itemprop="datePublished" content="2021-04-27T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2021-04-27T00:00:00+00:00" />
+<meta itemprop="wordCount" content="1355">
+<meta itemprop="keywords" content="Go标准包," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Go标准包(二十七):cron"/>
+<meta name="twitter:description" content="1.介绍 在Linux中，通过crontab命令使任务在约定的时间执行已经计划好的工作，而Go由于语言的特性，不适合直接使用crontab来管"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Learn Go</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">首页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Learn Go</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">首页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Go标准包(二十七):cron</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-04-27 </span>
+        <div class="post-category">
+            <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+            <a href="/categories/go/"> Go </a>
+            </div>
+          <span class="more-meta"> 约 1355 字 </span>
+          <span class="more-meta"> 预计阅读 3 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#1介绍">1.介绍</a></li>
+        <li><a href="#2-安装">2. 安装</a></li>
+        <li><a href="#3-快速使用">3. 快速使用</a></li>
+        <li><a href="#4-添加任务方式">4. 添加任务方式</a>
+          <ul>
+            <li><a href="#41-通过addfunc">4.1 通过<code>AddFunc</code></a></li>
+            <li><a href="#42-通过addjob">4.2 通过<code>AddJob</code></a></li>
+          </ul>
+        </li>
+        <li><a href="#5-执行频率">5. 执行频率</a>
+          <ul>
+            <li><a href="#51-cron时间表达式">5.1 cron时间表达式</a></li>
+            <li><a href="#52-预定义时间">5.2 预定义时间</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+  <div class="post-outdated">
+    <div class="warn">
+      <p>【注意】最后更新于 <span class="timeago" datetime="2021-04-27T00:00:00" title="April 27, 2021">April 27, 2021</span>，文中内容可能已过时，请谨慎使用。</p>
+    </div>
+  </div>
+    <div class="post-content">
+      <h2 id="1介绍">1.介绍</h2>
+<p>在<code>Linux</code>中，通过<code>crontab</code>命令使任务在约定的时间执行已经计划好的工作，而<code>Go</code>由于语言的特性，不适合直接使用<code>crontab</code>来管理计划任务，<a href="https://github.com/robfig/cron">cron (目前 Star8.3k)</a>是一个用<code>Go</code>实现的定时任务库，支持秒级定时任务，可以满足绝大多数工作场景需求。</p>
+<h2 id="2-安装">2. 安装</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="k">go</span> <span class="nx">get</span> <span class="nx">github</span><span class="p">.</span><span class="nx">com</span><span class="o">/</span><span class="nx">robfig</span><span class="o">/</span><span class="nx">cron</span><span class="o">/</span><span class="nx">v3</span><span class="err">@</span><span class="nx">v3</span><span class="mf">.0.0</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="3-快速使用">3. 快速使用</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;fmt&#34;</span>
+	<span class="s">&#34;github.com/robfig/cron/v3&#34;</span>
+	<span class="s">&#34;time&#34;</span>
+<span class="p">)</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 开启秒字段支持
+</span><span class="c1"></span>	<span class="nx">c</span> <span class="o">:=</span> <span class="nx">cron</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="nx">cron</span><span class="p">.</span><span class="nf">WithSeconds</span><span class="p">())</span>
+	<span class="c1">// 传统表达式写法: 每秒执行一次
+</span><span class="c1"></span>	<span class="nx">_</span><span class="p">,</span> <span class="nx">_</span> <span class="p">=</span> <span class="nx">c</span><span class="p">.</span><span class="nf">AddFunc</span><span class="p">(</span><span class="s">&#34;0/1 * * * * *&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;传统表达式: &#34;</span><span class="p">,</span><span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Format</span><span class="p">(</span><span class="s">&#34;2006-01-02 15:04:05&#34;</span><span class="p">))</span>
+	<span class="p">})</span>
+	<span class="c1">// 预定义表达式
+</span><span class="c1"></span>	<span class="nx">_</span><span class="p">,</span><span class="nx">_</span> <span class="p">=</span> <span class="nx">c</span><span class="p">.</span><span class="nf">AddFunc</span><span class="p">(</span><span class="s">&#34;@every 1s&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;预定义表达式: &#34;</span><span class="p">,</span><span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Format</span><span class="p">(</span><span class="s">&#34;2006-01-02 15:04:05&#34;</span><span class="p">))</span>
+	<span class="p">})</span>
+	<span class="c1">// 启动
+</span><span class="c1"></span>	<span class="nx">c</span><span class="p">.</span><span class="nf">Start</span><span class="p">()</span>
+	<span class="c1">// 防止程序直接退出
+</span><span class="c1"></span>	<span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nx">Second</span> <span class="o">*</span> <span class="mi">3</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">预定义表达式:  2021-07-18 10:44:52
+</span><span class="cm">传统表达式:   2021-07-18 10:44:52
+</span><span class="cm">传统表达式:   2021-07-18 10:44:53
+</span><span class="cm">预定义表达式:  2021-07-18 10:44:53
+</span><span class="cm">传统表达式:    2021-07-18 10:44:54
+</span><span class="cm">预定义表达式:  2021-07-18 10:44:54
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="4-添加任务方式">4. 添加任务方式</h2>
+<h3 id="41-通过addfunc">4.1 通过<code>AddFunc</code></h3>
+<p><strong>具体使用，参见上面的快速使用案例</strong></p>
+<h3 id="42-通过addjob">4.2 通过<code>AddJob</code></h3>
+<h4 id="1-使用步骤">1. 使用步骤</h4>
+<ul>
+<li>第一步：定义类型</li>
+<li>第二步：实现<code>cron.Job</code>接口，即给自定义类型添加方法<code>Run()</code></li>
+<li>第三步：通过<code>AddJob</code>方法添加到定时任务</li>
+</ul>
+<h4 id="2-使用示例">2. 使用示例</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;fmt&#34;</span>
+	<span class="s">&#34;github.com/robfig/cron/v3&#34;</span>
+	<span class="s">&#34;time&#34;</span>
+<span class="p">)</span>
+<span class="c1">// 定义类型
+</span><span class="c1"></span><span class="kd">type</span> <span class="nx">city</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">Name</span> <span class="kt">string</span>
+<span class="p">}</span>
+<span class="c1">// 实现cron.Job接口
+</span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="nx">city</span><span class="p">)</span> <span class="nf">Run</span><span class="p">()</span>  <span class="p">{</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%s时间:%v\n&#34;</span><span class="p">,</span><span class="nx">s</span><span class="p">.</span><span class="nx">Name</span><span class="p">,</span><span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Format</span><span class="p">(</span><span class="s">&#34;2006-01-02 15:04:05&#34;</span><span class="p">))</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 开启秒级别支持,默认支持最小粒度是分钟
+</span><span class="c1"></span>	<span class="nx">c</span> <span class="o">:=</span> <span class="nx">cron</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="nx">cron</span><span class="p">.</span><span class="nf">WithSeconds</span><span class="p">())</span>
+	<span class="c1">// 添加定时任务
+</span><span class="c1"></span>	<span class="nx">_</span><span class="p">,</span> <span class="nx">_</span> <span class="p">=</span> <span class="nx">c</span><span class="p">.</span><span class="nf">AddJob</span><span class="p">(</span><span class="s">&#34;@every 1s&#34;</span><span class="p">,</span> <span class="nx">city</span><span class="p">{</span>
+		<span class="nx">Name</span><span class="p">:</span> <span class="s">&#34;北京&#34;</span><span class="p">,</span>
+	<span class="p">})</span>
+	<span class="c1">// 启动
+</span><span class="c1"></span>	<span class="nx">c</span><span class="p">.</span><span class="nf">Start</span><span class="p">()</span>
+	<span class="c1">// 防止程序直接退出
+</span><span class="c1"></span>	<span class="k">for</span> <span class="p">{}</span>
+<span class="p">}</span>
+
+<span class="cm">/**输出
+</span><span class="cm">北京时间:2021-07-18 11:21:50
+</span><span class="cm">北京时间:2021-07-18 11:21:51
+</span><span class="cm">北京时间:2021-07-18 11:21:52
+</span><span class="cm">...
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="5-执行频率">5. 执行频率</h2>
+<h3 id="51-cron时间表达式">5.1 cron时间表达式</h3>
+<p><font color=red>@注意: cron默认支持最小粒度是分钟，若要支持秒级别,需要传入<code>cron.WithSeconds()</code>来开启,开启后的cron时间表达式和Linux中的crontab时间表达式会有区别。</font></p>
+<h4 id="1-开启秒级别后">1. 开启秒级别后</h4>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/20210824114416.png" alt=""></p>
+<h4 id="2-示例">2. 示例</h4>
+<p><font color=red>@注意：下面表格示例，是在开启秒级级别支持情况下的写法。</font></p>
+<table>
+<thead>
+<tr>
+<th>表达式</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>* * * * * *</code></td>
+<td>每秒执行一次</td>
+</tr>
+<tr>
+<td><code>0 */1 * * * *</code></td>
+<td>每分钟执行一次</td>
+</tr>
+<tr>
+<td><code>0 0 */1 * * *</code></td>
+<td>每小时执行一次</td>
+</tr>
+<tr>
+<td><code>0 0 0 */1 * *</code></td>
+<td>每天<code>00:00</code>执行一次</td>
+</tr>
+<tr>
+<td><code>0 30 23 */1 * *</code></td>
+<td>每天<code>23:30</code>执行一次</td>
+</tr>
+<tr>
+<td><code>0 0 0 1 */1 *</code></td>
+<td>每月的第一天执行</td>
+</tr>
+<tr>
+<td><code>0 30 21 * * 1</code></td>
+<td>每周一<code>21:30</code>执行</td>
+</tr>
+</tbody>
+</table>
+<h3 id="52-预定义时间">5.2 预定义时间</h3>
+<h4 id="1-预表达式">1. 预表达式</h4>
+<p>上面通过表达式写，很容易会写错，还好<code>cron</code>提供了预表达式，可以很方便各种场景的示例,具体如下:</p>
+<table>
+<thead>
+<tr>
+<th>表达式</th>
+<th>描述</th>
+<th>等式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>@yearly (or @annually)</code></td>
+<td>每年1月1日 00:00:00 执行一次</td>
+<td><code>0 0 0 1 1 *</code></td>
+</tr>
+<tr>
+<td><code>@monthly</code></td>
+<td>每个月第一天的 00:00:00 执行一次</td>
+<td><code>0 0 0 1 * *</code></td>
+</tr>
+<tr>
+<td><code>@weekly</code></td>
+<td>每周周六的 00:00:00 执行一次</td>
+<td><code>0 0 0 * * 0</code></td>
+</tr>
+<tr>
+<td><code>@daily (or @midnight)</code></td>
+<td>每天 00:00:00 执行一次</td>
+<td><code>0 0 0 * * *</code></td>
+</tr>
+<tr>
+<td><code>@hourly</code></td>
+<td>每小时执行一次</td>
+<td><code>0 0 * * * *</code></td>
+</tr>
+<tr>
+<td><code>@every duration</code></td>
+<td>指定时间间隔执行一次，如 <code>@every 5s</code>，每隔5秒执行一次。</td>
+<td><code>0/5 * * * * *</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="2-固定间隔every-">2. 固定间隔(<code>@every </code>)</h4>
+<p><code>@every duration</code>含义为每隔<code>duration</code>触发一次。<code>&lt;duration&gt;</code>会调用<code>time.ParseDuration()</code>函数解析，所以<code>ParseDuration</code>支持的格式都可以。单位为<code>h(小时)、m(分钟)、s(秒)</code></p>
+<table>
+<thead>
+<tr>
+<th>表达式</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>@every 1s</code></td>
+<td>每秒钟执行一次</td>
+</tr>
+<tr>
+<td><code>@every 1m</code></td>
+<td>每分钟执行一次</td>
+</tr>
+<tr>
+<td><code>@every 1h</code></td>
+<td>每小时执行一次</td>
+</tr>
+<tr>
+<td><code>@every 1h1m</code></td>
+<td>每小时一分钟执行一次</td>
+</tr>
+</tbody>
+</table>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Learn Go</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2021-04-27
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/go%E6%A0%87%E5%87%86%E5%8C%85/">Go标准包</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/%E6%A0%87%E5%87%86%E5%8C%85/28-cobra/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Go标准包(二十八):cobra</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/%E6%A0%87%E5%87%86%E5%8C%85/26-colly/">
+            <span class="next-text nav-default">Go标准包(二十六):colly</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/shershon1991" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/shershon520" class="iconfont icon-zhihu" title="zhihu"></a>
+  <a href="https://shershon1991.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2021 - 
+    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span>Learn Go</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.min.js" integrity="sha256-jwCP0NAdCBloaIWTWHmW4i3snUNMHUNO+jr9rYd2iOI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.locales.min.js" integrity="sha256-ZwofwC1Lf/faQCzN7nZtfijVV6hSwxjQMwXL4gn9qU8=" crossorigin="anonymous"></script>
+  <script><!-- NOTE: timeago.js uses the language code format like "zh_CN" (underscore and case sensitive) -->
+    var languageCode = "en".replace(/-/g, '_').replace(/_(.*)/, function ($0, $1) {return $0.replace($1, $1.toUpperCase());});
+    timeago().render(document.querySelectorAll('.timeago'), languageCode);
+    timeago.cancel();  
+  </script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

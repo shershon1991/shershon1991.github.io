@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>基金分析系统(三):爬取基金收益榜单 - Learn Go</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Learn Go" /><meta name="description" content="1.流程介绍 2.页面分析 3. 爬虫脚本 3.1 编写结构体 代码文件位置：service/crawl/fund/top_crawl.go 1 2 3 4 5 6 7 8 9" /><meta name="keywords" content="博客, Learn Go, hugo" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.90.1 with theme even" />
+
+
+<link rel="canonical" href="https://shershon1991.github.io/post/%E9%A1%B9%E7%9B%AE%E7%AF%87/%E7%88%AC%E8%99%AB/3-fund-top/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="基金分析系统(三):爬取基金收益榜单" />
+<meta property="og:description" content="1.流程介绍 2.页面分析 3. 爬虫脚本 3.1 编写结构体 代码文件位置：service/crawl/fund/top_crawl.go 1 2 3 4 5 6 7 8 9" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://shershon1991.github.io/post/%E9%A1%B9%E7%9B%AE%E7%AF%87/%E7%88%AC%E8%99%AB/3-fund-top/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2021-08-03T00:00:00+00:00" />
+<meta property="article:modified_time" content="2021-08-03T00:00:00+00:00" />
+
+<meta itemprop="name" content="基金分析系统(三):爬取基金收益榜单">
+<meta itemprop="description" content="1.流程介绍 2.页面分析 3. 爬虫脚本 3.1 编写结构体 代码文件位置：service/crawl/fund/top_crawl.go 1 2 3 4 5 6 7 8 9"><meta itemprop="datePublished" content="2021-08-03T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2021-08-03T00:00:00+00:00" />
+<meta itemprop="wordCount" content="1348">
+<meta itemprop="keywords" content="Go实战," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="基金分析系统(三):爬取基金收益榜单"/>
+<meta name="twitter:description" content="1.流程介绍 2.页面分析 3. 爬虫脚本 3.1 编写结构体 代码文件位置：service/crawl/fund/top_crawl.go 1 2 3 4 5 6 7 8 9"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Learn Go</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">首页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Learn Go</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">首页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">基金分析系统(三):爬取基金收益榜单</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-08-03 </span>
+        <div class="post-category">
+            <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+            <a href="/categories/go/"> Go </a>
+            </div>
+          <span class="more-meta"> 约 1348 字 </span>
+          <span class="more-meta"> 预计阅读 3 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#1流程介绍">1.流程介绍</a></li>
+        <li><a href="#2页面分析">2.页面分析</a></li>
+        <li><a href="#3-爬虫脚本">3. 爬虫脚本</a>
+          <ul>
+            <li><a href="#31-编写结构体">3.1 编写结构体</a></li>
+            <li><a href="#32-爬取网页">3.2 爬取网页</a></li>
+            <li><a href="#33-数据清洗">3.3 数据清洗</a></li>
+          </ul>
+        </li>
+        <li><a href="#4-定时任务">4. 定时任务</a>
+          <ul>
+            <li><a href="#41-实现cronjob接口">4.1 实现<code>cron.Job</code>接口</a></li>
+            <li><a href="#42-注册任务">4.2 注册任务</a></li>
+          </ul>
+        </li>
+        <li><a href="#5-效果展示">5. 效果展示</a>
+          <ul>
+            <li><a href="#51-运行项目">5.1 运行项目</a></li>
+            <li><a href="#52-数据表">5.2 数据表</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+  <div class="post-outdated">
+    <div class="warn">
+      <p>【注意】最后更新于 <span class="timeago" datetime="2021-08-03T00:00:00" title="August 3, 2021">August 3, 2021</span>，文中内容可能已过时，请谨慎使用。</p>
+    </div>
+  </div>
+    <div class="post-content">
+      <h2 id="1流程介绍">1.流程介绍</h2>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/20210901190333.png" alt=""></p>
+<h2 id="2页面分析">2.页面分析</h2>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/20210901183654.png" alt=""></p>
+<h2 id="3-爬虫脚本">3. 爬虫脚本</h2>
+<h3 id="31-编写结构体">3.1 编写结构体</h3>
+<p><strong>代码文件位置：<code>service/crawl/fund/top_crawl.go</code></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 对应每一行的基金信息
+</span><span class="c1"></span><span class="kd">type</span> <span class="nx">fundItem</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">FundCode</span>         <span class="kt">string</span> <span class="s">`selector:&#34;td:nth-of-type(1)&#34;`</span>
+	<span class="nx">FundName</span>         <span class="kt">string</span> <span class="s">`selector:&#34;td:nth-of-type(2)&#34;`</span>
+	<span class="nx">NetWorth</span>         <span class="kt">string</span> <span class="s">`selector:&#34;td:nth-of-type(3) &gt; span.fb&#34;`</span>
+	<span class="nx">TopDate</span>          <span class="kt">string</span> <span class="s">`selector:&#34;td:nth-of-type(3) &gt; span.date&#34;`</span>
+	<span class="nx">DayChange</span>        <span class="kt">string</span> <span class="s">`selector:&#34;td:nth-of-type(4)&#34;`</span>
+	<span class="nx">WeekChange</span>       <span class="kt">string</span> <span class="s">`selector:&#34;td:nth-of-type(5)&#34;`</span>
+	<span class="nx">MouthChange</span>      <span class="kt">string</span> <span class="s">`selector:&#34;td:nth-of-type(6)&#34;`</span>
+	<span class="nx">ThreeMouthChange</span> <span class="kt">string</span> <span class="s">`selector:&#34;td:nth-of-type(7)&#34;`</span>
+	<span class="nx">SixMouthChange</span>   <span class="kt">string</span> <span class="s">`selector:&#34;td:nth-of-type(8)&#34;`</span>
+	<span class="nx">YearChange</span>       <span class="kt">string</span> <span class="s">`selector:&#34;td:nth-of-type(9)&#34;`</span>
+	<span class="nx">TwoYearChange</span>    <span class="kt">string</span> <span class="s">`selector:&#34;td:nth-of-type(10)&#34;`</span>
+	<span class="nx">ThreeYearChange</span>  <span class="kt">string</span> <span class="s">`selector:&#34;td:nth-of-type(11)&#34;`</span>
+	<span class="nx">CurrentChange</span>    <span class="kt">string</span> <span class="s">`selector:&#34;td:nth-of-type(12)&#34;`</span>
+	<span class="nx">CreateChange</span>     <span class="kt">string</span> <span class="s">`selector:&#34;td:nth-of-type(13)&#34;`</span>
+<span class="p">}</span>
+<span class="kd">type</span> <span class="nx">TopCrawlService</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">Item</span> <span class="p">[]</span><span class="o">*</span><span class="nx">fundItem</span> <span class="s">`selector:&#34;tr&#34;`</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>td:nth-of-type(n)</code>代表每行的第<code>n</code>列，<font color=red>@注意：这里的NetWorth和TopDate,取的都是第3列的数据</font></p>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/20210901185821.png" alt=""></p>
+<h3 id="32-爬取网页">3.2 爬取网页</h3>
+<p><strong>代码文件位置：<code>service/crawl/fund/top_crawl.go</code></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// CrawlHtml 抓取网页信息
+</span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">f</span> <span class="o">*</span><span class="nx">TopCrawlService</span><span class="p">)</span> <span class="nf">CrawlHtml</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">collector</span> <span class="o">:=</span> <span class="nx">colly</span><span class="p">.</span><span class="nf">NewCollector</span><span class="p">(</span>
+		<span class="nx">colly</span><span class="p">.</span><span class="nf">UserAgent</span><span class="p">(</span><span class="nx">crawl</span><span class="p">.</span><span class="nx">UserAgent</span><span class="p">),</span>
+	<span class="p">)</span>
+	<span class="c1">// 设置Header
+</span><span class="c1"></span>	<span class="nx">collector</span><span class="p">.</span><span class="nf">OnRequest</span><span class="p">(</span><span class="kd">func</span><span class="p">(</span><span class="nx">request</span> <span class="o">*</span><span class="nx">colly</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">request</span><span class="p">.</span><span class="nx">Headers</span><span class="p">.</span><span class="nf">Set</span><span class="p">(</span><span class="s">&#34;Accept-Language&#34;</span><span class="p">,</span> <span class="s">&#34;zh-CN,zh;q=0.9,en;q=0.8,zh-TW;q=0.7&#34;</span><span class="p">)</span>
+	<span class="p">})</span>
+	<span class="nx">collector</span><span class="p">.</span><span class="nf">OnError</span><span class="p">(</span><span class="kd">func</span><span class="p">(</span><span class="nx">response</span> <span class="o">*</span><span class="nx">colly</span><span class="p">.</span><span class="nx">Response</span><span class="p">,</span> <span class="nx">err</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">global</span><span class="p">.</span><span class="nx">GvaLogger</span><span class="p">.</span><span class="nf">Sugar</span><span class="p">().</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;基金排行榜,信息获取失败: %s&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+		<span class="k">return</span>
+	<span class="p">})</span>
+  <span class="c1">// 选中id=tblite_hh的table,使用Unmarshal方法会把每行数据，自动映射结构体
+</span><span class="c1"></span>	<span class="nx">collector</span><span class="p">.</span><span class="nf">OnHTML</span><span class="p">(</span><span class="s">&#34;#tblite_hh&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">element</span> <span class="o">*</span><span class="nx">colly</span><span class="p">.</span><span class="nx">HTMLElement</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">err</span> <span class="o">:=</span> <span class="nx">element</span><span class="p">.</span><span class="nf">Unmarshal</span><span class="p">(</span><span class="nx">f</span><span class="p">)</span>
+		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;element.Unmarshal error: &#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+		<span class="p">}</span>
+	<span class="p">})</span>
+	<span class="c1">// 获取响应
+</span><span class="c1"></span>	<span class="nx">collector</span><span class="p">.</span><span class="nf">OnResponse</span><span class="p">(</span><span class="kd">func</span><span class="p">(</span><span class="nx">response</span> <span class="o">*</span><span class="nx">colly</span><span class="p">.</span><span class="nx">Response</span><span class="p">)</span> <span class="p">{</span>
+		<span class="c1">// 将返回中的html中所有的%去掉
+</span><span class="c1"></span>		<span class="nx">newBody</span> <span class="o">:=</span> <span class="nx">strings</span><span class="p">.</span><span class="nf">ReplaceAll</span><span class="p">(</span><span class="nb">string</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">Body</span><span class="p">),</span> <span class="s">&#34;%&#34;</span><span class="p">,</span> <span class="s">&#34;&#34;</span><span class="p">)</span>
+		<span class="nx">response</span><span class="p">.</span><span class="nx">Body</span> <span class="p">=</span> <span class="p">[]</span><span class="nb">byte</span><span class="p">(</span><span class="nx">newBody</span><span class="p">)</span>
+	<span class="p">})</span>
+	<span class="c1">// 爬取收益排行榜,(默认是按照近一年的排行)
+</span><span class="c1"></span>	<span class="nx">err</span> <span class="o">:=</span> <span class="nx">collector</span><span class="p">.</span><span class="nf">Visit</span><span class="p">(</span><span class="s">&#34;https://fundact.eastmoney.com/banner/hh.html&#34;</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">global</span><span class="p">.</span><span class="nx">GvaLogger</span><span class="p">.</span><span class="nf">Sugar</span><span class="p">().</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;基金排行榜爬取失败: %s&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="33-数据清洗">3.3 数据清洗</h3>
+<p><strong>代码文件位置：<code>service/crawl/fund/top_crawl.go</code></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// ConvertEntity 格式化类型
+</span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">f</span> <span class="o">*</span><span class="nx">TopCrawlService</span><span class="p">)</span> <span class="nf">ConvertEntity</span><span class="p">()</span> <span class="p">[]</span><span class="nx">entity</span><span class="p">.</span><span class="nx">FundDayTop</span> <span class="p">{</span>
+	<span class="kd">var</span> <span class="nx">topList</span> <span class="p">[]</span><span class="nx">entity</span><span class="p">.</span><span class="nx">FundDayTop</span>
+	<span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">item</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">f</span><span class="p">.</span><span class="nx">Item</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="nx">item</span><span class="p">.</span><span class="nx">FundCode</span> <span class="o">==</span> <span class="s">&#34;&#34;</span> <span class="p">{</span>
+			<span class="k">continue</span>
+		<span class="p">}</span>
+		<span class="nx">fundTmp</span> <span class="o">:=</span> <span class="nx">entity</span><span class="p">.</span><span class="nx">FundDayTop</span><span class="p">{}</span>
+		<span class="nx">fundTmp</span><span class="p">.</span><span class="nx">FundCode</span> <span class="p">=</span> <span class="nx">item</span><span class="p">.</span><span class="nx">FundCode</span>
+		<span class="c1">// 格式化日期
+</span><span class="c1"></span>		<span class="nx">format</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Format</span><span class="p">(</span><span class="s">&#34;2006&#34;</span><span class="p">)</span>
+		<span class="nx">fundTmp</span><span class="p">.</span><span class="nx">TopDate</span> <span class="p">=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;%s-%s&#34;</span><span class="p">,</span> <span class="nx">format</span><span class="p">,</span> <span class="nx">item</span><span class="p">.</span><span class="nx">TopDate</span><span class="p">)</span>
+		<span class="c1">// 转换编码
+</span><span class="c1"></span>		<span class="nx">fundTmp</span><span class="p">.</span><span class="nx">FundName</span><span class="p">,</span> <span class="nx">_</span> <span class="p">=</span> <span class="nx">utils</span><span class="p">.</span><span class="nf">GbkToUtf8</span><span class="p">(</span><span class="nx">item</span><span class="p">.</span><span class="nx">FundName</span><span class="p">)</span>
+		<span class="c1">// 字符串转浮点型
+</span><span class="c1"></span>		<span class="nx">fundTmp</span><span class="p">.</span><span class="nx">NetWorth</span><span class="p">,</span> <span class="nx">_</span> <span class="p">=</span> <span class="nx">strconv</span><span class="p">.</span><span class="nf">ParseFloat</span><span class="p">(</span><span class="nx">item</span><span class="p">.</span><span class="nx">NetWorth</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+		<span class="nx">fundTmp</span><span class="p">.</span><span class="nx">DayChange</span><span class="p">,</span> <span class="nx">_</span> <span class="p">=</span> <span class="nx">strconv</span><span class="p">.</span><span class="nf">ParseFloat</span><span class="p">(</span><span class="nx">item</span><span class="p">.</span><span class="nx">DayChange</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+		<span class="nx">fundTmp</span><span class="p">.</span><span class="nx">WeekChange</span><span class="p">,</span> <span class="nx">_</span> <span class="p">=</span> <span class="nx">strconv</span><span class="p">.</span><span class="nf">ParseFloat</span><span class="p">(</span><span class="nx">item</span><span class="p">.</span><span class="nx">WeekChange</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+		<span class="nx">fundTmp</span><span class="p">.</span><span class="nx">MouthChange</span><span class="p">,</span> <span class="nx">_</span> <span class="p">=</span> <span class="nx">strconv</span><span class="p">.</span><span class="nf">ParseFloat</span><span class="p">(</span><span class="nx">item</span><span class="p">.</span><span class="nx">MouthChange</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+		<span class="nx">fundTmp</span><span class="p">.</span><span class="nx">ThreeMouthChange</span><span class="p">,</span> <span class="nx">_</span> <span class="p">=</span> <span class="nx">strconv</span><span class="p">.</span><span class="nf">ParseFloat</span><span class="p">(</span><span class="nx">item</span><span class="p">.</span><span class="nx">ThreeMouthChange</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+		<span class="nx">fundTmp</span><span class="p">.</span><span class="nx">SixMouthChange</span><span class="p">,</span> <span class="nx">_</span> <span class="p">=</span> <span class="nx">strconv</span><span class="p">.</span><span class="nf">ParseFloat</span><span class="p">(</span><span class="nx">item</span><span class="p">.</span><span class="nx">SixMouthChange</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+		<span class="nx">fundTmp</span><span class="p">.</span><span class="nx">YearChange</span><span class="p">,</span> <span class="nx">_</span> <span class="p">=</span> <span class="nx">strconv</span><span class="p">.</span><span class="nf">ParseFloat</span><span class="p">(</span><span class="nx">item</span><span class="p">.</span><span class="nx">YearChange</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+		<span class="nx">fundTmp</span><span class="p">.</span><span class="nx">TwoYearChange</span><span class="p">,</span> <span class="nx">_</span> <span class="p">=</span> <span class="nx">strconv</span><span class="p">.</span><span class="nf">ParseFloat</span><span class="p">(</span><span class="nx">item</span><span class="p">.</span><span class="nx">TwoYearChange</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+		<span class="nx">fundTmp</span><span class="p">.</span><span class="nx">ThreeYearChange</span><span class="p">,</span> <span class="nx">_</span> <span class="p">=</span> <span class="nx">strconv</span><span class="p">.</span><span class="nf">ParseFloat</span><span class="p">(</span><span class="nx">item</span><span class="p">.</span><span class="nx">ThreeYearChange</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+		<span class="nx">fundTmp</span><span class="p">.</span><span class="nx">CurrentChange</span><span class="p">,</span> <span class="nx">_</span> <span class="p">=</span> <span class="nx">strconv</span><span class="p">.</span><span class="nf">ParseFloat</span><span class="p">(</span><span class="nx">item</span><span class="p">.</span><span class="nx">CurrentChange</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+		<span class="nx">fundTmp</span><span class="p">.</span><span class="nx">CreateChange</span><span class="p">,</span> <span class="nx">_</span> <span class="p">=</span> <span class="nx">strconv</span><span class="p">.</span><span class="nf">ParseFloat</span><span class="p">(</span><span class="nx">item</span><span class="p">.</span><span class="nx">CreateChange</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+		<span class="nx">topList</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">topList</span><span class="p">,</span> <span class="nx">fundTmp</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="nx">topList</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="4-定时任务">4. 定时任务</h2>
+<h3 id="41-实现cronjob接口">4.1 实现<code>cron.Job</code>接口</h3>
+<p><strong>代码文件位置：<code>crontab/fund_top_cron.go</code></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">FundTopCron</span> <span class="kd">struct</span> <span class="p">{}</span>
+<span class="kd">func</span> <span class="p">(</span><span class="nx">c</span> <span class="nx">FundTopCron</span><span class="p">)</span> <span class="nf">Run</span><span class="p">()</span>  <span class="p">{</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;基金排行榜-定时任务准备运行....&#34;</span><span class="p">)</span>
+	<span class="nx">f</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">fund</span><span class="p">.</span><span class="nx">TopCrawlService</span><span class="p">{}</span>
+	<span class="c1">// 爬取网页
+</span><span class="c1"></span>	<span class="nx">f</span><span class="p">.</span><span class="nf">CrawlHtml</span><span class="p">()</span>
+	<span class="c1">// 转换数据
+</span><span class="c1"></span>	<span class="nx">fundDayTopList</span> <span class="o">:=</span> <span class="nx">f</span><span class="p">.</span><span class="nf">ConvertEntity</span><span class="p">()</span>
+	<span class="c1">// 入库
+</span><span class="c1"></span>	<span class="k">if</span> <span class="p">!</span><span class="nx">f</span><span class="p">.</span><span class="nf">ExistTopDate</span><span class="p">()</span> <span class="p">{</span>
+		<span class="nx">result</span> <span class="o">:=</span> <span class="nx">global</span><span class="p">.</span><span class="nx">GvaMysqlClient</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="nx">fundDayTopList</span><span class="p">)</span>
+		<span class="k">if</span> <span class="nx">result</span><span class="p">.</span><span class="nx">Error</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+			<span class="nx">global</span><span class="p">.</span><span class="nx">GvaLogger</span><span class="p">.</span><span class="nf">Sugar</span><span class="p">().</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;本次任务保存数据失败：%条&#34;</span><span class="p">,</span><span class="nx">result</span><span class="p">.</span><span class="nx">Error</span><span class="p">)</span>
+			<span class="k">return</span>
+		<span class="p">}</span>
+		<span class="nx">global</span><span class="p">.</span><span class="nx">GvaLogger</span><span class="p">.</span><span class="nf">Sugar</span><span class="p">().</span><span class="nf">Infof</span><span class="p">(</span><span class="s">&#34;本次任务保存数据：%条&#34;</span><span class="p">,</span><span class="nx">result</span><span class="p">.</span><span class="nx">RowsAffected</span><span class="p">)</span>
+		<span class="k">return</span>
+	<span class="p">}</span>
+	<span class="nx">global</span><span class="p">.</span><span class="nx">GvaLogger</span><span class="p">.</span><span class="nf">Sugar</span><span class="p">().</span><span class="nf">Info</span><span class="p">(</span><span class="s">&#34;任务运行成功，无数据要保存！&#34;</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;基金排行榜-定时任务运行结束！&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="42-注册任务">4.2 注册任务</h3>
+<p><strong>代码文件位置：<code>initialize/cron.go</code></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 添加Job任务
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">addJob</span><span class="p">(</span><span class="nx">c</span> <span class="o">*</span><span class="nx">cron</span><span class="p">.</span><span class="nx">Cron</span><span class="p">)</span> <span class="p">{</span>
+	<span class="o">...</span>
+  <span class="c1">// 爬取每日基金排行榜单:每天16:30执行
+</span><span class="c1"></span>	<span class="c1">// _, _ = c.AddJob(&#34;0 30 16 */1 * *&#34;, crontab.FundTopCron{})
+</span><span class="c1"></span>  <span class="c1">// 为了测试，先写成 每10s一次
+</span><span class="c1"></span>  <span class="nx">_</span><span class="p">,</span> <span class="nx">_</span> <span class="p">=</span> <span class="nx">c</span><span class="p">.</span><span class="nf">AddJob</span><span class="p">(</span><span class="s">&#34;@every 10s&#34;</span><span class="p">,</span> <span class="nx">crontab</span><span class="p">.</span><span class="nx">FundTopCron</span><span class="p">{})</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="5-效果展示">5. 效果展示</h2>
+<h3 id="51-运行项目">5.1 运行项目</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">...
+<span class="o">[</span>GIN-debug<span class="o">]</span> GET    /demo/es/create           --&gt; 52lu/fund-analye-system/api/demo.CreateIndex <span class="o">(</span><span class="m">3</span> handlers<span class="o">)</span>
+<span class="o">[</span>GIN-debug<span class="o">]</span> GET    /demo/es/searchById       --&gt; 52lu/fund-analye-system/api/demo.SearchById <span class="o">(</span><span class="m">3</span> handlers<span class="o">)</span>
+
+【 当前环境: dev 当前版本: v1.0.0 接口地址: http://0.0.0.0:8088 】
+基金排行榜-定时任务准备运行....
+基金排行榜-定时任务运行结束！
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="52-数据表">5.2 数据表</h3>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/20210901192350.png" alt=""></p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Learn Go</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2021-08-03
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/go%E5%AE%9E%E6%88%98/">Go实战</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/%E9%A1%B9%E7%9B%AE%E7%AF%87/%E7%88%AC%E8%99%AB/4-fund-detail/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">基金分析系统(四):爬取基金详情信息</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/%E9%A1%B9%E7%9B%AE%E7%AF%87/%E7%88%AC%E8%99%AB/2-database/">
+            <span class="next-text nav-default">基金分析系统(二):通过数据模型建表</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/shershon1991" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/shershon520" class="iconfont icon-zhihu" title="zhihu"></a>
+  <a href="https://shershon1991.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2021 - 
+    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span>Learn Go</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.min.js" integrity="sha256-jwCP0NAdCBloaIWTWHmW4i3snUNMHUNO+jr9rYd2iOI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.locales.min.js" integrity="sha256-ZwofwC1Lf/faQCzN7nZtfijVV6hSwxjQMwXL4gn9qU8=" crossorigin="anonymous"></script>
+  <script><!-- NOTE: timeago.js uses the language code format like "zh_CN" (underscore and case sensitive) -->
+    var languageCode = "en".replace(/-/g, '_').replace(/_(.*)/, function ($0, $1) {return $0.replace($1, $1.toUpperCase());});
+    timeago().render(document.querySelectorAll('.timeago'), languageCode);
+    timeago.cancel();  
+  </script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

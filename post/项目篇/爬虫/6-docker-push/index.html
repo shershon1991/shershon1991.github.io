@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>基金分析系统(六):通过docker-compose项目部署 - Learn Go</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Learn Go" /><meta name="description" content="1.项目目录 1 2 3 4 5 6 7 8 9 10 ├── Dockerfile # dockerFile文件 ├── config-dev.yaml # dev环境配置文件 ├── config-local.yaml # 本地测试文件 ├── docker-compose.yaml # docker-" /><meta name="keywords" content="博客, Learn Go, hugo" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.90.1 with theme even" />
+
+
+<link rel="canonical" href="https://shershon1991.github.io/post/%E9%A1%B9%E7%9B%AE%E7%AF%87/%E7%88%AC%E8%99%AB/6-docker-push/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="基金分析系统(六):通过docker-compose项目部署" />
+<meta property="og:description" content="1.项目目录 1 2 3 4 5 6 7 8 9 10 ├── Dockerfile # dockerFile文件 ├── config-dev.yaml # dev环境配置文件 ├── config-local.yaml # 本地测试文件 ├── docker-compose.yaml # docker-" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://shershon1991.github.io/post/%E9%A1%B9%E7%9B%AE%E7%AF%87/%E7%88%AC%E8%99%AB/6-docker-push/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2021-08-06T00:00:00+00:00" />
+<meta property="article:modified_time" content="2021-08-06T00:00:00+00:00" />
+
+<meta itemprop="name" content="基金分析系统(六):通过docker-compose项目部署">
+<meta itemprop="description" content="1.项目目录 1 2 3 4 5 6 7 8 9 10 ├── Dockerfile # dockerFile文件 ├── config-dev.yaml # dev环境配置文件 ├── config-local.yaml # 本地测试文件 ├── docker-compose.yaml # docker-"><meta itemprop="datePublished" content="2021-08-06T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2021-08-06T00:00:00+00:00" />
+<meta itemprop="wordCount" content="1395">
+<meta itemprop="keywords" content="Go实战," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="基金分析系统(六):通过docker-compose项目部署"/>
+<meta name="twitter:description" content="1.项目目录 1 2 3 4 5 6 7 8 9 10 ├── Dockerfile # dockerFile文件 ├── config-dev.yaml # dev环境配置文件 ├── config-local.yaml # 本地测试文件 ├── docker-compose.yaml # docker-"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Learn Go</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">首页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Learn Go</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">首页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">基金分析系统(六):通过docker-compose项目部署</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-08-06 </span>
+        <div class="post-category">
+            <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+            <a href="/categories/go/"> Go </a>
+            </div>
+          <span class="more-meta"> 约 1395 字 </span>
+          <span class="more-meta"> 预计阅读 3 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#1项目目录">1.项目目录</a></li>
+            <li><a href="#2-新增dockerfile">2. 新增<code>dockerfile</code></a></li>
+            <li><a href="#3-新增docker-composeyaml">3. 新增<code>docker-compose.yaml</code></a></li>
+            <li><a href="#4-新增环境变量文件env">4. 新增环境变量文件<code>.env</code></a></li>
+            <li><a href="#5编译docker-compose-build">5.编译<code>docker-compose build</code></a></li>
+            <li><a href="#6运行docker-compose-up--d">6.运行<code>docker-compose up -d</code></a></li>
+            <li><a href="#7-踩坑记录connect-no-route-to-host">7. 踩坑记录<code>connect: no route to host</code></a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+  <div class="post-outdated">
+    <div class="warn">
+      <p>【注意】最后更新于 <span class="timeago" datetime="2021-08-06T00:00:00" title="August 6, 2021">August 6, 2021</span>，文中内容可能已过时，请谨慎使用。</p>
+    </div>
+  </div>
+    <div class="post-content">
+      <h3 id="1项目目录">1.项目目录</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">├── Dockerfile  <span class="c1"># dockerFile文件</span>
+├── config-dev.yaml <span class="c1"># dev环境配置文件</span>
+├── config-local.yaml <span class="c1"># 本地测试文件 </span>
+├── docker-compose.yaml <span class="c1"># docker-compose文件</span>
+├── .env <span class="c1"># 环境变量文件</span>
+....
+├── go.mod
+├── go.sum
+├── logs
+├── main.go
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="2-新增dockerfile">2. 新增<code>dockerfile</code></h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-dockerfile" data-lang="dockerfile"><span class="k">FROM</span><span class="s"> golang:1.16.9-stretch AS builder</span><span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="c"># 环境变量</span><span class="err">
+</span><span class="err"></span><span class="k">ENV</span> <span class="nv">GO111MODULE</span><span class="o">=</span>on <span class="se">\
+</span><span class="se"></span>    <span class="nv">CGO_ENABLED</span><span class="o">=</span><span class="m">0</span> <span class="se">\
+</span><span class="se"></span>    <span class="nv">GOOS</span><span class="o">=</span>linux <span class="se">\
+</span><span class="se"></span>    <span class="nv">GOARCH</span><span class="o">=</span>amd64 <span class="se">\
+</span><span class="se"></span>    <span class="nv">GOPROXY</span><span class="o">=</span><span class="s2">&#34;https://goproxy.cn,direct&#34;</span><span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="c"># 切换到工作目录</span><span class="err">
+</span><span class="err"></span><span class="k">WORKDIR</span><span class="s"> /build</span><span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="c"># 将代码复制到容器中</span><span class="err">
+</span><span class="err"></span><span class="k">COPY</span> . .<span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="c"># 下载依赖</span><span class="err">
+</span><span class="err"></span><span class="k">RUN</span> go mod download<span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="c"># 编译成二进制文件,二进制文件名：app</span><span class="err">
+</span><span class="err"></span><span class="k">RUN</span> go build -o app .<span class="err">
+</span><span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="c">### --------- 二阶段，构建一个小镜像 ---------</span><span class="err">
+</span><span class="err"></span><span class="k">FROM</span><span class="s"> registry.cn-beijing.aliyuncs.com/liuqinghui/go-env:stretch-slim</span><span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="c"># 项目目录</span><span class="err">
+</span><span class="err"></span><span class="k">WORKDIR</span><span class="s"> /www</span><span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="c">## 复制配置文件</span><span class="err">
+</span><span class="err"></span><span class="k">ARG</span> APP_ENV<span class="err">
+</span><span class="err"></span><span class="k">COPY</span> ./config-<span class="si">${</span><span class="nv">APP_ENV</span><span class="si">}</span>.yaml /www/config.yaml<span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="c"># 从builder镜像中把二进制文件/build/app 拷贝到当前目录</span><span class="err">
+</span><span class="err"></span><span class="k">COPY</span> --from<span class="o">=</span>builder /build/app /www<span class="err">
+</span></code></pre></td></tr></table>
+</div>
+</div><h3 id="3-新增docker-composeyaml">3. 新增<code>docker-compose.yaml</code></h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;3&#39;</span><span class="w">
+</span><span class="w"></span><span class="nt">networks</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">backend</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">driver</span><span class="p">:</span><span class="w"> </span><span class="l">${NETWORKS_DRIVER}</span><span class="w">
+</span><span class="w"></span><span class="nt">services</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">app</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">build</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">context</span><span class="p">:</span><span class="w"> </span><span class="l">.</span><span class="w">
+</span><span class="w">      </span><span class="nt">args</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span>- <span class="l">APP_ENV=${APP_ENV}</span><span class="w">
+</span><span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l">sh -c &#34;./app -c ./config.yaml&#34;</span><span class="w">
+</span><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span>- <span class="l">${PROJECT_PATH}/config-${APP_ENV}.yaml:/www/config.yaml</span><span class="w">
+</span><span class="w">      </span>- <span class="l">${LOG_PATH}/logs:/www/logs</span><span class="w">
+</span><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span>- <span class="s2">&#34;${APP_PORT}:8088&#34;</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><h3 id="4-新增环境变量文件env">4. 新增环境变量文件<code>.env</code></h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"># 项目地址(绝对路径)
+PROJECT_PATH=..
+# 日志目录
+LOG_PATH=
+# 网络
+NETWORKS_DRIVER=bridge
+# 环境
+APP_ENV=local
+# 端口
+APP_PORT=8081
+
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="5编译docker-compose-build">5.编译<code>docker-compose build</code></h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">➜ docker-compose build
+WARNING: Some networks were defined but are not used by any service: backend
+Building app
+Step 1/11 : FROM golang:1.16.9-stretch AS builder
+ ---&gt; 8a22bd5879d4
+Step 2/11 : ENV <span class="nv">GO111MODULE</span><span class="o">=</span>on     <span class="nv">CGO_ENABLED</span><span class="o">=</span><span class="m">0</span>     <span class="nv">GOOS</span><span class="o">=</span>linux     <span class="nv">GOARCH</span><span class="o">=</span>amd64     <span class="nv">GOPROXY</span><span class="o">=</span><span class="s2">&#34;https://goproxy.cn,direct&#34;</span>
+ ---&gt; Using cache
+ ---&gt; f1201d2611b7
+Step 3/11 : WORKDIR /build
+ ---&gt; Using cache
+ ---&gt; 7e157372b7c9
+Step 4/11 : COPY . .
+ ---&gt; 515c90ffcd8d
+Step 5/11 : RUN go mod download
+ ---&gt; Running in 0a52cfdd5444
+Removing intermediate container 0a52cfdd5444
+ ---&gt; 6f5f983a8fd5
+Step 6/11 : RUN go build -o app .
+ ---&gt; Running in a76302af8f8e
+Removing intermediate container a76302af8f8e
+ ---&gt; 7195b4de462c
+Step 7/11 : FROM registry.cn-beijing.aliyuncs.com/liuqinghui/go-env:stretch-slim
+ ---&gt; f9204dd33156
+Step 8/11 : WORKDIR /www
+ ---&gt; Using cache
+ ---&gt; b87192a29265
+Step 9/11 : ARG APP_ENV
+ ---&gt; Using cache
+ ---&gt; fad4cc8a171b
+Step 10/11 : COPY ./config-<span class="si">${</span><span class="nv">APP_ENV</span><span class="si">}</span>.yaml /www/config.yaml
+ ---&gt; Using cache
+ ---&gt; bc7e2bb9dfcb
+Step 11/11 : COPY --from<span class="o">=</span>builder /build/app /www
+ ---&gt; 951dce0d6536
+Successfully built 951dce0d6536
+Successfully tagged fund-server_app:latest
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="6运行docker-compose-up--d">6.运行<code>docker-compose up -d</code></h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 运行</span>
+➜ docker-compose up -d
+WARNING: Some networks were defined but are not used by any service: backend
+fund-server_app_1 is up-to-date
+
+<span class="c1"># 查看日志</span>
+➜ docker-compose logs
+WARNING: Some networks were defined but are not used by any service: backend
+Attaching to fund-server_app_1
+app_1  <span class="p">|</span> <span class="o">[</span>GIN-debug<span class="o">]</span> <span class="o">[</span>WARNING<span class="o">]</span> Running in <span class="s2">&#34;debug&#34;</span> mode. Switch to <span class="s2">&#34;release&#34;</span> mode in production.
+app_1  <span class="p">|</span>  - using env:	<span class="nb">export</span> <span class="nv">GIN_MODE</span><span class="o">=</span>release
+app_1  <span class="p">|</span>  - using code:	gin.SetMode<span class="o">(</span>gin.ReleaseMode<span class="o">)</span>
+app_1  <span class="p">|</span>
+app_1  <span class="p">|</span> <span class="o">[</span>GIN-debug<span class="o">]</span> GET    /system/config            --&gt; 52lu/fund-analye-system/api/demo.GetConfig <span class="o">(</span><span class="m">3</span> handlers<span class="o">)</span>
+app_1  <span class="p">|</span> <span class="o">[</span>GIN-debug<span class="o">]</span> POST   /demo/user/login          --&gt; 52lu/fund-analye-system/api/demo.Login <span class="o">(</span><span class="m">3</span> handlers<span class="o">)</span>
+app_1  <span class="p">|</span> 【 当前环境: dev 当前版本: v1.0.0 接口地址: http://0.0.0.0:8081 启动时间:2021-10-18 22:10:23 】
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="7-踩坑记录connect-no-route-to-host">7. 踩坑记录<code>connect: no route to host</code></h3>
+<p>启动容器后，在容器内访问本地mysql报错: <code>connect: no route to host</code></p>
+<h4 id="71-报错信息">7.1 报错信息</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">➜ docker-compose up
+WARNING: Some networks were defined but are not used by any service: backend
+Starting fund-server_app_1 ... <span class="k">done</span>
+Attaching to fund-server_app_1
+app_1  <span class="p">|</span> panic: 创建mysql客户端失败: dial tcp 172.20.0.1:3306: connect: no route to host, <span class="o">{</span>172.20.0.1 <span class="m">3306</span> root root fund_system utf8mb4 <span class="nb">false</span> <span class="nb">true</span> Local <span class="m">255</span> <span class="nb">true</span> <span class="nb">false</span> <span class="o">{</span><span class="nb">false</span> <span class="nb">true</span> <span class="nb">false</span> <span class="nb">false</span> fas_ true<span class="o">}</span> 50ms info <span class="nb">true</span> true<span class="o">}</span>
+app_1  <span class="p">|</span>
+app_1  <span class="p">|</span> goroutine <span class="m">1</span> <span class="o">[</span>running<span class="o">]</span>:
+app_1  <span class="p">|</span> 52lu/fund-analye-system/initialize.initGorm<span class="o">()</span>
+app_1  <span class="p">|</span> 	/build/initialize/gorm.go:50 +0x6ae
+app_1  <span class="p">|</span> 52lu/fund-analye-system/initialize.SetLoadInit<span class="o">()</span>
+app_1  <span class="p">|</span> 	/build/initialize/load.go:9 +0x2f
+app_1  <span class="p">|</span> main.main<span class="o">()</span>
+app_1  <span class="p">|</span> 	/build/main.go:18 +0x45
+fund-server_app_1 exited with code <span class="m">2</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="72-解决方法">7.2 解决方法</h4>
+<h5 id="1-替换mysql的host">1. 替换mysql的host</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 查看网络信息</span>
+➜ docker network ls
+NETWORK ID          NAME                  DRIVER              SCOPE
+1ff63fe03b51        bridge                bridge              <span class="nb">local</span>
+4067e988f21e        fund-server_default   bridge              <span class="nb">local</span>
+3e3c8036f789        host                  host                <span class="nb">local</span>
+5066fef7de07        none                  null                <span class="nb">local</span>
+
+<span class="c1">#  查看网络，对应的IP信息</span>
+➜  ifconfig
+br-4067e988f21e: <span class="nv">flags</span><span class="o">=</span>4099&lt;UP,BROADCAST,MULTICAST&gt;  mtu <span class="m">1500</span>
+        inet 172.30.0.1  netmask 255.255.0.0  broadcast 172.30.255.255
+        ether 02:42:09:22:b7:96  txqueuelen <span class="m">0</span>  <span class="o">(</span>Ethernet<span class="o">)</span>
+        RX packets <span class="m">341232</span>  bytes <span class="m">28039546</span> <span class="o">(</span>26.7 MiB<span class="o">)</span>
+        RX errors <span class="m">0</span>  dropped <span class="m">0</span>  overruns <span class="m">0</span>  frame <span class="m">0</span>
+        TX packets <span class="m">341232</span>  bytes <span class="m">28039546</span> <span class="o">(</span>26.7 MiB<span class="o">)</span>
+        TX errors <span class="m">0</span>  dropped <span class="m">0</span> overruns <span class="m">0</span>  carrier <span class="m">0</span>  collisions <span class="m">0</span>
+<span class="c1"># docker ip </span>
+docker0: <span class="nv">flags</span><span class="o">=</span>4099&lt;UP,BROADCAST,MULTICAST&gt;  mtu <span class="m">1500</span>
+        inet 172.20.0.1  netmask 255.255.255.0  broadcast 172.20.0.255
+        ether 02:42:ce:98:11:2d  txqueuelen <span class="m">0</span>  <span class="o">(</span>Ethernet<span class="o">)</span>
+        RX packets <span class="m">585535</span>  bytes <span class="m">33313003</span> <span class="o">(</span>31.7 MiB<span class="o">)</span>
+        RX errors <span class="m">0</span>  dropped <span class="m">0</span>  overruns <span class="m">0</span>  frame <span class="m">0</span>
+        TX packets <span class="m">605413</span>  bytes <span class="m">4440526782</span> <span class="o">(</span>4.1 GiB<span class="o">)</span>
+        TX errors <span class="m">0</span>  dropped <span class="m">0</span> overruns <span class="m">0</span>  carrier <span class="m">0</span>  collisions <span class="m">0</span>
+
+eth0: <span class="nv">flags</span><span class="o">=</span>4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu <span class="m">1500</span>
+        inet 172.17.109.13  netmask 255.255.240.0  broadcast 172.17.111.255
+        ether 00:16:3e:12:a4:49  txqueuelen <span class="m">1000</span>  <span class="o">(</span>Ethernet<span class="o">)</span>
+        RX packets <span class="m">8259415</span>  bytes <span class="m">5899125416</span> <span class="o">(</span>5.4 GiB<span class="o">)</span>
+        RX errors <span class="m">0</span>  dropped <span class="m">0</span>  overruns <span class="m">0</span>  frame <span class="m">0</span>
+        TX packets <span class="m">6539516</span>  bytes <span class="m">2592253401</span> <span class="o">(</span>2.4 GiB<span class="o">)</span>
+        TX errors <span class="m">0</span>  dropped <span class="m">0</span> overruns <span class="m">0</span>  carrier <span class="m">0</span>  collisions <span class="m">0</span>
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="2-修改防火墙配置文件">2. 修改防火墙配置文件</h5>
+<p><code>vim /etc/firewalld/zones/public.xml</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 文件位置</span>
+&lt;?xml <span class="nv">version</span><span class="o">=</span><span class="s2">&#34;1.0&#34;</span> <span class="nv">encoding</span><span class="o">=</span><span class="s2">&#34;utf-8&#34;</span>?&gt;
+&lt;zone&gt;
+  &lt;short&gt;Public&lt;/short&gt;
+  &lt;description&gt;For use in public areas. You <span class="k">do</span> not trust the other computers on networks to not harm your computer. Only selected incoming connections are accepted.&lt;/description&gt;
+  &lt;service <span class="nv">name</span><span class="o">=</span><span class="s2">&#34;ssh&#34;</span>/&gt;
+  &lt;service <span class="nv">name</span><span class="o">=</span><span class="s2">&#34;dhcpv6-client&#34;</span>/&gt;
+  &lt;port <span class="nv">protocol</span><span class="o">=</span><span class="s2">&#34;tcp&#34;</span> <span class="nv">port</span><span class="o">=</span><span class="s2">&#34;20&#34;</span>/&gt;
+  &lt;port <span class="nv">protocol</span><span class="o">=</span><span class="s2">&#34;tcp&#34;</span> <span class="nv">port</span><span class="o">=</span><span class="s2">&#34;21&#34;</span>/&gt;
+  &lt;port <span class="nv">protocol</span><span class="o">=</span><span class="s2">&#34;tcp&#34;</span> <span class="nv">port</span><span class="o">=</span><span class="s2">&#34;22&#34;</span>/&gt;
+  &lt;port <span class="nv">protocol</span><span class="o">=</span><span class="s2">&#34;tcp&#34;</span> <span class="nv">port</span><span class="o">=</span><span class="s2">&#34;80&#34;</span>/&gt;
+  &lt;port <span class="nv">protocol</span><span class="o">=</span><span class="s2">&#34;tcp&#34;</span> <span class="nv">port</span><span class="o">=</span><span class="s2">&#34;8888&#34;</span>/&gt;
+  &lt;port <span class="nv">protocol</span><span class="o">=</span><span class="s2">&#34;tcp&#34;</span> <span class="nv">port</span><span class="o">=</span><span class="s2">&#34;39000-40000&#34;</span>/&gt;
+  &lt;port <span class="nv">protocol</span><span class="o">=</span><span class="s2">&#34;tcp&#34;</span> <span class="nv">port</span><span class="o">=</span><span class="s2">&#34;443&#34;</span>/&gt;
+  &lt;port <span class="nv">protocol</span><span class="o">=</span><span class="s2">&#34;tcp&#34;</span> <span class="nv">port</span><span class="o">=</span><span class="s2">&#34;12345&#34;</span>/&gt;
+  &lt;port <span class="nv">protocol</span><span class="o">=</span><span class="s2">&#34;udp&#34;</span> <span class="nv">port</span><span class="o">=</span><span class="s2">&#34;12345&#34;</span>/&gt;
+  &lt;port <span class="nv">protocol</span><span class="o">=</span><span class="s2">&#34;tcp&#34;</span> <span class="nv">port</span><span class="o">=</span><span class="s2">&#34;888&#34;</span>/&gt;
+
+&lt;!-- docker ip--&gt;
+&lt;rule <span class="nv">family</span><span class="o">=</span><span class="s2">&#34;ipv4&#34;</span>&gt;
+    &lt;<span class="nb">source</span> <span class="nv">address</span><span class="o">=</span><span class="s2">&#34;172.20.0.0/16&#34;</span>/&gt;
+    &lt;accept/&gt;
+&lt;/rule&gt;
+&lt;!-- 服务创建的网络段--&gt;
+&lt;rule <span class="nv">family</span><span class="o">=</span><span class="s2">&#34;ipv4&#34;</span>&gt;
+    &lt;<span class="nb">source</span> <span class="nv">address</span><span class="o">=</span><span class="s2">&#34;172.30.0.0/16&#34;</span>/&gt;
+    &lt;accept/&gt;
+&lt;/rule&gt;
+&lt;/zone&gt;
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="3-重启防火墙">3. 重启防火墙</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 重启防火墙</span>
+➜ service firewalld  restart
+Redirecting to /bin/systemctl restart firewalld.service
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="4-重启服务">4. 重启服务</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 重启服务</span>
+➜  docker-compose up -d
+</code></pre></td></tr></table>
+</div>
+</div>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Learn Go</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2021-08-06
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/go%E5%AE%9E%E6%88%98/">Go实战</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/gin%E6%A1%86%E6%9E%B6/01-%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Gin框架(一):快速入门</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/%E9%A1%B9%E7%9B%AE%E7%AF%87/%E7%88%AC%E8%99%AB/5-fund-stock/">
+            <span class="next-text nav-default">基金分析系统(五):爬取基金持仓信息</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/shershon1991" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/shershon520" class="iconfont icon-zhihu" title="zhihu"></a>
+  <a href="https://shershon1991.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2021 - 
+    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span>Learn Go</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.min.js" integrity="sha256-jwCP0NAdCBloaIWTWHmW4i3snUNMHUNO+jr9rYd2iOI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.locales.min.js" integrity="sha256-ZwofwC1Lf/faQCzN7nZtfijVV6hSwxjQMwXL4gn9qU8=" crossorigin="anonymous"></script>
+  <script><!-- NOTE: timeago.js uses the language code format like "zh_CN" (underscore and case sensitive) -->
+    var languageCode = "en".replace(/-/g, '_').replace(/_(.*)/, function ($0, $1) {return $0.replace($1, $1.toUpperCase());});
+    timeago().render(document.querySelectorAll('.timeago'), languageCode);
+    timeago.cancel();  
+  </script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

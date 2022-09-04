@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Gin框架(五):参数接收 - Learn Go</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Learn Go" /><meta name="description" content="1.路由参数 1.1 Param 当注册路由格式为:/path/:a/:b 时，:x指的就是路由参数，可以直接通过Param(&amp;quot;x&amp;quot;)获取值" /><meta name="keywords" content="博客, Learn Go, hugo" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.90.1 with theme even" />
+
+
+<link rel="canonical" href="https://shershon1991.github.io/post/gin%E6%A1%86%E6%9E%B6/05-%E5%8F%82%E6%95%B0%E6%8E%A5%E6%94%B6/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Gin框架(五):参数接收" />
+<meta property="og:description" content="1.路由参数 1.1 Param 当注册路由格式为:/path/:a/:b 时，:x指的就是路由参数，可以直接通过Param(&quot;x&quot;)获取值" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://shershon1991.github.io/post/gin%E6%A1%86%E6%9E%B6/05-%E5%8F%82%E6%95%B0%E6%8E%A5%E6%94%B6/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2021-12-05T00:00:00+00:00" />
+<meta property="article:modified_time" content="2021-12-05T00:00:00+00:00" />
+
+<meta itemprop="name" content="Gin框架(五):参数接收">
+<meta itemprop="description" content="1.路由参数 1.1 Param 当注册路由格式为:/path/:a/:b 时，:x指的就是路由参数，可以直接通过Param(&quot;x&quot;)获取值"><meta itemprop="datePublished" content="2021-12-05T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2021-12-05T00:00:00+00:00" />
+<meta itemprop="wordCount" content="3581">
+<meta itemprop="keywords" content="Gin框架," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Gin框架(五):参数接收"/>
+<meta name="twitter:description" content="1.路由参数 1.1 Param 当注册路由格式为:/path/:a/:b 时，:x指的就是路由参数，可以直接通过Param(&quot;x&quot;)获取值"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Learn Go</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">首页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Learn Go</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">首页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Gin框架(五):参数接收</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-12-05 </span>
+        <div class="post-category">
+            <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+            <a href="/categories/go/"> Go </a>
+            </div>
+          <span class="more-meta"> 约 3581 字 </span>
+          <span class="more-meta"> 预计阅读 8 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#1路由参数">1.路由参数</a></li>
+            <li><a href="#2get参数">2.<code>GET</code>参数</a></li>
+            <li><a href="#3post参数">3.<code>POST</code>参数</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+  <div class="post-outdated">
+    <div class="warn">
+      <p>【注意】最后更新于 <span class="timeago" datetime="2021-12-05T00:00:00" title="December 5, 2021">December 5, 2021</span>，文中内容可能已过时，请谨慎使用。</p>
+    </div>
+  </div>
+    <div class="post-content">
+      <h3 id="1路由参数">1.路由参数</h3>
+<h4 id="11-param">1.1 <code>Param</code></h4>
+<p>当注册路由格式为:<code>/path/:a/:b</code> 时，<code>:x</code>指的就是路由参数，可以直接通过<code>Param(&quot;x&quot;)</code>获取值信息。</p>
+<p><strong>a.代码示例:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;github.com/gin-gonic/gin&#34;</span> <span class="c1">// 引入Gin框架
+</span><span class="c1"></span><span class="p">)</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 创建一个默认的路由引擎
+</span><span class="c1"></span>	<span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
+	<span class="c1">// 注册路由
+</span><span class="c1"></span>	<span class="nx">engine</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/test/:name&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+		<span class="c1">// 接收参数
+</span><span class="c1"></span>		<span class="nx">name</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">Param</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">)</span>
+		<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;msg&#34;</span><span class="p">:</span> <span class="s">&#34;success&#34;</span><span class="p">,</span> <span class="s">&#34;name&#34;</span><span class="p">:</span> <span class="nx">name</span><span class="p">})</span>
+	<span class="p">})</span>
+	<span class="nx">engine</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/test/:name/:age&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+		<span class="c1">// 接收参数
+</span><span class="c1"></span>		<span class="nx">name</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">Param</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">)</span>
+		<span class="nx">age</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">Param</span><span class="p">(</span><span class="s">&#34;age&#34;</span><span class="p">)</span>
+		<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span>
+			<span class="s">&#34;msg&#34;</span><span class="p">:</span> <span class="s">&#34;success&#34;</span><span class="p">,</span>
+			<span class="s">&#34;name&#34;</span><span class="p">:</span> <span class="nx">name</span><span class="p">,</span>
+			<span class="s">&#34;phone&#34;</span><span class="p">:</span><span class="nx">age</span><span class="p">,</span>
+		<span class="p">})</span>
+	<span class="p">})</span>
+	<span class="nx">engine</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/test/:name/:age/:height&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+		<span class="c1">// 接收参数
+</span><span class="c1"></span>		<span class="nx">name</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">Param</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">)</span>
+		<span class="nx">age</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">Param</span><span class="p">(</span><span class="s">&#34;age&#34;</span><span class="p">)</span>
+		<span class="nx">height</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">Param</span><span class="p">(</span><span class="s">&#34;height&#34;</span><span class="p">)</span>
+		<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span>
+			<span class="s">&#34;msg&#34;</span><span class="p">:</span> <span class="s">&#34;success&#34;</span><span class="p">,</span>
+			<span class="s">&#34;name&#34;</span><span class="p">:</span> <span class="nx">name</span><span class="p">,</span>
+			<span class="s">&#34;phone&#34;</span><span class="p">:</span><span class="nx">age</span><span class="p">,</span>
+			<span class="s">&#34;height&#34;</span><span class="p">:</span><span class="nx">height</span><span class="p">,</span>
+		<span class="p">})</span>
+	<span class="p">})</span>
+	<span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>b.请求返回:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">➜ curl -X GET http://127.0.0.1:8080/test/张三
+<span class="o">{</span><span class="s2">&#34;msg&#34;</span>:<span class="s2">&#34;success&#34;</span>,<span class="s2">&#34;name&#34;</span>:<span class="s2">&#34;张三&#34;</span><span class="o">}</span>
+➜ curl -X GET http://127.0.0.1:8080/test/张三/18
+<span class="o">{</span><span class="s2">&#34;msg&#34;</span>:<span class="s2">&#34;success&#34;</span>,<span class="s2">&#34;name&#34;</span>:<span class="s2">&#34;张三&#34;</span>,<span class="s2">&#34;phone&#34;</span>:<span class="s2">&#34;18&#34;</span><span class="o">}</span>
+➜ curl -X GET http://127.0.0.1:8080/test/张三/18/170
+<span class="o">{</span><span class="s2">&#34;height&#34;</span>:<span class="s2">&#34;170&#34;</span>,<span class="s2">&#34;msg&#34;</span>:<span class="s2">&#34;success&#34;</span>,<span class="s2">&#34;name&#34;</span>:<span class="s2">&#34;张三&#34;</span>,<span class="s2">&#34;phone&#34;</span>:<span class="s2">&#34;18&#34;</span><span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="2get参数">2.<code>GET</code>参数</h3>
+<h4 id="21--接收单值">2.1  接收单值</h4>
+<p>在<code>Gin</code>框架中可以通过<code>Query、DefaultQuery、GetQuery</code>来获取<code>Get</code>参数信息，而<code>Query、DefaultQuery</code>是对<code>GetQuery</code>的二次封装。</p>
+<p><strong>a.代码示例:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;github.com/gin-gonic/gin&#34;</span> <span class="c1">// 引入Gin框架
+</span><span class="c1"></span><span class="p">)</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 创建一个默认的路由引擎
+</span><span class="c1"></span>	<span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
+	<span class="c1">// 注册路由
+</span><span class="c1"></span>	<span class="nf">testReceiveGetParam</span><span class="p">(</span><span class="nx">engine</span><span class="p">)</span>
+	<span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
+<span class="p">}</span>
+<span class="kd">func</span> <span class="nf">testReceiveGetParam</span><span class="p">(</span> <span class="nx">engine</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Engine</span><span class="p">)</span>  <span class="p">{</span>
+	<span class="nx">engine</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/receive&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+		<span class="c1">// 如果不存在或为空,则返回:&#34;&#34;
+</span><span class="c1"></span>		<span class="nx">name</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">Query</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">)</span>
+		<span class="c1">// 如果不存在或为空,则返回默认值
+</span><span class="c1"></span>		<span class="nx">age</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">DefaultQuery</span><span class="p">(</span><span class="s">&#34;age&#34;</span><span class="p">,</span><span class="s">&#34;18&#34;</span><span class="p">)</span>
+		<span class="c1">// 直接使用GetQuery
+</span><span class="c1"></span>		<span class="nx">home</span><span class="p">,</span> <span class="nx">ok</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">GetQuery</span><span class="p">(</span><span class="s">&#34;home&#34;</span><span class="p">)</span>
+		<span class="nx">context</span><span class="p">.</span><span class="nf">PureJSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span>
+			<span class="s">&#34;msg&#34;</span><span class="p">:</span><span class="s">&#34;success&#34;</span><span class="p">,</span>
+			<span class="s">&#34;context.Query-&gt;name&#34;</span><span class="p">:</span><span class="nx">name</span><span class="p">,</span>
+			<span class="s">&#34;context.DefaultQuery-&gt;age&#34;</span><span class="p">:</span><span class="nx">age</span><span class="p">,</span>
+			<span class="s">&#34;context.GetQuery-&gt;home&#34;</span><span class="p">:</span><span class="nx">home</span><span class="p">,</span>
+			<span class="s">&#34;context.GetQuery-&gt;ok&#34;</span><span class="p">:</span><span class="nx">ok</span><span class="p">,</span>
+		<span class="p">})</span>
+	<span class="p">})</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>c.请求返回:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 不传任何参数时，看接收情况</span>
+➜ curl -X GET http://127.0.0.1:8080/receive
+<span class="o">{</span><span class="s2">&#34;context.DefaultQuery-&gt;age&#34;</span>:<span class="s2">&#34;18&#34;</span>,<span class="s2">&#34;context.GetQuery-&gt;ok&#34;</span>:false,<span class="s2">&#34;context.GetQuery-&gt;home&#34;</span>:<span class="s2">&#34;&#34;</span>,<span class="s2">&#34;context.Query-&gt;name&#34;</span>:<span class="s2">&#34;&#34;</span>,<span class="s2">&#34;msg&#34;</span>:<span class="s2">&#34;success&#34;</span><span class="o">}</span>
+<span class="c1"># 传任何参数时，看接收情况</span>
+➜ curl -X GET http://127.0.0.1:8080/receive<span class="se">\?</span>age<span class="se">\=</span>23<span class="se">\&amp;</span>home<span class="se">\=</span>北京<span class="se">\&amp;</span>name<span class="se">\=</span>小明
+<span class="o">{</span><span class="s2">&#34;context.DefaultQuery-&gt;age&#34;</span>:<span class="s2">&#34;23&#34;</span>,<span class="s2">&#34;context.GetQuery-&gt;ok&#34;</span>:true,<span class="s2">&#34;context.GetQuery-&gt;home&#34;</span>:<span class="s2">&#34;北京&#34;</span>,<span class="s2">&#34;context.Query-&gt;name&#34;</span>:<span class="s2">&#34;小明&#34;</span>,<span class="s2">&#34;msg&#34;</span>:<span class="s2">&#34;success&#34;</span><span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="22-接收数组">2.2 接收数组</h4>
+<p>在<code>Gin</code>框架中可以通过<code>QueryArray(&quot;param[]&quot;)</code>和<code>GetQueryArray(&quot;param[]&quot;)</code>获取<code>GET</code>方式提交中的数组值信息，而<code>QueryArray</code>是对<code>GetQueryArray</code>二次封装， 具体使用参考下面代码:</p>
+<p><strong>a.代码示例:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">//-------- main.go ---------------
+</span><span class="c1"></span><span class="kn">package</span> <span class="nx">main</span>
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;github.com/gin-gonic/gin&#34;</span> <span class="c1">// 引入Gin框架
+</span><span class="c1"></span>	<span class="s">&#34;go-use/practise&#34;</span> <span class="c1">// 代码示例包
+</span><span class="c1"></span><span class="p">)</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 创建一个默认的路由引擎
+</span><span class="c1"></span>	<span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
+	<span class="c1">// 注册路由
+</span><span class="c1"></span>	<span class="nx">practise</span><span class="p">.</span><span class="nf">TestReceiveGetArrayParam</span><span class="p">(</span><span class="nx">engine</span><span class="p">)</span>
+	<span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
+<span class="p">}</span>
+<span class="c1">//------ go-use/practise/param_receice.go -------
+</span><span class="c1">// 接收数组
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestReceiveGetArrayParam</span><span class="p">(</span><span class="nx">engine</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Engine</span><span class="p">)</span>  <span class="p">{</span>
+	<span class="nx">engine</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/getArr&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+		<span class="c1">// 接收GET数组：/getArr?name[]=张三&amp;name[]=李四
+</span><span class="c1"></span>		<span class="nx">nameList</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">QueryArray</span><span class="p">(</span><span class="s">&#34;name[]&#34;</span><span class="p">)</span>
+		<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span>
+			<span class="s">&#34;arr&#34;</span><span class="p">:</span> <span class="nx">nameList</span><span class="p">,</span>
+		<span class="p">})</span>
+	<span class="p">})</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>b.请求返回:</strong></p>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/20210427161130.png" alt=""></p>
+<h4 id="23-接收map">2.3 接收Map</h4>
+<p>在<code>Gin</code>框架中可以通过<code>QueryMap(&quot;param&quot;)</code>和<code>GetQueryMap(&quot;param&quot;)</code>获取<code>GET</code>方式提交中的<code>map</code>值信息，而<code>QueryMap</code>是对<code>GetQueryMap</code>二次封装,具体使用参考下面代码:</p>
+<p><strong>a.代码示例:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">//-------- main.go ---------------
+</span><span class="c1"></span><span class="kn">package</span> <span class="nx">main</span>
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;github.com/gin-gonic/gin&#34;</span> <span class="c1">// 引入Gin框架
+</span><span class="c1"></span>	<span class="s">&#34;go-use/practise&#34;</span> <span class="c1">// 代码示例包
+</span><span class="c1"></span><span class="p">)</span>
+
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 创建一个默认的路由引擎
+</span><span class="c1"></span>	<span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
+	<span class="c1">// 注册路由
+</span><span class="c1"></span>	<span class="nx">practise</span><span class="p">.</span><span class="nf">TestRecGetMapParam</span><span class="p">(</span><span class="nx">engine</span><span class="p">)</span>
+	<span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
+<span class="p">}</span>
+<span class="c1">//------ go-use/practise/param_receice.go -------
+</span><span class="c1">// 接收map
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestRecGetMapParam</span><span class="p">(</span><span class="nx">engine</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Engine</span><span class="p">)</span>  <span class="p">{</span>
+	<span class="nx">engine</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/getMap&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+		<span class="c1">//接收GET map：/getMap?score[语文]=95&amp;score[数学]=100
+</span><span class="c1"></span>		<span class="nx">queryMap</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">QueryMap</span><span class="p">(</span><span class="s">&#34;score&#34;</span><span class="p">)</span>
+		<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span>
+			<span class="s">&#34;map&#34;</span><span class="p">:</span><span class="nx">queryMap</span><span class="p">,</span>
+		<span class="p">})</span>
+	<span class="p">})</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>b.请求返回:</strong></p>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/20210427164158.png" alt="image-20210427164158662"></p>
+<h3 id="3post参数">3.<code>POST</code>参数</h3>
+<h4 id="31-接收单值">3.1 接收单值</h4>
+<p>在<code>Gin</code>框架中可以通过<code>PostForm、DefaultPostForm、GetPostForm</code>来获取<code>Post</code>提交的参数信息，而<code>PostForm、DefaultPostForm</code>同样是对<code>GetPostForm</code>的二次封装。</p>
+<p><strong>a.代码示例:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">//-------- main.go ---------------
+</span><span class="c1"></span><span class="kn">package</span> <span class="nx">main</span>
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;github.com/gin-gonic/gin&#34;</span>
+	<span class="s">&#34;go-use/practise&#34;</span>
+<span class="p">)</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 创建一个默认的路由引擎
+</span><span class="c1"></span>	<span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
+	<span class="c1">// 注册路由
+</span><span class="c1"></span>	<span class="nx">practise</span><span class="p">.</span><span class="nf">TestRecPostSingleValue</span><span class="p">(</span><span class="nx">engine</span><span class="p">)</span>
+	<span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
+<span class="p">}</span>
+<span class="c1">//------ go-use/practise/param_receice.go -------
+</span><span class="c1">// 接收单值: PostForm、DefaultPostForm、GetPostForm
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestRecPostSingleValue</span><span class="p">(</span><span class="nx">engine</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Engine</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">engine</span><span class="p">.</span><span class="nf">POST</span><span class="p">(</span><span class="s">&#34;/postSingle&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">name</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">PostForm</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">)</span>
+		<span class="nx">age</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">DefaultQuery</span><span class="p">(</span><span class="s">&#34;age&#34;</span><span class="p">,</span> <span class="s">&#34;22&#34;</span><span class="p">)</span>
+		<span class="nx">home</span><span class="p">,</span> <span class="nx">ok</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">GetPostForm</span><span class="p">(</span><span class="s">&#34;home&#34;</span><span class="p">)</span>
+		<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span>
+			<span class="s">&#34;postForm&#34;</span><span class="p">:</span>         <span class="nx">name</span><span class="p">,</span>
+			<span class="s">&#34;DefaultQuery&#34;</span><span class="p">:</span>     <span class="nx">age</span><span class="p">,</span>
+			<span class="s">&#34;GetPostForm.home&#34;</span><span class="p">:</span> <span class="nx">home</span><span class="p">,</span>
+			<span class="s">&#34;GetPostForm.ok&#34;</span><span class="p">:</span>   <span class="nx">ok</span><span class="p">,</span>
+		<span class="p">})</span>
+	<span class="p">})</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>b.请求返回:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 不传任何参数时，看接收情况</span>
+➜ curl -X POST http://127.0.0.1:8080/postSingle
+<span class="o">{</span><span class="s2">&#34;DefaultQuery&#34;</span>:<span class="s2">&#34;22&#34;</span>,<span class="s2">&#34;GetPostForm.home&#34;</span>:<span class="s2">&#34;&#34;</span>,<span class="s2">&#34;GetPostForm.ok&#34;</span>:false,<span class="s2">&#34;postForm&#34;</span>:<span class="s2">&#34;&#34;</span><span class="o">}</span>
+
+<span class="c1"># 传任何参数时，看接收情况</span>
+➜  ~  curl -X POST http://127.0.0.1:8080/postSingle -d <span class="s2">&#34;age=40&amp;home=南京&amp;name=张三&#34;</span>
+<span class="o">{</span><span class="s2">&#34;DefaultQuery&#34;</span>:<span class="s2">&#34;22&#34;</span>,<span class="s2">&#34;GetPostForm.home&#34;</span>:<span class="s2">&#34;南京&#34;</span>,<span class="s2">&#34;GetPostForm.ok&#34;</span>:true,<span class="s2">&#34;postForm&#34;</span>:<span class="s2">&#34;张三&#34;</span><span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="32-接收数组">3.2 接收数组</h4>
+<p>在<code>Gin</code>框架中可以通过<code>PostFormArray(&quot;param[]&quot;)</code>和<code>GetPostFormArray(&quot;param[]&quot;)</code>获取<code>POST</code>方式提交中的数组值信息，而<code>PostFormArray</code>是对<code>GetPostFormArray</code>二次封装，具体使用参考下面代码:</p>
+<p><strong>a.代码示例:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">//-------- main.go ---------------
+</span><span class="c1"></span><span class="kn">package</span> <span class="nx">main</span>
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;github.com/gin-gonic/gin&#34;</span>
+	<span class="s">&#34;go-use/practise&#34;</span>
+<span class="p">)</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 创建一个默认的路由引擎
+</span><span class="c1"></span>	<span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
+	<span class="c1">// 注册路由
+</span><span class="c1"></span>	<span class="nx">practise</span><span class="p">.</span><span class="nf">TestRecPostArrValue</span><span class="p">(</span><span class="nx">engine</span><span class="p">)</span>
+	<span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
+<span class="p">}</span>
+<span class="c1">//------ go-use/practise/param_receice.go -------
+</span><span class="c1">// 接收POST提交的数组
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestRecPostArrValue</span><span class="p">(</span><span class="nx">engine</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Engine</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">engine</span><span class="p">.</span><span class="nf">POST</span><span class="p">(</span><span class="s">&#34;/postArr&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">arr</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">PostFormArray</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">)</span>
+		<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span>
+			<span class="s">&#34;postArr&#34;</span><span class="p">:</span> <span class="nx">arr</span><span class="p">,</span>
+		<span class="p">})</span>
+	<span class="p">})</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>b.请求返回:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">➜ curl -X POST http://127.0.0.1:8080/postArr -d <span class="s2">&#34;name[]=张三&amp;name[]=李东&#34;</span>
+<span class="o">{</span><span class="s2">&#34;postArr&#34;</span>:<span class="o">[</span><span class="s2">&#34;张三&#34;</span>,<span class="s2">&#34;李东&#34;</span><span class="o">]}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="33-接收map">3.3 接收Map</h4>
+<p>在<code>Gin</code>框架中可以通过<code>PostFormMap(&quot;param&quot;)</code>和<code>GetPostFormMap(&quot;param&quot;)</code>获取<code>POST</code>方式提交中的映射(<code>map</code>)信息，具体使用参考下面代码:</p>
+<p><strong>a.代码示例:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">//--- main.go ---------------
+</span><span class="c1"></span><span class="kn">package</span> <span class="nx">main</span>
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;github.com/gin-gonic/gin&#34;</span>
+	<span class="s">&#34;go-use/practise&#34;</span>
+<span class="p">)</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 创建一个默认的路由引擎
+</span><span class="c1"></span>	<span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
+	<span class="c1">// 注册路由
+</span><span class="c1"></span>	<span class="nx">practise</span><span class="p">.</span><span class="nf">TestRecPostMapValue</span><span class="p">(</span><span class="nx">engine</span><span class="p">)</span>
+	<span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
+<span class="p">}</span>
+<span class="c1">//--- go-use/practise/param_receice.go -------
+</span><span class="c1">// 接收POST提交的Map信息
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestRecPostMapValue</span><span class="p">(</span><span class="nx">engine</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Engine</span><span class="p">)</span>  <span class="p">{</span>
+	<span class="nx">engine</span><span class="p">.</span><span class="nf">POST</span><span class="p">(</span><span class="s">&#34;/postMap&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">formMap</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">PostFormMap</span><span class="p">(</span><span class="s">&#34;score&#34;</span><span class="p">)</span>
+		<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;map&#34;</span><span class="p">:</span><span class="nx">formMap</span><span class="p">})</span>
+	<span class="p">})</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>b.请求返回:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">➜ curl -X POST http://127.0.0.1:8080/postMap -d <span class="s2">&#34;score[语文]=100&amp;score[数学]=100&#34;</span>
+<span class="o">{</span><span class="s2">&#34;map&#34;</span>:<span class="o">{</span><span class="s2">&#34;数学&#34;</span>:<span class="s2">&#34;100&#34;</span>,<span class="s2">&#34;语文&#34;</span>:<span class="s2">&#34;100&#34;</span><span class="o">}}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="34-接收json">3.4 接收JSON</h4>
+<p>在<code>Gin</code>框架中可以通过<code>BindJSON(&amp;param)</code>来接收提交的<code>json</code>格式数据,具体使用参考下面代码:</p>
+<h5 id="1直接赋值">1.直接赋值</h5>
+<p><strong>a.代码示例:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">//--- main.go ---------------
+</span><span class="c1"></span><span class="kn">package</span> <span class="nx">main</span>
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;github.com/gin-gonic/gin&#34;</span>
+	<span class="s">&#34;go-use/practise&#34;</span>
+<span class="p">)</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 创建一个默认的路由引擎
+</span><span class="c1"></span>	<span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
+	<span class="c1">// 注册路由
+</span><span class="c1"></span>	<span class="nx">practise</span><span class="p">.</span><span class="nf">TestRecPostJson</span><span class="p">(</span><span class="nx">engine</span><span class="p">)</span>
+	<span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
+<span class="p">}</span>
+<span class="c1">//--- go-use/practise/param_receice.go -------
+</span><span class="c1">// 方式一: 将接收POST提交的JSON，直接赋值给变量
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestRecPostJson</span><span class="p">(</span><span class="nx">engine</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Engine</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">engine</span><span class="p">.</span><span class="nf">POST</span><span class="p">(</span><span class="s">&#34;/postJson&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">param</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kd">interface</span><span class="p">{})</span>
+		<span class="nx">err</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">BindJSON</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">param</span><span class="p">)</span>
+		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+			<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;err&#34;</span><span class="p">:</span> <span class="nx">err</span><span class="p">})</span>
+      <span class="k">return</span>
+		<span class="p">}</span>
+		<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;return&#34;</span><span class="p">:</span> <span class="nx">param</span><span class="p">})</span>
+	<span class="p">})</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>b.请求返回:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 请求</span>
+➜ curl -X POST http://127.0.0.1:8080/postJson -d <span class="s1">&#39;{
+</span><span class="s1">   &#34;name&#34;:&#34;张三&#34;,
+</span><span class="s1">   &#34;age&#34;:20,
+</span><span class="s1">   &#34;likes&#34;:[&#34;打游戏&#34;,&#34;旅游&#34;]
+</span><span class="s1">}&#39;</span>
+<span class="c1"># 返回</span>
+<span class="o">{</span><span class="s2">&#34;return&#34;</span>:<span class="o">{</span><span class="s2">&#34;age&#34;</span>:20,<span class="s2">&#34;likes&#34;</span>:<span class="o">[</span><span class="s2">&#34;打游戏&#34;</span>,<span class="s2">&#34;旅游&#34;</span><span class="o">]</span>,<span class="s2">&#34;name&#34;</span>:<span class="s2">&#34;张三&#34;</span><span class="o">}}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="2绑定到结构体">2.绑定到结构体</h5>
+<p><strong>a.代码示例:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">//--- main.go ---------------
+</span><span class="c1"></span><span class="kn">package</span> <span class="nx">main</span>
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;github.com/gin-gonic/gin&#34;</span>
+	<span class="s">&#34;go-use/practise&#34;</span>
+<span class="p">)</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 创建一个默认的路由引擎
+</span><span class="c1"></span>	<span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
+	<span class="c1">// 注册路由
+</span><span class="c1"></span>	<span class="nx">practise</span><span class="p">.</span><span class="nf">TestRecPostJson2</span><span class="p">(</span><span class="nx">engine</span><span class="p">)</span>
+	<span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
+<span class="p">}</span>
+<span class="c1">//--- go-use/practise/param_receice.go -------
+</span><span class="c1">// 定义被绑定的结构体
+</span><span class="c1"></span><span class="kd">type</span> <span class="nx">People</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">Name</span>  <span class="kt">string</span>   <span class="s">`json:&#34;name&#34;`</span>
+	<span class="nx">Age</span>   <span class="kt">int</span>      <span class="s">`json:&#34;age&#34;`</span>
+	<span class="nx">Likes</span> <span class="p">[]</span><span class="kt">string</span> <span class="s">`json:&#34;likes&#34;`</span>
+<span class="p">}</span>
+<span class="c1">// 方式二: 将接收POST提交的JSON，绑定到结构体
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestRecPostJson2</span><span class="p">(</span><span class="nx">engine</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Engine</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">engine</span><span class="p">.</span><span class="nf">POST</span><span class="p">(</span><span class="s">&#34;/postJson2&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">people</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">People</span><span class="p">{}</span>
+		<span class="nx">err</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">BindJSON</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">people</span><span class="p">)</span>
+		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+			<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;err&#34;</span><span class="p">:</span> <span class="nx">err</span><span class="p">})</span>
+		<span class="p">}</span>
+		<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;return&#34;</span><span class="p">:</span> <span class="nx">people</span><span class="p">})</span>
+	<span class="p">})</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><font color=blue><b>请求和返回同上。</b></font></p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Learn Go</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2021-12-05
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/gin%E6%A1%86%E6%9E%B6/">Gin框架</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/gin%E6%A1%86%E6%9E%B6/06-%E5%8F%82%E6%95%B0%E7%BB%91%E5%AE%9A/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Gin框架(六):参数绑定</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/gin%E6%A1%86%E6%9E%B6/04-%E8%B7%AF%E7%94%B1%E7%BB%84/">
+            <span class="next-text nav-default">Gin框架(四):路由组</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/shershon1991" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/shershon520" class="iconfont icon-zhihu" title="zhihu"></a>
+  <a href="https://shershon1991.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2021 - 
+    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span>Learn Go</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.min.js" integrity="sha256-jwCP0NAdCBloaIWTWHmW4i3snUNMHUNO+jr9rYd2iOI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.locales.min.js" integrity="sha256-ZwofwC1Lf/faQCzN7nZtfijVV6hSwxjQMwXL4gn9qU8=" crossorigin="anonymous"></script>
+  <script><!-- NOTE: timeago.js uses the language code format like "zh_CN" (underscore and case sensitive) -->
+    var languageCode = "en".replace(/-/g, '_').replace(/_(.*)/, function ($0, $1) {return $0.replace($1, $1.toUpperCase());});
+    timeago().render(document.querySelectorAll('.timeago'), languageCode);
+    timeago.cancel();  
+  </script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

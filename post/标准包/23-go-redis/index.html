@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Go标准包(二十三):go-redis - Learn Go</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Learn Go" /><meta name="description" content="1. 介绍 redis官网推荐使用redigo(https://github.com/gomodule/redigo)，截止到今天Github St" /><meta name="keywords" content="博客, Learn Go, hugo" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.90.1 with theme even" />
+
+
+<link rel="canonical" href="https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/23-go-redis/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Go标准包(二十三):go-redis" />
+<meta property="og:description" content="1. 介绍 redis官网推荐使用redigo(https://github.com/gomodule/redigo)，截止到今天Github St" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/23-go-redis/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2021-04-23T00:00:00+00:00" />
+<meta property="article:modified_time" content="2021-04-23T00:00:00+00:00" />
+
+<meta itemprop="name" content="Go标准包(二十三):go-redis">
+<meta itemprop="description" content="1. 介绍 redis官网推荐使用redigo(https://github.com/gomodule/redigo)，截止到今天Github St"><meta itemprop="datePublished" content="2021-04-23T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2021-04-23T00:00:00+00:00" />
+<meta itemprop="wordCount" content="3797">
+<meta itemprop="keywords" content="Go标准包," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Go标准包(二十三):go-redis"/>
+<meta name="twitter:description" content="1. 介绍 redis官网推荐使用redigo(https://github.com/gomodule/redigo)，截止到今天Github St"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Learn Go</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">首页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Learn Go</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">首页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Go标准包(二十三):go-redis</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-04-23 </span>
+        <div class="post-category">
+            <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+            <a href="/categories/go/"> Go </a>
+            </div>
+          <span class="more-meta"> 约 3797 字 </span>
+          <span class="more-meta"> 预计阅读 8 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#1-介绍">1. 介绍</a></li>
+        <li><a href="#2-安装">2. 安装</a>
+          <ul>
+            <li><a href="#21-历史版本">2.1 历史版本</a></li>
+            <li><a href="#22-最新版本">2.2 最新版本</a></li>
+          </ul>
+        </li>
+        <li><a href="#3-连接redis">3. 连接<code>Redis</code></a>
+          <ul>
+            <li><a href="#31-单机连接newclient">3.1 单机连接(<code>NewClient</code>)</a></li>
+            <li><a href="#32-哨兵模式连接newfailoverclient">3.2 哨兵模式连接(<code>NewFailoverClient</code>)</a></li>
+            <li><a href="#33-集群模式连接newclusterclient">3.3 集群模式连接(<code>NewClusterClient</code>)</a></li>
+          </ul>
+        </li>
+        <li><a href="#4-redisoptions参数详解">4. redis.Options参数详解</a></li>
+        <li><a href="#5-基本键值操作">5. 基本键值操作</a>
+          <ul>
+            <li><a href="#51-设置和获取">5.1 设置和获取</a></li>
+            <li><a href="#52-锁-setnx">5.2 锁( <code>SetNX</code>)</a></li>
+            <li><a href="#53-自增自减">5.3 自增自减</a></li>
+            <li><a href="#54-删除和追加">5.4 删除和追加</a></li>
+          </ul>
+        </li>
+        <li><a href="#6-列表list操作">6. 列表(<code>List</code>)操作</a>
+          <ul>
+            <li><a href="#61-插入">6.1 插入</a></li>
+            <li><a href="#62-读取">6.2 读取</a></li>
+            <li><a href="#63-删除">6.3 删除</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+  <div class="post-outdated">
+    <div class="warn">
+      <p>【注意】最后更新于 <span class="timeago" datetime="2021-04-23T00:00:00" title="April 23, 2021">April 23, 2021</span>，文中内容可能已过时，请谨慎使用。</p>
+    </div>
+  </div>
+    <div class="post-content">
+      <h2 id="1-介绍">1. 介绍</h2>
+<p><code>redis</code>官网推荐使用<code>redigo</code>(<code>https://github.com/gomodule/redigo</code>)，截止到今天<code>Github Start是8.2k</code> 但<code>go-redis(https://github.com/go-redis/redis)</code>使用的人更多， 并且<code>go-redis</code>封装得更好。截止到今天<code>Github Start 是12.1k</code>。</p>
+<h2 id="2-安装">2. 安装</h2>
+<h3 id="21-历史版本">2.1 历史版本</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="k">go</span> <span class="nx">get</span> <span class="o">-</span><span class="nx">u</span> <span class="nx">github</span><span class="p">.</span><span class="nx">com</span><span class="o">/</span><span class="k">go</span><span class="o">-</span><span class="nx">redis</span><span class="o">/</span><span class="nx">redis</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="22-最新版本">2.2 最新版本</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="k">go</span> <span class="nx">get</span> <span class="nx">github</span><span class="p">.</span><span class="nx">com</span><span class="o">/</span><span class="k">go</span><span class="o">-</span><span class="nx">redis</span><span class="o">/</span><span class="nx">redis</span><span class="o">/</span><span class="nx">v8</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><font color=red>@注意: 最新版本的客户端在操作redis时，相关函数需要传递上下文(<code>context.Context</code>),以下内容都是基于最新版本。</font></p>
+<h2 id="3-连接redis">3. 连接<code>Redis</code></h2>
+<h3 id="31-单机连接newclient">3.1 单机连接(<code>NewClient</code>)</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 单机连接redis
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestConnect</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">client</span> <span class="o">:=</span> <span class="nx">redis</span><span class="p">.</span><span class="nf">NewClient</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">redis</span><span class="p">.</span><span class="nx">Options</span><span class="p">{</span>
+		<span class="nx">Addr</span><span class="p">:</span> <span class="s">&#34;127.0.0.1:6379&#34;</span><span class="p">,</span>
+	<span class="p">})</span>
+	<span class="c1">// 检测是否建立连接(需要传递上下文)
+</span><span class="c1"></span>	<span class="nx">timeoutCtx</span><span class="p">,</span> <span class="nx">cancelFunc</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">WithTimeout</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">Background</span><span class="p">(),</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="o">*</span><span class="mi">5</span><span class="p">)</span>
+	<span class="k">defer</span> <span class="nf">cancelFunc</span><span class="p">()</span>
+	<span class="c1">// 检测
+</span><span class="c1"></span>	<span class="nx">_</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">Ping</span><span class="p">(</span><span class="nx">timeoutCtx</span><span class="p">).</span><span class="nf">Result</span><span class="p">()</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">t</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+    <span class="k">return</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="32-哨兵模式连接newfailoverclient">3.2 哨兵模式连接(<code>NewFailoverClient</code>)</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 哨兵模式连接
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestConnectSentinel</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">client</span> <span class="o">:=</span> <span class="nx">redis</span><span class="p">.</span><span class="nf">NewFailoverClient</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">redis</span><span class="p">.</span><span class="nx">FailoverOptions</span><span class="p">{</span>
+		<span class="nx">MasterName</span><span class="p">:</span>    <span class="s">&#34;master-name&#34;</span><span class="p">,</span>
+		<span class="nx">SentinelAddrs</span><span class="p">:</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;:9126&#34;</span><span class="p">,</span> <span class="s">&#34;:9127&#34;</span><span class="p">,</span> <span class="s">&#34;:9128&#34;</span><span class="p">},</span>
+	<span class="p">})</span>
+	<span class="c1">// 检测是否建立连接(需要传递上下文)
+</span><span class="c1"></span>	<span class="nx">timeoutCtx</span><span class="p">,</span> <span class="nx">cancelFunc</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">WithTimeout</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">Background</span><span class="p">(),</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="o">*</span><span class="mi">5</span><span class="p">)</span>
+	<span class="k">defer</span> <span class="nf">cancelFunc</span><span class="p">()</span>
+	<span class="c1">// 检测
+</span><span class="c1"></span>	<span class="nx">_</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">Ping</span><span class="p">(</span><span class="nx">timeoutCtx</span><span class="p">).</span><span class="nf">Result</span><span class="p">()</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">t</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+		<span class="k">return</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="33-集群模式连接newclusterclient">3.3 集群模式连接(<code>NewClusterClient</code>)</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 集群模式连接
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestConnectCluster</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">client</span> <span class="o">:=</span> <span class="nx">redis</span><span class="p">.</span><span class="nf">NewClusterClient</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">redis</span><span class="p">.</span><span class="nx">ClusterOptions</span><span class="p">{</span>
+		<span class="nx">Addrs</span><span class="p">:</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;:7000&#34;</span><span class="p">,</span> <span class="s">&#34;:7001&#34;</span><span class="p">,</span> <span class="s">&#34;:7002&#34;</span><span class="p">,</span> <span class="s">&#34;:7003&#34;</span><span class="p">},</span>
+	<span class="p">})</span>
+	<span class="c1">// 检测是否建立连接(需要传递上下文)
+</span><span class="c1"></span>	<span class="nx">timeoutCtx</span><span class="p">,</span> <span class="nx">cancelFunc</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">WithTimeout</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">Background</span><span class="p">(),</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="o">*</span><span class="mi">5</span><span class="p">)</span>
+	<span class="k">defer</span> <span class="nf">cancelFunc</span><span class="p">()</span>
+	<span class="c1">// 检测
+</span><span class="c1"></span>	<span class="nx">_</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">Ping</span><span class="p">(</span><span class="nx">timeoutCtx</span><span class="p">).</span><span class="nf">Result</span><span class="p">()</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">t</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+		<span class="k">return</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="4-redisoptions参数详解">4. redis.Options参数详解</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">Options</span> <span class="kd">struct</span> <span class="p">{</span>
+  <span class="c1">// 网络类型:tcp|unix 默认:tcp
+</span><span class="c1"></span>	<span class="nx">Network</span> <span class="kt">string</span>
+  
+	<span class="c1">// redis地址，格式 host:port
+</span><span class="c1"></span>	<span class="nx">Addr</span> <span class="kt">string</span>
+  
+  <span class="c1">// 当新建一个redis连接的时候，会回调这个函数
+</span><span class="c1"></span>	<span class="nx">OnConnect</span> <span class="kd">func</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="nx">cn</span> <span class="o">*</span><span class="nx">Conn</span><span class="p">)</span> <span class="kt">error</span>
+  
+  <span class="c1">// 指定用户名连接(从redis6.0版本或更高以上支持)
+</span><span class="c1"></span>	<span class="nx">Username</span> <span class="kt">string</span>
+  
+	<span class="c1">// redis密码，可以为空。
+</span><span class="c1"></span>	<span class="nx">Password</span> <span class="kt">string</span>
+  
+  <span class="c1">// redis数据库，范围:0~15，默认是0，可以为空
+</span><span class="c1"></span>	<span class="nx">DB</span> <span class="kt">int</span>
+  
+  <span class="c1">// 最大重试次数，默认是3次，-1:表示关闭
+</span><span class="c1"></span>	<span class="nx">MaxRetries</span> <span class="kt">int</span>
+  
+	<span class="c1">// 最小重试时间间隔，默认是 8ms ; -1 表示关闭.
+</span><span class="c1"></span>	<span class="nx">MinRetryBackoff</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Duration</span>
+  
+	<span class="c1">// 最大重试时间间隔.默认是 512ms; -1 表示关闭.
+</span><span class="c1"></span>	<span class="nx">MaxRetryBackoff</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Duration</span>
+
+	<span class="c1">// redis连接超时时间.默认是 5 秒.
+</span><span class="c1"></span>	<span class="nx">DialTimeout</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Duration</span>
+  
+	<span class="c1">// 读取超时时间,默认3秒.
+</span><span class="c1"></span>	<span class="nx">ReadTimeout</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Duration</span>
+  
+	<span class="c1">// 写入超时时间,默认和ReadTimeout一致
+</span><span class="c1"></span>	<span class="nx">WriteTimeout</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Duration</span>
+
+  <span class="c1">// redis最大连接数,默认连接池大小等于 runtime.GOMAXPROCS(cpu个数) * 10
+</span><span class="c1"></span>	<span class="nx">PoolSize</span> <span class="kt">int</span>
+  
+	<span class="c1">// 启动时，创建最小空闲连接数
+</span><span class="c1"></span>	<span class="nx">MinIdleConns</span> <span class="kt">int</span>
+  
+	<span class="c1">// redis连接最大的存活时间，默认不会关闭过时的连接.
+</span><span class="c1"></span>	<span class="nx">MaxConnAge</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Duration</span>
+  
+  <span class="c1">// 当从redis连接池获取一个连接之后，连接池最多等待这个拿出去的连接多长时间。
+</span><span class="c1"></span>	<span class="c1">// 默认是等待 ReadTimeout + 1 秒.
+</span><span class="c1"></span>	<span class="nx">PoolTimeout</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Duration</span>
+  
+	<span class="c1">// redis连接池多久会关闭一个空闲连接.
+</span><span class="c1"></span>	<span class="c1">// 默认是 5 分钟. -1 则表示关闭这个配置项
+</span><span class="c1"></span>	<span class="nx">IdleTimeout</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Duration</span>
+  
+  <span class="c1">// 多长时间检测一下，空闲连接
+</span><span class="c1"></span>	<span class="c1">// 默认是 1 分钟. -1 表示关闭空闲连接检测
+</span><span class="c1"></span>	<span class="nx">IdleCheckFrequency</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Duration</span>
+
+	<span class="c1">// 设置只读模式，如果设置为true redis只能查不能更新
+</span><span class="c1"></span>	<span class="nx">readOnly</span> <span class="kt">bool</span>
+
+  <span class="c1">// 限流接口
+</span><span class="c1"></span>	<span class="nx">Limiter</span> <span class="nx">Limiter</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="5-基本键值操作">5. 基本键值操作</h2>
+<h3 id="51-设置和获取">5.1 设置和获取</h3>
+<h4 id="1单值操作-set和get">1.单值操作: <code>Set和Get</code></h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// Get&amp;Set
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestGetAndSet</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// 参考上面的单机模式连接redis
+</span><span class="c1"></span>	<span class="nx">client</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">goredis</span><span class="p">.</span><span class="nf">ConnectSingle</span><span class="p">()</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">t</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+		<span class="k">return</span>
+	<span class="p">}</span>
+	<span class="nx">ctx</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">Background</span><span class="p">()</span>
+	<span class="c1">// 设置缓存
+</span><span class="c1"></span>	<span class="nx">key</span> <span class="o">:=</span> <span class="s">&#34;test:abc&#34;</span>
+	<span class="nx">err</span> <span class="p">=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">Set</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="s">&#34;hello word!&#34;</span><span class="p">,</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Minute</span><span class="o">*</span><span class="mi">10</span><span class="p">).</span><span class="nf">Err</span><span class="p">()</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">t</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="s">&#34;设置缓存失败&#34;</span><span class="o">+</span><span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">())</span>
+		<span class="k">return</span>
+	<span class="p">}</span>
+	<span class="c1">// 获取缓存
+</span><span class="c1"></span>	<span class="nx">result</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">Get</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">key</span><span class="p">).</span><span class="nf">Result</span><span class="p">()</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">t</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="s">&#34;获取缓存失败&#34;</span><span class="o">+</span><span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">())</span>
+		<span class="k">return</span>
+	<span class="p">}</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;获取结果: &#34;</span><span class="p">,</span><span class="nx">result</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/*** 输出
+</span><span class="cm">=== RUN   TestGetAndSet
+</span><span class="cm">获取结果:  hello word!
+</span><span class="cm">--- PASS: TestGetAndSet (0.01s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="2批量操作-mset和mget">2.批量操作: <code>MSet和MGet</code></h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 批量设置和获取
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestMGetSet</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// 连接redis
+</span><span class="c1"></span>	<span class="nx">client</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">goredis</span><span class="p">.</span><span class="nf">ConnectSingle</span><span class="p">()</span>
+	<span class="nx">ctx</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">Background</span><span class="p">()</span>
+	<span class="c1">// MSet: 同时设置一个或多个 key-value 对。
+</span><span class="c1"></span>	<span class="nx">err</span> <span class="o">:=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">MSet</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="s">&#34;key1&#34;</span><span class="p">,</span> <span class="s">&#34;val1&#34;</span><span class="p">,</span> <span class="s">&#34;key2&#34;</span><span class="p">,</span> <span class="s">&#34;val2&#34;</span><span class="p">,</span> <span class="s">&#34;key3&#34;</span><span class="p">,</span> <span class="s">&#34;val3&#34;</span><span class="p">).</span><span class="nf">Err</span><span class="p">()</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">t</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+		<span class="k">return</span>
+	<span class="p">}</span>
+	<span class="c1">// 使用Get获取缓存
+</span><span class="c1"></span>	<span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">key</span> <span class="o">:=</span> <span class="k">range</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;key1&#34;</span><span class="p">,</span><span class="s">&#34;key2&#34;</span><span class="p">,</span><span class="s">&#34;key3&#34;</span><span class="p">}</span> <span class="p">{</span>
+		<span class="nx">result</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">Get</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">key</span><span class="p">).</span><span class="nf">Result</span><span class="p">()</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;Get获取,键: %s 值: %v \n&#34;</span><span class="p">,</span><span class="nx">key</span><span class="p">,</span><span class="nx">result</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="c1">// 使用MGet获取
+</span><span class="c1"></span>	<span class="nx">result</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">MGet</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="s">&#34;key1&#34;</span><span class="p">,</span> <span class="s">&#34;key2&#34;</span><span class="p">,</span><span class="s">&#34;key3&#34;</span><span class="p">).</span><span class="nf">Result</span><span class="p">()</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;MGet批量获取:&#34;</span><span class="p">,</span><span class="nx">result</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestMGetSet
+</span><span class="cm">Get获取,键: key1 值: val1 
+</span><span class="cm">Get获取,键: key2 值: val2 
+</span><span class="cm">Get获取,键: key3 值: val3 
+</span><span class="cm">MGet批量获取: [val1 val2 val3]
+</span><span class="cm">--- PASS: TestMGetSet (0.01s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="52-锁-setnx">5.2 锁( <code>SetNX</code>)</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// SetNX: 指定的 key 不存在时，为 key 设置指定的值
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestSetNx</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// 连接redis
+</span><span class="c1"></span>	<span class="nx">client</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">goredis</span><span class="p">.</span><span class="nf">ConnectSingle</span><span class="p">()</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">t</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+		<span class="k">return</span>
+	<span class="p">}</span>
+	<span class="nx">ctx</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">Background</span><span class="p">()</span>
+	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="mi">3</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="nx">res</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">SetNX</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="s">&#34;abc&#34;</span><span class="p">,</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Unix</span><span class="p">(),</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Hour</span><span class="p">).</span><span class="nf">Result</span><span class="p">()</span>
+		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+			<span class="nx">t</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+			<span class="k">break</span>
+		<span class="p">}</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;SetNX abc success :&#34;</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+<span class="cm">/** 输出
+</span><span class="cm">=== RUN   TestSetNx
+</span><span class="cm">SetNX abc success : true
+</span><span class="cm">SetNX abc success : false
+</span><span class="cm">SetNX abc success : false
+</span><span class="cm">--- PASS: TestSetNx (0.01s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="53-自增自减">5.3 自增自减</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 自增和自减
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestIncrAndDecr</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// 连接redis
+</span><span class="c1"></span>	<span class="nx">client</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">goredis</span><span class="p">.</span><span class="nf">ConnectSingle</span><span class="p">()</span>
+	<span class="nx">ctx</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">Background</span><span class="p">()</span>
+	<span class="c1">// 自增
+</span><span class="c1"></span>	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;=</span> <span class="mi">5</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="c1">// Incr: 每次调用+1
+</span><span class="c1"></span>		<span class="nx">client</span><span class="p">.</span><span class="nf">Incr</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="s">&#34;incr1&#34;</span><span class="p">)</span>
+		<span class="c1">// IncrBy: 每次调用+5
+</span><span class="c1"></span>		<span class="nx">client</span><span class="p">.</span><span class="nf">IncrBy</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="s">&#34;incr2&#34;</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
+		<span class="c1">// IncrByFloat: 每次调用 +0.5
+</span><span class="c1"></span>		<span class="nx">client</span><span class="p">.</span><span class="nf">IncrByFloat</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="s">&#34;incr3&#34;</span><span class="p">,</span><span class="mf">0.5</span><span class="p">)</span>
+		<span class="c1">// 查询缓存
+</span><span class="c1"></span>		<span class="nx">result</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">MGet</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="s">&#34;incr1&#34;</span><span class="p">,</span> <span class="s">&#34;incr2&#34;</span><span class="p">,</span> <span class="s">&#34;incr3&#34;</span><span class="p">).</span><span class="nf">Result</span><span class="p">()</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;第%d次自增后查询: %v \n&#34;</span><span class="p">,</span><span class="nx">i</span><span class="p">,</span><span class="nx">result</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="c1">// 自减
+</span><span class="c1"></span>	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;=</span> <span class="mi">5</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="c1">// Decr: 每次调用-1
+</span><span class="c1"></span>		<span class="nx">client</span><span class="p">.</span><span class="nf">Decr</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="s">&#34;decr1&#34;</span><span class="p">)</span>
+		<span class="c1">// DecrBy: 每次调用-5
+</span><span class="c1"></span>		<span class="nx">client</span><span class="p">.</span><span class="nf">DecrBy</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="s">&#34;decr2&#34;</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
+		<span class="c1">// 查询缓存
+</span><span class="c1"></span>		<span class="nx">result</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">MGet</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="s">&#34;decr1&#34;</span><span class="p">,</span> <span class="s">&#34;decr2&#34;</span><span class="p">).</span><span class="nf">Result</span><span class="p">()</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;第%d次自减后查询: %v \n&#34;</span><span class="p">,</span><span class="nx">i</span><span class="p">,</span><span class="nx">result</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestIncrAndDecr
+</span><span class="cm">第1次自增后查询: [10 50 5] 
+</span><span class="cm">第2次自增后查询: [11 55 5.5] 
+</span><span class="cm">第3次自增后查询: [12 60 6] 
+</span><span class="cm">第4次自增后查询: [13 65 6.5] 
+</span><span class="cm">第5次自增后查询: [14 70 7] 
+</span><span class="cm">第1次自减后查询: [-5 -25] 
+</span><span class="cm">第2次自减后查询: [-6 -30] 
+</span><span class="cm">第3次自减后查询: [-7 -35] 
+</span><span class="cm">第4次自减后查询: [-8 -40] 
+</span><span class="cm">第5次自减后查询: [-9 -45] 
+</span><span class="cm">--- PASS: TestIncrAndDecr (0.08s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="54-删除和追加">5.4 删除和追加</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 删除和追加
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestDelAndAppend</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">client</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">goredis</span><span class="p">.</span><span class="nf">ConnectSingle</span><span class="p">()</span>
+	<span class="nx">ctx</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">Background</span><span class="p">()</span>
+  <span class="c1">// ========== 删除测试 ==========
+</span><span class="c1"></span>	<span class="c1">// 删除单个
+</span><span class="c1"></span>	<span class="nx">client</span><span class="p">.</span><span class="nf">Del</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="s">&#34;key1&#34;</span><span class="p">)</span>
+	<span class="c1">// 删除多个
+</span><span class="c1"></span>	<span class="nx">client</span><span class="p">.</span><span class="nf">Del</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="s">&#34;incr1&#34;</span><span class="p">,</span><span class="s">&#34;incr2&#34;</span><span class="p">,</span><span class="s">&#34;incr3&#34;</span><span class="p">)</span>
+
+	<span class="c1">// ======== 追加value 测试使用 ========
+</span><span class="c1"></span>	<span class="nx">client</span><span class="p">.</span><span class="nf">Set</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="s">&#34;key&#34;</span><span class="p">,</span><span class="s">&#34;hello&#34;</span><span class="p">,</span><span class="nx">time</span><span class="p">.</span><span class="nx">Hour</span><span class="p">)</span>
+	<span class="c1">// 获取值
+</span><span class="c1"></span>	<span class="nx">res1</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">Get</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="s">&#34;key&#34;</span><span class="p">).</span><span class="nf">Result</span><span class="p">()</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;追加前的值:&#34;</span><span class="p">,</span><span class="nx">res1</span><span class="p">)</span>
+	<span class="c1">// 追加
+</span><span class="c1"></span>	<span class="nx">client</span><span class="p">.</span><span class="nf">Append</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="s">&#34;key&#34;</span><span class="p">,</span><span class="s">&#34; word&#34;</span><span class="p">)</span>
+	<span class="nx">res2</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">Get</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="s">&#34;key&#34;</span><span class="p">).</span><span class="nf">Result</span><span class="p">()</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;追加后的值:&#34;</span><span class="p">,</span><span class="nx">res2</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestDelAndAppend
+</span><span class="cm">追加前的值: hello
+</span><span class="cm">追加后的值: hello word
+</span><span class="cm">--- PASS: TestDelAndAppend (0.02s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="6-列表list操作">6. 列表(<code>List</code>)操作</h2>
+<h3 id="61-插入">6.1 插入</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">TestInsertList</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// 连接redis
+</span><span class="c1"></span>	<span class="nx">client</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nf">ConnectSingle</span><span class="p">()</span>
+	<span class="nx">ctx</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">Background</span><span class="p">()</span>
+	<span class="nx">key</span> <span class="o">:=</span> <span class="s">&#34;insertList&#34;</span>
+	<span class="c1">//从列表头部插入,不存在则新建并插入数据
+</span><span class="c1"></span>	<span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">val</span> <span class="o">:=</span> <span class="k">range</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;php&#34;</span><span class="p">,</span> <span class="s">&#34;go&#34;</span><span class="p">}</span> <span class="p">{</span>
+		<span class="c1">// 插入头部(左边)
+</span><span class="c1"></span>		<span class="nx">client</span><span class="p">.</span><span class="nf">LPush</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">val</span><span class="p">)</span>
+		<span class="c1">// 获取
+</span><span class="c1"></span>		<span class="nx">result</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">LRange</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">).</span><span class="nf">Result</span><span class="p">()</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;LPush 从头部插入【%v】: %v\n&#34;</span><span class="p">,</span> <span class="nx">val</span><span class="p">,</span><span class="nx">result</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="c1">// 从列表尾部插入
+</span><span class="c1"></span>	<span class="k">for</span> <span class="nx">_</span><span class="p">,</span><span class="nx">val</span> <span class="o">:=</span> <span class="k">range</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;张三&#34;</span><span class="p">,</span><span class="s">&#34;李四&#34;</span><span class="p">}</span> <span class="p">{</span>
+		<span class="c1">// 插入尾部(右边)
+</span><span class="c1"></span>		<span class="nx">client</span><span class="p">.</span><span class="nf">RPush</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">val</span><span class="p">)</span>
+		<span class="c1">// 获取
+</span><span class="c1"></span>		<span class="nx">result</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">LRange</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">).</span><span class="nf">Result</span><span class="p">()</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;RPush 从尾部插入【%v】: %v\n&#34;</span><span class="p">,</span> <span class="nx">val</span><span class="p">,</span><span class="nx">result</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="nx">result</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">LRange</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">).</span><span class="nf">Result</span><span class="p">()</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;当前列表所有值: %+v\n&#34;</span><span class="p">,</span> <span class="nx">result</span><span class="p">)</span>
+
+	<span class="c1">// 在指定的值前插入
+</span><span class="c1"></span>	<span class="nx">client</span><span class="p">.</span><span class="nf">LInsertBefore</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="nx">key</span><span class="p">,</span><span class="s">&#34;php&#34;</span><span class="p">,</span><span class="s">&#34;php5.6&#34;</span><span class="p">)</span>
+	<span class="nx">result</span><span class="p">,</span> <span class="nx">_</span> <span class="p">=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">LRange</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">).</span><span class="nf">Result</span><span class="p">()</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;在php前插入%v,当前列表所有值: %v\n&#34;</span><span class="p">,</span> <span class="s">&#34;php5.6&#34;</span><span class="p">,</span><span class="nx">result</span><span class="p">)</span>
+	<span class="c1">// 在指定的值后插入
+</span><span class="c1"></span>	<span class="nx">client</span><span class="p">.</span><span class="nf">LInsertAfter</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="nx">key</span><span class="p">,</span><span class="s">&#34;go&#34;</span><span class="p">,</span><span class="s">&#34;go1.0&#34;</span><span class="p">)</span>
+	<span class="nx">result</span><span class="p">,</span> <span class="nx">_</span> <span class="p">=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">LRange</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">).</span><span class="nf">Result</span><span class="p">()</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;在go后插入%v,当前列表所有值: %v\n&#34;</span><span class="p">,</span> <span class="s">&#34;go1.0&#34;</span><span class="p">,</span><span class="nx">result</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestInsertList
+</span><span class="cm">LPush 从头部插入【php】: [php]
+</span><span class="cm">LPush 从头部插入【go】: [go php]
+</span><span class="cm">RPush 从尾部插入【张三】: [go php 张三]
+</span><span class="cm">RPush 从尾部插入【李四】: [go php 张三 李四]
+</span><span class="cm">当前列表所有值: [go php 张三 李四]
+</span><span class="cm">在php前插入php5.6,当前列表所有值: [go php5.6 php 张三 李四]
+</span><span class="cm">在go后插入go1.0,当前列表所有值: [go go1.0 php5.6 php 张三 李四]
+</span><span class="cm">--- PASS: TestInsertList (0.04s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="62-读取">6.2 读取</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">TestReadList</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// 连接redis
+</span><span class="c1"></span>	<span class="nx">client</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nf">ConnectSingle</span><span class="p">()</span>
+	<span class="nx">ctx</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">Background</span><span class="p">()</span>
+	<span class="nx">key</span> <span class="o">:=</span> <span class="s">&#34;language-list&#34;</span>
+	<span class="c1">// 插入元素
+</span><span class="c1"></span>	<span class="nx">client</span><span class="p">.</span><span class="nf">LPush</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="s">&#34;php&#34;</span><span class="p">,</span> <span class="s">&#34;go&#34;</span><span class="p">,</span> <span class="s">&#34;java&#34;</span><span class="p">,</span> <span class="s">&#34;c&#34;</span><span class="p">,</span> <span class="s">&#34;c++&#34;</span><span class="p">,</span> <span class="s">&#34;python&#34;</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;插入列表: &#34;</span><span class="p">,</span> <span class="s">&#34;php&#34;</span><span class="p">,</span> <span class="s">&#34;go&#34;</span><span class="p">,</span> <span class="s">&#34;java&#34;</span><span class="p">,</span> <span class="s">&#34;c&#34;</span><span class="p">,</span> <span class="s">&#34;c++&#34;</span><span class="p">,</span> <span class="s">&#34;python&#34;</span><span class="p">)</span>
+	<span class="c1">// 获取长度
+</span><span class="c1"></span>	<span class="nx">result</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">LLen</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">key</span><span class="p">).</span><span class="nf">Result</span><span class="p">()</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;列表长度: &#34;</span><span class="p">,</span> <span class="nx">result</span><span class="p">)</span>
+	<span class="c1">// =========获取指定key的值=======
+</span><span class="c1"></span>	<span class="nx">val</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">LIndex</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="mi">0</span><span class="p">).</span><span class="nf">Result</span><span class="p">()</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;获取索引为0的值: &#34;</span><span class="p">,</span> <span class="nx">val</span><span class="p">)</span>
+
+	<span class="c1">// =========获取指定范围的值=======
+</span><span class="c1"></span>	<span class="c1">// 获取[0,2]的元素
+</span><span class="c1"></span>	<span class="nx">strings</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">LRange</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">).</span><span class="nf">Result</span><span class="p">()</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;获取列表位置为[0,2]的元素：%v\n&#34;</span><span class="p">,</span> <span class="nx">strings</span><span class="p">)</span>
+	<span class="c1">// 获取全部元素[0,-1]
+</span><span class="c1"></span>	<span class="nx">all</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">LRange</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">).</span><span class="nf">Result</span><span class="p">()</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;获取列表所有[0,-1]元素：%v\n&#34;</span><span class="p">,</span> <span class="nx">all</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestReadList
+</span><span class="cm">插入列表:  php go java c c++ python
+</span><span class="cm">列表长度:  6
+</span><span class="cm">获取索引为0的值:  python
+</span><span class="cm">获取列表位置为[0,2]的元素：[python c++ c]
+</span><span class="cm">获取列表所有[0,-1]元素：[python c++ c java go php]
+</span><span class="cm">--- PASS: TestReadList (0.02s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="63-删除">6.3 删除</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">TestDelList</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span>  <span class="p">{</span>
+	<span class="c1">// 连接redis
+</span><span class="c1"></span>	<span class="nx">client</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nf">ConnectSingle</span><span class="p">()</span>
+	<span class="nx">ctx</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">Background</span><span class="p">()</span>
+	<span class="nx">key</span> <span class="o">:=</span> <span class="s">&#34;language-list&#34;</span>
+	<span class="c1">// 插入元素
+</span><span class="c1"></span>	<span class="nx">client</span><span class="p">.</span><span class="nf">LPush</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="s">&#34;php&#34;</span><span class="p">,</span> <span class="s">&#34;go&#34;</span><span class="p">,</span> <span class="s">&#34;java&#34;</span><span class="p">,</span> <span class="s">&#34;c&#34;</span><span class="p">,</span> <span class="s">&#34;c++&#34;</span><span class="p">,</span> <span class="s">&#34;python&#34;</span><span class="p">)</span>
+	<span class="nx">all</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">LRange</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">).</span><span class="nf">Result</span><span class="p">()</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;当前列表所有值：%v\n&#34;</span><span class="p">,</span> <span class="nx">all</span><span class="p">)</span>
+
+	<span class="c1">// 移出并获取列表的第一个元素
+</span><span class="c1"></span>	<span class="nx">first</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">LPop</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">key</span><span class="p">).</span><span class="nf">Result</span><span class="p">()</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;LPop,移出并获取列表的第一个元素：%v\n&#34;</span><span class="p">,</span> <span class="nx">first</span><span class="p">)</span>
+	<span class="c1">// 当前列表所有值
+</span><span class="c1"></span>	<span class="nx">all</span><span class="p">,</span> <span class="nx">_</span> <span class="p">=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">LRange</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">).</span><span class="nf">Result</span><span class="p">()</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;当前列表所有值：%v\n&#34;</span><span class="p">,</span> <span class="nx">all</span><span class="p">)</span>
+	<span class="c1">// 移出并获取列表的最后一个元素
+</span><span class="c1"></span>	<span class="nx">last</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">RPop</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">key</span><span class="p">).</span><span class="nf">Result</span><span class="p">()</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;RPop,移出并获取列表的最后一个元素：%v\n&#34;</span><span class="p">,</span> <span class="nx">last</span><span class="p">)</span>
+	<span class="c1">// 当前列表所有值
+</span><span class="c1"></span>	<span class="nx">all</span><span class="p">,</span> <span class="nx">_</span> <span class="p">=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">LRange</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">).</span><span class="nf">Result</span><span class="p">()</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;当前列表所有值：%v\n&#34;</span><span class="p">,</span> <span class="nx">all</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/** 输出
+</span><span class="cm">=== RUN   TestDelList
+</span><span class="cm">当前列表所有值：[python c++ c java go php]
+</span><span class="cm">LPop,移出并获取列表的第一个元素：python
+</span><span class="cm">当前列表所有值：[c++ c java go php]
+</span><span class="cm">RPop,移出并获取列表的最后一个元素：php
+</span><span class="cm">当前列表所有值：[c++ c java go]
+</span><span class="cm">--- PASS: TestDelList (0.02s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Learn Go</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2021-04-23
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/go%E6%A0%87%E5%87%86%E5%8C%85/">Go标准包</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/%E6%A0%87%E5%87%86%E5%8C%85/24-testing/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Go标准包(二十四):testing</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/%E6%A0%87%E5%87%86%E5%8C%85/22-jwt-go/">
+            <span class="next-text nav-default">Go标准包(二十二):jwt-go</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/shershon1991" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/shershon520" class="iconfont icon-zhihu" title="zhihu"></a>
+  <a href="https://shershon1991.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2021 - 
+    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span>Learn Go</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.min.js" integrity="sha256-jwCP0NAdCBloaIWTWHmW4i3snUNMHUNO+jr9rYd2iOI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.locales.min.js" integrity="sha256-ZwofwC1Lf/faQCzN7nZtfijVV6hSwxjQMwXL4gn9qU8=" crossorigin="anonymous"></script>
+  <script><!-- NOTE: timeago.js uses the language code format like "zh_CN" (underscore and case sensitive) -->
+    var languageCode = "en".replace(/-/g, '_').replace(/_(.*)/, function ($0, $1) {return $0.replace($1, $1.toUpperCase());});
+    timeago().render(document.querySelectorAll('.timeago'), languageCode);
+    timeago.cancel();  
+  </script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

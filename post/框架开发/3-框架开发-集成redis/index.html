@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>框架开发(三):框架开发-集成Redis - Learn Go</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Learn Go" /><meta name="description" content="1.客户端介绍 redis官网推荐使用redigo(https://github.com/gomodule/redigo)，截止到今天Gith" /><meta name="keywords" content="博客, Learn Go, hugo" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.90.1 with theme even" />
+
+
+<link rel="canonical" href="https://shershon1991.github.io/post/%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91/3-%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91-%E9%9B%86%E6%88%90redis/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="框架开发(三):框架开发-集成Redis" />
+<meta property="og:description" content="1.客户端介绍 redis官网推荐使用redigo(https://github.com/gomodule/redigo)，截止到今天Gith" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://shershon1991.github.io/post/%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91/3-%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91-%E9%9B%86%E6%88%90redis/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2021-06-03T00:00:00+00:00" />
+<meta property="article:modified_time" content="2021-06-03T00:00:00+00:00" />
+
+<meta itemprop="name" content="框架开发(三):框架开发-集成Redis">
+<meta itemprop="description" content="1.客户端介绍 redis官网推荐使用redigo(https://github.com/gomodule/redigo)，截止到今天Gith"><meta itemprop="datePublished" content="2021-06-03T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2021-06-03T00:00:00+00:00" />
+<meta itemprop="wordCount" content="2001">
+<meta itemprop="keywords" content="框架开发," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="框架开发(三):框架开发-集成Redis"/>
+<meta name="twitter:description" content="1.客户端介绍 redis官网推荐使用redigo(https://github.com/gomodule/redigo)，截止到今天Gith"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Learn Go</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">首页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Learn Go</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">首页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">框架开发(三):框架开发-集成Redis</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-06-03 </span>
+        <div class="post-category">
+            <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+            <a href="/categories/go/"> Go </a>
+            </div>
+          <span class="more-meta"> 约 2001 字 </span>
+          <span class="more-meta"> 预计阅读 4 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#1客户端介绍">1.客户端介绍</a></li>
+            <li><a href="#2安装">2.安装</a></li>
+            <li><a href="#3编写配置">3.编写配置</a></li>
+            <li><a href="#4初始化客户端">4.初始化客户端</a></li>
+            <li><a href="#5使用">5.使用</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+  <div class="post-outdated">
+    <div class="warn">
+      <p>【注意】最后更新于 <span class="timeago" datetime="2021-06-03T00:00:00" title="June 3, 2021">June 3, 2021</span>，文中内容可能已过时，请谨慎使用。</p>
+    </div>
+  </div>
+    <div class="post-content">
+      <h3 id="1客户端介绍">1.客户端介绍</h3>
+<p><code>redis</code>官网推荐使用<code>redigo</code>(<code>https://github.com/gomodule/redigo</code>)，截止到今天<code>Github Start是8.2k</code> 但<code>go-redis(https://github.com/go-redis/redis)</code>使用的人更多， 并且<code>go-redis</code>封装得更好。截止到今天<code>Github Start 是10.8k</code>。</p>
+<h3 id="2安装">2.安装</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="k">go</span> <span class="nx">get</span> <span class="nx">github</span><span class="p">.</span><span class="nx">com</span><span class="o">/</span><span class="k">go</span><span class="o">-</span><span class="nx">redis</span><span class="o">/</span><span class="nx">redis</span><span class="o">/</span><span class="nx">v8</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="3编写配置">3.编写配置</h3>
+<h4 id="31-编写配置文件">3.1 编写配置文件</h4>
+<p><strong>文件:</strong><code>app/config/*.ini</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-ini" data-lang="ini"><span class="na">...</span>
+<span class="k">[redis]</span>
+<span class="na">host</span><span class="o">=</span><span class="s">127.0.0.1</span>
+<span class="na">port</span><span class="o">=</span><span class="s">6379</span>
+<span class="c1"># 密码</span>
+<span class="na">password</span><span class="o">=</span>
+<span class="c1"># 默认DB</span>
+<span class="na">default_db</span><span class="o">=</span><span class="s">0</span>
+<span class="na">...</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="32-编写redis配置结构">3.2 编写Redis配置结构</h4>
+<p><strong>文件:</strong><code>app/config/config.go</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="cm">/**
+</span><span class="cm"> * @description: Redis配置信息
+</span><span class="cm"> * @user: Shershon
+</span><span class="cm"> */</span>
+<span class="kd">type</span> <span class="nx">RedisConfig</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">Host</span>      <span class="kt">string</span> <span class="s">`ini:&#34;host&#34;`</span>
+	<span class="nx">Port</span>      <span class="kt">string</span> <span class="s">`ini:&#34;port&#34;`</span>
+	<span class="nx">DefaultDB</span> <span class="kt">string</span> <span class="s">`ini:&#34;default_db&#34;`</span>
+	<span class="nx">Password</span>  <span class="kt">string</span> <span class="s">`ini:&#34;password&#34;`</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="4初始化客户端">4.初始化客户端</h3>
+<h4 id="41-创建全局redis客户端">4.1 创建全局Redis客户端</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">RedisClient</span>  <span class="o">*</span><span class="nx">redis</span><span class="p">.</span><span class="nx">Client</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="42-建立连接">4.2 建立连接</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="cm">/**
+</span><span class="cm"> * @description: 连接Redis
+</span><span class="cm"> * @user: Shershon
+</span><span class="cm"> * @date 2021-02-23 17:06:27
+</span><span class="cm"> */</span>
+<span class="kd">func</span> <span class="nf">connectRedis</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">RedisClient</span> <span class="p">=</span> <span class="nx">redis</span><span class="p">.</span><span class="nf">NewClient</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">redis</span><span class="p">.</span><span class="nx">Options</span><span class="p">{</span>
+		<span class="nx">Addr</span><span class="p">:</span>     <span class="nx">RedisConfigInstance</span><span class="p">.</span><span class="nx">Host</span> <span class="o">+</span> <span class="s">&#34;:&#34;</span> <span class="o">+</span> <span class="nx">RedisConfigInstance</span><span class="p">.</span><span class="nx">Port</span><span class="p">,</span>
+		<span class="nx">Password</span><span class="p">:</span> <span class="nx">RedisConfigInstance</span><span class="p">.</span><span class="nx">Password</span><span class="p">,</span> <span class="c1">// 密码
+</span><span class="c1"></span>		<span class="nx">DB</span><span class="p">:</span>       <span class="nx">RedisConfigInstance</span><span class="p">.</span><span class="nx">DefaultDB</span><span class="p">,</span> <span class="c1">// 默认数据库
+</span><span class="c1"></span>		<span class="nx">PoolSize</span><span class="p">:</span> <span class="nx">RedisConfigInstance</span><span class="p">.</span><span class="nx">PoolSize</span><span class="p">,</span> <span class="c1">// 连接池大小
+</span><span class="c1"></span>	<span class="p">})</span>
+	<span class="c1">// 设置连接超时时间
+</span><span class="c1"></span>	<span class="nx">duration</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">ParseDuration</span><span class="p">(</span><span class="nx">RedisConfigInstance</span><span class="p">.</span><span class="nx">TimeOut</span><span class="p">)</span>
+	<span class="nx">ctx</span><span class="p">,</span> <span class="nx">cancelFunc</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">WithTimeout</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">Background</span><span class="p">(),</span> <span class="nx">duration</span><span class="p">)</span>
+	<span class="k">defer</span> <span class="nf">cancelFunc</span><span class="p">()</span>
+	<span class="nx">result</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">RedisClient</span><span class="p">.</span><span class="nf">Ping</span><span class="p">(</span><span class="nx">ctx</span><span class="p">).</span><span class="nf">Result</span><span class="p">()</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;redis: &#34;</span> <span class="o">+</span> <span class="nx">result</span><span class="p">)</span>
+	<span class="nx">BusErrorInstance</span><span class="p">.</span><span class="nf">ThrowError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="5使用">5.使用</h3>
+<p><strong>源码文件</strong>：https://github.com/52lu/goe/blob/master/app/controllers/v1/redis.go</p>
+<h4 id="51-set--get">5.1 Set &amp; Get</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">ctx</span> <span class="p">=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">Background</span><span class="p">()</span>
+<span class="kd">func</span> <span class="p">(</span><span class="nx">r</span> <span class="nx">RedisController</span><span class="p">)</span> <span class="nf">Normal</span><span class="p">()</span> <span class="kt">error</span>  <span class="p">{</span>
+	<span class="nx">opType</span> <span class="o">:=</span> <span class="nx">r</span><span class="p">.</span><span class="nf">GetParam</span><span class="p">(</span><span class="s">&#34;opType&#34;</span><span class="p">)</span>
+	<span class="nx">key</span> <span class="o">:=</span> <span class="nx">r</span><span class="p">.</span><span class="nf">GetParam</span><span class="p">(</span><span class="s">&#34;key&#34;</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">opType</span> <span class="o">==</span> <span class="s">&#34;1&#34;</span> <span class="p">{</span>
+		<span class="c1">// Set
+</span><span class="c1"></span>		<span class="nx">val</span> <span class="o">:=</span> <span class="nx">r</span><span class="p">.</span><span class="nf">GetParam</span><span class="p">(</span><span class="s">&#34;val&#34;</span><span class="p">)</span>
+		<span class="nx">err</span> <span class="o">:=</span> <span class="nx">RedisClient</span><span class="p">.</span><span class="nf">Set</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">val</span><span class="p">,</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Second</span> <span class="o">*</span> <span class="mi">60</span><span class="p">).</span><span class="nf">Err</span><span class="p">()</span>
+		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+			<span class="k">return</span> <span class="nx">r</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="s">&#34;Set: &#34;</span> <span class="o">+</span> <span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">())</span>
+		<span class="p">}</span>
+		<span class="k">return</span> <span class="nx">r</span><span class="p">.</span><span class="nf">Success</span><span class="p">(</span><span class="kc">nil</span><span class="p">)</span>
+	<span class="p">}</span> <span class="k">else</span>  <span class="p">{</span>
+		<span class="c1">// Get
+</span><span class="c1"></span>		<span class="nx">result</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">RedisClient</span><span class="p">.</span><span class="nf">Get</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">key</span><span class="p">).</span><span class="nf">Result</span><span class="p">()</span>
+		<span class="k">if</span> <span class="nx">err</span> <span class="o">==</span> <span class="nx">redis</span><span class="p">.</span><span class="nx">Nil</span> <span class="p">{</span>
+			<span class="k">return</span> <span class="nx">r</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">key</span> <span class="o">+</span> <span class="s">&#34; not exist&#34;</span><span class="p">)</span>
+		<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+			<span class="k">return</span> <span class="nx">r</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="s">&#34;Get: &#34;</span> <span class="o">+</span> <span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">())</span>
+		<span class="p">}</span>
+		<span class="k">return</span> <span class="nx">r</span><span class="p">.</span><span class="nf">Success</span><span class="p">(</span><span class="nx">result</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="52-有序集合sorted-set">5.2 有序集合(Sorted Set)</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="cm">/**
+</span><span class="cm">* @description: 有序集合添加
+</span><span class="cm">* @user: Shershon
+</span><span class="cm">* @receiver r RedisController
+</span><span class="cm">*/</span>
+<span class="kd">func</span> <span class="p">(</span><span class="nx">r</span> <span class="nx">RedisController</span><span class="p">)</span> <span class="nf">SortSet</span><span class="p">()</span> <span class="kt">error</span>  <span class="p">{</span>
+	<span class="nx">opType</span> <span class="o">:=</span> <span class="nx">r</span><span class="p">.</span><span class="nf">GetParam</span><span class="p">(</span><span class="s">&#34;opType&#34;</span><span class="p">)</span>
+	<span class="nx">key</span> <span class="o">:=</span> <span class="nx">r</span><span class="p">.</span><span class="nf">GetParam</span><span class="p">(</span><span class="s">&#34;key&#34;</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">opType</span> <span class="o">==</span> <span class="s">&#34;1&#34;</span> <span class="p">{</span>
+		<span class="c1">// 有序集合添加
+</span><span class="c1"></span>		<span class="nx">zs</span> <span class="o">:=</span> <span class="p">[]</span><span class="o">*</span><span class="nx">redis</span><span class="p">.</span><span class="nx">Z</span><span class="p">{</span>
+			<span class="p">{</span><span class="nx">Member</span><span class="p">:</span> <span class="s">&#34;小张&#34;</span><span class="p">,</span><span class="nx">Score</span><span class="p">:</span> <span class="mi">88</span><span class="p">},</span>
+			<span class="p">{</span><span class="nx">Member</span><span class="p">:</span> <span class="s">&#34;小李&#34;</span><span class="p">,</span><span class="nx">Score</span><span class="p">:</span> <span class="mi">90</span><span class="p">},</span>
+			<span class="p">{</span><span class="nx">Member</span><span class="p">:</span> <span class="s">&#34;小明&#34;</span><span class="p">,</span><span class="nx">Score</span><span class="p">:</span> <span class="mi">80</span><span class="p">},</span>
+			<span class="p">{</span><span class="nx">Member</span><span class="p">:</span> <span class="s">&#34;小英&#34;</span><span class="p">,</span><span class="nx">Score</span><span class="p">:</span> <span class="mi">70</span><span class="p">},</span>
+			<span class="p">{</span><span class="nx">Member</span><span class="p">:</span> <span class="s">&#34;小赵&#34;</span><span class="p">,</span><span class="nx">Score</span><span class="p">:</span> <span class="mi">95</span><span class="p">},</span>
+			<span class="p">{</span><span class="nx">Member</span><span class="p">:</span> <span class="s">&#34;小王&#34;</span><span class="p">,</span><span class="nx">Score</span><span class="p">:</span> <span class="mi">75</span><span class="p">},</span>
+			<span class="p">{</span><span class="nx">Member</span><span class="p">:</span> <span class="s">&#34;笨蛋&#34;</span><span class="p">,</span><span class="nx">Score</span><span class="p">:</span> <span class="mi">40</span><span class="p">},</span>
+		<span class="p">}</span>
+		<span class="nx">result</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">RedisClient</span><span class="p">.</span><span class="nf">ZAdd</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">zs</span><span class="o">...</span><span class="p">).</span><span class="nf">Result</span><span class="p">()</span>
+		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+			<span class="k">return</span> <span class="nx">r</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">())</span>
+		<span class="p">}</span>
+		<span class="k">return</span> <span class="nx">r</span><span class="p">.</span><span class="nf">Success</span><span class="p">(</span><span class="nx">result</span><span class="p">)</span>
+	<span class="p">}</span> <span class="k">else</span>  <span class="p">{</span>
+		<span class="nx">resultMap</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kd">interface</span><span class="p">{})</span>
+		<span class="c1">// 获取成员数
+</span><span class="c1"></span>		<span class="nx">val</span> <span class="o">:=</span> <span class="nx">RedisClient</span><span class="p">.</span><span class="nf">ZCard</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">key</span><span class="p">).</span><span class="nf">Val</span><span class="p">()</span>
+		<span class="nx">resultMap</span><span class="p">[</span><span class="s">&#34;获取成员数&#34;</span><span class="p">]</span> <span class="p">=</span> <span class="nx">val</span>
+		<span class="c1">// 获取指定分数区间的成员数
+</span><span class="c1"></span>		<span class="nx">resultMap</span><span class="p">[</span><span class="s">&#34;70分-90分成员数&#34;</span><span class="p">]</span> <span class="p">=</span> <span class="nx">RedisClient</span><span class="p">.</span><span class="nf">ZCount</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="s">&#34;70&#34;</span><span class="p">,</span> <span class="s">&#34;90&#34;</span><span class="p">).</span><span class="nf">Val</span><span class="p">()</span>
+		<span class="c1">// 返回有序集中指定分数区间内的成员，分数从高到低排序
+</span><span class="c1"></span>		<span class="nx">result</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">RedisClient</span><span class="p">.</span><span class="nf">ZRevRangeByScoreWithScores</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">redis</span><span class="p">.</span><span class="nx">ZRangeBy</span><span class="p">{</span>
+			<span class="nx">Min</span><span class="p">:</span> <span class="s">&#34;0&#34;</span><span class="p">,</span> <span class="nx">Max</span><span class="p">:</span> <span class="s">&#34;100&#34;</span><span class="p">,</span> <span class="nx">Offset</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">Count</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+		<span class="p">}).</span><span class="nf">Result</span><span class="p">()</span>
+		<span class="nx">resultMap</span><span class="p">[</span><span class="s">&#34;分数前三排名&#34;</span><span class="p">]</span> <span class="p">=</span> <span class="nx">result</span>
+		<span class="c1">// 返回分数值
+</span><span class="c1"></span>		<span class="nx">f</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">RedisClient</span><span class="p">.</span><span class="nf">ZScore</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="s">&#34;小张&#34;</span><span class="p">).</span><span class="nf">Result</span><span class="p">()</span>
+		<span class="nx">resultMap</span><span class="p">[</span><span class="s">&#34;小张的分数&#34;</span><span class="p">]</span> <span class="p">=</span> <span class="nx">f</span>
+		<span class="c1">// 给笨蛋加60分
+</span><span class="c1"></span>		<span class="nx">f2</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">RedisClient</span><span class="p">.</span><span class="nf">ZIncrBy</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="mf">60.0</span><span class="p">,</span> <span class="s">&#34;笨蛋&#34;</span><span class="p">).</span><span class="nf">Result</span><span class="p">()</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;新分数:%v \n&#34;</span><span class="p">,</span><span class="nx">f2</span><span class="p">)</span>
+		<span class="nx">result2</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">RedisClient</span><span class="p">.</span><span class="nf">ZRevRangeByScoreWithScores</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">redis</span><span class="p">.</span><span class="nx">ZRangeBy</span><span class="p">{</span>
+			<span class="nx">Min</span><span class="p">:</span> <span class="s">&#34;0&#34;</span><span class="p">,</span> <span class="nx">Max</span><span class="p">:</span> <span class="s">&#34;100&#34;</span><span class="p">,</span> <span class="nx">Offset</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">Count</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+		<span class="p">}).</span><span class="nf">Result</span><span class="p">()</span>
+		<span class="nx">resultMap</span><span class="p">[</span><span class="s">&#34;调整分后排名&#34;</span><span class="p">]</span> <span class="p">=</span> <span class="nx">result2</span>
+		<span class="k">return</span> <span class="nx">r</span><span class="p">.</span><span class="nf">Success</span><span class="p">(</span><span class="nx">resultMap</span><span class="p">)</span>
+	<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="53-hash操作">5.3 Hash操作</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="cm">/**
+</span><span class="cm"> * @description: 哈希类型操作
+</span><span class="cm"> * @user: Shershon
+</span><span class="cm"> * @receiver r RedisController
+</span><span class="cm"> * @return error
+</span><span class="cm"> */</span>
+<span class="kd">func</span> <span class="p">(</span><span class="nx">r</span> <span class="nx">RedisController</span><span class="p">)</span> <span class="nf">Hash</span><span class="p">()</span> <span class="kt">error</span> <span class="p">{</span>
+	<span class="c1">//  将哈希表 key 中的字段 field 的值设为 value 。
+</span><span class="c1"></span>	<span class="nx">opType</span> <span class="o">:=</span> <span class="nx">r</span><span class="p">.</span><span class="nf">GetParam</span><span class="p">(</span><span class="s">&#34;opType&#34;</span><span class="p">)</span>
+	<span class="nx">result</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kd">interface</span><span class="p">{})</span>
+	<span class="k">if</span> <span class="nx">opType</span> <span class="o">==</span> <span class="s">&#34;1&#34;</span> <span class="p">{</span>
+		<span class="c1">// Hset:将哈希表 key 中的字段 field 的值设为 value 。
+</span><span class="c1"></span>		<span class="nx">err</span> <span class="o">:=</span> <span class="nx">RedisClient</span><span class="p">.</span><span class="nf">HSet</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="s">&#34;HSet-key&#34;</span><span class="p">,</span> <span class="s">&#34;field_name&#34;</span><span class="p">,</span> <span class="s">&#34;张三&#34;</span><span class="p">).</span><span class="nf">Err</span><span class="p">()</span>
+		<span class="c1">// HmSET:同时将多个 field-value (域-值)对设置到哈希表 key 中。
+</span><span class="c1"></span>		<span class="nx">err</span> <span class="p">=</span> <span class="nx">RedisClient</span><span class="p">.</span><span class="nf">HMSet</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="s">&#34;HMSet-key&#34;</span><span class="p">,</span> <span class="s">&#34;field1&#34;</span><span class="p">,</span><span class="s">&#34;val1&#34;</span><span class="p">,</span><span class="s">&#34;field2&#34;</span><span class="p">,</span><span class="s">&#34;val2&#34;</span><span class="p">,</span><span class="s">&#34;field3&#34;</span><span class="p">,</span><span class="s">&#34;val3&#34;</span><span class="p">).</span><span class="nf">Err</span><span class="p">()</span>
+		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+			<span class="k">return</span>  <span class="nx">r</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">())</span>
+		<span class="p">}</span>
+		<span class="k">return</span>  <span class="nx">r</span><span class="p">.</span><span class="nf">Success</span><span class="p">(</span><span class="kc">nil</span><span class="p">)</span>
+	<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+		<span class="c1">// HEXISTS:查看哈希表key中，指定的字段是否存在。
+</span><span class="c1"></span>		<span class="nx">res</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">RedisClient</span><span class="p">.</span><span class="nf">HExists</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="s">&#34;HSet-key&#34;</span><span class="p">,</span> <span class="s">&#34;field_name&#34;</span><span class="p">).</span><span class="nf">Result</span><span class="p">()</span>
+		<span class="nx">result</span><span class="p">[</span><span class="s">&#34;HExists&#34;</span><span class="p">]</span> <span class="p">=</span> <span class="nx">res</span>
+		<span class="c1">// HGET:获取存储在哈希表中指定字段的值。
+</span><span class="c1"></span>		<span class="nx">s</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">RedisClient</span><span class="p">.</span><span class="nf">HGet</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="s">&#34;HMSet-key&#34;</span><span class="p">,</span> <span class="s">&#34;field2&#34;</span><span class="p">).</span><span class="nf">Result</span><span class="p">()</span>
+		<span class="nx">result</span><span class="p">[</span><span class="s">&#34;HGet&#34;</span><span class="p">]</span> <span class="p">=</span> <span class="nx">s</span>
+		<span class="c1">//HGETALL:获取在哈希表中指定 key 的所有字段和值
+</span><span class="c1"></span>		<span class="nx">m</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">RedisClient</span><span class="p">.</span><span class="nf">HGetAll</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="s">&#34;HMSet-key&#34;</span><span class="p">).</span><span class="nf">Result</span><span class="p">()</span>
+		<span class="nx">result</span><span class="p">[</span><span class="s">&#34;HGet&#34;</span><span class="p">]</span> <span class="p">=</span> <span class="nx">m</span>
+		<span class="c1">// Hkeys:获取所有哈希表中的字段
+</span><span class="c1"></span>		<span class="nx">strings</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">RedisClient</span><span class="p">.</span><span class="nf">HKeys</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="s">&#34;HMSet-key&#34;</span><span class="p">).</span><span class="nf">Result</span><span class="p">()</span>
+		<span class="nx">result</span><span class="p">[</span><span class="s">&#34;HKeys&#34;</span><span class="p">]</span> <span class="p">=</span> <span class="nx">strings</span>
+		<span class="c1">// HVALS:获取哈希表中所有值。
+</span><span class="c1"></span>		<span class="nx">i</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">RedisClient</span><span class="p">.</span><span class="nf">HVals</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="s">&#34;HMSet-key&#34;</span><span class="p">).</span><span class="nf">Result</span><span class="p">()</span>
+		<span class="nx">result</span><span class="p">[</span><span class="s">&#34;HVals&#34;</span><span class="p">]</span> <span class="p">=</span> <span class="nx">i</span>
+		<span class="c1">// HMGET:获取所有给定字段的值
+</span><span class="c1"></span>		<span class="nx">i2</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">RedisClient</span><span class="p">.</span><span class="nf">HMGet</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="s">&#34;HMSet-key&#34;</span><span class="p">,</span> <span class="s">&#34;field1&#34;</span><span class="p">,</span> <span class="s">&#34;field2&#34;</span><span class="p">,</span> <span class="s">&#34;field3&#34;</span><span class="p">).</span><span class="nf">Result</span><span class="p">()</span>
+		<span class="nx">result</span><span class="p">[</span><span class="s">&#34;HMGet&#34;</span><span class="p">]</span> <span class="p">=</span> <span class="nx">i2</span>
+		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+			<span class="k">return</span>  <span class="nx">r</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">())</span>
+		<span class="p">}</span>
+		<span class="k">return</span>  <span class="nx">r</span><span class="p">.</span><span class="nf">Success</span><span class="p">(</span><span class="nx">result</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="54-列表操作list">5.4 列表操作(List)</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="cm">/**
+</span><span class="cm"> * @description: 列表类型操作
+</span><span class="cm"> * @user: Shershon
+</span><span class="cm"> * @receiver r RedisController
+</span><span class="cm"> * @return error
+</span><span class="cm"> */</span>
+<span class="kd">func</span> <span class="p">(</span><span class="nx">r</span> <span class="nx">RedisController</span><span class="p">)</span> <span class="nf">List</span><span class="p">()</span> <span class="kt">error</span> <span class="p">{</span>
+	<span class="nx">opType</span> <span class="o">:=</span> <span class="nx">r</span><span class="p">.</span><span class="nf">GetParam</span><span class="p">(</span><span class="s">&#34;opType&#34;</span><span class="p">)</span>
+	<span class="nx">key</span> <span class="o">:=</span> <span class="s">&#34;List:Rows&#34;</span>
+	<span class="nx">result</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kd">interface</span><span class="p">{})</span>
+	<span class="k">if</span> <span class="nx">opType</span> <span class="o">==</span> <span class="s">&#34;1&#34;</span> <span class="p">{</span>
+		<span class="c1">// LPUSH: 将一个或多个值插入到列表头部
+</span><span class="c1"></span>		<span class="nx">err</span> <span class="o">:=</span> <span class="nx">RedisClient</span><span class="p">.</span><span class="nf">LPush</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="s">&#34;PHP&#34;</span><span class="p">,</span> <span class="s">&#34;C&#34;</span><span class="p">,</span> <span class="s">&#34;GO&#34;</span><span class="p">,</span> <span class="s">&#34;JAVA&#34;</span><span class="p">,</span> <span class="s">&#34;PYTHON&#34;</span><span class="p">).</span><span class="nf">Err</span><span class="p">()</span>
+		<span class="c1">// RPUSH:将一个或多个值插入到列表的尾部
+</span><span class="c1"></span>		<span class="nx">err</span> <span class="p">=</span> <span class="nx">RedisClient</span><span class="p">.</span><span class="nf">LPush</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="s">&#34;C++&#34;</span><span class="p">,</span> <span class="s">&#34;HTML&#34;</span><span class="p">).</span><span class="nf">Err</span><span class="p">()</span>
+		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+			<span class="k">return</span>  <span class="nx">r</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">())</span>
+		<span class="p">}</span>
+	<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="nx">opType</span> <span class="o">==</span> <span class="s">&#34;2&#34;</span>  <span class="p">{</span>
+		<span class="c1">// BLPOP:移出并获取列表的第一个元素(阻塞)
+</span><span class="c1"></span>		<span class="nx">duration</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">ParseDuration</span><span class="p">(</span><span class="s">&#34;10s&#34;</span><span class="p">)</span>
+		<span class="nx">res</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">RedisClient</span><span class="p">.</span><span class="nf">BLPop</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">duration</span><span class="p">,</span> <span class="nx">key</span><span class="p">).</span><span class="nf">Result</span><span class="p">()</span>
+		<span class="nx">result</span><span class="p">[</span><span class="s">&#34;BLPOP&#34;</span><span class="p">]</span> <span class="p">=</span> <span class="nx">res</span>
+		<span class="c1">//BRPOP:移出并获取列表的最后一个元素(阻塞)
+</span><span class="c1"></span>		<span class="nx">strings</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">RedisClient</span><span class="p">.</span><span class="nf">BRPop</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">duration</span><span class="p">,</span> <span class="nx">key</span><span class="p">).</span><span class="nf">Result</span><span class="p">()</span>
+		<span class="nx">result</span><span class="p">[</span><span class="s">&#34;BRPop&#34;</span><span class="p">]</span> <span class="p">=</span> <span class="nx">strings</span>
+		<span class="c1">// LPOP:移出并获取列表的第一个元素
+</span><span class="c1"></span>		<span class="nx">s</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">RedisClient</span><span class="p">.</span><span class="nf">LPop</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">key</span><span class="p">).</span><span class="nf">Result</span><span class="p">()</span>
+		<span class="nx">result</span><span class="p">[</span><span class="s">&#34;LPop&#34;</span><span class="p">]</span> <span class="p">=</span> <span class="nx">s</span>
+		<span class="c1">// RPOP:移除列表的最后一个元素，返回值为移除的元素。
+</span><span class="c1"></span>		<span class="nx">s2</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">RedisClient</span><span class="p">.</span><span class="nf">RPop</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">key</span><span class="p">).</span><span class="nf">Result</span><span class="p">()</span>
+		<span class="nx">result</span><span class="p">[</span><span class="s">&#34;RPOP&#34;</span><span class="p">]</span> <span class="p">=</span> <span class="nx">s2</span>
+		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+			<span class="k">return</span>  <span class="nx">r</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">())</span>
+		<span class="p">}</span>
+	<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+		<span class="c1">//LINDEX: 通过索引获取列表中的元素
+</span><span class="c1"></span>		<span class="nx">s</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">RedisClient</span><span class="p">.</span><span class="nf">LIndex</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="mi">0</span><span class="p">).</span><span class="nf">Result</span><span class="p">()</span>
+		<span class="nx">result</span><span class="p">[</span><span class="s">&#34;LIndex-0&#34;</span><span class="p">]</span> <span class="p">=</span> <span class="nx">s</span>
+		<span class="c1">//LRANGE:获取列表指定范围内的元素
+</span><span class="c1"></span>		<span class="nx">strings</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">RedisClient</span><span class="p">.</span><span class="nf">LRange</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">).</span><span class="nf">Result</span><span class="p">()</span>
+		<span class="nx">result</span><span class="p">[</span><span class="s">&#34;LRange&#34;</span><span class="p">]</span> <span class="p">=</span> <span class="nx">strings</span>
+		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+			<span class="k">return</span>  <span class="nx">r</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">())</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span>  <span class="nx">r</span><span class="p">.</span><span class="nf">Success</span><span class="p">(</span><span class="nx">result</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Learn Go</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2021-06-03
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91/">框架开发</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91/4-%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91-%E9%9B%86%E6%88%90%E6%97%A5%E5%BF%97logrus/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">框架开发(四):框架开发-集成日志Logrus</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91/2-%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91-%E9%9B%86%E6%88%90gorm/">
+            <span class="next-text nav-default">框架开发(二):框架开发-集成Gorm</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/shershon1991" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/shershon520" class="iconfont icon-zhihu" title="zhihu"></a>
+  <a href="https://shershon1991.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2021 - 
+    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span>Learn Go</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.min.js" integrity="sha256-jwCP0NAdCBloaIWTWHmW4i3snUNMHUNO+jr9rYd2iOI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.locales.min.js" integrity="sha256-ZwofwC1Lf/faQCzN7nZtfijVV6hSwxjQMwXL4gn9qU8=" crossorigin="anonymous"></script>
+  <script><!-- NOTE: timeago.js uses the language code format like "zh_CN" (underscore and case sensitive) -->
+    var languageCode = "en".replace(/-/g, '_').replace(/_(.*)/, function ($0, $1) {return $0.replace($1, $1.toUpperCase());});
+    timeago().render(document.querySelectorAll('.timeago'), languageCode);
+    timeago.cancel();  
+  </script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

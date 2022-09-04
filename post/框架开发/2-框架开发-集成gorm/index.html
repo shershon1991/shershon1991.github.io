@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>框架开发(二):框架开发-集成Gorm - Learn Go</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Learn Go" /><meta name="description" content="1.安装 1 2 go get -u gorm.io/gorm go get -u gorm.io/driver/mysql 2.配置相关 2.1 编写配置文件 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 [mysql] host=127.0.01 port=3306 database=test userName=root password=root charset=utf8mb4 # 表前缀 table_pre=app_ # 设置闲置的" /><meta name="keywords" content="博客, Learn Go, hugo" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.90.1 with theme even" />
+
+
+<link rel="canonical" href="https://shershon1991.github.io/post/%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91/2-%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91-%E9%9B%86%E6%88%90gorm/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="框架开发(二):框架开发-集成Gorm" />
+<meta property="og:description" content="1.安装 1 2 go get -u gorm.io/gorm go get -u gorm.io/driver/mysql 2.配置相关 2.1 编写配置文件 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 [mysql] host=127.0.01 port=3306 database=test userName=root password=root charset=utf8mb4 # 表前缀 table_pre=app_ # 设置闲置的" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://shershon1991.github.io/post/%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91/2-%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91-%E9%9B%86%E6%88%90gorm/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2021-06-02T00:00:00+00:00" />
+<meta property="article:modified_time" content="2021-06-02T00:00:00+00:00" />
+
+<meta itemprop="name" content="框架开发(二):框架开发-集成Gorm">
+<meta itemprop="description" content="1.安装 1 2 go get -u gorm.io/gorm go get -u gorm.io/driver/mysql 2.配置相关 2.1 编写配置文件 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 [mysql] host=127.0.01 port=3306 database=test userName=root password=root charset=utf8mb4 # 表前缀 table_pre=app_ # 设置闲置的"><meta itemprop="datePublished" content="2021-06-02T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2021-06-02T00:00:00+00:00" />
+<meta itemprop="wordCount" content="1895">
+<meta itemprop="keywords" content="框架开发," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="框架开发(二):框架开发-集成Gorm"/>
+<meta name="twitter:description" content="1.安装 1 2 go get -u gorm.io/gorm go get -u gorm.io/driver/mysql 2.配置相关 2.1 编写配置文件 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 [mysql] host=127.0.01 port=3306 database=test userName=root password=root charset=utf8mb4 # 表前缀 table_pre=app_ # 设置闲置的"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Learn Go</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">首页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Learn Go</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">首页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">框架开发(二):框架开发-集成Gorm</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-06-02 </span>
+        <div class="post-category">
+            <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+            <a href="/categories/go/"> Go </a>
+            </div>
+          <span class="more-meta"> 约 1895 字 </span>
+          <span class="more-meta"> 预计阅读 4 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#1安装">1.安装</a></li>
+            <li><a href="#2配置相关">2.配置相关</a></li>
+            <li><a href="#3初始化">3.初始化</a></li>
+            <li><a href="#4创建模型">4.创建模型</a></li>
+            <li><a href="#5使用">5.使用</a></li>
+            <li><a href="#6相关地址">6.相关地址</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+  <div class="post-outdated">
+    <div class="warn">
+      <p>【注意】最后更新于 <span class="timeago" datetime="2021-06-02T00:00:00" title="June 2, 2021">June 2, 2021</span>，文中内容可能已过时，请谨慎使用。</p>
+    </div>
+  </div>
+    <div class="post-content">
+      <h3 id="1安装">1.安装</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="k">go</span> <span class="nx">get</span> <span class="o">-</span><span class="nx">u</span> <span class="nx">gorm</span><span class="p">.</span><span class="nx">io</span><span class="o">/</span><span class="nx">gorm</span>
+<span class="k">go</span> <span class="nx">get</span> <span class="o">-</span><span class="nx">u</span> <span class="nx">gorm</span><span class="p">.</span><span class="nx">io</span><span class="o">/</span><span class="nx">driver</span><span class="o">/</span><span class="nx">mysql</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="2配置相关">2.配置相关</h3>
+<h4 id="21-编写配置文件">2.1 编写配置文件</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-ini" data-lang="ini"><span class="k">[mysql]</span>
+<span class="na">host</span><span class="o">=</span><span class="s">127.0.01</span>
+<span class="na">port</span><span class="o">=</span><span class="s">3306</span>
+<span class="na">database</span><span class="o">=</span><span class="s">test</span>
+<span class="na">userName</span><span class="o">=</span><span class="s">root</span>
+<span class="na">password</span><span class="o">=</span><span class="s">root</span>
+<span class="na">charset</span><span class="o">=</span><span class="s">utf8mb4</span>
+<span class="c1"># 表前缀</span>
+<span class="na">table_pre</span><span class="o">=</span><span class="s">app_</span>
+<span class="c1"># 设置闲置的连接数，默认值为2；</span>
+<span class="na">max_idle_conn</span><span class="o">=</span><span class="s">10</span>
+<span class="c1"># 设置最大打开的连接数，默认值为0，表示不限制。</span>
+<span class="na">max_open_conn</span><span class="o">=</span><span class="s">100</span>
+<span class="c1"># 设置了连接可复用的最大时间。</span>
+<span class="na">max_life_time</span><span class="o">=</span><span class="s">1h</span>
+<span class="c1"># 支持把数据库datetime和date类型转换为golang的time.Time类型</span>
+<span class="na">parse_time</span><span class="o">=</span><span class="s">true</span>
+<span class="c1"># 使用系统本地时区</span>
+<span class="na">loc</span><span class="o">=</span><span class="s">Local</span>
+<span class="c1"># 连接超时时间</span>
+<span class="na">timeout</span><span class="o">=</span><span class="s">10s</span>
+<span class="c1"># 慢sql时间,单位毫秒</span>
+<span class="na">slow_sql_time</span><span class="o">=</span><span class="s">50ms</span>
+<span class="c1"># 是否打印SQL</span>
+<span class="na">print_sql_log</span><span class="o">=</span><span class="s">true</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="22-定义mysql配置结构体">2.2 定义Mysql配置结构体</h4>
+<p><strong>文件:</strong> <code>app/config/mysql_config.go</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="cm">/**
+</span><span class="cm"> * @Author Shershon
+</span><span class="cm"> * @Description 数据库相关的配置
+</span><span class="cm"> **/</span>
+<span class="kn">package</span> <span class="nx">config</span>
+
+<span class="cm">/**
+</span><span class="cm"> * @description: mysql配置
+</span><span class="cm"> * @user: Shershon
+</span><span class="cm"> */</span>
+<span class="kd">type</span> <span class="nx">MysqlConfig</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">Host</span>        <span class="kt">string</span> <span class="s">`ini:&#34;host&#34;`</span>
+	<span class="nx">Port</span>        <span class="kt">string</span> <span class="s">`ini:&#34;port&#34;`</span>
+	<span class="nx">Database</span>    <span class="kt">string</span> <span class="s">`ini:&#34;database&#34;`</span>
+	<span class="nx">UserName</span>    <span class="kt">string</span> <span class="s">`ini:&#34;userName&#34;`</span>
+	<span class="nx">Password</span>    <span class="kt">string</span> <span class="s">`ini:&#34;password&#34;`</span>
+	<span class="nx">Charset</span>     <span class="kt">string</span> <span class="s">`ini:&#34;charset&#34;`</span>
+	<span class="nx">MaxIdleConn</span> <span class="kt">int</span>    <span class="s">`ini:&#34;max_idle_conn&#34;`</span>
+	<span class="nx">MaxOpenConn</span> <span class="kt">int</span>    <span class="s">`ini:&#34;max_open_conn&#34;`</span>
+	<span class="nx">ParseTime</span>   <span class="kt">string</span> <span class="s">`ini:&#34;parse_time&#34;`</span>
+	<span class="nx">Loc</span>         <span class="kt">string</span> <span class="s">`ini:&#34;loc&#34;`</span>
+	<span class="nx">Timeout</span>     <span class="kt">string</span> <span class="s">`ini:&#34;timeout&#34;`</span>
+	<span class="nx">MaxLifeTime</span> <span class="kt">string</span> <span class="s">`ini:&#34;max_life_time&#34;`</span>
+	<span class="nx">TablePre</span>    <span class="kt">string</span> <span class="s">`ini:&#34;table_pre&#34;`</span>
+	<span class="nx">SlowSqlTime</span> <span class="kt">string</span> <span class="s">`ini:&#34;slow_sql_time&#34;`</span>
+	<span class="nx">PrintSqlLog</span> <span class="kt">bool</span> <span class="s">`ini:&#34;print_sql_log&#34;`</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="3初始化">3.初始化</h3>
+<h4 id="31-定义全局客户端变量">3.1 定义全局客户端变量</h4>
+<p><strong>文件:</strong><code>app/common/global.go</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 全局客户端变量
+</span><span class="c1"></span><span class="kd">var</span> <span class="p">(</span>
+	<span class="nx">GormDBClient</span> <span class="o">*</span><span class="nx">gorm</span><span class="p">.</span><span class="nx">DB</span>
+<span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="32-映射配置到结构体">3.2 映射配置到结构体</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="cm">/**
+</span><span class="cm"> * @description: 加载配置文件
+</span><span class="cm"> * @user: Shershon
+</span><span class="cm"> * @receiver app
+</span><span class="cm"> */</span>
+<span class="kd">func</span> <span class="p">(</span><span class="nx">app</span> <span class="o">*</span><span class="nx">App</span><span class="p">)</span> <span class="nf">loadConfig</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">iniPath</span> <span class="o">:=</span> <span class="nx">ConfigPath</span> <span class="o">+</span> <span class="nx">app</span><span class="p">.</span><span class="nx">Env</span> <span class="o">+</span> <span class="s">&#34;.ini&#34;</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;加载配置文件: &#34;</span> <span class="o">+</span> <span class="nx">iniPath</span><span class="p">)</span>
+	<span class="nx">cfg</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ini</span><span class="p">.</span><span class="nf">Load</span><span class="p">(</span><span class="nx">iniPath</span><span class="p">)</span>
+	<span class="nx">BusErrorInstance</span><span class="p">.</span><span class="nf">ThrowError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+	<span class="c1">// 加载mysql配置
+</span><span class="c1"></span>	<span class="nx">err</span> <span class="p">=</span> <span class="nx">cfg</span><span class="p">.</span><span class="nf">Section</span><span class="p">(</span><span class="s">&#34;mysql&#34;</span><span class="p">).</span><span class="nf">MapTo</span><span class="p">(</span><span class="nx">MysqlConfigInstance</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="33-连接mysql">3.3 连接MySQL</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="cm">/**
+</span><span class="cm"> * @description: 连接mysql
+</span><span class="cm"> * @user: Shershon
+</span><span class="cm"> */</span>
+<span class="kd">func</span> <span class="nf">connectMysql</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 用户名:密码@tcp(IP:port)/数据库?charset=utf8mb4&amp;parseTime=True&amp;loc=Local
+</span><span class="c1"></span>	<span class="nx">dataSourceName</span> <span class="o">:=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;%s:%s@tcp(%s:%s)/%s?charset=%s&amp;parseTime=%s&amp;loc=%s&#34;</span><span class="p">,</span>
+		<span class="nx">MysqlConfigInstance</span><span class="p">.</span><span class="nx">UserName</span><span class="p">,</span> <span class="nx">MysqlConfigInstance</span><span class="p">.</span><span class="nx">Password</span><span class="p">,</span> <span class="nx">MysqlConfigInstance</span><span class="p">.</span><span class="nx">Host</span><span class="p">,</span> <span class="nx">MysqlConfigInstance</span><span class="p">.</span><span class="nx">Port</span><span class="p">,</span>
+		<span class="nx">MysqlConfigInstance</span><span class="p">.</span><span class="nx">Database</span><span class="p">,</span> <span class="nx">MysqlConfigInstance</span><span class="p">.</span><span class="nx">Charset</span><span class="p">,</span> <span class="nx">MysqlConfigInstance</span><span class="p">.</span><span class="nx">ParseTime</span><span class="p">,</span> <span class="nx">MysqlConfigInstance</span><span class="p">.</span><span class="nx">Loc</span><span class="p">)</span>
+
+	<span class="c1">// 连接额外配置信息
+</span><span class="c1"></span>	<span class="nx">gormConfig</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">gorm</span><span class="p">.</span><span class="nx">Config</span><span class="p">{</span>
+		<span class="nx">NamingStrategy</span><span class="p">:</span> <span class="nx">schema</span><span class="p">.</span><span class="nx">NamingStrategy</span><span class="p">{</span>
+			<span class="nx">TablePrefix</span><span class="p">:</span>   <span class="nx">MysqlConfigInstance</span><span class="p">.</span><span class="nx">TablePre</span><span class="p">,</span> <span class="c1">//表前缀
+</span><span class="c1"></span>			<span class="nx">SingularTable</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span><span class="c1">//使用单数表名，启用该选项时，`User` 的表名应该是 `user`而不是users
+</span><span class="c1"></span>		<span class="p">},</span>
+	<span class="p">}</span>
+	<span class="c1">// 打印SQL设置
+</span><span class="c1"></span>	<span class="k">if</span> <span class="nx">MysqlConfigInstance</span><span class="p">.</span><span class="nx">PrintSqlLog</span> <span class="p">{</span>
+		<span class="nx">slowSqlTime</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">ParseDuration</span><span class="p">(</span><span class="nx">MysqlConfigInstance</span><span class="p">.</span><span class="nx">SlowSqlTime</span><span class="p">)</span>
+		<span class="nx">BusErrorInstance</span><span class="p">.</span><span class="nf">ThrowError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+		<span class="nx">loggerNew</span> <span class="o">:=</span> <span class="nx">logger</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="nx">log</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stdout</span><span class="p">,</span> <span class="s">&#34;\r\n&#34;</span><span class="p">,</span> <span class="nx">log</span><span class="p">.</span><span class="nx">LstdFlags</span><span class="p">),</span> <span class="nx">logger</span><span class="p">.</span><span class="nx">Config</span><span class="p">{</span>
+			<span class="nx">SlowThreshold</span><span class="p">:</span> <span class="nx">slowSqlTime</span><span class="p">,</span> <span class="c1">//慢SQL阈值
+</span><span class="c1"></span>			<span class="nx">LogLevel</span><span class="p">:</span>      <span class="nx">logger</span><span class="p">.</span><span class="nx">Info</span><span class="p">,</span>
+			<span class="nx">Colorful</span><span class="p">:</span>      <span class="kc">true</span><span class="p">,</span> <span class="c1">// 彩色打印开启
+</span><span class="c1"></span>		<span class="p">})</span>
+		<span class="nx">gormConfig</span><span class="p">.</span><span class="nx">Logger</span> <span class="p">=</span> <span class="nx">loggerNew</span>
+	<span class="p">}</span>
+	<span class="c1">// 建立连接
+</span><span class="c1"></span>	<span class="nx">GormDBClient</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">gorm</span><span class="p">.</span><span class="nf">Open</span><span class="p">(</span><span class="nx">mysql</span><span class="p">.</span><span class="nf">Open</span><span class="p">(</span><span class="nx">dataSourceName</span><span class="p">),</span> <span class="nx">gormConfig</span><span class="p">)</span>
+	<span class="nx">BusErrorInstance</span><span class="p">.</span><span class="nf">ThrowError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+	<span class="c1">// 设置连接池信息
+</span><span class="c1"></span>	<span class="nx">db</span><span class="p">,</span> <span class="nx">err2</span> <span class="o">:=</span> <span class="nx">GormDBClient</span><span class="p">.</span><span class="nf">DB</span><span class="p">()</span>
+	<span class="nx">BusErrorInstance</span><span class="p">.</span><span class="nf">ThrowError</span><span class="p">(</span><span class="nx">err2</span><span class="p">)</span>
+	<span class="c1">// 设置空闲连接池中连接的最大数量
+</span><span class="c1"></span>	<span class="nx">db</span><span class="p">.</span><span class="nf">SetMaxIdleConns</span><span class="p">(</span><span class="nx">MysqlConfigInstance</span><span class="p">.</span><span class="nx">MaxIdleConn</span><span class="p">)</span>
+	<span class="c1">// 设置打开数据库连接的最大数量
+</span><span class="c1"></span>	<span class="nx">db</span><span class="p">.</span><span class="nf">SetMaxOpenConns</span><span class="p">(</span><span class="nx">MysqlConfigInstance</span><span class="p">.</span><span class="nx">MaxOpenConn</span><span class="p">)</span>
+	<span class="c1">// 设置了连接可复用的最大时间
+</span><span class="c1"></span>	<span class="nx">duration</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">ParseDuration</span><span class="p">(</span><span class="nx">MysqlConfigInstance</span><span class="p">.</span><span class="nx">MaxLifeTime</span><span class="p">)</span>
+	<span class="nx">BusErrorInstance</span><span class="p">.</span><span class="nf">ThrowError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+	<span class="nx">db</span><span class="p">.</span><span class="nf">SetConnMaxLifetime</span><span class="p">(</span><span class="nx">duration</span><span class="p">)</span>
+	<span class="c1">// 打印SQL配置信息
+</span><span class="c1"></span>	<span class="c1">//marshal, _ := json.Marshal(db.Stats())
+</span><span class="c1"></span>	<span class="c1">//fmt.Printf(&#34;数据库配置: %s \n&#34;, marshal)
+</span><span class="c1"></span><span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="4创建模型">4.创建模型</h3>
+<h4 id="41-创建父模型">4.1 创建父模型</h4>
+<p><strong>文件:</strong> <code>app/common/base_model.go</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="cm">/**
+</span><span class="cm"> * @Author Shershon
+</span><span class="cm"> * @Description 模型父类
+</span><span class="cm"> **/</span>
+<span class="kn">package</span> <span class="nx">common</span>
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;gorm.io/gorm&#34;</span>
+<span class="p">)</span>
+<span class="kd">type</span> <span class="nx">BaseModel</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">ID</span>        <span class="kt">uint</span> <span class="s">`gorm:&#34;primaryKey;autoincrement;not null&#34; json:&#34;id&#34;`</span>
+	<span class="nx">CreatedAt</span> <span class="kt">int</span> <span class="s">`json:&#34;createdAt&#34;`</span>
+	<span class="nx">UpdatedAt</span> <span class="kt">int</span> <span class="s">`json:&#34;updatedAt&#34;`</span>
+	<span class="nx">DeletedAt</span> <span class="nx">gorm</span><span class="p">.</span><span class="nx">DeletedAt</span> <span class="s">`gorm:&#34;index&#34; json:&#34;deletedAt&#34;`</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="42-创建用户模型">4.2 创建用户模型</h4>
+<p><strong>文件:</strong><code>app/models/user.go</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="cm">/**
+</span><span class="cm"> * @Author Shershon
+</span><span class="cm"> * @Description 用户相关的模型
+</span><span class="cm"> * @Date 2021/2/4 5:56 下午
+</span><span class="cm"> **/</span>
+<span class="kn">package</span> <span class="nx">models</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;goe/app/common&#34;</span>
+<span class="p">)</span>
+
+<span class="kd">type</span> <span class="nx">User</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">common</span><span class="p">.</span><span class="nx">BaseModel</span>
+	<span class="nx">NickName</span> <span class="kt">string</span>          <span class="s">`json:&#34;nickName&#34;`</span>
+	<span class="nx">Password</span> <span class="kt">string</span>          <span class="s">`json:&#34;password&#34;`</span>
+	<span class="nx">Email</span>    <span class="kt">string</span>          <span class="s">`json:&#34;email&#34;`</span>
+	<span class="nx">Mobile</span>   <span class="kt">string</span>          <span class="s">`json:&#34;mobile&#34;`</span>
+	<span class="nx">Gender</span>   <span class="kt">int8</span>            <span class="s">`json:&#34;gender&#34;`</span>
+	<span class="nx">Birthday</span> <span class="nx">common</span><span class="p">.</span><span class="nx">DateTime</span> <span class="s">`json:&#34;birthday&#34;`</span>
+	<span class="nx">Status</span>   <span class="kt">int8</span>            <span class="s">`json:&#34;status&#34;`</span>
+<span class="p">}</span>
+
+<span class="c1">// 根据主键查询
+</span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">um</span> <span class="o">*</span><span class="nx">User</span><span class="p">)</span> <span class="nf">FindById</span><span class="p">(</span><span class="nx">id</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="nx">result</span> <span class="o">:=</span> <span class="nx">common</span><span class="p">.</span><span class="nx">GormDBClient</span><span class="p">.</span><span class="nf">First</span><span class="p">(</span><span class="nx">um</span><span class="p">,</span> <span class="nx">id</span><span class="p">);</span> <span class="nx">result</span><span class="p">.</span><span class="nx">Error</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">common</span><span class="p">.</span><span class="nx">BusErrorInstance</span><span class="p">.</span><span class="nf">ThrowError</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">Error</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// 添加单条记录
+</span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">um</span> <span class="o">*</span><span class="nx">User</span><span class="p">)</span> <span class="nf">Add</span><span class="p">()</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="nx">result</span> <span class="o">:=</span> <span class="nx">common</span><span class="p">.</span><span class="nx">GormDBClient</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="nx">um</span><span class="p">);</span> <span class="nx">result</span><span class="p">.</span><span class="nx">Error</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">common</span><span class="p">.</span><span class="nx">BusErrorInstance</span><span class="p">.</span><span class="nf">ThrowError</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">Error</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// 根据条件查询
+</span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">um</span> <span class="o">*</span><span class="nx">User</span><span class="p">)</span> <span class="nf">FindByMobile</span><span class="p">(</span><span class="nx">mobile</span> <span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="nx">result</span> <span class="o">:=</span> <span class="nx">common</span><span class="p">.</span><span class="nx">GormDBClient</span><span class="p">.</span><span class="nf">Where</span><span class="p">(</span><span class="s">&#34;mobile=?&#34;</span><span class="p">,</span> <span class="nx">mobile</span><span class="p">).</span><span class="nf">Find</span><span class="p">(</span><span class="nx">um</span><span class="p">);</span> <span class="nx">result</span><span class="p">.</span><span class="nx">Error</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">common</span><span class="p">.</span><span class="nx">BusErrorInstance</span><span class="p">.</span><span class="nf">ThrowError</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">Error</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="cm">/**
+</span><span class="cm"> * @description: 更新用户信息
+</span><span class="cm"> * @user: Shershon
+</span><span class="cm"> * @receiver um
+</span><span class="cm"> * @param user
+</span><span class="cm"> */</span>
+<span class="kd">func</span> <span class="p">(</span><span class="nx">um</span> <span class="o">*</span><span class="nx">User</span><span class="p">)</span> <span class="nf">UpdateStatus</span><span class="p">(</span><span class="nx">user</span> <span class="nx">User</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="nx">result</span> <span class="o">:=</span> <span class="nx">common</span><span class="p">.</span><span class="nx">GormDBClient</span><span class="p">.</span><span class="nf">Model</span><span class="p">(</span><span class="nx">um</span><span class="p">).</span><span class="nf">Updates</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span> <span class="nx">result</span><span class="p">.</span><span class="nx">Error</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">common</span><span class="p">.</span><span class="nx">BusErrorInstance</span><span class="p">.</span><span class="nf">ThrowError</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">Error</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+<span class="cm">/**
+</span><span class="cm"> * @description: 删除用户(软删除)
+</span><span class="cm"> * @user: Shershon
+</span><span class="cm"> * @receiver um
+</span><span class="cm"> */</span>
+<span class="kd">func</span> <span class="p">(</span><span class="nx">um</span> <span class="o">*</span><span class="nx">User</span><span class="p">)</span> <span class="nf">DelUser</span><span class="p">(</span><span class="nx">id</span> <span class="kt">int</span><span class="p">)</span>  <span class="p">{</span>
+	<span class="k">if</span> <span class="nx">result</span> <span class="o">:=</span> <span class="nx">common</span><span class="p">.</span><span class="nx">GormDBClient</span><span class="p">.</span><span class="nf">Delete</span><span class="p">(</span><span class="nx">um</span><span class="p">,</span><span class="nx">id</span><span class="p">);</span><span class="nx">result</span><span class="p">.</span><span class="nx">Error</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">common</span><span class="p">.</span><span class="nx">BusErrorInstance</span><span class="p">.</span><span class="nf">ThrowError</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">Error</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="5使用">5.使用</h3>
+<p>创建<code>user</code>控制器，调用模型中的方法，具体代码如下:</p>
+<p><strong>文件:</strong> <code>app/cntrollers/v1/user.go</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span><span class="lnt">103
+</span><span class="lnt">104
+</span><span class="lnt">105
+</span><span class="lnt">106
+</span><span class="lnt">107
+</span><span class="lnt">108
+</span><span class="lnt">109
+</span><span class="lnt">110
+</span><span class="lnt">111
+</span><span class="lnt">112
+</span><span class="lnt">113
+</span><span class="lnt">114
+</span><span class="lnt">115
+</span><span class="lnt">116
+</span><span class="lnt">117
+</span><span class="lnt">118
+</span><span class="lnt">119
+</span><span class="lnt">120
+</span><span class="lnt">121
+</span><span class="lnt">122
+</span><span class="lnt">123
+</span><span class="lnt">124
+</span><span class="lnt">125
+</span><span class="lnt">126
+</span><span class="lnt">127
+</span><span class="lnt">128
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="cm">/**
+</span><span class="cm"> * @Author Shershon
+</span><span class="cm"> * @Description TODO
+</span><span class="cm"> * @Date 2021/2/22 9:43 上午
+</span><span class="cm"> **/</span>
+<span class="kn">package</span> <span class="nx">v1</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;crypto/md5&#34;</span>
+	<span class="s">&#34;fmt&#34;</span>
+	<span class="s">&#34;goe/app/common&#34;</span>
+	<span class="s">&#34;goe/app/models&#34;</span>
+	<span class="s">&#34;strconv&#34;</span>
+	<span class="s">&#34;time&#34;</span>
+<span class="p">)</span>
+
+<span class="kd">type</span> <span class="nx">UserController</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">common</span><span class="p">.</span><span class="nx">BaseController</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">init</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">common</span><span class="p">.</span><span class="nx">RouteListInstance</span><span class="p">.</span><span class="nf">AddRoute</span><span class="p">(</span><span class="s">&#34;v1&#34;</span><span class="p">,</span> <span class="s">&#34;user&#34;</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">UserController</span><span class="p">{})</span>
+<span class="p">}</span>
+
+<span class="cm">/**
+</span><span class="cm"> * @description: 查询
+</span><span class="cm"> * @user: Shershon
+</span><span class="cm"> * @receiver u UserController
+</span><span class="cm"> * @return error
+</span><span class="cm"> */</span>
+<span class="kd">func</span> <span class="p">(</span><span class="nx">uc</span> <span class="nx">UserController</span><span class="p">)</span> <span class="nf">GetUser</span><span class="p">()</span> <span class="kt">error</span> <span class="p">{</span>
+	<span class="nx">uid</span> <span class="o">:=</span> <span class="nx">uc</span><span class="p">.</span><span class="nf">GetParam</span><span class="p">(</span><span class="s">&#34;uid&#34;</span><span class="p">)</span>
+	<span class="nx">phone</span> <span class="o">:=</span> <span class="nx">uc</span><span class="p">.</span><span class="nf">GetParam</span><span class="p">(</span><span class="s">&#34;phone&#34;</span><span class="p">)</span>
+	<span class="nx">userModel</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">models</span><span class="p">.</span><span class="nx">User</span><span class="p">{}</span>
+	<span class="k">if</span> <span class="nx">uid</span> <span class="o">!=</span> <span class="s">&#34;&#34;</span> <span class="p">{</span>
+		<span class="nx">id</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">strconv</span><span class="p">.</span><span class="nf">Atoi</span><span class="p">(</span><span class="nx">uid</span><span class="p">)</span>
+		<span class="nx">userModel</span><span class="p">.</span><span class="nf">FindById</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span>
+	<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="nx">phone</span> <span class="o">!=</span> <span class="s">&#34;&#34;</span> <span class="p">{</span>
+		<span class="nx">userModel</span><span class="p">.</span><span class="nf">FindByMobile</span><span class="p">(</span><span class="nx">phone</span><span class="p">)</span>
+	<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nx">uc</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="s">&#34;查询条件不能为空!&#34;</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="nx">uc</span><span class="p">.</span><span class="nf">Success</span><span class="p">(</span><span class="nx">userModel</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="cm">/**
+</span><span class="cm"> * @description: 注册
+</span><span class="cm"> * @user: Shershon
+</span><span class="cm"> * @receiver uc
+</span><span class="cm"> * @return error
+</span><span class="cm"> */</span>
+<span class="kd">func</span> <span class="p">(</span><span class="nx">uc</span> <span class="nx">UserController</span><span class="p">)</span> <span class="nf">Register</span><span class="p">()</span> <span class="kt">error</span> <span class="p">{</span>
+	<span class="nx">nickName</span> <span class="o">:=</span> <span class="nx">uc</span><span class="p">.</span><span class="nf">GetParam</span><span class="p">(</span><span class="s">&#34;nickName&#34;</span><span class="p">)</span>
+	<span class="nx">email</span> <span class="o">:=</span> <span class="nx">uc</span><span class="p">.</span><span class="nf">GetParam</span><span class="p">(</span><span class="s">&#34;email&#34;</span><span class="p">)</span>
+	<span class="nx">mobile</span> <span class="o">:=</span> <span class="nx">uc</span><span class="p">.</span><span class="nf">GetParam</span><span class="p">(</span><span class="s">&#34;mobile&#34;</span><span class="p">)</span>
+	<span class="nx">birthday</span> <span class="o">:=</span> <span class="nx">uc</span><span class="p">.</span><span class="nf">GetParam</span><span class="p">(</span><span class="s">&#34;birthday&#34;</span><span class="p">)</span>
+	<span class="nx">notEmptyParam</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="nx">nickName</span><span class="p">,</span> <span class="nx">email</span><span class="p">,</span> <span class="nx">mobile</span><span class="p">,</span> <span class="nx">birthday</span><span class="p">}</span>
+	<span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">v</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">notEmptyParam</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="nx">v</span> <span class="o">==</span> <span class="s">&#34;&#34;</span> <span class="p">{</span>
+			<span class="k">return</span> <span class="nx">uc</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;%s不能为空!&#34;</span><span class="p">,</span> <span class="nx">v</span><span class="p">))</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="c1">// 判断用户是否存在
+</span><span class="c1"></span>	<span class="nx">userExist</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">models</span><span class="p">.</span><span class="nx">User</span><span class="p">{}</span>
+	<span class="nx">userExist</span><span class="p">.</span><span class="nf">FindByMobile</span><span class="p">(</span><span class="nx">mobile</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">userExist</span><span class="p">.</span><span class="nx">ID</span> <span class="o">!=</span> <span class="mi">0</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nx">uc</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;手机号%s已经存在!&#34;</span><span class="p">,</span> <span class="nx">mobile</span><span class="p">))</span>
+	<span class="p">}</span>
+
+	<span class="nx">location</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">LoadLocation</span><span class="p">(</span><span class="s">&#34;Asia/Shanghai&#34;</span><span class="p">)</span>
+	<span class="nx">birthdayTime</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">ParseInLocation</span><span class="p">(</span><span class="s">&#34;2006-01-02&#34;</span><span class="p">,</span> <span class="nx">birthday</span><span class="p">,</span> <span class="nx">location</span><span class="p">)</span>
+
+	<span class="c1">// 插入新用户
+</span><span class="c1"></span>	<span class="nx">userOne</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">models</span><span class="p">.</span><span class="nx">User</span><span class="p">{</span>
+		<span class="nx">NickName</span><span class="p">:</span> <span class="nx">nickName</span><span class="p">,</span>
+		<span class="nx">Email</span><span class="p">:</span>    <span class="nx">email</span><span class="p">,</span>
+		<span class="nx">Mobile</span><span class="p">:</span>   <span class="nx">mobile</span><span class="p">,</span>
+		<span class="nx">Birthday</span><span class="p">:</span> <span class="nx">common</span><span class="p">.</span><span class="nf">DateTime</span><span class="p">(</span><span class="nx">birthdayTime</span><span class="p">),</span>
+		<span class="nx">Status</span><span class="p">:</span>   <span class="mi">1</span><span class="p">,</span>
+		<span class="nx">Password</span><span class="p">:</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;%x&#34;</span><span class="p">,</span> <span class="nx">md5</span><span class="p">.</span><span class="nf">Sum</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="nx">mobile</span><span class="p">))),</span>
+	<span class="p">}</span>
+	<span class="nx">userOne</span><span class="p">.</span><span class="nf">Add</span><span class="p">()</span>
+	<span class="c1">// 入库
+</span><span class="c1"></span>	<span class="k">return</span> <span class="nx">uc</span><span class="p">.</span><span class="nf">Success</span><span class="p">(</span><span class="nx">userOne</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="cm">/**
+</span><span class="cm"> * @description: 更新用户信息
+</span><span class="cm"> * @user: Shershon
+</span><span class="cm"> * @receiver uc UserController
+</span><span class="cm"> * @return error
+</span><span class="cm"> * @date 2021-02-23 10:08:36
+</span><span class="cm"> */</span>
+<span class="kd">func</span> <span class="p">(</span><span class="nx">uc</span> <span class="nx">UserController</span><span class="p">)</span> <span class="nf">Update</span><span class="p">()</span> <span class="kt">error</span> <span class="p">{</span>
+	<span class="nx">uid</span> <span class="o">:=</span> <span class="nx">uc</span><span class="p">.</span><span class="nf">GetParam</span><span class="p">(</span><span class="s">&#34;uid&#34;</span><span class="p">)</span>
+	<span class="nx">name</span> <span class="o">:=</span> <span class="nx">uc</span><span class="p">.</span><span class="nf">GetParam</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">)</span>
+	<span class="nx">phone</span> <span class="o">:=</span> <span class="nx">uc</span><span class="p">.</span><span class="nf">GetParam</span><span class="p">(</span><span class="s">&#34;phone&#34;</span><span class="p">)</span>
+	<span class="nx">userModel</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">models</span><span class="p">.</span><span class="nx">User</span><span class="p">{}</span>
+	<span class="nx">id</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">strconv</span><span class="p">.</span><span class="nf">Atoi</span><span class="p">(</span><span class="nx">uid</span><span class="p">)</span>
+	<span class="nx">userModel</span><span class="p">.</span><span class="nf">FindById</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span>
+	<span class="nx">userUpdate</span> <span class="o">:=</span> <span class="nx">models</span><span class="p">.</span><span class="nx">User</span><span class="p">{</span>
+		<span class="nx">NickName</span><span class="p">:</span> <span class="nx">name</span><span class="p">,</span>
+		<span class="nx">Mobile</span><span class="p">:</span>   <span class="nx">phone</span><span class="p">,</span>
+	<span class="p">}</span>
+	<span class="nx">userModel</span><span class="p">.</span><span class="nf">UpdateStatus</span><span class="p">(</span><span class="nx">userUpdate</span><span class="p">)</span>
+	<span class="k">return</span> <span class="nx">uc</span><span class="p">.</span><span class="nf">Success</span><span class="p">(</span><span class="nx">userModel</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/**
+</span><span class="cm"> * @description: 删除用户
+</span><span class="cm"> * @user: Shershon
+</span><span class="cm"> * @receiver uc UserController
+</span><span class="cm"> * @return error
+</span><span class="cm"> * @date 2021-02-23 15:29:19
+</span><span class="cm"> */</span>
+<span class="kd">func</span> <span class="p">(</span><span class="nx">uc</span> <span class="nx">UserController</span><span class="p">)</span> <span class="nf">Del</span><span class="p">()</span> <span class="kt">error</span>  <span class="p">{</span>
+	<span class="nx">uid</span> <span class="o">:=</span> <span class="nx">uc</span><span class="p">.</span><span class="nf">GetParam</span><span class="p">(</span><span class="s">&#34;uid&#34;</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">uid</span> <span class="o">==</span> <span class="s">&#34;&#34;</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nx">uc</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="s">&#34;缺少参数!&#34;</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="nx">userModel</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">models</span><span class="p">.</span><span class="nx">User</span><span class="p">{}</span>
+	<span class="nx">id</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">strconv</span><span class="p">.</span><span class="nf">Atoi</span><span class="p">(</span><span class="nx">uid</span><span class="p">)</span>
+	<span class="nx">userModel</span><span class="p">.</span><span class="nf">FindById</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">userModel</span><span class="p">.</span><span class="nx">ID</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nx">uc</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="s">&#34;用户不存在!&#34;</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="nx">userModel</span><span class="p">.</span><span class="nf">DelUser</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span>
+	<span class="k">return</span> <span class="nx">uc</span><span class="p">.</span><span class="nf">Success</span><span class="p">(</span><span class="nx">userModel</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="6相关地址">6.相关地址</h3>
+<p><a href="https://gorm.io/zh_CN/docs/index.html">Gorm文档: https://gorm.io/zh_CN/docs/index.html </a></p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Learn Go</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2021-06-02
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91/">框架开发</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91/3-%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91-%E9%9B%86%E6%88%90redis/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">框架开发(三):框架开发-集成Redis</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91/1-%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91-%E7%9B%AE%E5%BD%95%E4%BB%8B%E7%BB%8D%E5%92%8C%E8%B7%AF%E7%94%B1%E8%AE%BE%E8%AE%A1/">
+            <span class="next-text nav-default">框架开发(一):框架开发-目录介绍和路由设计</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/shershon1991" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/shershon520" class="iconfont icon-zhihu" title="zhihu"></a>
+  <a href="https://shershon1991.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2021 - 
+    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span>Learn Go</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.min.js" integrity="sha256-jwCP0NAdCBloaIWTWHmW4i3snUNMHUNO+jr9rYd2iOI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.locales.min.js" integrity="sha256-ZwofwC1Lf/faQCzN7nZtfijVV6hSwxjQMwXL4gn9qU8=" crossorigin="anonymous"></script>
+  <script><!-- NOTE: timeago.js uses the language code format like "zh_CN" (underscore and case sensitive) -->
+    var languageCode = "en".replace(/-/g, '_').replace(/_(.*)/, function ($0, $1) {return $0.replace($1, $1.toUpperCase());});
+    timeago().render(document.querySelectorAll('.timeago'), languageCode);
+    timeago.cancel();  
+  </script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>
