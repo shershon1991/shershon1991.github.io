@@ -95,28 +95,28 @@
 
   <div class="container" id="mobile-panel">
     <header id="header" class="header">
-        <div class="logo-wrapper">
-  <a href="/" class="logo">Learn Go</a>
-</div>
-
-
-
-
-
-<nav class="site-navbar">
-  <ul id="menu" class="menu">
-    <li class="menu-item">
-        <a class="menu-item-link" href="/">首页</a>
-      </li><li class="menu-item">
-        <a class="menu-item-link" href="/post/">归档</a>
-      </li><li class="menu-item">
-        <a class="menu-item-link" href="/tags/">标签</a>
-      </li><li class="menu-item">
-        <a class="menu-item-link" href="/categories/">分类</a>
-      </li>
-  </ul>
-</nav>
-
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"/><header id="header" class="header">
+    <div class="logo-wrapper">
+        <a href="/" class="logo">Learn Go</a>
+    </div>
+    <nav class="site-navbar">
+        <ul id="menu" class="menu"><li style="display:inline-block;margin-right:10px;">
+                <input type="search" class="docsearch-input" placeholder="Search"/>
+            </li><li class="menu-item">
+                <a class="menu-item-link" href="/">首页</a>
+            </li>
+            <li class="menu-item">
+                <a class="menu-item-link" href="/post/">归档</a>
+            </li>
+            <li class="menu-item">
+                <a class="menu-item-link" href="/tags/">标签</a>
+            </li>
+            <li class="menu-item">
+                <a class="menu-item-link" href="/categories/">分类</a>
+            </li>
+        </ul>
+    </nav>
+</header>
     </header>
 
     <main id="main" class="main">
@@ -927,28 +927,15 @@
       <i class="iconfont icon-up"></i>
     </div>
   </div>
-  
-  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.min.js" integrity="sha256-jwCP0NAdCBloaIWTWHmW4i3snUNMHUNO+jr9rYd2iOI=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.locales.min.js" integrity="sha256-ZwofwC1Lf/faQCzN7nZtfijVV6hSwxjQMwXL4gn9qU8=" crossorigin="anonymous"></script>
-  <script><!-- NOTE: timeago.js uses the language code format like "zh_CN" (underscore and case sensitive) -->
-    var languageCode = "en".replace(/-/g, '_').replace(/_(.*)/, function ($0, $1) {return $0.replace($1, $1.toUpperCase());});
-    timeago().render(document.querySelectorAll('.timeago'), languageCode);
-    timeago.cancel();  
-  </script>
-
-
-
-<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
-
-
-
-
-
-
-
-
+  <script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+<script>
+    docsearch({
+        apiKey: "d957f1983d15fa8d90b52b50de53c0ce",
+        indexName: "hexo",
+        appId: "NTG92JK8YM",
+        inputSelector: '.docsearch-input',
+        debug: false,
+    });
+</script>
 </body>
 </html>
