@@ -49,7 +49,7 @@
 <meta itemprop="name" content="RPC编程(二):快速入门使用">
 <meta itemprop="description" content="1. 介绍 Go语言标准包(net/rpc)已经提供了对RPC的支持，而且支持三个级别的RPC：TCP、HTTP和JSONRPC。但Go语言的RP"><meta itemprop="datePublished" content="2021-07-02T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2021-07-02T00:00:00+00:00" />
-<meta itemprop="wordCount" content="1482">
+<meta itemprop="wordCount" content="1480">
 <meta itemprop="keywords" content="Go进阶," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="RPC编程(二):快速入门使用"/>
 <meta name="twitter:description" content="1. 介绍 Go语言标准包(net/rpc)已经提供了对RPC的支持，而且支持三个级别的RPC：TCP、HTTP和JSONRPC。但Go语言的RP"/>
@@ -133,7 +133,7 @@
             <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
             <a href="/categories/go/"> Go </a>
             </div>
-          <span class="more-meta"> 约 1482 字 </span>
+          <span class="more-meta"> 约 1480 字 </span>
           <span class="more-meta"> 预计阅读 3 分钟 </span>
         
       </div>
@@ -548,14 +548,13 @@ i:9 result:81
 </span><span class="lnt">45
 </span><span class="lnt">46
 </span><span class="lnt">47
-</span><span class="lnt">48
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;52lu/go-study-example/rpc/jsonrpc/dto&#34;</span>
 	<span class="s">&#34;fmt&#34;</span>
+	<span class="s">&#34;go-advanced/rpc/jsonrpc/dto&#34;</span>
 	<span class="s">&#34;net&#34;</span>
 	<span class="s">&#34;net/rpc&#34;</span>
 	<span class="s">&#34;net/rpc/jsonrpc&#34;</span>
@@ -565,8 +564,7 @@ i:9 result:81
 <span class="kd">type</span> <span class="nx">MathService</span> <span class="kd">struct</span> <span class="p">{</span>
 <span class="p">}</span>
 
-<span class="c1">// 求和
-</span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">m</span> <span class="nx">MathService</span><span class="p">)</span> <span class="nf">Sum</span><span class="p">(</span><span class="nx">arg</span> <span class="o">*</span><span class="nx">dto</span><span class="p">.</span><span class="nx">SumParam</span><span class="p">,</span> <span class="nx">res</span> <span class="o">*</span><span class="nx">dto</span><span class="p">.</span><span class="nx">SumRes</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
+<span class="kd">func</span> <span class="p">(</span><span class="nx">m</span> <span class="o">*</span><span class="nx">MathService</span><span class="p">)</span> <span class="nf">Sum</span><span class="p">(</span><span class="nx">arg</span> <span class="o">*</span><span class="nx">dto</span><span class="p">.</span><span class="nx">SumParam</span><span class="p">,</span> <span class="nx">res</span> <span class="o">*</span><span class="nx">dto</span><span class="p">.</span><span class="nx">SumRes</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
 	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;arg: %#v\n&#34;</span><span class="p">,</span> <span class="nx">arg</span><span class="p">)</span>
 	<span class="o">*</span><span class="nx">res</span> <span class="p">=</span> <span class="nx">dto</span><span class="p">.</span><span class="nx">SumRes</span><span class="p">{</span>
 		<span class="nx">Sum</span><span class="p">:</span>  <span class="nx">arg</span><span class="p">.</span><span class="nx">A</span> <span class="o">+</span> <span class="nx">arg</span><span class="p">.</span><span class="nx">B</span><span class="p">,</span>
@@ -579,20 +577,20 @@ i:9 result:81
 	<span class="c1">// 注册服务
 </span><span class="c1"></span>	<span class="nx">err</span> <span class="o">:=</span> <span class="nx">rpc</span><span class="p">.</span><span class="nf">RegisterName</span><span class="p">(</span><span class="s">&#34;MathService&#34;</span><span class="p">,</span> <span class="nb">new</span><span class="p">(</span><span class="nx">MathService</span><span class="p">))</span>
 	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;rpc RegisterName err &#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;rpc RegisterName error &#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
 		<span class="k">return</span>
 	<span class="p">}</span>
 	<span class="c1">// 监听端口
 </span><span class="c1"></span>	<span class="nx">listen</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">net</span><span class="p">.</span><span class="nf">Listen</span><span class="p">(</span><span class="s">&#34;tcp&#34;</span><span class="p">,</span> <span class="s">&#34;:9090&#34;</span><span class="p">)</span>
 	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;Listen err &#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;listen error &#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
 		<span class="k">return</span>
 	<span class="p">}</span>
 	<span class="c1">// 监听
 </span><span class="c1"></span>	<span class="k">for</span> <span class="p">{</span>
 		<span class="nx">conn</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">listen</span><span class="p">.</span><span class="nf">Accept</span><span class="p">()</span>
 		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;conn err &#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;conn error &#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
 			<span class="k">return</span>
 		<span class="p">}</span>
 		<span class="c1">// 使用json编码
@@ -639,8 +637,8 @@ i:9 result:81
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;52lu/go-study-example/rpc/jsonrpc/dto&#34;</span>
 	<span class="s">&#34;fmt&#34;</span>
+	<span class="s">&#34;go-advanced/rpc/jsonrpc/dto&#34;</span>
 	<span class="s">&#34;net&#34;</span>
 	<span class="s">&#34;net/rpc&#34;</span>
 	<span class="s">&#34;net/rpc/jsonrpc&#34;</span>
@@ -650,12 +648,12 @@ i:9 result:81
 	<span class="c1">// 建立链接
 </span><span class="c1"></span>	<span class="nx">conn</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">net</span><span class="p">.</span><span class="nf">Dial</span><span class="p">(</span><span class="s">&#34;tcp&#34;</span><span class="p">,</span> <span class="s">&#34;:9090&#34;</span><span class="p">)</span>
 	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34; rpc.Dial err &#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;rpc.Dial error &#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
 		<span class="k">return</span>
 	<span class="p">}</span>
 	<span class="c1">// 使用json编码
 </span><span class="c1"></span>	<span class="nx">client</span> <span class="o">:=</span> <span class="nx">rpc</span><span class="p">.</span><span class="nf">NewClientWithCodec</span><span class="p">(</span><span class="nx">jsonrpc</span><span class="p">.</span><span class="nf">NewClientCodec</span><span class="p">(</span><span class="nx">conn</span><span class="p">))</span>
-	<span class="c1">// 参数
+	<span class="c1">// 参数rpc
 </span><span class="c1"></span>	<span class="nx">arg</span> <span class="o">:=</span> <span class="nx">dto</span><span class="p">.</span><span class="nx">SumParam</span><span class="p">{</span><span class="nx">A</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span> <span class="nx">B</span><span class="p">:</span> <span class="mi">80</span><span class="p">}</span>
 	<span class="c1">// 结果
 </span><span class="c1"></span>	<span class="kd">var</span> <span class="nx">sum</span> <span class="nx">dto</span><span class="p">.</span><span class="nx">SumRes</span>
