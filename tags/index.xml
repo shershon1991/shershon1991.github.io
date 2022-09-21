@@ -6,7 +6,16 @@
     <description>Recent content in Tags on Learn Go</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 28 Aug 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://shershon1991.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 20 Sep 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://shershon1991.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Go进阶</title>
+      <link>https://shershon1991.github.io/tags/go%E8%BF%9B%E9%98%B6/</link>
+      <pubDate>Tue, 20 Sep 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://shershon1991.github.io/tags/go%E8%BF%9B%E9%98%B6/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>Gin集成</title>
       <link>https://shershon1991.github.io/tags/gin%E9%9B%86%E6%88%90/</link>
@@ -31,15 +40,6 @@
       <pubDate>Fri, 06 Aug 2021 00:00:00 +0000</pubDate>
       
       <guid>https://shershon1991.github.io/tags/go%E5%AE%9E%E6%88%98/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Go进阶</title>
-      <link>https://shershon1991.github.io/tags/go%E8%BF%9B%E9%98%B6/</link>
-      <pubDate>Fri, 02 Jul 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://shershon1991.github.io/tags/go%E8%BF%9B%E9%98%B6/</guid>
       <description></description>
     </item>
     
