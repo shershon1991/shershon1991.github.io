@@ -6,7 +6,16 @@
     <description>Recent content in Go on Learn Go</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 23 Sep 2022 18:44:07 +0800</lastBuildDate><atom:link href="https://shershon1991.github.io/categories/go/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 25 Sep 2022 16:03:00 +0800</lastBuildDate><atom:link href="https://shershon1991.github.io/categories/go/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>RPC编程(六):gRPC中的截取器</title>
+      <link>https://shershon1991.github.io/post/%E8%BF%9B%E9%98%B6%E7%AF%87/rpc/06-grpc%E4%B8%AD%E7%9A%84%E6%88%AA%E5%8F%96%E5%99%A8/</link>
+      <pubDate>Sun, 25 Sep 2022 16:03:00 +0800</pubDate>
+      
+      <guid>https://shershon1991.github.io/post/%E8%BF%9B%E9%98%B6%E7%AF%87/rpc/06-grpc%E4%B8%AD%E7%9A%84%E6%88%AA%E5%8F%96%E5%99%A8/</guid>
+      <description>1. 介绍 gRPC 中的截取器，类似中间件( middleware )的功能，可以做一些前置校验的工作，比如登陆验证、日志记录、异常捕获等。 2. 流程梳理 gRPC 中的 grpc.UnaryInterceptor 和 grpc.StreamInterceptor 分别对普通方</description>
+    </item>
+    
     <item>
       <title>RPC编程(五):gRPC中的token认证</title>
       <link>https://shershon1991.github.io/post/%E8%BF%9B%E9%98%B6%E7%AF%87/rpc/05-grpc%E4%B8%AD%E7%9A%84token%E8%AE%A4%E8%AF%81/</link>
