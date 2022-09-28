@@ -37,6 +37,13 @@
   </url>
   
   <url>
+    <loc>https://shershon1991.github.io/tags/rpc/</loc>
+    <lastmod>2022-09-25T16:03:00+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
     <loc>https://shershon1991.github.io/post/%E8%BF%9B%E9%98%B6%E7%AF%87/rpc/06-grpc%E4%B8%AD%E7%9A%84%E6%88%AA%E5%8F%96%E5%99%A8/</loc>
     <lastmod>2022-09-25T16:03:00+08:00</lastmod>
     <changefreq>weekly</changefreq>
