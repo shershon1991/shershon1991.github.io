@@ -13,7 +13,7 @@
       <pubDate>Sun, 25 Sep 2022 16:03:00 +0800</pubDate>
       
       <guid>https://shershon1991.github.io/post/%E8%BF%9B%E9%98%B6%E7%AF%87/rpc/06-grpc%E4%B8%AD%E7%9A%84%E6%88%AA%E5%8F%96%E5%99%A8/</guid>
-      <description>1. 介绍 gRPC 中的截取器，类似中间件( middleware )的功能，可以做一些前置校验的工作，比如登陆验证、日志记录、异常捕获等。 2. 流程梳理 gRPC 中的 grpc.UnaryInterceptor 和 grpc.StreamInterceptor 分别对普通方</description>
+      <description>介绍 gRPC 中的截取器，类似中间件( middleware )的功能，可以做一些前置校验的工作，比如登陆验证、日志记录、异常捕获等。 流程梳理 gRPC 中的 grpc.UnaryInterceptor 和 grpc.StreamInterceptor 分别对普通方法和</description>
     </item>
     
     <item>
@@ -22,7 +22,7 @@
       <pubDate>Fri, 23 Sep 2022 18:44:07 +0800</pubDate>
       
       <guid>https://shershon1991.github.io/post/%E8%BF%9B%E9%98%B6%E7%AF%87/rpc/05-grpc%E4%B8%AD%E7%9A%84token%E8%AE%A4%E8%AF%81/</guid>
-      <description>1.介绍 gRPC 为每个 gRPC 方法调用提供了 token 认证支持，可以基于用户传入的 token 判断用户是否登录、以及权限&amp;hellip;，实现 token 认证的前提是，需要定义一个</description>
+      <description>介绍 gRPC 为每个 gRPC 方法调用提供了 token 认证支持，可以基于用户传入的 token 判断用户是否登录、以及权限&amp;hellip;，实现 token 认证的前提是，需要定义一个结构</description>
     </item>
     
     <item>
@@ -31,7 +31,7 @@
       <pubDate>Tue, 20 Sep 2022 11:44:00 +0000</pubDate>
       
       <guid>https://shershon1991.github.io/post/%E8%BF%9B%E9%98%B6%E7%AF%87/rpc/04-protobuf%E8%AF%AD%E6%B3%95%E5%AD%A6%E4%B9%A0/</guid>
-      <description>1.介绍 ProtoBuf 是 Protocol Buffers 的简称，它是Google开发的一种数据描述语言，于2008年开源。 ProtoBuf 刚开源时的定位类似于 XML、JSON 等数据描述语言，通过</description>
+      <description>介绍 ProtoBuf 是 Protocol Buffers 的简称，它是Google开发的一种数据描述语言，于2008年开源。 ProtoBuf 刚开源时的定位类似于 XML、JSON 等数据描述语言，通过附带</description>
     </item>
     
     <item>
@@ -40,7 +40,7 @@
       <pubDate>Tue, 20 Sep 2022 00:00:00 +0000</pubDate>
       
       <guid>https://shershon1991.github.io/post/%E8%BF%9B%E9%98%B6%E7%AF%87/rpc/03-grpc%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/</guid>
-      <description>1.什么是gRPC gRPC 是一个高性能、开源、通用的 RPC 框架，由 Google 推出，基于 HTTP2 协议标准设计开发，默认采用 Protocol Buffers 数据序列化协议，支持多种开发语言。 gRPC 提供</description>
+      <description>什么是gRPC gRPC 是一个高性能、开源、通用的 RPC 框架，由 Google 推出，基于 HTTP2 协议标准设计开发，默认采用 Protocol Buffers 数据序列化协议，支持多种开发语言。 gRPC 提供了一</description>
     </item>
     
     <item>
@@ -49,7 +49,7 @@
       <pubDate>Fri, 02 Jul 2021 00:00:00 +0000</pubDate>
       
       <guid>https://shershon1991.github.io/post/%E8%BF%9B%E9%98%B6%E7%AF%87/rpc/02-use-rpc/</guid>
-      <description>1. 介绍 Go语言标准包(net/rpc)已经提供了对RPC的支持，而且支持三个级别的RPC：TCP、HTTP和JSONRPC。但Go语言的RP</description>
+      <description>介绍 Go语言标准包(net/rpc)已经提供了对RPC的支持，而且支持三个级别的RPC：TCP、HTTP和JSONRPC。但Go语言的RPC</description>
     </item>
     
     <item>
@@ -58,7 +58,7 @@
       <pubDate>Thu, 01 Jul 2021 00:00:00 +0000</pubDate>
       
       <guid>https://shershon1991.github.io/post/%E8%BF%9B%E9%98%B6%E7%AF%87/rpc/01-understand/</guid>
-      <description>1. 什么是RPC RPC（Remote Procedure Call，远程过程调用）是一种进程间的通信方式，它是一种技术思想(概念),而不是规范，它允许程序调用另一</description>
+      <description>什么是RPC RPC（Remote Procedure Call，远程过程调用）是一种进程间的通信方式，它是一种技术思想(概念),而不是规范，它允许程序调用另一个</description>
     </item>
     
   </channel>

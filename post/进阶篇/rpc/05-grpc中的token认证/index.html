@@ -16,7 +16,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="Learn Go" /><meta name="description" content="1.介绍 gRPC 为每个 gRPC 方法调用提供了 token 认证支持，可以基于用户传入的 token 判断用户是否登录、以及权限&amp;hellip;，实现 token 认证的前提是，需要定义一个" /><meta name="keywords" content="博客, Learn Go, hugo" />
+<meta name="author" content="Learn Go" /><meta name="description" content="介绍 gRPC 为每个 gRPC 方法调用提供了 token 认证支持，可以基于用户传入的 token 判断用户是否登录、以及权限&amp;hellip;，实现 token 认证的前提是，需要定义一个结构" /><meta name="keywords" content="博客, Learn Go, hugo" />
 
 
 
@@ -40,19 +40,19 @@
 
 
 <meta property="og:title" content="RPC编程(五):gRPC中的token认证" />
-<meta property="og:description" content="1.介绍 gRPC 为每个 gRPC 方法调用提供了 token 认证支持，可以基于用户传入的 token 判断用户是否登录、以及权限&hellip;，实现 token 认证的前提是，需要定义一个" />
+<meta property="og:description" content="介绍 gRPC 为每个 gRPC 方法调用提供了 token 认证支持，可以基于用户传入的 token 判断用户是否登录、以及权限&hellip;，实现 token 认证的前提是，需要定义一个结构" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/%E8%BF%9B%E9%98%B6%E7%AF%87/rpc/05-grpc%E4%B8%AD%E7%9A%84token%E8%AE%A4%E8%AF%81/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2022-09-23T18:44:07+08:00" />
 <meta property="article:modified_time" content="2022-09-23T18:44:07+08:00" />
 
 <meta itemprop="name" content="RPC编程(五):gRPC中的token认证">
-<meta itemprop="description" content="1.介绍 gRPC 为每个 gRPC 方法调用提供了 token 认证支持，可以基于用户传入的 token 判断用户是否登录、以及权限&hellip;，实现 token 认证的前提是，需要定义一个"><meta itemprop="datePublished" content="2022-09-23T18:44:07+08:00" />
+<meta itemprop="description" content="介绍 gRPC 为每个 gRPC 方法调用提供了 token 认证支持，可以基于用户传入的 token 判断用户是否登录、以及权限&hellip;，实现 token 认证的前提是，需要定义一个结构"><meta itemprop="datePublished" content="2022-09-23T18:44:07+08:00" />
 <meta itemprop="dateModified" content="2022-09-23T18:44:07+08:00" />
-<meta itemprop="wordCount" content="1478">
+<meta itemprop="wordCount" content="1463">
 <meta itemprop="keywords" content="Go进阶,RPC," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="RPC编程(五):gRPC中的token认证"/>
-<meta name="twitter:description" content="1.介绍 gRPC 为每个 gRPC 方法调用提供了 token 认证支持，可以基于用户传入的 token 判断用户是否登录、以及权限&hellip;，实现 token 认证的前提是，需要定义一个"/>
+<meta name="twitter:description" content="介绍 gRPC 为每个 gRPC 方法调用提供了 token 认证支持，可以基于用户传入的 token 判断用户是否登录、以及权限&hellip;，实现 token 认证的前提是，需要定义一个结构"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -133,7 +133,7 @@
             <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
             <a href="/categories/go/"> Go </a>
             </div>
-          <span class="more-meta"> 约 1478 字 </span>
+          <span class="more-meta"> 约 1463 字 </span>
           <span class="more-meta"> 预计阅读 3 分钟 </span>
         
       </div>
@@ -144,15 +144,22 @@
   <div class="post-toc-content always-active">
     <nav id="TableOfContents">
   <ul>
-    <li>
+    <li><a href="#介绍">介绍</a>
       <ul>
-        <li><a href="#1介绍">1.介绍</a>
-          <ul>
-            <li><a href="#11-grpcperrpccredentials">1.1 grpc.PerRPCCredentials</a></li>
-          </ul>
-        </li>
-        <li><a href="#2步骤梳理">2.步骤梳理</a></li>
-        <li><a href="#3代码实现">3.代码实现</a></li>
+        <li><a href="#grpcperrpccredentials">grpc.PerRPCCredentials</a></li>
+      </ul>
+    </li>
+    <li><a href="#步骤梳理">步骤梳理</a></li>
+    <li><a href="#代码实现">代码实现</a>
+      <ul>
+        <li><a href="#编写-proto-文件">编写 <code>proto</code> 文件</a></li>
+        <li><a href="#生成-go-代码">生成 <code>Go</code> 代码</a></li>
+        <li><a href="#实现-grpcperrpccredentials">实现 <code>grpc.PerRPCCredentials</code></a></li>
+        <li><a href="#编写验证-token-方法">编写验证 <code>token</code> 方法</a></li>
+        <li><a href="#实现被调用的方法-test">实现被调用的方法 <code>Test</code></a></li>
+        <li><a href="#服务端代码">服务端代码</a></li>
+        <li><a href="#实现客户端代码">实现客户端代码</a></li>
+        <li><a href="#启动--请求">启动 &amp; 请求</a></li>
       </ul>
     </li>
   </ul>
@@ -160,9 +167,10 @@
   </div>
 </div>
     <div class="post-content">
-      <h2 id="1介绍">1.介绍</h2>
-<p><code>gRPC</code> 为每个 <code>gRPC</code> 方法调用提供了 <code>token</code> 认证支持，可以基于用户传入的 <code>token</code> 判断用户是否登录、以及权限&hellip;，实现 <code>token</code> 认证的前提是，需要定义一个结构体，并实现 <code>grpc.PerRPCCredentials</code> 接口。</p>
-<h3 id="11-grpcperrpccredentials">1.1 grpc.PerRPCCredentials</h3>
+      <h1 id="介绍">介绍</h1>
+<p><code>gRPC</code> 为每个 <code>gRPC</code> 方法调用提供了 <code>token</code> 认证支持，可以基于用户传入的 <code>token</code> 判断用户是否登录、以及权限&hellip;，实现 <code>token</code>
+认证的前提是，需要定义一个结构体，并实现 <code>grpc.PerRPCCredentials</code> 接口。</p>
+<h2 id="grpcperrpccredentials">grpc.PerRPCCredentials</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -174,14 +182,14 @@
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">PerRPCCredentials</span> <span class="kd">interface</span> <span class="p">{</span>
-	<span class="c1">// 返回需要认证的必要信息
-</span><span class="c1"></span>	<span class="nf">GetRequestMetadata</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="nx">uri</span> <span class="o">...</span><span class="kt">string</span><span class="p">)</span> <span class="p">(</span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span>
-    <span class="c1">// 是否使用安全链接(TLS)
-</span><span class="c1"></span>	<span class="nf">RequireTransportSecurity</span><span class="p">()</span> <span class="kt">bool</span>
+<span class="c1">// 返回需要认证的必要信息
+</span><span class="c1"></span><span class="nf">GetRequestMetadata</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="nx">uri</span> <span class="o">...</span><span class="kt">string</span><span class="p">)</span> <span class="p">(</span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span>
+<span class="c1">// 是否使用安全链接(TLS)
+</span><span class="c1"></span><span class="nf">RequireTransportSecurity</span><span class="p">()</span> <span class="kt">bool</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h2 id="2步骤梳理">2.步骤梳理</h2>
+</div><h1 id="步骤梳理">步骤梳理</h1>
 <ul>
 <li>步骤一: 编写 <code>proto</code> 文件。</li>
 <li>步骤二: 生成 <code>go</code> 代码。</li>
@@ -192,8 +200,8 @@
 <li>步骤七: 编写客户端代码。</li>
 <li>步骤八: 启动服务 &amp; 发起请求。</li>
 </ul>
-<h2 id="3代码实现">3.代码实现</h2>
-<p>3.1 编写 <code>proto</code> 文件</p>
+<h1 id="代码实现">代码实现</h1>
+<h2 id="编写-proto-文件">编写 <code>proto</code> 文件</h2>
 <p>文件: <code>go-advanced/grpc/3/proto/token.proto</code></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -253,7 +261,7 @@
 </span><span class="err"></span><span class="p">}</span><span class="err">
 </span></code></pre></td></tr></table>
 </div>
-</div><p>3.2 生成 <code>Go</code> 代码</p>
+</div><h2 id="生成-go-代码">生成 <code>Go</code> 代码</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -262,7 +270,7 @@
 <pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">➜  <span class="m">3</span> protoc --go_out<span class="o">=</span>. --go-grpc_out<span class="o">=</span>. proto/token.proto
 </code></pre></td></tr></table>
 </div>
-</div><p>3.3 实现 <code>grpc.PerRPCCredentials</code></p>
+</div><h2 id="实现-grpcperrpccredentials">实现 <code>grpc.PerRPCCredentials</code></h2>
 <p>文件：<code>go-advanced/grpc/3/server/tokenservice/token_grpc.pb.go</code></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -312,10 +320,10 @@
 </span><span class="cm"> * @Date 2022-09-23 17:58:55
 </span><span class="cm"> **/</span>
 <span class="kd">func</span> <span class="p">(</span><span class="nx">x</span> <span class="o">*</span><span class="nx">TokenValidateParam</span><span class="p">)</span> <span class="nf">GetRequestMetadata</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="nx">uri</span> <span class="o">...</span><span class="kt">string</span><span class="p">)</span> <span class="p">(</span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
-	<span class="k">return</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">{</span>
-		<span class="s">&#34;uid&#34;</span><span class="p">:</span>   <span class="nx">strconv</span><span class="p">.</span><span class="nf">FormatInt</span><span class="p">(</span><span class="nb">int64</span><span class="p">(</span><span class="nx">x</span><span class="p">.</span><span class="nf">GetUid</span><span class="p">()),</span> <span class="mi">10</span><span class="p">),</span>
-		<span class="s">&#34;token&#34;</span><span class="p">:</span> <span class="nx">x</span><span class="p">.</span><span class="nf">GetToken</span><span class="p">(),</span>
-	<span class="p">},</span> <span class="kc">nil</span>
+<span class="k">return</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">{</span>
+<span class="s">&#34;uid&#34;</span><span class="p">:</span>   <span class="nx">strconv</span><span class="p">.</span><span class="nf">FormatInt</span><span class="p">(</span><span class="nb">int64</span><span class="p">(</span><span class="nx">x</span><span class="p">.</span><span class="nf">GetUid</span><span class="p">()),</span> <span class="mi">10</span><span class="p">),</span>
+<span class="s">&#34;token&#34;</span><span class="p">:</span> <span class="nx">x</span><span class="p">.</span><span class="nf">GetToken</span><span class="p">(),</span>
+<span class="p">},</span> <span class="kc">nil</span>
 <span class="p">}</span>
 
 <span class="cm">/**
@@ -327,12 +335,12 @@
 </span><span class="cm"> * @Date 2022-09-23 18:00:02
 </span><span class="cm"> **/</span>
 <span class="kd">func</span> <span class="p">(</span><span class="nx">x</span> <span class="o">*</span><span class="nx">TokenValidateParam</span><span class="p">)</span> <span class="nf">RequireTransportSecurity</span><span class="p">()</span> <span class="kt">bool</span> <span class="p">{</span>
-	<span class="k">return</span> <span class="kc">false</span>
+<span class="k">return</span> <span class="kc">false</span>
 <span class="p">}</span>
 <span class="o">...</span>
 </code></pre></td></tr></table>
 </div>
-</div><p>3.4 编写验证 <code>token</code> 方法</p>
+</div><h2 id="编写验证-token-方法">编写验证 <code>token</code> 方法</h2>
 <p>文件：<code>go-advanced/grpc/3/server/tokenservice/token.go</code></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -438,7 +446,7 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><p>3.5 实现被调用的方法 <code>Test</code></p>
+</div><h2 id="实现被调用的方法-test">实现被调用的方法 <code>Test</code></h2>
 <p>文件：<code>go-advanced/grpc/3/server/tokenservice/token_grpc.pb.go</code></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -474,7 +482,7 @@
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="o">...</span>
 <span class="c1">// 匿名TokenAuth，可以直接调用验证token方法
 </span><span class="c1"></span><span class="kd">type</span> <span class="nx">UnimplementedTokenServiceServer</span> <span class="kd">struct</span> <span class="p">{</span>
-	<span class="nx">TokenAuth</span>
+<span class="nx">TokenAuth</span>
 <span class="p">}</span>
 
 <span class="cm">/**
@@ -489,18 +497,18 @@
 </span><span class="cm"> * @Date 2022-09-23 18:19:26
 </span><span class="cm"> **/</span>
 <span class="kd">func</span> <span class="p">(</span><span class="nx">u</span> <span class="nx">UnimplementedTokenServiceServer</span><span class="p">)</span> <span class="nf">Test</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="nx">r</span> <span class="o">*</span><span class="nx">Request</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="nx">Response</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
-	<span class="c1">//return nil, status.Errorf(codes.Unimplemented, &#34;method Test not implemented&#34;)
-</span><span class="c1"></span>	<span class="c1">// 验证token
-</span><span class="c1"></span>	<span class="nx">_</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">u</span><span class="p">.</span><span class="nf">CheckToken</span><span class="p">(</span><span class="nx">ctx</span><span class="p">)</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">err</span>
-	<span class="p">}</span>
-	<span class="k">return</span> <span class="o">&amp;</span><span class="nx">Response</span><span class="p">{</span><span class="nx">Name</span><span class="p">:</span> <span class="nx">r</span><span class="p">.</span><span class="nf">GetName</span><span class="p">()},</span> <span class="kc">nil</span>
+<span class="c1">//return nil, status.Errorf(codes.Unimplemented, &#34;method Test not implemented&#34;)
+</span><span class="c1">// 验证token
+</span><span class="c1"></span><span class="nx">_</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">u</span><span class="p">.</span><span class="nf">CheckToken</span><span class="p">(</span><span class="nx">ctx</span><span class="p">)</span>
+<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+<span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">err</span>
+<span class="p">}</span>
+<span class="k">return</span> <span class="o">&amp;</span><span class="nx">Response</span><span class="p">{</span><span class="nx">Name</span><span class="p">:</span> <span class="nx">r</span><span class="p">.</span><span class="nf">GetName</span><span class="p">()},</span> <span class="kc">nil</span>
 <span class="p">}</span>
 <span class="o">...</span>
 </code></pre></td></tr></table>
 </div>
-</div><p>3.6 服务端代码</p>
+</div><h2 id="服务端代码">服务端代码</h2>
 <p>文件：<code>go-advanced/grpc/3/server.go</code></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -566,7 +574,7 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><p>3.7 实现客户端代码</p>
+</div><h2 id="实现客户端代码">实现客户端代码</h2>
 <p>文件：<code>go-advanced/grpc/3/client.go</code></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -642,7 +650,7 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><p>3.8 启动 &amp; 请求</p>
+</div><h2 id="启动--请求">启动 &amp; 请求</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
