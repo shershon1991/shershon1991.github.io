@@ -271,35 +271,35 @@
 <span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;context&#34;</span>
-	<span class="s">&#34;fmt&#34;</span>
-	<span class="s">&#34;go-advanced/grpc/4/server/interceptservice&#34;</span>
-	<span class="s">&#34;google.golang.org/grpc&#34;</span>
-	<span class="s">&#34;net&#34;</span>
-	<span class="s">&#34;time&#34;</span>
+    <span class="s">&#34;context&#34;</span>
+    <span class="s">&#34;fmt&#34;</span>
+    <span class="s">&#34;go-advanced/grpc/4/server/interceptservice&#34;</span>
+    <span class="s">&#34;google.golang.org/grpc&#34;</span>
+    <span class="s">&#34;net&#34;</span>
+    <span class="s">&#34;time&#34;</span>
 <span class="p">)</span>
 
 <span class="c1">// 实现拦截器
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">filter</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="nx">req</span> <span class="kd">interface</span><span class="p">{},</span> <span class="nx">info</span> <span class="o">*</span><span class="nx">grpc</span><span class="p">.</span><span class="nx">UnaryServerInfo</span><span class="p">,</span> <span class="nx">handler</span> <span class="nx">grpc</span><span class="p">.</span><span class="nx">UnaryHandler</span><span class="p">)</span> <span class="p">(</span><span class="kd">interface</span><span class="p">{},</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
-	<span class="c1">// todo
-</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;time:&#34;</span><span class="p">,</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Unix</span><span class="p">())</span>
-	<span class="k">return</span> <span class="nf">handler</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">req</span><span class="p">)</span>
+    <span class="c1">// todo
+</span><span class="c1"></span>    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;time:&#34;</span><span class="p">,</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Unix</span><span class="p">())</span>
+    <span class="k">return</span> <span class="nf">handler</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">req</span><span class="p">)</span>
 <span class="p">}</span>
 
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="c1">// 创建grpc,并实现UnaryServerInterceptor
-</span><span class="c1"></span>	<span class="nx">grpcserver</span> <span class="o">:=</span> <span class="nx">grpc</span><span class="p">.</span><span class="nf">NewServer</span><span class="p">(</span><span class="nx">grpc</span><span class="p">.</span><span class="nf">UnaryInterceptor</span><span class="p">(</span><span class="nx">filter</span><span class="p">))</span>
-	<span class="c1">// 注册服务
-</span><span class="c1"></span>	<span class="nx">interceptservice</span><span class="p">.</span><span class="nf">RegisterInterceptServiceServer</span><span class="p">(</span><span class="nx">grpcserver</span><span class="p">,</span> <span class="nb">new</span><span class="p">(</span><span class="nx">interceptservice</span><span class="p">.</span><span class="nx">UnimplementedInterceptServiceServer</span><span class="p">))</span>
-	<span class="c1">// 监听端口
-</span><span class="c1"></span>	<span class="nx">conn</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">net</span><span class="p">.</span><span class="nf">Listen</span><span class="p">(</span><span class="s">&#34;tcp&#34;</span><span class="p">,</span> <span class="s">&#34;:1234&#34;</span><span class="p">)</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;net.Listen error &#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
-		<span class="k">return</span>
-	<span class="p">}</span>
-	<span class="c1">// 启动服务
-</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;启动服务...&#34;</span><span class="p">)</span>
-	<span class="nx">grpcserver</span><span class="p">.</span><span class="nf">Serve</span><span class="p">(</span><span class="nx">conn</span><span class="p">)</span>
+    <span class="c1">// 创建grpc,并实现UnaryServerInterceptor
+</span><span class="c1"></span>    <span class="nx">grpcserver</span> <span class="o">:=</span> <span class="nx">grpc</span><span class="p">.</span><span class="nf">NewServer</span><span class="p">(</span><span class="nx">grpc</span><span class="p">.</span><span class="nf">UnaryInterceptor</span><span class="p">(</span><span class="nx">filter</span><span class="p">))</span>
+    <span class="c1">// 注册服务
+</span><span class="c1"></span>    <span class="nx">interceptservice</span><span class="p">.</span><span class="nf">RegisterInterceptServiceServer</span><span class="p">(</span><span class="nx">grpcserver</span><span class="p">,</span> <span class="nb">new</span><span class="p">(</span><span class="nx">interceptservice</span><span class="p">.</span><span class="nx">UnimplementedInterceptServiceServer</span><span class="p">))</span>
+    <span class="c1">// 监听端口
+</span><span class="c1"></span>    <span class="nx">conn</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">net</span><span class="p">.</span><span class="nf">Listen</span><span class="p">(</span><span class="s">&#34;tcp&#34;</span><span class="p">,</span> <span class="s">&#34;:1234&#34;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;net.Listen error &#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+        <span class="k">return</span>
+    <span class="p">}</span>
+    <span class="c1">// 启动服务
+</span><span class="c1"></span>    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;启动服务...&#34;</span><span class="p">)</span>
+    <span class="nx">grpcserver</span><span class="p">.</span><span class="nf">Serve</span><span class="p">(</span><span class="nx">conn</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -358,30 +358,30 @@
 <span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;context&#34;</span>
-	<span class="s">&#34;fmt&#34;</span>
-	<span class="s">&#34;go-advanced/grpc/4/server/interceptservice&#34;</span>
-	<span class="s">&#34;google.golang.org/grpc&#34;</span>
+    <span class="s">&#34;context&#34;</span>
+    <span class="s">&#34;fmt&#34;</span>
+    <span class="s">&#34;go-advanced/grpc/4/server/interceptservice&#34;</span>
+    <span class="s">&#34;google.golang.org/grpc&#34;</span>
 <span class="p">)</span>
 
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="nx">conn</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">grpc</span><span class="p">.</span><span class="nf">Dial</span><span class="p">(</span><span class="s">&#34;:1234&#34;</span><span class="p">,</span> <span class="nx">grpc</span><span class="p">.</span><span class="nf">WithInsecure</span><span class="p">())</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;Dial err &#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
-		<span class="k">return</span>
-	<span class="p">}</span>
-	<span class="k">defer</span> <span class="nx">conn</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
-	<span class="c1">// 实例化服务
-</span><span class="c1"></span>	<span class="nx">client</span> <span class="o">:=</span> <span class="nx">interceptservice</span><span class="p">.</span><span class="nf">NewInterceptServiceClient</span><span class="p">(</span><span class="nx">conn</span><span class="p">)</span>
-	<span class="nx">p</span> <span class="o">:=</span> <span class="nx">interceptservice</span><span class="p">.</span><span class="nx">Param</span><span class="p">{</span>
-		<span class="nx">Query</span><span class="p">:</span> <span class="s">&#34;name=xiaoming&#34;</span><span class="p">,</span>
-	<span class="p">}</span>
-	<span class="nx">test</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">Test</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">TODO</span><span class="p">(),</span> <span class="o">&amp;</span><span class="nx">p</span><span class="p">)</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;call test err &#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
-		<span class="k">return</span>
-	<span class="p">}</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">test</span><span class="p">.</span><span class="nf">String</span><span class="p">())</span>
+    <span class="nx">conn</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">grpc</span><span class="p">.</span><span class="nf">Dial</span><span class="p">(</span><span class="s">&#34;:1234&#34;</span><span class="p">,</span> <span class="nx">grpc</span><span class="p">.</span><span class="nf">WithInsecure</span><span class="p">())</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;Dial err &#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+        <span class="k">return</span>
+    <span class="p">}</span>
+    <span class="k">defer</span> <span class="nx">conn</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
+    <span class="c1">// 实例化服务
+</span><span class="c1"></span>    <span class="nx">client</span> <span class="o">:=</span> <span class="nx">interceptservice</span><span class="p">.</span><span class="nf">NewInterceptServiceClient</span><span class="p">(</span><span class="nx">conn</span><span class="p">)</span>
+    <span class="nx">p</span> <span class="o">:=</span> <span class="nx">interceptservice</span><span class="p">.</span><span class="nx">Param</span><span class="p">{</span>
+        <span class="nx">Query</span><span class="p">:</span> <span class="s">&#34;name=xiaoming&#34;</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="nx">test</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">Test</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">TODO</span><span class="p">(),</span> <span class="o">&amp;</span><span class="nx">p</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;call test err &#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+        <span class="k">return</span>
+    <span class="p">}</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">test</span><span class="p">.</span><span class="nf">String</span><span class="p">())</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>

@@ -729,24 +729,24 @@ protoc-gen-go-grpc 1.1.0
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;fmt&#34;</span>
-	<span class="s">&#34;go-advanced/grpc/sever/hello&#34;</span>
-	<span class="s">&#34;google.golang.org/grpc&#34;</span>
-	<span class="s">&#34;net&#34;</span>
+    <span class="s">&#34;fmt&#34;</span>
+    <span class="s">&#34;go-advanced/grpc/sever/hello&#34;</span>
+    <span class="s">&#34;google.golang.org/grpc&#34;</span>
+    <span class="s">&#34;net&#34;</span>
 <span class="p">)</span>
 
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="c1">// 创建grpc服务
-</span><span class="c1"></span>	<span class="nx">grpcServer</span> <span class="o">:=</span> <span class="nx">grpc</span><span class="p">.</span><span class="nf">NewServer</span><span class="p">()</span>
-	<span class="c1">// 注册服务
-</span><span class="c1"></span>	<span class="nx">hello</span><span class="p">.</span><span class="nf">RegisterUserServiceServer</span><span class="p">(</span><span class="nx">grpcServer</span><span class="p">,</span> <span class="nb">new</span><span class="p">(</span><span class="nx">hello</span><span class="p">.</span><span class="nx">UnimplementedUserServiceServer</span><span class="p">))</span>
-	<span class="c1">// 监听端口
-</span><span class="c1"></span>	<span class="nx">listen</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">net</span><span class="p">.</span><span class="nf">Listen</span><span class="p">(</span><span class="s">&#34;tcp&#34;</span><span class="p">,</span> <span class="s">&#34;:1234&#34;</span><span class="p">)</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;服务启动失败&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
-		<span class="k">return</span>
-	<span class="p">}</span>
-	<span class="nx">_</span> <span class="p">=</span> <span class="nx">grpcServer</span><span class="p">.</span><span class="nf">Serve</span><span class="p">(</span><span class="nx">listen</span><span class="p">)</span>
+    <span class="c1">// 创建grpc服务
+</span><span class="c1"></span>    <span class="nx">grpcServer</span> <span class="o">:=</span> <span class="nx">grpc</span><span class="p">.</span><span class="nf">NewServer</span><span class="p">()</span>
+    <span class="c1">// 注册服务
+</span><span class="c1"></span>    <span class="nx">hello</span><span class="p">.</span><span class="nf">RegisterUserServiceServer</span><span class="p">(</span><span class="nx">grpcServer</span><span class="p">,</span> <span class="nb">new</span><span class="p">(</span><span class="nx">hello</span><span class="p">.</span><span class="nx">UnimplementedUserServiceServer</span><span class="p">))</span>
+    <span class="c1">// 监听端口
+</span><span class="c1"></span>    <span class="nx">listen</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">net</span><span class="p">.</span><span class="nf">Listen</span><span class="p">(</span><span class="s">&#34;tcp&#34;</span><span class="p">,</span> <span class="s">&#34;:1234&#34;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;服务启动失败&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+        <span class="k">return</span>
+    <span class="p">}</span>
+    <span class="nx">_</span> <span class="p">=</span> <span class="nx">grpcServer</span><span class="p">.</span><span class="nf">Serve</span><span class="p">(</span><span class="nx">listen</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -786,29 +786,29 @@ protoc-gen-go-grpc 1.1.0
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;context&#34;</span>
-	<span class="s">&#34;fmt&#34;</span>
-	<span class="s">&#34;go-advanced/grpc/sever/hello&#34;</span>
-	<span class="s">&#34;google.golang.org/grpc&#34;</span>
+    <span class="s">&#34;context&#34;</span>
+    <span class="s">&#34;fmt&#34;</span>
+    <span class="s">&#34;go-advanced/grpc/sever/hello&#34;</span>
+    <span class="s">&#34;google.golang.org/grpc&#34;</span>
 <span class="p">)</span>
 
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="c1">// 建立链接
-</span><span class="c1"></span>	<span class="nx">conn</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">grpc</span><span class="p">.</span><span class="nf">Dial</span><span class="p">(</span><span class="s">&#34;127.0.0.1:1234&#34;</span><span class="p">,</span> <span class="nx">grpc</span><span class="p">.</span><span class="nf">WithInsecure</span><span class="p">())</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;Dial err &#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
-		<span class="k">return</span>
-	<span class="p">}</span>
-	<span class="c1">// 延迟关闭链接
-</span><span class="c1"></span>	<span class="k">defer</span> <span class="nx">conn</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
-	<span class="c1">// 实例化客户端
-</span><span class="c1"></span>	<span class="nx">client</span> <span class="o">:=</span> <span class="nx">hello</span><span class="p">.</span><span class="nf">NewUserServiceClient</span><span class="p">(</span><span class="nx">conn</span><span class="p">)</span>
-	<span class="c1">// 发起请求
-</span><span class="c1"></span>	<span class="nx">reply</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">Say</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">TODO</span><span class="p">(),</span> <span class="o">&amp;</span><span class="nx">hello</span><span class="p">.</span><span class="nx">Request</span><span class="p">{</span><span class="nx">Name</span><span class="p">:</span> <span class="s">&#34;张三&#34;</span><span class="p">})</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="k">return</span>
-	<span class="p">}</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;返回：&#34;</span><span class="p">,</span> <span class="nx">reply</span><span class="p">.</span><span class="nx">Result</span><span class="p">)</span>
+    <span class="c1">// 建立链接
+</span><span class="c1"></span>    <span class="nx">conn</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">grpc</span><span class="p">.</span><span class="nf">Dial</span><span class="p">(</span><span class="s">&#34;127.0.0.1:1234&#34;</span><span class="p">,</span> <span class="nx">grpc</span><span class="p">.</span><span class="nf">WithInsecure</span><span class="p">())</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;Dial err &#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+        <span class="k">return</span>
+    <span class="p">}</span>
+    <span class="c1">// 延迟关闭链接
+</span><span class="c1"></span>    <span class="k">defer</span> <span class="nx">conn</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
+    <span class="c1">// 实例化客户端
+</span><span class="c1"></span>    <span class="nx">client</span> <span class="o">:=</span> <span class="nx">hello</span><span class="p">.</span><span class="nf">NewUserServiceClient</span><span class="p">(</span><span class="nx">conn</span><span class="p">)</span>
+    <span class="c1">// 发起请求
+</span><span class="c1"></span>    <span class="nx">reply</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">Say</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">TODO</span><span class="p">(),</span> <span class="o">&amp;</span><span class="nx">hello</span><span class="p">.</span><span class="nx">Request</span><span class="p">{</span><span class="nx">Name</span><span class="p">:</span> <span class="s">&#34;张三&#34;</span><span class="p">})</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="k">return</span>
+    <span class="p">}</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;返回：&#34;</span><span class="p">,</span> <span class="nx">reply</span><span class="p">.</span><span class="nx">Result</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>

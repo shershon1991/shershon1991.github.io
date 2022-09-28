@@ -49,7 +49,7 @@
 <meta itemprop="name" content="RPC编程(四):protobuf语法学习">
 <meta itemprop="description" content="介绍 ProtoBuf 是 Protocol Buffers 的简称，它是Google开发的一种数据描述语言，于2008年开源。 ProtoBuf 刚开源时的定位类似于 XML、JSON 等数据描述语言，通过附带"><meta itemprop="datePublished" content="2022-09-20T11:44:00+00:00" />
 <meta itemprop="dateModified" content="2022-09-20T11:44:00+00:00" />
-<meta itemprop="wordCount" content="3610">
+<meta itemprop="wordCount" content="3611">
 <meta itemprop="keywords" content="Go进阶,RPC," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="RPC编程(四):protobuf语法学习"/>
 <meta name="twitter:description" content="介绍 ProtoBuf 是 Protocol Buffers 的简称，它是Google开发的一种数据描述语言，于2008年开源。 ProtoBuf 刚开源时的定位类似于 XML、JSON 等数据描述语言，通过附带"/>
@@ -133,7 +133,7 @@
             <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
             <a href="/categories/go/"> Go </a>
             </div>
-          <span class="more-meta"> 约 3610 字 </span>
+          <span class="more-meta"> 约 3611 字 </span>
           <span class="more-meta"> 预计阅读 8 分钟 </span>
         
       </div>
@@ -569,15 +569,15 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-protobuf" data-lang="protobuf"><span class="o">...</span><span class="err">
 </span><span class="err"></span><span class="c1">// map消息
-</span><span class="c1"></span>    <span class="n">type</span> <span class="n">DemoMapMsg</span> <span class="n">struct</span> <span class="p">{</span><span class="err">
-</span><span class="err"></span><span class="n">state</span>         <span class="n">protoimpl.MessageState</span><span class="err">
+</span><span class="c1"></span><span class="n">type</span> <span class="n">DemoMapMsg</span> <span class="n">struct</span> <span class="p">{</span><span class="err">
+</span><span class="err"></span>    <span class="n">state</span>         <span class="n">protoimpl.MessageState</span><span class="err">
 </span><span class="err"></span>    <span class="n">sizeCache</span>     <span class="n">protoimpl.SizeCache</span><span class="err">
 </span><span class="err"></span>    <span class="n">unknownFields</span> <span class="n">protoimpl.UnknownFields</span><span class="err">
-</span><span class="err">
+</span><span class="err"></span>    <span class="err">
 </span><span class="err"></span>    <span class="n">UserId</span> <span class="kt">int32</span>             <span class="err">`</span><span class="n">protobuf</span><span class="o">:</span><span class="s">&#34;varint,1,opt,name=userId,proto3&#34;</span> <span class="n">json</span><span class="o">:</span><span class="s">&#34;userId,omitempty&#34;</span><span class="err">`
 </span><span class="err"></span>    <span class="n">Like</span>   <span class="n">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span> <span class="err">`</span><span class="n">protobuf</span><span class="o">:</span><span class="s">&#34;bytes,2,rep,name=like,proto3&#34;</span> <span class="n">json</span><span class="o">:</span><span class="s">&#34;like,omitempty&#34;</span> <span class="n">protobuf_key</span><span class="o">:</span><span class="s">&#34;bytes,1,opt,name=key,proto3&#34;</span> <span class="n">protobuf_val</span><span class="o">:</span><span class="s">&#34;bytes,2,opt,name=value,proto3&#34;</span><span class="err">`
-</span><span class="err"></span>    <span class="p">}</span><span class="err">
-</span><span class="err"></span>    <span class="o">...</span><span class="err">
+</span><span class="err"></span><span class="p">}</span><span class="err">
+</span><span class="err"></span><span class="o">...</span><span class="err">
 </span></code></pre></td></tr></table>
 </div>
 </div><h1 id="切片数组类型消息">切片(数组)类型消息</h1>
@@ -639,20 +639,20 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-protobuf" data-lang="protobuf"><span class="o">...</span><span class="err">
 </span><span class="err"></span><span class="c1">// repeated允许字段重复，对于Go语言来说，它会编译成数组(slice of type)类型的格式
-</span><span class="c1"></span>    <span class="n">type</span> <span class="n">DemoSliceMsg</span> <span class="n">struct</span> <span class="p">{</span><span class="err">
-</span><span class="err"></span><span class="n">state</span>         <span class="n">protoimpl.MessageState</span><span class="err">
+</span><span class="c1"></span><span class="n">type</span> <span class="n">DemoSliceMsg</span> <span class="n">struct</span> <span class="p">{</span><span class="err">
+</span><span class="err"></span>    <span class="n">state</span>         <span class="n">protoimpl.MessageState</span><span class="err">
 </span><span class="err"></span>    <span class="n">sizeCache</span>     <span class="n">protoimpl.SizeCache</span><span class="err">
 </span><span class="err"></span>    <span class="n">unknownFields</span> <span class="n">protoimpl.UnknownFields</span><span class="err">
-</span><span class="err">
-</span><span class="err"></span><span class="c1">// 会生成 []int32
+</span><span class="err"></span>    <span class="err">
+</span><span class="err"></span>    <span class="c1">// 会生成 []int32
 </span><span class="c1"></span>    <span class="n">Id</span> <span class="p">[]</span><span class="kt">int32</span> <span class="err">`</span><span class="n">protobuf</span><span class="o">:</span><span class="s">&#34;varint,1,rep,packed,name=id,proto3&#34;</span> <span class="n">json</span><span class="o">:</span><span class="s">&#34;id,omitempty&#34;</span><span class="err">`
-</span><span class="err"></span><span class="c1">// 会生成 []string
+</span><span class="err"></span>    <span class="c1">// 会生成 []string
 </span><span class="c1"></span>    <span class="n">Name</span> <span class="p">[]</span><span class="kt">string</span> <span class="err">`</span><span class="n">protobuf</span><span class="o">:</span><span class="s">&#34;bytes,2,rep,name=name,proto3&#34;</span> <span class="n">json</span><span class="o">:</span><span class="s">&#34;name,omitempty&#34;</span><span class="err">`
-</span><span class="err"></span><span class="c1">// 会生成 []float32
+</span><span class="err"></span>    <span class="c1">// 会生成 []float32
 </span><span class="c1"></span>    <span class="n">Price</span> <span class="p">[]</span><span class="n">float32</span> <span class="err">`</span><span class="n">protobuf</span><span class="o">:</span><span class="s">&#34;fixed32,3,rep,packed,name=price,proto3&#34;</span> <span class="n">json</span><span class="o">:</span><span class="s">&#34;price,omitempty&#34;</span><span class="err">`
 </span><span class="err"></span>    <span class="n">Money</span> <span class="p">[]</span><span class="n">float64</span> <span class="err">`</span><span class="n">protobuf</span><span class="o">:</span><span class="s">&#34;fixed64,4,rep,packed,name=money,proto3&#34;</span> <span class="n">json</span><span class="o">:</span><span class="s">&#34;money,omitempty&#34;</span><span class="err">`
-</span><span class="err"></span>    <span class="p">}</span><span class="err">
-</span><span class="err"></span>    <span class="o">...</span><span class="err">
+</span><span class="err"></span><span class="p">}</span><span class="err">
+</span><span class="err"></span><span class="o">...</span><span class="err">
 </span></code></pre></td></tr></table>
 </div>
 </div><h1 id="引入其他-proto-文件">引入其他 <code>proto</code> 文件</h1>
@@ -810,16 +810,16 @@
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="o">...</span>
 <span class="c1">// 客户端接口
 </span><span class="c1"></span><span class="kd">type</span> <span class="nx">HelloServiceClient</span> <span class="kd">interface</span> <span class="p">{</span>
-<span class="nf">SayHello</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="nx">in</span> <span class="o">*</span><span class="nx">HelloParam</span><span class="p">,</span> <span class="nx">opts</span> <span class="o">...</span><span class="nx">grpc</span><span class="p">.</span><span class="nx">CallOption</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="nx">HelloResult</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span>
+    <span class="nf">SayHello</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="nx">in</span> <span class="o">*</span><span class="nx">HelloParam</span><span class="p">,</span> <span class="nx">opts</span> <span class="o">...</span><span class="nx">grpc</span><span class="p">.</span><span class="nx">CallOption</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="nx">HelloResult</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span>
 <span class="p">}</span>
 <span class="c1">// 客户端实现调用SayHello方法
 </span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">c</span> <span class="o">*</span><span class="nx">helloServiceClient</span><span class="p">)</span> <span class="nf">SayHello</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="nx">in</span> <span class="o">*</span><span class="nx">HelloParam</span><span class="p">,</span> <span class="nx">opts</span> <span class="o">...</span><span class="nx">grpc</span><span class="p">.</span><span class="nx">CallOption</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="nx">HelloResult</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
-<span class="nx">out</span> <span class="o">:=</span> <span class="nb">new</span><span class="p">(</span><span class="nx">HelloResult</span><span class="p">)</span>
-<span class="nx">err</span> <span class="o">:=</span> <span class="nx">c</span><span class="p">.</span><span class="nx">cc</span><span class="p">.</span><span class="nf">Invoke</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="s">&#34;/HelloService/SayHello&#34;</span><span class="p">,</span> <span class="nx">in</span><span class="p">,</span> <span class="nx">out</span><span class="p">,</span> <span class="nx">opts</span><span class="o">...</span><span class="p">)</span>
-<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-<span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">err</span>
-<span class="p">}</span>
-<span class="k">return</span> <span class="nx">out</span><span class="p">,</span> <span class="kc">nil</span>
+    <span class="nx">out</span> <span class="o">:=</span> <span class="nb">new</span><span class="p">(</span><span class="nx">HelloResult</span><span class="p">)</span>
+    <span class="nx">err</span> <span class="o">:=</span> <span class="nx">c</span><span class="p">.</span><span class="nx">cc</span><span class="p">.</span><span class="nf">Invoke</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="s">&#34;/HelloService/SayHello&#34;</span><span class="p">,</span> <span class="nx">in</span><span class="p">,</span> <span class="nx">out</span><span class="p">,</span> <span class="nx">opts</span><span class="o">...</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">err</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">out</span><span class="p">,</span> <span class="kc">nil</span>
 <span class="p">}</span>
 <span class="o">...</span>
 </code></pre></td></tr></table>
@@ -845,12 +845,12 @@
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="o">...</span>
 <span class="c1">// 生成的接口
 </span><span class="c1"></span><span class="kd">type</span> <span class="nx">HelloServiceServer</span> <span class="kd">interface</span> <span class="p">{</span>
-<span class="nf">SayHello</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="o">*</span><span class="nx">HelloParam</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="nx">HelloResult</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span>
-<span class="nf">mustEmbedUnimplementedHelloServiceServer</span><span class="p">()</span>
+    <span class="nf">SayHello</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="o">*</span><span class="nx">HelloParam</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="nx">HelloResult</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span>
+    <span class="nf">mustEmbedUnimplementedHelloServiceServer</span><span class="p">()</span>
 <span class="p">}</span>
 <span class="c1">// 需要实现SayHello方法
 </span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">UnimplementedHelloServiceServer</span><span class="p">)</span> <span class="nf">SayHello</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="o">*</span><span class="nx">HelloParam</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="nx">HelloResult</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
-<span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">status</span><span class="p">.</span><span class="nf">Errorf</span><span class="p">(</span><span class="nx">codes</span><span class="p">.</span><span class="nx">Unimplemented</span><span class="p">,</span> <span class="s">&#34;method SayHello not implemented&#34;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">status</span><span class="p">.</span><span class="nf">Errorf</span><span class="p">(</span><span class="nx">codes</span><span class="p">.</span><span class="nx">Unimplemented</span><span class="p">,</span> <span class="s">&#34;method SayHello not implemented&#34;</span><span class="p">)</span>
 <span class="p">}</span>
 <span class="o">...</span>
 </code></pre></td></tr></table>
@@ -865,8 +865,8 @@
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="p">(</span><span class="nx">UnimplementedHelloServiceServer</span><span class="p">)</span> <span class="nf">SayHello</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="nx">p</span> <span class="o">*</span><span class="nx">HelloParam</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="nx">HelloResult</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
-<span class="c1">//return nil, status.Errorf(codes.Unimplemented, &#34;method SayHello not implemented&#34;)
-</span><span class="c1"></span><span class="k">return</span> <span class="o">&amp;</span><span class="nx">HelloResult</span><span class="p">{</span><span class="nx">Result</span><span class="p">:</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;%s say %s&#34;</span><span class="p">,</span> <span class="nx">p</span><span class="p">.</span><span class="nf">GetName</span><span class="p">(),</span> <span class="nx">p</span><span class="p">.</span><span class="nf">GetContext</span><span class="p">())},</span> <span class="kc">nil</span>
+    <span class="c1">//return nil, status.Errorf(codes.Unimplemented, &#34;method SayHello not implemented&#34;)
+</span><span class="c1"></span>    <span class="k">return</span> <span class="o">&amp;</span><span class="nx">HelloResult</span><span class="p">{</span><span class="nx">Result</span><span class="p">:</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;%s say %s&#34;</span><span class="p">,</span> <span class="nx">p</span><span class="p">.</span><span class="nf">GetName</span><span class="p">(),</span> <span class="nx">p</span><span class="p">.</span><span class="nf">GetContext</span><span class="p">())},</span> <span class="kc">nil</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -917,26 +917,26 @@
 <span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;fmt&#34;</span>
-	<span class="s">&#34;go-advanced/grpc/2/grpc/server&#34;</span>
-	<span class="s">&#34;google.golang.org/grpc&#34;</span>
-	<span class="s">&#34;net&#34;</span>
+    <span class="s">&#34;fmt&#34;</span>
+    <span class="s">&#34;go-advanced/grpc/2/grpc/server&#34;</span>
+    <span class="s">&#34;google.golang.org/grpc&#34;</span>
+    <span class="s">&#34;net&#34;</span>
 <span class="p">)</span>
 
 <span class="c1">// 服务端代码
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="c1">// 创建grpc服务
-</span><span class="c1"></span>	<span class="nx">rpcServer</span> <span class="o">:=</span> <span class="nx">grpc</span><span class="p">.</span><span class="nf">NewServer</span><span class="p">()</span>
-	<span class="c1">// 注册服务
-</span><span class="c1"></span>	<span class="nx">server</span><span class="p">.</span><span class="nf">RegisterHelloServiceServer</span><span class="p">(</span><span class="nx">rpcServer</span><span class="p">,</span> <span class="nb">new</span><span class="p">(</span><span class="nx">server</span><span class="p">.</span><span class="nx">UnimplementedHelloServiceServer</span><span class="p">))</span>
-	<span class="c1">// 监听端口
-</span><span class="c1"></span>	<span class="nx">listen</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">net</span><span class="p">.</span><span class="nf">Listen</span><span class="p">(</span><span class="s">&#34;tcp&#34;</span><span class="p">,</span> <span class="s">&#34;:1234&#34;</span><span class="p">)</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;服务启动失败&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
-		<span class="k">return</span>
-	<span class="p">}</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;服务启动成功&#34;</span><span class="p">)</span>
-	<span class="nx">_</span> <span class="p">=</span> <span class="nx">rpcServer</span><span class="p">.</span><span class="nf">Serve</span><span class="p">(</span><span class="nx">listen</span><span class="p">)</span>
+    <span class="c1">// 创建grpc服务
+</span><span class="c1"></span>    <span class="nx">rpcServer</span> <span class="o">:=</span> <span class="nx">grpc</span><span class="p">.</span><span class="nf">NewServer</span><span class="p">()</span>
+    <span class="c1">// 注册服务
+</span><span class="c1"></span>    <span class="nx">server</span><span class="p">.</span><span class="nf">RegisterHelloServiceServer</span><span class="p">(</span><span class="nx">rpcServer</span><span class="p">,</span> <span class="nb">new</span><span class="p">(</span><span class="nx">server</span><span class="p">.</span><span class="nx">UnimplementedHelloServiceServer</span><span class="p">))</span>
+    <span class="c1">// 监听端口
+</span><span class="c1"></span>    <span class="nx">listen</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">net</span><span class="p">.</span><span class="nf">Listen</span><span class="p">(</span><span class="s">&#34;tcp&#34;</span><span class="p">,</span> <span class="s">&#34;:1234&#34;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;服务启动失败&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+        <span class="k">return</span>
+    <span class="p">}</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;服务启动成功&#34;</span><span class="p">)</span>
+    <span class="nx">_</span> <span class="p">=</span> <span class="nx">rpcServer</span><span class="p">.</span><span class="nf">Serve</span><span class="p">(</span><span class="nx">listen</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -995,35 +995,35 @@
 <span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;context&#34;</span>
-	<span class="s">&#34;fmt&#34;</span>
-	<span class="s">&#34;go-advanced/grpc/2/grpc/server&#34;</span>
-	<span class="s">&#34;google.golang.org/grpc&#34;</span>
+    <span class="s">&#34;context&#34;</span>
+    <span class="s">&#34;fmt&#34;</span>
+    <span class="s">&#34;go-advanced/grpc/2/grpc/server&#34;</span>
+    <span class="s">&#34;google.golang.org/grpc&#34;</span>
 <span class="p">)</span>
 
 <span class="c1">// 客户端代码
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="c1">// 建立链接
-</span><span class="c1"></span>	<span class="nx">dial</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">grpc</span><span class="p">.</span><span class="nf">Dial</span><span class="p">(</span><span class="s">&#34;127.0.0.1:1234&#34;</span><span class="p">,</span> <span class="nx">grpc</span><span class="p">.</span><span class="nf">WithInsecure</span><span class="p">())</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;Dial Error &#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
-		<span class="k">return</span>
-	<span class="p">}</span>
-	<span class="c1">// 延迟关闭链接
-</span><span class="c1"></span>	<span class="k">defer</span> <span class="nx">dial</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
-	<span class="c1">// 实例化客户端
-</span><span class="c1"></span>	<span class="nx">client</span> <span class="o">:=</span> <span class="nx">server</span><span class="p">.</span><span class="nf">NewHelloServiceClient</span><span class="p">(</span><span class="nx">dial</span><span class="p">)</span>
-	<span class="c1">// 发起请求
-</span><span class="c1"></span>	<span class="nx">result</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">SayHello</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">TODO</span><span class="p">(),</span> <span class="o">&amp;</span><span class="nx">server</span><span class="p">.</span><span class="nx">HelloParam</span><span class="p">{</span>
-		<span class="nx">Name</span><span class="p">:</span>    <span class="s">&#34;张三&#34;</span><span class="p">,</span>
-		<span class="nx">Context</span><span class="p">:</span> <span class="s">&#34;hello world!&#34;</span><span class="p">,</span>
-	<span class="p">})</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;请求失败:&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
-		<span class="k">return</span>
-	<span class="p">}</span>
-	<span class="c1">// 打印返回信息
-</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%+v\n&#34;</span><span class="p">,</span> <span class="nx">result</span><span class="p">)</span>
+    <span class="c1">// 建立链接
+</span><span class="c1"></span>    <span class="nx">dial</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">grpc</span><span class="p">.</span><span class="nf">Dial</span><span class="p">(</span><span class="s">&#34;127.0.0.1:1234&#34;</span><span class="p">,</span> <span class="nx">grpc</span><span class="p">.</span><span class="nf">WithInsecure</span><span class="p">())</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;Dial Error &#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+        <span class="k">return</span>
+    <span class="p">}</span>
+    <span class="c1">// 延迟关闭链接
+</span><span class="c1"></span>    <span class="k">defer</span> <span class="nx">dial</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
+    <span class="c1">// 实例化客户端
+</span><span class="c1"></span>    <span class="nx">client</span> <span class="o">:=</span> <span class="nx">server</span><span class="p">.</span><span class="nf">NewHelloServiceClient</span><span class="p">(</span><span class="nx">dial</span><span class="p">)</span>
+    <span class="c1">// 发起请求
+</span><span class="c1"></span>    <span class="nx">result</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">SayHello</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">TODO</span><span class="p">(),</span> <span class="o">&amp;</span><span class="nx">server</span><span class="p">.</span><span class="nx">HelloParam</span><span class="p">{</span>
+        <span class="nx">Name</span><span class="p">:</span>    <span class="s">&#34;张三&#34;</span><span class="p">,</span>
+        <span class="nx">Context</span><span class="p">:</span> <span class="s">&#34;hello world!&#34;</span><span class="p">,</span>
+    <span class="p">})</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;请求失败:&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+        <span class="k">return</span>
+    <span class="p">}</span>
+    <span class="c1">// 打印返回信息
+</span><span class="c1"></span>    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%+v\n&#34;</span><span class="p">,</span> <span class="nx">result</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -1104,10 +1104,10 @@ result:<span class="s2">&#34;张三 say hello world!&#34;</span>
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="o">...</span>
 <span class="c1">// 实例化客户端
 </span><span class="c1"></span><span class="nx">client</span> <span class="o">:=</span> <span class="nx">server</span><span class="p">.</span><span class="nf">NewHelloServiceClient</span><span class="p">(</span><span class="nx">dial</span><span class="p">)</span>
-<span class="c1">// 定义参数
-</span><span class="c1"></span><span class="nx">reqParam</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">server</span><span class="p">.</span><span class="nx">HelloParam</span><span class="p">{</span>
-<span class="nx">Name</span><span class="p">:</span>    <span class="s">&#34;张三&#34;</span><span class="p">,</span>
-<span class="nx">Context</span><span class="p">:</span> <span class="s">&#34;hello word!&#34;</span><span class="p">,</span>
+    <span class="c1">// 定义参数
+</span><span class="c1"></span>    <span class="nx">reqParam</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">server</span><span class="p">.</span><span class="nx">HelloParam</span><span class="p">{</span>
+    <span class="nx">Name</span><span class="p">:</span>    <span class="s">&#34;张三&#34;</span><span class="p">,</span>
+    <span class="nx">Context</span><span class="p">:</span> <span class="s">&#34;hello word!&#34;</span><span class="p">,</span>
 <span class="p">}</span>
 <span class="c1">// 只能设置其中一个
 </span><span class="c1"></span><span class="nx">reqParam</span><span class="p">.</span><span class="nx">Option</span> <span class="p">=</span> <span class="o">&amp;</span><span class="nx">server</span><span class="p">.</span><span class="nx">HelloParam_Age</span><span class="p">{</span><span class="nx">Age</span><span class="p">:</span> <span class="mi">19</span><span class="p">}</span>
@@ -1131,9 +1131,9 @@ result:<span class="s2">&#34;张三 say hello world!&#34;</span>
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="p">(</span><span class="nx">UnimplementedHelloServiceServer</span><span class="p">)</span> <span class="nf">SayHello</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="nx">p</span> <span class="o">*</span><span class="nx">HelloParam</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="nx">HelloResult</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
-<span class="c1">//return nil, status.Errorf(codes.Unimplemented, &#34;method SayHello not implemented&#34;)
-</span><span class="c1"></span><span class="nx">res</span> <span class="o">:=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;name:%s| gender:%s| age:%s | context:%s&#34;</span><span class="p">,</span> <span class="nx">p</span><span class="p">.</span><span class="nf">GetName</span><span class="p">(),</span> <span class="nx">p</span><span class="p">.</span><span class="nf">GetGender</span><span class="p">(),</span><span class="nx">p</span><span class="p">.</span><span class="nf">GetAge</span><span class="p">(),</span> <span class="nx">p</span><span class="p">.</span><span class="nf">GetContext</span><span class="p">())</span>
-<span class="k">return</span> <span class="o">&amp;</span><span class="nx">HelloResult</span><span class="p">{</span><span class="nx">Result</span><span class="p">:</span><span class="nx">res</span><span class="p">,},</span> <span class="kc">nil</span>
+    <span class="c1">//return nil, status.Errorf(codes.Unimplemented, &#34;method SayHello not implemented&#34;)
+</span><span class="c1"></span>    <span class="nx">res</span> <span class="o">:=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;name:%s| gender:%s| age:%s | context:%s&#34;</span><span class="p">,</span> <span class="nx">p</span><span class="p">.</span><span class="nf">GetName</span><span class="p">(),</span> <span class="nx">p</span><span class="p">.</span><span class="nf">GetGender</span><span class="p">(),</span><span class="nx">p</span><span class="p">.</span><span class="nf">GetAge</span><span class="p">(),</span> <span class="nx">p</span><span class="p">.</span><span class="nf">GetContext</span><span class="p">())</span>
+    <span class="k">return</span> <span class="o">&amp;</span><span class="nx">HelloResult</span><span class="p">{</span><span class="nx">Result</span><span class="p">:</span><span class="nx">res</span><span class="p">,},</span> <span class="kc">nil</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -1222,14 +1222,14 @@ result:<span class="s2">&#34;张三 say hello world!&#34;</span>
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="o">...</span>
 <span class="c1">// 使用Any参数
 </span><span class="c1"></span><span class="nx">content</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">server</span><span class="p">.</span><span class="nx">Context</span><span class="p">{</span>
-<span class="nx">Id</span><span class="p">:</span>    <span class="mi">100</span><span class="p">,</span>
-<span class="nx">Title</span><span class="p">:</span> <span class="s">&#34;Hello Word&#34;</span><span class="p">,</span>
+    <span class="nx">Id</span><span class="p">:</span>    <span class="mi">100</span><span class="p">,</span>
+    <span class="nx">Title</span><span class="p">:</span> <span class="s">&#34;Hello Word&#34;</span><span class="p">,</span>
 <span class="p">}</span>
 <span class="c1">// 序列化Any类型参数
 </span><span class="c1"></span><span class="nx">any</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">anypb</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="nx">content</span><span class="p">)</span>
 <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;any 类型参数序列化失败&#34;</span><span class="p">)</span>
-<span class="k">return</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;any 类型参数序列化失败&#34;</span><span class="p">)</span>
+    <span class="k">return</span>
 <span class="p">}</span>
 <span class="c1">// 注意这里，一开始在proto文件中，没有定义使用消息类型Context，
 </span><span class="c1">// 现在通过any类型，同样可以使用
@@ -1237,8 +1237,8 @@ result:<span class="s2">&#34;张三 say hello world!&#34;</span>
 <span class="c1">// 发起请求
 </span><span class="c1"></span><span class="nx">result</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">SayHello</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">TODO</span><span class="p">(),</span> <span class="nx">reqParam</span><span class="p">)</span>
 <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;请求失败:&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
-<span class="k">return</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;请求失败:&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+    <span class="k">return</span>
 <span class="p">}</span>
 <span class="o">...</span>
 </code></pre></td></tr></table>
@@ -1259,12 +1259,12 @@ result:<span class="s2">&#34;张三 say hello world!&#34;</span>
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="p">(</span><span class="nx">UnimplementedHelloServiceServer</span><span class="p">)</span> <span class="nf">SayHello</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="nx">p</span> <span class="o">*</span><span class="nx">HelloParam</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="nx">HelloResult</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
-<span class="kd">var</span> <span class="nx">context</span> <span class="nx">Context</span>
-<span class="c1">// 反序列化参数
-</span><span class="c1"></span><span class="nx">p</span><span class="p">.</span><span class="nx">Data</span><span class="p">.</span><span class="nf">UnmarshalTo</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">context</span><span class="p">)</span>
-<span class="nx">res</span> <span class="o">:=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;%v|%v&#34;</span><span class="p">,</span> <span class="nx">context</span><span class="p">.</span><span class="nf">GetId</span><span class="p">(),</span> <span class="nx">context</span><span class="p">.</span><span class="nf">GetTitle</span><span class="p">())</span>
-<span class="k">return</span> <span class="o">&amp;</span><span class="nx">HelloResult</span><span class="p">{</span><span class="nx">Result</span><span class="p">:</span> <span class="nx">res</span><span class="p">},</span> <span class="kc">nil</span>
-<span class="c1">//return nil, status.Errorf(codes.Unimplemented, &#34;method SayHello not implemented&#34;)
+    <span class="kd">var</span> <span class="nx">context</span> <span class="nx">Context</span>
+    <span class="c1">// 反序列化参数
+</span><span class="c1"></span>    <span class="nx">p</span><span class="p">.</span><span class="nx">Data</span><span class="p">.</span><span class="nf">UnmarshalTo</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">context</span><span class="p">)</span>
+    <span class="nx">res</span> <span class="o">:=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;%v|%v&#34;</span><span class="p">,</span> <span class="nx">context</span><span class="p">.</span><span class="nf">GetId</span><span class="p">(),</span> <span class="nx">context</span><span class="p">.</span><span class="nf">GetTitle</span><span class="p">())</span>
+    <span class="k">return</span> <span class="o">&amp;</span><span class="nx">HelloResult</span><span class="p">{</span><span class="nx">Result</span><span class="p">:</span> <span class="nx">res</span><span class="p">},</span> <span class="kc">nil</span>
+    <span class="c1">//return nil, status.Errorf(codes.Unimplemented, &#34;method SayHello not implemented&#34;)
 </span><span class="c1"></span><span class="p">}</span>
 </code></pre></td></tr></table>
 </div>

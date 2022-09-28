@@ -182,10 +182,10 @@
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">PerRPCCredentials</span> <span class="kd">interface</span> <span class="p">{</span>
-<span class="c1">// 返回需要认证的必要信息
-</span><span class="c1"></span><span class="nf">GetRequestMetadata</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="nx">uri</span> <span class="o">...</span><span class="kt">string</span><span class="p">)</span> <span class="p">(</span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span>
-<span class="c1">// 是否使用安全链接(TLS)
-</span><span class="c1"></span><span class="nf">RequireTransportSecurity</span><span class="p">()</span> <span class="kt">bool</span>
+    <span class="c1">// 返回需要认证的必要信息
+</span><span class="c1"></span>    <span class="nf">GetRequestMetadata</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="nx">uri</span> <span class="o">...</span><span class="kt">string</span><span class="p">)</span> <span class="p">(</span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span>
+    <span class="c1">// 是否使用安全链接(TLS)
+</span><span class="c1"></span>    <span class="nf">RequireTransportSecurity</span><span class="p">()</span> <span class="kt">bool</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -320,10 +320,10 @@
 </span><span class="cm"> * @Date 2022-09-23 17:58:55
 </span><span class="cm"> **/</span>
 <span class="kd">func</span> <span class="p">(</span><span class="nx">x</span> <span class="o">*</span><span class="nx">TokenValidateParam</span><span class="p">)</span> <span class="nf">GetRequestMetadata</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="nx">uri</span> <span class="o">...</span><span class="kt">string</span><span class="p">)</span> <span class="p">(</span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
-<span class="k">return</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">{</span>
-<span class="s">&#34;uid&#34;</span><span class="p">:</span>   <span class="nx">strconv</span><span class="p">.</span><span class="nf">FormatInt</span><span class="p">(</span><span class="nb">int64</span><span class="p">(</span><span class="nx">x</span><span class="p">.</span><span class="nf">GetUid</span><span class="p">()),</span> <span class="mi">10</span><span class="p">),</span>
-<span class="s">&#34;token&#34;</span><span class="p">:</span> <span class="nx">x</span><span class="p">.</span><span class="nf">GetToken</span><span class="p">(),</span>
-<span class="p">},</span> <span class="kc">nil</span>
+    <span class="k">return</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">{</span>
+    <span class="s">&#34;uid&#34;</span><span class="p">:</span>   <span class="nx">strconv</span><span class="p">.</span><span class="nf">FormatInt</span><span class="p">(</span><span class="nb">int64</span><span class="p">(</span><span class="nx">x</span><span class="p">.</span><span class="nf">GetUid</span><span class="p">()),</span> <span class="mi">10</span><span class="p">),</span>
+    <span class="s">&#34;token&#34;</span><span class="p">:</span> <span class="nx">x</span><span class="p">.</span><span class="nf">GetToken</span><span class="p">(),</span>
+    <span class="p">},</span> <span class="kc">nil</span>
 <span class="p">}</span>
 
 <span class="cm">/**
@@ -335,7 +335,7 @@
 </span><span class="cm"> * @Date 2022-09-23 18:00:02
 </span><span class="cm"> **/</span>
 <span class="kd">func</span> <span class="p">(</span><span class="nx">x</span> <span class="o">*</span><span class="nx">TokenValidateParam</span><span class="p">)</span> <span class="nf">RequireTransportSecurity</span><span class="p">()</span> <span class="kt">bool</span> <span class="p">{</span>
-<span class="k">return</span> <span class="kc">false</span>
+    <span class="k">return</span> <span class="kc">false</span>
 <span class="p">}</span>
 <span class="o">...</span>
 </code></pre></td></tr></table>
@@ -404,45 +404,45 @@
 <span class="kn">package</span> <span class="nx">tokenservice</span>
 
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;context&#34;</span>
-	<span class="s">&#34;crypto/md5&#34;</span>
-	<span class="s">&#34;fmt&#34;</span>
-	<span class="s">&#34;google.golang.org/grpc/codes&#34;</span>
-	<span class="s">&#34;google.golang.org/grpc/metadata&#34;</span>
-	<span class="s">&#34;google.golang.org/grpc/status&#34;</span>
+    <span class="s">&#34;context&#34;</span>
+    <span class="s">&#34;crypto/md5&#34;</span>
+    <span class="s">&#34;fmt&#34;</span>
+    <span class="s">&#34;google.golang.org/grpc/codes&#34;</span>
+    <span class="s">&#34;google.golang.org/grpc/metadata&#34;</span>
+    <span class="s">&#34;google.golang.org/grpc/status&#34;</span>
 <span class="p">)</span>
 
 <span class="c1">// 定义token
 </span><span class="c1"></span><span class="kd">type</span> <span class="nx">TokenAuth</span> <span class="kd">struct</span><span class="p">{}</span>
 
 <span class="kd">func</span> <span class="p">(</span><span class="nx">t</span> <span class="nx">TokenAuth</span><span class="p">)</span> <span class="nf">CheckToken</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="nx">Response</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
-	<span class="c1">// 验证token
-</span><span class="c1"></span>	<span class="nx">md</span><span class="p">,</span> <span class="nx">b</span> <span class="o">:=</span> <span class="nx">metadata</span><span class="p">.</span><span class="nf">FromIncomingContext</span><span class="p">(</span><span class="nx">ctx</span><span class="p">)</span>
-	<span class="k">if</span> <span class="p">!</span><span class="nx">b</span> <span class="p">{</span>
-		<span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">status</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">codes</span><span class="p">.</span><span class="nx">InvalidArgument</span><span class="p">,</span> <span class="s">&#34;token信息不存在&#34;</span><span class="p">)</span>
-	<span class="p">}</span>
-	<span class="kd">var</span> <span class="nx">token</span><span class="p">,</span> <span class="nx">uid</span> <span class="kt">string</span>
-	<span class="c1">// 取出token
-</span><span class="c1"></span>	<span class="nx">tokenInfo</span><span class="p">,</span> <span class="nx">ok</span> <span class="o">:=</span> <span class="nx">md</span><span class="p">[</span><span class="s">&#34;token&#34;</span><span class="p">]</span>
-	<span class="k">if</span> <span class="p">!</span><span class="nx">ok</span> <span class="p">{</span>
-		<span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">status</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">codes</span><span class="p">.</span><span class="nx">InvalidArgument</span><span class="p">,</span> <span class="s">&#34;token不存在&#34;</span><span class="p">)</span>
-	<span class="p">}</span>
-	<span class="nx">token</span> <span class="p">=</span> <span class="nx">tokenInfo</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-	<span class="c1">// 取出uid
-</span><span class="c1"></span>	<span class="nx">uidInfo</span><span class="p">,</span> <span class="nx">ok</span> <span class="o">:=</span> <span class="nx">md</span><span class="p">[</span><span class="s">&#34;uid&#34;</span><span class="p">]</span>
-	<span class="k">if</span> <span class="p">!</span><span class="nx">ok</span> <span class="p">{</span>
-		<span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">status</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">codes</span><span class="p">.</span><span class="nx">InvalidArgument</span><span class="p">,</span> <span class="s">&#34;uid不存在&#34;</span><span class="p">)</span>
-	<span class="p">}</span>
-	<span class="nx">uid</span> <span class="p">=</span> <span class="nx">uidInfo</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-	<span class="c1">// 验证
-</span><span class="c1"></span>	<span class="nx">sum</span> <span class="o">:=</span> <span class="nx">md5</span><span class="p">.</span><span class="nf">Sum</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="nx">uid</span><span class="p">))</span>
-	<span class="nx">md5Str</span> <span class="o">:=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;%x&#34;</span><span class="p">,</span> <span class="nx">sum</span><span class="p">)</span>
-	<span class="k">if</span> <span class="nx">md5Str</span> <span class="o">!=</span> <span class="nx">token</span> <span class="p">{</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;md5Str:&#34;</span><span class="p">,</span> <span class="nx">md5Str</span><span class="p">)</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;password:&#34;</span><span class="p">,</span> <span class="nx">token</span><span class="p">)</span>
-		<span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">status</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">codes</span><span class="p">.</span><span class="nx">InvalidArgument</span><span class="p">,</span> <span class="s">&#34;token验证失败&#34;</span><span class="p">)</span>
-	<span class="p">}</span>
-	<span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="kc">nil</span>
+    <span class="c1">// 验证token
+</span><span class="c1"></span>    <span class="nx">md</span><span class="p">,</span> <span class="nx">b</span> <span class="o">:=</span> <span class="nx">metadata</span><span class="p">.</span><span class="nf">FromIncomingContext</span><span class="p">(</span><span class="nx">ctx</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">!</span><span class="nx">b</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">status</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">codes</span><span class="p">.</span><span class="nx">InvalidArgument</span><span class="p">,</span> <span class="s">&#34;token信息不存在&#34;</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="kd">var</span> <span class="nx">token</span><span class="p">,</span> <span class="nx">uid</span> <span class="kt">string</span>
+    <span class="c1">// 取出token
+</span><span class="c1"></span>    <span class="nx">tokenInfo</span><span class="p">,</span> <span class="nx">ok</span> <span class="o">:=</span> <span class="nx">md</span><span class="p">[</span><span class="s">&#34;token&#34;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="p">!</span><span class="nx">ok</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">status</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">codes</span><span class="p">.</span><span class="nx">InvalidArgument</span><span class="p">,</span> <span class="s">&#34;token不存在&#34;</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="nx">token</span> <span class="p">=</span> <span class="nx">tokenInfo</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="c1">// 取出uid
+</span><span class="c1"></span>    <span class="nx">uidInfo</span><span class="p">,</span> <span class="nx">ok</span> <span class="o">:=</span> <span class="nx">md</span><span class="p">[</span><span class="s">&#34;uid&#34;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="p">!</span><span class="nx">ok</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">status</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">codes</span><span class="p">.</span><span class="nx">InvalidArgument</span><span class="p">,</span> <span class="s">&#34;uid不存在&#34;</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="nx">uid</span> <span class="p">=</span> <span class="nx">uidInfo</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="c1">// 验证
+</span><span class="c1"></span>    <span class="nx">sum</span> <span class="o">:=</span> <span class="nx">md5</span><span class="p">.</span><span class="nf">Sum</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="nx">uid</span><span class="p">))</span>
+    <span class="nx">md5Str</span> <span class="o">:=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;%x&#34;</span><span class="p">,</span> <span class="nx">sum</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nx">md5Str</span> <span class="o">!=</span> <span class="nx">token</span> <span class="p">{</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;md5Str:&#34;</span><span class="p">,</span> <span class="nx">md5Str</span><span class="p">)</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;password:&#34;</span><span class="p">,</span> <span class="nx">token</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">status</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">codes</span><span class="p">.</span><span class="nx">InvalidArgument</span><span class="p">,</span> <span class="s">&#34;token验证失败&#34;</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="kc">nil</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -482,7 +482,7 @@
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="o">...</span>
 <span class="c1">// 匿名TokenAuth，可以直接调用验证token方法
 </span><span class="c1"></span><span class="kd">type</span> <span class="nx">UnimplementedTokenServiceServer</span> <span class="kd">struct</span> <span class="p">{</span>
-<span class="nx">TokenAuth</span>
+    <span class="nx">TokenAuth</span>
 <span class="p">}</span>
 
 <span class="cm">/**
@@ -497,13 +497,13 @@
 </span><span class="cm"> * @Date 2022-09-23 18:19:26
 </span><span class="cm"> **/</span>
 <span class="kd">func</span> <span class="p">(</span><span class="nx">u</span> <span class="nx">UnimplementedTokenServiceServer</span><span class="p">)</span> <span class="nf">Test</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="nx">r</span> <span class="o">*</span><span class="nx">Request</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="nx">Response</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
-<span class="c1">//return nil, status.Errorf(codes.Unimplemented, &#34;method Test not implemented&#34;)
-</span><span class="c1">// 验证token
-</span><span class="c1"></span><span class="nx">_</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">u</span><span class="p">.</span><span class="nf">CheckToken</span><span class="p">(</span><span class="nx">ctx</span><span class="p">)</span>
-<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-<span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">err</span>
-<span class="p">}</span>
-<span class="k">return</span> <span class="o">&amp;</span><span class="nx">Response</span><span class="p">{</span><span class="nx">Name</span><span class="p">:</span> <span class="nx">r</span><span class="p">.</span><span class="nf">GetName</span><span class="p">()},</span> <span class="kc">nil</span>
+    <span class="c1">//return nil, status.Errorf(codes.Unimplemented, &#34;method Test not implemented&#34;)
+</span><span class="c1"></span>    <span class="c1">// 验证token
+</span><span class="c1"></span>    <span class="nx">_</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">u</span><span class="p">.</span><span class="nf">CheckToken</span><span class="p">(</span><span class="nx">ctx</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">err</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="o">&amp;</span><span class="nx">Response</span><span class="p">{</span><span class="nx">Name</span><span class="p">:</span> <span class="nx">r</span><span class="p">.</span><span class="nf">GetName</span><span class="p">()},</span> <span class="kc">nil</span>
 <span class="p">}</span>
 <span class="o">...</span>
 </code></pre></td></tr></table>
@@ -552,25 +552,25 @@
 <span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;fmt&#34;</span>
-	<span class="s">&#34;go-advanced/grpc/3/server/tokenservice&#34;</span>
-	<span class="s">&#34;google.golang.org/grpc&#34;</span>
-	<span class="s">&#34;net&#34;</span>
+    <span class="s">&#34;fmt&#34;</span>
+    <span class="s">&#34;go-advanced/grpc/3/server/tokenservice&#34;</span>
+    <span class="s">&#34;google.golang.org/grpc&#34;</span>
+    <span class="s">&#34;net&#34;</span>
 <span class="p">)</span>
 
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="c1">// 创建grpc服务
-</span><span class="c1"></span>	<span class="nx">grpcServer</span> <span class="o">:=</span> <span class="nx">grpc</span><span class="p">.</span><span class="nf">NewServer</span><span class="p">()</span>
-	<span class="c1">// 注册服务
-</span><span class="c1"></span>	<span class="nx">tokenservice</span><span class="p">.</span><span class="nf">RegisterTokenServiceServer</span><span class="p">(</span><span class="nx">grpcServer</span><span class="p">,</span> <span class="nb">new</span><span class="p">(</span><span class="nx">tokenservice</span><span class="p">.</span><span class="nx">UnimplementedTokenServiceServer</span><span class="p">))</span>
-	<span class="c1">// 监听端口
-</span><span class="c1"></span>	<span class="nx">listen</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">net</span><span class="p">.</span><span class="nf">Listen</span><span class="p">(</span><span class="s">&#34;tcp&#34;</span><span class="p">,</span> <span class="s">&#34;:1234&#34;</span><span class="p">)</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;start error:&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
-		<span class="k">return</span>
-	<span class="p">}</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;服务启动成功....&#34;</span><span class="p">)</span>
-	<span class="nx">grpcServer</span><span class="p">.</span><span class="nf">Serve</span><span class="p">(</span><span class="nx">listen</span><span class="p">)</span>
+    <span class="c1">// 创建grpc服务
+</span><span class="c1"></span>    <span class="nx">grpcServer</span> <span class="o">:=</span> <span class="nx">grpc</span><span class="p">.</span><span class="nf">NewServer</span><span class="p">()</span>
+    <span class="c1">// 注册服务
+</span><span class="c1"></span>    <span class="nx">tokenservice</span><span class="p">.</span><span class="nf">RegisterTokenServiceServer</span><span class="p">(</span><span class="nx">grpcServer</span><span class="p">,</span> <span class="nb">new</span><span class="p">(</span><span class="nx">tokenservice</span><span class="p">.</span><span class="nx">UnimplementedTokenServiceServer</span><span class="p">))</span>
+    <span class="c1">// 监听端口
+</span><span class="c1"></span>    <span class="nx">listen</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">net</span><span class="p">.</span><span class="nf">Listen</span><span class="p">(</span><span class="s">&#34;tcp&#34;</span><span class="p">,</span> <span class="s">&#34;:1234&#34;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;start error:&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+        <span class="k">return</span>
+    <span class="p">}</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;服务启动成功....&#34;</span><span class="p">)</span>
+    <span class="nx">grpcServer</span><span class="p">.</span><span class="nf">Serve</span><span class="p">(</span><span class="nx">listen</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -623,30 +623,30 @@
 <span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;context&#34;</span>
-	<span class="s">&#34;fmt&#34;</span>
-	<span class="s">&#34;go-advanced/grpc/3/server/tokenservice&#34;</span>
-	<span class="s">&#34;google.golang.org/grpc&#34;</span>
+    <span class="s">&#34;context&#34;</span>
+    <span class="s">&#34;fmt&#34;</span>
+    <span class="s">&#34;go-advanced/grpc/3/server/tokenservice&#34;</span>
+    <span class="s">&#34;google.golang.org/grpc&#34;</span>
 <span class="p">)</span>
 
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="c1">// token信息
-</span><span class="c1"></span>	<span class="nx">auth</span> <span class="o">:=</span> <span class="nx">tokenservice</span><span class="p">.</span><span class="nx">TokenValidateParam</span><span class="p">{</span>
-		<span class="nx">Token</span><span class="p">:</span> <span class="s">&#34;11223&#34;</span><span class="p">,</span>
-		<span class="nx">Uid</span><span class="p">:</span>   <span class="mi">10000</span><span class="p">,</span>
-	<span class="p">}</span>
-	<span class="nx">conn</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">grpc</span><span class="p">.</span><span class="nf">Dial</span><span class="p">(</span><span class="s">&#34;127.0.0.1:1234&#34;</span><span class="p">,</span> <span class="nx">grpc</span><span class="p">.</span><span class="nf">WithInsecure</span><span class="p">(),</span> <span class="nx">grpc</span><span class="p">.</span><span class="nf">WithPerRPCCredentials</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">auth</span><span class="p">))</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;grpc.Dial error &#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
-		<span class="k">return</span>
-	<span class="p">}</span>
-	<span class="k">defer</span> <span class="nx">conn</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
-	<span class="c1">// 实例化客户端
-</span><span class="c1"></span>	<span class="nx">client</span> <span class="o">:=</span> <span class="nx">tokenservice</span><span class="p">.</span><span class="nf">NewTokenServiceClient</span><span class="p">(</span><span class="nx">conn</span><span class="p">)</span>
-	<span class="c1">// 调用具体方法
-</span><span class="c1"></span>	<span class="nx">test</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">Test</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">TODO</span><span class="p">(),</span> <span class="o">&amp;</span><span class="nx">tokenservice</span><span class="p">.</span><span class="nx">Request</span><span class="p">{</span><span class="nx">Name</span><span class="p">:</span> <span class="s">&#34;张三&#34;</span><span class="p">})</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;return err:&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;return result:&#34;</span><span class="p">,</span> <span class="nx">test</span><span class="p">)</span>
+    <span class="c1">// token信息
+</span><span class="c1"></span>    <span class="nx">auth</span> <span class="o">:=</span> <span class="nx">tokenservice</span><span class="p">.</span><span class="nx">TokenValidateParam</span><span class="p">{</span>
+        <span class="nx">Token</span><span class="p">:</span> <span class="s">&#34;11223&#34;</span><span class="p">,</span>
+        <span class="nx">Uid</span><span class="p">:</span>   <span class="mi">10000</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="nx">conn</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">grpc</span><span class="p">.</span><span class="nf">Dial</span><span class="p">(</span><span class="s">&#34;127.0.0.1:1234&#34;</span><span class="p">,</span> <span class="nx">grpc</span><span class="p">.</span><span class="nf">WithInsecure</span><span class="p">(),</span> <span class="nx">grpc</span><span class="p">.</span><span class="nf">WithPerRPCCredentials</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">auth</span><span class="p">))</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;grpc.Dial error &#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+        <span class="k">return</span>
+    <span class="p">}</span>
+    <span class="k">defer</span> <span class="nx">conn</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
+    <span class="c1">// 实例化客户端
+</span><span class="c1"></span>    <span class="nx">client</span> <span class="o">:=</span> <span class="nx">tokenservice</span><span class="p">.</span><span class="nf">NewTokenServiceClient</span><span class="p">(</span><span class="nx">conn</span><span class="p">)</span>
+    <span class="c1">// 调用具体方法
+</span><span class="c1"></span>    <span class="nx">test</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">Test</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">TODO</span><span class="p">(),</span> <span class="o">&amp;</span><span class="nx">tokenservice</span><span class="p">.</span><span class="nx">Request</span><span class="p">{</span><span class="nx">Name</span><span class="p">:</span> <span class="s">&#34;张三&#34;</span><span class="p">})</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;return err:&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;return result:&#34;</span><span class="p">,</span> <span class="nx">test</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
