@@ -144,18 +144,44 @@
   <div class="post-toc-content always-active">
     <nav id="TableOfContents">
   <ul>
-    <li>
+    <li><a href="#1介绍">1.介绍</a></li>
+    <li><a href="#2-error接口">2. error接口</a>
       <ul>
-        <li>
+        <li><a href="#21-语法">2.1 语法</a></li>
+        <li><a href="#22-函数返回错误">2.2 函数返回错误</a></li>
+        <li><a href="#23-判断错误">2.3 判断错误</a></li>
+        <li><a href="#24-创建error对象几种方式">2.4 创建error对象几种方式</a></li>
+      </ul>
+    </li>
+    <li><a href="#3自定义错误">3.自定义错误</a>
+      <ul>
+        <li><a href="#31-自定义错误的实现步骤">3.1 自定义错误的实现步骤</a></li>
+        <li><a href="#32-使用示例">3.2 使用示例</a></li>
+      </ul>
+    </li>
+    <li><a href="#4延迟函数defer">4.延迟函数(defer)</a>
+      <ul>
+        <li><a href="#41-概念">4.1 概念</a></li>
+        <li><a href="#42-在函数中使用">4.2 在函数中使用</a></li>
+      </ul>
+    </li>
+    <li><a href="#5panic崩溃">5.panic(崩溃)</a>
+      <ul>
+        <li><a href="#51-造成panic的场景">5.1 造成panic的场景</a>
           <ul>
-            <li><a href="#1介绍">1.介绍</a></li>
-            <li><a href="#2-error接口">2. error接口</a></li>
-            <li><a href="#3自定义错误">3.自定义错误</a></li>
-            <li><a href="#4延迟函数defer">4.延迟函数(defer)</a></li>
-            <li><a href="#5panic崩溃">5.panic(崩溃)</a></li>
-            <li><a href="#6recover恢复">6.recover(恢复)</a></li>
+            <li><a href="#1数组访问越界">1.数组访问越界</a></li>
+            <li><a href="#2访问未初始化的指针或-nil-指针">2.访问未初始化的指针或 nil 指针</a></li>
+            <li><a href="#3向已经-close-的-chan管道-里发送数据">3.向已经 close 的 <code>chan</code>(管道) 里发送数据</a></li>
+            <li><a href="#4类型断言">4.类型断言</a></li>
           </ul>
         </li>
+        <li><a href="#52-使用">5.2 使用</a></li>
+      </ul>
+    </li>
+    <li><a href="#6recover恢复">6.recover(恢复)</a>
+      <ul>
+        <li><a href="#61-介绍">6.1 介绍</a></li>
+        <li><a href="#62-使用">6.2 使用</a></li>
       </ul>
     </li>
   </ul>
@@ -168,10 +194,10 @@
     </div>
   </div>
     <div class="post-content">
-      <h3 id="1介绍">1.介绍</h3>
+      <h1 id="1介绍">1.介绍</h1>
 <p>错误是指程序中出现不正常的情况，从而导致程序无法正常运行。<code>Go</code>语言中没有<code>try...catch</code>来捕获错误，而是通过<code>defer+recover+panic</code>模式来实现捕捉错误信息。</p>
-<h3 id="2-error接口">2. error接口</h3>
-<h4 id="21-语法">2.1 语法</h4>
+<h1 id="2-error接口">2. error接口</h1>
+<h2 id="21-语法">2.1 语法</h2>
 <p>Go语言通过内置的错误类型提供了非常简单的错误处理机制，即<code>error</code>接口。该接口的定义如下:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -185,7 +211,7 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="22-函数返回错误">2.2 函数返回错误</h4>
+</div><h2 id="22-函数返回错误">2.2 函数返回错误</h2>
 <p>对于大多数函数，如果要返回错误，大致上都可以定义为如下模式，<font color=red>必须将<code>error</code>作为多种返回值中的最后一个。</font></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -201,7 +227,7 @@
 </span><span class="c1"></span><span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="23-判断错误">2.3 判断错误</h4>
+</div><h2 id="23-判断错误">2.3 判断错误</h2>
 <p>在Go语言中处理错误的方式通常是将返回的错误与<code>nil</code>进行比较。<code>nil</code>值表示没有发生错误，而<code>非nil</code>值表示出现错误。如果不是<code>nil</code>，需打印输出错误。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -217,7 +243,7 @@
 </span><span class="c1"></span><span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="24-创建error对象几种方式">2.4 创建error对象几种方式</h4>
+</div><h2 id="24-创建error对象几种方式">2.4 创建error对象几种方式</h2>
 <p><strong>常见的创建error对象的几种方式：</strong></p>
 <ul>
 <li>Go语言<code>errors</code>包下的<code>New()</code>函数可以返回<code>error</code>对象。</li>
@@ -297,14 +323,14 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="3自定义错误">3.自定义错误</h3>
-<h4 id="31-自定义错误的实现步骤">3.1 自定义错误的实现步骤</h4>
+</div><h1 id="3自定义错误">3.自定义错误</h1>
+<h2 id="31-自定义错误的实现步骤">3.1 自定义错误的实现步骤</h2>
 <ul>
 <li>定义一个结构体，表示自定义错误的类型。</li>
 <li>让自定义错误类型实现<code>error接口：Error() string</code>。</li>
 <li>定义一个返回<code>error</code>的函数。根据程序实际功能而定。</li>
 </ul>
-<h4 id="32-使用示例">3.2 使用示例</h4>
+<h2 id="32-使用示例">3.2 使用示例</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -393,10 +419,10 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="4延迟函数defer">4.延迟函数(defer)</h3>
-<h4 id="41-概念">4.1 概念</h4>
+</div><h1 id="4延迟函数defer">4.延迟函数(defer)</h1>
+<h2 id="41-概念">4.1 概念</h2>
 <p>关键字<code>defer</code>用于延迟一个函数或者方法（或者当前所创建的匿名函数）的执行。<font color=red>defer语句只能出现在函数或方法的内部。</font></p>
-<h4 id="42-在函数中使用">4.2 在函数中使用</h4>
+<h2 id="42-在函数中使用">4.2 在函数中使用</h2>
 <p>在函数中可以添加多个<code>defer</code>语句。如果有很多调用<code>defer</code>，当函数执行到最后时，这些<code>defer</code>语句会按照逆序执行（报错的时候也会执行），最后该函数返回。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -473,10 +499,10 @@
 </div><blockquote>
 <p>defer语句经常被用于处理成对的操作，如打开-关闭、连接-断开连接、加锁-释放锁。特别是在执行打开资源的操作时，遇到错误需要提前返回，在返回前需要关闭相应的资源，不然很容易造成资源泄露等问题。</p>
 </blockquote>
-<h3 id="5panic崩溃">5.panic(崩溃)</h3>
+<h1 id="5panic崩溃">5.panic(崩溃)</h1>
 <p><code>panic</code>让当前的程序进入恐慌，中断程序的执行。<code>panic()</code>是一个内建函数，可以中断原有的控制流程。其功能类似于<code>PHP</code>中的<code>throw</code>。</p>
-<h4 id="51-造成panic的场景">5.1 造成panic的场景</h4>
-<h5 id="1数组访问越界">1.数组访问越界</h5>
+<h2 id="51-造成panic的场景">5.1 造成panic的场景</h2>
+<h3 id="1数组访问越界">1.数组访问越界</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -505,7 +531,7 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h5 id="2访问未初始化的指针或-nil-指针">2.访问未初始化的指针或 nil 指针</h5>
+</div><h3 id="2访问未初始化的指针或-nil-指针">2.访问未初始化的指针或 nil 指针</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -542,7 +568,7 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h5 id="3向已经-close-的-chan管道-里发送数据">3.向已经 close 的 <code>chan</code>(管道) 里发送数据</h5>
+</div><h3 id="3向已经-close-的-chan管道-里发送数据">3.向已经 close 的 <code>chan</code>(管道) 里发送数据</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -575,7 +601,7 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h5 id="4类型断言">4.类型断言</h5>
+</div><h3 id="4类型断言">4.类型断言</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -604,7 +630,7 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="52-使用">5.2 使用</h4>
+</div><h2 id="52-使用">5.2 使用</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -659,13 +685,13 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="6recover恢复">6.recover(恢复)</h3>
-<h4 id="61-介绍">6.1 介绍</h4>
+</div><h1 id="6recover恢复">6.recover(恢复)</h1>
+<h2 id="61-介绍">6.1 介绍</h2>
 <p><code>Go</code>语言中没有<code>try...catch</code>来捕获错误，一旦触发<code>panic</code>就会导致程序崩溃。在<code>Go</code>中是通过<code>recover</code>让程序恢复。<font color=red>值的注意的是recover()必须在延迟函数(defer)中有效。</font></p>
 <blockquote>
 <p>在正常的程序运行过程中，调用 <code>recover()会返回 nil</code>，并且没有其他任何效果。如果当前的<code>Goroutine</code>陷入恐慌，调用<code>recover()</code>可以捕获<code>panic()</code>的输入值，使程序恢复正常运行。</p>
 </blockquote>
-<h4 id="62-使用">6.2 使用</h4>
+<h2 id="62-使用">6.2 使用</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
