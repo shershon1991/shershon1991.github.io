@@ -49,7 +49,7 @@
 <meta itemprop="name" content="Go学习(二十三):JSON使用">
 <meta itemprop="description" content="1.Map转JSON 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 package main import ( &#34;encoding/json&#34; &#34;fmt&#34; ) func main() { // map里面 map1 := map[string]string { &#34;n"><meta itemprop="datePublished" content="2021-01-23T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2021-01-23T00:00:00+00:00" />
-<meta itemprop="wordCount" content="2426">
+<meta itemprop="wordCount" content="2425">
 <meta itemprop="keywords" content="Go基础," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go学习(二十三):JSON使用"/>
 <meta name="twitter:description" content="1.Map转JSON 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 package main import ( &#34;encoding/json&#34; &#34;fmt&#34; ) func main() { // map里面 map1 := map[string]string { &#34;n"/>
@@ -133,7 +133,7 @@
             <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
             <a href="/categories/go/"> Go </a>
             </div>
-          <span class="more-meta"> 约 2426 字 </span>
+          <span class="more-meta"> 约 2425 字 </span>
           <span class="more-meta"> 预计阅读 5 分钟 </span>
         
       </div>
@@ -343,7 +343,7 @@
 	<span class="nx">Name</span> <span class="kt">string</span>
 	<span class="nx">Age</span> <span class="kt">int</span>
 	<span class="nx">Class</span> <span class="kt">string</span>
-	<span class="nx">phone</span> <span class="kt">string</span> <span class="c1">//小写字段，则不是会导出
+	<span class="nx">phone</span> <span class="kt">string</span> <span class="c1">//小写字段，则不会导出
 </span><span class="c1"></span><span class="p">}</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span>  <span class="p">{</span>
 	<span class="nx">s</span> <span class="o">:=</span> <span class="nx">Student</span><span class="p">{</span>
@@ -362,7 +362,7 @@
 </span></code></pre></td></tr></table>
 </div>
 </div><h4 id="32-有字段标签">3.2 有字段标签</h4>
-<p><code>json</code>包在解析结构体时，如果遇到<code>key</code>为<code>JSON</code>的字段标签，则会按照一定规则解析该标签。</p>
+<p><code>json</code>包在解析结构体时，如果遇到<code>key</code>为<code>json</code>的字段标签，则会按照一定规则解析该标签。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1

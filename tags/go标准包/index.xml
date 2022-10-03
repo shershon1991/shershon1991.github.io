@@ -58,7 +58,7 @@
       <pubDate>Wed, 28 Apr 2021 00:00:00 +0000</pubDate>
       
       <guid>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/28-cobra/</guid>
-      <description>1. 介绍 cobra是一个用来构建现代CLI工具的库。相比flag标准库，它提供更多方便的特性和功能。Cobra 由 Go 项目成员和 hugo 作者 spf13 创建，已经</description>
+      <description>介绍 cobra是一个用来构建现代CLI工具的库。相比flag标准库，它提供更多方便的特性和功能。Cobra 由 Go 项目成员和 hugo 作者 spf13 创建，已经被</description>
     </item>
     
     <item>
