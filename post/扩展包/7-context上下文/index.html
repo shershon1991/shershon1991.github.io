@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Go扩展包(七):context(上下文) - Learn Go</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Learn Go" /><meta name="description" content="1.什么是上下文? 从Go 1.7开始,标准库引入context(上下文)，他主要用来在goroutine之间传递上下文信息(同步信号、超时时间" /><meta name="keywords" content="博客, Learn Go, hugo" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.90.1 with theme even" />
+
+
+<link rel="canonical" href="https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/7-context%E4%B8%8A%E4%B8%8B%E6%96%87/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Go扩展包(七):context(上下文)" />
+<meta property="og:description" content="1.什么是上下文? 从Go 1.7开始,标准库引入context(上下文)，他主要用来在goroutine之间传递上下文信息(同步信号、超时时间" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/7-context%E4%B8%8A%E4%B8%8B%E6%96%87/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2021-04-07T00:00:00+00:00" />
+<meta property="article:modified_time" content="2022-10-04T07:42:32+08:00" />
+
+<meta itemprop="name" content="Go扩展包(七):context(上下文)">
+<meta itemprop="description" content="1.什么是上下文? 从Go 1.7开始,标准库引入context(上下文)，他主要用来在goroutine之间传递上下文信息(同步信号、超时时间"><meta itemprop="datePublished" content="2021-04-07T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2022-10-04T07:42:32+08:00" />
+<meta itemprop="wordCount" content="3027">
+<meta itemprop="keywords" content="Go扩展包," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Go扩展包(七):context(上下文)"/>
+<meta name="twitter:description" content="1.什么是上下文? 从Go 1.7开始,标准库引入context(上下文)，他主要用来在goroutine之间传递上下文信息(同步信号、超时时间"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Learn Go</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">首页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"/><header id="header" class="header">
+    <div class="logo-wrapper">
+        <a href="/" class="logo">Learn Go</a>
+    </div>
+    <nav class="site-navbar">
+        <ul id="menu" class="menu"><li style="display:inline-block;margin-right:10px;">
+                <input type="search" class="docsearch-input" placeholder="Search"/>
+            </li><li class="menu-item">
+                <a class="menu-item-link" href="/">首页</a>
+            </li>
+            <li class="menu-item">
+                <a class="menu-item-link" href="/post/">归档</a>
+            </li>
+            <li class="menu-item">
+                <a class="menu-item-link" href="/tags/">标签</a>
+            </li>
+            <li class="menu-item">
+                <a class="menu-item-link" href="/categories/">分类</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Go扩展包(七):context(上下文)</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-04-07 </span>
+        <div class="post-category">
+            <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+            <a href="/categories/go/"> Go </a>
+            </div>
+          <span class="more-meta"> 约 3027 字 </span>
+          <span class="more-meta"> 预计阅读 7 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#1什么是上下文">1.什么是上下文?</a></li>
+            <li><a href="#2-为什么要用上下文">2. 为什么要用上下文?</a></li>
+            <li><a href="#3-上下文接口">3. 上下文接口</a></li>
+            <li><a href="#4-创建父上下文">4. 创建父上下文</a></li>
+            <li><a href="#5-创建子上下文">5. 创建子上下文</a></li>
+            <li><a href="#6上下文中传值">6.上下文中传值</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h3 id="1什么是上下文">1.什么是上下文?</h3>
+<p>从<code>Go 1.7</code>开始,标准库引入<code>context</code>(上下文)，他主要用来在<code>goroutine</code>之间传递上下文信息(同步信号、超时时间、截止时间、<code>Key-Val</code>值对)。</p>
+<h3 id="2-为什么要用上下文">2. 为什么要用上下文?</h3>
+<h4 id="21-场景说明">2.1 场景说明</h4>
+<p>在实际开发过程中，我们往往会在<code>main.goroutine(主协程)</code>中开启<code>N 个goroutine(子协程)</code>来处理其他逻辑，那么<code>主协程</code>和 <code>子协程</code>之间信号怎么同步呢？列举以下几个需要信号同步的场景。</p>
+<ul>
+<li>当<code>主协程</code>报错或者因为其他原因需要取消时，需要通知<code>子协程</code>取消任务。</li>
+<li>创建<code>子协程</code>时,希望指定超时时间或截止时间后，自动取消任务。</li>
+</ul>
+<h4 id="22-怎么解决">2.2 怎么解决？</h4>
+<p><code>context</code> 包提供了一些函数，协助用户从现有的 <code>Context</code> 对象创建新的 <code>Context</code> 对象。
+这些 <code>Context</code> 对象形成一棵树：当一个 <code>Context</code> 对象被取消时，继承自它的所有 <code>Context</code> 都会被取消。</p>
+<blockquote>
+<p><code>Background</code> 是所有 <code>Context</code> 对象树的根，它不能被取消。</p>
+</blockquote>
+<h3 id="3-上下文接口">3. 上下文接口</h3>
+<p><code>context</code>包中定义了一个接口<code>context.Context</code>,具体定义代码如下:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">Context</span> <span class="kd">interface</span> <span class="p">{</span>
+  <span class="c1">// deadline: 返回取消的时间点(到点Context会自动取消请求)
+</span><span class="c1"></span>  <span class="c1">// ok：false代表没有设置截止时间
+</span><span class="c1"></span>	<span class="nf">Deadline</span><span class="p">()</span> <span class="p">(</span><span class="nx">deadline</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Time</span><span class="p">,</span> <span class="nx">ok</span> <span class="kt">bool</span><span class="p">)</span>
+  
+  <span class="c1">// 返回一个只读的Chan
+</span><span class="c1"></span>  <span class="c1">// 这个Channel 会在当前工作完成或者上下文被取消后关闭,
+</span><span class="c1"></span>  <span class="c1">// 多次调用 Done 方法会返回同一个 Channel；
+</span><span class="c1"></span>	<span class="nf">Done</span><span class="p">()</span> <span class="o">&lt;-</span><span class="kd">chan</span> <span class="kd">struct</span><span class="p">{}</span>
+  
+  <span class="c1">//返回 context.Context 结束的原因，
+</span><span class="c1"></span>  <span class="c1">// 它只会在 Done 方法对应的 Channel 关闭时返回非空的值；
+</span><span class="c1"></span>	<span class="nf">Err</span><span class="p">()</span> <span class="kt">error</span>
+	<span class="c1">// 从 context.Context 中获取键对应的值
+</span><span class="c1"></span>  <span class="c1">// 对于同一个上下文来说，多次调用 Value 并传入相同的 Key 会返回相同的结果
+</span><span class="c1"></span>	<span class="nf">Value</span><span class="p">(</span><span class="nx">key</span> <span class="kd">interface</span><span class="p">{})</span> <span class="kd">interface</span><span class="p">{}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="4-创建父上下文">4. 创建父上下文</h3>
+<h4 id="41-签名及说明">4.1 签名及说明</h4>
+<p><strong>源码</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">Background</span><span class="p">()</span> <span class="nx">Context</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="nx">background</span>
+<span class="p">}</span>
+<span class="kd">func</span> <span class="nf">TODO</span><span class="p">()</span> <span class="nx">Context</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="nx">todo</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>context</code> 包中最常用的方法是<code> context.Background、context.TODO</code>，这两个方法都会返回预先初始化好的私有变量<code> background 和 todo</code>,使用区别如下:</p>
+<ul>
+<li><code>Background</code>: 主要用于<code>main</code>函数、初始化以及测试代码中，作为最顶层的<code>Context</code>，也就是根<code>Context</code>。</li>
+<li><code>TODO</code>:  当我们不知道该使用什么类型的<code>Context</code>的时候，可以使用这个。</li>
+</ul>
+<h4 id="42-使用">4.2 使用</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 基于context.Background()为根，创建新的超时上下文
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;Begin:%s\n&#34;</span><span class="p">,</span><span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">())</span>
+	<span class="nx">timeoutCtx</span><span class="p">,</span> <span class="nx">cancelFunc</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">WithTimeout</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">Background</span><span class="p">(),</span> <span class="mi">3</span><span class="o">*</span><span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">)</span>
+	<span class="c1">// 3秒后自动取消
+</span><span class="c1"></span>	<span class="k">defer</span> <span class="nf">cancelFunc</span><span class="p">()</span>
+	<span class="c1">// 子协程执行取消
+</span><span class="c1"></span>	<span class="k">go</span> <span class="kd">func</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;子协程输出...&#34;</span><span class="p">)</span>
+	<span class="p">}(</span><span class="nx">timeoutCtx</span><span class="p">)</span>
+	<span class="c1">// 等待上下文处于完成状态
+</span><span class="c1"></span>	<span class="o">&lt;-</span><span class="nx">timeoutCtx</span><span class="p">.</span><span class="nf">Done</span><span class="p">()</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;等待超时结束：%s \n&#34;</span><span class="p">,</span><span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">())</span>
+<span class="p">}</span>
+<span class="cm">/**输出()
+</span><span class="cm">Begin:2021-04-19 17:10:26.625493 +0800 CST m=+0.000780950
+</span><span class="cm">子协程输出...
+</span><span class="cm">等待超时结束：2021-04-19 17:10:29.627471 +0800 CST m=+3.002727432 
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="5-创建子上下文">5. 创建子上下文</h3>
+<h4 id="51-可取消的withcancel">5.1 可取消的(<code>WithCancel</code>)</h4>
+<h5 id="1签名">1.签名</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// parent 父上下文
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">WithCancel</span><span class="p">(</span><span class="nx">parent</span> <span class="nx">Context</span><span class="p">)</span> <span class="p">(</span><span class="nx">ctx</span> <span class="nx">Context</span><span class="p">,</span> <span class="nx">cancel</span> <span class="nx">CancelFunc</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>context.WithCancel</code> 函数能够从 <code>context.Context</code> 中衍生出一个新的子上下文并返回用于取消该上下文的函数。<font color=red>一旦我们执行返回的取消函数，当前上下文以及它的子上下文都会被取消，所有的 Goroutine 都会同步收到这一取消信号。</font></p>
+<h5 id="2使用">2.使用</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;Begin:%s\n&#34;</span><span class="p">,</span><span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">())</span>
+	<span class="c1">// 基于context.Background()为根，创建一个可取消的子Context
+</span><span class="c1"></span>	<span class="nx">cancelCtx</span><span class="p">,</span> <span class="nx">cancelFunc</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">WithCancel</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">Background</span><span class="p">())</span>
+	<span class="c1">// 子协程执行取消
+</span><span class="c1"></span>	<span class="k">go</span> <span class="kd">func</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">for</span>  <span class="p">{</span>
+			<span class="k">select</span> <span class="p">{</span>
+			<span class="k">case</span> <span class="o">&lt;-</span><span class="nx">ctx</span><span class="p">.</span><span class="nf">Done</span><span class="p">():</span>
+				<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;子协程终止,上下文已被取消&#34;</span><span class="p">)</span>
+				<span class="k">return</span>
+			<span class="k">default</span><span class="p">:</span>
+				<span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="mi">1</span> <span class="o">*</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">)</span>
+				<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%s: 子协程输出\n&#34;</span><span class="p">,</span><span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">())</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}(</span><span class="nx">cancelCtx</span><span class="p">)</span>
+	<span class="c1">// 5秒后执行取消操作
+</span><span class="c1"></span>	<span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">)</span>
+	<span class="c1">// 取消上下文，子协程也会停止输出
+</span><span class="c1"></span>	<span class="nf">cancelFunc</span><span class="p">()</span>
+	<span class="c1">// 看看子协程是否停止
+</span><span class="c1"></span>	<span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="mi">1</span> <span class="o">*</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;End：%s \n&#34;</span><span class="p">,</span><span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">())</span>
+<span class="p">}</span>
+<span class="cm">/*输出
+</span><span class="cm">Begin:2021-04-20 11:08:29.77314 +0800 CST m=+0.000635148
+</span><span class="cm">2021-04-20 11:08:30.776474 +0800 CST m=+1.003963915: 子协程输出
+</span><span class="cm">2021-04-20 11:08:31.780469 +0800 CST m=+2.007953399: 子协程输出
+</span><span class="cm">2021-04-20 11:08:32.781569 +0800 CST m=+3.009048079: 子协程输出
+</span><span class="cm">子协程终止,上下文已被取消
+</span><span class="cm">End：2021-04-20 11:08:33.778543 +0800 CST m=+4.006016052 
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="52-指定超时时间withtimeout">5.2 指定超时时间(<code>WithTimeout</code>)</h4>
+<h5 id="1签名-1">1.签名</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">WithTimeout</span><span class="p">(</span><span class="nx">parent</span> <span class="nx">Context</span><span class="p">,</span> <span class="nx">timeout</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Duration</span><span class="p">)</span> <span class="p">(</span><span class="nx">Context</span><span class="p">,</span> <span class="nx">CancelFunc</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>context.WithTimeout</code> 函数接收父上下文(<code>parent</code>)和一个超时时间，能够从 <code>context.Context</code> 中衍生出一个新的子上下文并返回用于取消该上下文的函数。执行取消函数时功能和<code>WithCancel</code>一样。</p>
+<h5 id="2使用-1">2.使用</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 等待超时，自动取消
+</span><span class="c1"></span>	<span class="nf">waitTimeOut</span><span class="p">()</span>
+	<span class="c1">// 子协程主动发送取消信号
+</span><span class="c1"></span>	<span class="nf">subSendCancel</span><span class="p">()</span>
+<span class="p">}</span>
+<span class="c1">// 等待超时，自动取消
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">waitTimeOut</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;等待超时——&gt; Begin:%s\n&#34;</span><span class="p">,</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">())</span>
+	<span class="c1">// 基于context.Background()为根，创建一个3秒后自动取消的子Context
+</span><span class="c1"></span>	<span class="nx">ctx</span><span class="p">,</span> <span class="nx">cancelFunc</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">WithTimeout</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">Background</span><span class="p">(),</span> <span class="mi">3</span><span class="o">*</span><span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">)</span>
+	<span class="c1">// 延迟关闭
+</span><span class="c1"></span>	<span class="k">defer</span> <span class="nf">cancelFunc</span><span class="p">()</span>
+	<span class="c1">// 创建子协程
+</span><span class="c1"></span>	<span class="k">go</span> <span class="kd">func</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="p">{</span>
+			<span class="k">select</span> <span class="p">{</span>
+			<span class="k">case</span> <span class="o">&lt;-</span><span class="nx">ctx</span><span class="p">.</span><span class="nf">Done</span><span class="p">():</span>
+				<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;子协程收到取消信号，终止&#34;</span><span class="p">)</span>
+				<span class="k">return</span>
+			<span class="k">default</span><span class="p">:</span>
+				<span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="mi">1</span> <span class="o">*</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">)</span>
+				<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;子协程输出:%s\n&#34;</span><span class="p">,</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">())</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}(</span><span class="nx">ctx</span><span class="p">)</span>
+	<span class="c1">// 等待超时，自动取消
+</span><span class="c1"></span>	<span class="o">&lt;-</span><span class="nx">ctx</span><span class="p">.</span><span class="nf">Done</span><span class="p">()</span>
+	<span class="c1">// 超时后，查看子协程输出
+</span><span class="c1"></span>	<span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;End：%s \n&#34;</span><span class="p">,</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">())</span>
+<span class="p">}</span>
+
+<span class="c1">// 子协程主动发送取消信号
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">subSendCancel</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;子协程主动发送取消信号——&gt; Begin:%s\n&#34;</span><span class="p">,</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">())</span>
+	<span class="c1">// 基于context.Background()为根，创建一个可取消的子Context
+</span><span class="c1"></span>	<span class="nx">cancelCtx</span><span class="p">,</span> <span class="nx">cancelFunc</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">WithTimeout</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">Background</span><span class="p">(),</span> <span class="mi">5</span><span class="o">*</span><span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">)</span>
+	<span class="c1">// 创建子协程
+</span><span class="c1"></span>	<span class="k">go</span> <span class="kd">func</span><span class="p">(</span><span class="nx">cancelFunc</span> <span class="nx">context</span><span class="p">.</span><span class="nx">CancelFunc</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;子协程发送-&gt;取消信号&#34;</span><span class="p">)</span>
+		<span class="nf">cancelFunc</span><span class="p">()</span>
+	<span class="p">}(</span><span class="nx">cancelFunc</span><span class="p">)</span>
+	<span class="c1">// 同步阻塞
+</span><span class="c1"></span>	<span class="o">&lt;-</span><span class="nx">cancelCtx</span><span class="p">.</span><span class="nf">Done</span><span class="p">()</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;End：%s \n&#34;</span><span class="p">,</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">())</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">等待超时——&gt; Begin:2021-04-20 11:43:59.232983 +0800 CST m=+0.000634095
+</span><span class="cm">子协程输出:2021-04-20 11:44:00.237187 +0800 CST m=+1.004832384
+</span><span class="cm">子协程输出:2021-04-20 11:44:01.240217 +0800 CST m=+2.007856775
+</span><span class="cm">子协程输出:2021-04-20 11:44:02.24042 +0800 CST m=+3.008054083
+</span><span class="cm">子协程收到取消信号，终止
+</span><span class="cm">End：2021-04-20 11:44:04.239543 +0800 CST m=+5.007166176 
+</span><span class="cm">子协程主动发送取消信号——&gt; Begin:2021-04-20 11:44:04.239701 +0800 CST m=+5.007323972
+</span><span class="cm">子协程发送-&gt;取消信号
+</span><span class="cm">End：2021-04-20 11:44:04.239809 +0800 CST m=+5.007432189 
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="53-指定截止时间withdeadline">5.3 指定截止时间(<code>WithDeadline</code>)</h4>
+<h5 id="1签名-2">1.签名</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">WithDeadline</span><span class="p">(</span><span class="nx">parent</span> <span class="nx">Context</span><span class="p">,</span> <span class="nx">d</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Time</span><span class="p">)</span> <span class="p">(</span><span class="nx">Context</span><span class="p">,</span> <span class="nx">CancelFunc</span><span class="p">)</span> 
+</code></pre></td></tr></table>
+</div>
+</div><p><code>context.WithDeadline</code> 函数接收父上下文(<code>parent</code>)和一个截止时间，能够从 <code>context.Context</code> 中衍生出一个新的子上下文并返回用于取消该上下文的函数。执行取消函数时功能和<code>WithCancel</code>一样。</p>
+<h5 id="2使用-2">2.使用</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;Begin:%s\n&#34;</span><span class="p">,</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">())</span>
+	<span class="c1">// 基于context.Background()为根，创建一个5秒后自动取消的子Context
+</span><span class="c1"></span>	<span class="nx">deadlineCtx</span><span class="p">,</span> <span class="nx">cancelFunc</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">WithDeadline</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">Background</span><span class="p">(),</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Add</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">))</span>
+	<span class="k">defer</span> <span class="nf">cancelFunc</span><span class="p">()</span>
+	<span class="k">go</span> <span class="kd">func</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">for</span>  <span class="p">{</span>
+			<span class="k">select</span> <span class="p">{</span>
+			<span class="k">case</span> <span class="o">&lt;-</span><span class="nx">ctx</span><span class="p">.</span><span class="nf">Done</span><span class="p">():</span>
+				<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;子协程终止,上下文已被取消&#34;</span><span class="p">)</span>
+				<span class="k">return</span>
+			<span class="k">default</span><span class="p">:</span>
+				<span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="mi">1</span> <span class="o">*</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">)</span>
+				<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;子协程输出: %s\n&#34;</span><span class="p">,</span><span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">())</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}(</span><span class="nx">deadlineCtx</span><span class="p">)</span>
+	<span class="c1">// 同步阻塞，直到上下文被完成或取消
+</span><span class="c1"></span>	<span class="o">&lt;-</span><span class="nx">deadlineCtx</span><span class="p">.</span><span class="nf">Done</span><span class="p">()</span>
+	<span class="c1">// 查看子协程是否收到取消信号
+</span><span class="c1"></span>	<span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="mi">1</span> <span class="o">*</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;End：%s \n&#34;</span><span class="p">,</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">())</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">Begin:2021-04-20 13:54:56.224477 +0800 CST m=+0.000826415
+</span><span class="cm">子协程输出: 2021-04-20 13:54:57.227495 +0800 CST m=+1.003830376
+</span><span class="cm">子协程输出: 2021-04-20 13:54:58.229607 +0800 CST m=+2.005927050
+</span><span class="cm">子协程输出: 2021-04-20 13:54:59.230173 +0800 CST m=+3.006503681
+</span><span class="cm">子协程输出: 2021-04-20 13:55:00.233766 +0800 CST m=+4.010057104
+</span><span class="cm">子协程终止,上下文已被取消
+</span><span class="cm">End：2021-04-20 13:55:00.233781 +0800 CST m=+4.010072336 
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="6上下文中传值">6.上下文中传值</h3>
+<h4 id="61-签名">6.1 签名</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// parent:父上下文
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">WithValue</span><span class="p">(</span><span class="nx">parent</span> <span class="nx">Context</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">val</span> <span class="kd">interface</span><span class="p">{})</span> <span class="nx">Context</span> 
+</code></pre></td></tr></table>
+</div>
+</div><p><code>context.WithValue</code> 能从<code>父 Context</code>中创建一个子<code>子 Context</code>,并传体一个键值对信息给<code>子 Context</code>，在<code>子 Context</code>中，通过<code>context.Value</code>获取对应的值信息。</p>
+<h4 id="62-使用">6.2 使用</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;Begin:%s\n&#34;</span><span class="p">,</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">())</span>
+	<span class="c1">// 基于context.Background()为根，创建一个5秒后自动取消的子Context
+</span><span class="c1"></span>	<span class="nx">parentCtx</span><span class="p">,</span> <span class="nx">cancelFunc</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">WithCancel</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">Background</span><span class="p">())</span>
+	<span class="c1">// 传体信息
+</span><span class="c1"></span>	<span class="nx">valueCtx</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">WithValue</span><span class="p">(</span><span class="nx">parentCtx</span><span class="p">,</span> <span class="s">&#34;name&#34;</span><span class="p">,</span> <span class="s">&#34;张三&#34;</span><span class="p">)</span>
+	<span class="k">go</span> <span class="kd">func</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span><span class="nx">cancelFunc2</span> <span class="nx">context</span><span class="p">.</span><span class="nx">CancelFunc</span><span class="p">)</span> <span class="p">{</span>
+		<span class="c1">// 取出上下文中key=name的值
+</span><span class="c1"></span>		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;取出上下文中的name: %v\n&#34;</span><span class="p">,</span><span class="nx">ctx</span><span class="p">.</span><span class="nf">Value</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">))</span>
+		<span class="c1">// 子协程发送取消信号
+</span><span class="c1"></span>		<span class="nf">cancelFunc</span><span class="p">()</span>
+	<span class="p">}(</span><span class="nx">valueCtx</span><span class="p">,</span><span class="nx">cancelFunc</span><span class="p">)</span>
+	<span class="c1">// 等待工作完成或者上下文被取消
+</span><span class="c1"></span>	<span class="o">&lt;-</span> <span class="nx">parentCtx</span><span class="p">.</span><span class="nf">Done</span><span class="p">()</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;End：%s \n&#34;</span><span class="p">,</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">())</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">Begin:2021-04-20 14:15:57.243469 +0800 CST m=+0.000674192
+</span><span class="cm">取出上下文中的name: 张三
+</span><span class="cm">End：2021-04-20 14:15:57.243699 +0800 CST m=+0.000904753 
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Learn Go</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2022-10-04
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/go%E6%89%A9%E5%B1%95%E5%8C%85/">Go扩展包</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/%E6%89%A9%E5%B1%95%E5%8C%85/8-sync/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Go扩展包(八):sync</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/%E6%89%A9%E5%B1%95%E5%8C%85/6-bufio%E6%9C%89%E7%BC%93%E5%86%B2%E7%9A%84io/">
+            <span class="next-text nav-default">Go扩展包(六):bufio(有缓冲的IO)</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/shershon1991" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/shershon520" class="iconfont icon-zhihu" title="zhihu"></a>
+  <a href="https://shershon1991.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2021 - 
+    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span>Learn Go</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+<script>
+    docsearch({
+        apiKey: "9f0c02b55e9885568dcbf6ef094b433c",
+        indexName: "hugo",
+        appId: "TTENARPLYL",
+        inputSelector: '.docsearch-input',
+        debug: false,
+    });
+</script>
+</body>
+</html>

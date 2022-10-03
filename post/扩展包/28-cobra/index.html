@@ -1,0 +1,1706 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Go扩展包(二十八):cobra - Learn Go</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Learn Go" /><meta name="description" content="介绍 cobra是一个用来构建现代CLI工具的库。相比flag标准库，它提供更多方便的特性和功能。Cobra 由 Go 项目成员和 hugo 作者 spf13 创建，已经被" /><meta name="keywords" content="博客, Learn Go, hugo" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.90.1 with theme even" />
+
+
+<link rel="canonical" href="https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/28-cobra/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Go扩展包(二十八):cobra" />
+<meta property="og:description" content="介绍 cobra是一个用来构建现代CLI工具的库。相比flag标准库，它提供更多方便的特性和功能。Cobra 由 Go 项目成员和 hugo 作者 spf13 创建，已经被" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/28-cobra/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2021-04-28T00:00:00+00:00" />
+<meta property="article:modified_time" content="2022-10-04T07:42:32+08:00" />
+
+<meta itemprop="name" content="Go扩展包(二十八):cobra">
+<meta itemprop="description" content="介绍 cobra是一个用来构建现代CLI工具的库。相比flag标准库，它提供更多方便的特性和功能。Cobra 由 Go 项目成员和 hugo 作者 spf13 创建，已经被"><meta itemprop="datePublished" content="2021-04-28T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2022-10-04T07:42:32+08:00" />
+<meta itemprop="wordCount" content="4309">
+<meta itemprop="keywords" content="Go扩展包," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Go扩展包(二十八):cobra"/>
+<meta name="twitter:description" content="介绍 cobra是一个用来构建现代CLI工具的库。相比flag标准库，它提供更多方便的特性和功能。Cobra 由 Go 项目成员和 hugo 作者 spf13 创建，已经被"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Learn Go</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">首页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"/><header id="header" class="header">
+    <div class="logo-wrapper">
+        <a href="/" class="logo">Learn Go</a>
+    </div>
+    <nav class="site-navbar">
+        <ul id="menu" class="menu"><li style="display:inline-block;margin-right:10px;">
+                <input type="search" class="docsearch-input" placeholder="Search"/>
+            </li><li class="menu-item">
+                <a class="menu-item-link" href="/">首页</a>
+            </li>
+            <li class="menu-item">
+                <a class="menu-item-link" href="/post/">归档</a>
+            </li>
+            <li class="menu-item">
+                <a class="menu-item-link" href="/tags/">标签</a>
+            </li>
+            <li class="menu-item">
+                <a class="menu-item-link" href="/categories/">分类</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Go扩展包(二十八):cobra</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-04-28 </span>
+        <div class="post-category">
+            <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+            <a href="/categories/go/"> Go </a>
+            </div>
+          <span class="more-meta"> 约 4309 字 </span>
+          <span class="more-meta"> 预计阅读 9 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#介绍">介绍</a>
+      <ul>
+        <li><a href="#特性预览">特性预览</a></li>
+        <li><a href="#相关概念">相关概念</a></li>
+      </ul>
+    </li>
+    <li><a href="#安装">安装</a></li>
+    <li><a href="#快速使用">快速使用</a>
+      <ul>
+        <li><a href="#创建根命令rootcmd">创建根命令(<code>rootCmd</code>)</a></li>
+        <li><a href="#创建子命令">创建子命令</a>
+          <ul>
+            <li><a href="#创建文件cobra-add-">创建文件:<code>cobra add ?</code></a></li>
+            <li><a href="#查看创建子命令内容">查看创建子命令内容</a></li>
+            <li><a href="#编辑子命令内容">编辑子命令内容</a></li>
+          </ul>
+        </li>
+        <li><a href="#编译运行">编译运行</a>
+          <ul>
+            <li><a href="#编译">编译</a></li>
+            <li><a href="#运行不带参数">运行(不带参数)</a></li>
+            <li><a href="#查看具体子命令">查看具体子命令</a></li>
+            <li><a href="#运行子命令">运行子命令</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#嵌套子命令">嵌套子命令</a>
+      <ul>
+        <li><a href="#编辑命令">编辑命令</a></li>
+        <li><a href="#查看命令">查看命令</a></li>
+        <li><a href="#编译运行-1">编译运行</a></li>
+      </ul>
+    </li>
+    <li><a href="#标志-flags">标志 (<code>flags</code>)</a>
+      <ul>
+        <li><a href="#使用示例">使用示例</a>
+          <ul>
+            <li><a href="#修改后的脚本">修改后的脚本</a></li>
+            <li><a href="#运行测试">运行测试</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#参数限制">参数限制</a>
+      <ul>
+        <li><a href="#位置参数限制">位置参数限制</a>
+          <ul>
+            <li><a href="#代码示例">代码示例</a></li>
+            <li><a href="#运行测试-1">运行测试</a></li>
+          </ul>
+        </li>
+        <li><a href="#标志参数限制">标志参数限制</a>
+          <ul>
+            <li><a href="#代码示例-1">代码示例</a></li>
+            <li><a href="#运行测试-2">运行测试</a></li>
+          </ul>
+        </li>
+        <li><a href="#自定义位置限制">自定义位置限制</a>
+          <ul>
+            <li><a href="#代码示例-2">代码示例</a></li>
+            <li><a href="#运行测试-3">运行测试</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#集成viper">集成viper</a>
+      <ul>
+        <li><a href="#查看目录结构">查看目录结构</a></li>
+        <li><a href="#代码实现">代码实现</a>
+          <ul>
+            <li><a href="#解析配置-cmdrootgo">解析配置: <code>cmd/root.go</code></a></li>
+            <li><a href="#使用配置cmdservergo">使用配置:<code>cmd/server.go</code></a></li>
+            <li><a href="#具体配置详情">具体配置详情</a></li>
+          </ul>
+        </li>
+        <li><a href="#编译运行-2">编译运行</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h1 id="介绍">介绍</h1>
+<p><code>cobra</code>是一个用来构建现代CLI工具的库。相比<code>flag</code>标准库，它提供更多方便的特性和功能。<code>Cobra</code> 由 <code>Go</code> 项目成员和 <code>hugo</code>
+作者 <a href="https://link.juejin.cn/?target=https%3A%2F%2Fgithub.com%2Fspf13">spf13</a> 创建，已经被许多流行的 <code>Go</code>
+项目采用，比如 <a href="https://link.juejin.cn/?target=https%3A%2F%2Fgithub.com%2Fcli%2Fcli">GitHub CLI</a>
+和 <a href="https://link.juejin.cn/?target=https%3A%2F%2Fgithub.com%2Fdocker%2Fcli">Docker CLI</a>。</p>
+<blockquote>
+<p>源码地址: <a href="https://github.com/spf13/cobra">https://github.com/spf13/cobra</a>，截止到现在<code>Star 23.8K</code></p>
+</blockquote>
+<h2 id="特性预览">特性预览</h2>
+<ul>
+<li>使用<code>cobra add cmdname</code>可快速的创建子命令<code>cli</code></li>
+<li>全局、局部和级联的标志</li>
+<li>自动生成<code>commands</code>和<code>flags</code>的帮助信息</li>
+<li>自动识别 <code>-h</code>、<code>--help</code> 等帮助标识</li>
+<li>支持自定义帮助信息，用法等的灵活性。</li>
+<li>可与<a href="https://link.juejin.cn/?target=https%3A%2F%2Fgithub.com%2Fspf13%2Fviper">viper</a> 紧密集成</li>
+</ul>
+<h2 id="相关概念">相关概念</h2>
+<p><code>Cobra</code> 结构由三部分组成：命令 (<code>commands</code>)、参数 (<code>arguments</code>)、标志 (<code>flags</code>)。最好的应用程序在使用时读起来像句子，要遵循的模式：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 没有子命令</span>
+<span class="sb">`</span>app cmd --param<span class="o">=</span>？<span class="sb">`</span>: 
+<span class="c1"># 有子命令</span>
+<span class="sb">`</span>app cmd subCmd --param<span class="o">=</span>？<span class="sb">`</span>
+</code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p><code>app</code>:代表编译后的文件名, <code>cmd</code>:代表命令  <code>subCmd</code>:代表子命令 <code>--param</code>: 代表请求参数。</p>
+</blockquote>
+<h1 id="安装">安装</h1>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">go get -u github.com/spf13/cobra/cobra 
+</code></pre></td></tr></table>
+</div>
+</div><h1 id="快速使用">快速使用</h1>
+<blockquote>
+<p>快速创建一个<code>cli</code>,效果是<code>app server --port=?</code>运行一个服务</p>
+</blockquote>
+<h2 id="创建根命令rootcmd">创建根命令(<code>rootCmd</code>)</h2>
+<p><strong>文件位置:</strong><code>cmd/root.go</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">cmd</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;github.com/spf13/cobra&#34;</span>
+<span class="p">)</span>
+
+<span class="kd">func</span> <span class="nf">init</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 接受参数
+</span><span class="c1"></span>	<span class="nx">rootCmd</span><span class="p">.</span><span class="nf">PersistentFlags</span><span class="p">().</span><span class="nf">String</span><span class="p">(</span><span class="s">&#34;version&#34;</span><span class="p">,</span> <span class="s">&#34;&#34;</span><span class="p">,</span> <span class="s">&#34;版本&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1">// rootCmd represents the base command when called without any subcommands
+</span><span class="c1">// 根命令
+</span><span class="c1"></span><span class="kd">var</span> <span class="nx">rootCmd</span> <span class="p">=</span> <span class="o">&amp;</span><span class="nx">cobra</span><span class="p">.</span><span class="nx">Command</span><span class="p">{</span>
+	<span class="nx">Use</span><span class="p">:</span>   <span class="s">&#34;app&#34;</span><span class="p">,</span>
+	<span class="nx">Short</span><span class="p">:</span> <span class="s">&#34;命令行的简要描述....&#34;</span><span class="p">,</span>
+	<span class="nx">Long</span><span class="p">:</span> <span class="s">`学习使用Cobra,开发cli项目,
+</span><span class="s">- app: 指的是编译后的文件名。`</span><span class="p">,</span>
+	<span class="c1">//// 根命令执行方法，如果有要
+</span><span class="c1"></span>	<span class="c1">//Run: func(cmd *cobra.Command, args []string) {
+</span><span class="c1"></span>	<span class="c1">//	fmt.Println(&#34;args:&#34;,args)
+</span><span class="c1"></span>	<span class="c1">//},
+</span><span class="c1"></span><span class="p">}</span>
+
+<span class="c1">// Execute 将所有子命令添加到root命令并适当设置标志。
+</span><span class="c1">// 这由 main.main() 调用。它只需要对 rootCmd 调用一次。
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">Execute</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">cobra</span><span class="p">.</span><span class="nf">CheckErr</span><span class="p">(</span><span class="nx">rootCmd</span><span class="p">.</span><span class="nf">Execute</span><span class="p">())</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="创建子命令">创建子命令</h2>
+<h3 id="创建文件cobra-add-">创建文件:<code>cobra add ?</code></h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 创建子命令server</span>
+➜ cobra add server   
+server created at /Users/liuqh/ProjectItem/GoItem/go-cli
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="查看创建子命令内容">查看创建子命令内容</h3>
+<p><strong>文件位置:</strong><code>cmd/server.go</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">cmd</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;fmt&#34;</span>
+	<span class="s">&#34;github.com/spf13/cobra&#34;</span>
+<span class="p">)</span>
+
+<span class="c1">// serverCmd represents the server command
+</span><span class="c1"></span><span class="kd">var</span> <span class="nx">serverCmd</span> <span class="p">=</span> <span class="o">&amp;</span><span class="nx">cobra</span><span class="p">.</span><span class="nx">Command</span><span class="p">{</span>
+	<span class="nx">Use</span><span class="p">:</span>   <span class="s">&#34;server&#34;</span><span class="p">,</span>
+	<span class="nx">Short</span><span class="p">:</span> <span class="s">&#34;A brief description of your command&#34;</span><span class="p">,</span>
+	<span class="nx">Long</span><span class="p">:</span> <span class="s">`A longer description that spans multiple lines and likely contains examples
+</span><span class="s">and usage of using your command. For example:
+</span><span class="s">
+</span><span class="s">Cobra is a CLI library for Go that empowers applications.
+</span><span class="s">This application is a tool to generate the needed files
+</span><span class="s">to quickly create a Cobra application.`</span><span class="p">,</span>
+	<span class="nx">Run</span><span class="p">:</span> <span class="kd">func</span><span class="p">(</span><span class="nx">cmd</span> <span class="o">*</span><span class="nx">cobra</span><span class="p">.</span><span class="nx">Command</span><span class="p">,</span> <span class="nx">args</span> <span class="p">[]</span><span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;server called&#34;</span><span class="p">)</span>
+	<span class="p">},</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">init</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">rootCmd</span><span class="p">.</span><span class="nf">AddCommand</span><span class="p">(</span><span class="nx">serverCmd</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="编辑子命令内容">编辑子命令内容</h3>
+<p><strong>文件位置:</strong><code>cmd/server.go</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">cmd</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;fmt&#34;</span>
+	<span class="s">&#34;github.com/gin-gonic/gin&#34;</span>
+	<span class="s">&#34;github.com/spf13/cobra&#34;</span>
+	<span class="s">&#34;os&#34;</span>
+<span class="p">)</span>
+
+<span class="c1">// serverCmd represents the server command
+</span><span class="c1"></span><span class="kd">var</span> <span class="p">(</span>
+	<span class="nx">serverCmd</span> <span class="p">=</span> <span class="o">&amp;</span><span class="nx">cobra</span><span class="p">.</span><span class="nx">Command</span><span class="p">{</span>
+		<span class="nx">Use</span><span class="p">:</span>   <span class="s">&#34;server&#34;</span><span class="p">,</span>
+		<span class="nx">Short</span><span class="p">:</span> <span class="s">&#34;启动http服务,使用方法: app server --port=?&#34;</span><span class="p">,</span>
+		<span class="nx">Run</span><span class="p">:</span> <span class="kd">func</span><span class="p">(</span><span class="nx">cmd</span> <span class="o">*</span><span class="nx">cobra</span><span class="p">.</span><span class="nx">Command</span><span class="p">,</span> <span class="nx">args</span> <span class="p">[]</span><span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
+			<span class="k">if</span> <span class="nx">port</span> <span class="o">==</span> <span class="s">&#34;&#34;</span> <span class="p">{</span>
+				<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;port不能为空!&#34;</span><span class="p">)</span>
+				<span class="nx">os</span><span class="p">.</span><span class="nf">Exit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+			<span class="p">}</span>
+			<span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
+			<span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">(</span><span class="s">&#34;:&#34;</span> <span class="o">+</span> <span class="nx">port</span><span class="p">)</span>
+		<span class="p">},</span>
+	<span class="p">}</span>
+	<span class="c1">//接收端口号
+</span><span class="c1"></span>	<span class="nx">port</span> <span class="kt">string</span>
+<span class="p">)</span>
+
+<span class="kd">func</span> <span class="nf">init</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 添加命令
+</span><span class="c1"></span>	<span class="nx">rootCmd</span><span class="p">.</span><span class="nf">AddCommand</span><span class="p">(</span><span class="nx">serverCmd</span><span class="p">)</span>
+	<span class="c1">// 接收参数port
+</span><span class="c1"></span>	<span class="nx">serverCmd</span><span class="p">.</span><span class="nf">Flags</span><span class="p">().</span><span class="nf">StringVar</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">port</span><span class="p">,</span> <span class="s">&#34;port&#34;</span><span class="p">,</span> <span class="s">&#34;&#34;</span><span class="p">,</span> <span class="s">&#34;端口号&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="编译运行">编译运行</h2>
+<h3 id="编译">编译</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 编译(编译后的文件名为: app)</span>
+➜ go build -o app .
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="运行不带参数">运行(不带参数)</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">➜ ./app          
+学习使用Cobra,开发cli项目,
+- app: 指的是编译后的文件名。
+
+Usage:
+  app <span class="o">[</span>command<span class="o">]</span>
+
+Available Commands:
+  completion  generate the autocompletion script <span class="k">for</span> the specified shell
+  <span class="nb">help</span>        Help about any <span class="nb">command</span>
+  server      启动http服务,使用方法: app server --port<span class="o">=</span>?
+
+Flags:
+  -h, --help             <span class="nb">help</span> <span class="k">for</span> app
+      --version string   版本
+
+Use <span class="s2">&#34;app [command] --help&#34;</span> <span class="k">for</span> more information about a command.
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="查看具体子命令">查看具体子命令</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 查看server使用信息</span>
+➜ ./app server -h
+启动http服务,使用方法: app server --port<span class="o">=</span>?
+
+Usage:
+  app server <span class="o">[</span>flags<span class="o">]</span>
+
+Flags:
+  -h, --help          <span class="nb">help</span> <span class="k">for</span> server
+      --port string   端口号
+
+Global Flags:
+      --version string   版本
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="运行子命令">运行子命令</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 不传必填参数时</span>
+➜ ./app server       
+port不能为空!
+<span class="c1"># 传参数</span>
+➜ ./app server --port <span class="m">8090</span>
+<span class="o">[</span>GIN-debug<span class="o">]</span> <span class="o">[</span>WARNING<span class="o">]</span> Creating an Engine instance with the Logger and Recovery middleware already attached.
+
+<span class="o">[</span>GIN-debug<span class="o">]</span> <span class="o">[</span>WARNING<span class="o">]</span> Running in <span class="s2">&#34;debug&#34;</span> mode. Switch to <span class="s2">&#34;release&#34;</span> mode in production.
+ - using env:   <span class="nb">export</span> <span class="nv">GIN_MODE</span><span class="o">=</span>release
+ - using code:  gin.SetMode<span class="o">(</span>gin.ReleaseMode<span class="o">)</span>
+
+<span class="o">[</span>GIN-debug<span class="o">]</span> Listening and serving HTTP on :8090
+</code></pre></td></tr></table>
+</div>
+</div><h1 id="嵌套子命令">嵌套子命令</h1>
+<h2 id="编辑命令">编辑命令</h2>
+<p><strong>文件位置:</strong><code>cmd/user.go</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">cmd</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;fmt&#34;</span>
+	<span class="s">&#34;github.com/spf13/cobra&#34;</span>
+<span class="p">)</span>
+
+<span class="c1">// userCmd 父命令
+</span><span class="c1"></span><span class="kd">var</span> <span class="nx">userCmd</span> <span class="p">=</span> <span class="o">&amp;</span><span class="nx">cobra</span><span class="p">.</span><span class="nx">Command</span><span class="p">{</span>
+	<span class="nx">Use</span><span class="p">:</span>   <span class="s">&#34;user&#34;</span><span class="p">,</span>
+	<span class="nx">Short</span><span class="p">:</span> <span class="s">&#34;用户操作&#34;</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="c1">// 子命令(添加用户)
+</span><span class="c1"></span><span class="kd">var</span> <span class="nx">userAddCmd</span> <span class="p">=</span> <span class="o">&amp;</span><span class="nx">cobra</span><span class="p">.</span><span class="nx">Command</span><span class="p">{</span>
+	<span class="nx">Use</span><span class="p">:</span>   <span class="s">&#34;add&#34;</span><span class="p">,</span>
+	<span class="nx">Short</span><span class="p">:</span> <span class="s">&#34;添加用户；user add --name=?&#34;</span><span class="p">,</span>
+	<span class="nx">Run</span><span class="p">:</span> <span class="kd">func</span><span class="p">(</span><span class="nx">cmd</span> <span class="o">*</span><span class="nx">cobra</span><span class="p">.</span><span class="nx">Command</span><span class="p">,</span> <span class="nx">args</span> <span class="p">[]</span><span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;添加用户:&#34;</span><span class="p">,</span> <span class="nx">name</span><span class="p">)</span>
+	<span class="p">},</span>
+<span class="p">}</span>
+
+<span class="c1">// 子命令(删除用户)
+</span><span class="c1"></span><span class="kd">var</span> <span class="nx">userDelCmd</span> <span class="p">=</span> <span class="o">&amp;</span><span class="nx">cobra</span><span class="p">.</span><span class="nx">Command</span><span class="p">{</span>
+	<span class="nx">Use</span><span class="p">:</span>   <span class="s">&#34;del&#34;</span><span class="p">,</span>
+	<span class="nx">Short</span><span class="p">:</span> <span class="s">&#34;删除用户；user del --name=?&#34;</span><span class="p">,</span>
+	<span class="nx">Run</span><span class="p">:</span> <span class="kd">func</span><span class="p">(</span><span class="nx">cmd</span> <span class="o">*</span><span class="nx">cobra</span><span class="p">.</span><span class="nx">Command</span><span class="p">,</span> <span class="nx">args</span> <span class="p">[]</span><span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;删除用户:&#34;</span><span class="p">,</span> <span class="nx">name</span><span class="p">)</span>
+	<span class="p">},</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">name</span> <span class="kt">string</span>
+
+<span class="kd">func</span> <span class="nf">init</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 添加子命令到父命令
+</span><span class="c1"></span>	<span class="nx">userCmd</span><span class="p">.</span><span class="nf">AddCommand</span><span class="p">(</span><span class="nx">userDelCmd</span><span class="p">)</span>
+	<span class="nx">userCmd</span><span class="p">.</span><span class="nf">AddCommand</span><span class="p">(</span><span class="nx">userAddCmd</span><span class="p">)</span>
+	<span class="c1">// 添加到根命令
+</span><span class="c1"></span>	<span class="nx">rootCmd</span><span class="p">.</span><span class="nf">AddCommand</span><span class="p">(</span><span class="nx">userCmd</span><span class="p">)</span>
+	<span class="c1">// 接收参数
+</span><span class="c1"></span>	<span class="nx">userCmd</span><span class="p">.</span><span class="nf">PersistentFlags</span><span class="p">().</span><span class="nf">StringVarP</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">name</span><span class="p">,</span> <span class="s">&#34;name&#34;</span><span class="p">,</span> <span class="s">&#34;n&#34;</span><span class="p">,</span> <span class="s">&#34;&#34;</span><span class="p">,</span> <span class="s">&#34;用户名&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="查看命令">查看命令</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">➜ ./app user -h    
+用户操作
+
+Usage:
+  app user <span class="o">[</span>command<span class="o">]</span>
+
+Available Commands:
+  add         添加用户；user add --name<span class="o">=</span>?
+  del         删除用户；user del --name<span class="o">=</span>?
+
+Flags:
+  -h, --help          <span class="nb">help</span> <span class="k">for</span> user
+  -n, --name string   用户名
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="编译运行-1">编译运行</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 编译</span>
+➜ go build -o app .
+
+<span class="c1"># 运行</span>
+➜ ./app user add -n 张三
+添加用户: 张三
+➜ ./app user del -n 张三
+删除用户: 张三
+</code></pre></td></tr></table>
+</div>
+</div><h1 id="标志-flags">标志 (<code>flags</code>)</h1>
+<p><code>cobra</code>的标志指的就是参数的名称，但是有<strong>本地标志</strong>和<strong>持久化标志</strong>之分,白话描述:</p>
+<ul>
+<li>本地标志(<code>Flags</code>): 当前命令接收,当前命令使用。</li>
+<li>持久标志(<code>PersistentFlags</code>): 当前命令接收，当前命令行和其所有子命令都可使用。</li>
+</ul>
+<h2 id="使用示例">使用示例</h2>
+<blockquote>
+<p>修改用户操作命令 <code>cmd/user.go</code></p>
+</blockquote>
+<h3 id="修改后的脚本">修改后的脚本</h3>
+<p><strong>文件位置:</strong><code>cmd/user.go</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">cmd</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;fmt&#34;</span>
+	<span class="s">&#34;github.com/spf13/cobra&#34;</span>
+<span class="p">)</span>
+
+<span class="c1">// userCmd 父命令
+</span><span class="c1"></span><span class="kd">var</span> <span class="nx">userCmd</span> <span class="p">=</span> <span class="o">&amp;</span><span class="nx">cobra</span><span class="p">.</span><span class="nx">Command</span><span class="p">{</span>
+	<span class="nx">Use</span><span class="p">:</span>   <span class="s">&#34;user&#34;</span><span class="p">,</span>
+	<span class="nx">Short</span><span class="p">:</span> <span class="s">&#34;用户操作&#34;</span><span class="p">,</span>
+	<span class="nx">Run</span><span class="p">:</span> <span class="kd">func</span><span class="p">(</span><span class="nx">cmd</span> <span class="o">*</span><span class="nx">cobra</span><span class="p">.</span><span class="nx">Command</span><span class="p">,</span> <span class="nx">args</span> <span class="p">[]</span><span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;用户列表: &#34;</span><span class="p">,</span> <span class="nx">list</span><span class="p">)</span>
+	<span class="p">},</span>
+<span class="p">}</span>
+
+<span class="c1">// 子命令(添加用户)
+</span><span class="c1"></span><span class="kd">var</span> <span class="nx">userAddCmd</span> <span class="p">=</span> <span class="o">&amp;</span><span class="nx">cobra</span><span class="p">.</span><span class="nx">Command</span><span class="p">{</span>
+	<span class="nx">Use</span><span class="p">:</span>   <span class="s">&#34;add&#34;</span><span class="p">,</span>
+	<span class="nx">Short</span><span class="p">:</span> <span class="s">&#34;添加用户；user add --name=?&#34;</span><span class="p">,</span>
+	<span class="nx">Run</span><span class="p">:</span> <span class="kd">func</span><span class="p">(</span><span class="nx">cmd</span> <span class="o">*</span><span class="nx">cobra</span><span class="p">.</span><span class="nx">Command</span><span class="p">,</span> <span class="nx">args</span> <span class="p">[]</span><span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;添加用户:&#34;</span><span class="p">,</span> <span class="nx">name</span><span class="p">)</span>
+	<span class="p">},</span>
+<span class="p">}</span>
+
+<span class="c1">// 子命令(删除用户)
+</span><span class="c1"></span><span class="kd">var</span> <span class="nx">userDelCmd</span> <span class="p">=</span> <span class="o">&amp;</span><span class="nx">cobra</span><span class="p">.</span><span class="nx">Command</span><span class="p">{</span>
+	<span class="nx">Use</span><span class="p">:</span>   <span class="s">&#34;del&#34;</span><span class="p">,</span>
+	<span class="nx">Short</span><span class="p">:</span> <span class="s">&#34;删除用户；user del --name=?&#34;</span><span class="p">,</span>
+	<span class="nx">Run</span><span class="p">:</span> <span class="kd">func</span><span class="p">(</span><span class="nx">cmd</span> <span class="o">*</span><span class="nx">cobra</span><span class="p">.</span><span class="nx">Command</span><span class="p">,</span> <span class="nx">args</span> <span class="p">[]</span><span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;删除用户:&#34;</span><span class="p">,</span> <span class="nx">name</span><span class="p">)</span>
+	<span class="p">},</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="p">(</span>
+	<span class="nx">name</span> <span class="kt">string</span>
+	<span class="nx">list</span> <span class="p">[]</span><span class="kt">string</span>
+<span class="p">)</span>
+
+<span class="kd">func</span> <span class="nf">init</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 添加子命令到父命令
+</span><span class="c1"></span>	<span class="nx">userCmd</span><span class="p">.</span><span class="nf">AddCommand</span><span class="p">(</span><span class="nx">userDelCmd</span><span class="p">)</span>
+	<span class="nx">userCmd</span><span class="p">.</span><span class="nf">AddCommand</span><span class="p">(</span><span class="nx">userAddCmd</span><span class="p">)</span>
+	<span class="nx">rootCmd</span><span class="p">.</span><span class="nf">AddCommand</span><span class="p">(</span><span class="nx">userCmd</span><span class="p">)</span>
+	<span class="c1">// 父命令接收持久标志
+</span><span class="c1"></span>	<span class="nx">userCmd</span><span class="p">.</span><span class="nf">PersistentFlags</span><span class="p">().</span><span class="nf">StringVarP</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">name</span><span class="p">,</span> <span class="s">&#34;name&#34;</span><span class="p">,</span> <span class="s">&#34;n&#34;</span><span class="p">,</span> <span class="s">&#34;&#34;</span><span class="p">,</span> <span class="s">&#34;用户名&#34;</span><span class="p">)</span>
+	<span class="c1">// 父命令接收本地标志
+</span><span class="c1"></span>	<span class="nx">userCmd</span><span class="p">.</span><span class="nf">Flags</span><span class="p">().</span><span class="nf">StringSliceVarP</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">list</span><span class="p">,</span> <span class="s">&#34;list&#34;</span><span class="p">,</span> <span class="s">&#34;l&#34;</span><span class="p">,</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{},</span> <span class="s">&#34;用户列表&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="运行测试">运行测试</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 传入本地标志</span>
+➜  ./app user --list<span class="o">=</span><span class="s2">&#34;小明,小三&#34;</span>    
+用户列表:  <span class="o">[</span>小明 小三<span class="o">]</span>
+
+➜ ./app user del --list<span class="o">=</span><span class="s2">&#34;小明,小三&#34;</span>
+Error: unknown flag: --list
+Usage:
+  app user del <span class="o">[</span>flags<span class="o">]</span>
+
+Flags:
+  -h, --help   <span class="nb">help</span> <span class="k">for</span> del
+
+Global Flags:
+  -n, --name string   用户名
+
+Error: unknown flag: --list
+</code></pre></td></tr></table>
+</div>
+</div><h1 id="参数限制">参数限制</h1>
+<h2 id="位置参数限制">位置参数限制</h2>
+<ul>
+<li>
+<p><code>NoArgs</code> : 如果有任何位置参数，该命令将报告错误。</p>
+</li>
+<li>
+<p><code>MinimumNArgs(int)</code> :至少传 N 个位置参数，否则报错。</p>
+</li>
+<li>
+<p><code>ArbitraryArgs</code>: 接受任意个位置参数。</p>
+</li>
+<li>
+<p><code>MaximumNArgs(int)</code> : 最多传N 个位置参数，否则报错。</p>
+</li>
+<li>
+<p><code>ExactArgs(int)</code> : 传入位置参数个数等于N，否则报错。</p>
+</li>
+<li>
+<p><code>RangeArgs(min, max)</code> : 传入位置参数个数 <code>min&lt;= N &lt;= max</code>，否则报错</p>
+</li>
+</ul>
+<h3 id="代码示例">代码示例</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="p">(</span>
+<span class="c1">// 子命令(添加用户)
+</span><span class="c1"></span><span class="nx">userAddCmd</span> <span class="p">=</span> <span class="o">&amp;</span><span class="nx">cobra</span><span class="p">.</span><span class="nx">Command</span><span class="p">{</span>
+<span class="nx">Use</span><span class="p">:</span>   <span class="s">&#34;add&#34;</span><span class="p">,</span>
+<span class="nx">Short</span><span class="p">:</span> <span class="s">&#34;添加用户；user add --name=?&#34;</span><span class="p">,</span>
+<span class="nx">Args</span><span class="p">:</span> <span class="nx">cobra</span><span class="p">.</span><span class="nf">RangeArgs</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+<span class="nx">Run</span><span class="p">:</span> <span class="kd">func</span> <span class="p">(</span><span class="nx">cmd</span> <span class="o">*</span><span class="nx">cobra</span><span class="p">.</span><span class="nx">Command</span><span class="p">,</span> <span class="nx">args</span> <span class="p">[]</span><span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;位置参数(args):&#34;</span><span class="p">,</span> <span class="nx">args</span><span class="p">)</span>
+<span class="p">},</span>
+<span class="p">}</span>
+<span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p><strong><font color=red>@注意：上面规则限制的是位置参数，并不是标志，不要混淆。</font></strong></p>
+</blockquote>
+<h3 id="运行测试-1">运行测试</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 传入3个位置参数</span>
+➜  go-cli ./app user add <span class="m">1</span> <span class="m">2</span> <span class="m">3</span>      
+位置参数<span class="o">(</span>args<span class="o">)</span>: <span class="o">[</span><span class="m">1</span> <span class="m">2</span> 3<span class="o">]</span>
+<span class="c1"># 传入4个位置参数</span>
+➜  go-cli ./app user add <span class="m">1</span> <span class="m">2</span> <span class="m">3</span> <span class="m">4</span>    
+Error: accepts between <span class="m">1</span> and <span class="m">3</span> arg<span class="o">(</span>s<span class="o">)</span>, received <span class="m">4</span>
+Usage:
+  app user add <span class="o">[</span>flags<span class="o">]</span>
+
+Flags:
+  -h, --help   <span class="nb">help</span> <span class="k">for</span> add
+
+Error: accepts between <span class="m">1</span> and <span class="m">3</span> arg<span class="o">(</span>s<span class="o">)</span>, received <span class="m">4</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="标志参数限制">标志参数限制</h2>
+<p>标志默认是可选的。如果你想在缺少标志时命令报错，可使用<code>MarkFlagRequired</code>限制</p>
+<h3 id="代码示例-1">代码示例</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">init</span><span class="p">()</span> <span class="p">{</span>
+<span class="c1">// 添加子命令到父命令
+</span><span class="c1"></span><span class="nx">userCmd</span><span class="p">.</span><span class="nf">AddCommand</span><span class="p">(</span><span class="nx">userAddCmd</span><span class="p">)</span>
+<span class="nx">rootCmd</span><span class="p">.</span><span class="nf">AddCommand</span><span class="p">(</span><span class="nx">userCmd</span><span class="p">)</span>
+<span class="c1">// 标志
+</span><span class="c1"></span><span class="nx">userAddCmd</span><span class="p">.</span><span class="nf">Flags</span><span class="p">().</span><span class="nf">StringVar</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">name</span><span class="p">,</span> <span class="s">&#34;name&#34;</span><span class="p">,</span> <span class="s">&#34;&#34;</span><span class="p">,</span> <span class="s">&#34;用户名&#34;</span><span class="p">)</span>
+<span class="c1">// 标志必需
+</span><span class="c1"></span><span class="nx">err</span> <span class="o">:=</span> <span class="nx">userAddCmd</span><span class="p">.</span><span class="nf">MarkFlagRequired</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">)</span>
+<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;--name 不能为空&#34;</span><span class="p">)</span>
+<span class="k">return</span>
+<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="运行测试-2">运行测试</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 不传--name标志</span>
+➜ ./app user add 
+Error: required flag<span class="o">(</span>s<span class="o">)</span> <span class="s2">&#34;name&#34;</span> not <span class="nb">set</span>
+Usage:
+  app user add <span class="o">[</span>flags<span class="o">]</span>
+
+Flags:
+  -h, --help          <span class="nb">help</span> <span class="k">for</span> add
+      --name string   用户名
+
+Error: required flag<span class="o">(</span>s<span class="o">)</span> <span class="s2">&#34;name&#34;</span> not <span class="nb">set</span>
+<span class="c1"># 传 --name 标志</span>
+➜ ./app user add --name<span class="o">=</span>张三
+name: 张三
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="自定义位置限制">自定义位置限制</h2>
+<h3 id="代码示例-2">代码示例</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">cmd</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;errors&#34;</span>
+	<span class="s">&#34;fmt&#34;</span>
+	<span class="s">&#34;github.com/spf13/cobra&#34;</span>
+	<span class="s">&#34;unicode/utf8&#34;</span>
+<span class="p">)</span>
+
+<span class="c1">// userCmd 父命令
+</span><span class="c1"></span><span class="kd">var</span> <span class="nx">userCmd</span> <span class="p">=</span> <span class="o">&amp;</span><span class="nx">cobra</span><span class="p">.</span><span class="nx">Command</span><span class="p">{</span>
+	<span class="nx">Use</span><span class="p">:</span>   <span class="s">&#34;user&#34;</span><span class="p">,</span>
+	<span class="nx">Short</span><span class="p">:</span> <span class="s">&#34;用户操作&#34;</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="p">(</span>
+	<span class="c1">// 子命令(添加用户)
+</span><span class="c1"></span>	<span class="nx">userAddCmd</span> <span class="p">=</span> <span class="o">&amp;</span><span class="nx">cobra</span><span class="p">.</span><span class="nx">Command</span><span class="p">{</span>
+		<span class="nx">Use</span><span class="p">:</span>   <span class="s">&#34;add&#34;</span><span class="p">,</span>
+		<span class="nx">Short</span><span class="p">:</span> <span class="s">&#34;添加用户；user add name&#34;</span><span class="p">,</span>
+		<span class="c1">// 自定义参数限制
+</span><span class="c1"></span>		<span class="nx">Args</span><span class="p">:</span> <span class="kd">func</span><span class="p">(</span><span class="nx">cmd</span> <span class="o">*</span><span class="nx">cobra</span><span class="p">.</span><span class="nx">Command</span><span class="p">,</span> <span class="nx">args</span> <span class="p">[]</span><span class="kt">string</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
+			<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nx">args</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span> <span class="p">{</span>
+				<span class="k">return</span> <span class="nx">errors</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="s">&#34;参数数量不对&#34;</span><span class="p">)</span>
+			<span class="p">}</span>
+			<span class="c1">// 判断姓名长度
+</span><span class="c1"></span>			<span class="nx">count</span> <span class="o">:=</span> <span class="nx">utf8</span><span class="p">.</span><span class="nf">RuneCountInString</span><span class="p">(</span><span class="nx">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%v %v \n&#34;</span><span class="p">,</span> <span class="nx">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nx">count</span><span class="p">)</span>
+			<span class="k">if</span> <span class="nx">count</span> <span class="p">&gt;</span> <span class="mi">4</span> <span class="p">{</span>
+				<span class="k">return</span> <span class="nx">errors</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="s">&#34;姓名长度过长&#34;</span><span class="p">)</span>
+			<span class="p">}</span>
+			<span class="k">return</span> <span class="kc">nil</span>
+		<span class="p">},</span>
+		<span class="nx">Run</span><span class="p">:</span> <span class="kd">func</span><span class="p">(</span><span class="nx">cmd</span> <span class="o">*</span><span class="nx">cobra</span><span class="p">.</span><span class="nx">Command</span><span class="p">,</span> <span class="nx">args</span> <span class="p">[]</span><span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
+			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;args:&#34;</span><span class="p">,</span> <span class="nx">args</span><span class="p">)</span>
+		<span class="p">},</span>
+	<span class="p">}</span>
+<span class="p">)</span>
+
+<span class="kd">func</span> <span class="nf">init</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 添加子命令到父命令
+</span><span class="c1"></span>	<span class="nx">userCmd</span><span class="p">.</span><span class="nf">AddCommand</span><span class="p">(</span><span class="nx">userAddCmd</span><span class="p">)</span>
+	<span class="nx">rootCmd</span><span class="p">.</span><span class="nf">AddCommand</span><span class="p">(</span><span class="nx">userCmd</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="运行测试-3">运行测试</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 姓名正常时</span>
+➜ ./app user add 上官伊人      
+上官伊人 <span class="m">4</span> 
+args: <span class="o">[</span>上官伊人<span class="o">]</span>
+<span class="c1"># 姓名超长时</span>
+➜ ./app user add 上官伊人家
+上官伊人家 <span class="m">5</span> 
+Error: 姓名长度过长
+Usage:
+  app user add <span class="o">[</span>flags<span class="o">]</span>
+
+Flags:
+  -h, --help   <span class="nb">help</span> <span class="k">for</span> add
+
+Error: 姓名长度过长
+<span class="c1"># 参数数量不对时</span>
+➜ ./app user add 上官伊人家 小三
+Error: 参数数量不对
+Usage:
+  app user add <span class="o">[</span>flags<span class="o">]</span>
+
+Flags:
+  -h, --help   <span class="nb">help</span> <span class="k">for</span> add
+
+Error: 参数数量不对
+</code></pre></td></tr></table>
+</div>
+</div><h1 id="集成viper">集成viper</h1>
+<h2 id="查看目录结构">查看目录结构</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">├── app
+│   └── config
+│       ├── app.go <span class="c1"># 配置结构体</span>
+│       └── app.yaml <span class="c1"># 配置文件</span>
+├── cmd
+│   ├── root.go <span class="c1"># 根命令</span>
+│   └── server.go <span class="c1"># http服务</span>
+├── go.mod
+├── go.sum
+├── local.yaml <span class="c1">#</span>
+└── main.go
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="代码实现">代码实现</h2>
+<h3 id="解析配置-cmdrootgo">解析配置: <code>cmd/root.go</code></h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">cmd</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;shershon1991/go-cli/app/config&#34;</span>
+	<span class="s">&#34;fmt&#34;</span>
+	<span class="s">&#34;github.com/spf13/cobra&#34;</span>
+	<span class="s">&#34;github.com/spf13/viper&#34;</span>
+	<span class="s">&#34;os&#34;</span>
+<span class="p">)</span>
+
+<span class="kd">func</span> <span class="nf">init</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 初始化配置信息
+</span><span class="c1"></span>	<span class="nx">cobra</span><span class="p">.</span><span class="nf">OnInitialize</span><span class="p">(</span><span class="nx">initConfig</span><span class="p">)</span>
+	<span class="nx">rootCmd</span><span class="p">.</span><span class="nf">PersistentFlags</span><span class="p">().</span><span class="nf">StringVar</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">cfgFile</span><span class="p">,</span> <span class="s">&#34;config&#34;</span><span class="p">,</span> <span class="s">&#34;&#34;</span><span class="p">,</span> <span class="s">&#34;config file (default is ./app.yaml | ./config/app.yaml )&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1">// rootCmd represents the base command when called without any subcommands
+</span><span class="c1">// 根命令
+</span><span class="c1"></span><span class="kd">var</span> <span class="nx">rootCmd</span> <span class="p">=</span> <span class="o">&amp;</span><span class="nx">cobra</span><span class="p">.</span><span class="nx">Command</span><span class="p">{</span>
+	<span class="nx">Use</span><span class="p">:</span>   <span class="s">&#34;&#34;</span><span class="p">,</span>
+	<span class="nx">Short</span><span class="p">:</span> <span class="s">&#34;命令行的简要描述....&#34;</span><span class="p">,</span>
+	<span class="nx">Long</span><span class="p">:</span>  <span class="s">`学习使用Cobra,开发cli项目,app: 指的是编译后的文件名。`</span><span class="p">,</span>
+	<span class="c1">// 根命令执行方法，如果有要
+</span><span class="c1"></span>	<span class="c1">//Run: func(cmd *cobra.Command, args []string) {
+</span><span class="c1"></span>	<span class="c1">//},
+</span><span class="c1"></span><span class="p">}</span>
+<span class="kd">var</span> <span class="p">(</span>
+	<span class="nx">cfgFile</span>   <span class="kt">string</span>            <span class="c1">// 配置文件
+</span><span class="c1"></span>	<span class="nx">appConfig</span> <span class="o">*</span><span class="nx">config</span><span class="p">.</span><span class="nx">AppConfig</span> <span class="c1">// 配置对应的结构体
+</span><span class="c1"></span><span class="p">)</span>
+
+<span class="c1">// Execute 将所有子命令添加到root命令并适当设置标志。
+</span><span class="c1">// 这由 main.main() 调用。它只需要对 rootCmd 调用一次。
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">Execute</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">cobra</span><span class="p">.</span><span class="nf">CheckErr</span><span class="p">(</span><span class="nx">rootCmd</span><span class="p">.</span><span class="nf">Execute</span><span class="p">())</span>
+<span class="p">}</span>
+
+<span class="c1">// initConfig reads in config file and ENV variables if set.
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">initConfig</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 接收指定的配置文件
+</span><span class="c1"></span>	<span class="k">if</span> <span class="nx">cfgFile</span> <span class="o">!=</span> <span class="s">&#34;&#34;</span> <span class="p">{</span>
+		<span class="c1">// Use config file from the flag.
+</span><span class="c1"></span>		<span class="nx">viper</span><span class="p">.</span><span class="nf">SetConfigFile</span><span class="p">(</span><span class="nx">cfgFile</span><span class="p">)</span>
+	<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+		<span class="c1">// 设置配置文件目录(可以设置多个,优先级根据添加顺序来)
+</span><span class="c1"></span>		<span class="nx">viper</span><span class="p">.</span><span class="nf">AddConfigPath</span><span class="p">(</span><span class="s">&#34;.&#34;</span><span class="p">)</span>
+		<span class="nx">viper</span><span class="p">.</span><span class="nf">AddConfigPath</span><span class="p">(</span><span class="s">&#34;./config&#34;</span><span class="p">)</span>
+		<span class="nx">viper</span><span class="p">.</span><span class="nf">AddConfigPath</span><span class="p">(</span><span class="s">&#34;./app/config&#34;</span><span class="p">)</span>
+		<span class="c1">// 设置配置文件
+</span><span class="c1"></span>		<span class="nx">viper</span><span class="p">.</span><span class="nf">SetConfigType</span><span class="p">(</span><span class="s">&#34;yaml&#34;</span><span class="p">)</span>
+		<span class="nx">viper</span><span class="p">.</span><span class="nf">SetConfigName</span><span class="p">(</span><span class="s">&#34;app&#34;</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="c1">// 读取环境变量
+</span><span class="c1"></span>	<span class="nx">viper</span><span class="p">.</span><span class="nf">AutomaticEnv</span><span class="p">()</span> <span class="c1">// read in environment variables that match
+</span><span class="c1"></span>	<span class="c1">// 读取配置文件
+</span><span class="c1"></span>	<span class="k">if</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">viper</span><span class="p">.</span><span class="nf">ReadInConfig</span><span class="p">();</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;viper.ReadInConfig: %v\n&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="c1">// 解析配置信息
+</span><span class="c1"></span>	<span class="nx">err</span> <span class="o">:=</span> <span class="nx">viper</span><span class="p">.</span><span class="nf">Unmarshal</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">appConfig</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+		<span class="nx">os</span><span class="p">.</span><span class="nf">Exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+		<span class="k">return</span>
+	<span class="p">}</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%+v\n&#34;</span><span class="p">,</span> <span class="nx">appConfig</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="使用配置cmdservergo">使用配置:<code>cmd/server.go</code></h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">cmd</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;fmt&#34;</span>
+	<span class="s">&#34;github.com/gin-gonic/gin&#34;</span>
+	<span class="s">&#34;github.com/spf13/cobra&#34;</span>
+	<span class="s">&#34;os&#34;</span>
+<span class="p">)</span>
+
+<span class="c1">// serverCmd represents the server command
+</span><span class="c1"></span><span class="kd">var</span> <span class="p">(</span>
+	<span class="nx">serverCmd</span> <span class="p">=</span> <span class="o">&amp;</span><span class="nx">cobra</span><span class="p">.</span><span class="nx">Command</span><span class="p">{</span>
+		<span class="nx">Use</span><span class="p">:</span>   <span class="s">&#34;server&#34;</span><span class="p">,</span>
+		<span class="nx">Short</span><span class="p">:</span> <span class="s">&#34;启动http服务,使用方法: app server?&#34;</span><span class="p">,</span>
+		<span class="nx">Run</span><span class="p">:</span> <span class="kd">func</span><span class="p">(</span><span class="nx">cmd</span> <span class="o">*</span><span class="nx">cobra</span><span class="p">.</span><span class="nx">Command</span><span class="p">,</span> <span class="nx">args</span> <span class="p">[]</span><span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
+			<span class="c1">// 使用配置
+</span><span class="c1"></span>			<span class="k">if</span> <span class="nx">appConfig</span><span class="p">.</span><span class="nx">App</span><span class="p">.</span><span class="nx">Port</span> <span class="o">==</span> <span class="s">&#34;&#34;</span> <span class="p">{</span>
+				<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;port不能为空!&#34;</span><span class="p">)</span>
+				<span class="nx">os</span><span class="p">.</span><span class="nf">Exit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+			<span class="p">}</span>
+			<span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
+			<span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">(</span><span class="s">&#34;:&#34;</span> <span class="o">+</span> <span class="nx">appConfig</span><span class="p">.</span><span class="nx">App</span><span class="p">.</span><span class="nx">Port</span><span class="p">)</span>
+		<span class="p">},</span>
+	<span class="p">}</span>
+	<span class="c1">//接收端口号
+</span><span class="c1"></span>	<span class="nx">port</span> <span class="kt">string</span>
+<span class="p">)</span>
+
+<span class="kd">func</span> <span class="nf">init</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 添加命令
+</span><span class="c1"></span>	<span class="nx">rootCmd</span><span class="p">.</span><span class="nf">AddCommand</span><span class="p">(</span><span class="nx">serverCmd</span><span class="p">)</span>
+	<span class="c1">// 接收参数port
+</span><span class="c1"></span>	<span class="nx">serverCmd</span><span class="p">.</span><span class="nf">Flags</span><span class="p">().</span><span class="nf">StringVar</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">port</span><span class="p">,</span> <span class="s">&#34;port&#34;</span><span class="p">,</span> <span class="s">&#34;&#34;</span><span class="p">,</span> <span class="s">&#34;端口号&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="具体配置详情">具体配置详情</h3>
+<p><strong><code>app/config/app.go</code></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">config</span>
+
+<span class="kd">type</span> <span class="nx">AppConfig</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">App</span>   <span class="nx">app</span>   <span class="s">`yaml:&#34;app&#34;`</span>
+	<span class="nx">MySql</span> <span class="nx">mysql</span> <span class="s">`yaml:&#34;mysql&#34;`</span>
+<span class="p">}</span>
+<span class="kd">type</span> <span class="nx">app</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">Version</span> <span class="kt">string</span> <span class="s">`yaml:&#34;version&#34;`</span>
+	<span class="nx">Author</span>  <span class="kt">string</span> <span class="s">`yaml:&#34;author&#34;`</span>
+	<span class="nx">Port</span>    <span class="kt">string</span> <span class="s">`yaml:&#34;port&#34;`</span>
+<span class="p">}</span>
+<span class="kd">type</span> <span class="nx">mysql</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">Host</span>     <span class="kt">string</span> <span class="s">`yaml:&#34;host&#34;`</span>
+	<span class="nx">DataBase</span> <span class="kt">string</span> <span class="s">`yaml:&#34;data_base&#34;`</span>
+	<span class="nx">User</span>     <span class="kt">string</span> <span class="s">`yaml:&#34;user&#34;`</span>
+	<span class="nx">Password</span> <span class="kt">string</span> <span class="s">`yaml:&#34;password&#34;`</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><strong><code>app/config/app.yaml</code></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">app</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l">v1.0.0</span><span class="w">
+</span><span class="w">  </span><span class="nt">author</span><span class="p">:</span><span class="w"> </span><span class="l">Shershon</span><span class="w">
+</span><span class="w">  </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">8080</span><span class="w">
+</span><span class="w"></span><span class="nt">mysql</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="m">127.0.0.1</span><span class="w">
+</span><span class="w">  </span><span class="nt">data_base</span><span class="p">:</span><span class="w"> </span><span class="l">test</span><span class="w">
+</span><span class="w">  </span><span class="nt">user</span><span class="p">:</span><span class="w"> </span><span class="l">root</span><span class="w">
+</span><span class="w">  </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l">root</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p><strong><code>./local.yaml</code></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">app</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l">v1.0.2</span><span class="w">
+</span><span class="w">  </span><span class="nt">author</span><span class="p">:</span><span class="w"> </span><span class="l">Shershon</span><span class="w">
+</span><span class="w">  </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">8081</span><span class="w">
+</span><span class="w"></span><span class="nt">mysql</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="m">192.168.0.10</span><span class="w">
+</span><span class="w">  </span><span class="nt">data_base</span><span class="p">:</span><span class="w"> </span><span class="l">test</span><span class="w">
+</span><span class="w">  </span><span class="nt">user</span><span class="p">:</span><span class="w"> </span><span class="l">root</span><span class="w">
+</span><span class="w">  </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l">root</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><h2 id="编译运行-2">编译运行</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 编译</span>
+➜ go build -o cli .
+
+<span class="c1"># 默认启动http</span>
+➜ ./cli server
+<span class="p">&amp;</span><span class="o">{</span>App:<span class="o">{</span>Version:v1.0.0 Author:Shershon Port:8080<span class="o">}</span> MySql:<span class="o">{</span>Host:127.0.0.1 DataBase: User:root Password:root<span class="o">}}</span>
+<span class="o">[</span>GIN-debug<span class="o">]</span> <span class="o">[</span>WARNING<span class="o">]</span> Creating an Engine instance with the Logger and Recovery middleware already attached.
+
+<span class="o">[</span>GIN-debug<span class="o">]</span> <span class="o">[</span>WARNING<span class="o">]</span> Running in <span class="s2">&#34;debug&#34;</span> mode. Switch to <span class="s2">&#34;release&#34;</span> mode in production.
+ - using env:	<span class="nb">export</span> <span class="nv">GIN_MODE</span><span class="o">=</span>release
+ - using code:	gin.SetMode<span class="o">(</span>gin.ReleaseMode<span class="o">)</span>
+
+<span class="o">[</span>GIN-debug<span class="o">]</span> Listening and serving HTTP on :8080
+
+<span class="c1"># 指定配置文件启动</span>
+➜ ./cli server --config<span class="o">=</span>./local.yaml
+<span class="p">&amp;</span><span class="o">{</span>App:<span class="o">{</span>Version:v1.0.2 Author:Shershon Port:8081<span class="o">}</span> MySql:<span class="o">{</span>Host:192.168.0.10 DataBase: User:root Password:root<span class="o">}}</span>
+<span class="o">[</span>GIN-debug<span class="o">]</span> <span class="o">[</span>WARNING<span class="o">]</span> Creating an Engine instance with the Logger and Recovery middleware already attached.
+
+<span class="o">[</span>GIN-debug<span class="o">]</span> <span class="o">[</span>WARNING<span class="o">]</span> Running in <span class="s2">&#34;debug&#34;</span> mode. Switch to <span class="s2">&#34;release&#34;</span> mode in production.
+ - using env:	<span class="nb">export</span> <span class="nv">GIN_MODE</span><span class="o">=</span>release
+ - using code:	gin.SetMode<span class="o">(</span>gin.ReleaseMode<span class="o">)</span>
+
+<span class="o">[</span>GIN-debug<span class="o">]</span> Listening and serving HTTP on :8081
+</code></pre></td></tr></table>
+</div>
+</div>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Learn Go</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2022-10-04
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/go%E6%89%A9%E5%B1%95%E5%8C%85/">Go扩展包</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/%E6%89%A9%E5%B1%95%E5%8C%85/29-pprof/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Go扩展包(二十九):pprof</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/%E6%89%A9%E5%B1%95%E5%8C%85/27-cron/">
+            <span class="next-text nav-default">Go扩展包(二十七):cron</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/shershon1991" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/shershon520" class="iconfont icon-zhihu" title="zhihu"></a>
+  <a href="https://shershon1991.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2021 - 
+    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span>Learn Go</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+<script>
+    docsearch({
+        apiKey: "9f0c02b55e9885568dcbf6ef094b433c",
+        indexName: "hugo",
+        appId: "TTENARPLYL",
+        inputSelector: '.docsearch-input',
+        debug: false,
+    });
+</script>
+</body>
+</html>

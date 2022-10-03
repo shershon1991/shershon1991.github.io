@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Go扩展包(十八):encoding-json - Learn Go</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Learn Go" /><meta name="description" content="1. 介绍 Go的标准包 encoding/json实现了json对象的编码和解码。 这篇文章主要讲的是结构体中嵌套匿名字段时的序列化和反序列化，因结" /><meta name="keywords" content="博客, Learn Go, hugo" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.90.1 with theme even" />
+
+
+<link rel="canonical" href="https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/18-encoding-json/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Go扩展包(十八):encoding-json" />
+<meta property="og:description" content="1. 介绍 Go的标准包 encoding/json实现了json对象的编码和解码。 这篇文章主要讲的是结构体中嵌套匿名字段时的序列化和反序列化，因结" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/18-encoding-json/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2021-04-18T00:00:00+00:00" />
+<meta property="article:modified_time" content="2022-10-04T07:42:32+08:00" />
+
+<meta itemprop="name" content="Go扩展包(十八):encoding-json">
+<meta itemprop="description" content="1. 介绍 Go的标准包 encoding/json实现了json对象的编码和解码。 这篇文章主要讲的是结构体中嵌套匿名字段时的序列化和反序列化，因结"><meta itemprop="datePublished" content="2021-04-18T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2022-10-04T07:42:32+08:00" />
+<meta itemprop="wordCount" content="4330">
+<meta itemprop="keywords" content="Go扩展包," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Go扩展包(十八):encoding-json"/>
+<meta name="twitter:description" content="1. 介绍 Go的标准包 encoding/json实现了json对象的编码和解码。 这篇文章主要讲的是结构体中嵌套匿名字段时的序列化和反序列化，因结"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Learn Go</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">首页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"/><header id="header" class="header">
+    <div class="logo-wrapper">
+        <a href="/" class="logo">Learn Go</a>
+    </div>
+    <nav class="site-navbar">
+        <ul id="menu" class="menu"><li style="display:inline-block;margin-right:10px;">
+                <input type="search" class="docsearch-input" placeholder="Search"/>
+            </li><li class="menu-item">
+                <a class="menu-item-link" href="/">首页</a>
+            </li>
+            <li class="menu-item">
+                <a class="menu-item-link" href="/post/">归档</a>
+            </li>
+            <li class="menu-item">
+                <a class="menu-item-link" href="/tags/">标签</a>
+            </li>
+            <li class="menu-item">
+                <a class="menu-item-link" href="/categories/">分类</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Go扩展包(十八):encoding-json</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-04-18 </span>
+        <div class="post-category">
+            <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+            <a href="/categories/go/"> Go </a>
+            </div>
+          <span class="more-meta"> 约 4330 字 </span>
+          <span class="more-meta"> 预计阅读 9 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#1-介绍">1. 介绍</a></li>
+            <li><a href="#2-匿名字段序列化">2. 匿名字段序列化</a></li>
+            <li><a href="#3-匿名字段反序列化">3. 匿名字段反序列化</a></li>
+            <li><a href="#4-匿名字段json总结">4. 匿名字段<code>json</code>总结</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h3 id="1-介绍">1. 介绍</h3>
+<blockquote>
+<p><code>Go</code>的标准包 <code>encoding/json</code>实现了<code>json对象</code>的编码和解码。</p>
+</blockquote>
+<p>这篇文章主要讲的是结构体中嵌套匿名字段时的序列化和反序列化，因结构体在参与序列时会有很多细节规则，平时常用的也是结构体，至于<code>map和slice</code>可参考历史文章 <a href="https://mp.weixin.qq.com/s/lmWYxkLU4dV0h-J99Tztzg">Go学习(二十三):JSON编码解析使用</a></p>
+<h4 id="11-go和json数据类型">1.1 Go和JSON数据类型</h4>
+<table>
+<thead>
+<tr>
+<th>JSON</th>
+<th>Go</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Boolean</code></td>
+<td><code>bool</code></td>
+</tr>
+<tr>
+<td><code>Number</code></td>
+<td><code>float64</code></td>
+</tr>
+<tr>
+<td><code>String</code></td>
+<td><code>string</code></td>
+</tr>
+<tr>
+<td><code>Array</code></td>
+<td><code>[]interface{}</code></td>
+</tr>
+<tr>
+<td><code>Object</code></td>
+<td><code>map[string]interface{}</code></td>
+</tr>
+<tr>
+<td><code>NULL</code></td>
+<td><code>nil</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="12-结构体序列化规则">1.2 结构体序列化规则</h4>
+<p><strong><font color=red>@注意：可导出的字段(首字母大写)，才能参与Json的序列化</font></strong></p>
+<table>
+<thead>
+<tr>
+<th>标签</th>
+<th>json的key</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>有标签,<code>json:&quot;xx&quot;</code></td>
+<td>key=xx</td>
+</tr>
+<tr>
+<td>无标签</td>
+<td>key=结构体原属性字段</td>
+</tr>
+<tr>
+<td>有标签,<code>json:&quot;-&quot;</code></td>
+<td>会被忽略，不参与序列化</td>
+</tr>
+<tr>
+<td>有标签,<code>json:&quot;xxx,omitempty&quot;</code></td>
+<td>代表该字段为空值时,会被忽略。其中<code>xxx</code>可以省略，<code>,</code>不可以省略。<br>如：<code>json:&quot;,omitempty&quot;</code></td>
+</tr>
+<tr>
+<td>有标签,<code>json:&quot;xxx,string&quot;</code></td>
+<td>代表输出类型会转化为字符串。其中<code>xxx</code>也可以省略<br><font color=red>它只适用于字符串、浮点数、整数类型的字段</font></td>
+</tr>
+</tbody>
+</table>
+<p><strong>a. 代码示例</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">Student</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="c1">// 指定json标签时,序列化的key为标签值:name
+</span><span class="c1"></span>	<span class="nx">Name</span> <span class="kt">string</span> <span class="s">`json:&#34;name&#34;`</span>
+	<span class="c1">// 不指定序列化标签时，key为原属性:Age
+</span><span class="c1"></span>	<span class="nx">Age</span>  <span class="kt">int</span>
+	<span class="c1">// 当标签值为`json:&#34;-&#34;`,代表改字段会被忽略
+</span><span class="c1"></span>	<span class="nx">Home</span> <span class="kt">string</span> <span class="s">`json:&#34;-&#34;`</span>
+	<span class="c1">// 标签指定omitempty选项,代表该字段为空值时,会被忽略
+</span><span class="c1"></span>	<span class="nx">Phone</span> <span class="kt">string</span> <span class="s">`json:&#34;phone,omitempty&#34;`</span>
+	<span class="c1">// 标签指定string选项,代表输出类型会转化为字符串
+</span><span class="c1"></span>	<span class="c1">// 它只适用于字符串、浮点数、整数类型的字段
+</span><span class="c1"></span>	<span class="nx">Score</span> <span class="kt">float64</span> <span class="s">`json:&#34;score,string&#34;`</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>b. 运行效果</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">TestMarshal</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// 声明初始化结构体
+</span><span class="c1"></span>	<span class="nx">student1</span> <span class="o">:=</span> <span class="nx">Student</span><span class="p">{</span>
+		<span class="nx">Name</span><span class="p">:</span>  <span class="s">&#34;张三&#34;</span><span class="p">,</span>
+		<span class="nx">Age</span><span class="p">:</span>   <span class="mi">18</span><span class="p">,</span>
+		<span class="nx">Home</span><span class="p">:</span>  <span class="s">&#34;北京&#34;</span><span class="p">,</span>
+		<span class="nx">Score</span><span class="p">:</span>  <span class="mf">90.5</span><span class="p">,</span>
+		<span class="nx">Phone</span><span class="p">:</span> <span class="s">&#34;&#34;</span><span class="p">,</span>
+	<span class="p">}</span>
+	<span class="c1">// 序列化
+</span><span class="c1"></span>	<span class="nx">json1</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">Marshal</span><span class="p">(</span><span class="nx">student1</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;序列化json:%s\n&#34;</span><span class="p">,</span> <span class="nx">json1</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestMarshal
+</span><span class="cm">序列化json: {&#34;name&#34;:&#34;张三&#34;,&#34;Age&#34;:18,&#34;score&#34;:&#34;90.5&#34;}
+</span><span class="cm">--- PASS: TestMarshal (0.00s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="2-匿名字段序列化">2. 匿名字段序列化</h3>
+<h4 id="21-无json标签">2.1 无<code>JSON</code>标签</h4>
+<h5 id="a-字段标签不重复">a. 字段标签不重复</h5>
+<p><strong><font color=green>School.Name和StudentA.Name，Json标签不一致。</font></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 学校
+</span><span class="c1"></span><span class="kd">type</span> <span class="nx">School</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">Name</span>    <span class="kt">string</span> <span class="s">`json:&#34;schoolName&#34;`</span>
+	<span class="nx">Address</span> <span class="kt">string</span> <span class="s">`json:&#34;schoolAddress&#34;`</span>
+<span class="p">}</span>
+<span class="c1">// 学生
+</span><span class="c1"></span><span class="kd">type</span> <span class="nx">StudentA</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">Name</span> <span class="kt">string</span> <span class="s">`json:&#34;name&#34;`</span>
+	<span class="c1">// 匿名字段,而且没有json标签
+</span><span class="c1"></span>	<span class="nx">School</span> 
+<span class="p">}</span>
+<span class="c1">// 序列化-匿名字段 (默认字段不冲突)
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestAnonymousTagDifferent</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="kd">var</span> <span class="nx">student</span> <span class="p">=</span> <span class="nx">StudentA</span><span class="p">{</span>
+		<span class="nx">Name</span><span class="p">:</span> <span class="s">&#34;小明&#34;</span><span class="p">,</span>
+		<span class="nx">School</span><span class="p">:</span><span class="nx">School</span><span class="p">{</span>
+			<span class="nx">Name</span><span class="p">:</span> <span class="s">&#34;北京大学&#34;</span><span class="p">,</span>
+			<span class="nx">Address</span><span class="p">:</span> <span class="s">&#34;北京海淀区&#34;</span><span class="p">,</span>
+		<span class="p">},</span>
+	<span class="p">}</span>
+	<span class="nx">jsonByte</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">Marshal</span><span class="p">(</span><span class="nx">student</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;json: %s \n&#34;</span><span class="p">,</span><span class="nx">jsonByte</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/** 输出
+</span><span class="cm">=== RUN   TestAnonymousTagDifferent
+</span><span class="cm">json: {&#34;name&#34;:&#34;小明&#34;,&#34;schoolName&#34;:&#34;北京大学&#34;,&#34;schoolAddress&#34;:&#34;北京海淀区&#34;} 
+</span><span class="cm">--- PASS: TestAnonymousTagDifferent (0.00s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="b-字段标签重复">b. 字段标签重复</h5>
+<p><strong><font color=green>Class.Name和StudentB.Name，Json标签一致，都是 <code>json:&quot;name&quot;</code>。</font></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 学生
+</span><span class="c1"></span><span class="kd">type</span> <span class="nx">StudentB</span> <span class="kd">struct</span> <span class="p">{</span>
+  <span class="c1">// 标签名和班级名一样
+</span><span class="c1"></span>	<span class="nx">Name</span> <span class="kt">string</span> <span class="s">`json:&#34;name&#34;`</span> 
+	<span class="c1">// 匿名字段,而且没有json标签
+</span><span class="c1"></span>	<span class="nx">Class</span>
+<span class="p">}</span>
+<span class="c1">// 班级
+</span><span class="c1"></span><span class="kd">type</span> <span class="nx">Class</span> <span class="kd">struct</span> <span class="p">{</span>
+  <span class="c1">// 标签名和学生名一样
+</span><span class="c1"></span>	<span class="nx">Name</span> <span class="kt">string</span> <span class="s">`json:&#34;name&#34;`</span>
+	<span class="nx">Desc</span> <span class="kt">string</span> <span class="s">`json:&#34;desc&#34;`</span>
+<span class="p">}</span>
+<span class="c1">// 序列化-匿名字段 (字段标签冲突)
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestAnonymousTagSame</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="kd">var</span> <span class="nx">student</span> <span class="p">=</span> <span class="nx">StudentB</span><span class="p">{</span>
+		<span class="nx">Name</span><span class="p">:</span> <span class="s">&#34;小明&#34;</span><span class="p">,</span>
+		<span class="nx">Class</span><span class="p">:</span> <span class="nx">Class</span><span class="p">{</span>
+			<span class="nx">Name</span><span class="p">:</span> <span class="s">&#34;高二(1)班&#34;</span><span class="p">,</span>
+			<span class="nx">Desc</span><span class="p">:</span> <span class="s">&#34;优秀班级&#34;</span><span class="p">,</span>
+		<span class="p">},</span>
+	<span class="p">}</span>
+	<span class="nx">jsonByte</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">Marshal</span><span class="p">(</span><span class="nx">student</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;json: %s \n&#34;</span><span class="p">,</span> <span class="nx">jsonByte</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/** 输出
+</span><span class="cm">=== RUN   TestAnonymousTagSame
+</span><span class="cm">json: {&#34;name&#34;:&#34;小明&#34;,&#34;desc&#34;:&#34;优秀班级&#34;} 
+</span><span class="cm">--- PASS: TestAnonymousTagSame (0.00s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><strong><font color=red>根据上面代码，得知如果字段标签冲突，冲突的匿名字段会被忽略。</font></strong></p>
+<h4 id="22-有json标签">2.2 有<code>JSON</code>标签</h4>
+<p>当匿名字段设置<code>json</code>标签时, 就不会出现冲突的情况，因为序列化后的匿名字段会变成对象。</p>
+<h5 id="a-字段标签重复">a. 字段标签重复</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">Bird</span> <span class="kd">struct</span> <span class="p">{</span>
+  <span class="c1">// json标签一样
+</span><span class="c1"></span>	<span class="nx">Name</span> <span class="kt">string</span> <span class="s">`json:&#34;name&#34;`</span>
+	<span class="c1">// 匿名字段，有json标签
+</span><span class="c1"></span>	<span class="nx">Category</span> <span class="s">`json:&#34;category&#34;`</span>
+<span class="p">}</span>
+<span class="kd">type</span> <span class="nx">Category</span> <span class="kd">struct</span> <span class="p">{</span>
+  <span class="c1">// json标签一样
+</span><span class="c1"></span>	<span class="nx">Name</span> <span class="kt">string</span> <span class="s">`json:&#34;name&#34;`</span>
+<span class="p">}</span>
+<span class="c1">// 序列化-匿名字段,有json标签
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestAnonymousWithTag</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">b</span> <span class="o">:=</span> <span class="nx">Bird</span><span class="p">{</span>
+		<span class="nx">Name</span><span class="p">:</span> <span class="s">&#34;喜鹊&#34;</span><span class="p">,</span>
+		<span class="nx">Category</span><span class="p">:</span><span class="nx">Category</span><span class="p">{</span><span class="nx">Name</span><span class="p">:</span> <span class="s">&#34;鸟类&#34;</span><span class="p">},</span>
+	<span class="p">}</span>
+	<span class="nx">jsonByte</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">Marshal</span><span class="p">(</span><span class="nx">b</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;json: %s \n&#34;</span><span class="p">,</span> <span class="nx">jsonByte</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/** 输出
+</span><span class="cm">=== RUN   TestAnonymousWithTag
+</span><span class="cm">json: {&#34;name&#34;:&#34;喜鹊&#34;,&#34;category&#34;:{&#34;name&#34;:&#34;鸟类&#34;}} 
+</span><span class="cm">--- PASS: TestAnonymousWithTag (0.00s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="b-字段标签不重复">b. 字段标签不重复</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">Bird</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">Name</span> <span class="kt">string</span> <span class="s">`json:&#34;name&#34;`</span>
+	<span class="c1">// 匿名字段，有json标签
+</span><span class="c1"></span>	<span class="nx">Category</span> <span class="s">`json:&#34;category&#34;`</span>
+<span class="p">}</span>
+<span class="kd">type</span> <span class="nx">Category</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">Name</span> <span class="kt">string</span> <span class="s">`json:&#34;categoryName&#34;`</span>
+<span class="p">}</span>
+<span class="c1">// 序列化-匿名字段,有json标签
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestAnonymousWithTag</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">b</span> <span class="o">:=</span> <span class="nx">Bird</span><span class="p">{</span>
+		<span class="nx">Name</span><span class="p">:</span> <span class="s">&#34;喜鹊&#34;</span><span class="p">,</span>
+		<span class="nx">Category</span><span class="p">:</span><span class="nx">Category</span><span class="p">{</span><span class="nx">Name</span><span class="p">:</span> <span class="s">&#34;鸟类&#34;</span><span class="p">},</span>
+	<span class="p">}</span>
+	<span class="nx">jsonByte</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">Marshal</span><span class="p">(</span><span class="nx">b</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;json: %s \n&#34;</span><span class="p">,</span> <span class="nx">jsonByte</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/** 输出
+</span><span class="cm">=== RUN   TestAnonymousWithTag
+</span><span class="cm">json: {&#34;name&#34;:&#34;喜鹊&#34;,&#34;category&#34;:{&#34;categoryName&#34;:&#34;鸟类&#34;}} 
+</span><span class="cm">--- PASS: TestAnonymousWithTag (0.00s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="3-匿名字段反序列化">3. 匿名字段反序列化</h3>
+<h4 id="31-无json标签">3.1 无<code>JSON</code>标签</h4>
+<h5 id="a-字段标签不重复-1">a. 字段标签不重复</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">BookClass</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">Name</span>  <span class="kt">string</span>  <span class="s">`json:&#34;className&#34;`</span>
+	<span class="nx">Company</span> <span class="kt">string</span> <span class="s">`json:&#34;company&#34;`</span>
+<span class="p">}</span>
+<span class="kd">type</span> <span class="nx">GoStudy</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">Name</span> <span class="kt">string</span> <span class="s">`json:&#34;name&#34;`</span>
+	<span class="nx">Desc</span> <span class="kt">string</span> <span class="s">`json:&#34;desc&#34;`</span>
+  <span class="c1">// 匿名字段无 json标签
+</span><span class="c1"></span>	<span class="nx">BookClass</span>
+<span class="p">}</span>
+<span class="kd">func</span> <span class="nf">TestUnMarshal</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">jsonStr</span> <span class="o">:=</span> <span class="s">`{&#34;name&#34;:&#34;Go语言高级编程&#34;,&#34;desc&#34;:&#34;这是一本Go学习书籍&#34;,&#34;className&#34;:&#34;IT行业书籍&#34;,&#34;company&#34;:&#34;xxx出版社&#34;}`</span>
+	<span class="kd">var</span> <span class="nx">goStudy</span> <span class="nx">GoStudy</span>
+	<span class="nx">err</span> <span class="o">:=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">Unmarshal</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="nx">jsonStr</span><span class="p">),</span> <span class="o">&amp;</span><span class="nx">goStudy</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">t</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+		<span class="k">return</span>
+	<span class="p">}</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;反序列化结果: %+v\n&#34;</span><span class="p">,</span><span class="nx">goStudy</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/** 输出
+</span><span class="cm">=== RUN   TestUnMarshal
+</span><span class="cm">反序列化结果: {Name:Go语言高级编程 Desc:这是一本Go学习书籍 BookClass:{Name:IT行业书籍 Company:xxx出版社}}
+</span><span class="cm">--- PASS: TestUnMarshal (0.00s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="b-字段标签重复-1">b. 字段标签重复</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">BookClass</span> <span class="kd">struct</span> <span class="p">{</span>
+  <span class="c1">// 设置成标签都为 name
+</span><span class="c1"></span>	<span class="nx">Name</span>  <span class="kt">string</span>  <span class="s">`json:&#34;name&#34;`</span>
+	<span class="nx">Company</span> <span class="kt">string</span> <span class="s">`json:&#34;company&#34;`</span>
+<span class="p">}</span>
+<span class="kd">type</span> <span class="nx">GoStudy</span> <span class="kd">struct</span> <span class="p">{</span>
+  <span class="c1">//设置成标签都为 name
+</span><span class="c1"></span>	<span class="nx">Name</span> <span class="kt">string</span> <span class="s">`json:&#34;name&#34;`</span>
+	<span class="nx">Desc</span> <span class="kt">string</span> <span class="s">`json:&#34;desc&#34;`</span>
+  <span class="c1">// 匿名字段无 json标签
+</span><span class="c1"></span>	<span class="nx">BookClass</span>
+<span class="p">}</span>
+<span class="kd">func</span> <span class="nf">TestUnMarshal</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">jsonStr</span> <span class="o">:=</span> <span class="s">`{&#34;desc&#34;:&#34;这是一本Go学习书籍&#34;,&#34;company&#34;:&#34;xxx出版社&#34;,&#34;name&#34;:&#34;IT行业书籍&#34;}`</span>
+	<span class="kd">var</span> <span class="nx">goStudy</span> <span class="nx">GoStudy</span>
+	<span class="nx">err</span> <span class="o">:=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">Unmarshal</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="nx">jsonStr</span><span class="p">),</span> <span class="o">&amp;</span><span class="nx">goStudy</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">t</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+		<span class="k">return</span>
+	<span class="p">}</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;反序列化结果: %+v\n&#34;</span><span class="p">,</span><span class="nx">goStudy</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/** 输出
+</span><span class="cm">=== RUN   TestUnMarshal
+</span><span class="cm">反序列化结果: {Name:IT行业书籍 Desc:这是一本Go学习书籍 BookClass:{Name: Company:xxx出版社}}
+</span><span class="cm">--- PASS: TestUnMarshal (0.00s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><strong><font color=red>@注意: 当字段标签重复时,反序列化会优先给主属性字段赋值。</font></strong></p>
+<h4 id="32-有json标签">3.2 有<code>JSON</code>标签</h4>
+<h5 id="a-字段标签重复-1">a. 字段标签重复</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">BookClass</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">Name</span>  <span class="kt">string</span>  <span class="s">`json:&#34;name&#34;`</span>
+	<span class="nx">Company</span> <span class="kt">string</span> <span class="s">`json:&#34;company&#34;`</span>
+<span class="p">}</span>
+<span class="kd">type</span> <span class="nx">GoStudy</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">Name</span> <span class="kt">string</span> <span class="s">`json:&#34;name&#34;`</span>
+	<span class="nx">Desc</span> <span class="kt">string</span> <span class="s">`json:&#34;desc&#34;`</span>
+	<span class="c1">// 设置成有json标签
+</span><span class="c1"></span>	<span class="nx">BookClass</span> <span class="s">`json:&#34;bookClass&#34;`</span>
+<span class="p">}</span>
+<span class="kd">func</span> <span class="nf">TestUnMarshal</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">jsonStr1</span> <span class="o">:=</span> <span class="s">`{&#34;name&#34;:&#34;Go语言高级编程&#34;,&#34;desc&#34;:&#34;这是一本Go学习书籍&#34;,&#34;company&#34;:&#34;xxx出版社&#34;}`</span>
+	<span class="nx">jsonStr2</span> <span class="o">:=</span> <span class="s">`{&#34;name&#34;:&#34;Go语言高级编程&#34;,&#34;desc&#34;:&#34;这是一本Go学习书籍&#34;,&#34;bookClass&#34;:{&#34;name&#34;:&#34;IT行业书籍&#34;,&#34;company&#34;:&#34;xxx出版社&#34;}}`</span>
+	<span class="kd">var</span> <span class="nx">res1</span> <span class="nx">GoStudy</span>
+	<span class="kd">var</span> <span class="nx">res2</span> <span class="nx">GoStudy</span>
+	<span class="nx">_</span> <span class="p">=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">Unmarshal</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="nx">jsonStr1</span><span class="p">),</span> <span class="o">&amp;</span><span class="nx">res1</span><span class="p">)</span>
+	<span class="nx">_</span> <span class="p">=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">Unmarshal</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="nx">jsonStr2</span><span class="p">),</span> <span class="o">&amp;</span><span class="nx">res2</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;res1结果: %+v\n&#34;</span><span class="p">,</span> <span class="nx">res1</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;res2结果: %+v\n&#34;</span><span class="p">,</span> <span class="nx">res2</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/** 输出
+</span><span class="cm">=== RUN   TestUnMarshal
+</span><span class="cm">res1结果: {Name:Go语言高级编程 Desc:这是一本Go学习书籍 BookClass:{Name: Company:}}
+</span><span class="cm">res2结果: {Name:Go语言高级编程 Desc:这是一本Go学习书籍 BookClass:{Name:IT行业书籍 Company:xxx出版社}}
+</span><span class="cm">--- PASS: TestUnMarshal (0.00s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="b-字段标签不重复-1">b. 字段标签不重复</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">BookClass</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">Name</span>  <span class="kt">string</span>  <span class="s">`json:&#34;bookName&#34;`</span>
+	<span class="nx">Company</span> <span class="kt">string</span> <span class="s">`json:&#34;company&#34;`</span>
+<span class="p">}</span>
+<span class="kd">type</span> <span class="nx">GoStudy</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">Name</span> <span class="kt">string</span> <span class="s">`json:&#34;name&#34;`</span>
+	<span class="nx">Desc</span> <span class="kt">string</span> <span class="s">`json:&#34;desc&#34;`</span>
+	<span class="c1">// 设置成有json标签
+</span><span class="c1"></span>	<span class="nx">BookClass</span> <span class="s">`json:&#34;bookClass&#34;`</span>
+<span class="p">}</span>
+<span class="kd">func</span> <span class="nf">TestUnMarshal</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">jsonStr1</span> <span class="o">:=</span> <span class="s">`{&#34;bookName&#34;:&#34;Go语言高级编程&#34;,&#34;desc&#34;:&#34;这是一本Go学习书籍&#34;,&#34;company&#34;:&#34;xxx出版社&#34;}`</span>
+	<span class="nx">jsonStr2</span> <span class="o">:=</span> <span class="s">`{&#34;name&#34;:&#34;Go语言高级编程&#34;,&#34;desc&#34;:&#34;这是一本Go学习书籍&#34;,&#34;bookClass&#34;:{&#34;bookName&#34;:&#34;IT行业书籍&#34;,&#34;company&#34;:&#34;xxx出版社&#34;}}`</span>
+	<span class="kd">var</span> <span class="nx">res1</span> <span class="nx">GoStudy</span>
+	<span class="kd">var</span> <span class="nx">res2</span> <span class="nx">GoStudy</span>
+	<span class="nx">_</span> <span class="p">=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">Unmarshal</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="nx">jsonStr1</span><span class="p">),</span> <span class="o">&amp;</span><span class="nx">res1</span><span class="p">)</span>
+	<span class="nx">_</span> <span class="p">=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">Unmarshal</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="nx">jsonStr2</span><span class="p">),</span> <span class="o">&amp;</span><span class="nx">res2</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;res1结果: %+v\n&#34;</span><span class="p">,</span> <span class="nx">res1</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;res2结果: %+v\n&#34;</span><span class="p">,</span> <span class="nx">res2</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/** 输出
+</span><span class="cm">=== RUN   TestUnMarshal
+</span><span class="cm">res1结果: {Name: Desc:这是一本Go学习书籍 BookClass:{Name: Company:}}
+</span><span class="cm">res2结果: {Name:Go语言高级编程 Desc:这是一本Go学习书籍 BookClass:{Name:IT行业书籍 Company:xxx出版社}}
+</span><span class="cm">--- PASS: TestUnMarshal (0.00s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="4-匿名字段json总结">4. 匿名字段<code>json</code>总结</h3>
+<h4 id="41-序列化">4.1 序列化</h4>
+<h5 id="a-匿名字段无标签">a. 匿名字段无标签</h5>
+<ul>
+<li>
+<p>当匿名字段没有指定标签时，序列化后的结构为同级,如<code>{&quot;..&quot;:&quot;..&quot;,..}</code></p>
+</li>
+<li>
+<p>当匿名属性和主属性的字段标签一样时，序列化会忽略匿名属性的字段。</p>
+</li>
+<li>
+<p>当匿名属性和主属性的字段标签不一样时，序列化不忽略任何字段。</p>
+</li>
+</ul>
+<h5 id="b-匿名字段有标签">b. 匿名字段有标签</h5>
+<ul>
+<li>当匿名字段<code>a</code>指定标签时，序列化后的结构为上下级,如<code>{&quot;..&quot;:&quot;..&quot;,&quot;a&quot;:{&quot;xx&quot;:&quot;xx&quot;}}</code></li>
+<li>匿名属性和主属性字段，标签无论是否一致，序列化都不会忽略任何字段。</li>
+</ul>
+<h4 id="42-反序列化">4.2 反序列化</h4>
+<h5 id="a-匿名字段无标签-1">a. 匿名字段无标签</h5>
+<ul>
+<li>当匿名字段没有指定标签时，可解析的<code>JSON</code>结构,为: <code>{&quot;..&quot;:&quot;..&quot;,..}</code></li>
+<li>当匿名属性和主属性的字段标签一样时，会优先将值赋给主属性，匿名属性为类型零值。</li>
+<li>当匿名属性和主属性的字段标签不一样时，会正常解析。</li>
+</ul>
+<h5 id="b-匿名字段有标签-1">b. 匿名字段有标签</h5>
+<ul>
+<li>当匿名字段指定标签时，可解析的<code>JSON</code>结构,为: <code>{&quot;..&quot;:&quot;..&quot;,&quot;a&quot;:{&quot;xx&quot;:&quot;xx&quot;}}</code></li>
+<li>匿名属性和主属性字段，标签无论是否一致，反序列化都能正常赋值。</li>
+</ul>
+<blockquote>
+<p><font color=red>当结构体中嵌套匿名结构体字段时，在进行序列化和反序列时，推荐为匿名字段加上json标签。</font></p>
+</blockquote>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Learn Go</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2022-10-04
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/go%E6%89%A9%E5%B1%95%E5%8C%85/">Go扩展包</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/%E6%89%A9%E5%B1%95%E5%8C%85/19-gorm/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Go扩展包(十九):gorm</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/%E6%89%A9%E5%B1%95%E5%8C%85/17-crypto-rsa/">
+            <span class="next-text nav-default">Go扩展包(二):crypto-rsa</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/shershon1991" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/shershon520" class="iconfont icon-zhihu" title="zhihu"></a>
+  <a href="https://shershon1991.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2021 - 
+    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span>Learn Go</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+<script>
+    docsearch({
+        apiKey: "9f0c02b55e9885568dcbf6ef094b433c",
+        indexName: "hugo",
+        appId: "TTENARPLYL",
+        inputSelector: '.docsearch-input',
+        debug: false,
+    });
+</script>
+</body>
+</html>

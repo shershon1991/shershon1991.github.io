@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Go扩展包(十三):zap - Learn Go</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Learn Go" /><meta name="description" content="1.介绍 Zap是uber开源的日志库，支持日志级别分级 、结构化记录，对性能和内存分配做了极致的优化。目前 Star 12.8 源码地址: https://github.com/uber-go/zap 官方性能测试图 2.安" /><meta name="keywords" content="博客, Learn Go, hugo" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.90.1 with theme even" />
+
+
+<link rel="canonical" href="https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/13-zap/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Go扩展包(十三):zap" />
+<meta property="og:description" content="1.介绍 Zap是uber开源的日志库，支持日志级别分级 、结构化记录，对性能和内存分配做了极致的优化。目前 Star 12.8 源码地址: https://github.com/uber-go/zap 官方性能测试图 2.安" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/13-zap/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2021-04-13T00:00:00+00:00" />
+<meta property="article:modified_time" content="2022-10-04T07:42:32+08:00" />
+
+<meta itemprop="name" content="Go扩展包(十三):zap">
+<meta itemprop="description" content="1.介绍 Zap是uber开源的日志库，支持日志级别分级 、结构化记录，对性能和内存分配做了极致的优化。目前 Star 12.8 源码地址: https://github.com/uber-go/zap 官方性能测试图 2.安"><meta itemprop="datePublished" content="2021-04-13T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2022-10-04T07:42:32+08:00" />
+<meta itemprop="wordCount" content="4425">
+<meta itemprop="keywords" content="Go扩展包," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Go扩展包(十三):zap"/>
+<meta name="twitter:description" content="1.介绍 Zap是uber开源的日志库，支持日志级别分级 、结构化记录，对性能和内存分配做了极致的优化。目前 Star 12.8 源码地址: https://github.com/uber-go/zap 官方性能测试图 2.安"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Learn Go</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">首页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"/><header id="header" class="header">
+    <div class="logo-wrapper">
+        <a href="/" class="logo">Learn Go</a>
+    </div>
+    <nav class="site-navbar">
+        <ul id="menu" class="menu"><li style="display:inline-block;margin-right:10px;">
+                <input type="search" class="docsearch-input" placeholder="Search"/>
+            </li><li class="menu-item">
+                <a class="menu-item-link" href="/">首页</a>
+            </li>
+            <li class="menu-item">
+                <a class="menu-item-link" href="/post/">归档</a>
+            </li>
+            <li class="menu-item">
+                <a class="menu-item-link" href="/tags/">标签</a>
+            </li>
+            <li class="menu-item">
+                <a class="menu-item-link" href="/categories/">分类</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Go扩展包(十三):zap</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-04-13 </span>
+        <div class="post-category">
+            <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+            <a href="/categories/go/"> Go </a>
+            </div>
+          <span class="more-meta"> 约 4425 字 </span>
+          <span class="more-meta"> 预计阅读 9 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#1介绍">1.介绍</a></li>
+            <li><a href="#2安装">2.安装</a></li>
+            <li><a href="#3日志记录器">3.日志记录器</a></li>
+            <li><a href="#4创建logger">4.创建Logger</a></li>
+            <li><a href="#5记录日志">5.记录日志</a></li>
+            <li><a href="#6定制logger">6.定制Logger</a></li>
+            <li><a href="#7切割日志">7.切割日志</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h3 id="1介绍">1.介绍</h3>
+<p><code>Zap</code>是<code>uber</code>开源的日志库，支持日志级别分级 、结构化记录，对性能和内存分配做了极致的优化。<a href="https://github.com/uber-go/zap">目前 Star 12.8 源码地址: https://github.com/uber-go/zap</a></p>
+<p><strong>官方性能测试图</strong></p>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/20210618164446.png" alt=""></p>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/20210618164425.png" alt=""></p>
+<h3 id="2安装">2.安装</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="k">go</span> <span class="nx">get</span> <span class="o">-</span><span class="nx">u</span> <span class="k">go</span><span class="p">.</span><span class="nx">uber</span><span class="p">.</span><span class="nx">org</span><span class="o">/</span><span class="nx">zap</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="3日志记录器">3.日志记录器</h3>
+<p><code>Zap</code>提供了两种类型的日志记录器: <code>SugaredLogger</code>和<code>Logger</code>,两者对比如下：</p>
+<p><strong><code>SugaredLogger</code></strong> : 在性能很好但不是很关键的上下文中使用,它比其他结构化日志记录包快4-10倍，并且支持结构化和<code>printf</code>风格的日志记录。与 <code>log15</code>和 <code>go-kit</code> 一样，<code>SugaredLogger</code> 的结构化日志 <code>api</code> 类型灵活，并接受可变的键值对的数量。</p>
+<p><strong><code>Logger</code></strong> : 在每一微秒和每一次内存分配都很重要的上下文中，使用<code>Logger</code>。它甚至比<code>SugaredLogger</code>更快，内存分配次数也更少，但它只支持强类型的结构化日志记录。</p>
+<h3 id="4创建logger">4.创建Logger</h3>
+<h4 id="41-创建logger几种方式">4.1 创建Logger几种方式</h4>
+<p>在<code>Zap</code>中通过调用<code>zap.NewProduction()</code>、<code>zap.NewDevelopment()</code>或者<code>zap.Example()</code>可创建一个<code>Logger</code>。</p>
+<p>他们创建的<code>Logger</code>，唯一的区别在于它将记录的信息不同。</p>
+<p>使用场景如下:</p>
+<ul>
+<li><code>zap.NewProduction()</code>  : 在生产环境中使用</li>
+<li><code>zap.NewDevelopment()</code> : 在开发环境中使用</li>
+<li><code>zap.Example()</code> : 适合用在测试代码中</li>
+</ul>
+<h4 id="42-使用示例">4.2 使用示例</h4>
+<h5 id="a代码">a.代码</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">TestCreateLogger</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// 初始化logger
+</span><span class="c1"></span>	<span class="nx">logger</span> <span class="o">:=</span> <span class="nx">zap</span><span class="p">.</span><span class="nf">NewExample</span><span class="p">()</span>
+	<span class="c1">// 使用defer logger.Sync()将缓存同步到文件中。
+</span><span class="c1"></span>	<span class="k">defer</span> <span class="nx">logger</span><span class="p">.</span><span class="nf">Sync</span><span class="p">()</span>
+	<span class="c1">// 记录日志
+</span><span class="c1"></span>	<span class="nx">logger</span><span class="p">.</span><span class="nf">Info</span><span class="p">(</span><span class="s">&#34;NewExample&#34;</span><span class="p">,</span>
+		<span class="nx">zap</span><span class="p">.</span><span class="nf">String</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">,</span><span class="s">&#34;张三&#34;</span><span class="p">),</span>
+		<span class="nx">zap</span><span class="p">.</span><span class="nf">Int</span><span class="p">(</span><span class="s">&#34;age&#34;</span><span class="p">,</span><span class="mi">18</span><span class="p">),</span>
+	<span class="p">)</span>
+	<span class="nx">productionLogger</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">zap</span><span class="p">.</span><span class="nf">NewProduction</span><span class="p">()</span>
+	<span class="k">defer</span> <span class="nx">productionLogger</span><span class="p">.</span><span class="nf">Sync</span><span class="p">()</span>
+	<span class="nx">productionLogger</span><span class="p">.</span><span class="nf">Info</span><span class="p">(</span><span class="s">&#34;NewProduction&#34;</span><span class="p">,</span>
+		<span class="nx">zap</span><span class="p">.</span><span class="nf">String</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">,</span><span class="s">&#34;张三&#34;</span><span class="p">),</span>
+		<span class="nx">zap</span><span class="p">.</span><span class="nf">Int</span><span class="p">(</span><span class="s">&#34;age&#34;</span><span class="p">,</span><span class="mi">18</span><span class="p">),</span>
+	<span class="p">)</span>
+	<span class="nx">devLogger</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">zap</span><span class="p">.</span><span class="nf">NewDevelopment</span><span class="p">()</span>
+	<span class="k">defer</span> <span class="nx">devLogger</span><span class="p">.</span><span class="nf">Sync</span><span class="p">()</span>
+	<span class="nx">devLogger</span><span class="p">.</span><span class="nf">Info</span><span class="p">(</span><span class="s">&#34;NewDevelopment&#34;</span><span class="p">,</span>
+		<span class="nx">zap</span><span class="p">.</span><span class="nf">String</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">,</span><span class="s">&#34;张三&#34;</span><span class="p">),</span>
+		<span class="nx">zap</span><span class="p">.</span><span class="nf">Int</span><span class="p">(</span><span class="s">&#34;age&#34;</span><span class="p">,</span><span class="mi">18</span><span class="p">),</span>
+	<span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="b-输出">b. 输出</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="o">==</span><span class="p">=</span> <span class="nx">RUN</span>   <span class="nx">TestCreateLogger</span>
+<span class="p">{</span><span class="s">&#34;level&#34;</span><span class="p">:</span><span class="s">&#34;info&#34;</span><span class="p">,</span><span class="s">&#34;msg&#34;</span><span class="p">:</span><span class="s">&#34;NewExample&#34;</span><span class="p">,</span><span class="s">&#34;name&#34;</span><span class="p">:</span><span class="s">&#34;张三&#34;</span><span class="p">,</span><span class="s">&#34;age&#34;</span><span class="p">:</span><span class="mi">18</span><span class="p">}</span>
+<span class="p">{</span><span class="s">&#34;level&#34;</span><span class="p">:</span><span class="s">&#34;info&#34;</span><span class="p">,</span><span class="s">&#34;ts&#34;</span><span class="p">:</span><span class="mf">1624005421.7035909</span><span class="p">,</span><span class="s">&#34;caller&#34;</span><span class="p">:</span><span class="s">&#34;test/zap_test.go:25&#34;</span><span class="p">,</span><span class="s">&#34;msg&#34;</span><span class="p">:</span><span class="s">&#34;NewProduction&#34;</span><span class="p">,</span><span class="s">&#34;name&#34;</span><span class="p">:</span><span class="s">&#34;张三&#34;</span><span class="p">,</span><span class="s">&#34;age&#34;</span><span class="p">:</span><span class="mi">18</span><span class="p">}</span>
+<span class="mi">2021</span><span class="o">-</span><span class="mo">06</span><span class="o">-</span><span class="mi">18</span><span class="nx">T16</span><span class="p">:</span><span class="mi">37</span><span class="p">:</span><span class="mf">01.703</span><span class="o">+</span><span class="mi">0800</span>	<span class="nx">INFO</span>	<span class="nx">test</span><span class="o">/</span><span class="nx">zap_test</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">31</span>	<span class="nx">NewDevelopment</span>	<span class="p">{</span><span class="s">&#34;name&#34;</span><span class="p">:</span> <span class="s">&#34;张三&#34;</span><span class="p">,</span> <span class="s">&#34;age&#34;</span><span class="p">:</span> <span class="mi">18</span><span class="p">}</span>
+<span class="o">---</span> <span class="nx">PASS</span><span class="p">:</span> <span class="nf">TestCreateLogger</span> <span class="p">(</span><span class="mf">0.00</span><span class="nx">s</span><span class="p">)</span>
+<span class="nx">PASS</span>
+</code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p><code>zap</code>底层 API 可以设置缓存，所以一般使用<code>defer logger.Sync()</code>将缓存同步到文件中</p>
+</blockquote>
+<h4 id="43-总结">4.3 总结</h4>
+<ol>
+<li>使用<code>NewProduction()</code>记录日志，默认会记录调用函数信息、日期和时间。</li>
+<li><code>NewExample</code>和<code>NewProduction()</code> 默认都是使用<code>json</code>格式记录日志，而<code>NewDevelopment</code>不是。</li>
+<li>默认情况下日志都会打印到应用程序的控制台界面。</li>
+<li>记录日志时,尽量调用<code>zap.T(key,val)</code>对应的类型方法，这也是<code>zap</code>高性能原因的一部分。</li>
+</ol>
+<h3 id="5记录日志">5.记录日志</h3>
+<h4 id="51-使用默认记录器logger">5.1 使用默认记录器(<code>Logger</code>)</h4>
+<h5 id="a代码示例">a.代码示例</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 使用默认记录日志
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestRecordLogWithDefault</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// 初始化记录器（使用默认记录器）
+</span><span class="c1"></span>	<span class="nx">logger</span> <span class="o">:=</span> <span class="nx">zap</span><span class="p">.</span><span class="nf">NewExample</span><span class="p">()</span>
+	<span class="k">defer</span> <span class="nx">logger</span><span class="p">.</span><span class="nf">Sync</span><span class="p">()</span>
+	<span class="c1">// 记录日志
+</span><span class="c1"></span>	<span class="nx">logger</span><span class="p">.</span><span class="nf">Debug</span><span class="p">(</span><span class="s">&#34;这是debug日志&#34;</span><span class="p">)</span>
+	<span class="nx">logger</span><span class="p">.</span><span class="nf">Debug</span><span class="p">(</span><span class="s">&#34;这是debug日志&#34;</span><span class="p">,</span><span class="nx">zap</span><span class="p">.</span><span class="nf">String</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">,</span><span class="s">&#34;张三&#34;</span><span class="p">))</span>
+    <span class="nx">logger</span><span class="p">.</span><span class="nf">Info</span><span class="p">(</span><span class="s">&#34;这是info日志&#34;</span><span class="p">,</span><span class="nx">zap</span><span class="p">.</span><span class="nf">Int</span><span class="p">(</span><span class="s">&#34;age&#34;</span><span class="p">,</span><span class="mi">18</span><span class="p">))</span>
+	<span class="nx">logger</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="s">&#34;这是error日志&#34;</span><span class="p">,</span><span class="nx">zap</span><span class="p">.</span><span class="nf">Int</span><span class="p">(</span><span class="s">&#34;line&#34;</span><span class="p">,</span><span class="mi">130</span><span class="p">),</span><span class="nx">zap</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;错误示例&#34;</span><span class="p">)))</span>
+	<span class="nx">logger</span><span class="p">.</span><span class="nf">Warn</span><span class="p">(</span><span class="s">&#34;这是Warn日志&#34;</span><span class="p">)</span>
+	<span class="c1">// 下面两个都会中断程序
+</span><span class="c1"></span>	<span class="c1">//logger.Fatal(&#34;这是Fatal日志&#34;)
+</span><span class="c1"></span>	<span class="c1">//logger.Panic(&#34;这是Panic日志&#34;)
+</span><span class="c1"></span><span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="b输出">b.输出</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="o">===</span> RUN   TestRecordLogWithDefault
+<span class="o">{</span><span class="s2">&#34;level&#34;</span>:<span class="s2">&#34;debug&#34;</span>,<span class="s2">&#34;msg&#34;</span>:<span class="s2">&#34;这是debug日志&#34;</span><span class="o">}</span>
+<span class="o">{</span><span class="s2">&#34;level&#34;</span>:<span class="s2">&#34;debug&#34;</span>,<span class="s2">&#34;msg&#34;</span>:<span class="s2">&#34;这是debug日志&#34;</span>,<span class="s2">&#34;name&#34;</span>:<span class="s2">&#34;张三&#34;</span><span class="o">}</span>
+<span class="o">{</span><span class="s2">&#34;level&#34;</span>:<span class="s2">&#34;info&#34;</span>,<span class="s2">&#34;msg&#34;</span>:<span class="s2">&#34;这是info日志&#34;</span>,<span class="s2">&#34;age&#34;</span>:18<span class="o">}</span>
+<span class="o">{</span><span class="s2">&#34;level&#34;</span>:<span class="s2">&#34;error&#34;</span>,<span class="s2">&#34;msg&#34;</span>:<span class="s2">&#34;这是error日志&#34;</span>,<span class="s2">&#34;line&#34;</span>:130,<span class="s2">&#34;error&#34;</span>:<span class="s2">&#34;错误示例&#34;</span><span class="o">}</span>
+<span class="o">{</span><span class="s2">&#34;level&#34;</span>:<span class="s2">&#34;warn&#34;</span>,<span class="s2">&#34;msg&#34;</span>:<span class="s2">&#34;这是Warn日志&#34;</span><span class="o">}</span>
+--- PASS: TestRecordLogWithDefault <span class="o">(</span>0.00s<span class="o">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="52-使用默认记录器sugar">5.2 使用默认记录器(<code>Sugar</code>)</h4>
+<h5 id="a代码示例-1">a.代码示例</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 使用Sugar记录器
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestRecordLogWithSuage</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// 初始化记录器
+</span><span class="c1"></span>	<span class="nx">logger</span> <span class="o">:=</span> <span class="nx">zap</span><span class="p">.</span><span class="nf">NewExample</span><span class="p">()</span>
+	<span class="c1">// 把日志记录器转成Sugar
+</span><span class="c1"></span>	<span class="nx">sugarLogger</span> <span class="o">:=</span> <span class="nx">logger</span><span class="p">.</span><span class="nf">Sugar</span><span class="p">()</span>
+	<span class="k">defer</span> <span class="nx">sugarLogger</span><span class="p">.</span><span class="nf">Sync</span><span class="p">()</span>
+	<span class="c1">// 记录日志
+</span><span class="c1"></span>	<span class="nx">sugarLogger</span><span class="p">.</span><span class="nf">Debug</span><span class="p">(</span><span class="s">&#34;这是debug日志 &#34;</span><span class="p">,</span><span class="nx">zap</span><span class="p">.</span><span class="nf">String</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">,</span><span class="s">&#34;张三&#34;</span><span class="p">))</span>
+	<span class="nx">sugarLogger</span><span class="p">.</span><span class="nf">Debugf</span><span class="p">(</span><span class="s">&#34;这是Debugf日志 name:%s &#34;</span><span class="p">,</span><span class="s">&#34;张三&#34;</span><span class="p">)</span>
+	<span class="nx">sugarLogger</span><span class="p">.</span><span class="nf">Info</span><span class="p">(</span><span class="s">&#34;这是info日志&#34;</span><span class="p">,</span><span class="nx">zap</span><span class="p">.</span><span class="nf">Int</span><span class="p">(</span><span class="s">&#34;age&#34;</span><span class="p">,</span><span class="mi">18</span><span class="p">))</span>
+	<span class="nx">sugarLogger</span><span class="p">.</span><span class="nf">Infof</span><span class="p">(</span><span class="s">&#34;这是Infof日志  内容:%v&#34;</span><span class="p">,</span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;爱好&#34;</span><span class="p">:</span><span class="s">&#34;动漫&#34;</span><span class="p">})</span>
+	<span class="nx">sugarLogger</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="s">&#34;这是error日志&#34;</span><span class="p">,</span><span class="nx">zap</span><span class="p">.</span><span class="nf">Int</span><span class="p">(</span><span class="s">&#34;line&#34;</span><span class="p">,</span><span class="mi">130</span><span class="p">),</span><span class="nx">zap</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;错误示例&#34;</span><span class="p">)))</span>
+	<span class="nx">sugarLogger</span><span class="p">.</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;这是Errorf日志，错误信息：%s&#34;</span><span class="p">,</span><span class="s">&#34;错误报告！&#34;</span><span class="p">)</span>
+	<span class="nx">sugarLogger</span><span class="p">.</span><span class="nf">Warn</span><span class="p">(</span><span class="s">&#34;这是Warn日志&#34;</span><span class="p">)</span>
+	<span class="nx">sugarLogger</span><span class="p">.</span><span class="nf">Warnf</span><span class="p">(</span><span class="s">&#34;这是Warnf日志 %v&#34;</span><span class="p">,[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">})</span>
+	<span class="c1">// 下面两个都会中断程序
+</span><span class="c1"></span>	<span class="c1">//sugarLogger.Fatal(&#34;这是Fatal日志&#34;)
+</span><span class="c1"></span>	<span class="c1">//sugarLogger.Panic(&#34;这是Panic日志&#34;)
+</span><span class="c1"></span><span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="b输出-1">b.输出</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="o">===</span> RUN   TestRecordLogWithSuage
+<span class="o">{</span><span class="s2">&#34;level&#34;</span>:<span class="s2">&#34;debug&#34;</span>,<span class="s2">&#34;msg&#34;</span>:<span class="s2">&#34;这是debug日志 {name 15 0 张三 &lt;nil&gt;}&#34;</span><span class="o">}</span>
+<span class="o">{</span><span class="s2">&#34;level&#34;</span>:<span class="s2">&#34;debug&#34;</span>,<span class="s2">&#34;msg&#34;</span>:<span class="s2">&#34;这是Debugf日志 name:张三 &#34;</span><span class="o">}</span>
+<span class="o">{</span><span class="s2">&#34;level&#34;</span>:<span class="s2">&#34;info&#34;</span>,<span class="s2">&#34;msg&#34;</span>:<span class="s2">&#34;这是info日志{age 11 18  &lt;nil&gt;}&#34;</span><span class="o">}</span>
+<span class="o">{</span><span class="s2">&#34;level&#34;</span>:<span class="s2">&#34;info&#34;</span>,<span class="s2">&#34;msg&#34;</span>:<span class="s2">&#34;这是Infof日志  内容:map[爱好:动漫]&#34;</span><span class="o">}</span>
+<span class="o">{</span><span class="s2">&#34;level&#34;</span>:<span class="s2">&#34;error&#34;</span>,<span class="s2">&#34;msg&#34;</span>:<span class="s2">&#34;这是error日志{line 11 130  &lt;nil&gt;} {error 26 0  错误示例}&#34;</span><span class="o">}</span>
+<span class="o">{</span><span class="s2">&#34;level&#34;</span>:<span class="s2">&#34;error&#34;</span>,<span class="s2">&#34;msg&#34;</span>:<span class="s2">&#34;这是Errorf日志，错误信息：错误报告！&#34;</span><span class="o">}</span>
+<span class="o">{</span><span class="s2">&#34;level&#34;</span>:<span class="s2">&#34;warn&#34;</span>,<span class="s2">&#34;msg&#34;</span>:<span class="s2">&#34;这是Warn日志&#34;</span><span class="o">}</span>
+<span class="o">{</span><span class="s2">&#34;level&#34;</span>:<span class="s2">&#34;warn&#34;</span>,<span class="s2">&#34;msg&#34;</span>:<span class="s2">&#34;这是Warnf日志 [1 2 4 5]&#34;</span><span class="o">}</span>
+--- PASS: TestRecordLogWithSuage <span class="o">(</span>0.00s<span class="o">)</span>
+PASS
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="6定制logger">6.定制Logger</h3>
+<p>除了<code>zap.NewProduction()</code>、<code>zap.NewDevelopment()</code>、<code>zap.Example()</code>还可以通过<code>zap.New(...)</code>创建一个<code>Logger</code>。</p>
+<h4 id="61-定制一-输出到文件">6.1 定制一: 输出到文件</h4>
+<h5 id="a代码示例-2">a.代码示例</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">Test2File</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// 指定写入文件
+</span><span class="c1"></span>	<span class="nx">fileHandle</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="s">&#34;./test.log&#34;</span><span class="p">)</span>
+	<span class="nx">writeFile</span> <span class="o">:=</span> <span class="nx">zapcore</span><span class="p">.</span><span class="nf">AddSync</span><span class="p">(</span><span class="nx">fileHandle</span><span class="p">)</span>
+	<span class="c1">// 设置日志输出格式为JSON (参数复用NewDevelopmentEncoderConfig)
+</span><span class="c1"></span>	<span class="nx">encoder</span> <span class="o">:=</span> <span class="nx">zapcore</span><span class="p">.</span><span class="nf">NewJSONEncoder</span><span class="p">(</span><span class="nx">zap</span><span class="p">.</span><span class="nf">NewDevelopmentEncoderConfig</span><span class="p">())</span>
+	<span class="c1">// 返回zapcore.Core,并指定记录zap.DebugLevel级别及以上日志
+</span><span class="c1"></span>	<span class="nx">zcore</span> <span class="o">:=</span> <span class="nx">zapcore</span><span class="p">.</span><span class="nf">NewCore</span><span class="p">(</span><span class="nx">encoder</span><span class="p">,</span> <span class="nx">zapcore</span><span class="p">.</span><span class="nf">Lock</span><span class="p">(</span><span class="nx">writeFile</span><span class="p">),</span> <span class="nx">zap</span><span class="p">.</span><span class="nx">DebugLevel</span><span class="p">)</span>
+	<span class="c1">// 创建日志记录器
+</span><span class="c1"></span>	<span class="nx">logger</span> <span class="o">:=</span> <span class="nx">zap</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="nx">zcore</span><span class="p">)</span>
+	<span class="k">defer</span> <span class="nx">logger</span><span class="p">.</span><span class="nf">Sync</span><span class="p">()</span>
+	<span class="c1">// 记录日志
+</span><span class="c1"></span>	<span class="nx">logger</span><span class="p">.</span><span class="nf">Info</span><span class="p">(</span><span class="s">&#34;输出日志到文件&#34;</span><span class="p">,</span> <span class="nx">zap</span><span class="p">.</span><span class="nf">String</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">,</span> <span class="s">&#34;张三&#34;</span><span class="p">))</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="62-定制二-同时输入文件和控制台">6.2 定制二: 同时输入文件和控制台</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 同时输入到文件和控制台
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestPrintFileAndStd</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// 指定写入文件
+</span><span class="c1"></span>	<span class="nx">fileHandle</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="s">&#34;./test.log&#34;</span><span class="p">)</span>
+  <span class="c1">// 同时写入文件和控制台 (只修改这一行)
+</span><span class="c1"></span>	<span class="nx">writeFile</span> <span class="o">:=</span> <span class="nx">zapcore</span><span class="p">.</span><span class="nf">NewMultiWriteSyncer</span><span class="p">(</span><span class="nx">fileHandle</span><span class="p">,</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stdout</span><span class="p">)</span>
+	<span class="c1">// 设置日志输出格式为JSON (参数复用NewDevelopmentEncoderConfig)
+</span><span class="c1"></span>	<span class="nx">encoder</span> <span class="o">:=</span> <span class="nx">zapcore</span><span class="p">.</span><span class="nf">NewJSONEncoder</span><span class="p">(</span><span class="nx">zap</span><span class="p">.</span><span class="nf">NewDevelopmentEncoderConfig</span><span class="p">())</span>
+	<span class="c1">// 返回zapcore.Core
+</span><span class="c1"></span>	<span class="nx">zcore</span> <span class="o">:=</span> <span class="nx">zapcore</span><span class="p">.</span><span class="nf">NewCore</span><span class="p">(</span><span class="nx">encoder</span><span class="p">,</span> <span class="nx">zapcore</span><span class="p">.</span><span class="nf">Lock</span><span class="p">(</span><span class="nx">writeFile</span><span class="p">),</span> <span class="nx">zap</span><span class="p">.</span><span class="nx">DebugLevel</span><span class="p">)</span>
+	<span class="c1">// 创建日志记录器
+</span><span class="c1"></span>	<span class="nx">logger</span> <span class="o">:=</span> <span class="nx">zap</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="nx">zcore</span><span class="p">)</span>
+	<span class="k">defer</span> <span class="nx">logger</span><span class="p">.</span><span class="nf">Sync</span><span class="p">()</span>
+	<span class="c1">// 记录日志
+</span><span class="c1"></span>	<span class="nx">logger</span><span class="p">.</span><span class="nf">Info</span><span class="p">(</span><span class="s">&#34;输出日志到文件&#34;</span><span class="p">,</span> <span class="nx">zap</span><span class="p">.</span><span class="nf">String</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">,</span> <span class="s">&#34;张三&#34;</span><span class="p">))</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="7切割日志">7.切割日志</h3>
+<p><code>Zap</code>本身不支持文件切割和日志归档,好在开源强大,贡献出<a href="https://github.com/natefinch/lumberjack">Lumberjack</a>,它是一个<code>Go</code>包，用于将日志写入滚动文件。</p>
+<h4 id="71-安装lumberjack">7.1 安装<code>Lumberjack</code></h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="k">go</span> <span class="nx">get</span> <span class="o">-</span><span class="nx">u</span> <span class="nx">github</span><span class="p">.</span><span class="nx">com</span><span class="o">/</span><span class="nx">natefinch</span><span class="o">/</span><span class="nx">lumberjack</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="72-集成到zap">7.2 集成到Zap</h4>
+<h5 id="a-代码示例">a. 代码示例</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 获取文件切割和归档配置信息
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">getLumberjackConfig</span><span class="p">()</span> <span class="nx">zapcore</span><span class="p">.</span><span class="nx">WriteSyncer</span> <span class="p">{</span>
+	<span class="nx">lumberjackLogger</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">lumberjack</span><span class="p">.</span><span class="nx">Logger</span><span class="p">{</span>
+		<span class="nx">Filename</span><span class="p">:</span> <span class="s">&#34;./zap.log&#34;</span><span class="p">,</span><span class="c1">//日志文件
+</span><span class="c1"></span>		<span class="nx">MaxSize</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span><span class="c1">//单文件最大容量(单位MB)
+</span><span class="c1"></span>		<span class="nx">MaxBackups</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span><span class="c1">//保留旧文件的最大数量
+</span><span class="c1"></span>		<span class="nx">MaxAge</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span><span class="c1">// 旧文件最多保存几天
+</span><span class="c1"></span>		<span class="nx">Compress</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span> <span class="c1">// 是否压缩/归档旧文件
+</span><span class="c1"></span>	<span class="p">}</span>
+	<span class="k">return</span> <span class="nx">zapcore</span><span class="p">.</span><span class="nf">AddSync</span><span class="p">(</span><span class="nx">lumberjackLogger</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1">// 测试日志切割和归档
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestCutAndArchive</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// 设置日志输出格式为JSON (参数复用NewDevelopmentEncoderConfig)
+</span><span class="c1"></span>	<span class="nx">encoder</span> <span class="o">:=</span> <span class="nx">zapcore</span><span class="p">.</span><span class="nf">NewJSONEncoder</span><span class="p">(</span><span class="nx">zap</span><span class="p">.</span><span class="nf">NewDevelopmentEncoderConfig</span><span class="p">())</span>
+	<span class="nx">core</span> <span class="o">:=</span> <span class="nx">zapcore</span><span class="p">.</span><span class="nf">NewCore</span><span class="p">(</span><span class="nx">encoder</span><span class="p">,</span> <span class="nf">getLumberjackConfig</span><span class="p">(),</span> <span class="nx">zap</span><span class="p">.</span><span class="nx">DebugLevel</span><span class="p">)</span>
+	<span class="nx">sugarLogger</span> <span class="o">:=</span> <span class="nx">zap</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="nx">core</span><span class="p">).</span><span class="nf">Sugar</span><span class="p">()</span>
+	<span class="k">defer</span> <span class="nx">sugarLogger</span><span class="p">.</span><span class="nf">Sync</span><span class="p">()</span>
+	<span class="c1">// 记录日志
+</span><span class="c1"></span>	<span class="nx">sugarLogger</span><span class="p">.</span><span class="nf">Infof</span><span class="p">(</span><span class="s">&#34;日志内容:%s&#34;</span><span class="p">,</span><span class="nx">strings</span><span class="p">.</span><span class="nf">Repeat</span><span class="p">(</span><span class="s">&#34;日志&#34;</span><span class="p">,</span><span class="mi">90000</span><span class="p">))</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="b-效果">b. 效果</h5>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/20210621181145.png" alt=""></p>
+<blockquote>
+<p>在代码中设置单文件最大容量为1MB，如上图所示当文件超过<code>1MB(527+527 &gt; 1024)</code>时,则分割。</p>
+</blockquote>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Learn Go</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2022-10-04
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/go%E6%89%A9%E5%B1%95%E5%8C%85/">Go扩展包</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/%E6%89%A9%E5%B1%95%E5%8C%85/14-bigcache/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Go扩展包(十四):bigCache</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/%E6%89%A9%E5%B1%95%E5%8C%85/12-unicode/">
+            <span class="next-text nav-default">Go扩展包(十二):unicode</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/shershon1991" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/shershon520" class="iconfont icon-zhihu" title="zhihu"></a>
+  <a href="https://shershon1991.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2021 - 
+    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span>Learn Go</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+<script>
+    docsearch({
+        apiKey: "9f0c02b55e9885568dcbf6ef094b433c",
+        indexName: "hugo",
+        appId: "TTENARPLYL",
+        inputSelector: '.docsearch-input',
+        debug: false,
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,2156 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Go扩展包(三十二):go-funk - Learn Go</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Learn Go" /><meta name="description" content="1. 介绍 Go-funk 是基于反射(reflect )实现的一个现代Go工具库，封装了对slice/map/struct/string等的操作。 2. 下载 1 2 3 4" /><meta name="keywords" content="博客, Learn Go, hugo" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.90.1 with theme even" />
+
+
+<link rel="canonical" href="https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/32-go-funk/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Go扩展包(三十二):go-funk" />
+<meta property="og:description" content="1. 介绍 Go-funk 是基于反射(reflect )实现的一个现代Go工具库，封装了对slice/map/struct/string等的操作。 2. 下载 1 2 3 4" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/32-go-funk/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2021-05-02T00:00:00+00:00" />
+<meta property="article:modified_time" content="2022-10-04T07:42:32+08:00" />
+
+<meta itemprop="name" content="Go扩展包(三十二):go-funk">
+<meta itemprop="description" content="1. 介绍 Go-funk 是基于反射(reflect )实现的一个现代Go工具库，封装了对slice/map/struct/string等的操作。 2. 下载 1 2 3 4"><meta itemprop="datePublished" content="2021-05-02T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2022-10-04T07:42:32+08:00" />
+<meta itemprop="wordCount" content="6405">
+<meta itemprop="keywords" content="Go扩展包," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Go扩展包(三十二):go-funk"/>
+<meta name="twitter:description" content="1. 介绍 Go-funk 是基于反射(reflect )实现的一个现代Go工具库，封装了对slice/map/struct/string等的操作。 2. 下载 1 2 3 4"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Learn Go</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">首页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"/><header id="header" class="header">
+    <div class="logo-wrapper">
+        <a href="/" class="logo">Learn Go</a>
+    </div>
+    <nav class="site-navbar">
+        <ul id="menu" class="menu"><li style="display:inline-block;margin-right:10px;">
+                <input type="search" class="docsearch-input" placeholder="Search"/>
+            </li><li class="menu-item">
+                <a class="menu-item-link" href="/">首页</a>
+            </li>
+            <li class="menu-item">
+                <a class="menu-item-link" href="/post/">归档</a>
+            </li>
+            <li class="menu-item">
+                <a class="menu-item-link" href="/tags/">标签</a>
+            </li>
+            <li class="menu-item">
+                <a class="menu-item-link" href="/categories/">分类</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Go扩展包(三十二):go-funk</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-05-02 </span>
+        <div class="post-category">
+            <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+            <a href="/categories/go/"> Go </a>
+            </div>
+          <span class="more-meta"> 约 6405 字 </span>
+          <span class="more-meta"> 预计阅读 13 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#1-介绍">1. 介绍</a></li>
+        <li><a href="#2-下载">2. 下载</a></li>
+        <li><a href="#3-切片slice操作">3. 切片(<code>slice</code>)操作</a>
+          <ul>
+            <li><a href="#31--判断元素是否存在">3.1  判断元素是否存在</a></li>
+            <li><a href="#32-查找元素第一次出现位置">3.2 查找元素第一次出现位置</a></li>
+            <li><a href="#33--查找元素最后一次出现位置">3.3  查找元素最后一次出现位置</a></li>
+            <li><a href="#34--批量查找都有则true">3.4  批量查找(都有则True)</a></li>
+            <li><a href="#35-批量查找有一则true">3.5 批量查找(有一则True)</a></li>
+            <li><a href="#36-获取最后或第一个元素">3.6 获取最后或第一个元素</a></li>
+            <li><a href="#37-用元素填充切片">3.7 用元素填充切片</a></li>
+            <li><a href="#38-取两个切片共同元素结果集">3.8 取两个切片共同元素结果集</a></li>
+            <li><a href="#39--获取去掉两切片共同元素结果集">3.9  获取去掉两切片共同元素结果集</a></li>
+            <li><a href="#310--求只存在某切片的元素除去共同元素">3.10  求只存在某切片的元素(除去共同元素)</a></li>
+            <li><a href="#311-分别去掉两个切片共同元素两结果集">3.11 分别去掉两个切片共同元素(两结果集)</a></li>
+            <li><a href="#312-遍历切片">3.12 遍历切片</a></li>
+            <li><a href="#313-删除首或尾">3.13 删除首或尾</a></li>
+            <li><a href="#314-判断a切片是否属于b切片子集">3.14 判断A切片是否属于B切片子集</a></li>
+            <li><a href="#315-分组">3.15 分组</a></li>
+            <li><a href="#316-把结构体切片转成map">3.16 把结构体切片转成map</a></li>
+            <li><a href="#317-把切片值转成map中的key">3.17 把切片值转成<code>Map</code>中的<code>Key</code></a></li>
+            <li><a href="#318--把二维切片转成一维切片">3.18  把二维切片转成一维切片</a></li>
+            <li><a href="#319-打乱切片">3.19 打乱切片</a></li>
+            <li><a href="#320-反转切片">3.20 反转切片</a></li>
+            <li><a href="#321-元素去重">3.21 元素去重</a></li>
+            <li><a href="#322-删除制定元素">3.22 删除制定元素</a></li>
+          </ul>
+        </li>
+        <li><a href="#4-映射map操作">4. 映射(<code>map</code>)操作</a>
+          <ul>
+            <li><a href="#41-获取所有的key">4.1 获取所有的<code>Key</code></a></li>
+            <li><a href="#42-获取所有的value">4.2 获取所有的<code>Value</code></a></li>
+          </ul>
+        </li>
+        <li><a href="#5-结构体struct切片操作">5. 结构体(<code>struct</code>)切片操作</a>
+          <ul>
+            <li><a href="#51-取结构体某元素为切片">5.1 取结构体某元素为切片</a></li>
+          </ul>
+        </li>
+        <li><a href="#6-判断操作">6. 判断操作</a>
+          <ul>
+            <li><a href="#61-判断相等">6.1 判断相等</a></li>
+            <li><a href="#62-判断类型一致">6.2 判断类型一致</a></li>
+            <li><a href="#63-判断arrayslice">6.3 判断<code>array|slice</code></a></li>
+            <li><a href="#64-判断空">6.4 判断空</a></li>
+          </ul>
+        </li>
+        <li><a href="#7-类型转换">7. 类型转换</a>
+          <ul>
+            <li><a href="#71-任意数字转float64">7.1 任意数字转<code>float64</code></a></li>
+            <li><a href="#72-将x转成x">7.2 将<code>X</code>转成<code>[]X</code></a></li>
+          </ul>
+        </li>
+        <li><a href="#8字符串操作">8.字符串操作</a>
+          <ul>
+            <li><a href="#81-根据字符串生成切片">8.1 根据字符串生成切片</a></li>
+          </ul>
+        </li>
+        <li><a href="#9数字计算">9.数字计算</a>
+          <ul>
+            <li><a href="#91-最大值max">9.1 最大值(<code>Max</code>)</a></li>
+            <li><a href="#92-最小值min">9.2 最小值(<code>Min</code>)</a></li>
+            <li><a href="#93-求和sum">9.3 求和(<code>Sum</code>)</a></li>
+            <li><a href="#94-求乘积product">9.4 求乘积(<code>Product</code>)</a></li>
+          </ul>
+        </li>
+        <li><a href="#10-其他操作">10. 其他操作</a>
+          <ul>
+            <li><a href="#101-生成随机数">10.1 生成随机数</a></li>
+            <li><a href="#102-生成随机字符串">10.2 生成随机字符串</a></li>
+            <li><a href="#103-三元运算">10.3 三元运算</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="1-介绍">1. 介绍</h2>
+<p><code>Go-funk</code> 是基于反射(<code>reflect </code>)实现的一个现代<code>Go</code>工具库，封装了对<code>slice/map/struct/string</code>等的操作。</p>
+<h2 id="2-下载">2. 下载</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 下载</span>
+go get github.com/thoas/go-funk
+<span class="c1"># 引入</span>
+import github.com/thoas/go-funk
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="3-切片slice操作">3. 切片(<code>slice</code>)操作</h2>
+<h3 id="31--判断元素是否存在">3.1  判断元素是否存在</h3>
+<ul>
+<li><code>funk.Contains</code>: 接收任意类型。</li>
+<li><code>funk.ContainsX</code>: <code>X</code>代表具体类型，如:<code>ContainsInt、ContainsString...</code></li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">TestExist</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// 判断任意类型
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;str-&gt;&#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">Contains</span><span class="p">([]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;a&#34;</span><span class="p">,</span> <span class="s">&#34;b&#34;</span><span class="p">},</span> <span class="s">&#34;a&#34;</span><span class="p">))</span>
+	<span class="c1">// int 类型
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;int-&gt;&#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">ContainsInt</span><span class="p">([]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">},</span> <span class="mi">1</span><span class="p">))</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestExist
+</span><span class="cm">str-&gt; true
+</span><span class="cm">int-&gt; true
+</span><span class="cm">--- PASS: TestExist (0.00s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="32-查找元素第一次出现位置">3.2 查找元素第一次出现位置</h3>
+<ul>
+<li><code>funk.IndexOf</code>: 接收任意类型,不存在则返回<code>-1</code>。</li>
+<li><code>funk.IndexOfX</code>:  <code>X</code>代表具体类型,不存在则返回<code>-1</code>。</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">TestIndexOf</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">strArr</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;go&#34;</span><span class="p">,</span> <span class="s">&#34;java&#34;</span><span class="p">,</span> <span class="s">&#34;c&#34;</span><span class="p">,</span> <span class="s">&#34;java&#34;</span><span class="p">}</span>
+	<span class="c1">// 具体类型
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;c: &#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">IndexOfString</span><span class="p">(</span><span class="nx">strArr</span><span class="p">,</span> <span class="s">&#34;c&#34;</span><span class="p">))</span>
+	<span class="c1">// 验证第一次出现位置
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;java: &#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">IndexOfString</span><span class="p">(</span><span class="nx">strArr</span><span class="p">,</span> <span class="s">&#34;java&#34;</span><span class="p">))</span>
+	<span class="c1">// 任意类型
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;go: &#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">IndexOf</span><span class="p">(</span><span class="nx">strArr</span><span class="p">,</span> <span class="s">&#34;go&#34;</span><span class="p">))</span>
+	<span class="c1">// 不存在时返回-1
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;php: &#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">IndexOfString</span><span class="p">(</span><span class="nx">strArr</span><span class="p">,</span> <span class="s">&#34;php&#34;</span><span class="p">))</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestIndexOf
+</span><span class="cm">c:  2
+</span><span class="cm">java:  1
+</span><span class="cm">go:  0
+</span><span class="cm">php:  -1
+</span><span class="cm">--- PASS: TestIndexOf (0.00s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="33--查找元素最后一次出现位置">3.3  查找元素最后一次出现位置</h3>
+<ul>
+<li><code>funk.LastIndexOf</code>: 接收任意类型,不存在则返回<code>-1</code>。</li>
+<li><code>funk.LastIndexOfX</code>:  <code>X</code>代表具体类型,不存在则返回<code>-1</code>。</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 查找元素最后一次出现的位置
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestLastOf</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">strArr</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;go&#34;</span><span class="p">,</span> <span class="s">&#34;java&#34;</span><span class="p">,</span> <span class="s">&#34;c&#34;</span><span class="p">,</span> <span class="s">&#34;java&#34;</span><span class="p">}</span>
+	<span class="c1">// 具体类型
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;c: &#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">LastIndexOfString</span><span class="p">(</span><span class="nx">strArr</span><span class="p">,</span> <span class="s">&#34;c&#34;</span><span class="p">))</span>
+	<span class="c1">// 验证第一次出现位置
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;java: &#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">LastIndexOfString</span><span class="p">(</span><span class="nx">strArr</span><span class="p">,</span> <span class="s">&#34;java&#34;</span><span class="p">))</span>
+	<span class="c1">// 任意类型
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;go: &#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">LastIndexOf</span><span class="p">(</span><span class="nx">strArr</span><span class="p">,</span> <span class="s">&#34;go&#34;</span><span class="p">))</span>
+	<span class="c1">// 不存在时返回-1
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;php: &#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">LastIndexOf</span><span class="p">(</span><span class="nx">strArr</span><span class="p">,</span> <span class="s">&#34;php&#34;</span><span class="p">))</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestLastOf
+</span><span class="cm">c:  2
+</span><span class="cm">java:  3
+</span><span class="cm">go:  0
+</span><span class="cm">php:  -1
+</span><span class="cm">--- PASS: TestLastOf (0.00s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="34--批量查找都有则true">3.4  批量查找(都有则True)</h3>
+<blockquote>
+<p><code>func Every(in interface{}, elements ...interface{}) bool</code></p>
+</blockquote>
+<ul>
+<li>当<code>elements</code>都在<code>in</code>中时，则返回<code>true</code>; 否则为<code>false</code>;</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">TestEvery</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">strArr</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;go&#34;</span><span class="p">,</span> <span class="s">&#34;java&#34;</span><span class="p">,</span> <span class="s">&#34;c&#34;</span><span class="p">,</span> <span class="s">&#34;python&#34;</span><span class="p">}</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;都存在:&#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">Every</span><span class="p">(</span><span class="nx">strArr</span><span class="p">,</span> <span class="s">&#34;go&#34;</span><span class="p">,</span> <span class="s">&#34;c&#34;</span><span class="p">))</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;有一个不存在:&#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">Every</span><span class="p">(</span><span class="nx">strArr</span><span class="p">,</span> <span class="s">&#34;php&#34;</span><span class="p">,</span> <span class="s">&#34;go&#34;</span><span class="p">))</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;都不存在:&#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">Every</span><span class="p">(</span><span class="nx">strArr</span><span class="p">,</span> <span class="s">&#34;php&#34;</span><span class="p">,</span> <span class="s">&#34;c++&#34;</span><span class="p">))</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestEvery
+</span><span class="cm">都存在: true
+</span><span class="cm">有一个不存在: false
+</span><span class="cm">都不存在: false
+</span><span class="cm">--- PASS: TestEvery (0.00s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="35-批量查找有一则true">3.5 批量查找(有一则True)</h3>
+<blockquote>
+<p><code>func Some(in interface{}, elements ...interface{}) bool</code></p>
+</blockquote>
+<ul>
+<li>当<code>elements</code>至少有一个在<code>in</code>中时，则返回<code>true</code>; 否则为<code>false</code>;</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 批量查找，有一则返回true
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestSome</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">strArr</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;go&#34;</span><span class="p">,</span> <span class="s">&#34;java&#34;</span><span class="p">,</span> <span class="s">&#34;c&#34;</span><span class="p">,</span> <span class="s">&#34;python&#34;</span><span class="p">}</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;都存在:&#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">Some</span><span class="p">(</span><span class="nx">strArr</span><span class="p">,</span> <span class="s">&#34;go&#34;</span><span class="p">,</span> <span class="s">&#34;c&#34;</span><span class="p">))</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;至少一个存在:&#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">Some</span><span class="p">(</span><span class="nx">strArr</span><span class="p">,</span> <span class="s">&#34;php&#34;</span><span class="p">,</span> <span class="s">&#34;go&#34;</span><span class="p">))</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;都不存在:&#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">Some</span><span class="p">(</span><span class="nx">strArr</span><span class="p">,</span> <span class="s">&#34;php&#34;</span><span class="p">,</span> <span class="s">&#34;c++&#34;</span><span class="p">))</span>
+<span class="p">}</span>
+<span class="cm">/***输出
+</span><span class="cm">=== RUN   TestSome
+</span><span class="cm">都存在: true
+</span><span class="cm">至少一个存在: true
+</span><span class="cm">都不存在: false
+</span><span class="cm">--- PASS: TestSome (0.00s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="36-获取最后或第一个元素">3.6 获取最后或第一个元素</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 获取第一个元素 或 最后一个元素
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestLastOrFirst</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">number</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">10</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">23</span><span class="p">}</span>
+	<span class="c1">// 获取第一个元素
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;Head: &#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">Head</span><span class="p">(</span><span class="nx">number</span><span class="p">))</span>
+	<span class="c1">// 获取最后一个元素
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;Last: &#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">Last</span><span class="p">(</span><span class="nx">number</span><span class="p">))</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestLastOrFirst
+</span><span class="cm">Head:  10
+</span><span class="cm">Last:  23
+</span><span class="cm">--- PASS: TestLastOrFirst (0.00s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="37-用元素填充切片">3.7 用元素填充切片</h3>
+<blockquote>
+<p><code>func Fill(in interface{}, fillValue interface{}) (interface{}, error)</code></p>
+</blockquote>
+<ul>
+<li>将<code>in</code>中的所有元素，设置成<code>fillValue</code></li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 填充元素
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestFill</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// 初始化切片
+</span><span class="c1"></span>	<span class="kd">var</span> <span class="nx">data</span> <span class="p">=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+	<span class="nx">fill</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">Fill</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;fill: %v \n&#34;</span><span class="p">,</span> <span class="nx">fill</span><span class="p">)</span>
+	<span class="c1">// 将所有值设置成2
+</span><span class="c1"></span>	<span class="nx">input</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">}</span>
+	<span class="nx">result</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">Fill</span><span class="p">(</span><span class="nx">input</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;result: %v \n&#34;</span><span class="p">,</span> <span class="nx">result</span><span class="p">)</span>
+	<span class="kd">var</span> <span class="nx">structData</span> <span class="p">=</span> <span class="nb">make</span><span class="p">([]</span><span class="nx">Student</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+	<span class="nx">stuInfo</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">Fill</span><span class="p">(</span><span class="nx">structData</span><span class="p">,</span> <span class="nx">Student</span><span class="p">{</span><span class="nx">Name</span><span class="p">:</span> <span class="s">&#34;张三&#34;</span><span class="p">,</span> <span class="nx">Age</span><span class="p">:</span> <span class="mi">18</span><span class="p">})</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;stuInfo: %v \n&#34;</span><span class="p">,</span> <span class="nx">stuInfo</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestFill
+</span><span class="cm">fill: [100 100 100] 
+</span><span class="cm">result: [2 2 2] 
+</span><span class="cm">stuInfo: [{张三 18} {张三 18}] 
+</span><span class="cm">--- PASS: TestFill (0.00s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="38-取两个切片共同元素结果集">3.8 取两个切片共同元素结果集</h3>
+<ul>
+<li><code>Join(larr, rarr interface{}, fnc JoinFnc)</code>:  当<code>fnc=funk.InnerJoin</code>,代表合并两个任意类型切片。</li>
+<li><code>JoinXXX(larr, rarr interface{}, fnc JoinFnc)</code>: 指定类型合并，推荐使用。</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">cus</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">Name</span> <span class="kt">string</span>
+	<span class="nx">Age</span>  <span class="kt">int</span>
+	<span class="nx">Home</span> <span class="kt">string</span>
+<span class="p">}</span>
+<span class="kd">func</span> <span class="nf">TestJoin</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">a</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int64</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">}</span>
+	<span class="nx">b</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int64</span><span class="p">{</span><span class="mi">3</span><span class="p">,</span> <span class="mi">7</span><span class="p">}</span>
+	<span class="c1">// 任意类型切片交集
+</span><span class="c1"></span>	<span class="nx">join</span> <span class="o">:=</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">Join</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nx">InnerJoin</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;join = &#34;</span><span class="p">,</span> <span class="nx">join</span><span class="p">)</span>
+	<span class="c1">// 指定类型取交集
+</span><span class="c1"></span>	<span class="nx">joinInt64</span> <span class="o">:=</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">JoinInt64</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nx">InnerJoinInt64</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;joinInt64 = &#34;</span><span class="p">,</span> <span class="nx">joinInt64</span><span class="p">)</span>
+	<span class="c1">// 自定义结构体交集
+</span><span class="c1"></span>	<span class="nx">sliceA</span> <span class="o">:=</span> <span class="p">[]</span><span class="nx">cus</span><span class="p">{</span>
+		<span class="p">{</span><span class="s">&#34;张三&#34;</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="s">&#34;北京&#34;</span><span class="p">},</span>
+		<span class="p">{</span><span class="s">&#34;李四&#34;</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="s">&#34;南京&#34;</span><span class="p">},</span>
+	<span class="p">}</span>
+	<span class="nx">sliceB</span> <span class="o">:=</span> <span class="p">[]</span><span class="nx">cus</span><span class="p">{</span>
+		<span class="p">{</span><span class="s">&#34;张三&#34;</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="s">&#34;北京&#34;</span><span class="p">},</span>
+		<span class="p">{</span><span class="s">&#34;李四&#34;</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="s">&#34;上海&#34;</span><span class="p">},</span>
+	<span class="p">}</span>
+	<span class="nx">res</span> <span class="o">:=</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">Join</span><span class="p">(</span><span class="nx">sliceA</span><span class="p">,</span> <span class="nx">sliceB</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nx">InnerJoin</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;自定义结构体: &#34;</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestJoin
+</span><span class="cm">join =  [3 7]
+</span><span class="cm">joinInt64 =  [3 7]
+</span><span class="cm">自定义结构体:  [{张三 20 北京}]
+</span><span class="cm">--- PASS: TestJoin (0.00s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="39--获取去掉两切片共同元素结果集">3.9  获取去掉两切片共同元素结果集</h3>
+<p>同样使用<code>Join</code>和<code>JoinXXX</code>方法，而<code>fnc</code>设置成<code>funk.OuterJoin</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 取差集
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestDiffSlice</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">a</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int64</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">}</span>
+	<span class="nx">b</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int64</span><span class="p">{</span><span class="mi">3</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">10</span><span class="p">}</span>
+	<span class="c1">// 任意类型切片交集
+</span><span class="c1"></span>	<span class="nx">join</span> <span class="o">:=</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">Join</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nx">OuterJoin</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;OuterJoin = &#34;</span><span class="p">,</span> <span class="nx">join</span><span class="p">)</span>
+	<span class="c1">// 指定类型取交集
+</span><span class="c1"></span>	<span class="nx">joinInt64</span> <span class="o">:=</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">JoinInt64</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nx">OuterJoinInt64</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;joinInt64 = &#34;</span><span class="p">,</span> <span class="nx">joinInt64</span><span class="p">)</span>
+	<span class="c1">// 自定义结构体交集
+</span><span class="c1"></span>	<span class="nx">sliceA</span> <span class="o">:=</span> <span class="p">[]</span><span class="nx">cus</span><span class="p">{</span>
+		<span class="p">{</span><span class="s">&#34;张三&#34;</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="s">&#34;北京&#34;</span><span class="p">},</span>
+		<span class="p">{</span><span class="s">&#34;李四&#34;</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="s">&#34;南京&#34;</span><span class="p">},</span>
+	<span class="p">}</span>
+	<span class="nx">sliceB</span> <span class="o">:=</span> <span class="p">[]</span><span class="nx">cus</span><span class="p">{</span>
+		<span class="p">{</span><span class="s">&#34;张三&#34;</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="s">&#34;北京&#34;</span><span class="p">},</span>
+		<span class="p">{</span><span class="s">&#34;李四&#34;</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="s">&#34;上海&#34;</span><span class="p">},</span>
+	<span class="p">}</span>
+	<span class="nx">res</span> <span class="o">:=</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">Join</span><span class="p">(</span><span class="nx">sliceA</span><span class="p">,</span> <span class="nx">sliceB</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nx">OuterJoin</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;自定义结构体: &#34;</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestDiffSlice
+</span><span class="cm">OuterJoin =  [1 5 10]
+</span><span class="cm">joinInt64 =  [1 5 10]
+</span><span class="cm">自定义结构体:  [{李四 22 南京} {李四 22 上海}]
+</span><span class="cm">--- PASS: TestDiffSlice (0.00s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="310--求只存在某切片的元素除去共同元素">3.10  求只存在某切片的元素(除去共同元素)</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">TestLeftAndRightJoin</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">a</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int64</span><span class="p">{</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">}</span>
+	<span class="nx">b</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int64</span><span class="p">{</span><span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">}</span>
+	<span class="c1">// 取出只在a，不在b的元素
+</span><span class="c1"></span>	<span class="nx">leftJoin</span> <span class="o">:=</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">Join</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nx">LeftJoin</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;只在a切片的元素: &#34;</span><span class="p">,</span> <span class="nx">leftJoin</span><span class="p">)</span>
+	<span class="c1">// 取出只在b，不在a的元素
+</span><span class="c1"></span>	<span class="nx">rightJoin</span> <span class="o">:=</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">Join</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nx">RightJoin</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;只在b切片的元素: &#34;</span><span class="p">,</span> <span class="nx">rightJoin</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestLeftAndRightJoin
+</span><span class="cm">只在a切片的元素:  [10 20]
+</span><span class="cm">只在b切片的元素:  [40]
+</span><span class="cm">--- PASS: TestLeftAndRightJoin (0.00s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="311-分别去掉两个切片共同元素两结果集">3.11 分别去掉两个切片共同元素(两结果集)</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">TestDifferent</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// 处理任意类型
+</span><span class="c1"></span>	<span class="nx">one</span> <span class="o">:=</span> <span class="p">[]</span><span class="kd">interface</span><span class="p">{}{</span><span class="mi">1</span><span class="p">,</span> <span class="s">&#34;go&#34;</span><span class="p">,</span> <span class="mf">3.2</span><span class="p">,</span> <span class="p">[]</span><span class="kt">int8</span><span class="p">{</span><span class="mi">10</span><span class="p">}}</span>
+	<span class="nx">two</span> <span class="o">:=</span> <span class="p">[]</span><span class="kd">interface</span><span class="p">{}{</span><span class="mi">2</span><span class="p">,</span> <span class="s">&#34;go&#34;</span><span class="p">,</span> <span class="mf">3.2</span><span class="p">,</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">20</span><span class="p">}}</span>
+	<span class="nx">oneRes</span><span class="p">,</span> <span class="nx">twoRes</span> <span class="o">:=</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">Difference</span><span class="p">(</span><span class="nx">one</span><span class="p">,</span> <span class="nx">two</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;oneRes: &#34;</span><span class="p">,</span> <span class="nx">oneRes</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;twoRes:  &#34;</span><span class="p">,</span> <span class="nx">twoRes</span><span class="p">)</span>
+
+	<span class="c1">// 只处理具体类型
+</span><span class="c1"></span>	<span class="nx">str1</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;go&#34;</span><span class="p">,</span> <span class="s">&#34;php&#34;</span><span class="p">,</span> <span class="s">&#34;java&#34;</span><span class="p">}</span>
+	<span class="nx">str2</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;c&#34;</span><span class="p">,</span> <span class="s">&#34;python&#34;</span><span class="p">,</span> <span class="s">&#34;java&#34;</span><span class="p">}</span>
+	<span class="nx">res</span><span class="p">,</span> <span class="nx">res1</span> <span class="o">:=</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">DifferenceString</span><span class="p">(</span><span class="nx">str1</span><span class="p">,</span> <span class="nx">str2</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;res: &#34;</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;res1: &#34;</span><span class="p">,</span> <span class="nx">res1</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestDifferent
+</span><span class="cm">oneRes:  [1 [10]]
+</span><span class="cm">twoRes:   [2 [20]]
+</span><span class="cm">res:  [go php]
+</span><span class="cm">res1:  [c python]
+</span><span class="cm">--- PASS: TestDifferent (0.00s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="312-遍历切片">3.12 遍历切片</h3>
+<ul>
+<li><code>ForEach</code>: 从左边遍历切片。</li>
+<li><code>ForEachRight</code>: 从右边遍历切片。</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 遍历切片
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestForeachSlice</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// 从左边遍历
+</span><span class="c1"></span>	<span class="kd">var</span> <span class="nx">leftRes</span> <span class="p">[]</span><span class="kt">int</span>
+	<span class="nx">funk</span><span class="p">.</span><span class="nf">ForEach</span><span class="p">([]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">},</span> <span class="kd">func</span><span class="p">(</span><span class="nx">x</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">leftRes</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">leftRes</span><span class="p">,</span> <span class="nx">x</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span>
+	<span class="p">})</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;ForEach:&#34;</span><span class="p">,</span> <span class="nx">leftRes</span><span class="p">)</span>
+	<span class="c1">// 从右边遍历
+</span><span class="c1"></span>	<span class="kd">var</span> <span class="nx">rightRes</span> <span class="p">[]</span><span class="kt">int</span>
+	<span class="nx">funk</span><span class="p">.</span><span class="nf">ForEachRight</span><span class="p">([]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">},</span> <span class="kd">func</span><span class="p">(</span><span class="nx">x</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">rightRes</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">rightRes</span><span class="p">,</span> <span class="nx">x</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span>
+	<span class="p">})</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;ForEachRight:&#34;</span><span class="p">,</span> <span class="nx">rightRes</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestForeachSlice
+</span><span class="cm">ForEach: [2 4 6 8]
+</span><span class="cm">ForEachRight: [8 6 4 2]
+</span><span class="cm">--- PASS: TestForeachSlice (0.00s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="313-删除首或尾">3.13 删除首或尾</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 除去第一个 或者 最后一个
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestDelLastOrFirst</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">a</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">}</span>
+	<span class="c1">// 除去第一个，返回剩余元素
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">funk</span><span class="p">.</span><span class="nf">Tail</span><span class="p">(</span><span class="nx">a</span><span class="p">))</span>
+	<span class="c1">// 除去最后一个，返回剩余元素
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">funk</span><span class="p">.</span><span class="nf">Initial</span><span class="p">(</span><span class="nx">a</span><span class="p">))</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestDelLastOrFirst
+</span><span class="cm">[2 3 4 5 6 7]
+</span><span class="cm">[1 2 3 4 5 6]
+</span><span class="cm">--- PASS: TestDelLastOrFirst (0.00s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="314-判断a切片是否属于b切片子集">3.14 判断A切片是否属于B切片子集</h3>
+<blockquote>
+<p><code>Subset(x interface{}, y interface{}) bool</code>: 判断<code>x</code>是否属于<code>y</code>的切片。</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 判断是否属于子集
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestSubset</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// 判断基础切片
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;是否属于子集:&#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">Subset</span><span class="p">([]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">},</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">}))</span>
+	<span class="c1">// 判断自定义结构体切片
+</span><span class="c1"></span>	<span class="nx">subStu1</span> <span class="o">:=</span> <span class="p">[]</span><span class="nx">Student</span><span class="p">{{</span><span class="nx">Name</span><span class="p">:</span> <span class="s">&#34;张三&#34;</span><span class="p">,</span> <span class="nx">Age</span><span class="p">:</span> <span class="mi">18</span><span class="p">}}</span>
+	<span class="nx">subStu2</span> <span class="o">:=</span> <span class="p">[]</span><span class="nx">Student</span><span class="p">{{</span><span class="nx">Name</span><span class="p">:</span> <span class="s">&#34;张三&#34;</span><span class="p">,</span> <span class="nx">Age</span><span class="p">:</span> <span class="mi">22</span><span class="p">}}</span>
+	<span class="nx">allStu</span> <span class="o">:=</span> <span class="p">[]</span><span class="nx">Student</span><span class="p">{</span>
+		<span class="p">{</span><span class="nx">Name</span><span class="p">:</span> <span class="s">&#34;张三&#34;</span><span class="p">,</span> <span class="nx">Age</span><span class="p">:</span> <span class="mi">18</span><span class="p">},</span>
+		<span class="p">{</span><span class="nx">Name</span><span class="p">:</span> <span class="s">&#34;李四&#34;</span><span class="p">,</span> <span class="nx">Age</span><span class="p">:</span> <span class="mi">22</span><span class="p">},</span>
+	<span class="p">}</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;subStu1: &#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">Subset</span><span class="p">(</span><span class="nx">subStu1</span><span class="p">,</span> <span class="nx">allStu</span><span class="p">))</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;subStu2: &#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">Subset</span><span class="p">(</span><span class="nx">subStu2</span><span class="p">,</span> <span class="nx">allStu</span><span class="p">))</span>
+	<span class="c1">// 判断空切片是否属于另一切片子集
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;判断空集：&#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">Subset</span><span class="p">([]</span><span class="kt">int</span><span class="p">{},</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">}))</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestSubset
+</span><span class="cm">是否属于子集: true
+</span><span class="cm">subStu1:  true
+</span><span class="cm">subStu2:  false
+</span><span class="cm">判断空集： true
+</span><span class="cm">--- PASS: TestSubset (0.00s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="315-分组">3.15 分组</h3>
+<blockquote>
+<p><code>Chunk(arr interface{}, size int) interface{}</code>: 把<code>arr</code>按照<code>每组size个</code>进行分组</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 分组
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestChunk</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">a</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">}</span>
+	<span class="c1">// 分组(每组2个)
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">funk</span><span class="p">.</span><span class="nf">Chunk</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+	<span class="c1">// 分组自定义结构体切片 (每组2个)
+</span><span class="c1"></span>	<span class="nx">stuList</span> <span class="o">:=</span> <span class="p">[]</span><span class="nx">Student</span><span class="p">{</span>
+		<span class="p">{</span><span class="nx">Name</span><span class="p">:</span> <span class="s">&#34;张三&#34;</span><span class="p">,</span> <span class="nx">Age</span><span class="p">:</span> <span class="mi">18</span><span class="p">},</span>
+		<span class="p">{</span><span class="nx">Name</span><span class="p">:</span> <span class="s">&#34;小明&#34;</span><span class="p">,</span> <span class="nx">Age</span><span class="p">:</span> <span class="mi">20</span><span class="p">},</span>
+		<span class="p">{</span><span class="nx">Name</span><span class="p">:</span> <span class="s">&#34;李四&#34;</span><span class="p">,</span> <span class="nx">Age</span><span class="p">:</span> <span class="mi">22</span><span class="p">},</span>
+		<span class="p">{</span><span class="nx">Name</span><span class="p">:</span> <span class="s">&#34;赵武&#34;</span><span class="p">,</span> <span class="nx">Age</span><span class="p">:</span> <span class="mi">32</span><span class="p">},</span>
+		<span class="p">{</span><span class="nx">Name</span><span class="p">:</span> <span class="s">&#34;小英&#34;</span><span class="p">,</span> <span class="nx">Age</span><span class="p">:</span> <span class="mi">19</span><span class="p">},</span>
+	<span class="p">}</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">funk</span><span class="p">.</span><span class="nf">Chunk</span><span class="p">(</span><span class="nx">stuList</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestChunk
+</span><span class="cm">[[1 2] [3 4] [5 6] [7]]
+</span><span class="cm">[[{张三 18} {小明 20}] [{李四 22} {赵武 32}] [{小英 19}]]
+</span><span class="cm">--- PASS: TestChunk (0.00s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="316-把结构体切片转成map">3.16 把结构体切片转成map</h3>
+<blockquote>
+<p><code>ToMap(in interface{}, pivot string) interface{}</code>: 把切片<code>in</code>,转成以<code>pivot</code>为<code>key</code>的<code>map</code>。</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 结构体转成Map
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestToMap</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">bookList</span> <span class="o">:=</span> <span class="p">[]</span><span class="nx">Book</span><span class="p">{</span>
+		<span class="p">{</span><span class="nx">Id</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">Name</span><span class="p">:</span> <span class="s">&#34;西游记&#34;</span><span class="p">},</span>
+		<span class="p">{</span><span class="nx">Id</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="nx">Name</span><span class="p">:</span> <span class="s">&#34;水浒传&#34;</span><span class="p">},</span>
+		<span class="p">{</span><span class="nx">Id</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="nx">Name</span><span class="p">:</span> <span class="s">&#34;三国演义&#34;</span><span class="p">},</span>
+	<span class="p">}</span>
+	<span class="c1">// 转成以Id为Key的Map
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;结果:&#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">ToMap</span><span class="p">(</span><span class="nx">bookList</span><span class="p">,</span> <span class="s">&#34;Id&#34;</span><span class="p">))</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestToMap
+</span><span class="cm">结果: map[1:{1 西游记} 2:{2 水浒传} 3:{3 三国演义}]
+</span><span class="cm">--- PASS: TestToMap (0.00s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="317-把切片值转成map中的key">3.17 把切片值转成<code>Map</code>中的<code>Key</code></h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">TestMap</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// 将切片最为map的key
+</span><span class="c1"></span>	<span class="nx">r</span> <span class="o">:=</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">Map</span><span class="p">([]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">},</span> <span class="kd">func</span><span class="p">(</span><span class="nx">x</span> <span class="kt">int</span><span class="p">)</span> <span class="p">(</span><span class="kt">int</span><span class="p">,</span> <span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nx">x</span><span class="p">,</span> <span class="s">&#34;go&#34;</span>
+	<span class="p">})</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;r=&#34;</span><span class="p">,</span> <span class="nx">r</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestMap
+</span><span class="cm">r= map[1:go 2:go 3:go 4:go]
+</span><span class="cm">--- PASS: TestMap (0.00s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="318--把二维切片转成一维切片">3.18  把二维切片转成一维切片</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 把二维切片转成一维切片
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestFlatMap</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+   <span class="nx">r</span> <span class="o">:=</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">FlatMap</span><span class="p">([][]</span><span class="kt">int</span><span class="p">{{</span><span class="mi">1</span><span class="p">},</span> <span class="p">{</span><span class="mi">2</span><span class="p">},</span> <span class="p">{</span><span class="mi">3</span><span class="p">},</span> <span class="p">{</span><span class="mi">4</span><span class="p">}},</span> <span class="kd">func</span><span class="p">(</span><span class="nx">x</span> <span class="p">[]</span><span class="kt">int</span><span class="p">)</span> <span class="p">[]</span><span class="kt">int</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">x</span>
+   <span class="p">})</span>
+   <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%#v\n&#34;</span><span class="p">,</span> <span class="nx">r</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestFlatMap
+</span><span class="cm">[]int{1, 2, 3, 4}
+</span><span class="cm">--- PASS: TestFlatMap (0.00s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="319-打乱切片">3.19 打乱切片</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">TestShuffle</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">a</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">}</span>
+	<span class="c1">// 打乱多次
+</span><span class="c1"></span>	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;第%v次打乱a&#34;</span><span class="p">,</span> <span class="nx">i</span><span class="p">),</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">Shuffle</span><span class="p">(</span><span class="nx">a</span><span class="p">))</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestShuffle
+</span><span class="cm">第1次打乱a [5 4 2 6 7 0 3 1]
+</span><span class="cm">第2次打乱a [1 6 7 3 2 5 0 4]
+</span><span class="cm">第3次打乱a [5 1 7 6 0 4 2 3]
+</span><span class="cm">--- PASS: TestShuffle (0.00s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="320-反转切片">3.20 反转切片</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 反转切片
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestReverse</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;ReverseInt:&#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">ReverseInt</span><span class="p">([]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">}))</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;Reverse,任意类型:&#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">Reverse</span><span class="p">([]</span><span class="kd">interface</span><span class="p">{}{</span><span class="mi">1</span><span class="p">,</span> <span class="s">&#34;2&#34;</span><span class="p">,</span> <span class="mf">3.02</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s">&#34;5&#34;</span><span class="p">,</span> <span class="mi">6</span><span class="p">}))</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;Reverse,Str:&#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">ReverseStrings</span><span class="p">([]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;a&#34;</span><span class="p">,</span> <span class="s">&#34;b&#34;</span><span class="p">,</span> <span class="s">&#34;c&#34;</span><span class="p">,</span> <span class="s">&#34;d&#34;</span><span class="p">}))</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestReverse
+</span><span class="cm">ReverseInt: [6 5 4 3 2 1]
+</span><span class="cm">Reverse,任意类型: [6 5 4 3.02 2 1]
+</span><span class="cm">Reverse,Str: [d c b a]
+</span><span class="cm">--- PASS: TestReverse (0.00s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="321-元素去重">3.21 元素去重</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 去重
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestUniq</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">a</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int64</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">}</span>
+	<span class="c1">// 过滤整型类型
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;Uniq:&#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">Uniq</span><span class="p">(</span><span class="nx">a</span><span class="p">))</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;UniqInt64:&#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">UniqInt64</span><span class="p">(</span><span class="nx">a</span><span class="p">))</span>
+	<span class="nx">b</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;php&#34;</span><span class="p">,</span> <span class="s">&#34;go&#34;</span><span class="p">,</span> <span class="s">&#34;c&#34;</span><span class="p">,</span> <span class="s">&#34;go&#34;</span><span class="p">}</span>
+	<span class="c1">// 过滤字符串类型
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;UniqString:&#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">UniqString</span><span class="p">(</span><span class="nx">b</span><span class="p">))</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestUniq
+</span><span class="cm">Uniq: [1 2 3 4]
+</span><span class="cm">UniqInt64: [1 2 3 4]
+</span><span class="cm">UniqString: [php go c]
+</span><span class="cm">--- PASS: TestUniq (0.00s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="322-删除制定元素">3.22 删除制定元素</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 删除制定元素
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestWithOut</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// 删除具体元素
+</span><span class="c1"></span>	<span class="nx">b</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">}</span>
+	<span class="nx">without</span> <span class="o">:=</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">Without</span><span class="p">(</span><span class="nx">b</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;删除30:&#34;</span><span class="p">,</span> <span class="nx">without</span><span class="p">)</span>
+	<span class="c1">// 删除自定义结构体元素
+</span><span class="c1"></span>	<span class="nx">stuList</span> <span class="o">:=</span> <span class="p">[]</span><span class="nx">Student</span><span class="p">{</span>
+		<span class="p">{</span><span class="nx">Name</span><span class="p">:</span> <span class="s">&#34;张三&#34;</span><span class="p">,</span> <span class="nx">Age</span><span class="p">:</span> <span class="mi">18</span><span class="p">},</span>
+		<span class="p">{</span><span class="nx">Name</span><span class="p">:</span> <span class="s">&#34;李四&#34;</span><span class="p">,</span> <span class="nx">Age</span><span class="p">:</span> <span class="mi">22</span><span class="p">},</span>
+		<span class="p">{</span><span class="nx">Name</span><span class="p">:</span> <span class="s">&#34;范五&#34;</span><span class="p">,</span> <span class="nx">Age</span><span class="p">:</span> <span class="mi">24</span><span class="p">},</span>
+	<span class="p">}</span>
+	<span class="nx">res</span> <span class="o">:=</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">Without</span><span class="p">(</span><span class="nx">stuList</span><span class="p">,</span> <span class="nx">Student</span><span class="p">{</span><span class="nx">Name</span><span class="p">:</span> <span class="s">&#34;李四&#34;</span><span class="p">,</span> <span class="nx">Age</span><span class="p">:</span> <span class="mi">22</span><span class="p">})</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;删除李四:&#34;</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestWithOut
+</span><span class="cm">删除30: [10 20 40]
+</span><span class="cm">删除李四: [{张三 18} {范五 24}]
+</span><span class="cm">--- PASS: TestWithOut (0.00s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="4-映射map操作">4. 映射(<code>map</code>)操作</h2>
+<h3 id="41-获取所有的key">4.1 获取所有的<code>Key</code></h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 获取map中所有的key
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestMapKeys</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">res</span> <span class="o">:=</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span>
+		<span class="s">&#34;张三&#34;</span><span class="p">:</span> <span class="mi">18</span><span class="p">,</span>
+		<span class="s">&#34;李四&#34;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+		<span class="s">&#34;赵武&#34;</span><span class="p">:</span> <span class="mi">25</span><span class="p">,</span>
+	<span class="p">}</span>
+	<span class="nx">keys</span> <span class="o">:=</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">Keys</span><span class="p">(</span><span class="nx">res</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;keys: %#v %T \n&#34;</span><span class="p">,</span> <span class="nx">keys</span><span class="p">,</span> <span class="nx">keys</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestMapKeys
+</span><span class="cm">keys: []string{&#34;张三&#34;, &#34;李四&#34;, &#34;赵武&#34;} []string 
+</span><span class="cm">--- PASS: TestMapKeys (0.00s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="42-获取所有的value">4.2 获取所有的<code>Value</code></h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 获取map中的所有values
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestMapValues</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">res</span> <span class="o">:=</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span>
+		<span class="s">&#34;张三&#34;</span><span class="p">:</span> <span class="mi">18</span><span class="p">,</span>
+		<span class="s">&#34;李四&#34;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+		<span class="s">&#34;赵武&#34;</span><span class="p">:</span> <span class="mi">25</span><span class="p">,</span>
+	<span class="p">}</span>
+	<span class="nx">values</span> <span class="o">:=</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">Values</span><span class="p">(</span><span class="nx">res</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;values: %#v %T \n&#34;</span><span class="p">,</span> <span class="nx">values</span><span class="p">,</span> <span class="nx">values</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestMapValues
+</span><span class="cm">values: []int{18, 20, 25} []int 
+</span><span class="cm">--- PASS: TestMapValues (0.00s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="5-结构体struct切片操作">5. 结构体(<code>struct</code>)切片操作</h2>
+<h3 id="51-取结构体某元素为切片">5.1 取结构体某元素为切片</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">TestGetToSlice</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">userList</span> <span class="o">:=</span> <span class="p">[]</span><span class="nx">User</span><span class="p">{</span>
+		<span class="p">{</span>
+			<span class="nx">Name</span><span class="p">:</span> <span class="s">&#34;张三&#34;</span><span class="p">,</span>
+			<span class="nx">Home</span><span class="p">:</span> <span class="kd">struct</span> <span class="p">{</span>
+				<span class="nx">City</span> <span class="kt">string</span>
+			<span class="p">}{</span><span class="s">&#34;北京&#34;</span><span class="p">},</span>
+		<span class="p">},</span>
+		<span class="p">{</span>
+			<span class="nx">Name</span><span class="p">:</span> <span class="s">&#34;小明&#34;</span><span class="p">,</span>
+			<span class="nx">Home</span><span class="p">:</span> <span class="kd">struct</span> <span class="p">{</span>
+				<span class="nx">City</span> <span class="kt">string</span>
+			<span class="p">}{</span><span class="s">&#34;南京&#34;</span><span class="p">},</span>
+		<span class="p">},</span>
+	<span class="p">}</span>
+	<span class="c1">// 取一层
+</span><span class="c1"></span>	<span class="nx">names</span> <span class="o">:=</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">Get</span><span class="p">(</span><span class="nx">userList</span><span class="p">,</span> <span class="s">&#34;Name&#34;</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;names:&#34;</span><span class="p">,</span> <span class="nx">names</span><span class="p">)</span>
+	<span class="c1">// 取其他层
+</span><span class="c1"></span>	<span class="nx">homes</span> <span class="o">:=</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">Get</span><span class="p">(</span><span class="nx">userList</span><span class="p">,</span> <span class="s">&#34;Home.City&#34;</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;homes:&#34;</span><span class="p">,</span> <span class="nx">homes</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestGetToSlice
+</span><span class="cm">names: [张三 小明]
+</span><span class="cm">homes: [北京 南京]
+</span><span class="cm">--- PASS: TestGetToSlice (0.00s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="6-判断操作">6. 判断操作</h2>
+<h3 id="61-判断相等">6.1 判断相等</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">Student</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">Name</span> <span class="kt">string</span>
+	<span class="nx">Age</span>  <span class="kt">int</span>
+<span class="p">}</span>
+<span class="c1">// 比较
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestIsEqual</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// 对比字符串
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;对比字符串:&#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">IsEqual</span><span class="p">(</span><span class="s">&#34;a&#34;</span><span class="p">,</span> <span class="s">&#34;a&#34;</span><span class="p">))</span>
+	<span class="c1">// 对比int
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;对比int:&#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">IsEqual</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+	<span class="c1">// 对比float64
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;对比float64:&#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">IsEqual</span><span class="p">(</span><span class="nb">float64</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="nb">float64</span><span class="p">(</span><span class="mi">1</span><span class="p">)))</span>
+	<span class="c1">// 对比结构体
+</span><span class="c1"></span>	<span class="nx">stu1</span> <span class="o">:=</span> <span class="nx">Student</span><span class="p">{</span><span class="nx">Name</span><span class="p">:</span> <span class="s">&#34;张三&#34;</span><span class="p">,</span> <span class="nx">Age</span><span class="p">:</span> <span class="mi">18</span><span class="p">}</span>
+	<span class="nx">stu2</span> <span class="o">:=</span> <span class="nx">Student</span><span class="p">{</span><span class="nx">Name</span><span class="p">:</span> <span class="s">&#34;张三&#34;</span><span class="p">,</span> <span class="nx">Age</span><span class="p">:</span> <span class="mi">18</span><span class="p">}</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;对比结构体:&#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">IsEqual</span><span class="p">(</span><span class="nx">stu1</span><span class="p">,</span> <span class="nx">stu2</span><span class="p">))</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestIsEqual
+</span><span class="cm">对比字符串: true
+</span><span class="cm">对比int: true
+</span><span class="cm">对比float64: true
+</span><span class="cm">对比结构体: true
+</span><span class="cm">--- PASS: TestIsEqual (0.00s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="62-判断类型一致">6.2 判断类型一致</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 判断类型是否一样
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestIsType</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="kd">var</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">b</span> <span class="kt">int8</span> <span class="p">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;A: &#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">IsType</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">))</span>
+	<span class="nx">c</span> <span class="o">:=</span> <span class="mi">3</span>
+	<span class="nx">d</span> <span class="o">:=</span> <span class="s">&#34;3&#34;</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;B:&#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">IsType</span><span class="p">(</span><span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">))</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestIsType
+</span><span class="cm">A:  true
+</span><span class="cm">B: false
+</span><span class="cm">--- PASS: TestIsType (0.00s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="63-判断arrayslice">6.3 判断<code>array|slice</code></h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 判断是否是array|slice
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestCollect</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// slice
+</span><span class="c1"></span>	<span class="nx">a</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">}</span>
+	<span class="c1">// 字符串
+</span><span class="c1"></span>	<span class="nx">b</span> <span class="o">:=</span> <span class="s">&#34;str&#34;</span>
+	<span class="c1">// 自定义结构体切片
+</span><span class="c1"></span>	<span class="nx">c</span> <span class="o">:=</span> <span class="p">[]</span><span class="nx">Student</span><span class="p">{</span>
+		<span class="p">{</span><span class="nx">Name</span><span class="p">:</span> <span class="s">&#34;张三&#34;</span><span class="p">,</span> <span class="nx">Age</span><span class="p">:</span> <span class="mi">18</span><span class="p">},</span>
+		<span class="p">{</span><span class="nx">Name</span><span class="p">:</span> <span class="s">&#34;李四&#34;</span><span class="p">,</span> <span class="nx">Age</span><span class="p">:</span> <span class="mi">18</span><span class="p">},</span>
+	<span class="p">}</span>
+	<span class="c1">// 数组类型
+</span><span class="c1"></span>	<span class="nx">d</span> <span class="o">:=</span> <span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;c&#34;</span><span class="p">,</span> <span class="s">&#34;go&#34;</span><span class="p">}</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;a:&#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">IsCollection</span><span class="p">(</span><span class="nx">a</span><span class="p">))</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;b:&#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">IsCollection</span><span class="p">(</span><span class="nx">b</span><span class="p">))</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;c:&#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">IsCollection</span><span class="p">(</span><span class="nx">c</span><span class="p">))</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;d:&#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">IsCollection</span><span class="p">(</span><span class="nx">d</span><span class="p">))</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestCollect
+</span><span class="cm">a: true
+</span><span class="cm">b: false
+</span><span class="cm">c: true
+</span><span class="cm">d: true
+</span><span class="cm">--- PASS: TestCollect (0.00s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="64-判断空">6.4 判断空</h3>
+<ul>
+<li><code>funk.IsEmpty(obj interface{})</code>: 判断为空。</li>
+<li><code>funk.NotEmpty(obj interface{})</code>: 判断不为空。</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 判断是否为空
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestIsEmpty</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// 空结构体
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;空结构体&#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">IsEmpty</span><span class="p">([]</span><span class="kt">int</span><span class="p">{}))</span>
+	<span class="c1">// 空字符串
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;空字符串:&#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">IsEmpty</span><span class="p">(</span><span class="s">&#34;&#34;</span><span class="p">))</span>
+	<span class="c1">// 判断数字0
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;0:&#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">IsEmpty</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+	<span class="c1">// 判断字符串&#39;0&#39;
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;&#39;0&#39;:&#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">IsEmpty</span><span class="p">(</span><span class="s">&#34;0&#34;</span><span class="p">))</span>
+	<span class="c1">// nil
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;nil:&#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">IsEmpty</span><span class="p">(</span><span class="kc">nil</span><span class="p">))</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestIsEmpty
+</span><span class="cm">空结构体 true
+</span><span class="cm">空字符串: true
+</span><span class="cm">0: true
+</span><span class="cm">&#39;0&#39;: false
+</span><span class="cm">nil: true
+</span><span class="cm">--- PASS: TestEmpty (0.00s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="7-类型转换">7. 类型转换</h2>
+<h3 id="71-任意数字转float64">7.1 任意数字转<code>float64</code></h3>
+<blockquote>
+<p><code>func ToFloat64(x interface{}) (float64, bool)</code></p>
+</blockquote>
+<ul>
+<li>将任何数字类型，转成<code>float64</code>类型，<strong><font color=red>@注:只能是数字类型: uint8、uint16、uint32、uint64、int、int8、int16、int32、int64、float32、float64</font></strong></li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 数字型转浮点型
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestToFloat64</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// int to float64
+</span><span class="c1"></span>	<span class="nx">d1</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">ToFloat64</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;d1 = %v %T \n&#34;</span><span class="p">,</span> <span class="nx">d1</span><span class="p">,</span> <span class="nx">d1</span><span class="p">)</span>
+	<span class="c1">//@会失败
+</span><span class="c1"></span>	<span class="nx">d2</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">ToFloat64</span><span class="p">(</span><span class="s">&#34;10&#34;</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;d2 = %v %v \n&#34;</span><span class="p">,</span> <span class="nx">d2</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestToFloat64
+</span><span class="cm">d1 = 10 float64 
+</span><span class="cm">d2 = 0 false 
+</span><span class="cm">--- PASS: TestToFloat64 (0.00s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="72-将x转成x">7.2 将<code>X</code>转成<code>[]X</code></h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 返回任一类型的类型切片
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestSliceOf</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">a</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">}</span>
+	<span class="c1">// []int 转成 [][]int
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%v %T \n&#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">SliceOf</span><span class="p">(</span><span class="nx">a</span><span class="p">),</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">SliceOf</span><span class="p">(</span><span class="nx">a</span><span class="p">))</span>
+	<span class="c1">// string 转成 []string
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%v %T \n&#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">SliceOf</span><span class="p">(</span><span class="s">&#34;go&#34;</span><span class="p">),</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">SliceOf</span><span class="p">(</span><span class="s">&#34;go&#34;</span><span class="p">))</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestSliceOf
+</span><span class="cm">[[10 20 30]] [][]int 
+</span><span class="cm">[go] []string 
+</span><span class="cm">--- PASS: TestSliceOf (0.00s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="8字符串操作">8.字符串操作</h2>
+<h3 id="81-根据字符串生成切片">8.1 根据字符串生成切片</h3>
+<blockquote>
+<p><code>func Shard(str string, width int, depth int, restOnly bool) []string</code></p>
+</blockquote>
+<ul>
+<li><code>width</code>: 代表根据几个字节生成一个元素。</li>
+<li><code>depth</code>: 将字符串前<code>x</code>个元素转成切片。</li>
+<li><code>restOnly</code>: 当为<code>false</code>时，最后一个元素为原字符串,当为<code>true</code>时,最后一个元素为原字符串剩余元素</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 将自定长度字符串生成切片
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestShard</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">tokey</span> <span class="o">:=</span> <span class="s">&#34;Hello,Word&#34;</span>
+	<span class="nx">shard</span> <span class="o">:=</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">Shard</span><span class="p">(</span><span class="nx">tokey</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="kc">false</span><span class="p">)</span>
+	<span class="nx">shard1</span> <span class="o">:=</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">Shard</span><span class="p">(</span><span class="nx">tokey</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;shard: &#34;</span><span class="p">,</span> <span class="nx">shard</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;shard1: &#34;</span><span class="p">,</span> <span class="nx">shard1</span><span class="p">)</span>
+	<span class="nx">shard2</span> <span class="o">:=</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">Shard</span><span class="p">(</span><span class="nx">tokey</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="kc">false</span><span class="p">)</span>
+	<span class="nx">shard22</span> <span class="o">:=</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">Shard</span><span class="p">(</span><span class="nx">tokey</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;shard2: &#34;</span><span class="p">,</span> <span class="nx">shard2</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;shard22: &#34;</span><span class="p">,</span> <span class="nx">shard22</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/**
+</span><span class="cm">=== RUN   TestShard
+</span><span class="cm">shard:  [H e l l o Hello,Word]
+</span><span class="cm">shard1:  [H e l l o ,Word]
+</span><span class="cm">shard2:  [He ll o, Wo rd Hello,Word]
+</span><span class="cm">shard22:  [He ll o, Wo rd ]
+</span><span class="cm">--- PASS: TestShard (0.00s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="9数字计算">9.数字计算</h2>
+<h3 id="91-最大值max">9.1 最大值(<code>Max</code>)</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">TestMax</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// 求最大int
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;MaxInt:&#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">MaxInt</span><span class="p">([]</span><span class="kt">int</span><span class="p">{</span><span class="mi">30</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">11</span><span class="p">}))</span>
+	<span class="c1">// 求最大浮点数
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;MaxFloat64:&#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">MaxFloat64</span><span class="p">([]</span><span class="kt">float64</span><span class="p">{</span><span class="mf">10.2</span><span class="p">,</span> <span class="mf">11.0</span><span class="p">,</span> <span class="mf">8.03</span><span class="p">}))</span>
+	<span class="c1">// 求最大字符串
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;MaxString:&#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">MaxString</span><span class="p">([]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;a&#34;</span><span class="p">,</span> <span class="s">&#34;d&#34;</span><span class="p">,</span> <span class="s">&#34;c&#34;</span><span class="p">,</span> <span class="s">&#34;b&#34;</span><span class="p">}))</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestMaxInt
+</span><span class="cm">MaxInt: 30
+</span><span class="cm">MaxFloat64: 11
+</span><span class="cm">MaxString: d
+</span><span class="cm">--- PASS: TestMaxInt (0.00s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="92-最小值min">9.2 最小值(<code>Min</code>)</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">TestMin</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// 求最小int
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;MinInt:&#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">MinInt</span><span class="p">([]</span><span class="kt">int</span><span class="p">{</span><span class="mi">30</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">11</span><span class="p">}))</span>
+	<span class="c1">// 求最小浮点数
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;MinFloat64:&#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">MinFloat64</span><span class="p">([]</span><span class="kt">float64</span><span class="p">{</span><span class="mf">10.2</span><span class="p">,</span> <span class="mf">11.0</span><span class="p">,</span> <span class="mf">8.03</span><span class="p">}))</span>
+	<span class="c1">// 求最小字符串
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;MinString:&#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">MinString</span><span class="p">([]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;a&#34;</span><span class="p">,</span> <span class="s">&#34;d&#34;</span><span class="p">,</span> <span class="s">&#34;c&#34;</span><span class="p">,</span> <span class="s">&#34;b&#34;</span><span class="p">}))</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestMin
+</span><span class="cm">MinInt: 8
+</span><span class="cm">MinFloat64: 8.03
+</span><span class="cm">MinString: a
+</span><span class="cm">--- PASS: TestMin (0.00s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="93-求和sum">9.3 求和(<code>Sum</code>)</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 求和
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestSum</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// 整型
+</span><span class="c1"></span>	<span class="nx">a</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">20</span><span class="p">}</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;int sum:&#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">Sum</span><span class="p">(</span><span class="nx">a</span><span class="p">))</span>
+	<span class="c1">// 浮点型
+</span><span class="c1"></span>	<span class="nx">b</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">float64</span><span class="p">{</span><span class="mf">5.11</span><span class="p">,</span> <span class="mf">2.23</span><span class="p">,</span> <span class="mf">3.31</span><span class="p">,</span> <span class="mf">0.32</span><span class="p">}</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;float64 sum:&#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">Sum</span><span class="p">(</span><span class="nx">b</span><span class="p">))</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestSum
+</span><span class="cm">int sum: 50
+</span><span class="cm">float64 sum: 10.97
+</span><span class="cm">--- PASS: TestSum (0.00s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="94-求乘积product">9.4 求乘积(<code>Product</code>)</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 求乘积
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestProduct</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// 整型
+</span><span class="c1"></span>	<span class="nx">a</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">}</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;int Product:&#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">Product</span><span class="p">(</span><span class="nx">a</span><span class="p">))</span>
+	<span class="c1">// 浮点型
+</span><span class="c1"></span>	<span class="nx">b</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">float64</span><span class="p">{</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">,</span> <span class="mf">1.3</span><span class="p">,</span> <span class="mf">1.4</span><span class="p">}</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;float64 Product:&#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">Product</span><span class="p">(</span><span class="nx">b</span><span class="p">))</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestProduct
+</span><span class="cm">int Product: 120
+</span><span class="cm">float64 Product: 2.4024
+</span><span class="cm">--- PASS: TestProduct (0.00s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="10-其他操作">10. 其他操作</h2>
+<h3 id="101-生成随机数">10.1 生成随机数</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 生成随机数
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestRandom</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="c1">// 生成任意数字类型
+</span><span class="c1"></span>		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">funk</span><span class="p">.</span><span class="nf">RandomInt</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">))</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestRandom
+</span><span class="cm">24
+</span><span class="cm">79
+</span><span class="cm">21
+</span><span class="cm">--- PASS: TestRandom (0.00s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="102-生成随机字符串">10.2 生成随机字符串</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 生成随机字符串
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestRandomString</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="c1">// 从默认字符串生成
+</span><span class="c1"></span>		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;从默认字符串生成:&#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">RandomString</span><span class="p">(</span><span class="nx">i</span><span class="p">))</span>
+		<span class="c1">// 从指的字符串生成
+</span><span class="c1"></span>		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;从指定字符串生成:&#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">RandomString</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="p">[]</span><span class="kt">rune</span><span class="p">{</span><span class="sc">&#39;您&#39;</span><span class="p">,</span> <span class="sc">&#39;好&#39;</span><span class="p">,</span> <span class="sc">&#39;北&#39;</span><span class="p">,</span> <span class="sc">&#39;京&#39;</span><span class="p">}))</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestRandomString
+</span><span class="cm">从默认字符串生成: B
+</span><span class="cm">从指定字符串生成: 京
+</span><span class="cm">从默认字符串生成: Ln
+</span><span class="cm">从指定字符串生成: 好北
+</span><span class="cm">从默认字符串生成: Dsc
+</span><span class="cm">从指定字符串生成: 您北京
+</span><span class="cm">--- PASS: TestRandomString (0.00s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="103-三元运算">10.3 三元运算</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 三元运算
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestShortIf</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;10 &gt; 5 :&#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">ShortIf</span><span class="p">(</span><span class="mi">10</span> <span class="p">&gt;</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;10.0 == 10 : &#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">ShortIf</span><span class="p">(</span><span class="mf">10.0</span> <span class="o">==</span> <span class="mi">10</span><span class="p">,</span> <span class="s">&#34;yes&#34;</span><span class="p">,</span> <span class="s">&#34;no&#34;</span><span class="p">))</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;&#39;a&#39; == &#39;b&#39; : &#34;</span><span class="p">,</span> <span class="nx">funk</span><span class="p">.</span><span class="nf">ShortIf</span><span class="p">(</span><span class="sc">&#39;a&#39;</span> <span class="o">==</span> <span class="sc">&#39;b&#39;</span><span class="p">,</span> <span class="s">&#34;equal chars&#34;</span><span class="p">,</span> <span class="s">&#34;unequal chars&#34;</span><span class="p">))</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestShortIf
+</span><span class="cm">10 &gt; 5 : 10
+</span><span class="cm">10.0 == 10 :  yes
+</span><span class="cm">&#39;a&#39; == &#39;b&#39; :  unequal chars
+</span><span class="cm">--- PASS: TestShortIf (0.00s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Learn Go</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2022-10-04
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/go%E6%89%A9%E5%B1%95%E5%8C%85/">Go扩展包</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/%E6%89%A9%E5%B1%95%E5%8C%85/33-jsoniter/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Go扩展包(三十三):jsoniter</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/%E6%89%A9%E5%B1%95%E5%8C%85/31-trace/">
+            <span class="next-text nav-default">Go扩展包(三十一):trace</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/shershon1991" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/shershon520" class="iconfont icon-zhihu" title="zhihu"></a>
+  <a href="https://shershon1991.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2021 - 
+    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span>Learn Go</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+<script>
+    docsearch({
+        apiKey: "9f0c02b55e9885568dcbf6ef094b433c",
+        indexName: "hugo",
+        appId: "TTENARPLYL",
+        inputSelector: '.docsearch-input',
+        debug: false,
+    });
+</script>
+</body>
+</html>

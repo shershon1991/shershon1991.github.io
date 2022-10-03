@@ -1,0 +1,1634 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Go扩展包(二十六):colly - Learn Go</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Learn Go" /><meta name="description" content="1.介绍 Colly是Golang世界中最知名的Web爬虫框架,它提供简洁的 API，拥有强劲的性能、可以自动处理 cookie&amp;amp;sess" /><meta name="keywords" content="博客, Learn Go, hugo" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.90.1 with theme even" />
+
+
+<link rel="canonical" href="https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/26-colly/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Go扩展包(二十六):colly" />
+<meta property="og:description" content="1.介绍 Colly是Golang世界中最知名的Web爬虫框架,它提供简洁的 API，拥有强劲的性能、可以自动处理 cookie&amp;sess" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/26-colly/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2021-04-26T00:00:00+00:00" />
+<meta property="article:modified_time" content="2022-10-04T07:42:32+08:00" />
+
+<meta itemprop="name" content="Go扩展包(二十六):colly">
+<meta itemprop="description" content="1.介绍 Colly是Golang世界中最知名的Web爬虫框架,它提供简洁的 API，拥有强劲的性能、可以自动处理 cookie&amp;sess"><meta itemprop="datePublished" content="2021-04-26T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2022-10-04T07:42:32+08:00" />
+<meta itemprop="wordCount" content="7500">
+<meta itemprop="keywords" content="Go扩展包," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Go扩展包(二十六):colly"/>
+<meta name="twitter:description" content="1.介绍 Colly是Golang世界中最知名的Web爬虫框架,它提供简洁的 API，拥有强劲的性能、可以自动处理 cookie&amp;sess"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Learn Go</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">首页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"/><header id="header" class="header">
+    <div class="logo-wrapper">
+        <a href="/" class="logo">Learn Go</a>
+    </div>
+    <nav class="site-navbar">
+        <ul id="menu" class="menu"><li style="display:inline-block;margin-right:10px;">
+                <input type="search" class="docsearch-input" placeholder="Search"/>
+            </li><li class="menu-item">
+                <a class="menu-item-link" href="/">首页</a>
+            </li>
+            <li class="menu-item">
+                <a class="menu-item-link" href="/post/">归档</a>
+            </li>
+            <li class="menu-item">
+                <a class="menu-item-link" href="/tags/">标签</a>
+            </li>
+            <li class="menu-item">
+                <a class="menu-item-link" href="/categories/">分类</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Go扩展包(二十六):colly</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-04-26 </span>
+        <div class="post-category">
+            <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+            <a href="/categories/go/"> Go </a>
+            </div>
+          <span class="more-meta"> 约 7500 字 </span>
+          <span class="more-meta"> 预计阅读 15 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#1介绍">1.介绍</a></li>
+        <li><a href="#2安装">2.安装</a></li>
+        <li><a href="#3-快速入门">3. 快速入门</a>
+          <ul>
+            <li><a href="#31-语法模板">3.1 语法模板</a></li>
+            <li><a href="#32-回调函数说明">3.2 回调函数说明</a></li>
+            <li><a href="#33-回调函数注册顺序">3.3 回调函数注册顺序</a></li>
+            <li><a href="#34-使用示例">3.4 使用示例</a></li>
+          </ul>
+        </li>
+        <li><a href="#4-配置采集器">4. 配置采集器</a>
+          <ul>
+            <li><a href="#41-配置预览">4.1 配置预览</a></li>
+            <li><a href="#42-部分配置说明">4.2 部分配置说明</a></li>
+            <li><a href="#43-创建采集器">4.3 创建采集器</a></li>
+          </ul>
+        </li>
+        <li><a href="#5-常用解析函数">5. 常用解析函数</a>
+          <ul>
+            <li><a href="#51-attr">5.1 Attr</a></li>
+            <li><a href="#52-childattrchildattrs">5.2 ChildAttr&amp;ChildAttrs</a></li>
+            <li><a href="#53-childtext--childtexts">5.3 ChildText &amp; ChildTexts</a></li>
+            <li><a href="#54-foreach">5.4 ForEach</a></li>
+            <li><a href="#55-unmarshal">5.5 Unmarshal</a></li>
+          </ul>
+        </li>
+        <li><a href="#6常用选择器">6.常用选择器</a>
+          <ul>
+            <li><a href="#61-html内容">6.1 html内容</a></li>
+            <li><a href="#62-使用示例">6.2 使用示例</a></li>
+          </ul>
+        </li>
+        <li><a href="#7-过滤器">7. 过滤器</a>
+          <ul>
+            <li><a href="#71-第一个子元素first-child--first-of-type">7.1 第一个子元素(<code>first-child &amp; first-of-type</code>)</a></li>
+            <li><a href="#72-最后一个子元素last-child--last-of-type">7.2 最后一个子元素(<code>last-child &amp; last-of-type</code>)</a></li>
+            <li><a href="#73-第x个子元素nth-child--nth-of-type">7.3 第x个子元素(<code>nth-child &amp; nth-of-type</code>)</a></li>
+            <li><a href="#74-仅有一个子元素only-child--only-of-type">7.4 仅有一个子元素(<code>only-child &amp; only-of-type</code>)</a></li>
+            <li><a href="#75-内容匹配contains">7.5 内容匹配(<code>contains</code>)</a></li>
+          </ul>
+        </li>
+        <li><a href="#8-爬取限速">8. 爬取限速</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="1介绍">1.介绍</h2>
+<p><code>Colly</code>是<code>Golang</code>世界中最知名的<code>Web</code>爬虫框架,它提供简洁的 API，拥有强劲的性能、可以自动处理 <code>cookie&amp;session</code>、提供灵活的扩展机制,同时支持分布式抓取和多种存储后端（如内存、<code>Redis</code>、<code>MongoDB</code>等）。</p>
+<h2 id="2安装">2.安装</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 下载最新版本
+</span><span class="c1"></span><span class="k">go</span> <span class="nx">get</span> <span class="o">-</span><span class="nx">u</span> <span class="nx">github</span><span class="p">.</span><span class="nx">com</span><span class="o">/</span><span class="nx">gocolly</span><span class="o">/</span><span class="nx">colly</span><span class="o">/</span><span class="nx">v2</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="3-快速入门">3. 快速入门</h2>
+<h3 id="31-语法模板">3.1 语法模板</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 简单使用模板示例
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">collyUseTemplate</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 创建采集器对象
+</span><span class="c1"></span>	<span class="nx">collector</span> <span class="o">:=</span> <span class="nx">colly</span><span class="p">.</span><span class="nf">NewCollector</span><span class="p">()</span>
+	<span class="c1">// 发起请求之前调用
+</span><span class="c1"></span>	<span class="nx">collector</span><span class="p">.</span><span class="nf">OnRequest</span><span class="p">(</span><span class="kd">func</span><span class="p">(</span><span class="nx">request</span> <span class="o">*</span><span class="nx">colly</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;发起请求之前调用...&#34;</span><span class="p">)</span>
+	<span class="p">})</span>
+	<span class="c1">// 请求期间发生错误,则调用
+</span><span class="c1"></span>	<span class="nx">collector</span><span class="p">.</span><span class="nf">OnError</span><span class="p">(</span><span class="kd">func</span><span class="p">(</span><span class="nx">response</span> <span class="o">*</span><span class="nx">colly</span><span class="p">.</span><span class="nx">Response</span><span class="p">,</span> <span class="nx">err</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;请求期间发生错误,则调用:&#34;</span><span class="p">,</span><span class="nx">err</span><span class="p">)</span>
+	<span class="p">})</span>
+	<span class="c1">// 收到响应后调用
+</span><span class="c1"></span>	<span class="nx">collector</span><span class="p">.</span><span class="nf">OnResponse</span><span class="p">(</span><span class="kd">func</span><span class="p">(</span><span class="nx">response</span> <span class="o">*</span><span class="nx">colly</span><span class="p">.</span><span class="nx">Response</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;收到响应后调用:&#34;</span><span class="p">,</span><span class="nx">response</span><span class="p">.</span><span class="nx">Request</span><span class="p">.</span><span class="nx">URL</span><span class="p">)</span>
+	<span class="p">})</span>
+	<span class="c1">//OnResponse如果收到的内容是HTML ,则在之后调用
+</span><span class="c1"></span>	<span class="nx">collector</span><span class="p">.</span><span class="nf">OnHTML</span><span class="p">(</span><span class="s">&#34;#position_shares table&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">element</span> <span class="o">*</span><span class="nx">colly</span><span class="p">.</span><span class="nx">HTMLElement</span><span class="p">)</span> <span class="p">{</span>
+		<span class="c1">// todo 解析html内容
+</span><span class="c1"></span>	<span class="p">})</span>
+	<span class="c1">// url：请求具体的地址
+</span><span class="c1"></span>	<span class="nx">err</span> <span class="o">:=</span> <span class="nx">collector</span><span class="p">.</span><span class="nf">Visit</span><span class="p">(</span><span class="s">&#34;请求具体的地址&#34;</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;具体错误:&#34;</span><span class="p">,</span><span class="nx">err</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="32-回调函数说明">3.2 回调函数说明</h3>
+<ul>
+<li><strong>OnRequest</strong>: 在发起请求之前调用。</li>
+<li><strong>OnError</strong>: 如果请求期间发生错误,则调用。</li>
+<li><strong>OnResponse</strong>：收到回复后调用。</li>
+<li><strong>OnHTML</strong>: 解析HTML内容 ,在<code>OnResponse</code>之后调用。</li>
+<li><strong>OnXML</strong>: 如果收到的响应内容是XML 调用它。写爬虫基本用不到</li>
+<li><strong>OnScraped</strong>：在OnXML/OnHTML回调完成后调用。不过官网写的是<code>Called after OnXML callbacks</code>，实际上对于OnHTML也有效，大家可以注意一下。</li>
+</ul>
+<h3 id="33-回调函数注册顺序">3.3 回调函数注册顺序</h3>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/image-20210819234814412.png" alt="image-20210819234814412"></p>
+<h3 id="34-使用示例">3.4 使用示例</h3>
+<p><strong>需求: 抓取豆瓣小说榜单数据</strong></p>
+<h4 id="1-分析网页">1. 分析网页</h4>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/20210820154533.png" alt=""></p>
+<h4 id="2-逻辑分析">2. 逻辑分析</h4>
+<ul>
+<li>第一步: 找到对应的<code>ul</code></li>
+<li>第二步: 遍历<code>ul</code>,然后取出里面没一个<code>li</code>的信息</li>
+</ul>
+<h4 id="3-代码实现">3. 代码实现</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">collyDemo</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;fmt&#34;</span>
+	<span class="s">&#34;github.com/gocolly/colly/v2&#34;</span>
+	<span class="s">&#34;strings&#34;</span>
+<span class="p">)</span>
+<span class="c1">// 豆瓣书榜单
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">DouBanBook</span><span class="p">()</span> <span class="kt">error</span> <span class="p">{</span>
+	<span class="c1">// 创建 Collector 对象
+</span><span class="c1"></span>	<span class="nx">collector</span> <span class="o">:=</span> <span class="nx">colly</span><span class="p">.</span><span class="nf">NewCollector</span><span class="p">()</span>
+	<span class="c1">// 在请求之前调用
+</span><span class="c1"></span>	<span class="nx">collector</span><span class="p">.</span><span class="nf">OnRequest</span><span class="p">(</span><span class="kd">func</span><span class="p">(</span><span class="nx">request</span> <span class="o">*</span><span class="nx">colly</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;回调函数OnRequest: 在请求之前调用&#34;</span><span class="p">)</span>
+	<span class="p">})</span>
+	<span class="c1">// 请求期间发生错误,则调用
+</span><span class="c1"></span>	<span class="nx">collector</span><span class="p">.</span><span class="nf">OnError</span><span class="p">(</span><span class="kd">func</span><span class="p">(</span><span class="nx">response</span> <span class="o">*</span><span class="nx">colly</span><span class="p">.</span><span class="nx">Response</span><span class="p">,</span> <span class="nx">err</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;回调函数OnError: 请求错误&#34;</span><span class="p">,</span><span class="nx">err</span><span class="p">)</span>
+	<span class="p">})</span>
+	<span class="c1">// 收到响应后调用
+</span><span class="c1"></span>	<span class="nx">collector</span><span class="p">.</span><span class="nf">OnResponse</span><span class="p">(</span><span class="kd">func</span><span class="p">(</span><span class="nx">response</span> <span class="o">*</span><span class="nx">colly</span><span class="p">.</span><span class="nx">Response</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;回调函数OnResponse: 收到响应后调用&#34;</span><span class="p">)</span>
+	<span class="p">})</span>
+	<span class="c1">//OnResponse如果收到的内容是HTML ,则在之后调用
+</span><span class="c1"></span>	<span class="nx">collector</span><span class="p">.</span><span class="nf">OnHTML</span><span class="p">(</span><span class="s">&#34;ul[class=&#39;subject-list&#39;]&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">element</span> <span class="o">*</span><span class="nx">colly</span><span class="p">.</span><span class="nx">HTMLElement</span><span class="p">)</span> <span class="p">{</span>
+		<span class="c1">// 遍历li
+</span><span class="c1"></span>		<span class="nx">element</span><span class="p">.</span><span class="nf">ForEach</span><span class="p">(</span><span class="s">&#34;li&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">i</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">el</span> <span class="o">*</span><span class="nx">colly</span><span class="p">.</span><span class="nx">HTMLElement</span><span class="p">)</span> <span class="p">{</span>
+      <span class="c1">// 获取封面图片
+</span><span class="c1"></span>			<span class="nx">coverImg</span> <span class="o">:=</span> <span class="nx">el</span><span class="p">.</span><span class="nf">ChildAttr</span><span class="p">(</span><span class="s">&#34;div[class=&#39;pic&#39;] &gt; a[class=&#39;nbg&#39;] &gt; img&#34;</span><span class="p">,</span><span class="s">&#34;src&#34;</span><span class="p">)</span>
+      <span class="c1">// 获取书名
+</span><span class="c1"></span>			<span class="nx">bookName</span> <span class="o">:=</span> <span class="nx">el</span><span class="p">.</span><span class="nf">ChildText</span><span class="p">(</span><span class="s">&#34;div[class=&#39;info&#39;] &gt; h2&#34;</span><span class="p">)</span>
+      <span class="c1">// 获取发版信息，并从中解析出作者名称
+</span><span class="c1"></span>			<span class="nx">authorInfo</span> <span class="o">:=</span> <span class="nx">el</span><span class="p">.</span><span class="nf">ChildText</span><span class="p">(</span><span class="s">&#34;div[class=&#39;info&#39;] &gt; div[class=&#39;pub&#39;]&#34;</span><span class="p">)</span>
+			<span class="nx">split</span> <span class="o">:=</span> <span class="nx">strings</span><span class="p">.</span><span class="nf">Split</span><span class="p">(</span><span class="nx">authorInfo</span><span class="p">,</span> <span class="s">&#34;/&#34;</span><span class="p">)</span>
+			<span class="nx">author</span> <span class="o">:=</span> <span class="nx">split</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;封面: %v 书名:%v 作者:%v\n&#34;</span><span class="p">,</span><span class="nx">coverImg</span><span class="p">,</span><span class="nf">trimSpace</span><span class="p">(</span><span class="nx">bookName</span><span class="p">),</span><span class="nx">author</span><span class="p">)</span>
+		<span class="p">})</span>
+	<span class="p">})</span>
+  <span class="c1">// 发起请求
+</span><span class="c1"></span>	<span class="k">return</span> <span class="nx">collector</span><span class="p">.</span><span class="nf">Visit</span><span class="p">(</span><span class="s">&#34;https://book.douban.com/tag/小说&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="c1">// 删除字符串中的空格信息
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">trimSpace</span><span class="p">(</span><span class="nx">str</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">string</span>  <span class="p">{</span>
+	<span class="c1">// 替换所有的空格
+</span><span class="c1"></span>	<span class="nx">str</span> <span class="p">=</span> <span class="nx">strings</span><span class="p">.</span><span class="nf">ReplaceAll</span><span class="p">(</span><span class="nx">str</span><span class="p">,</span><span class="s">&#34; &#34;</span><span class="p">,</span><span class="s">&#34;&#34;</span><span class="p">)</span>
+	<span class="c1">// 替换所有的换行
+</span><span class="c1"></span>	<span class="k">return</span>  <span class="nx">strings</span><span class="p">.</span><span class="nf">ReplaceAll</span><span class="p">(</span><span class="nx">str</span><span class="p">,</span><span class="s">&#34;\n&#34;</span><span class="p">,</span><span class="s">&#34;&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="4-运行结果">4. 运行结果</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">回调函数OnRequest</span><span class="p">:</span> <span class="nx">在请求之前调用</span>
+<span class="nx">回调函数OnResponse</span><span class="p">:</span> <span class="nx">收到响应后调用</span>
+<span class="nx">封面</span><span class="p">:</span> <span class="nx">https</span><span class="p">:</span><span class="c1">//img9.doubanio.com/view/subject/s/public/s27279654.jpg 书名:活着 作者:余华 
+</span><span class="c1"></span><span class="nx">封面</span><span class="p">:</span> <span class="nx">https</span><span class="p">:</span><span class="c1">//img1.doubanio.com/view/subject/s/public/s33880929.jpg 书名:字母表谜案 作者:大山诚一郎 
+</span><span class="c1"></span><span class="nx">封面</span><span class="p">:</span> <span class="nx">https</span><span class="p">:</span><span class="c1">//img1.doubanio.com/view/subject/s/public/s24514468.jpg 书名:白夜行 作者:[日] 东野圭吾 
+</span><span class="c1"></span><span class="nx">封面</span><span class="p">:</span> <span class="nx">https</span><span class="p">:</span><span class="c1">//img2.doubanio.com/view/subject/s/public/s29651121.jpg 书名:房思琪的初恋乐园 作者:林奕含 
+</span><span class="c1"></span><span class="nx">封面</span><span class="p">:</span> <span class="nx">https</span><span class="p">:</span><span class="c1">//img1.doubanio.com/view/subject/s/public/s33834057.jpg 书名:文城 作者:余华 
+</span><span class="c1"></span><span class="nx">封面</span><span class="p">:</span> <span class="nx">https</span><span class="p">:</span><span class="c1">//img3.doubanio.com/view/subject/s/public/s27237850.jpg 书名:百年孤独 作者:[哥伦比亚] 加西亚·马尔克斯 
+</span><span class="c1"></span><span class="nx">封面</span><span class="p">:</span> <span class="nx">https</span><span class="p">:</span><span class="c1">//img9.doubanio.com/view/subject/s/public/s33944156.jpg 书名:蛤蟆先生去看心理医生 作者:【英】罗伯特·戴博德 
+</span><span class="c1"></span><span class="nx">封面</span><span class="p">:</span> <span class="nx">https</span><span class="p">:</span><span class="c1">//img1.doubanio.com/view/subject/s/public/s1070959.jpg 书名:红楼梦 作者:[清] 曹雪芹 著、高鹗 续 
+</span><span class="c1"></span><span class="nx">封面</span><span class="p">:</span> <span class="nx">https</span><span class="p">:</span><span class="c1">//img9.doubanio.com/view/subject/s/public/s33821754.jpg 书名:克拉拉与太阳 作者:[英] 石黑一雄 
+</span><span class="c1"></span><span class="nx">封面</span><span class="p">:</span> <span class="nx">https</span><span class="p">:</span><span class="c1">//img2.doubanio.com/view/subject/s/public/s1103152.jpg 书名:小王子 作者:[法] 圣埃克苏佩里 
+</span><span class="c1"></span><span class="nx">封面</span><span class="p">:</span> <span class="nx">https</span><span class="p">:</span><span class="c1">//img2.doubanio.com/view/subject/s/public/s27264181.jpg 书名:解忧杂货店 作者:[日] 东野圭吾 
+</span><span class="c1"></span><span class="nx">封面</span><span class="p">:</span> <span class="nx">https</span><span class="p">:</span><span class="c1">//img1.doubanio.com/view/subject/s/public/s2768378.jpg 书名:三体:“地球往事”三部曲之一 作者:刘慈欣 
+</span><span class="c1"></span><span class="nx">封面</span><span class="p">:</span> <span class="nx">https</span><span class="p">:</span><span class="c1">//img3.doubanio.com/view/subject/s/public/s1727290.jpg 书名:追风筝的人 作者:[美] 卡勒德·胡赛尼 
+</span><span class="c1"></span><span class="nx">封面</span><span class="p">:</span> <span class="nx">https</span><span class="p">:</span><span class="c1">//img2.doubanio.com/view/subject/s/public/s11284102.jpg 书名:霍乱时期的爱情 作者:[哥伦比亚] 加西亚·马尔克斯 
+</span><span class="c1"></span><span class="nx">封面</span><span class="p">:</span> <span class="nx">https</span><span class="p">:</span><span class="c1">//img3.doubanio.com/view/subject/s/public/s24575140.jpg 书名:许三观卖血记 作者:余华 
+</span><span class="c1"></span><span class="nx">封面</span><span class="p">:</span> <span class="nx">https</span><span class="p">:</span><span class="c1">//img1.doubanio.com/view/subject/s/public/s4371408.jpg 书名:1984 作者:[英] 乔治·奥威尔 
+</span><span class="c1"></span><span class="nx">封面</span><span class="p">:</span> <span class="nx">https</span><span class="p">:</span><span class="c1">//img9.doubanio.com/view/subject/s/public/s4468484.jpg 书名:局外人 作者:[法] 阿尔贝·加缪 
+</span><span class="c1"></span><span class="nx">封面</span><span class="p">:</span> <span class="nx">https</span><span class="p">:</span><span class="c1">//img9.doubanio.com/view/subject/s/public/s28357056.jpg 书名:三体全集:地球往事三部曲 作者:刘慈欣 
+</span><span class="c1"></span><span class="nx">封面</span><span class="p">:</span> <span class="nx">https</span><span class="p">:</span><span class="c1">//img9.doubanio.com/view/subject/s/public/s29799055.jpg 书名:云边有个小卖部 作者:张嘉佳 
+</span><span class="c1"></span><span class="nx">封面</span><span class="p">:</span> <span class="nx">https</span><span class="p">:</span><span class="c1">//img3.doubanio.com/view/subject/s/public/s33718940.jpg 书名:夜晚的潜水艇 作者:陈春成 
+</span></code></pre></td></tr></table>
+</div>
+</div><h2 id="4-配置采集器">4. 配置采集器</h2>
+<h3 id="41-配置预览">4.1 配置预览</h3>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/20210820172722.png" alt=""></p>
+<h3 id="42-部分配置说明">4.2 部分配置说明</h3>
+<ul>
+<li><code>AllowedDomains</code>: 设置收集器使用的域白名单，设置后不在白名单内链接，报错:<code>Forbidden domain</code>。</li>
+<li><code>AllowURLRevisit</code>:  设置收集器允许对同一 URL 进行多次下载。</li>
+<li><code>Async</code>:  设置收集器为异步请求，需很<code>Wait()</code>配合使用。</li>
+<li><code>Debugger</code>: 开启Debug,开启后会打印请求日志。</li>
+<li><code>MaxDepth</code>: 设置爬取页面的深度。</li>
+<li><code>UserAgent</code>: 设置收集器使用的用户代理。</li>
+<li><code>MaxBodySize</code> : 以字节为单位设置检索到的响应正文的限制。</li>
+<li><code>IgnoreRobotsTxt</code>:  忽略目标机器中的<code>robots.txt</code>声明。</li>
+</ul>
+<h3 id="43-创建采集器">4.3 创建采集器</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go">	<span class="nx">collector</span> <span class="o">:=</span> <span class="nx">colly</span><span class="p">.</span><span class="nf">NewCollector</span><span class="p">(</span>
+		<span class="nx">colly</span><span class="p">.</span><span class="nf">AllowedDomains</span><span class="p">(</span><span class="s">&#34;www.baidu.com&#34;</span><span class="p">,</span><span class="s">&#34;.baidu.com&#34;</span><span class="p">),</span><span class="c1">//白名单域名
+</span><span class="c1"></span>		<span class="nx">colly</span><span class="p">.</span><span class="nf">AllowURLRevisit</span><span class="p">(),</span><span class="c1">//允许对同一 URL 进行多次下载
+</span><span class="c1"></span>		<span class="nx">colly</span><span class="p">.</span><span class="nf">Async</span><span class="p">(</span><span class="kc">true</span><span class="p">),</span><span class="c1">//设置为异步请求
+</span><span class="c1"></span>		<span class="nx">colly</span><span class="p">.</span><span class="nf">Debugger</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">debug</span><span class="p">.</span><span class="nx">LogDebugger</span><span class="p">{}),</span><span class="c1">// 开启debug
+</span><span class="c1"></span>		<span class="nx">colly</span><span class="p">.</span><span class="nf">MaxDepth</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span><span class="c1">//爬取页面深度,最多为两层
+</span><span class="c1"></span>		<span class="nx">colly</span><span class="p">.</span><span class="nf">MaxBodySize</span><span class="p">(</span><span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span><span class="p">),</span><span class="c1">//响应正文最大字节数
+</span><span class="c1"></span>		<span class="nx">colly</span><span class="p">.</span><span class="nf">UserAgent</span><span class="p">(</span><span class="s">&#34;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36&#34;</span><span class="p">),</span>
+		<span class="nx">colly</span><span class="p">.</span><span class="nf">IgnoreRobotsTxt</span><span class="p">(),</span><span class="c1">//忽略目标机器中的`robots.txt`声明
+</span><span class="c1"></span>	<span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="5-常用解析函数">5. 常用解析函数</h2>
+<p><code>colly</code>爬取到页面之后，又该怎么解析<code>Html</code>内容呢？实际上使用<a href="https://github.com/PuerkitoBio/goquery">goquery</a>包解析这个页面,而<code>colly.HTMLElement</code>其实就是对<code>goquery.Selection</code>的简单封装：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// colly.HTMLElement结构体
+</span><span class="c1"></span><span class="kd">type</span> <span class="nx">HTMLElement</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">Name</span>       <span class="kt">string</span>
+	<span class="nx">Text</span>       <span class="kt">string</span>
+	<span class="nx">attributes</span> <span class="p">[]</span><span class="nx">html</span><span class="p">.</span><span class="nx">Attribute</span>
+	<span class="nx">Request</span> <span class="o">*</span><span class="nx">Request</span>
+	<span class="nx">Response</span> <span class="o">*</span><span class="nx">Response</span>
+	<span class="c1">// 对goquery封装
+</span><span class="c1"></span>	<span class="nx">DOM</span> <span class="o">*</span><span class="nx">goquery</span><span class="p">.</span><span class="nx">Selection</span>
+	<span class="nx">Index</span> <span class="kt">int</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="51-attr">5.1 Attr</h3>
+<h4 id="1-函数说明">1. 函数说明</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">//返回当前元素的属性
+</span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">h</span> <span class="o">*</span><span class="nx">HTMLElement</span><span class="p">)</span> <span class="nf">Attr</span><span class="p">(</span><span class="nx">k</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">string</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="2-使用示例">2. 使用示例</h4>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/20210820190125.png" alt=""></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 返回当前元素的属性
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestUseAttr</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">collector</span> <span class="o">:=</span> <span class="nx">colly</span><span class="p">.</span><span class="nf">NewCollector</span><span class="p">()</span>
+  <span class="c1">// 定位到div[class=&#39;nav-logo&#39;] &gt; a标签元素
+</span><span class="c1"></span>	<span class="nx">collector</span><span class="p">.</span><span class="nf">OnHTML</span><span class="p">(</span><span class="s">&#34;div[class=&#39;nav-logo&#39;] &gt; a&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">element</span> <span class="o">*</span><span class="nx">colly</span><span class="p">.</span><span class="nx">HTMLElement</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;href:%v\n&#34;</span><span class="p">,</span><span class="nx">element</span><span class="p">.</span><span class="nf">Attr</span><span class="p">(</span><span class="s">&#34;href&#34;</span><span class="p">))</span>
+	<span class="p">})</span>
+	<span class="nx">_</span> <span class="p">=</span> <span class="nx">collector</span><span class="p">.</span><span class="nf">Visit</span><span class="p">(</span><span class="s">&#34;https://book.douban.com/tag/小说&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestUseAttr
+</span><span class="cm">href:https://book.douban.com
+</span><span class="cm">--- PASS: TestUseAttr (0.66s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="52-childattrchildattrs">5.2 ChildAttr&amp;ChildAttrs</h3>
+<h4 id="1-函数说明-1">1. 函数说明</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 返回`goquerySelector`选择的第一个子元素的`attrName`属性；
+</span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">h</span> <span class="o">*</span><span class="nx">HTMLElement</span><span class="p">)</span> <span class="nf">ChildAttr</span><span class="p">(</span><span class="nx">goquerySelector</span><span class="p">,</span> <span class="nx">attrName</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">string</span>
+<span class="c1">// 返回`goquerySelector`选择的所有子元素的`attrName`属性，以`[]string`返回；
+</span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">h</span> <span class="o">*</span><span class="nx">HTMLElement</span><span class="p">)</span> <span class="nf">ChildAttrs</span><span class="p">(</span><span class="nx">goquerySelector</span><span class="p">,</span> <span class="nx">attrName</span> <span class="kt">string</span><span class="p">)</span> <span class="p">[]</span><span class="kt">string</span> 
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="2-使用示例-1">2. 使用示例</h4>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/20210821151336.png" alt=""></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">TestChildAttrMethod</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">collector</span> <span class="o">:=</span> <span class="nx">colly</span><span class="p">.</span><span class="nf">NewCollector</span><span class="p">()</span>
+	<span class="nx">collector</span><span class="p">.</span><span class="nf">OnError</span><span class="p">(</span><span class="kd">func</span><span class="p">(</span><span class="nx">response</span> <span class="o">*</span><span class="nx">colly</span><span class="p">.</span><span class="nx">Response</span><span class="p">,</span> <span class="nx">err</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;OnError&#34;</span><span class="p">,</span><span class="nx">err</span><span class="p">)</span>
+	<span class="p">})</span>
+	<span class="c1">// 解析Html
+</span><span class="c1"></span>	<span class="nx">collector</span><span class="p">.</span><span class="nf">OnHTML</span><span class="p">(</span><span class="s">&#34;body&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">element</span> <span class="o">*</span><span class="nx">colly</span><span class="p">.</span><span class="nx">HTMLElement</span><span class="p">)</span> <span class="p">{</span>
+		<span class="c1">// 获取第一个子元素(div)的class属性
+</span><span class="c1"></span>		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;ChildAttr:%v\n&#34;</span><span class="p">,</span><span class="nx">element</span><span class="p">.</span><span class="nf">ChildAttr</span><span class="p">(</span><span class="s">&#34;div&#34;</span><span class="p">,</span><span class="s">&#34;class&#34;</span><span class="p">))</span>
+		<span class="c1">// 获取所有子元素(div)的class属性
+</span><span class="c1"></span>		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;ChildAttrs:%v\n&#34;</span><span class="p">,</span><span class="nx">element</span><span class="p">.</span><span class="nf">ChildAttrs</span><span class="p">(</span><span class="s">&#34;div&#34;</span><span class="p">,</span><span class="s">&#34;class&#34;</span><span class="p">))</span>
+	<span class="p">})</span>
+	<span class="nx">err</span> <span class="o">:=</span> <span class="nx">collector</span><span class="p">.</span><span class="nf">Visit</span><span class="p">(</span><span class="s">&#34;https://liuqh.icu/a.html&#34;</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;err&#34;</span><span class="p">,</span><span class="nx">err</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestChildAttrMethod
+</span><span class="cm">ChildAttr:div1
+</span><span class="cm">ChildAttrs:[div1 sub1 div2 div3]
+</span><span class="cm">--- PASS: TestChildAttrMethod (0.29s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="53-childtext--childtexts">5.3 ChildText &amp; ChildTexts</h3>
+<h4 id="1-函数说明-2">1. 函数说明</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 拼接goquerySelector选择的子元素的文本内容并返回
+</span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">h</span> <span class="o">*</span><span class="nx">HTMLElement</span><span class="p">)</span> <span class="nf">ChildText</span><span class="p">(</span><span class="nx">goquerySelector</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">string</span> 
+<span class="c1">// 返回goquerySelector选择的子元素的文本内容组成的切片，以[]string返回。
+</span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">h</span> <span class="o">*</span><span class="nx">HTMLElement</span><span class="p">)</span> <span class="nf">ChildTexts</span><span class="p">(</span><span class="nx">goquerySelector</span> <span class="kt">string</span><span class="p">)</span> <span class="p">[]</span><span class="kt">string</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="2-使用示例-2">2. 使用示例</h4>
+<p><strong>a. 待解析的Html：</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>测试<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">http-equiv</span><span class="o">=</span><span class="s">&#34;Content-Type&#34;</span> <span class="na">content</span><span class="o">=</span><span class="s">&#34;text/html; charset=utf-8&#34;</span> <span class="p">/&gt;</span>
+<span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+	<span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;div1&#34;</span><span class="p">&gt;</span>
+		<span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;sub1&#34;</span><span class="p">&gt;</span>内容1<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+	<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+	<span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;div2&#34;</span><span class="p">&gt;</span>内容2<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+	<span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;div3&#34;</span><span class="p">&gt;</span>内容3<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>b. 解析代码：</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 测试使用ChildText和ChildTexts
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestChildTextMethod</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">collector</span> <span class="o">:=</span> <span class="nx">colly</span><span class="p">.</span><span class="nf">NewCollector</span><span class="p">()</span>
+	<span class="nx">collector</span><span class="p">.</span><span class="nf">OnError</span><span class="p">(</span><span class="kd">func</span><span class="p">(</span><span class="nx">response</span> <span class="o">*</span><span class="nx">colly</span><span class="p">.</span><span class="nx">Response</span><span class="p">,</span> <span class="nx">err</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;OnError&#34;</span><span class="p">,</span><span class="nx">err</span><span class="p">)</span>
+	<span class="p">})</span>
+	<span class="c1">//
+</span><span class="c1"></span>	<span class="nx">collector</span><span class="p">.</span><span class="nf">OnHTML</span><span class="p">(</span><span class="s">&#34;body&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">element</span> <span class="o">*</span><span class="nx">colly</span><span class="p">.</span><span class="nx">HTMLElement</span><span class="p">)</span> <span class="p">{</span>
+		<span class="c1">// 获取第一个子元素(div)的class属性
+</span><span class="c1"></span>		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;ChildText:%v\n&#34;</span><span class="p">,</span><span class="nx">element</span><span class="p">.</span><span class="nf">ChildText</span><span class="p">(</span><span class="s">&#34;div&#34;</span><span class="p">))</span>
+		<span class="c1">// 获取所有子元素(div)的class属性
+</span><span class="c1"></span>		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;ChildTexts:%v\n&#34;</span><span class="p">,</span><span class="nx">element</span><span class="p">.</span><span class="nf">ChildTexts</span><span class="p">(</span><span class="s">&#34;div&#34;</span><span class="p">))</span>
+	<span class="p">})</span>
+	<span class="nx">err</span> <span class="o">:=</span> <span class="nx">collector</span><span class="p">.</span><span class="nf">Visit</span><span class="p">(</span><span class="s">&#34;https://liuqh.icu/a.html&#34;</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;err&#34;</span><span class="p">,</span><span class="nx">err</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestChildTextMethod
+</span><span class="cm">ChildText:内容1
+</span><span class="cm">	内容1内容2内容3
+</span><span class="cm">ChildTexts:[内容1 内容1 内容2 内容3]
+</span><span class="cm">--- PASS: TestChildTextMethod (0.28s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="54-foreach">5.4 ForEach</h3>
+<h4 id="1-函数说明-3">1. 函数说明</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">//对每个`goquerySelector`选择的子元素执行回调`callback`
+</span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">h</span> <span class="o">*</span><span class="nx">HTMLElement</span><span class="p">)</span> <span class="nf">ForEach</span><span class="p">(</span><span class="nx">goquerySelector</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">callback</span> <span class="kd">func</span><span class="p">(</span><span class="kt">int</span><span class="p">,</span> <span class="o">*</span><span class="nx">HTMLElement</span><span class="p">))</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="2-使用示例-3">2. 使用示例</h4>
+<p><strong>a. 待解析Html:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>测试<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">http-equiv</span><span class="o">=</span><span class="s">&#34;Content-Type&#34;</span> <span class="na">content</span><span class="o">=</span><span class="s">&#34;text/html; charset=utf-8&#34;</span> <span class="p">/&gt;</span>
+<span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+	<span class="p">&lt;</span><span class="nt">ul</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;demo&#34;</span><span class="p">&gt;</span>
+		<span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;</span>
+			<span class="p">&lt;</span><span class="nt">span</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;name&#34;</span><span class="p">&gt;</span>张三<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+			<span class="p">&lt;</span><span class="nt">span</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;age&#34;</span><span class="p">&gt;</span>18<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+			<span class="p">&lt;</span><span class="nt">span</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;home&#34;</span><span class="p">&gt;</span>北京<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+		<span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+		<span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;</span>
+			<span class="p">&lt;</span><span class="nt">span</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;name&#34;</span><span class="p">&gt;</span>李四<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+			<span class="p">&lt;</span><span class="nt">span</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;age&#34;</span><span class="p">&gt;</span>22<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+			<span class="p">&lt;</span><span class="nt">span</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;home&#34;</span><span class="p">&gt;</span>南京<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+		<span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+		<span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;</span>
+			<span class="p">&lt;</span><span class="nt">span</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;name&#34;</span><span class="p">&gt;</span>王五<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+			<span class="p">&lt;</span><span class="nt">span</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;age&#34;</span><span class="p">&gt;</span>29<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+			<span class="p">&lt;</span><span class="nt">span</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;home&#34;</span><span class="p">&gt;</span>天津<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+		<span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+	<span class="p">&lt;/</span><span class="nt">ul</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>b. 解析代码:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">TestForeach</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">collector</span> <span class="o">:=</span> <span class="nx">colly</span><span class="p">.</span><span class="nf">NewCollector</span><span class="p">()</span>
+	<span class="nx">collector</span><span class="p">.</span><span class="nf">OnHTML</span><span class="p">(</span><span class="s">&#34;ul[class=&#39;demo&#39;]&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">element</span> <span class="o">*</span><span class="nx">colly</span><span class="p">.</span><span class="nx">HTMLElement</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">element</span><span class="p">.</span><span class="nf">ForEach</span><span class="p">(</span><span class="s">&#34;li&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">_</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">el</span> <span class="o">*</span><span class="nx">colly</span><span class="p">.</span><span class="nx">HTMLElement</span><span class="p">)</span> <span class="p">{</span>
+			<span class="nx">name</span> <span class="o">:=</span> <span class="nx">el</span><span class="p">.</span><span class="nf">ChildText</span><span class="p">(</span><span class="s">&#34;span[class=&#39;name&#39;]&#34;</span><span class="p">)</span>
+			<span class="nx">age</span> <span class="o">:=</span> <span class="nx">el</span><span class="p">.</span><span class="nf">ChildText</span><span class="p">(</span><span class="s">&#34;span[class=&#39;age&#39;]&#34;</span><span class="p">)</span>
+			<span class="nx">home</span> <span class="o">:=</span> <span class="nx">el</span><span class="p">.</span><span class="nf">ChildText</span><span class="p">(</span><span class="s">&#34;span[class=&#39;home&#39;]&#34;</span><span class="p">)</span>
+			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;姓名: %s  年龄:%s 住址: %s \n&#34;</span><span class="p">,</span><span class="nx">name</span><span class="p">,</span><span class="nx">age</span><span class="p">,</span><span class="nx">home</span><span class="p">)</span>
+		<span class="p">})</span>
+	<span class="p">})</span>
+	<span class="nx">_</span> <span class="p">=</span> <span class="nx">collector</span><span class="p">.</span><span class="nf">Visit</span><span class="p">(</span><span class="s">&#34;https://liuqh.icu/a.html&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestForeach
+</span><span class="cm">姓名: 张三  年龄:18 住址: 北京 
+</span><span class="cm">姓名: 李四  年龄:22 住址: 南京 
+</span><span class="cm">姓名: 王五  年龄:29 住址: 天津 
+</span><span class="cm">--- PASS: TestForeach (0.36s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="55-unmarshal">5.5 Unmarshal</h3>
+<h4 id="1-函数说明-4">1. 函数说明</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 通过给结构体字段指定 goquerySelector 格式的 tag，可以将HTMLElement对象Unmarshal 到一个结构体实例中
+</span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">h</span> <span class="o">*</span><span class="nx">HTMLElement</span><span class="p">)</span> <span class="nf">Unmarshal</span><span class="p">(</span><span class="nx">v</span> <span class="kd">interface</span><span class="p">{})</span> <span class="kt">error</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="2-使用示例-4">2. 使用示例</h4>
+<p><strong>a. 待解析Html</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>测试<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">http-equiv</span><span class="o">=</span><span class="s">&#34;Content-Type&#34;</span> <span class="na">content</span><span class="o">=</span><span class="s">&#34;text/html; charset=utf-8&#34;</span> <span class="p">/&gt;</span>
+<span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+	<span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;book&#34;</span><span class="p">&gt;</span>
+		<span class="p">&lt;</span><span class="nt">span</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;title&#34;</span><span class="p">&gt;&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;https://liuqh.icu&#34;</span><span class="p">&gt;</span>红楼梦<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+		<span class="p">&lt;</span><span class="nt">span</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;autor&#34;</span><span class="p">&gt;</span>曹雪芹 <span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+		<span class="p">&lt;</span><span class="nt">ul</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;category&#34;</span><span class="p">&gt;</span>
+			<span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;</span>四大名著<span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+			<span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;</span>文学著作<span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+			<span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;</span>古典长篇章回小说<span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+			<span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;</span>四大小说名著之首<span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+		<span class="p">&lt;/</span><span class="nt">ul</span><span class="p">&gt;</span>
+		<span class="p">&lt;</span><span class="nt">span</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;price&#34;</span><span class="p">&gt;</span>59.70元<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+	<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>b. 解析代码：</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 定义结构体
+</span><span class="c1"></span><span class="kd">type</span> <span class="nx">Book</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">Name</span> <span class="kt">string</span> <span class="s">`selector:&#34;span.title&#34;`</span>
+	<span class="nx">Link</span> <span class="kt">string</span> <span class="s">`selector:&#34;span &gt; a&#34; attr:&#34;href&#34;`</span>
+	<span class="nx">Author</span> <span class="kt">string</span> <span class="s">`selector:&#34;span.autor&#34;`</span>
+	<span class="nx">Reviews</span> <span class="p">[]</span><span class="kt">string</span> <span class="s">`selector:&#34;ul.category &gt; li&#34;`</span>
+	<span class="nx">Price</span> <span class="kt">string</span> <span class="s">`selector:&#34;span.price&#34;`</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">TestUnmarshal</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// 声明结构体
+</span><span class="c1"></span>	<span class="kd">var</span> <span class="nx">book</span> <span class="nx">Book</span>
+	<span class="nx">collector</span> <span class="o">:=</span> <span class="nx">colly</span><span class="p">.</span><span class="nf">NewCollector</span><span class="p">()</span>
+	<span class="nx">collector</span><span class="p">.</span><span class="nf">OnHTML</span><span class="p">(</span><span class="s">&#34;body&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">element</span> <span class="o">*</span><span class="nx">colly</span><span class="p">.</span><span class="nx">HTMLElement</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">err</span> <span class="o">:=</span> <span class="nx">element</span><span class="p">.</span><span class="nf">Unmarshal</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">book</span><span class="p">)</span>
+		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;解析失败:&#34;</span><span class="p">,</span><span class="nx">err</span><span class="p">)</span>
+		<span class="p">}</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;结果:%+v\n&#34;</span><span class="p">,</span><span class="nx">book</span><span class="p">)</span>
+	<span class="p">})</span>
+	<span class="nx">_</span> <span class="p">=</span> <span class="nx">collector</span><span class="p">.</span><span class="nf">Visit</span><span class="p">(</span><span class="s">&#34;https://liuqh.icu/a.html&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="cm">/***输出
+</span><span class="cm">=== RUN   TestUnmarshal
+</span><span class="cm">结果:{Name:红楼梦 Link:https://liuqh.icu Author:曹雪芹 Reviews:[四大名著 文学著作 古典长篇章回小说 四大小说名著之首] Price:59.70元}
+</span><span class="cm">--- PASS: TestUnmarshal (0.27s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="6常用选择器">6.常用选择器</h2>
+<h3 id="61-html内容">6.1 html内容</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>测试<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">http-equiv</span><span class="o">=</span><span class="s">&#34;Content-Type&#34;</span> <span class="na">content</span><span class="o">=</span><span class="s">&#34;text/html; charset=utf-8&#34;</span> <span class="p">/&gt;</span>
+<span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+  <span class="c">&lt;!-- 演示ID选择器 --&gt;</span>
+  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&#34;title&#34;</span><span class="p">&gt;</span>标题ABC<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+  <span class="c">&lt;!-- 演示class选择器 --&gt;</span>
+  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;desc&#34;</span><span class="p">&gt;</span>这是一段描述<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+  <span class="c">&lt;!-- 演示相邻选择器 --&gt;</span>
+  <span class="p">&lt;</span><span class="nt">span</span><span class="p">&gt;</span>好好学习！<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+  <span class="c">&lt;!-- 演示父子选择器 --&gt;</span>
+  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;parent&#34;</span><span class="p">&gt;</span>
+  	 <span class="c">&lt;!-- 演示兄弟选择器 --&gt;</span>
+    <span class="p">&lt;</span><span class="nt">p</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;childA&#34;</span><span class="p">&gt;</span>老大<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+	<span class="p">&lt;</span><span class="nt">p</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;childB&#34;</span><span class="p">&gt;</span>老二<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+  <span class="c">&lt;!-- 演示同时筛选多个选择器 --&gt;</span>
+  <span class="p">&lt;</span><span class="nt">span</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;context1&#34;</span><span class="p">&gt;</span>武松上山<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">span</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;context2&#34;</span><span class="p">&gt;</span>打老虎<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="62-使用示例">6.2 使用示例</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 常用选择器使用
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestSelector</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">collector</span> <span class="o">:=</span> <span class="nx">colly</span><span class="p">.</span><span class="nf">NewCollector</span><span class="p">()</span>
+	<span class="nx">collector</span><span class="p">.</span><span class="nf">OnHTML</span><span class="p">(</span><span class="s">&#34;body&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">element</span> <span class="o">*</span><span class="nx">colly</span><span class="p">.</span><span class="nx">HTMLElement</span><span class="p">)</span> <span class="p">{</span>
+		<span class="c1">// ID属性选择器,使用#
+</span><span class="c1"></span>		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;ID选择器使用: %v \n&#34;</span><span class="p">,</span><span class="nx">element</span><span class="p">.</span><span class="nf">ChildText</span><span class="p">(</span><span class="s">&#34;#title&#34;</span><span class="p">))</span>
+		<span class="c1">// Class属性选择器,使用
+</span><span class="c1"></span>		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;class选择器使用1: %v \n&#34;</span><span class="p">,</span><span class="nx">element</span><span class="p">.</span><span class="nf">ChildText</span><span class="p">(</span><span class="s">&#34;div[class=&#39;desc&#39;]&#34;</span><span class="p">))</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;class选择器使用2: %v \n&#34;</span><span class="p">,</span><span class="nx">element</span><span class="p">.</span><span class="nf">ChildText</span><span class="p">(</span><span class="s">&#34;.desc&#34;</span><span class="p">))</span>
+		<span class="c1">// 相邻选择器 prev +  next: 提取 &lt;span&gt;好好学习！&lt;/span&gt;
+</span><span class="c1"></span>		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;相邻选择器: %v \n&#34;</span><span class="p">,</span><span class="nx">element</span><span class="p">.</span><span class="nf">ChildText</span><span class="p">(</span><span class="s">&#34;div[class=&#39;desc&#39;] + span&#34;</span><span class="p">))</span>
+		<span class="c1">// 父子选择器： parent &gt; child,提取:&lt;div class=&#34;parent&#34;&gt;下所有子元素
+</span><span class="c1"></span>		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;父子选择器: %v \n&#34;</span><span class="p">,</span><span class="nx">element</span><span class="p">.</span><span class="nf">ChildText</span><span class="p">(</span><span class="s">&#34;div[class=&#39;parent&#39;] &gt; p&#34;</span><span class="p">))</span>
+		<span class="c1">// 兄弟选择器 prev ~ next , 提取:&lt;p class=&#34;childB&#34;&gt;老二&lt;/p&gt;
+</span><span class="c1"></span>		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;兄弟选择器: %v \n&#34;</span><span class="p">,</span><span class="nx">element</span><span class="p">.</span><span class="nf">ChildText</span><span class="p">(</span><span class="s">&#34;p[class=&#39;childA&#39;] ~ p&#34;</span><span class="p">))</span>
+		<span class="c1">// 同时选中多个,用,
+</span><span class="c1"></span>		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;同时选中多个1: %v \n&#34;</span><span class="p">,</span><span class="nx">element</span><span class="p">.</span><span class="nf">ChildText</span><span class="p">(</span><span class="s">&#34;span[class=&#39;context1&#39;],span[class=&#39;context2&#39;]&#34;</span><span class="p">))</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;同时选中多个2: %v \n&#34;</span><span class="p">,</span><span class="nx">element</span><span class="p">.</span><span class="nf">ChildText</span><span class="p">(</span><span class="s">&#34;.context1,.context2&#34;</span><span class="p">))</span>
+	<span class="p">})</span>
+	<span class="nx">_</span> <span class="p">=</span> <span class="nx">collector</span><span class="p">.</span><span class="nf">Visit</span><span class="p">(</span><span class="s">&#34;https://liuqh.icu/a.html&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestSelector
+</span><span class="cm">ID选择器使用: 标题ABC 
+</span><span class="cm">class选择器使用1: 这是一段描述 
+</span><span class="cm">class选择器使用2: 这是一段描述 
+</span><span class="cm">相邻选择器: 好好学习！ 
+</span><span class="cm">父子选择器: 老大老二 
+</span><span class="cm">兄弟选择器: 老二 
+</span><span class="cm">同时选中多个1: 武松上山打老虎 
+</span><span class="cm">同时选中多个2: 武松上山打老虎 
+</span><span class="cm">--- PASS: TestSelector (0.31s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="7-过滤器">7. 过滤器</h2>
+<h3 id="71-第一个子元素first-child--first-of-type">7.1 第一个子元素(<code>first-child &amp; first-of-type</code>)</h3>
+<h4 id="1-过滤器说明">1. 过滤器说明</h4>
+<table>
+<thead>
+<tr>
+<th>过滤器</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>:first-child</code></td>
+<td>筛选出父元素的第一个子元素,不分区子元素类型</td>
+</tr>
+<tr>
+<td><code>:first-of-type</code></td>
+<td>筛选出父元素的第一个指定类型子元素</td>
+</tr>
+</tbody>
+</table>
+<h4 id="2-html内容">2. html内容</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>测试<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">http-equiv</span><span class="o">=</span><span class="s">&#34;Content-Type&#34;</span> <span class="na">content</span><span class="o">=</span><span class="s">&#34;text/html; charset=utf-8&#34;</span> <span class="p">/&gt;</span>
+<span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;parent&#34;</span><span class="p">&gt;</span>
+    <span class="c">&lt;!--因为这里的p不是第一个子元素，不会被first-child筛选到--&gt;</span>
+  	<span class="p">&lt;</span><span class="nt">span</span><span class="p">&gt;</span>第一个不是p标签<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>老大<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+	  <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>老二<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+   <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;name&#34;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>张三<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+	  <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>小米<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="3-代码实现-1">3. 代码实现</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 常用过滤器使用first-child &amp; first-of-type
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestFilterFirstChild</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">collector</span> <span class="o">:=</span> <span class="nx">colly</span><span class="p">.</span><span class="nf">NewCollector</span><span class="p">()</span>
+	<span class="nx">collector</span><span class="p">.</span><span class="nf">OnHTML</span><span class="p">(</span><span class="s">&#34;body&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">element</span> <span class="o">*</span><span class="nx">colly</span><span class="p">.</span><span class="nx">HTMLElement</span><span class="p">)</span> <span class="p">{</span>
+		<span class="c1">// 只会筛选父元素下第一个子元素是&lt;p&gt;..&lt;/p&gt;
+</span><span class="c1"></span>		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;first-child: %v \n&#34;</span><span class="p">,</span><span class="nx">element</span><span class="p">.</span><span class="nf">ChildText</span><span class="p">(</span><span class="s">&#34;p:first-child&#34;</span><span class="p">))</span>
+		<span class="c1">// 会筛选父元素下第一个子元素类型是&lt;p&gt;..&lt;/p&gt;
+</span><span class="c1"></span>		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;first-of-type: %v \n&#34;</span><span class="p">,</span><span class="nx">element</span><span class="p">.</span><span class="nf">ChildText</span><span class="p">(</span><span class="s">&#34;p:first-of-type&#34;</span><span class="p">))</span>
+	<span class="p">})</span>
+	<span class="nx">_</span> <span class="p">=</span> <span class="nx">collector</span><span class="p">.</span><span class="nf">Visit</span><span class="p">(</span><span class="s">&#34;https://liuqh.icu/a.html&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestFilterFirstChild
+</span><span class="cm">first-child: 张三 
+</span><span class="cm">first-of-type: 老大张三 
+</span><span class="cm">--- PASS: TestFilterFirstChild (0.51s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="72-最后一个子元素last-child--last-of-type">7.2 最后一个子元素(<code>last-child &amp; last-of-type</code>)</h3>
+<h4 id="1-过滤器说明-1">1. 过滤器说明</h4>
+<table>
+<thead>
+<tr>
+<th>过滤器</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>:last-child</code></td>
+<td>筛选出父元素的最后一个子元素,不分区子元素类型</td>
+</tr>
+<tr>
+<td><code>:last-of-type</code></td>
+<td>筛选出父元素的最后一个指定类型子元素</td>
+</tr>
+</tbody>
+</table>
+<p><font color=red>使用方法和上面<code>筛选第一个子元素</code>一样，不在啰嗦。</font></p>
+<h3 id="73-第x个子元素nth-child--nth-of-type">7.3 第x个子元素(<code>nth-child &amp; nth-of-type</code>)</h3>
+<h4 id="1-过滤器说明-2">1. 过滤器说明</h4>
+<table>
+<thead>
+<tr>
+<th>过滤器</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>nth-child(n)</code></td>
+<td>筛选出的元素是其父元素的第<code>n</code>个元素，n以<code>1</code>开始。<br/>所以<code>:nth-child(1) = :first-child</code></td>
+</tr>
+<tr>
+<td><code>nth-of-type(n)</code></td>
+<td>和<code>nth-child</code>一样，只不过它筛选的是同类型的第n个元素，<br>所以<code>:nth-of-type(1) = :first-of-type</code></td>
+</tr>
+<tr>
+<td><code>nth-last-child(n)</code></td>
+<td>和<code>nth-child(n)</code>一样，顺序是倒序</td>
+</tr>
+<tr>
+<td><code>nth-last-of-type(n) </code></td>
+<td>和<code>nth-of-type(n)</code>一样，顺序是倒序</td>
+</tr>
+</tbody>
+</table>
+<h4 id="2-使用示例-5">2. 使用示例</h4>
+<p><font color=green>html内容和上面(7.1中)的html内容一样。</font></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 过滤器第x个元素
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestFilterNth</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">collector</span> <span class="o">:=</span> <span class="nx">colly</span><span class="p">.</span><span class="nf">NewCollector</span><span class="p">()</span>
+	<span class="nx">collector</span><span class="p">.</span><span class="nf">OnHTML</span><span class="p">(</span><span class="s">&#34;body&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">element</span> <span class="o">*</span><span class="nx">colly</span><span class="p">.</span><span class="nx">HTMLElement</span><span class="p">)</span> <span class="p">{</span>
+		<span class="c1">//&lt;div class=&#34;parent&#34;&gt;下的第一个子元素
+</span><span class="c1"></span>		<span class="nx">nthChild</span> <span class="o">:=</span> <span class="nx">element</span><span class="p">.</span><span class="nf">ChildText</span><span class="p">(</span><span class="s">&#34;div[class=&#39;parent&#39;] &gt; :nth-child(1)&#34;</span><span class="p">)</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;nth-child(1): %v \n&#34;</span><span class="p">,</span><span class="nx">nthChild</span><span class="p">)</span>
+
+		<span class="c1">//&lt;div class=&#34;parent&#34;&gt;下的第一个p子元素
+</span><span class="c1"></span>		<span class="nx">nthOfType</span> <span class="o">:=</span> <span class="nx">element</span><span class="p">.</span><span class="nf">ChildText</span><span class="p">(</span><span class="s">&#34;div[class=&#39;parent&#39;] &gt; p:nth-of-type(1)&#34;</span><span class="p">)</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;nth-of-type(1): %v \n&#34;</span><span class="p">,</span><span class="nx">nthOfType</span><span class="p">)</span>
+
+		<span class="c1">// div class=&#34;parent&#34;&gt;下的最后一个子元素
+</span><span class="c1"></span>		<span class="nx">nthLastChild</span> <span class="o">:=</span> <span class="nx">element</span><span class="p">.</span><span class="nf">ChildText</span><span class="p">(</span><span class="s">&#34;div[class=&#39;parent&#39;] &gt; :nth-last-child(1)&#34;</span><span class="p">)</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;nth-last-child(1): %v \n&#34;</span><span class="p">,</span><span class="nx">nthLastChild</span><span class="p">)</span>
+
+		<span class="c1">//&lt;div class=&#34;parent&#34;&gt;下的最后一个p子元素
+</span><span class="c1"></span>		<span class="nx">nthLastOfType</span> <span class="o">:=</span> <span class="nx">element</span><span class="p">.</span><span class="nf">ChildText</span><span class="p">(</span><span class="s">&#34;div[class=&#39;parent&#39;] &gt; p:nth-last-of-type(1)&#34;</span><span class="p">)</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;nth-last-of-type(1): %v \n&#34;</span><span class="p">,</span><span class="nx">nthLastOfType</span><span class="p">)</span>
+
+	<span class="p">})</span>
+	<span class="nx">_</span> <span class="p">=</span> <span class="nx">collector</span><span class="p">.</span><span class="nf">Visit</span><span class="p">(</span><span class="s">&#34;https://liuqh.icu/a.html&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestFilterNth
+</span><span class="cm">nth-child(1): 第一个不是p标签 
+</span><span class="cm">nth-of-type(1): 老大 
+</span><span class="cm">nth-last-child(1): 老二 
+</span><span class="cm">nth-last-of-type(1): 老二 
+</span><span class="cm">--- PASS: TestFilterNth (0.29s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="74-仅有一个子元素only-child--only-of-type">7.4 仅有一个子元素(<code>only-child &amp; only-of-type</code>)</h3>
+<h4 id="1-过滤器说明-3">1. 过滤器说明</h4>
+<table>
+<thead>
+<tr>
+<th>过滤器</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>:only-child</code></td>
+<td>筛选其父元素下只有个子元素</td>
+</tr>
+<tr>
+<td><code>:on-of-type</code></td>
+<td>筛选其父元素下只有个指定类型的子元素</td>
+</tr>
+</tbody>
+</table>
+<h4 id="2-html内容-1">2. html内容</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>测试<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">http-equiv</span><span class="o">=</span><span class="s">&#34;Content-Type&#34;</span> <span class="na">content</span><span class="o">=</span><span class="s">&#34;text/html; charset=utf-8&#34;</span> <span class="p">/&gt;</span>
+<span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;parent&#34;</span><span class="p">&gt;</span>
+  	<span class="p">&lt;</span><span class="nt">span</span><span class="p">&gt;</span>我是span标签<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;name&#34;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>我是p标签<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="3-使用示例">3. 使用示例</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 过滤器只有一个元素
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestFilterOnly</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">collector</span> <span class="o">:=</span> <span class="nx">colly</span><span class="p">.</span><span class="nf">NewCollector</span><span class="p">()</span>
+	<span class="nx">collector</span><span class="p">.</span><span class="nf">OnHTML</span><span class="p">(</span><span class="s">&#34;body&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">element</span> <span class="o">*</span><span class="nx">colly</span><span class="p">.</span><span class="nx">HTMLElement</span><span class="p">)</span> <span class="p">{</span>
+		<span class="c1">// 匹配其子元素：有且只有一个标签的
+</span><span class="c1"></span>		<span class="nx">onlyChild</span> <span class="o">:=</span> <span class="nx">element</span><span class="p">.</span><span class="nf">ChildTexts</span><span class="p">(</span><span class="s">&#34;div &gt; :only-child&#34;</span><span class="p">)</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;onlyChild: %v \n&#34;</span><span class="p">,</span><span class="nx">onlyChild</span><span class="p">)</span>
+		<span class="c1">// 匹配其子元素：有且只有一个 p 标签的
+</span><span class="c1"></span>		<span class="nx">nthOfType</span> <span class="o">:=</span> <span class="nx">element</span><span class="p">.</span><span class="nf">ChildTexts</span><span class="p">(</span><span class="s">&#34;div &gt; p:only-of-type&#34;</span><span class="p">)</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;nth-of-type(1): %v \n&#34;</span><span class="p">,</span><span class="nx">nthOfType</span><span class="p">)</span>
+
+	<span class="p">})</span>
+	<span class="nx">_</span> <span class="p">=</span> <span class="nx">collector</span><span class="p">.</span><span class="nf">Visit</span><span class="p">(</span><span class="s">&#34;https://liuqh.icu/a.html&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestFilterOnly
+</span><span class="cm">onlyChild: [我是span标签 我是p标签] 
+</span><span class="cm">nth-of-type(1): [我是p标签] 
+</span><span class="cm">--- PASS: TestFilterOnly (0.29s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="75-内容匹配contains">7.5 内容匹配(<code>contains</code>)</h3>
+<h4 id="1-html内容">1. html内容</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>测试<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">http-equiv</span><span class="o">=</span><span class="s">&#34;Content-Type&#34;</span> <span class="na">content</span><span class="o">=</span><span class="s">&#34;text/html; charset=utf-8&#34;</span> <span class="p">/&gt;</span>
+<span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;https://www.baidu.com&#34;</span><span class="p">&gt;</span>百度<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;https://cn.bing.com&#34;</span><span class="p">&gt;</span>必应<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="2-使用示例-6">2. 使用示例</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">TestFilterContext</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">collector</span> <span class="o">:=</span> <span class="nx">colly</span><span class="p">.</span><span class="nf">NewCollector</span><span class="p">()</span>
+	<span class="nx">collector</span><span class="p">.</span><span class="nf">OnHTML</span><span class="p">(</span><span class="s">&#34;body&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">element</span> <span class="o">*</span><span class="nx">colly</span><span class="p">.</span><span class="nx">HTMLElement</span><span class="p">)</span> <span class="p">{</span>
+		<span class="c1">// 内容匹配
+</span><span class="c1"></span>		<span class="nx">attr1</span> <span class="o">:=</span> <span class="nx">element</span><span class="p">.</span><span class="nf">ChildAttr</span><span class="p">(</span><span class="s">&#34;a:contains(百度)&#34;</span><span class="p">,</span> <span class="s">&#34;href&#34;</span><span class="p">)</span>
+		<span class="nx">attr2</span> <span class="o">:=</span> <span class="nx">element</span><span class="p">.</span><span class="nf">ChildAttr</span><span class="p">(</span><span class="s">&#34;a:contains(必应)&#34;</span><span class="p">,</span> <span class="s">&#34;href&#34;</span><span class="p">)</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;百度: %v \n&#34;</span><span class="p">,</span><span class="nx">attr1</span><span class="p">)</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;必应: %v \n&#34;</span><span class="p">,</span><span class="nx">attr2</span><span class="p">)</span>
+	<span class="p">})</span>
+	<span class="nx">_</span> <span class="p">=</span> <span class="nx">collector</span><span class="p">.</span><span class="nf">Visit</span><span class="p">(</span><span class="s">&#34;https://liuqh.icu/a.html&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestFilterContext
+</span><span class="cm">百度: https://www.baidu.com 
+</span><span class="cm">必应: https://cn.bing.com 
+</span><span class="cm">--- PASS: TestFilterContext (0.31s)
+</span><span class="cm">PASS
+</span><span class="cm">*/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="8-爬取限速">8. 爬取限速</h2>
+<p>有时候并发请求太多，网站会限制访问。这时就需要使用<code>LimitRule</code>了。说白了，<code>LimitRule</code>就是限制访问速度和并发量的：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">LimitRule</span> <span class="kd">struct</span> <span class="p">{</span>
+  <span class="nx">DomainRegexp</span> <span class="kt">string</span> <span class="c1">// 匹配域名的正则表达式
+</span><span class="c1"></span>  <span class="nx">DomainGlob</span> <span class="kt">string</span> <span class="c1">// glob 匹配模式
+</span><span class="c1"></span>  <span class="nx">Delay</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Duration</span> <span class="c1">// 请求之间的延迟
+</span><span class="c1"></span>  <span class="nx">RandomDelay</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Duration</span> <span class="c1">// 添加额外的随机延迟
+</span><span class="c1"></span>  <span class="nx">Parallelism</span>    <span class="kt">int</span> <span class="c1">// 设置并发数
+</span><span class="c1"></span><span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><font color=red><b>@注意: DomainRegexp和DomainGlob，两个参数至少要设置一个，否则报错</b></font></p>
+<p><a href="https://studygolang.com/articles/30580">更多场景使用示例</a></p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Learn Go</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2022-10-04
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/go%E6%89%A9%E5%B1%95%E5%8C%85/">Go扩展包</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/%E6%89%A9%E5%B1%95%E5%8C%85/27-cron/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Go扩展包(二十七):cron</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/%E6%89%A9%E5%B1%95%E5%8C%85/25-es/">
+            <span class="next-text nav-default">Go扩展包(二十五):es</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/shershon1991" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/shershon520" class="iconfont icon-zhihu" title="zhihu"></a>
+  <a href="https://shershon1991.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2021 - 
+    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span>Learn Go</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+<script>
+    docsearch({
+        apiKey: "9f0c02b55e9885568dcbf6ef094b433c",
+        indexName: "hugo",
+        appId: "TTENARPLYL",
+        inputSelector: '.docsearch-input',
+        debug: false,
+    });
+</script>
+</body>
+</html>
