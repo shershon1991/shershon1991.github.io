@@ -44,11 +44,11 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/34-rocketmq/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2022-10-05T00:00:00+00:00" />
-<meta property="article:modified_time" content="2022-10-05T11:30:45+08:00" />
+<meta property="article:modified_time" content="2022-10-05T11:34:17+08:00" />
 
 <meta itemprop="name" content="Go扩展包(三十四):rocketmq">
 <meta itemprop="description" content="介绍 本文将会介绍两种rocketmq扩展包，如下（截止到2022.10.04）： 包 文档 Star 数量 说明 apache/rocketmq-client-go https://github.com/apache/rocketmq-client-go 979 apache官方提供 aliyunmq/mq-http-go-sdk https://github.com/aliyunmq/mq-http-go-sdk 50 aliyun"><meta itemprop="datePublished" content="2022-10-05T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2022-10-05T11:30:45+08:00" />
+<meta itemprop="dateModified" content="2022-10-05T11:34:17+08:00" />
 <meta itemprop="wordCount" content="3915">
 <meta itemprop="keywords" content="Go扩展包," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go扩展包(三十四):rocketmq"/>
@@ -1166,15 +1166,15 @@
 </span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">// 发送普通消息
-func TestSimpleProducer<span class="o">(</span>t *testing.T<span class="o">)</span> <span class="o">{</span>
-	rocketmqpkg.Simple<span class="o">()</span>
-<span class="o">}</span>
-/**输出
-<span class="o">===</span> RUN   TestSimpleProducer
-2022-10-05 11:17:39: 消息: SendResult <span class="o">[</span><span class="nv">sendStatus</span><span class="o">=</span>0, <span class="nv">msgIds</span><span class="o">=</span>C0A80009FECC000000001705d8380001, <span class="nv">offsetMsgId</span><span class="o">=</span>C0A8000900002A9F0000000000000000, <span class="nv">queueOffset</span><span class="o">=</span>0, <span class="nv">messageQueue</span><span class="o">=</span>MessageQueue <span class="o">[</span><span class="nv">topic</span><span class="o">=</span>SimpleTopic, <span class="nv">brokerName</span><span class="o">=</span>broker-a, <span class="nv">queueId</span><span class="o">=</span>1<span class="o">]]</span>发送成功 
---- PASS: TestSimpleProducer <span class="o">(</span>0.05s<span class="o">)</span>
- */
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 发送普通消息
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestSimpleProducer</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">rocketmqpkg</span><span class="p">.</span><span class="nf">Simple</span><span class="p">()</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestSimpleProducer
+</span><span class="cm">2022-10-05 11:17:39: 消息: SendResult [sendStatus=0, msgIds=C0A80009FECC000000001705d8380001, offsetMsgId=C0A8000900002A9F0000000000000000, queueOffset=0, messageQueue=MessageQueue [topic=SimpleTopic, brokerName=broker-a, queueId=1]]发送成功 
+</span><span class="cm">--- PASS: TestSimpleProducer (0.05s)
+</span><span class="cm"> */</span>
 </code></pre></td></tr></table>
 </div>
 </div><h2 id="消费普通消息基于-rocketmq-client-go">消费普通消息（基于 <code>rocketmq-client-go</code>）</h2>
@@ -1190,14 +1190,14 @@ func TestSimpleProducer<span class="o">(</span>t *testing.T<span class="o">)</sp
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">// 消费普通消息
-func TestSimpleConsumer<span class="o">(</span>t *testing.T<span class="o">)</span> <span class="o">{</span>
-	rocketmqpkg.ConsumeSimple<span class="o">()</span>
-<span class="o">}</span>
-/**输出
-<span class="o">===</span> RUN   TestSimpleConsumer
-2022-10-05 11:19:42 读取到一条消息,消息内容: 一条简单消息 
- */
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 消费普通消息
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestSimpleConsumer</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">rocketmqpkg</span><span class="p">.</span><span class="nf">ConsumeSimple</span><span class="p">()</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestSimpleConsumer
+</span><span class="cm">2022-10-05 11:19:42 读取到一条消息,消息内容: 一条简单消息 
+</span><span class="cm"> */</span>
 </code></pre></td></tr></table>
 </div>
 </div><h2 id="发送延时消息基于-rocketmq-client-go">发送延时消息（基于 <code>rocketmq-client-go</code>）</h2>
@@ -1215,16 +1215,16 @@ func TestSimpleConsumer<span class="o">(</span>t *testing.T<span class="o">)</sp
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">// 发送延时消息
-func TestDelayProducer<span class="o">(</span>t *testing.T<span class="o">)</span> <span class="o">{</span>
-	rocketmqpkg.Delay<span class="o">()</span>
-<span class="o">}</span>
-/**输出
-<span class="o">===</span> RUN   TestDelayProducer
-2022-10-05 11:22:12: 消息: SendResult <span class="o">[</span><span class="nv">sendStatus</span><span class="o">=</span>0, <span class="nv">msgIds</span><span class="o">=</span>C0A80009FF2900000000170a02a00001, <span class="nv">offsetMsgId</span><span class="o">=</span>C0A8000900002A9F00000000000000A2, <span class="nv">queueOffset</span><span class="o">=</span>0, <span class="nv">messageQueue</span><span class="o">=</span>MessageQueue <span class="o">[</span><span class="nv">topic</span><span class="o">=</span>DelayTopic, <span class="nv">brokerName</span><span class="o">=</span>broker-a, <span class="nv">queueId</span><span class="o">=</span>1<span class="o">]]</span>发送成功 
---- PASS: TestDelayProducer <span class="o">(</span>0.03s<span class="o">)</span>
-PASS
- */
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 发送延时消息
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestDelayProducer</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">rocketmqpkg</span><span class="p">.</span><span class="nf">Delay</span><span class="p">()</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestDelayProducer
+</span><span class="cm">2022-10-05 11:22:12: 消息: SendResult [sendStatus=0, msgIds=C0A80009FF2900000000170a02a00001, offsetMsgId=C0A8000900002A9F00000000000000A2, queueOffset=0, messageQueue=MessageQueue [topic=DelayTopic, brokerName=broker-a, queueId=1]]发送成功 
+</span><span class="cm">--- PASS: TestDelayProducer (0.03s)
+</span><span class="cm">PASS
+</span><span class="cm"> */</span>
 </code></pre></td></tr></table>
 </div>
 </div><h2 id="消费延时消息基于-rocketmq-client-go">消费延时消息（基于 <code>rocketmq-client-go</code>）</h2>
@@ -1240,14 +1240,14 @@ PASS
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">// 消费延时消息
-func TestDelayConsumer<span class="o">(</span>t *testing.T<span class="o">)</span> <span class="o">{</span>
-	rocketmqpkg.ConsumeDelay<span class="o">()</span>
-<span class="o">}</span>
-/**输出
-<span class="o">===</span> RUN   TestDelayConsumer
-2022-10-05 11:24:02 读取到一条消息,消息内容: 一条延时消息 
- */
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 消费延时消息
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestDelayConsumer</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">rocketmqpkg</span><span class="p">.</span><span class="nf">ConsumeDelay</span><span class="p">()</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestDelayConsumer
+</span><span class="cm">2022-10-05 11:24:02 读取到一条消息,消息内容: 一条延时消息 
+</span><span class="cm"> */</span>
 </code></pre></td></tr></table>
 </div>
 </div><h2 id="发送事务消息基于-rocketmq-client-go">发送事务消息（基于 <code>rocketmq-client-go</code>）</h2>
@@ -1263,14 +1263,14 @@ func TestDelayConsumer<span class="o">(</span>t *testing.T<span class="o">)</spa
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">// 发送事务消息
-func TestTransactionProducer<span class="o">(</span>t *testing.T<span class="o">)</span> <span class="o">{</span>
-	rocketmqpkg.Transaction<span class="o">()</span>
-<span class="o">}</span>
-/**输出
-<span class="o">===</span> RUN   TestTransactionProducer
-2022-10-05 11:24:58: 消息: SendResult <span class="o">[</span><span class="nv">sendStatus</span><span class="o">=</span>0, <span class="nv">msgIds</span><span class="o">=</span>C0A80009FF7900000000170c8b100001, <span class="nv">offsetMsgId</span><span class="o">=</span>C0A8000900002A9F000000000000023F, <span class="nv">queueOffset</span><span class="o">=</span>0, <span class="nv">messageQueue</span><span class="o">=</span>MessageQueue <span class="o">[</span><span class="nv">topic</span><span class="o">=</span>TransactionTopic, <span class="nv">brokerName</span><span class="o">=</span>broker-a, <span class="nv">queueId</span><span class="o">=</span>1<span class="o">]]</span>发送成功 
- */
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 发送事务消息
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestTransactionProducer</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">rocketmqpkg</span><span class="p">.</span><span class="nf">Transaction</span><span class="p">()</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestTransactionProducer
+</span><span class="cm">2022-10-05 11:24:58: 消息: SendResult [sendStatus=0, msgIds=C0A80009FF7900000000170c8b100001, offsetMsgId=C0A8000900002A9F000000000000023F, queueOffset=0, messageQueue=MessageQueue [topic=TransactionTopic, brokerName=broker-a, queueId=1]]发送成功 
+</span><span class="cm"> */</span>
 </code></pre></td></tr></table>
 </div>
 </div><h2 id="消费事务消息基于-rocketmq-client-go">消费事务消息（基于 <code>rocketmq-client-go</code>）</h2>
@@ -1286,14 +1286,14 @@ func TestTransactionProducer<span class="o">(</span>t *testing.T<span class="o">
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">// 消费事务消息
-func TestTransactionConsumer<span class="o">(</span>t *testing.T<span class="o">)</span> <span class="o">{</span>
-	rocketmqpkg.ConsumeTransaction<span class="o">()</span>
-<span class="o">}</span>
-/**输出
-<span class="o">===</span> RUN   TestTransactionConsumer
-2022-10-05 11:26:48 读取到一条消息,消息内容: 这是一条事务消息2 
- */
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 消费事务消息
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestTransactionConsumer</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">rocketmqpkg</span><span class="p">.</span><span class="nf">ConsumeTransaction</span><span class="p">()</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestTransactionConsumer
+</span><span class="cm">2022-10-05 11:26:48 读取到一条消息,消息内容: 这是一条事务消息2 
+</span><span class="cm"> */</span>
 </code></pre></td></tr></table>
 </div>
 </div><h2 id="发送普通消息基于-阿里云mq-http-go-sdk">发送普通消息（基于 <code>阿里云mq-http-go-sdk</code>）</h2>
@@ -1318,23 +1318,23 @@ func TestTransactionConsumer<span class="o">(</span>t *testing.T<span class="o">
 </span><span class="lnt">17
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">// aliyun-发送普通消息
-func TestAliSimpleProducer<span class="o">(</span>t *testing.T<span class="o">)</span> <span class="o">{</span>
-	aliyunmq.Simple<span class="o">()</span>
-<span class="o">}</span>
-/**输出
-<span class="o">===</span> RUN   TestAliSimpleProducer
-Publish ----&gt;
-	MessageId:6F3C3DB6000E681A951516F039C8A5B7, BodyMD5:95A269CF8D5A5D22CF8A0F8ACF64AB66, 
-Publish ----&gt;
-	MessageId:6F3C3DB6000E681A951516F03A5CA6F7, BodyMD5:C0FF9ACB51988C7BCC7A0C62397282D7, 
-Publish ----&gt;
-	MessageId:6F3C3DB6000E681A951516F03AECA7DB, BodyMD5:95A269CF8D5A5D22CF8A0F8ACF64AB66, 
-Publish ----&gt;
-	MessageId:6F3C3DB6000E681A951516F03B7DA8F3, BodyMD5:C0FF9ACB51988C7BCC7A0C62397282D7, 
---- PASS: TestAliSimpleProducer <span class="o">(</span>0.72s<span class="o">)</span>
-PASS
- */
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// aliyun-发送普通消息
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestAliSimpleProducer</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">aliyunmq</span><span class="p">.</span><span class="nf">Simple</span><span class="p">()</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestAliSimpleProducer
+</span><span class="cm">Publish ----&gt;
+</span><span class="cm">	MessageId:6F3C3DB6000E681A951516F039C8A5B7, BodyMD5:95A269CF8D5A5D22CF8A0F8ACF64AB66, 
+</span><span class="cm">Publish ----&gt;
+</span><span class="cm">	MessageId:6F3C3DB6000E681A951516F03A5CA6F7, BodyMD5:C0FF9ACB51988C7BCC7A0C62397282D7, 
+</span><span class="cm">Publish ----&gt;
+</span><span class="cm">	MessageId:6F3C3DB6000E681A951516F03AECA7DB, BodyMD5:95A269CF8D5A5D22CF8A0F8ACF64AB66, 
+</span><span class="cm">Publish ----&gt;
+</span><span class="cm">	MessageId:6F3C3DB6000E681A951516F03B7DA8F3, BodyMD5:C0FF9ACB51988C7BCC7A0C62397282D7, 
+</span><span class="cm">--- PASS: TestAliSimpleProducer (0.72s)
+</span><span class="cm">PASS
+</span><span class="cm"> */</span>
 </code></pre></td></tr></table>
 </div>
 </div><h2 id="消费普通消息基于-阿里云mq-http-go-sdk">消费普通消息（基于 <code>阿里云mq-http-go-sdk</code>）</h2>
@@ -1371,35 +1371,35 @@ PASS
 </span><span class="lnt">29
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">// aliyun-消费普通消息
-func TestAliSimpleConsumer<span class="o">(</span>t *testing.T<span class="o">)</span> <span class="o">{</span>
-	aliyunmq.ConsumeSimple<span class="o">()</span>
-<span class="o">}</span>
-/**输出
-<span class="o">===</span> RUN   TestAliSimpleConsumer
-Consume <span class="m">3</span> messages----&gt;
-	MessageID: 6F3C3DB6000E681A951516F039C8A5B7, PublishTime: 1664938442184, MessageTag: 
-	ConsumedTimes: 1, FirstConsumeTime: 1664938606594, NextConsumeTime: <span class="m">1664938906594</span>
-	Body: hello mq!
-	Props: map<span class="o">[</span>__BORNHOST:111.60.61.182 a:0<span class="o">]</span>
-	MessageID: 6F3C3DB6000E681A951516F03A5CA6F7, PublishTime: 1664938442332, MessageTag: 
-	ConsumedTimes: 1, FirstConsumeTime: 1664938606594, NextConsumeTime: <span class="m">1664938906594</span>
-	Body: hello mq timer!
-	Props: map<span class="o">[</span>__BORNHOST:111.60.61.182 a:1<span class="o">]</span>
-	MessageID: 6F3C3DB6000E681A951516F03AECA7DB, PublishTime: 1664938442476, MessageTag: 
-	ConsumedTimes: 1, FirstConsumeTime: 1664938606594, NextConsumeTime: <span class="m">1664938906594</span>
-	Body: hello mq!
-	Props: map<span class="o">[</span>__BORNHOST:111.60.61.182 a:2<span class="o">]</span>
-Ack ----&gt;
-	<span class="o">[</span>6F3C3DB6000E681A951516F039C8A5B7-MCAxNjY0OTM4NjA2NTk0IDMwMDAwMCA2IDAgY24temhhbmdqaWFrb3Utc2hhcmUtMDEtMyAxIDA<span class="o">=</span> 6F3C3DB6000E681A951516F03A5CA6F7-MCAxNjY0OTM4NjA2NTk0IDMwMDAwMCA2IDAgY24temhhbmdqaWFrb3Utc2hhcmUtMDEtMyAyIDA<span class="o">=</span> 6F3C3DB6000E681A951516F03AECA7DB-MCAxNjY0OTM4NjA2NTk0IDMwMDAwMCA2IDAgY24temhhbmdqaWFrb3Utc2hhcmUtMDEtMyAzIDA<span class="o">=]</span>
-Consume <span class="m">1</span> messages----&gt;
-	MessageID: 6F3C3DB6000E681A951516F03B7DA8F3, PublishTime: 1664938442621, MessageTag: 
-	ConsumedTimes: 1, FirstConsumeTime: 1664938606724, NextConsumeTime: <span class="m">1664938906724</span>
-	Body: hello mq timer!
-	Props: map<span class="o">[</span>__BORNHOST:111.60.61.182 a:3<span class="o">]</span>
-Ack ----&gt;
-	<span class="o">[</span>6F3C3DB6000E681A951516F03B7DA8F3-MCAxNjY0OTM4NjA2NzI0IDMwMDAwMCAyIDAgY24temhhbmdqaWFrb3Utc2hhcmUtMDEtMyA0IDA<span class="o">=]</span>
- */
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// aliyun-消费普通消息
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestAliSimpleConsumer</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">aliyunmq</span><span class="p">.</span><span class="nf">ConsumeSimple</span><span class="p">()</span>
+<span class="p">}</span>
+<span class="cm">/**输出
+</span><span class="cm">=== RUN   TestAliSimpleConsumer
+</span><span class="cm">Consume 3 messages----&gt;
+</span><span class="cm">	MessageID: 6F3C3DB6000E681A951516F039C8A5B7, PublishTime: 1664938442184, MessageTag: 
+</span><span class="cm">	ConsumedTimes: 1, FirstConsumeTime: 1664938606594, NextConsumeTime: 1664938906594
+</span><span class="cm">	Body: hello mq!
+</span><span class="cm">	Props: map[__BORNHOST:111.60.61.182 a:0]
+</span><span class="cm">	MessageID: 6F3C3DB6000E681A951516F03A5CA6F7, PublishTime: 1664938442332, MessageTag: 
+</span><span class="cm">	ConsumedTimes: 1, FirstConsumeTime: 1664938606594, NextConsumeTime: 1664938906594
+</span><span class="cm">	Body: hello mq timer!
+</span><span class="cm">	Props: map[__BORNHOST:111.60.61.182 a:1]
+</span><span class="cm">	MessageID: 6F3C3DB6000E681A951516F03AECA7DB, PublishTime: 1664938442476, MessageTag: 
+</span><span class="cm">	ConsumedTimes: 1, FirstConsumeTime: 1664938606594, NextConsumeTime: 1664938906594
+</span><span class="cm">	Body: hello mq!
+</span><span class="cm">	Props: map[__BORNHOST:111.60.61.182 a:2]
+</span><span class="cm">Ack ----&gt;
+</span><span class="cm">	[6F3C3DB6000E681A951516F039C8A5B7-MCAxNjY0OTM4NjA2NTk0IDMwMDAwMCA2IDAgY24temhhbmdqaWFrb3Utc2hhcmUtMDEtMyAxIDA= 6F3C3DB6000E681A951516F03A5CA6F7-MCAxNjY0OTM4NjA2NTk0IDMwMDAwMCA2IDAgY24temhhbmdqaWFrb3Utc2hhcmUtMDEtMyAyIDA= 6F3C3DB6000E681A951516F03AECA7DB-MCAxNjY0OTM4NjA2NTk0IDMwMDAwMCA2IDAgY24temhhbmdqaWFrb3Utc2hhcmUtMDEtMyAzIDA=]
+</span><span class="cm">Consume 1 messages----&gt;
+</span><span class="cm">	MessageID: 6F3C3DB6000E681A951516F03B7DA8F3, PublishTime: 1664938442621, MessageTag: 
+</span><span class="cm">	ConsumedTimes: 1, FirstConsumeTime: 1664938606724, NextConsumeTime: 1664938906724
+</span><span class="cm">	Body: hello mq timer!
+</span><span class="cm">	Props: map[__BORNHOST:111.60.61.182 a:3]
+</span><span class="cm">Ack ----&gt;
+</span><span class="cm">	[6F3C3DB6000E681A951516F03B7DA8F3-MCAxNjY0OTM4NjA2NzI0IDMwMDAwMCAyIDAgY24temhhbmdqaWFrb3Utc2hhcmUtMDEtMyA0IDA=]
+</span><span class="cm"> */</span>
 </code></pre></td></tr></table>
 </div>
 </div>
