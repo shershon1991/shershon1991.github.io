@@ -6,7 +6,16 @@
     <description>Recent content on Learn Go</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 25 Sep 2022 16:03:00 +0800</lastBuildDate><atom:link href="https://shershon1991.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 04 Oct 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://shershon1991.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Go扩展包(三十四):rocketmq</title>
+      <link>https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/34-rocketmq/</link>
+      <pubDate>Tue, 04 Oct 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/34-rocketmq/</guid>
+      <description>介绍 本文将会介绍两种rocketmq扩展包，如下（截止到2022.10.04）： 包 文档 Star 数量 说明 apache/rocketmq-client-go https://github.com/apache/rocketmq-client-go 979 apache官方提供 aliyunmq/mq-http-go-sdk https://github.com/aliyunmq/mq-http-go-sdk 50 aliyun</description>
+    </item>
+    
     <item>
       <title>RPC编程(六):gRPC中的截取器</title>
       <link>https://shershon1991.github.io/post/%E8%BF%9B%E9%98%B6%E7%AF%87/rpc/06-grpc%E4%B8%AD%E7%9A%84%E6%88%AA%E5%8F%96%E5%99%A8/</link>

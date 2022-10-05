@@ -122,6 +122,30 @@
           <section id="posts" class="posts">
     <article class="post">
   <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/%E5%9F%BA%E7%A1%80%E7%AF%87/21-web%E5%BC%80%E5%8F%91-http%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%8E%A5%E6%94%B6%E5%8F%82%E6%95%B0%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E5%BC%8F/">Go学习(二十一):Web开发-HTTP服务端接收参数的几种方式</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2021-01-21 </span>
+      <div class="post-category">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+          <a href="/categories/go/"> Go </a>
+          </div>
+        <span class="more-meta"> 约 1887 字 </span>
+        <span class="more-meta"> 预计阅读 4 分钟 </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      1.获取GET参数 1.1 方法列表 方法名 描述 (r *Request) ParseForm() error 判断是否解析传参时出错 (r *Request) FormValue(key string) string 接收指定key的参数值 1.2 使用示例 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+    </div>
+    <div class="read-more">
+      <a href="/post/%E5%9F%BA%E7%A1%80%E7%AF%87/21-web%E5%BC%80%E5%8F%91-http%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%8E%A5%E6%94%B6%E5%8F%82%E6%95%B0%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E5%BC%8F/" class="read-more-link">阅读更多</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
     <h1 class="post-title"><a class="post-link" href="/post/%E5%9F%BA%E7%A1%80%E7%AF%87/20-web%E5%BC%80%E5%8F%91-http%E6%9C%8D%E5%8A%A1%E7%AB%AF%E5%90%AF%E5%8A%A8%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E5%BC%8F/">Go学习(二十):Web开发-HTTP服务端启动的几种方式</a></h1>
     <div class="post-meta">
       <span class="post-time"> 2021-01-20 </span>
@@ -576,27 +600,6 @@
   </div>
 </article>
 
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/%E5%9F%BA%E7%A1%80%E7%AF%87/13-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E4%B9%8B-%E6%96%B9%E6%B3%95/"></a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 0001-01-01 </span>
-      
-        <span class="more-meta"> 约 1692 字 </span>
-        <span class="more-meta"> 预计阅读 4 分钟 </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      Go没有沿袭传统面向对象编程中的诸多概念，也没有提供类(class)，但是它提供了结构体(struct)，方法(method)可以在结构体上
-    </div>
-    <div class="read-more">
-      <a href="/post/%E5%9F%BA%E7%A1%80%E7%AF%87/13-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E4%B9%8B-%E6%96%B9%E6%B3%95/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
     </section>
   
   <nav class="pagination">
@@ -604,7 +607,10 @@
         <i class="iconfont icon-left"></i>
         <span class="prev-text">上一页</span>
       </a>
-    
+    <a class="next" href="/page/6/">
+        <span class="next-text">下一页</span>
+        <i class="iconfont icon-right"></i>
+      </a>
   </nav>
         </div>
         
