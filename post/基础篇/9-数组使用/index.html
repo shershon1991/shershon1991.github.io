@@ -44,12 +44,12 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/%E5%9F%BA%E7%A1%80%E7%AF%87/9-%E6%95%B0%E7%BB%84%E4%BD%BF%E7%94%A8/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-01-09T00:00:00+00:00" />
-<meta property="article:modified_time" content="2022-01-16T18:07:53+08:00" />
+<meta property="article:modified_time" content="2022-12-05T16:25:20+08:00" />
 
 <meta itemprop="name" content="Go学习(九):数组使用">
 <meta itemprop="description" content="1.数组的概念 数组是相同类型的一组数据构成的长度固定的序列，其中数据类型包含了基本数据类型、复合数据类型和自定义类型。因为数组的内存是一段连"><meta itemprop="datePublished" content="2021-01-09T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2022-01-16T18:07:53+08:00" />
-<meta itemprop="wordCount" content="1360">
+<meta itemprop="dateModified" content="2022-12-05T16:25:20+08:00" />
+<meta itemprop="wordCount" content="1382">
 <meta itemprop="keywords" content="Go基础," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go学习(九):数组使用"/>
 <meta name="twitter:description" content="1.数组的概念 数组是相同类型的一组数据构成的长度固定的序列，其中数据类型包含了基本数据类型、复合数据类型和自定义类型。因为数组的内存是一段连"/>
@@ -133,7 +133,7 @@
             <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
             <a href="/categories/go/"> Go </a>
             </div>
-          <span class="more-meta"> 约 1360 字 </span>
+          <span class="more-meta"> 约 1382 字 </span>
           <span class="more-meta"> 预计阅读 3 分钟 </span>
         
       </div>
@@ -160,11 +160,6 @@
 </nav>
   </div>
 </div>
-  <div class="post-outdated">
-    <div class="warn">
-      <p>【注意】最后更新于 <span class="timeago" datetime="2022-01-16T18:07:53" title="January 16, 2022">January 16, 2022</span>，文中内容可能已过时，请谨慎使用。</p>
-    </div>
-  </div>
     <div class="post-content">
       <h3 id="1数组的概念">1.数组的概念</h3>
 <p>数组是相同类型的一组数据构成的长度固定的序列，其中数据类型包含了基本数据类型、复合数据类型和自定义类型。<font color=red>因为数组的内存是一段连续的存储区域，所以数组的检索速度是非常快的，但是数组也有一定的缺陷，就是定义后长度不能更改。</font></p>
@@ -188,8 +183,8 @@
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="s">&#34;fmt&#34;</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="c1">// 声明一个长度为3的整型数组
-</span><span class="c1"></span>	<span class="kd">var</span> <span class="nx">arr</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="kt">int</span>
+    <span class="c1">// 声明一个长度为3的整型数组
+</span><span class="c1"></span>    <span class="kd">var</span> <span class="nx">arr</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="kt">int</span>
     <span class="nx">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">=</span> <span class="mi">1</span>
     <span class="nx">arr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">=</span> <span class="mi">3</span>
     <span class="nx">arr</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="p">=</span> <span class="mi">5</span>
@@ -214,9 +209,9 @@
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="s">&#34;fmt&#34;</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="c1">// 直接声明使用
-</span><span class="c1"></span>	<span class="nx">arr</span> <span class="o">:=</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">}</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;数组arr 类型: %T  值: %v&#34;</span><span class="p">,</span><span class="nx">arr</span><span class="p">,</span><span class="nx">arr</span><span class="p">)</span>
+    <span class="c1">// 直接声明使用
+</span><span class="c1"></span>    <span class="nx">arr</span> <span class="o">:=</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">}</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;数组arr 类型: %T  值: %v&#34;</span><span class="p">,</span><span class="nx">arr</span><span class="p">,</span><span class="nx">arr</span><span class="p">)</span>
 <span class="p">}</span>
 <span class="c1">// 输出: 数组arr 类型: [3]int  值: [1 3 5]
 </span></code></pre></td></tr></table>
@@ -231,16 +226,18 @@
 </span><span class="lnt">5
 </span><span class="lnt">6
 </span><span class="lnt">7
+</span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="s">&#34;fmt&#34;</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="c1">// 用...代表数组长度， 编译器会自动计算长度
-</span><span class="c1"></span>	<span class="nx">arr</span> <span class="o">:=</span> <span class="p">[</span><span class="o">...</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">11</span><span class="p">}</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;数组arr 类型: %T  值: %v&#34;</span><span class="p">,</span><span class="nx">arr</span><span class="p">,</span><span class="nx">arr</span><span class="p">)</span>
+    <span class="c1">// 用...代表数组长度， 编译器会自动计算长度
+</span><span class="c1"></span>    <span class="nx">arr</span> <span class="o">:=</span> <span class="p">[</span><span class="o">...</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">11</span><span class="p">}</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;数组arr 类型: %T  值: %v&#34;</span><span class="p">,</span><span class="nx">arr</span><span class="p">,</span><span class="nx">arr</span><span class="p">)</span>
 <span class="p">}</span>
-</code></pre></td></tr></table>
+<span class="c1">// 输出：数组arr 类型: [6]int  值: [1 3 5 7 9 11]
+</span></code></pre></td></tr></table>
 </div>
 </div><h3 id="3二维数组">3.二维数组</h3>
 <h4 id="31-先声明后使用">3.1 先声明后使用</h4>
@@ -263,13 +260,13 @@
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="s">&#34;fmt&#34;</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="c1">// 声明一个二维数组
-</span><span class="c1"></span>	<span class="kd">var</span> <span class="nx">arr</span> <span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="mi">4</span><span class="p">]</span><span class="kt">int</span>
-	<span class="c1">// 赋值使用
-</span><span class="c1"></span>	<span class="nx">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">}</span>
-	<span class="nx">arr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">}</span>
-	<span class="nx">arr</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="p">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="mi">9</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">12</span><span class="p">}</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;数组arr 类型: %T  值: %v&#34;</span><span class="p">,</span><span class="nx">arr</span><span class="p">,</span><span class="nx">arr</span><span class="p">)</span>
+    <span class="c1">// 声明一个二维数组
+</span><span class="c1"></span>    <span class="kd">var</span> <span class="nx">arr</span> <span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="mi">4</span><span class="p">]</span><span class="kt">int</span>
+    <span class="c1">// 赋值使用
+</span><span class="c1"></span>    <span class="nx">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">}</span>
+    <span class="nx">arr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">}</span>
+    <span class="nx">arr</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="p">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="mi">9</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">12</span><span class="p">}</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;数组arr 类型: %T  值: %v&#34;</span><span class="p">,</span><span class="nx">arr</span><span class="p">,</span><span class="nx">arr</span><span class="p">)</span>
 <span class="p">}</span>
 <span class="c1">// 输出: 数组arr 类型: [3][4]int  值: [[1 2 3 4] [5 6 7 8] [9 10 11 12]]
 </span></code></pre></td></tr></table>
@@ -294,13 +291,13 @@
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="s">&#34;fmt&#34;</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="c1">// 直接声明使用
-</span><span class="c1"></span>	<span class="nx">arr</span> <span class="o">:=</span> <span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="mi">4</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span>
-		<span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">},</span>
-		<span class="p">{</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">},</span>
-		<span class="p">{</span><span class="mi">9</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">12</span><span class="p">},</span>
-	<span class="p">}</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;数组arr 类型: %T  值: %v&#34;</span><span class="p">,</span><span class="nx">arr</span><span class="p">,</span><span class="nx">arr</span><span class="p">)</span>
+    <span class="c1">// 直接声明使用
+</span><span class="c1"></span>    <span class="nx">arr</span> <span class="o">:=</span> <span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="mi">4</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span>
+        <span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">},</span>
+        <span class="p">{</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">},</span>
+        <span class="p">{</span><span class="mi">9</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">12</span><span class="p">},</span>
+    <span class="p">}</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;数组arr 类型: %T  值: %v&#34;</span><span class="p">,</span><span class="nx">arr</span><span class="p">,</span><span class="nx">arr</span><span class="p">)</span>
 <span class="p">}</span>
 <span class="c1">// 输出: 数组arr 类型: [3][4]int  值: [[1 2 3 4] [5 6 7 8] [9 10 11 12]]
 </span></code></pre></td></tr></table>
@@ -343,18 +340,18 @@
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="s">&#34;fmt&#34;</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="c1">// 直接声明多维数组
-</span><span class="c1"></span>	<span class="nx">arr</span> <span class="o">:=</span> <span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="mi">4</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span>
-		<span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">},</span>
-		<span class="p">{</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">},</span>
-		<span class="p">{</span><span class="mi">9</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">12</span><span class="p">},</span>
-	<span class="p">}</span>
-	<span class="c1">// 遍历多维数组
-</span><span class="c1"></span>	<span class="k">for</span> <span class="nx">key</span><span class="p">,</span><span class="nx">val</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">arr</span> <span class="p">{</span>
-		<span class="k">for</span> <span class="nx">kk</span><span class="p">,</span><span class="nx">vv</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">val</span> <span class="p">{</span>
-			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;第%d维数组,第%d个元素v: %d \n&#34;</span><span class="p">,</span><span class="nx">key</span><span class="p">,</span><span class="nx">kk</span><span class="p">,</span><span class="nx">vv</span><span class="p">)</span>
-		<span class="p">}</span>
-	<span class="p">}</span>
+    <span class="c1">// 直接声明多维数组
+</span><span class="c1"></span>    <span class="nx">arr</span> <span class="o">:=</span> <span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="mi">4</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span>
+        <span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">},</span>
+        <span class="p">{</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">},</span>
+        <span class="p">{</span><span class="mi">9</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">12</span><span class="p">},</span>
+    <span class="p">}</span>
+    <span class="c1">// 遍历多维数组
+</span><span class="c1"></span>    <span class="k">for</span> <span class="nx">key</span><span class="p">,</span><span class="nx">val</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">arr</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="nx">kk</span><span class="p">,</span><span class="nx">vv</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">val</span> <span class="p">{</span>
+            <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;第%d维数组,第%d个元素v: %d \n&#34;</span><span class="p">,</span><span class="nx">key</span><span class="p">,</span><span class="nx">kk</span><span class="p">,</span><span class="nx">vv</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 <span class="p">}</span>
 <span class="cm">/**输出:
 </span><span class="cm">第0组,第0个元素v: 1 
@@ -420,33 +417,33 @@
 <span class="kn">import</span> <span class="s">&#34;fmt&#34;</span>
 
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="c1">// 先声明三维数组
-</span><span class="c1"></span>	<span class="kd">var</span> <span class="nx">arr</span> <span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">3</span><span class="p">][</span><span class="mi">4</span><span class="p">]</span><span class="kt">int</span>
-
-	<span class="c1">// 后赋值
-</span><span class="c1"></span>	<span class="nx">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="p">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">}</span>
-	<span class="nx">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="p">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="mi">10</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">40</span><span class="p">}</span>
-	<span class="nx">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="p">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="mi">100</span><span class="p">,</span><span class="mi">200</span><span class="p">,</span><span class="mi">300</span><span class="p">,</span><span class="mi">400</span><span class="p">}</span>
-
-	<span class="nx">arr</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="p">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="mi">11</span><span class="p">,</span><span class="mi">22</span><span class="p">,</span><span class="mi">33</span><span class="p">,</span><span class="mi">44</span><span class="p">}</span>
-	<span class="nx">arr</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="p">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="mi">111</span><span class="p">,</span><span class="mi">222</span><span class="p">,</span><span class="mi">333</span><span class="p">,</span><span class="mi">333</span><span class="p">}</span>
-	<span class="nx">arr</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="p">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1111</span><span class="p">,</span><span class="mi">2222</span><span class="p">,</span><span class="mi">3333</span><span class="p">,</span><span class="mi">4444</span><span class="p">}</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;arr类型: %T 值: %v \n&#34;</span><span class="p">,</span><span class="nx">arr</span><span class="p">,</span><span class="nx">arr</span><span class="p">)</span>
-
-	<span class="c1">// 直接声明三维数组
-</span><span class="c1"></span>	<span class="nx">arr2</span> <span class="o">:=</span> <span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">3</span><span class="p">][</span><span class="mi">4</span><span class="p">]</span><span class="kt">int</span> <span class="p">{</span>
-		<span class="p">{</span>
-			<span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">},</span>
-			<span class="p">{</span><span class="mi">10</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">40</span><span class="p">},</span>
-			<span class="p">{</span><span class="mi">100</span><span class="p">,</span><span class="mi">200</span><span class="p">,</span><span class="mi">300</span><span class="p">,</span><span class="mi">400</span><span class="p">},</span>
-		<span class="p">},</span>
-		<span class="p">{</span>
-			<span class="p">{</span><span class="mi">11</span><span class="p">,</span><span class="mi">22</span><span class="p">,</span><span class="mi">33</span><span class="p">,</span><span class="mi">44</span><span class="p">},</span>
-			<span class="p">{</span><span class="mi">111</span><span class="p">,</span><span class="mi">222</span><span class="p">,</span><span class="mi">333</span><span class="p">,</span><span class="mi">333</span><span class="p">},</span>
-			<span class="p">{</span><span class="mi">1111</span><span class="p">,</span><span class="mi">2222</span><span class="p">,</span><span class="mi">3333</span><span class="p">,</span><span class="mi">4444</span><span class="p">},</span>
-		<span class="p">},</span>
-	<span class="p">}</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;arr2类型: %T 值: %v&#34;</span><span class="p">,</span><span class="nx">arr2</span><span class="p">,</span><span class="nx">arr2</span><span class="p">)</span>
+    <span class="c1">// 先声明三维数组
+</span><span class="c1"></span>    <span class="kd">var</span> <span class="nx">arr</span> <span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">3</span><span class="p">][</span><span class="mi">4</span><span class="p">]</span><span class="kt">int</span>
+    
+    <span class="c1">// 后赋值
+</span><span class="c1"></span>    <span class="nx">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="p">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">}</span>
+    <span class="nx">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="p">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="mi">10</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">40</span><span class="p">}</span>
+    <span class="nx">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="p">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="mi">100</span><span class="p">,</span><span class="mi">200</span><span class="p">,</span><span class="mi">300</span><span class="p">,</span><span class="mi">400</span><span class="p">}</span>
+    
+    <span class="nx">arr</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="p">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="mi">11</span><span class="p">,</span><span class="mi">22</span><span class="p">,</span><span class="mi">33</span><span class="p">,</span><span class="mi">44</span><span class="p">}</span>
+    <span class="nx">arr</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="p">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="mi">111</span><span class="p">,</span><span class="mi">222</span><span class="p">,</span><span class="mi">333</span><span class="p">,</span><span class="mi">333</span><span class="p">}</span>
+    <span class="nx">arr</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="p">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1111</span><span class="p">,</span><span class="mi">2222</span><span class="p">,</span><span class="mi">3333</span><span class="p">,</span><span class="mi">4444</span><span class="p">}</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;arr类型: %T 值: %v \n&#34;</span><span class="p">,</span><span class="nx">arr</span><span class="p">,</span><span class="nx">arr</span><span class="p">)</span>
+    
+    <span class="c1">// 直接声明三维数组
+</span><span class="c1"></span>    <span class="nx">arr2</span> <span class="o">:=</span> <span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">3</span><span class="p">][</span><span class="mi">4</span><span class="p">]</span><span class="kt">int</span> <span class="p">{</span>
+        <span class="p">{</span>
+            <span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">},</span>
+            <span class="p">{</span><span class="mi">10</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">40</span><span class="p">},</span>
+            <span class="p">{</span><span class="mi">100</span><span class="p">,</span><span class="mi">200</span><span class="p">,</span><span class="mi">300</span><span class="p">,</span><span class="mi">400</span><span class="p">},</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="p">{</span><span class="mi">11</span><span class="p">,</span><span class="mi">22</span><span class="p">,</span><span class="mi">33</span><span class="p">,</span><span class="mi">44</span><span class="p">},</span>
+            <span class="p">{</span><span class="mi">111</span><span class="p">,</span><span class="mi">222</span><span class="p">,</span><span class="mi">333</span><span class="p">,</span><span class="mi">333</span><span class="p">},</span>
+            <span class="p">{</span><span class="mi">1111</span><span class="p">,</span><span class="mi">2222</span><span class="p">,</span><span class="mi">3333</span><span class="p">,</span><span class="mi">4444</span><span class="p">},</span>
+        <span class="p">},</span>
+    <span class="p">}</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;arr2类型: %T 值: %v&#34;</span><span class="p">,</span><span class="nx">arr2</span><span class="p">,</span><span class="nx">arr2</span><span class="p">)</span>
 <span class="p">}</span>
 <span class="cm">/**输出
 </span><span class="cm">arr类型: [2][3][4]int 值: [[[1 2 3 4] [10 20 30 40] [100 200 300 400]] [[11 22 33 44] [111 222 333 333] [1111 2222 3333 4444]]] 
@@ -494,25 +491,25 @@
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="s">&#34;fmt&#34;</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="c1">// 先声明三维数组
-</span><span class="c1"></span>	<span class="kd">var</span> <span class="nx">arr</span> <span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">3</span><span class="p">][</span><span class="mi">4</span><span class="p">]</span><span class="kt">int</span>
-
-	<span class="c1">// 后赋值
-</span><span class="c1"></span>	<span class="nx">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="p">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">}</span>
-	<span class="nx">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="p">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="mi">10</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">40</span><span class="p">}</span>
-	<span class="nx">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="p">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="mi">100</span><span class="p">,</span><span class="mi">200</span><span class="p">,</span><span class="mi">300</span><span class="p">,</span><span class="mi">400</span><span class="p">}</span>
-
-	<span class="nx">arr</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="p">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="mi">11</span><span class="p">,</span><span class="mi">22</span><span class="p">,</span><span class="mi">33</span><span class="p">,</span><span class="mi">44</span><span class="p">}</span>
-	<span class="nx">arr</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="p">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="mi">111</span><span class="p">,</span><span class="mi">222</span><span class="p">,</span><span class="mi">333</span><span class="p">,</span><span class="mi">333</span><span class="p">}</span>
-	<span class="nx">arr</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="p">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1111</span><span class="p">,</span><span class="mi">2222</span><span class="p">,</span><span class="mi">3333</span><span class="p">,</span><span class="mi">4444</span><span class="p">}</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;arr类型: %T 值: %v \n&#34;</span><span class="p">,</span><span class="nx">arr</span><span class="p">,</span><span class="nx">arr</span><span class="p">)</span>
-
-	<span class="c1">// 遍历输出
-</span><span class="c1"></span>	<span class="k">for</span> <span class="nx">_</span><span class="p">,</span><span class="nx">val</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">arr</span> <span class="p">{</span>
-		<span class="k">for</span> <span class="nx">_</span><span class="p">,</span><span class="nx">vv</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">val</span> <span class="p">{</span>
-			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;vv类型: %T 值: %v \n&#34;</span><span class="p">,</span><span class="nx">vv</span><span class="p">,</span><span class="nx">vv</span><span class="p">)</span>
-		<span class="p">}</span>
-	<span class="p">}</span>
+    <span class="c1">// 先声明三维数组
+</span><span class="c1"></span>    <span class="kd">var</span> <span class="nx">arr</span> <span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">3</span><span class="p">][</span><span class="mi">4</span><span class="p">]</span><span class="kt">int</span>
+    
+    <span class="c1">// 后赋值
+</span><span class="c1"></span>    <span class="nx">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="p">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">}</span>
+    <span class="nx">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="p">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="mi">10</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">40</span><span class="p">}</span>
+    <span class="nx">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="p">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="mi">100</span><span class="p">,</span><span class="mi">200</span><span class="p">,</span><span class="mi">300</span><span class="p">,</span><span class="mi">400</span><span class="p">}</span>
+    
+    <span class="nx">arr</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="p">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="mi">11</span><span class="p">,</span><span class="mi">22</span><span class="p">,</span><span class="mi">33</span><span class="p">,</span><span class="mi">44</span><span class="p">}</span>
+    <span class="nx">arr</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="p">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="mi">111</span><span class="p">,</span><span class="mi">222</span><span class="p">,</span><span class="mi">333</span><span class="p">,</span><span class="mi">333</span><span class="p">}</span>
+    <span class="nx">arr</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="p">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1111</span><span class="p">,</span><span class="mi">2222</span><span class="p">,</span><span class="mi">3333</span><span class="p">,</span><span class="mi">4444</span><span class="p">}</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;arr类型: %T 值: %v \n&#34;</span><span class="p">,</span><span class="nx">arr</span><span class="p">,</span><span class="nx">arr</span><span class="p">)</span>
+    
+    <span class="c1">// 遍历输出
+</span><span class="c1"></span>    <span class="k">for</span> <span class="nx">_</span><span class="p">,</span><span class="nx">val</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">arr</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="nx">_</span><span class="p">,</span><span class="nx">vv</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">val</span> <span class="p">{</span>
+            <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;vv类型: %T 值: %v \n&#34;</span><span class="p">,</span><span class="nx">vv</span><span class="p">,</span><span class="nx">vv</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 <span class="p">}</span>
 <span class="cm">/*输出:
 </span><span class="cm">arr类型: [2][3][4]int 值: [[[1 2 3 4] [10 20 30 40] [100 200 300 400]] [[11 22 33 44] [111 222 333 333] [1111 2222 3333 4444]]] 
@@ -536,7 +533,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2022-01-16
+        2022-12-05
         
     </span>
   </p>

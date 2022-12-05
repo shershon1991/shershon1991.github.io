@@ -44,12 +44,12 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/%E5%9F%BA%E7%A1%80%E7%AF%87/10-%E5%88%87%E7%89%87/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-01-10T00:00:00+00:00" />
-<meta property="article:modified_time" content="2022-11-20T12:51:10+08:00" />
+<meta property="article:modified_time" content="2022-12-05T17:40:06+08:00" />
 
 <meta itemprop="name" content="Go学习(十):切片(slice)">
 <meta itemprop="description" content="1.切片的概念 Go语言中数组的长度不可改变，但在很多应用场景中，在初始定义数组时，数组的长度并不可预知，这样的序列集合无法满足要求。Go中提"><meta itemprop="datePublished" content="2021-01-10T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2022-11-20T12:51:10+08:00" />
-<meta itemprop="wordCount" content="4124">
+<meta itemprop="dateModified" content="2022-12-05T17:40:06+08:00" />
+<meta itemprop="wordCount" content="4129">
 <meta itemprop="keywords" content="Go基础," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go学习(十):切片(slice)"/>
 <meta name="twitter:description" content="1.切片的概念 Go语言中数组的长度不可改变，但在很多应用场景中，在初始定义数组时，数组的长度并不可预知，这样的序列集合无法满足要求。Go中提"/>
@@ -133,7 +133,7 @@
             <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
             <a href="/categories/go/"> Go </a>
             </div>
-          <span class="more-meta"> 约 4124 字 </span>
+          <span class="more-meta"> 约 4129 字 </span>
           <span class="more-meta"> 预计阅读 9 分钟 </span>
         
       </div>
@@ -164,7 +164,7 @@
 </div>
     <div class="post-content">
       <h3 id="1切片的概念">1.切片的概念</h3>
-<p>Go语言中数组的长度不可改变，但在很多应用场景中，在初始定义数组时，数组的长度并不可预知，这样的序列集合无法满足要求。Go中提供了另外一种内置类型<code>切片（slice）</code>，弥补了数组的缺陷。从底层来看，切片引用了数组的对象。切片可以追加元素，在追加时可能使切片的容量增大。与数组相比，切片不需要设定长度，在[]中不用设定值，相对来说比较自由。</p>
+<p>Go语言中数组的长度不可改变，但在很多应用场景中，在初始定义数组时，数组的长度并不可预知，这样的序列集合无法满足要求。Go中提供了另外一种内置类型<code>切片（slice）</code>，弥补了数组的缺陷。从底层来看，切片引用了数组的对象。切片可以追加元素，在追加时可能使切片的容量增大。与数组相比，切片不需要设定长度，在 <code>[]</code> 中不用设定值，相对来说比较自由。</p>
 <h3 id="2切片声明使用">2.切片声明使用</h3>
 <h4 id="21-通过make">2.1 通过make</h4>
 <div class="highlight"><div class="chroma">
@@ -183,8 +183,8 @@
 <span class="nx">slice1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">=</span> <span class="mi">1</span>
 <span class="nx">slice1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">=</span> <span class="mi">2</span>
 <span class="nx">slice1</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="p">=</span> <span class="mi">4</span>
-<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;通过make关键字[slic1] 类型:%T 值:%v \n&#34;</span><span class="p">,</span><span class="nx">slice1</span><span class="p">,</span><span class="nx">slice1</span><span class="p">)</span>
-<span class="c1">//  输出: 通过make关键字[slic1] 类型:[]int 值:[1 2 4] 
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;通过make关键字创建[slice1] 类型:%T 值:%v \n&#34;</span><span class="p">,</span><span class="nx">slice1</span><span class="p">,</span><span class="nx">slice1</span><span class="p">)</span>
+<span class="c1">//  输出: 通过make关键字[slice1] 类型:[]int 值:[1 2 4] 
 </span></code></pre></td></tr></table>
 </div>
 </div><h4 id="22-直接初始化">2.2 直接初始化</h4>
@@ -198,8 +198,8 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 直接初始化使用
 </span><span class="c1"></span><span class="nx">slice2</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">}</span>
-<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;直接初始化使用[slic2] 类型:%T 值:%v \n&#34;</span><span class="p">,</span><span class="nx">slice2</span><span class="p">,</span><span class="nx">slice2</span><span class="p">)</span>
-<span class="c1">// 输出: 直接初始化使用[slic2] 类型:[]int 值:[1 2 4] 
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;直接初始化使用[slice2] 类型:%T 值:%v \n&#34;</span><span class="p">,</span><span class="nx">slice2</span><span class="p">,</span><span class="nx">slice2</span><span class="p">)</span>
+<span class="c1">// 输出: 直接初始化使用[slice2] 类型:[]int 值:[1 2 4] 
 </span></code></pre></td></tr></table>
 </div>
 </div><h4 id="23-通过数组截取">2.3 通过数组截取</h4>
@@ -230,17 +230,17 @@
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="s">&#34;fmt&#34;</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="c1">// 定义一个数组
-</span><span class="c1"></span>	<span class="nx">arr</span> <span class="o">:=</span> <span class="p">[</span><span class="o">...</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">14</span><span class="p">,</span><span class="mi">16</span><span class="p">}</span>
-	<span class="c1">// 从索引0开始截取到索引为4(不包括4)
-</span><span class="c1"></span>	<span class="nx">slice3</span> <span class="o">:=</span> <span class="nx">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;从索引0开始截取到索引为4(不包括4)[slice3] 类型:%T 值:%v \n&#34;</span><span class="p">,</span><span class="nx">slice3</span><span class="p">,</span><span class="nx">slice3</span><span class="p">)</span>
-	<span class="c1">// 索引从0开始时，0也可以省略不写
-</span><span class="c1"></span>	<span class="nx">slice33</span> <span class="o">:=</span> <span class="nx">arr</span><span class="p">[:</span><span class="mi">4</span><span class="p">]</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;从索引0开始截取到索引为4(不包括4)[slice33] 类型:%T 值:%v \n&#34;</span><span class="p">,</span><span class="nx">slice33</span><span class="p">,</span><span class="nx">slice33</span><span class="p">)</span>
-	<span class="c1">// 从索引4开始截取到最后
-</span><span class="c1"></span>	<span class="nx">slice4</span> <span class="o">:=</span> <span class="nx">arr</span><span class="p">[</span><span class="mi">5</span><span class="p">:]</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;从索引5开始截取到最后[slice4] 类型:%T 值:%v \n&#34;</span><span class="p">,</span><span class="nx">slice4</span><span class="p">,</span><span class="nx">slice4</span><span class="p">)</span>
+    <span class="c1">// 定义一个数组
+</span><span class="c1"></span>    <span class="nx">arr</span> <span class="o">:=</span> <span class="p">[</span><span class="o">...</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">14</span><span class="p">,</span><span class="mi">16</span><span class="p">}</span>
+    <span class="c1">// 从索引0开始截取到索引为4(不包括4)
+</span><span class="c1"></span>    <span class="nx">slice3</span> <span class="o">:=</span> <span class="nx">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;从索引0开始截取到索引为4(不包括4)[slice3] 类型:%T 值:%v \n&#34;</span><span class="p">,</span><span class="nx">slice3</span><span class="p">,</span><span class="nx">slice3</span><span class="p">)</span>
+    <span class="c1">// 索引从0开始时，0也可以省略不写
+</span><span class="c1"></span>    <span class="nx">slice33</span> <span class="o">:=</span> <span class="nx">arr</span><span class="p">[:</span><span class="mi">4</span><span class="p">]</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;从索引0开始截取到索引为4(不包括4)[slice33] 类型:%T 值:%v \n&#34;</span><span class="p">,</span><span class="nx">slice33</span><span class="p">,</span><span class="nx">slice33</span><span class="p">)</span>
+    <span class="c1">// 从索引5开始截取到最后
+</span><span class="c1"></span>    <span class="nx">slice4</span> <span class="o">:=</span> <span class="nx">arr</span><span class="p">[</span><span class="mi">5</span><span class="p">:]</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;从索引5开始截取到最后[slice4] 类型:%T 值:%v \n&#34;</span><span class="p">,</span><span class="nx">slice4</span><span class="p">,</span><span class="nx">slice4</span><span class="p">)</span>
 <span class="p">}</span>
 <span class="cm">/**输出
 </span><span class="cm">从索引0开始截取到索引为4(不包括4)[slice3] 类型:[]int 值:[1 2 4 6] 
@@ -272,12 +272,12 @@
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="s">&#34;fmt&#34;</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span>  <span class="p">{</span>
-	<span class="c1">// 定义一个切片
-</span><span class="c1"></span>	<span class="nx">slice</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">}</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;切片slice--&gt; 值:%v len: %d cap: %d\n&#34;</span><span class="p">,</span><span class="nx">slice</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="nx">slice</span><span class="p">),</span><span class="nb">cap</span><span class="p">(</span><span class="nx">slice</span><span class="p">))</span>
-	<span class="c1">// 删除第一个元素
-</span><span class="c1"></span>	<span class="nx">slice</span> <span class="p">=</span> <span class="nx">slice</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;删除一个元素后--&gt; 值:%v len: %d cap: %d\n&#34;</span><span class="p">,</span><span class="nx">slice</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="nx">slice</span><span class="p">),</span><span class="nb">cap</span><span class="p">(</span><span class="nx">slice</span><span class="p">))</span>
+    <span class="c1">// 定义一个切片
+</span><span class="c1"></span>    <span class="nx">slice</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">}</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;切片slice--&gt; 值:%v len: %d cap: %d\n&#34;</span><span class="p">,</span><span class="nx">slice</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="nx">slice</span><span class="p">),</span><span class="nb">cap</span><span class="p">(</span><span class="nx">slice</span><span class="p">))</span>
+    <span class="c1">// 删除第一个元素
+</span><span class="c1"></span>    <span class="nx">slice</span> <span class="p">=</span> <span class="nx">slice</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;删除一个元素后--&gt; 值:%v len: %d cap: %d\n&#34;</span><span class="p">,</span><span class="nx">slice</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="nx">slice</span><span class="p">),</span><span class="nb">cap</span><span class="p">(</span><span class="nx">slice</span><span class="p">))</span>
 <span class="p">}</span>
 <span class="cm">/*输出
 </span><span class="cm">切片slice--&gt; 值:[1 2 3 4 5 6] len: 6 cap: 6
@@ -307,12 +307,12 @@
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="s">&#34;fmt&#34;</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span>  <span class="p">{</span>
-	<span class="c1">// 定义一个切片
-</span><span class="c1"></span>	<span class="nx">slice</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">}</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;切片slice--&gt; 值:%v len: %d cap: %d\n&#34;</span><span class="p">,</span><span class="nx">slice</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="nx">slice</span><span class="p">),</span><span class="nb">cap</span><span class="p">(</span><span class="nx">slice</span><span class="p">))</span>
-	<span class="c1">// 删除最后一个元素
-</span><span class="c1"></span>	<span class="nx">slice</span> <span class="p">=</span> <span class="nx">slice</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="nx">slice</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;删除一个元素后--&gt; 值:%v len: %d cap: %d\n&#34;</span><span class="p">,</span><span class="nx">slice</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="nx">slice</span><span class="p">),</span><span class="nb">cap</span><span class="p">(</span><span class="nx">slice</span><span class="p">))</span>
+    <span class="c1">// 定义一个切片
+</span><span class="c1"></span>    <span class="nx">slice</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">}</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;切片slice--&gt; 值:%v len: %d cap: %d\n&#34;</span><span class="p">,</span><span class="nx">slice</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="nx">slice</span><span class="p">),</span><span class="nb">cap</span><span class="p">(</span><span class="nx">slice</span><span class="p">))</span>
+    <span class="c1">// 删除最后一个元素
+</span><span class="c1"></span>    <span class="nx">slice</span> <span class="p">=</span> <span class="nx">slice</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="nx">slice</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;删除一个元素后--&gt; 值:%v len: %d cap: %d\n&#34;</span><span class="p">,</span><span class="nx">slice</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="nx">slice</span><span class="p">),</span><span class="nb">cap</span><span class="p">(</span><span class="nx">slice</span><span class="p">))</span>
 <span class="p">}</span>
 <span class="cm">/*输出
 </span><span class="cm">切片slice--&gt; 值:[1 2 3 4 5 6] len: 6 cap: 6
@@ -343,17 +343,17 @@
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="s">&#34;fmt&#34;</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span>  <span class="p">{</span>
-	<span class="c1">// 定义一个切片
-</span><span class="c1"></span>	<span class="nx">slice</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">}</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;切片slice--&gt; 值:%v len: %d cap: %d\n&#34;</span><span class="p">,</span><span class="nx">slice</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="nx">slice</span><span class="p">),</span><span class="nb">cap</span><span class="p">(</span><span class="nx">slice</span><span class="p">))</span>
-	<span class="nx">index</span> <span class="o">:=</span> <span class="mi">2</span>
-	<span class="c1">// 指定索引前面一部分
-</span><span class="c1"></span>	<span class="nx">front</span> <span class="o">:=</span> <span class="nx">slice</span><span class="p">[:</span><span class="nx">index</span><span class="p">]</span>
-	<span class="c1">// 指定索引后面一部分
-</span><span class="c1"></span>	<span class="nx">behind</span> <span class="o">:=</span> <span class="nx">slice</span><span class="p">[</span><span class="nx">index</span><span class="o">+</span><span class="mi">1</span><span class="p">:]</span>
-	<span class="c1">// 拼起来
-</span><span class="c1"></span>	<span class="nx">slice</span> <span class="p">=</span>  <span class="nb">append</span><span class="p">(</span><span class="nx">front</span><span class="p">,</span><span class="nx">behind</span><span class="o">...</span><span class="p">)</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;删除索引%d后--&gt; 值:%v len: %d cap: %d\n&#34;</span><span class="p">,</span><span class="nx">index</span><span class="p">,</span><span class="nx">slice</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="nx">slice</span><span class="p">),</span><span class="nb">cap</span><span class="p">(</span><span class="nx">slice</span><span class="p">))</span>
+    <span class="c1">// 定义一个切片
+</span><span class="c1"></span>    <span class="nx">slice</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">}</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;切片slice--&gt; 值:%v len: %d cap: %d\n&#34;</span><span class="p">,</span><span class="nx">slice</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="nx">slice</span><span class="p">),</span><span class="nb">cap</span><span class="p">(</span><span class="nx">slice</span><span class="p">))</span>
+    <span class="nx">index</span> <span class="o">:=</span> <span class="mi">2</span>
+    <span class="c1">// 指定索引前面一部分
+</span><span class="c1"></span>    <span class="nx">front</span> <span class="o">:=</span> <span class="nx">slice</span><span class="p">[:</span><span class="nx">index</span><span class="p">]</span>
+    <span class="c1">// 指定索引后面一部分
+</span><span class="c1"></span>    <span class="nx">behind</span> <span class="o">:=</span> <span class="nx">slice</span><span class="p">[</span><span class="nx">index</span><span class="o">+</span><span class="mi">1</span><span class="p">:]</span>
+    <span class="c1">// 拼起来
+</span><span class="c1"></span>    <span class="nx">slice</span> <span class="p">=</span>  <span class="nb">append</span><span class="p">(</span><span class="nx">front</span><span class="p">,</span><span class="nx">behind</span><span class="o">...</span><span class="p">)</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;删除索引%d后--&gt; 值:%v len: %d cap: %d\n&#34;</span><span class="p">,</span><span class="nx">index</span><span class="p">,</span><span class="nx">slice</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="nx">slice</span><span class="p">),</span><span class="nb">cap</span><span class="p">(</span><span class="nx">slice</span><span class="p">))</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -395,23 +395,23 @@
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="s">&#34;fmt&#34;</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="c1">// 创建一个切片
-</span><span class="c1"></span>	<span class="nx">slice</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">14</span><span class="p">,</span><span class="mi">16</span><span class="p">}</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;切片slice， len:%d cap:%d \n&#34;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="nx">slice</span><span class="p">),</span><span class="nb">cap</span><span class="p">(</span><span class="nx">slice</span><span class="p">))</span>
-	
-	<span class="c1">// 清空切片slice赋值给slice1
-</span><span class="c1"></span>	<span class="nx">slice1</span> <span class="o">:=</span> <span class="nx">slice</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;切片slice1， len:%d cap:%d \n&#34;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="nx">slice1</span><span class="p">),</span><span class="nb">cap</span><span class="p">(</span><span class="nx">slice1</span><span class="p">))</span>
-
-	<span class="c1">// 使用make指定容量创建切片
-</span><span class="c1"></span>	<span class="kd">var</span> <span class="nx">slice2</span> <span class="p">=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">8</span><span class="p">)</span>
-	<span class="nx">slice2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">=</span> <span class="mi">1</span>
-	<span class="nx">slice2</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="p">=</span> <span class="mi">3</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;切片slice2， len:%d cap:%d \n&#34;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="nx">slice2</span><span class="p">),</span><span class="nb">cap</span><span class="p">(</span><span class="nx">slice2</span><span class="p">))</span>
-
-	<span class="c1">// 数组计算cap()结果与len()相同
-</span><span class="c1"></span>	<span class="nx">arr</span> <span class="o">:=</span> <span class="p">[</span><span class="o">...</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">14</span><span class="p">,</span><span class="mi">16</span><span class="p">}</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;数组arr， len:%d cap:%d \n&#34;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="nx">arr</span><span class="p">),</span><span class="nb">cap</span><span class="p">(</span><span class="nx">arr</span><span class="p">))</span>
+    <span class="c1">// 创建一个切片
+</span><span class="c1"></span>    <span class="nx">slice</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">14</span><span class="p">,</span><span class="mi">16</span><span class="p">}</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;切片slice， len:%d cap:%d \n&#34;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="nx">slice</span><span class="p">),</span><span class="nb">cap</span><span class="p">(</span><span class="nx">slice</span><span class="p">))</span>
+    
+    <span class="c1">// 清空切片slice赋值给slice1
+</span><span class="c1"></span>    <span class="nx">slice1</span> <span class="o">:=</span> <span class="nx">slice</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;切片slice1， len:%d cap:%d \n&#34;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="nx">slice1</span><span class="p">),</span><span class="nb">cap</span><span class="p">(</span><span class="nx">slice1</span><span class="p">))</span>
+    
+    <span class="c1">// 使用make指定容量创建切片
+</span><span class="c1"></span>    <span class="kd">var</span> <span class="nx">slice2</span> <span class="p">=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">8</span><span class="p">)</span>
+    <span class="nx">slice2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">=</span> <span class="mi">1</span>
+    <span class="nx">slice2</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="p">=</span> <span class="mi">3</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;切片slice2， len:%d cap:%d \n&#34;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="nx">slice2</span><span class="p">),</span><span class="nb">cap</span><span class="p">(</span><span class="nx">slice2</span><span class="p">))</span>
+    
+    <span class="c1">// 数组计算cap()结果与len()相同
+</span><span class="c1"></span>    <span class="nx">arr</span> <span class="o">:=</span> <span class="p">[</span><span class="o">...</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">14</span><span class="p">,</span><span class="mi">16</span><span class="p">}</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;数组arr， len:%d cap:%d \n&#34;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="nx">arr</span><span class="p">),</span><span class="nb">cap</span><span class="p">(</span><span class="nx">arr</span><span class="p">))</span>
 <span class="p">}</span>
 <span class="cm">/***输出:
 </span><span class="cm">切片slice， len:9 cap:9 
@@ -450,17 +450,17 @@
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="s">&#34;fmt&#34;</span>
 <span class="kd">func</span> <span class="nf">testSlice</span><span class="p">(</span><span class="nx">slice</span> <span class="p">[]</span><span class="kt">int</span><span class="p">)</span>  <span class="p">{</span>
-	<span class="c1">// 修改切片的值
-</span><span class="c1"></span>	<span class="nx">slice</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">=</span> <span class="mi">100</span>
+    <span class="c1">// 修改切片的值
+</span><span class="c1"></span>    <span class="nx">slice</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">=</span> <span class="mi">100</span>
 <span class="p">}</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="c1">// 创建一个切片
-</span><span class="c1"></span>	<span class="kd">var</span> <span class="nx">slice</span> <span class="p">=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
-	 <span class="nx">slice</span> <span class="p">=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">}</span>
-	 <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;变量slice  类型: %T 内存地址: %p 值:%v \n&#34;</span><span class="p">,</span><span class="nx">slice</span><span class="p">,</span><span class="o">&amp;</span><span class="nx">slice</span><span class="p">,</span><span class="nx">slice</span><span class="p">)</span>
-	 <span class="c1">// 调用函数修改
-</span><span class="c1"></span>	 <span class="nf">testSlice</span><span class="p">(</span><span class="nx">slice</span><span class="p">)</span>
-	 <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;调用函数后,变量slice  类型: %T 内存地址: %p 值:%v \n&#34;</span><span class="p">,</span><span class="nx">slice</span><span class="p">,</span><span class="o">&amp;</span><span class="nx">slice</span><span class="p">,</span><span class="nx">slice</span><span class="p">)</span>
+    <span class="c1">// 创建一个切片
+</span><span class="c1"></span>    <span class="kd">var</span> <span class="nx">slice</span> <span class="p">=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
+    <span class="nx">slice</span> <span class="p">=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">}</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;变量slice  类型: %T 内存地址: %p 值:%v \n&#34;</span><span class="p">,</span><span class="nx">slice</span><span class="p">,</span><span class="o">&amp;</span><span class="nx">slice</span><span class="p">,</span><span class="nx">slice</span><span class="p">)</span>
+    <span class="c1">// 调用函数修改
+</span><span class="c1"></span>    <span class="nf">testSlice</span><span class="p">(</span><span class="nx">slice</span><span class="p">)</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;调用函数后,变量slice  类型: %T 内存地址: %p 值:%v \n&#34;</span><span class="p">,</span><span class="nx">slice</span><span class="p">,</span><span class="o">&amp;</span><span class="nx">slice</span><span class="p">,</span><span class="nx">slice</span><span class="p">)</span>
 <span class="p">}</span>
 <span class="cm">/**输出
 </span><span class="cm">变量slice  类型: []int 内存地址: 0xc00000c080 值:[1 2 3 4] 
@@ -513,29 +513,29 @@
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;fmt&#34;</span>
+    <span class="s">&#34;fmt&#34;</span>
 <span class="p">)</span>
 
 <span class="kd">func</span> <span class="nf">testSlice</span><span class="p">(</span><span class="nx">slice</span> <span class="p">[]</span><span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
-	<span class="c1">// 修改切片的值
-</span><span class="c1"></span>	<span class="nx">slice</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">=</span> <span class="mi">100</span>
+    <span class="c1">// 修改切片的值
+</span><span class="c1"></span>    <span class="nx">slice</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">=</span> <span class="mi">100</span>
 <span class="p">}</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="c1">// 创建一个切片
-</span><span class="c1"></span>	<span class="kd">var</span> <span class="nx">slice</span> <span class="p">=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
-	<span class="nx">slice</span> <span class="p">=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">}</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;变量slice  类型: %T 内存地址: %p 值:%v \n&#34;</span><span class="p">,</span> <span class="nx">slice</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">slice</span><span class="p">,</span> <span class="nx">slice</span><span class="p">)</span>
-	<span class="c1">// 复制给另外一个切片
-</span><span class="c1"></span>	<span class="nx">slice1</span> <span class="o">:=</span> <span class="nx">slice</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;变量slice1  类型: %T 内存地址: %p 值:%v \n&#34;</span><span class="p">,</span> <span class="nx">slice1</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">slice1</span><span class="p">,</span> <span class="nx">slice1</span><span class="p">)</span>
-	<span class="c1">// 从切片中截取
-</span><span class="c1"></span>	<span class="nx">slice2</span> <span class="o">:=</span> <span class="nx">slice</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;变量slice2  类型: %T 内存地址: %p 值:%v \n&#34;</span><span class="p">,</span> <span class="nx">slice2</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">slice2</span><span class="p">,</span> <span class="nx">slice2</span><span class="p">)</span>
-	<span class="c1">// 调用函数修改
-</span><span class="c1"></span>	<span class="nf">testSlice</span><span class="p">(</span><span class="nx">slice</span><span class="p">)</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;调用函数后---变量slice  类型: %T 内存地址: %p 值:%v \n&#34;</span><span class="p">,</span> <span class="nx">slice</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">slice</span><span class="p">,</span> <span class="nx">slice</span><span class="p">)</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;调用函数后---变量slice1  类型: %T 内存地址: %p 值:%v \n&#34;</span><span class="p">,</span> <span class="nx">slice1</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">slice1</span><span class="p">,</span> <span class="nx">slice1</span><span class="p">)</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;调用函数后---变量slice2  类型: %T 内存地址: %p 值:%v \n&#34;</span><span class="p">,</span> <span class="nx">slice2</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">slice2</span><span class="p">,</span> <span class="nx">slice2</span><span class="p">)</span>
+    <span class="c1">// 创建一个切片
+</span><span class="c1"></span>    <span class="kd">var</span> <span class="nx">slice</span> <span class="p">=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+    <span class="nx">slice</span> <span class="p">=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">}</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;变量slice  类型: %T 内存地址: %p 值:%v \n&#34;</span><span class="p">,</span> <span class="nx">slice</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">slice</span><span class="p">,</span> <span class="nx">slice</span><span class="p">)</span>
+    <span class="c1">// 复制给另外一个切片
+</span><span class="c1"></span>    <span class="nx">slice1</span> <span class="o">:=</span> <span class="nx">slice</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;变量slice1  类型: %T 内存地址: %p 值:%v \n&#34;</span><span class="p">,</span> <span class="nx">slice1</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">slice1</span><span class="p">,</span> <span class="nx">slice1</span><span class="p">)</span>
+    <span class="c1">// 从切片中截取
+</span><span class="c1"></span>    <span class="nx">slice2</span> <span class="o">:=</span> <span class="nx">slice</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;变量slice2  类型: %T 内存地址: %p 值:%v \n&#34;</span><span class="p">,</span> <span class="nx">slice2</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">slice2</span><span class="p">,</span> <span class="nx">slice2</span><span class="p">)</span>
+    <span class="c1">// 调用函数修改
+</span><span class="c1"></span>    <span class="nf">testSlice</span><span class="p">(</span><span class="nx">slice</span><span class="p">)</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;调用函数后---变量slice  类型: %T 内存地址: %p 值:%v \n&#34;</span><span class="p">,</span> <span class="nx">slice</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">slice</span><span class="p">,</span> <span class="nx">slice</span><span class="p">)</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;调用函数后---变量slice1  类型: %T 内存地址: %p 值:%v \n&#34;</span><span class="p">,</span> <span class="nx">slice1</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">slice1</span><span class="p">,</span> <span class="nx">slice1</span><span class="p">)</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;调用函数后---变量slice2  类型: %T 内存地址: %p 值:%v \n&#34;</span><span class="p">,</span> <span class="nx">slice2</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">slice2</span><span class="p">,</span> <span class="nx">slice2</span><span class="p">)</span>
 <span class="p">}</span>
 
 <span class="cm">/**输出
@@ -605,37 +605,37 @@
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="s">&#34;fmt&#34;</span>
 <span class="kd">func</span> <span class="nf">testSlice</span><span class="p">(</span><span class="nx">slice</span> <span class="p">[]</span><span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
-	<span class="c1">// 修改切片的值
-</span><span class="c1"></span>	<span class="nx">slice</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">=</span> <span class="mi">100</span>
+    <span class="c1">// 修改切片的值
+</span><span class="c1"></span>    <span class="nx">slice</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">=</span> <span class="mi">100</span>
 <span class="p">}</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="c1">// 定义一个切片类型，长度为0，容量为4
-</span><span class="c1"></span>	<span class="kd">var</span> <span class="nx">slice</span> <span class="p">=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
-
-	<span class="c1">//向切片中添加1个元素 (不超过容量)
-</span><span class="c1"></span>	<span class="nx">slice1</span> <span class="o">:=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">slice</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;变量slice1 --- 值: %v 长度(len):%d 容量(cap): %d  地址: %p \n&#34;</span><span class="p">,</span>
-		<span class="nx">slice1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="nx">slice1</span><span class="p">),</span><span class="nb">cap</span><span class="p">(</span><span class="nx">slice1</span><span class="p">),</span><span class="o">&amp;</span><span class="nx">slice1</span> <span class="p">)</span>
-
-	<span class="c1">// 向切片中添加多个元素(不超过容量)
-</span><span class="c1"></span>	<span class="nx">slice2</span> <span class="o">:=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">slice</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;变量slice2 --- 值: %v 长度(len):%d 容量(cap): %d 地址: %p \n&#34;</span><span class="p">,</span>
-		<span class="nx">slice2</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="nx">slice2</span><span class="p">),</span><span class="nb">cap</span><span class="p">(</span><span class="nx">slice2</span><span class="p">),</span><span class="o">&amp;</span><span class="nx">slice2</span> <span class="p">)</span>
-
-	<span class="c1">// 向切片中添加一个切片(超过容量)
-</span><span class="c1"></span>	<span class="nx">newSlice</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">}</span>
-	<span class="nx">slice3</span> <span class="o">:=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">slice</span><span class="p">,</span><span class="nx">newSlice</span><span class="p">[:]</span><span class="o">...</span><span class="p">)</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;变量slice3 --- 值: %v 长度(len):%d 容量(cap): %d 地址: %p \n&#34;</span><span class="p">,</span>
-		<span class="nx">slice3</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="nx">slice3</span><span class="p">),</span><span class="nb">cap</span><span class="p">(</span><span class="nx">slice3</span><span class="p">),</span><span class="o">&amp;</span><span class="nx">slice3</span> <span class="p">)</span>
-
-  <span class="c1">// 调用函数修改
-</span><span class="c1"></span>	<span class="nf">testSlice</span><span class="p">(</span><span class="nx">slice1</span><span class="p">)</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;调用函数后-变量slice1 --- 值: %v 长度(len):%d 容量(cap): %d 地址: %p \n&#34;</span><span class="p">,</span>
-		<span class="nx">slice1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="nx">slice1</span><span class="p">),</span><span class="nb">cap</span><span class="p">(</span><span class="nx">slice1</span><span class="p">),</span><span class="o">&amp;</span><span class="nx">slice1</span> <span class="p">)</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;调用函数后-变量slice2 --- 值: %v 长度(len):%d 容量(cap): %d 地址: %p \n&#34;</span><span class="p">,</span>
-		<span class="nx">slice2</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="nx">slice2</span><span class="p">),</span><span class="nb">cap</span><span class="p">(</span><span class="nx">slice2</span><span class="p">),</span><span class="o">&amp;</span><span class="nx">slice2</span> <span class="p">)</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;调用函数后-变量slice3 --- 值: %v 长度(len):%d 容量(cap): %d 地址: %p \n&#34;</span><span class="p">,</span>
-		<span class="nx">slice3</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="nx">slice3</span><span class="p">),</span><span class="nb">cap</span><span class="p">(</span><span class="nx">slice3</span><span class="p">),</span><span class="o">&amp;</span><span class="nx">slice3</span> <span class="p">)</span>
+    <span class="c1">// 定义一个切片类型，长度为0，容量为4
+</span><span class="c1"></span>    <span class="kd">var</span> <span class="nx">slice</span> <span class="p">=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+    
+    <span class="c1">//向切片中添加1个元素 (不超过容量)
+</span><span class="c1"></span>    <span class="nx">slice1</span> <span class="o">:=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">slice</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;变量slice1 --- 值: %v 长度(len):%d 容量(cap): %d  地址: %p \n&#34;</span><span class="p">,</span>
+        <span class="nx">slice1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="nx">slice1</span><span class="p">),</span><span class="nb">cap</span><span class="p">(</span><span class="nx">slice1</span><span class="p">),</span><span class="o">&amp;</span><span class="nx">slice1</span> <span class="p">)</span>
+    
+    <span class="c1">// 向切片中添加多个元素(不超过容量)
+</span><span class="c1"></span>    <span class="nx">slice2</span> <span class="o">:=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">slice</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;变量slice2 --- 值: %v 长度(len):%d 容量(cap): %d 地址: %p \n&#34;</span><span class="p">,</span>
+        <span class="nx">slice2</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="nx">slice2</span><span class="p">),</span><span class="nb">cap</span><span class="p">(</span><span class="nx">slice2</span><span class="p">),</span><span class="o">&amp;</span><span class="nx">slice2</span> <span class="p">)</span>
+    
+    <span class="c1">// 向切片中添加一个切片(超过容量)
+</span><span class="c1"></span>    <span class="nx">newSlice</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">}</span>
+    <span class="nx">slice3</span> <span class="o">:=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">slice</span><span class="p">,</span><span class="nx">newSlice</span><span class="p">[:]</span><span class="o">...</span><span class="p">)</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;变量slice3 --- 值: %v 长度(len):%d 容量(cap): %d 地址: %p \n&#34;</span><span class="p">,</span>
+        <span class="nx">slice3</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="nx">slice3</span><span class="p">),</span><span class="nb">cap</span><span class="p">(</span><span class="nx">slice3</span><span class="p">),</span><span class="o">&amp;</span><span class="nx">slice3</span> <span class="p">)</span>
+    
+    <span class="c1">// 调用函数修改
+</span><span class="c1"></span>    <span class="nf">testSlice</span><span class="p">(</span><span class="nx">slice1</span><span class="p">)</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;调用函数后-变量slice1 --- 值: %v 长度(len):%d 容量(cap): %d 地址: %p \n&#34;</span><span class="p">,</span>
+        <span class="nx">slice1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="nx">slice1</span><span class="p">),</span><span class="nb">cap</span><span class="p">(</span><span class="nx">slice1</span><span class="p">),</span><span class="o">&amp;</span><span class="nx">slice1</span> <span class="p">)</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;调用函数后-变量slice2 --- 值: %v 长度(len):%d 容量(cap): %d 地址: %p \n&#34;</span><span class="p">,</span>
+        <span class="nx">slice2</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="nx">slice2</span><span class="p">),</span><span class="nb">cap</span><span class="p">(</span><span class="nx">slice2</span><span class="p">),</span><span class="o">&amp;</span><span class="nx">slice2</span> <span class="p">)</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;调用函数后-变量slice3 --- 值: %v 长度(len):%d 容量(cap): %d 地址: %p \n&#34;</span><span class="p">,</span>
+        <span class="nx">slice3</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="nx">slice3</span><span class="p">),</span><span class="nb">cap</span><span class="p">(</span><span class="nx">slice3</span><span class="p">),</span><span class="o">&amp;</span><span class="nx">slice3</span> <span class="p">)</span>
 <span class="p">}</span>
 <span class="cm">/**输出
 </span><span class="cm">变量slice1 --- 值: [1] 长度(len):1 容量(cap): 4  地址: 0xc00000c080 
@@ -647,7 +647,7 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><p><font color=red>append()会改变切片所引用的数组的内容，从而影响到引用同一数组的其他切片。</font>当使用<code>append()</code>追加元素到切片时，如果容量不够（也就是(cap-len) == 0），Go就会创建一个新的内存地址来储存元素。</p>
+</div><p><font color=red>append()会改变切片所引用的数组的内容，从而影响到引用同一数组的其他切片。</font>当使用<code>append()</code>追加元素到切片时，如果容量不够（也就是(cap-len) &lt;= 0），Go就会创建一个新的内存地址来储存元素。</p>
 <h4 id="63-使用copy">6.3 使用copy()</h4>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -687,26 +687,26 @@
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="s">&#34;fmt&#34;</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span>  <span class="p">{</span>
-	<span class="c1">// 定义一个切片
-</span><span class="c1"></span>	<span class="nx">slice</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">}</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;变量slice --- 值: %v 长度(len):%d 容量(cap): %d  地址: %p \n&#34;</span><span class="p">,</span>
-		<span class="nx">slice</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="nx">slice</span><span class="p">),</span><span class="nb">cap</span><span class="p">(</span><span class="nx">slice</span><span class="p">),</span><span class="o">&amp;</span><span class="nx">slice</span> <span class="p">)</span>
-
-	<span class="c1">// 定义一个切片变量用来复制slice
-</span><span class="c1"></span>	<span class="nx">copySlice</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span><span class="mi">8</span><span class="p">)</span>
-
-	<span class="c1">// 使用copy
-</span><span class="c1"></span>	<span class="nx">count</span> <span class="o">:=</span> <span class="nb">copy</span><span class="p">(</span><span class="nx">copySlice</span><span class="p">,</span><span class="nx">slice</span><span class="p">)</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;复制的数量: %d \n&#34;</span><span class="p">,</span><span class="nx">count</span><span class="p">)</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;变量copySlice --- 值: %v 长度(len):%d 容量(cap): %d  地址: %p \n&#34;</span><span class="p">,</span>
-		<span class="nx">copySlice</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="nx">copySlice</span><span class="p">),</span><span class="nb">cap</span><span class="p">(</span><span class="nx">copySlice</span><span class="p">),</span><span class="o">&amp;</span><span class="nx">copySlice</span> <span class="p">)</span>
-
-	<span class="c1">// 修改复制后的切片，源切片不会变
-</span><span class="c1"></span>	<span class="nx">copySlice</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">=</span> <span class="mi">100</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;修改后--&gt;变量slice --- 值: %v 长度(len):%d 容量(cap): %d  地址: %p \n&#34;</span><span class="p">,</span>
-		<span class="nx">slice</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="nx">slice</span><span class="p">),</span><span class="nb">cap</span><span class="p">(</span><span class="nx">slice</span><span class="p">),</span><span class="o">&amp;</span><span class="nx">slice</span> <span class="p">)</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;修改后--&gt;变量copySlice --- 值: %v 长度(len):%d 容量(cap): %d  地址: %p \n&#34;</span><span class="p">,</span>
-		<span class="nx">copySlice</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="nx">copySlice</span><span class="p">),</span><span class="nb">cap</span><span class="p">(</span><span class="nx">copySlice</span><span class="p">),</span><span class="o">&amp;</span><span class="nx">copySlice</span> <span class="p">)</span>
+    <span class="c1">// 定义一个切片
+</span><span class="c1"></span>    <span class="nx">slice</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">}</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;变量slice --- 值: %v 长度(len):%d 容量(cap): %d  地址: %p \n&#34;</span><span class="p">,</span>
+        <span class="nx">slice</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="nx">slice</span><span class="p">),</span><span class="nb">cap</span><span class="p">(</span><span class="nx">slice</span><span class="p">),</span><span class="o">&amp;</span><span class="nx">slice</span> <span class="p">)</span>
+    
+    <span class="c1">// 定义一个切片变量用来复制slice
+</span><span class="c1"></span>    <span class="nx">copySlice</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span><span class="mi">8</span><span class="p">)</span>
+    
+    <span class="c1">// 使用copy
+</span><span class="c1"></span>    <span class="nx">count</span> <span class="o">:=</span> <span class="nb">copy</span><span class="p">(</span><span class="nx">copySlice</span><span class="p">,</span><span class="nx">slice</span><span class="p">)</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;复制的数量: %d \n&#34;</span><span class="p">,</span><span class="nx">count</span><span class="p">)</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;变量copySlice --- 值: %v 长度(len):%d 容量(cap): %d  地址: %p \n&#34;</span><span class="p">,</span>
+        <span class="nx">copySlice</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="nx">copySlice</span><span class="p">),</span><span class="nb">cap</span><span class="p">(</span><span class="nx">copySlice</span><span class="p">),</span><span class="o">&amp;</span><span class="nx">copySlice</span> <span class="p">)</span>
+    
+    <span class="c1">// 修改复制后的切片，源切片不会变
+</span><span class="c1"></span>    <span class="nx">copySlice</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">=</span> <span class="mi">100</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;修改后--&gt;变量slice --- 值: %v 长度(len):%d 容量(cap): %d  地址: %p \n&#34;</span><span class="p">,</span>
+        <span class="nx">slice</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="nx">slice</span><span class="p">),</span><span class="nb">cap</span><span class="p">(</span><span class="nx">slice</span><span class="p">),</span><span class="o">&amp;</span><span class="nx">slice</span> <span class="p">)</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;修改后--&gt;变量copySlice --- 值: %v 长度(len):%d 容量(cap): %d  地址: %p \n&#34;</span><span class="p">,</span>
+        <span class="nx">copySlice</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="nx">copySlice</span><span class="p">),</span><span class="nb">cap</span><span class="p">(</span><span class="nx">copySlice</span><span class="p">),</span><span class="o">&amp;</span><span class="nx">copySlice</span> <span class="p">)</span>
 <span class="p">}</span>
 <span class="cm">/**输出
 </span><span class="cm">变量slice --- 值: [1 2 3 4] 长度(len):4 容量(cap): 4  地址: 0xc00000c080 
@@ -728,7 +728,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2022-11-20
+        2022-12-05
         
     </span>
   </p>

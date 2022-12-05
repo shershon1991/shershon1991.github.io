@@ -801,6 +801,15 @@
     
     <item>
       <title>Go学习(十三):面向对象-方法(method)</title>
+      <link>https://shershon1991.github.io/post/%E5%9F%BA%E7%A1%80%E7%AF%87/13-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E4%B9%8B-%E6%96%B9%E6%B3%95/</link>
+      <pubDate>Wed, 13 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://shershon1991.github.io/post/%E5%9F%BA%E7%A1%80%E7%AF%87/13-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E4%B9%8B-%E6%96%B9%E6%B3%95/</guid>
+      <description>Go没有沿袭传统面向对象编程中的诸多概念，也没有提供类(class)，但是它提供了结构体(struct)，方法(method)可以在结构体上</description>
+    </item>
+    
+    <item>
+      <title>Go学习(十二):面向对象-结构体(struct)</title>
       <link>https://shershon1991.github.io/post/%E5%9F%BA%E7%A1%80%E7%AF%87/12-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E4%B9%8B-%E7%BB%93%E6%9E%84%E4%BD%93/</link>
       <pubDate>Wed, 13 Jan 2021 00:00:00 +0000</pubDate>
       
@@ -850,7 +859,7 @@
       <pubDate>Thu, 07 Jan 2021 00:00:00 +0000</pubDate>
       
       <guid>https://shershon1991.github.io/post/%E5%9F%BA%E7%A1%80%E7%AF%87/7-%E9%97%AD%E5%8C%85/</guid>
-      <description>1. 什么是闭包 闭包是由函数和与其相关的引用环境组合而成的实体在实现深约束时，需要创建一个能显式表示引用环境的东西，并将它与相关的子程序捆绑在一</description>
+      <description>1. 什么是闭包 闭包是由函数和与其相关的引用环境组合而成的实体。在实现深约束时，需要创建一个能显式表示引用环境的东西，并将它与相关的子程序捆绑在</description>
     </item>
     
     <item>
@@ -905,15 +914,6 @@
       
       <guid>https://shershon1991.github.io/post/%E5%9F%BA%E7%A1%80%E7%AF%87/1-%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/</guid>
       <description>1.安装 下载地址（https://golang.org/dl/） 下载之后，双击安装； 2.验证 2.1 查看版本 1 2 3 # 查看版本 ➜ ~ go version go version go1.15.5 darwin/amd64 2.2 查看</description>
-    </item>
-    
-    <item>
-      <title></title>
-      <link>https://shershon1991.github.io/post/%E5%9F%BA%E7%A1%80%E7%AF%87/13-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E4%B9%8B-%E6%96%B9%E6%B3%95/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://shershon1991.github.io/post/%E5%9F%BA%E7%A1%80%E7%AF%87/13-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E4%B9%8B-%E6%96%B9%E6%B3%95/</guid>
-      <description>Go没有沿袭传统面向对象编程中的诸多概念，也没有提供类(class)，但是它提供了结构体(struct)，方法(method)可以在结构体上</description>
     </item>
     
   </channel>

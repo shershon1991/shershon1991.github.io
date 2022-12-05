@@ -44,12 +44,12 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/%E5%9F%BA%E7%A1%80%E7%AF%87/8-%E6%8C%87%E9%92%88/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-01-08T00:00:00+00:00" />
-<meta property="article:modified_time" content="2022-05-02T12:20:32+08:00" />
+<meta property="article:modified_time" content="2022-12-05T15:49:14+08:00" />
 
 <meta itemprop="name" content="Go学习(八):指针">
 <meta itemprop="description" content="1.什么是指针？ 指针是存储另一个变量的内存地址的变量。变量是一种使用方便的占位符，变量都指向计算机的内存地址。一个指针变量可以指向任何一个值"><meta itemprop="datePublished" content="2021-01-08T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2022-05-02T12:20:32+08:00" />
-<meta itemprop="wordCount" content="1931">
+<meta itemprop="dateModified" content="2022-12-05T15:49:14+08:00" />
+<meta itemprop="wordCount" content="1924">
 <meta itemprop="keywords" content="Go基础," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go学习(八):指针"/>
 <meta name="twitter:description" content="1.什么是指针？ 指针是存储另一个变量的内存地址的变量。变量是一种使用方便的占位符，变量都指向计算机的内存地址。一个指针变量可以指向任何一个值"/>
@@ -133,7 +133,7 @@
             <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
             <a href="/categories/go/"> Go </a>
             </div>
-          <span class="more-meta"> 约 1931 字 </span>
+          <span class="more-meta"> 约 1924 字 </span>
           <span class="more-meta"> 预计阅读 4 分钟 </span>
         
       </div>
@@ -162,11 +162,6 @@
 </nav>
   </div>
 </div>
-  <div class="post-outdated">
-    <div class="warn">
-      <p>【注意】最后更新于 <span class="timeago" datetime="2022-05-02T12:20:32" title="May 2, 2022">May 2, 2022</span>，文中内容可能已过时，请谨慎使用。</p>
-    </div>
-  </div>
     <div class="post-content">
       <h3 id="1什么是指针">1.什么是指针？</h3>
 <p>指针是存储另一个变量的内存地址的变量。变量是一种使用方便的占位符，变量都指向计算机的内存地址。一个指针变量可以指向任何一个值的内存地址。</p>
@@ -285,8 +280,8 @@
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="k">if</span> <span class="p">(</span><span class="nx">ptr</span> <span class="o">!=</span> <span class="kc">nil</span><span class="p">)</span> <span class="c1">// ptr不是空指针
-</span><span class="c1"></span><span class="k">if</span> <span class="p">(</span><span class="nx">ptr</span> <span class="o">==</span> <span class="kc">nil</span><span class="p">)</span> <span class="c1">// ptr是空指针
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="k">if</span> <span class="nx">ptr</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="c1">// ptr不是空指针
+</span><span class="c1"></span><span class="k">if</span> <span class="nx">ptr</span> <span class="o">==</span> <span class="kc">nil</span> <span class="c1">// ptr是空指针
 </span></code></pre></td></tr></table>
 </div>
 </div><h3 id="4使用指针">4.使用指针</h3>
@@ -383,7 +378,7 @@
 </div><h3 id="5指针数组">5.指针数组</h3>
 <h4 id="51-概念">5.1 概念</h4>
 <p>指针数组: 就是元素为指针类型的数组。</p>
-<p>**定义指针数组: **</p>
+<p><strong>定义指针数组:</strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -423,7 +418,6 @@
 </span><span class="lnt">26
 </span><span class="lnt">27
 </span><span class="lnt">28
-</span><span class="lnt">29
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
@@ -446,7 +440,6 @@
 		<span class="nx">a</span> <span class="o">:=</span>  <span class="nx">ptrArr</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span>
 		<span class="c1">// 通过指针修改原数组的值
 </span><span class="c1"></span>		<span class="o">*</span><span class="nx">a</span> <span class="o">+=</span> <span class="s">&#34;-v&#34;</span>
-		<span class="nx">ptrArr</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="p">=</span> <span class="nx">a</span>
 	<span class="p">}</span>
 	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;修改后: arr类型: %T arr类型值: %v \n&#34;</span><span class="p">,</span><span class="nx">arr</span><span class="p">,</span><span class="nx">arr</span><span class="p">)</span>
 <span class="p">}</span>
@@ -517,7 +510,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2022-05-02
+        2022-12-05
         
     </span>
   </p>
