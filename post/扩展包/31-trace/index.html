@@ -188,6 +188,11 @@
 </nav>
   </div>
 </div>
+  <div class="post-outdated">
+    <div class="hint">
+      <p>【注意】最后更新于 <span class="timeago" datetime="2022-11-18T16:19:24" title="November 18, 2022">November 18, 2022</span>，文中内容可能已过时，请谨慎使用。</p>
+    </div>
+  </div>
     <div class="post-content">
       <h2 id="1-trace说明">1. trace说明</h2>
 <p>在<code>pprof</code>的分析中，能够知道一段时间内的<code>CPU</code>占用、内存分配、协程堆栈信息。这些信息都是一段时间内数据的汇总，但是它们并没有提供整个周期内发生的事件，例如指定的<code>Goroutines</code>何时执行、执行了多长时间、什么时候陷入了堵塞、什么时候解除了堵塞、<code>GC</code>如何影响单个<code>Goroutine</code>的执行、<code>STW</code>中断花费的时间是否太长等。这就是在Go1.5之后推出的<code>trace</code>工具的强大之处，它提供了指定时间内程序发生的事件的完整信息，这些事件信息包括：</p>
@@ -622,7 +627,7 @@
   <span class="copyright-year">
     &copy; 
     2021 - 
-    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span>Learn Go</span>
+    2023<span class="heart"><i class="iconfont icon-heart"></i></span><span>Learn Go</span>
   </span>
 </div>
 
