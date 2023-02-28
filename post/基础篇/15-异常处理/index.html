@@ -44,12 +44,12 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/%E5%9F%BA%E7%A1%80%E7%AF%87/15-%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-01-15T00:00:00+00:00" />
-<meta property="article:modified_time" content="2022-09-28T20:55:25+08:00" />
+<meta property="article:modified_time" content="2023-02-28T15:44:32+08:00" />
 
 <meta itemprop="name" content="Go学习(十五):异常处理">
 <meta itemprop="description" content="1.介绍 错误是指程序中出现不正常的情况，从而导致程序无法正常运行。Go语言中没有try...catch来捕获错误，而是通过defer&#43;rec"><meta itemprop="datePublished" content="2021-01-15T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2022-09-28T20:55:25+08:00" />
-<meta itemprop="wordCount" content="2899">
+<meta itemprop="dateModified" content="2023-02-28T15:44:32+08:00" />
+<meta itemprop="wordCount" content="2950">
 <meta itemprop="keywords" content="Go基础," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go学习(十五):异常处理"/>
 <meta name="twitter:description" content="1.介绍 错误是指程序中出现不正常的情况，从而导致程序无法正常运行。Go语言中没有try...catch来捕获错误，而是通过defer&#43;rec"/>
@@ -133,7 +133,7 @@
             <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
             <a href="/categories/go/"> Go </a>
             </div>
-          <span class="more-meta"> 约 2899 字 </span>
+          <span class="more-meta"> 约 2950 字 </span>
           <span class="more-meta"> 预计阅读 6 分钟 </span>
         
       </div>
@@ -188,11 +188,6 @@
 </nav>
   </div>
 </div>
-  <div class="post-outdated">
-    <div class="hint">
-      <p>【注意】最后更新于 <span class="timeago" datetime="2022-09-28T20:55:25" title="September 28, 2022">September 28, 2022</span>，文中内容可能已过时，请谨慎使用。</p>
-    </div>
-  </div>
     <div class="post-content">
       <h1 id="1介绍">1.介绍</h1>
 <p>错误是指程序中出现不正常的情况，从而导致程序无法正常运行。<code>Go</code>语言中没有<code>try...catch</code>来捕获错误，而是通过<code>defer+recover+panic</code>模式来实现捕捉错误信息。</p>
@@ -689,7 +684,7 @@
 <h2 id="61-介绍">6.1 介绍</h2>
 <p><code>Go</code>语言中没有<code>try...catch</code>来捕获错误，一旦触发<code>panic</code>就会导致程序崩溃。在<code>Go</code>中是通过<code>recover</code>让程序恢复。<font color=red>值的注意的是recover()必须在延迟函数(defer)中有效。</font></p>
 <blockquote>
-<p>在正常的程序运行过程中，调用 <code>recover()会返回 nil</code>，并且没有其他任何效果。如果当前的<code>Goroutine</code>陷入恐慌，调用<code>recover()</code>可以捕获<code>panic()</code>的输入值，使程序恢复正常运行。</p>
+<p>在正常的程序运行过程中，调用 <code>recover()会返回 nil</code>，并且没有其他任何效果。如果当前的<code>Goroutine</code>陷入恐慌，调用<code>recover()</code>可以捕获<code>panic()</code>的输入值，使程序恢复正常运行。<font color="red">引起恐慌之后的流程将不再执行。</font></p>
 </blockquote>
 <h2 id="62-使用">6.2 使用</h2>
 <div class="highlight"><div class="chroma">
@@ -716,6 +711,7 @@
 </span><span class="lnt">20
 </span><span class="lnt">21
 </span><span class="lnt">22
+</span><span class="lnt">23
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
@@ -732,6 +728,7 @@
 	<span class="p">}()</span>
 	<span class="c1">// 定义一个数组
 </span><span class="c1"></span>	<span class="nf">testPanic</span><span class="p">(</span><span class="s">&#34;请求失败&#34;</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;panic后面的执行流程&#34;</span><span class="p">)</span>
 <span class="p">}</span>
 <span class="c1">// 故意抛出panic
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">testPanic</span><span class="p">(</span><span class="nx">err</span> <span class="kt">string</span><span class="p">)</span>  <span class="p">{</span>
@@ -753,7 +750,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2022-09-28
+        2023-02-28
         
     </span>
   </p>
