@@ -130,7 +130,7 @@
       <pubDate>Thu, 14 Jan 2021 00:00:00 +0000</pubDate>
       
       <guid>https://shershon1991.github.io/post/%E5%9F%BA%E7%A1%80%E7%AF%87/14-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1-%E6%8E%A5%E5%8F%A3/</guid>
-      <description>虽然Go语言没有继承和多态，但是Go语言可以通过匿名字段实现继承，通过接口实现多态。 1.介绍 1.1 概念 在Go语言中，接口是一组方法签名。接口指定</description>
+      <description>虽然 Go 语言没有继承和多态，但是 Go 语言可以通过匿名字段实现继承，通过接口实现多态。 1.介绍 1.1 概念 在Go语言中，接口是一组方法签名。接口指定了类</description>
     </item>
     
     <item>
