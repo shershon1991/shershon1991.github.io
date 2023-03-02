@@ -44,12 +44,12 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/%E5%9F%BA%E7%A1%80%E7%AF%87/19-%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-sync%E5%8C%85/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-01-19T00:00:00+00:00" />
-<meta property="article:modified_time" content="2022-09-29T09:47:10+08:00" />
+<meta property="article:modified_time" content="2023-03-02T22:11:05+08:00" />
 
 <meta itemprop="name" content="Go学习(十九):并发编程-sync包">
 <meta itemprop="description" content="1.介绍 sync包提供了互斥锁。除了Once和WaitGroup类型，其余多数适用于低水平的程序，多数情况下，高水平的同步使用channel"><meta itemprop="datePublished" content="2021-01-19T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2022-09-29T09:47:10+08:00" />
-<meta itemprop="wordCount" content="4799">
+<meta itemprop="dateModified" content="2023-03-02T22:11:05+08:00" />
+<meta itemprop="wordCount" content="4796">
 <meta itemprop="keywords" content="Go基础," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go学习(十九):并发编程-sync包"/>
 <meta name="twitter:description" content="1.介绍 sync包提供了互斥锁。除了Once和WaitGroup类型，其余多数适用于低水平的程序，多数情况下，高水平的同步使用channel"/>
@@ -133,7 +133,7 @@
             <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
             <a href="/categories/go/"> Go </a>
             </div>
-          <span class="more-meta"> 约 4799 字 </span>
+          <span class="more-meta"> 约 4796 字 </span>
           <span class="more-meta"> 预计阅读 10 分钟 </span>
         
       </div>
@@ -144,16 +144,62 @@
   <div class="post-toc-content always-active">
     <nav id="TableOfContents">
   <ul>
-    <li>
+    <li><a href="#1介绍">1.介绍</a></li>
+    <li><a href="#2并发等待组waitgroup">2.并发等待组(WaitGroup)</a>
       <ul>
-        <li>
+        <li><a href="#21-waitgroup结构">2.1 WaitGroup结构</a></li>
+        <li><a href="#22-方法列表">2.2 方法列表</a></li>
+        <li><a href="#23-add参数取值范围">2.3 Add参数取值范围</a></li>
+        <li><a href="#24-使用示例">2.4 使用示例</a>
           <ul>
-            <li><a href="#1介绍">1.介绍</a></li>
-            <li><a href="#2并发等待组waitgroup">2.并发等待组(WaitGroup)</a></li>
-            <li><a href="#3互斥锁mutex">3.互斥锁(Mutex)</a></li>
-            <li><a href="#4读写锁rwmutex">4.读写锁(RWMutex)</a></li>
-            <li><a href="#5条件变量cond">5.条件变量(Cond)</a></li>
-            <li><a href="#6一次once">6.一次(Once)</a></li>
+            <li><a href="#1-不使用waitgroup示例">1. 不使用WaitGroup示例</a></li>
+            <li><a href="#2使用waitgroup示例">2.使用WaitGroup示例</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#3互斥锁mutex">3.互斥锁(Mutex)</a>
+      <ul>
+        <li><a href="#31-结构介绍">3.1 结构介绍</a></li>
+        <li><a href="#32-方法列表">3.2 方法列表</a></li>
+        <li><a href="#33-使用售票">3.3 使用(售票)</a>
+          <ul>
+            <li><a href="#1不作为结构体属性使用">1.不作为结构体属性使用</a></li>
+            <li><a href="#2作为结构体属性使用">2.作为结构体属性使用</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#4读写锁rwmutex">4.读写锁(RWMutex)</a>
+      <ul>
+        <li><a href="#41-结构介绍">4.1 结构介绍</a>
+          <ul>
+            <li><a href="#1-rwmutex锁结构">1. <code>RWMutex</code>锁结构</a></li>
+            <li><a href="#2-读写锁堵塞场景">2. 读写锁堵塞场景</a></li>
+          </ul>
+        </li>
+        <li><a href="#42-方法列表">4.2 方法列表</a></li>
+        <li><a href="#43-使用读写文件">4.3 使用(读写文件)</a>
+          <ul>
+            <li><a href="#1不作为结构体属性使用-1">1.不作为结构体属性使用</a></li>
+            <li><a href="#2作为结构体属性使用-1">2.作为结构体属性使用</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#5条件变量cond">5.条件变量(Cond)</a>
+      <ul>
+        <li><a href="#51-介绍">5.1 介绍</a></li>
+        <li><a href="#52-方法列表">5.2 方法列表</a></li>
+        <li><a href="#53-使用示例">5.3 使用示例</a></li>
+      </ul>
+    </li>
+    <li><a href="#6一次once">6.一次(Once)</a>
+      <ul>
+        <li><a href="#61-方法介绍">6.1 方法介绍</a></li>
+        <li><a href="#62-使用示例">6.2 使用示例</a>
+          <ul>
+            <li><a href="#示例1-重复调用只执行一次">示例1: 重复调用只执行一次</a></li>
           </ul>
         </li>
       </ul>
@@ -162,17 +208,12 @@
 </nav>
   </div>
 </div>
-  <div class="post-outdated">
-    <div class="hint">
-      <p>【注意】最后更新于 <span class="timeago" datetime="2022-09-29T09:47:10" title="September 29, 2022">September 29, 2022</span>，文中内容可能已过时，请谨慎使用。</p>
-    </div>
-  </div>
     <div class="post-content">
-      <h3 id="1介绍">1.介绍</h3>
+      <h1 id="1介绍">1.介绍</h1>
 <p><code>sync</code>包提供了互斥锁。除了<code>Once</code>和<code>WaitGroup</code>类型，其余多数适用于低水平的程序，多数情况下，高水平的同步使用<code>channel</code>通信性能会更优一些。</p>
-<h3 id="2并发等待组waitgroup">2.并发等待组(WaitGroup)</h3>
+<h1 id="2并发等待组waitgroup">2.并发等待组(WaitGroup)</h1>
 <p><code>WaitGroup</code>，即等待一组<code>Goroutine</code>结束。父<code>Goroutine</code>调用<code>Add()</code>方法来设置应等待<code>Goroutine</code>的数量。每个被等待的<code>Goroutine</code>在结束时应该调用<code>Done()</code>方法。与此同时，主<code>Goroutine</code>可调用<code>Wait()</code>方法阻塞至所有<code>Goroutine</code>结束。</p>
-<h4 id="21-waitgroup结构">2.1 WaitGroup结构</h4>
+<h2 id="21-waitgroup结构">2.1 WaitGroup结构</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -184,12 +225,12 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// A WaitGroup must not be copied after first use.
 </span><span class="c1"></span><span class="kd">type</span> <span class="nx">WaitGroup</span> <span class="kd">struct</span> <span class="p">{</span>
-	<span class="nx">noCopy</span> <span class="nx">noCopy</span>
-	<span class="nx">state1</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="kt">uint32</span>
+    <span class="nx">noCopy</span> <span class="nx">noCopy</span>
+    <span class="nx">state1</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="kt">uint32</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="22-方法列表">2.2 方法列表</h4>
+</div><h2 id="22-方法列表">2.2 方法列表</h2>
 <table>
 <thead>
 <tr>
@@ -212,7 +253,7 @@
 </tr>
 </tbody>
 </table>
-<h4 id="23-add参数取值范围">2.3 Add参数取值范围</h4>
+<h2 id="23-add参数取值范围">2.3 Add参数取值范围</h2>
 <p>等待组内部拥有一个计数器，计数器的值可以通过<code>Add(delta int)</code>方法调用实现计数器的增加和减少。该方法应该在创建新的<code>Goroutine</code>之前调用。</p>
 <p><strong>参数值x取值</strong></p>
 <table>
@@ -237,8 +278,8 @@
 </tr>
 </tbody>
 </table>
-<h4 id="24-使用示例">2.4 使用示例</h4>
-<h5 id="1-不使用waitgroup示例">1. 不使用WaitGroup示例</h5>
+<h2 id="24-使用示例">2.4 使用示例</h2>
+<h3 id="1-不使用waitgroup示例">1. 不使用WaitGroup示例</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -286,39 +327,39 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;fmt&#34;</span>
-	<span class="s">&#34;time&#34;</span>
+    <span class="s">&#34;fmt&#34;</span>
+    <span class="s">&#34;time&#34;</span>
 <span class="p">)</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="c1">// 创建通道
-</span><span class="c1"></span>	<span class="nx">intChan</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="kt">int</span><span class="p">)</span>
-
-	<span class="c1">// 计算1-50的和
-</span><span class="c1"></span>	<span class="k">go</span> <span class="kd">func</span><span class="p">(</span><span class="nx">intChan</span> <span class="kd">chan</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
-		<span class="nx">sum</span> <span class="o">:=</span> <span class="mi">0</span>
-		<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;=</span> <span class="mi">50</span> <span class="p">;</span> <span class="nx">i</span><span class="o">++</span>  <span class="p">{</span>
-			<span class="nx">sum</span> <span class="o">+=</span> <span class="nx">i</span>
-		<span class="p">}</span>
-		<span class="nx">intChan</span> <span class="o">&lt;-</span> <span class="nx">sum</span>
-	<span class="p">}(</span><span class="nx">intChan</span><span class="p">)</span>
-	<span class="c1">// 计算51-100的和
-</span><span class="c1"></span>	<span class="k">go</span> <span class="kd">func</span><span class="p">(</span><span class="nx">intChan</span> <span class="kd">chan</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
-		<span class="nx">sum</span> <span class="o">:=</span> <span class="mi">0</span>
-		<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">51</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;=</span> <span class="mi">100</span> <span class="p">;</span> <span class="nx">i</span><span class="o">++</span>  <span class="p">{</span>
-			<span class="nx">sum</span> <span class="o">+=</span> <span class="nx">i</span>
-		<span class="p">}</span>
-		<span class="nx">intChan</span> <span class="o">&lt;-</span> <span class="nx">sum</span>
-	<span class="p">}(</span><span class="nx">intChan</span><span class="p">)</span>
-	<span class="c1">// 另外创建个channle聚合结果
-</span><span class="c1"></span>	<span class="k">go</span> <span class="kd">func</span><span class="p">(</span><span class="nx">intChan</span> <span class="kd">chan</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
-		<span class="nx">sum1</span> <span class="o">:=</span> <span class="o">&lt;-</span> <span class="nx">intChan</span>
-		<span class="nx">sum2</span> <span class="o">:=</span> <span class="o">&lt;-</span> <span class="nx">intChan</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;sum1 = %d sum2 = %d  \nsum1 + sum2 = %d \n&#34;</span><span class="p">,</span><span class="nx">sum1</span><span class="p">,</span><span class="nx">sum2</span><span class="p">,</span><span class="nx">sum1</span><span class="o">+</span><span class="nx">sum2</span><span class="p">)</span>
-	<span class="p">}(</span><span class="nx">intChan</span><span class="p">)</span>
-
-	<span class="c1">// 注意,需求手动sleep
-</span><span class="c1"></span>	<span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">)</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;运行结束&#34;</span><span class="p">)</span>
+    <span class="c1">// 创建通道
+</span><span class="c1"></span>    <span class="nx">intChan</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="kt">int</span><span class="p">)</span>
+    
+    <span class="c1">// 计算1-50的和
+</span><span class="c1"></span>    <span class="k">go</span> <span class="kd">func</span><span class="p">(</span><span class="nx">intChan</span> <span class="kd">chan</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">sum</span> <span class="o">:=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;=</span> <span class="mi">50</span> <span class="p">;</span> <span class="nx">i</span><span class="o">++</span>  <span class="p">{</span>
+            <span class="nx">sum</span> <span class="o">+=</span> <span class="nx">i</span>
+        <span class="p">}</span>
+        <span class="nx">intChan</span> <span class="o">&lt;-</span> <span class="nx">sum</span>
+    <span class="p">}(</span><span class="nx">intChan</span><span class="p">)</span>
+    <span class="c1">// 计算51-100的和
+</span><span class="c1"></span>    <span class="k">go</span> <span class="kd">func</span><span class="p">(</span><span class="nx">intChan</span> <span class="kd">chan</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">sum</span> <span class="o">:=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">51</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;=</span> <span class="mi">100</span> <span class="p">;</span> <span class="nx">i</span><span class="o">++</span>  <span class="p">{</span>
+            <span class="nx">sum</span> <span class="o">+=</span> <span class="nx">i</span>
+        <span class="p">}</span>
+        <span class="nx">intChan</span> <span class="o">&lt;-</span> <span class="nx">sum</span>
+    <span class="p">}(</span><span class="nx">intChan</span><span class="p">)</span>
+    <span class="c1">// 另外创建个channle聚合结果
+</span><span class="c1"></span>    <span class="k">go</span> <span class="kd">func</span><span class="p">(</span><span class="nx">intChan</span> <span class="kd">chan</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">sum1</span> <span class="o">:=</span> <span class="o">&lt;-</span> <span class="nx">intChan</span>
+        <span class="nx">sum2</span> <span class="o">:=</span> <span class="o">&lt;-</span> <span class="nx">intChan</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;sum1 = %d sum2 = %d  \nsum1 + sum2 = %d \n&#34;</span><span class="p">,</span><span class="nx">sum1</span><span class="p">,</span><span class="nx">sum2</span><span class="p">,</span><span class="nx">sum1</span><span class="o">+</span><span class="nx">sum2</span><span class="p">)</span>
+    <span class="p">}(</span><span class="nx">intChan</span><span class="p">)</span>
+    
+    <span class="c1">// 注意,需求手动sleep
+</span><span class="c1"></span>    <span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">)</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;运行结束&#34;</span><span class="p">)</span>
 <span class="p">}</span>
 <span class="cm">/** 输出:
 </span><span class="cm">  sum1 = 1275 sum2 = 3775  
@@ -327,7 +368,7 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h5 id="2使用waitgroup示例">2.使用WaitGroup示例</h5>
+</div><h3 id="2使用waitgroup示例">2.使用WaitGroup示例</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -383,47 +424,47 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;fmt&#34;</span>
-	<span class="s">&#34;sync&#34;</span>
+    <span class="s">&#34;fmt&#34;</span>
+    <span class="s">&#34;sync&#34;</span>
 <span class="p">)</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="c1">// 声明等待组
-</span><span class="c1"></span>	<span class="kd">var</span> <span class="nx">wg</span> <span class="nx">sync</span><span class="p">.</span><span class="nx">WaitGroup</span>
-	<span class="c1">// 设置，需要等待3个协程执行完成
-</span><span class="c1"></span>	<span class="nx">wg</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-	<span class="c1">// 创建通道
-</span><span class="c1"></span>	<span class="nx">intChan</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="kt">int</span><span class="p">)</span>
-	<span class="c1">// 计算1-50的和
-</span><span class="c1"></span>	<span class="k">go</span> <span class="kd">func</span><span class="p">(</span><span class="nx">intChan</span> <span class="kd">chan</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">wg</span> <span class="o">*</span><span class="nx">sync</span><span class="p">.</span><span class="nx">WaitGroup</span><span class="p">)</span> <span class="p">{</span>
-		<span class="nx">sum</span> <span class="o">:=</span> <span class="mi">0</span>
-		<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;=</span> <span class="mi">50</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
-			<span class="nx">sum</span> <span class="o">+=</span> <span class="nx">i</span>
-		<span class="p">}</span>
-		<span class="nx">intChan</span> <span class="o">&lt;-</span> <span class="nx">sum</span>
-		<span class="c1">// 计数器减一
-</span><span class="c1"></span>		<span class="nx">wg</span><span class="p">.</span><span class="nf">Done</span><span class="p">()</span>
-	<span class="p">}(</span><span class="nx">intChan</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">wg</span><span class="p">)</span>
-	<span class="c1">// 计算51-100的和
-</span><span class="c1"></span>	<span class="k">go</span> <span class="kd">func</span><span class="p">(</span><span class="nx">intChan</span> <span class="kd">chan</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">wg</span> <span class="o">*</span><span class="nx">sync</span><span class="p">.</span><span class="nx">WaitGroup</span><span class="p">)</span> <span class="p">{</span>
-		<span class="nx">sum</span> <span class="o">:=</span> <span class="mi">0</span>
-		<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">51</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;=</span> <span class="mi">100</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
-			<span class="nx">sum</span> <span class="o">+=</span> <span class="nx">i</span>
-		<span class="p">}</span>
-		<span class="nx">intChan</span> <span class="o">&lt;-</span> <span class="nx">sum</span>
-		<span class="c1">// 计数器减一
-</span><span class="c1"></span>		<span class="nx">wg</span><span class="p">.</span><span class="nf">Done</span><span class="p">()</span>
-	<span class="p">}(</span><span class="nx">intChan</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">wg</span><span class="p">)</span>
-	<span class="c1">// 另外创建个channle聚合结果
-</span><span class="c1"></span>	<span class="k">go</span> <span class="kd">func</span><span class="p">(</span><span class="nx">intChan</span> <span class="kd">chan</span> <span class="kt">int</span><span class="p">,</span><span class="nx">wg</span> <span class="o">*</span><span class="nx">sync</span><span class="p">.</span><span class="nx">WaitGroup</span><span class="p">)</span> <span class="p">{</span>
-		<span class="nx">sum1</span> <span class="o">:=</span> <span class="o">&lt;-</span><span class="nx">intChan</span>
-		<span class="nx">sum2</span> <span class="o">:=</span> <span class="o">&lt;-</span><span class="nx">intChan</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;sum1 = %d sum2 = %d  \nsum1 + sum2 = %d \n&#34;</span><span class="p">,</span> <span class="nx">sum1</span><span class="p">,</span> <span class="nx">sum2</span><span class="p">,</span> <span class="nx">sum1</span><span class="o">+</span><span class="nx">sum2</span><span class="p">)</span>
-		<span class="c1">// 计数器减一
-</span><span class="c1"></span>		<span class="nx">wg</span><span class="p">.</span><span class="nf">Done</span><span class="p">()</span>
-	<span class="p">}(</span><span class="nx">intChan</span><span class="p">,</span><span class="o">&amp;</span><span class="nx">wg</span><span class="p">)</span>
-	<span class="c1">// 阻塞，直到等待组的计数器等于0
-</span><span class="c1"></span>	<span class="nx">wg</span><span class="p">.</span><span class="nf">Wait</span><span class="p">()</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;运行结束&#34;</span><span class="p">)</span>
+    <span class="c1">// 声明等待组
+</span><span class="c1"></span>    <span class="kd">var</span> <span class="nx">wg</span> <span class="nx">sync</span><span class="p">.</span><span class="nx">WaitGroup</span>
+    <span class="c1">// 设置，需要等待3个协程执行完成
+</span><span class="c1"></span>    <span class="nx">wg</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+    <span class="c1">// 创建通道
+</span><span class="c1"></span>    <span class="nx">intChan</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="kt">int</span><span class="p">)</span>
+    <span class="c1">// 计算1-50的和
+</span><span class="c1"></span>    <span class="k">go</span> <span class="kd">func</span><span class="p">(</span><span class="nx">intChan</span> <span class="kd">chan</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">wg</span> <span class="o">*</span><span class="nx">sync</span><span class="p">.</span><span class="nx">WaitGroup</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">sum</span> <span class="o">:=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;=</span> <span class="mi">50</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+            <span class="nx">sum</span> <span class="o">+=</span> <span class="nx">i</span>
+        <span class="p">}</span>
+        <span class="nx">intChan</span> <span class="o">&lt;-</span> <span class="nx">sum</span>
+        <span class="c1">// 计数器减一
+</span><span class="c1"></span>        <span class="nx">wg</span><span class="p">.</span><span class="nf">Done</span><span class="p">()</span>
+    <span class="p">}(</span><span class="nx">intChan</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">wg</span><span class="p">)</span>
+    <span class="c1">// 计算51-100的和
+</span><span class="c1"></span>    <span class="k">go</span> <span class="kd">func</span><span class="p">(</span><span class="nx">intChan</span> <span class="kd">chan</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">wg</span> <span class="o">*</span><span class="nx">sync</span><span class="p">.</span><span class="nx">WaitGroup</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">sum</span> <span class="o">:=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">51</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;=</span> <span class="mi">100</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+            <span class="nx">sum</span> <span class="o">+=</span> <span class="nx">i</span>
+        <span class="p">}</span>
+        <span class="nx">intChan</span> <span class="o">&lt;-</span> <span class="nx">sum</span>
+        <span class="c1">// 计数器减一
+</span><span class="c1"></span>        <span class="nx">wg</span><span class="p">.</span><span class="nf">Done</span><span class="p">()</span>
+    <span class="p">}(</span><span class="nx">intChan</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">wg</span><span class="p">)</span>
+    <span class="c1">// 另外创建个channle聚合结果
+</span><span class="c1"></span>    <span class="k">go</span> <span class="kd">func</span><span class="p">(</span><span class="nx">intChan</span> <span class="kd">chan</span> <span class="kt">int</span><span class="p">,</span><span class="nx">wg</span> <span class="o">*</span><span class="nx">sync</span><span class="p">.</span><span class="nx">WaitGroup</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">sum1</span> <span class="o">:=</span> <span class="o">&lt;-</span><span class="nx">intChan</span>
+        <span class="nx">sum2</span> <span class="o">:=</span> <span class="o">&lt;-</span><span class="nx">intChan</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;sum1 = %d sum2 = %d  \nsum1 + sum2 = %d \n&#34;</span><span class="p">,</span> <span class="nx">sum1</span><span class="p">,</span> <span class="nx">sum2</span><span class="p">,</span> <span class="nx">sum1</span><span class="o">+</span><span class="nx">sum2</span><span class="p">)</span>
+        <span class="c1">// 计数器减一
+</span><span class="c1"></span>        <span class="nx">wg</span><span class="p">.</span><span class="nf">Done</span><span class="p">()</span>
+    <span class="p">}(</span><span class="nx">intChan</span><span class="p">,</span><span class="o">&amp;</span><span class="nx">wg</span><span class="p">)</span>
+    <span class="c1">// 阻塞，直到等待组的计数器等于0
+</span><span class="c1"></span>    <span class="nx">wg</span><span class="p">.</span><span class="nf">Wait</span><span class="p">()</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;运行结束&#34;</span><span class="p">)</span>
 <span class="p">}</span>
 <span class="cm">/**输出
 </span><span class="cm">  sum1 = 3775 sum2 = 1275  
@@ -432,9 +473,9 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="3互斥锁mutex">3.互斥锁(Mutex)</h3>
+</div><h1 id="3互斥锁mutex">3.互斥锁(Mutex)</h1>
 <p><code>Mutex</code>是一个互斥锁，<font color=red>保证同时只有一个Goroutine可以访问共享资源</font>。<code>Mutex</code>类型的锁和<code>Goroutine</code>无关，可以由不同的<code>Goroutine</code>加锁和解锁。也可以为其他结构体的字段，零值为解锁状态。</p>
-<h4 id="31-结构介绍">3.1 结构介绍</h4>
+<h2 id="31-结构介绍">3.1 结构介绍</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -444,12 +485,12 @@
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">Mutex</span> <span class="kd">struct</span> <span class="p">{</span>
-	<span class="nx">state</span> <span class="kt">int32</span> <span class="c1">// state 表示当前互斥锁的状态
-</span><span class="c1"></span>	<span class="nx">sema</span>  <span class="kt">uint32</span> <span class="c1">// sema 是用于控制锁状态的信号量
+    <span class="nx">state</span> <span class="kt">int32</span> <span class="c1">// state 表示当前互斥锁的状态
+</span><span class="c1"></span>    <span class="nx">sema</span>  <span class="kt">uint32</span> <span class="c1">// sema 是用于控制锁状态的信号量
 </span><span class="c1"></span><span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="32-方法列表">3.2 方法列表</h4>
+</div><h2 id="32-方法列表">3.2 方法列表</h2>
 <table>
 <thead>
 <tr>
@@ -468,9 +509,9 @@
 </tr>
 </tbody>
 </table>
-<h4 id="33-使用售票">3.3 使用(售票)</h4>
+<h2 id="33-使用售票">3.3 使用(售票)</h2>
 <p>需求:模拟多个窗口售票</p>
-<h5 id="1不作为结构体属性使用">1.不作为结构体属性使用</h5>
+<h3 id="1不作为结构体属性使用">1.不作为结构体属性使用</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -536,9 +577,9 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;fmt&#34;</span>
-	<span class="s">&#34;sync&#34;</span>
-	<span class="s">&#34;time&#34;</span>
+    <span class="s">&#34;fmt&#34;</span>
+    <span class="s">&#34;sync&#34;</span>
+    <span class="s">&#34;time&#34;</span>
 <span class="p">)</span>
 <span class="c1">// 声明全局等待组
 </span><span class="c1"></span><span class="kd">var</span> <span class="nx">wg</span> <span class="nx">sync</span><span class="p">.</span><span class="nx">WaitGroup</span>
@@ -547,35 +588,35 @@
 <span class="c1">// 声明全局余票
 </span><span class="c1"></span><span class="kd">var</span> <span class="nx">ticket</span> <span class="kt">int</span> <span class="p">=</span> <span class="mi">10</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="c1">// 设置等待组计数器
-</span><span class="c1"></span>	<span class="nx">wg</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-	<span class="c1">// 窗口卖票
-</span><span class="c1"></span>	<span class="k">go</span> <span class="nf">saleTicket</span><span class="p">(</span><span class="s">&#34;窗口A&#34;</span><span class="p">,</span><span class="o">&amp;</span><span class="nx">wg</span><span class="p">)</span>
-	<span class="k">go</span> <span class="nf">saleTicket</span><span class="p">(</span><span class="s">&#34;窗口B&#34;</span><span class="p">,</span><span class="o">&amp;</span><span class="nx">wg</span><span class="p">)</span>
-	<span class="k">go</span> <span class="nf">saleTicket</span><span class="p">(</span><span class="s">&#34;窗口C&#34;</span><span class="p">,</span><span class="o">&amp;</span><span class="nx">wg</span><span class="p">)</span>
-	<span class="nx">wg</span><span class="p">.</span><span class="nf">Wait</span><span class="p">()</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;运行结束!&#34;</span><span class="p">)</span>
+    <span class="c1">// 设置等待组计数器
+</span><span class="c1"></span>    <span class="nx">wg</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+    <span class="c1">// 窗口卖票
+</span><span class="c1"></span>    <span class="k">go</span> <span class="nf">saleTicket</span><span class="p">(</span><span class="s">&#34;窗口A&#34;</span><span class="p">,</span><span class="o">&amp;</span><span class="nx">wg</span><span class="p">)</span>
+    <span class="k">go</span> <span class="nf">saleTicket</span><span class="p">(</span><span class="s">&#34;窗口B&#34;</span><span class="p">,</span><span class="o">&amp;</span><span class="nx">wg</span><span class="p">)</span>
+    <span class="k">go</span> <span class="nf">saleTicket</span><span class="p">(</span><span class="s">&#34;窗口C&#34;</span><span class="p">,</span><span class="o">&amp;</span><span class="nx">wg</span><span class="p">)</span>
+    <span class="nx">wg</span><span class="p">.</span><span class="nf">Wait</span><span class="p">()</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;运行结束!&#34;</span><span class="p">)</span>
 <span class="p">}</span>
 <span class="c1">// 卖票流程
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">saleTicket</span><span class="p">(</span><span class="nx">windowName</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">wg</span> <span class="o">*</span><span class="nx">sync</span><span class="p">.</span><span class="nx">WaitGroup</span><span class="p">)</span>  <span class="p">{</span>
-	<span class="c1">// 卖票流程结束后关闭
-</span><span class="c1"></span>	<span class="k">defer</span> <span class="nx">wg</span><span class="p">.</span><span class="nf">Done</span><span class="p">()</span>
-	<span class="k">for</span> <span class="p">{</span>
-		<span class="c1">// 加锁
-</span><span class="c1"></span>		<span class="nx">mutex</span><span class="p">.</span><span class="nf">Lock</span><span class="p">()</span>
-		<span class="k">if</span>  <span class="nx">ticket</span> <span class="p">&gt;</span> <span class="mi">0</span><span class="p">{</span>
-			<span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Millisecond</span><span class="p">)</span>
-			<span class="nx">ticket</span><span class="o">--</span>
-			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%s 卖出一张票，余票: %d \n&#34;</span><span class="p">,</span><span class="nx">windowName</span><span class="p">,</span><span class="nx">ticket</span><span class="p">)</span>
-		<span class="p">}</span> <span class="k">else</span>  <span class="p">{</span>
-			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%s 票已卖完! \n&#34;</span><span class="p">,</span><span class="nx">windowName</span><span class="p">)</span>
-			<span class="c1">// 解锁
-</span><span class="c1"></span>			<span class="nx">mutex</span><span class="p">.</span><span class="nf">Unlock</span><span class="p">()</span>
-			<span class="k">break</span>
-		<span class="p">}</span>
-		<span class="c1">// 解锁
-</span><span class="c1"></span>		<span class="nx">mutex</span><span class="p">.</span><span class="nf">Unlock</span><span class="p">()</span>
-	<span class="p">}</span>
+    <span class="c1">// 卖票流程结束后关闭
+</span><span class="c1"></span>    <span class="k">defer</span> <span class="nx">wg</span><span class="p">.</span><span class="nf">Done</span><span class="p">()</span>
+    <span class="k">for</span> <span class="p">{</span>
+        <span class="c1">// 加锁
+</span><span class="c1"></span>        <span class="nx">mutex</span><span class="p">.</span><span class="nf">Lock</span><span class="p">()</span>
+        <span class="k">if</span>  <span class="nx">ticket</span> <span class="p">&gt;</span> <span class="mi">0</span><span class="p">{</span>
+            <span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Millisecond</span><span class="p">)</span>
+            <span class="nx">ticket</span><span class="o">--</span>
+            <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%s 卖出一张票，余票: %d \n&#34;</span><span class="p">,</span><span class="nx">windowName</span><span class="p">,</span><span class="nx">ticket</span><span class="p">)</span>
+        <span class="p">}</span> <span class="k">else</span>  <span class="p">{</span>
+            <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%s 票已卖完! \n&#34;</span><span class="p">,</span><span class="nx">windowName</span><span class="p">)</span>
+            <span class="c1">// 解锁
+</span><span class="c1"></span>            <span class="nx">mutex</span><span class="p">.</span><span class="nf">Unlock</span><span class="p">()</span>
+            <span class="k">break</span>
+        <span class="p">}</span>
+        <span class="c1">// 解锁
+</span><span class="c1"></span>        <span class="nx">mutex</span><span class="p">.</span><span class="nf">Unlock</span><span class="p">()</span>
+    <span class="p">}</span>
 <span class="p">}</span>
 <span class="cm">/**输出
 </span><span class="cm">  窗口C 卖出一张票，余票: 9 
@@ -595,7 +636,7 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h5 id="2作为结构体属性使用">2.作为结构体属性使用</h5>
+</div><h3 id="2作为结构体属性使用">2.作为结构体属性使用</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -667,52 +708,52 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;fmt&#34;</span>
-	<span class="s">&#34;strconv&#34;</span>
-	<span class="s">&#34;sync&#34;</span>
-	<span class="s">&#34;time&#34;</span>
+    <span class="s">&#34;fmt&#34;</span>
+    <span class="s">&#34;strconv&#34;</span>
+    <span class="s">&#34;sync&#34;</span>
+    <span class="s">&#34;time&#34;</span>
 <span class="p">)</span>
 <span class="c1">// 声明一个票池
 </span><span class="c1"></span><span class="kd">type</span> <span class="nx">ticketPool</span> <span class="kd">struct</span> <span class="p">{</span>
-	<span class="nx">over</span> <span class="kt">int</span>
-	<span class="nx">lock</span> <span class="nx">sync</span><span class="p">.</span><span class="nx">Mutex</span>
-	<span class="nx">wg</span>   <span class="nx">sync</span><span class="p">.</span><span class="nx">WaitGroup</span>
+    <span class="nx">over</span> <span class="kt">int</span>
+    <span class="nx">lock</span> <span class="nx">sync</span><span class="p">.</span><span class="nx">Mutex</span>
+    <span class="nx">wg</span>   <span class="nx">sync</span><span class="p">.</span><span class="nx">WaitGroup</span>
 <span class="p">}</span>
 <span class="c1">// 定义售票方法
 </span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">ticketPool</span><span class="p">)</span> <span class="nf">sellTicket</span><span class="p">(</span><span class="nx">windowName</span> <span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
-	<span class="c1">// 等待组减一
-</span><span class="c1"></span>	<span class="k">defer</span> <span class="nx">t</span><span class="p">.</span><span class="nx">wg</span><span class="p">.</span><span class="nf">Done</span><span class="p">()</span>
-	<span class="k">for</span> <span class="p">{</span>
-		<span class="c1">// 加锁
-</span><span class="c1"></span>		<span class="nx">t</span><span class="p">.</span><span class="nx">lock</span><span class="p">.</span><span class="nf">Lock</span><span class="p">()</span>
-		<span class="k">if</span> <span class="nx">t</span><span class="p">.</span><span class="nx">over</span> <span class="p">&gt;</span> <span class="mi">0</span> <span class="p">{</span>
-			<span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Millisecond</span><span class="p">)</span>
-			<span class="nx">t</span><span class="p">.</span><span class="nx">over</span><span class="o">--</span>
-			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%s 卖出一张票，余票: %d \n&#34;</span><span class="p">,</span> <span class="nx">windowName</span><span class="p">,</span> <span class="nx">t</span><span class="p">.</span><span class="nx">over</span><span class="p">)</span>
-		<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-			<span class="c1">// 无票，跳无限循环并解锁
-</span><span class="c1"></span>			<span class="nx">t</span><span class="p">.</span><span class="nx">lock</span><span class="p">.</span><span class="nf">Unlock</span><span class="p">()</span>
-			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%s 票已卖完! \n&#34;</span><span class="p">,</span> <span class="nx">windowName</span><span class="p">)</span>
-			<span class="k">break</span>
-		<span class="p">}</span>
-		<span class="c1">// 正常售票流程解锁
-</span><span class="c1"></span>		<span class="nx">t</span><span class="p">.</span><span class="nx">lock</span><span class="p">.</span><span class="nf">Unlock</span><span class="p">()</span>
-	<span class="p">}</span>
+    <span class="c1">// 等待组减一
+</span><span class="c1"></span>    <span class="k">defer</span> <span class="nx">t</span><span class="p">.</span><span class="nx">wg</span><span class="p">.</span><span class="nf">Done</span><span class="p">()</span>
+    <span class="k">for</span> <span class="p">{</span>
+        <span class="c1">// 加锁
+</span><span class="c1"></span>        <span class="nx">t</span><span class="p">.</span><span class="nx">lock</span><span class="p">.</span><span class="nf">Lock</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nx">t</span><span class="p">.</span><span class="nx">over</span> <span class="p">&gt;</span> <span class="mi">0</span> <span class="p">{</span>
+            <span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Millisecond</span><span class="p">)</span>
+            <span class="nx">t</span><span class="p">.</span><span class="nx">over</span><span class="o">--</span>
+            <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%s 卖出一张票，余票: %d \n&#34;</span><span class="p">,</span> <span class="nx">windowName</span><span class="p">,</span> <span class="nx">t</span><span class="p">.</span><span class="nx">over</span><span class="p">)</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="c1">// 无票，跳无限循环并解锁
+</span><span class="c1"></span>            <span class="nx">t</span><span class="p">.</span><span class="nx">lock</span><span class="p">.</span><span class="nf">Unlock</span><span class="p">()</span>
+            <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%s 票已卖完! \n&#34;</span><span class="p">,</span> <span class="nx">windowName</span><span class="p">)</span>
+            <span class="k">break</span>
+        <span class="p">}</span>
+        <span class="c1">// 正常售票流程解锁
+</span><span class="c1"></span>        <span class="nx">t</span><span class="p">.</span><span class="nx">lock</span><span class="p">.</span><span class="nf">Unlock</span><span class="p">()</span>
+    <span class="p">}</span>
 <span class="p">}</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="c1">// 创建一个票池
-</span><span class="c1"></span>	<span class="nx">ticketP</span> <span class="o">:=</span> <span class="nx">ticketPool</span><span class="p">{</span><span class="nx">over</span><span class="p">:</span> <span class="mi">10</span><span class="p">}</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;T:%T v: %v \n&#34;</span><span class="p">,</span> <span class="nx">ticketP</span><span class="p">,</span> <span class="nx">ticketP</span><span class="p">)</span>
-	<span class="c1">// 设置窗口数量
-</span><span class="c1"></span>	<span class="nx">windowNum</span> <span class="o">:=</span> <span class="mi">3</span>
-	<span class="c1">// 设置等待组计数器
-</span><span class="c1"></span>	<span class="nx">ticketP</span><span class="p">.</span><span class="nx">wg</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="nx">windowNum</span><span class="p">)</span>
-	<span class="c1">// 定义3个窗口售票
-</span><span class="c1"></span>	<span class="k">for</span> <span class="nx">i</span><span class="o">:=</span> <span class="mi">1</span> <span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;=</span> <span class="nx">windowNum</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
-		<span class="k">go</span> <span class="nx">ticketP</span><span class="p">.</span><span class="nf">sellTicket</span><span class="p">(</span><span class="s">&#34;窗口&#34;</span> <span class="o">+</span> <span class="nx">strconv</span><span class="p">.</span><span class="nf">Itoa</span><span class="p">(</span><span class="nx">i</span><span class="p">))</span>
-	<span class="p">}</span>
-	<span class="nx">ticketP</span><span class="p">.</span><span class="nx">wg</span><span class="p">.</span><span class="nf">Wait</span><span class="p">()</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;运行结束!&#34;</span><span class="p">)</span>
+    <span class="c1">// 创建一个票池
+</span><span class="c1"></span>    <span class="nx">ticketP</span> <span class="o">:=</span> <span class="nx">ticketPool</span><span class="p">{</span><span class="nx">over</span><span class="p">:</span> <span class="mi">10</span><span class="p">}</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;T:%T v: %v \n&#34;</span><span class="p">,</span> <span class="nx">ticketP</span><span class="p">,</span> <span class="nx">ticketP</span><span class="p">)</span>
+    <span class="c1">// 设置窗口数量
+</span><span class="c1"></span>    <span class="nx">windowNum</span> <span class="o">:=</span> <span class="mi">3</span>
+    <span class="c1">// 设置等待组计数器
+</span><span class="c1"></span>    <span class="nx">ticketP</span><span class="p">.</span><span class="nx">wg</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="nx">windowNum</span><span class="p">)</span>
+    <span class="c1">// 定义3个窗口售票
+</span><span class="c1"></span>    <span class="k">for</span> <span class="nx">i</span><span class="o">:=</span> <span class="mi">1</span> <span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;=</span> <span class="nx">windowNum</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="k">go</span> <span class="nx">ticketP</span><span class="p">.</span><span class="nf">sellTicket</span><span class="p">(</span><span class="s">&#34;窗口&#34;</span> <span class="o">+</span> <span class="nx">strconv</span><span class="p">.</span><span class="nf">Itoa</span><span class="p">(</span><span class="nx">i</span><span class="p">))</span>
+    <span class="p">}</span>
+    <span class="nx">ticketP</span><span class="p">.</span><span class="nx">wg</span><span class="p">.</span><span class="nf">Wait</span><span class="p">()</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;运行结束!&#34;</span><span class="p">)</span>
 <span class="p">}</span>
 <span class="cm">/**输出
 </span><span class="cm">  窗口3 卖出一张票，余票: 9 
@@ -732,10 +773,10 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="4读写锁rwmutex">4.读写锁(RWMutex)</h3>
-<h4 id="41-结构介绍">4.1 结构介绍</h4>
+</div><h1 id="4读写锁rwmutex">4.读写锁(RWMutex)</h1>
+<h2 id="41-结构介绍">4.1 结构介绍</h2>
 <p><code>RWMutex</code>是读写互斥锁，简称读写锁。该锁可以同时被多个读取者持有或被唯一一个写入者持有。<code>RWMutex</code>类型锁跟<code>Goroutine</code>无关，可以由不同的<code>Goroutine</code>加锁、解锁。<code>RWMutex</code>也可以创建为其他结构体的字段；零值为解锁状态。</p>
-<h5 id="1-rwmutex锁结构">1. <code>RWMutex</code>锁结构</h5>
+<h3 id="1-rwmutex锁结构">1. <code>RWMutex</code>锁结构</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -756,14 +797,14 @@
 </span><span class="c1"></span><span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h5 id="2-读写锁堵塞场景">2. 读写锁堵塞场景</h5>
+</div><h3 id="2-读写锁堵塞场景">2. 读写锁堵塞场景</h3>
 <ol>
 <li>写锁需要阻塞写锁：一个协程拥有写锁时，其他协程写锁需要阻塞</li>
 <li>写锁需要阻塞读锁：一个协程拥有写锁时，其他协程读锁需要阻塞</li>
 <li>读锁需要阻塞写锁：一个协程拥有读锁时，其他协程写锁需要阻塞</li>
 <li>读锁不能阻塞读锁：一个协程拥有读锁时，其他协程也可以拥有读锁</li>
 </ol>
-<h4 id="42-方法列表">4.2 方法列表</h4>
+<h2 id="42-方法列表">4.2 方法列表</h2>
 <table>
 <thead>
 <tr>
@@ -790,8 +831,8 @@
 </tr>
 </tbody>
 </table>
-<h4 id="43-使用读写文件">4.3 使用(读写文件)</h4>
-<h5 id="1不作为结构体属性使用-1">1.不作为结构体属性使用</h5>
+<h2 id="43-使用读写文件">4.3 使用(读写文件)</h2>
+<h3 id="1不作为结构体属性使用-1">1.不作为结构体属性使用</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -858,9 +899,9 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;fmt&#34;</span>
-	<span class="s">&#34;strconv&#34;</span>
-	<span class="s">&#34;sync&#34;</span>
+    <span class="s">&#34;fmt&#34;</span>
+    <span class="s">&#34;strconv&#34;</span>
+    <span class="s">&#34;sync&#34;</span>
 <span class="p">)</span>
 <span class="c1">// 声明全局变量，文件内容
 </span><span class="c1"></span><span class="kd">var</span> <span class="nx">fileContext</span> <span class="kt">string</span>
@@ -869,43 +910,43 @@
 <span class="c1">// 声明全局等待组
 </span><span class="c1"></span><span class="kd">var</span> <span class="nx">wg</span> <span class="nx">sync</span><span class="p">.</span><span class="nx">WaitGroup</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="c1">// 设置计数器
-</span><span class="c1"></span>	<span class="nx">wg</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;=</span> <span class="mi">5</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
-		<span class="nx">name</span> <span class="o">:=</span> <span class="s">&#34;同学-&#34;</span> <span class="o">+</span> <span class="nx">strconv</span><span class="p">.</span><span class="nf">Itoa</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span>
-		<span class="k">if</span> <span class="nx">i</span><span class="o">%</span><span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">{</span>
-			<span class="k">go</span> <span class="nf">readFile</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span>
-		<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-			<span class="k">go</span> <span class="nf">writeFile</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">strconv</span><span class="p">.</span><span class="nf">Itoa</span><span class="p">(</span><span class="nx">i</span><span class="p">))</span>
-		<span class="p">}</span>
-	<span class="p">}</span>
-	<span class="c1">// 等待所有计数器执行完成
-</span><span class="c1"></span>	<span class="nx">wg</span><span class="p">.</span><span class="nf">Wait</span><span class="p">()</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;运行结束!&#34;</span><span class="p">)</span>
+    <span class="c1">// 设置计数器
+</span><span class="c1"></span>    <span class="nx">wg</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+    <span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;=</span> <span class="mi">5</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="nx">name</span> <span class="o">:=</span> <span class="s">&#34;同学-&#34;</span> <span class="o">+</span> <span class="nx">strconv</span><span class="p">.</span><span class="nf">Itoa</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nx">i</span><span class="o">%</span><span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">{</span>
+            <span class="k">go</span> <span class="nf">readFile</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">go</span> <span class="nf">writeFile</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">strconv</span><span class="p">.</span><span class="nf">Itoa</span><span class="p">(</span><span class="nx">i</span><span class="p">))</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="c1">// 等待所有计数器执行完成
+</span><span class="c1"></span>    <span class="nx">wg</span><span class="p">.</span><span class="nf">Wait</span><span class="p">()</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;运行结束!&#34;</span><span class="p">)</span>
 <span class="p">}</span>
 
 <span class="c1">// 读文件
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">readFile</span><span class="p">(</span><span class="nx">name</span> <span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
-	<span class="c1">// 释放读锁
-</span><span class="c1"></span>	<span class="k">defer</span> <span class="nx">rxMutex</span><span class="p">.</span><span class="nf">RUnlock</span><span class="p">()</span>
-	<span class="c1">// 获取读锁
-</span><span class="c1"></span>	<span class="nx">rxMutex</span><span class="p">.</span><span class="nf">RLock</span><span class="p">()</span>
-	<span class="c1">// 打印读取内容
-</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%s 获取读锁，读取内容为: %s \n&#34;</span><span class="p">,</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">fileContext</span><span class="p">)</span>
-	<span class="c1">// 计数器减一
-</span><span class="c1"></span>	<span class="nx">wg</span><span class="p">.</span><span class="nf">Done</span><span class="p">()</span>
+    <span class="c1">// 释放读锁
+</span><span class="c1"></span>    <span class="k">defer</span> <span class="nx">rxMutex</span><span class="p">.</span><span class="nf">RUnlock</span><span class="p">()</span>
+    <span class="c1">// 获取读锁
+</span><span class="c1"></span>    <span class="nx">rxMutex</span><span class="p">.</span><span class="nf">RLock</span><span class="p">()</span>
+    <span class="c1">// 打印读取内容
+</span><span class="c1"></span>    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%s 获取读锁，读取内容为: %s \n&#34;</span><span class="p">,</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">fileContext</span><span class="p">)</span>
+    <span class="c1">// 计数器减一
+</span><span class="c1"></span>    <span class="nx">wg</span><span class="p">.</span><span class="nf">Done</span><span class="p">()</span>
 <span class="p">}</span>
 <span class="c1">// 写文件
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">writeFile</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">s</span> <span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
-	<span class="c1">// 释放写锁
-</span><span class="c1"></span>	<span class="k">defer</span> <span class="nx">rxMutex</span><span class="p">.</span><span class="nf">Unlock</span><span class="p">()</span>
-	<span class="c1">// 获取写锁
-</span><span class="c1"></span>	<span class="nx">rxMutex</span><span class="p">.</span><span class="nf">Lock</span><span class="p">()</span>
-	<span class="c1">// 写入内容
-</span><span class="c1"></span>	<span class="nx">fileContext</span> <span class="p">=</span> <span class="nx">fileContext</span> <span class="o">+</span> <span class="s">&#34; &#34;</span> <span class="o">+</span> <span class="nx">s</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%s 获取写锁，写入内容: %s。 文件内容变成: %s \n&#34;</span><span class="p">,</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">s</span><span class="p">,</span> <span class="nx">fileContext</span><span class="p">)</span>
-	<span class="c1">// 计数器减一
-</span><span class="c1"></span>	<span class="nx">wg</span><span class="p">.</span><span class="nf">Done</span><span class="p">()</span>
+    <span class="c1">// 释放写锁
+</span><span class="c1"></span>    <span class="k">defer</span> <span class="nx">rxMutex</span><span class="p">.</span><span class="nf">Unlock</span><span class="p">()</span>
+    <span class="c1">// 获取写锁
+</span><span class="c1"></span>    <span class="nx">rxMutex</span><span class="p">.</span><span class="nf">Lock</span><span class="p">()</span>
+    <span class="c1">// 写入内容
+</span><span class="c1"></span>    <span class="nx">fileContext</span> <span class="p">=</span> <span class="nx">fileContext</span> <span class="o">+</span> <span class="s">&#34; &#34;</span> <span class="o">+</span> <span class="nx">s</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%s 获取写锁，写入内容: %s。 文件内容变成: %s \n&#34;</span><span class="p">,</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">s</span><span class="p">,</span> <span class="nx">fileContext</span><span class="p">)</span>
+    <span class="c1">// 计数器减一
+</span><span class="c1"></span>    <span class="nx">wg</span><span class="p">.</span><span class="nf">Done</span><span class="p">()</span>
 <span class="p">}</span>
 
 <span class="cm">/**输出
@@ -918,7 +959,7 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h5 id="2作为结构体属性使用-1">2.作为结构体属性使用</h5>
+</div><h3 id="2作为结构体属性使用-1">2.作为结构体属性使用</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -990,60 +1031,60 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;fmt&#34;</span>
-	<span class="s">&#34;strconv&#34;</span>
-	<span class="s">&#34;sync&#34;</span>
-	<span class="s">&#34;time&#34;</span>
+    <span class="s">&#34;fmt&#34;</span>
+    <span class="s">&#34;strconv&#34;</span>
+    <span class="s">&#34;sync&#34;</span>
+    <span class="s">&#34;time&#34;</span>
 <span class="p">)</span>
 <span class="c1">// 定义一个文件结构体
 </span><span class="c1"></span><span class="kd">type</span> <span class="nx">fileResource</span> <span class="kd">struct</span> <span class="p">{</span>
-	<span class="nx">content</span> <span class="kt">string</span>
-	<span class="nx">wg</span> <span class="nx">sync</span><span class="p">.</span><span class="nx">WaitGroup</span>
-	<span class="nx">rwLock</span> <span class="nx">sync</span><span class="p">.</span><span class="nx">RWMutex</span>
+    <span class="nx">content</span> <span class="kt">string</span>
+    <span class="nx">wg</span> <span class="nx">sync</span><span class="p">.</span><span class="nx">WaitGroup</span>
+    <span class="nx">rwLock</span> <span class="nx">sync</span><span class="p">.</span><span class="nx">RWMutex</span>
 <span class="p">}</span>
 
 <span class="c1">// 读文件
 </span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">f</span> <span class="o">*</span><span class="nx">fileResource</span><span class="p">)</span><span class="nf">readFile</span><span class="p">(</span><span class="nx">name</span> <span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
-	<span class="c1">// 释放读锁
-</span><span class="c1"></span>	<span class="k">defer</span> <span class="nx">f</span><span class="p">.</span><span class="nx">rwLock</span><span class="p">.</span><span class="nf">RUnlock</span><span class="p">()</span>
-	<span class="c1">// 获取读锁
-</span><span class="c1"></span>	<span class="nx">f</span><span class="p">.</span><span class="nx">rwLock</span><span class="p">.</span><span class="nf">RLock</span><span class="p">()</span>
-	<span class="c1">// 打印读取内容
-</span><span class="c1"></span>	<span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">)</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%s 获取读锁，读取内容为: %s \n&#34;</span><span class="p">,</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">f</span><span class="p">.</span><span class="nx">content</span><span class="p">)</span>
-	<span class="c1">// 计数器减一
-</span><span class="c1"></span>	<span class="nx">f</span><span class="p">.</span><span class="nx">wg</span><span class="p">.</span><span class="nf">Done</span><span class="p">()</span>
+    <span class="c1">// 释放读锁
+</span><span class="c1"></span>    <span class="k">defer</span> <span class="nx">f</span><span class="p">.</span><span class="nx">rwLock</span><span class="p">.</span><span class="nf">RUnlock</span><span class="p">()</span>
+    <span class="c1">// 获取读锁
+</span><span class="c1"></span>    <span class="nx">f</span><span class="p">.</span><span class="nx">rwLock</span><span class="p">.</span><span class="nf">RLock</span><span class="p">()</span>
+    <span class="c1">// 打印读取内容
+</span><span class="c1"></span>    <span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">)</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%s 获取读锁，读取内容为: %s \n&#34;</span><span class="p">,</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">f</span><span class="p">.</span><span class="nx">content</span><span class="p">)</span>
+    <span class="c1">// 计数器减一
+</span><span class="c1"></span>    <span class="nx">f</span><span class="p">.</span><span class="nx">wg</span><span class="p">.</span><span class="nf">Done</span><span class="p">()</span>
 <span class="p">}</span>
 
 <span class="c1">// 写文件
 </span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">f</span> <span class="o">*</span><span class="nx">fileResource</span><span class="p">)</span><span class="nf">writeFile</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">s</span> <span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
-	<span class="c1">// 释放写锁
-</span><span class="c1"></span>	<span class="k">defer</span> <span class="nx">f</span><span class="p">.</span><span class="nx">rwLock</span><span class="p">.</span><span class="nf">Unlock</span><span class="p">()</span>
-	<span class="c1">// 获取写锁
-</span><span class="c1"></span>	<span class="nx">f</span><span class="p">.</span><span class="nx">rwLock</span><span class="p">.</span><span class="nf">Lock</span><span class="p">()</span>
-	<span class="c1">// 写入内容
-</span><span class="c1"></span>	<span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">)</span>
-	<span class="nx">f</span><span class="p">.</span><span class="nx">content</span> <span class="p">=</span> <span class="nx">f</span><span class="p">.</span><span class="nx">content</span> <span class="o">+</span> <span class="s">&#34; &#34;</span> <span class="o">+</span> <span class="nx">s</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%s 获取写锁，写入内容: %s。 文件内容变成: %s \n&#34;</span><span class="p">,</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">s</span><span class="p">,</span> <span class="nx">f</span><span class="p">.</span><span class="nx">content</span><span class="p">)</span>
-	<span class="c1">// 计数器减一
-</span><span class="c1"></span>	<span class="nx">f</span><span class="p">.</span><span class="nx">wg</span><span class="p">.</span><span class="nf">Done</span><span class="p">()</span>
+    <span class="c1">// 释放写锁
+</span><span class="c1"></span>    <span class="k">defer</span> <span class="nx">f</span><span class="p">.</span><span class="nx">rwLock</span><span class="p">.</span><span class="nf">Unlock</span><span class="p">()</span>
+    <span class="c1">// 获取写锁
+</span><span class="c1"></span>    <span class="nx">f</span><span class="p">.</span><span class="nx">rwLock</span><span class="p">.</span><span class="nf">Lock</span><span class="p">()</span>
+    <span class="c1">// 写入内容
+</span><span class="c1"></span>    <span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">)</span>
+    <span class="nx">f</span><span class="p">.</span><span class="nx">content</span> <span class="p">=</span> <span class="nx">f</span><span class="p">.</span><span class="nx">content</span> <span class="o">+</span> <span class="s">&#34; &#34;</span> <span class="o">+</span> <span class="nx">s</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%s 获取写锁，写入内容: %s。 文件内容变成: %s \n&#34;</span><span class="p">,</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">s</span><span class="p">,</span> <span class="nx">f</span><span class="p">.</span><span class="nx">content</span><span class="p">)</span>
+    <span class="c1">// 计数器减一
+</span><span class="c1"></span>    <span class="nx">f</span><span class="p">.</span><span class="nx">wg</span><span class="p">.</span><span class="nf">Done</span><span class="p">()</span>
 <span class="p">}</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="c1">// 声明结构体
-</span><span class="c1"></span>	<span class="kd">var</span> <span class="nx">file</span> <span class="nx">fileResource</span>
-	<span class="c1">// 设置计数器
-</span><span class="c1"></span>	<span class="nx">file</span><span class="p">.</span><span class="nx">wg</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;=</span> <span class="mi">5</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
-		<span class="nx">name</span> <span class="o">:=</span> <span class="s">&#34;同学-&#34;</span> <span class="o">+</span> <span class="nx">strconv</span><span class="p">.</span><span class="nf">Itoa</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span>
-		<span class="k">if</span> <span class="nx">i</span><span class="o">%</span><span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">{</span>
-			<span class="k">go</span> <span class="nx">file</span><span class="p">.</span><span class="nf">readFile</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span>
-		<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-			<span class="k">go</span> <span class="nx">file</span><span class="p">.</span><span class="nf">writeFile</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">strconv</span><span class="p">.</span><span class="nf">Itoa</span><span class="p">(</span><span class="nx">i</span><span class="p">))</span>
-		<span class="p">}</span>
-	<span class="p">}</span>
-	<span class="c1">// 等待所有计数器执行完成
-</span><span class="c1"></span>	<span class="nx">file</span><span class="p">.</span><span class="nx">wg</span><span class="p">.</span><span class="nf">Wait</span><span class="p">()</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;运行结束!&#34;</span><span class="p">)</span>
+    <span class="c1">// 声明结构体
+</span><span class="c1"></span>    <span class="kd">var</span> <span class="nx">file</span> <span class="nx">fileResource</span>
+    <span class="c1">// 设置计数器
+</span><span class="c1"></span>    <span class="nx">file</span><span class="p">.</span><span class="nx">wg</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+    <span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;=</span> <span class="mi">5</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="nx">name</span> <span class="o">:=</span> <span class="s">&#34;同学-&#34;</span> <span class="o">+</span> <span class="nx">strconv</span><span class="p">.</span><span class="nf">Itoa</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nx">i</span><span class="o">%</span><span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">{</span>
+            <span class="k">go</span> <span class="nx">file</span><span class="p">.</span><span class="nf">readFile</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">go</span> <span class="nx">file</span><span class="p">.</span><span class="nf">writeFile</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">strconv</span><span class="p">.</span><span class="nf">Itoa</span><span class="p">(</span><span class="nx">i</span><span class="p">))</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="c1">// 等待所有计数器执行完成
+</span><span class="c1"></span>    <span class="nx">file</span><span class="p">.</span><span class="nx">wg</span><span class="p">.</span><span class="nf">Wait</span><span class="p">()</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;运行结束!&#34;</span><span class="p">)</span>
 <span class="p">}</span>
 <span class="cm">/**输出
 </span><span class="cm">  同学-5 获取写锁，写入内容: 5。 文件内容变成:  5 
@@ -1055,11 +1096,11 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="5条件变量cond">5.条件变量(Cond)</h3>
-<h4 id="51-介绍">5.1 介绍</h4>
+</div><h1 id="5条件变量cond">5.条件变量(Cond)</h1>
+<h2 id="51-介绍">5.1 介绍</h2>
 <p>与互斥锁不同，条件变量的作用并不是保证在同一时刻仅有一个线程访问某一个共享数据，而是在对应的共享数据的状态发生变化时，通知其他因此而被阻塞的线程。<font color=red>条件变量总是与互斥锁组合使用，互斥锁为共享数据的访问提供互斥支持，而条件变量可以就共享数据的状态的变化向相关线程发出通知。</font></p>
-<p>**使用场景: ** 我需要完成一项任务，但是这项任务需要满足一定条件才可以执行，否则我就等着。</p>
-<h4 id="52-方法列表">5.2 方法列表</h4>
+<p><strong>使用场景:</strong> 我需要完成一项任务，但是这项任务需要满足一定条件才可以执行，否则我就等着。</p>
+<h2 id="52-方法列表">5.2 方法列表</h2>
 <table>
 <thead>
 <tr>
@@ -1086,7 +1127,7 @@
 </tr>
 </tbody>
 </table>
-<h4 id="53-使用示例">5.3 使用示例</h4>
+<h2 id="53-使用示例">5.3 使用示例</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1148,42 +1189,42 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;fmt&#34;</span>
-	<span class="s">&#34;sync&#34;</span>
-	<span class="s">&#34;time&#34;</span>
+    <span class="s">&#34;fmt&#34;</span>
+    <span class="s">&#34;sync&#34;</span>
+    <span class="s">&#34;time&#34;</span>
 <span class="p">)</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="c1">// 声明互斥锁
-</span><span class="c1"></span>	<span class="kd">var</span> <span class="nx">mutex</span> <span class="nx">sync</span><span class="p">.</span><span class="nx">Mutex</span>
-	<span class="c1">// 声明条件变量
-</span><span class="c1"></span>	<span class="nx">cond</span> <span class="o">:=</span> <span class="nx">sync</span><span class="p">.</span><span class="nf">NewCond</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">mutex</span><span class="p">)</span>
-	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;=</span> <span class="mi">10</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
-		<span class="k">go</span> <span class="kd">func</span><span class="p">(</span><span class="nx">i</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
-			<span class="c1">// 获取锁
-</span><span class="c1"></span>			<span class="nx">cond</span><span class="p">.</span><span class="nx">L</span><span class="p">.</span><span class="nf">Lock</span><span class="p">()</span>
-			<span class="c1">// 释放锁
-</span><span class="c1"></span>			<span class="k">defer</span> <span class="nx">cond</span><span class="p">.</span><span class="nx">L</span><span class="p">.</span><span class="nf">Unlock</span><span class="p">()</span>
-			<span class="c1">// 等待通知,阻塞当前协程
-</span><span class="c1"></span>			<span class="nx">cond</span><span class="p">.</span><span class="nf">Wait</span><span class="p">()</span>
-			<span class="c1">// 等待通知后打印输出
-</span><span class="c1"></span>			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;输出:%d ! \n&#34;</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span>
-		<span class="p">}(</span><span class="nx">i</span><span class="p">)</span>
-	<span class="p">}</span>
-	<span class="c1">// 单个通知
-</span><span class="c1"></span>	<span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">)</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;单个通知A！&#34;</span><span class="p">)</span>
-	<span class="nx">cond</span><span class="p">.</span><span class="nf">Signal</span><span class="p">()</span>
-	<span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">)</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;单个通知B！&#34;</span><span class="p">)</span>
-	<span class="nx">cond</span><span class="p">.</span><span class="nf">Signal</span><span class="p">()</span>
-
-	<span class="c1">// 广播通知
-</span><span class="c1"></span>	<span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">)</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;广播通知！并睡眠1秒，等待其他协程输出!&#34;</span><span class="p">)</span>
-	<span class="nx">cond</span><span class="p">.</span><span class="nf">Broadcast</span><span class="p">()</span>
-	<span class="c1">// 等待其他协程处理完
-</span><span class="c1"></span>	<span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">)</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;运行结束！&#34;</span><span class="p">)</span>
+    <span class="c1">// 声明互斥锁
+</span><span class="c1"></span>    <span class="kd">var</span> <span class="nx">mutex</span> <span class="nx">sync</span><span class="p">.</span><span class="nx">Mutex</span>
+    <span class="c1">// 声明条件变量
+</span><span class="c1"></span>    <span class="nx">cond</span> <span class="o">:=</span> <span class="nx">sync</span><span class="p">.</span><span class="nf">NewCond</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">mutex</span><span class="p">)</span>
+    <span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;=</span> <span class="mi">10</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="k">go</span> <span class="kd">func</span><span class="p">(</span><span class="nx">i</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// 获取锁
+</span><span class="c1"></span>            <span class="nx">cond</span><span class="p">.</span><span class="nx">L</span><span class="p">.</span><span class="nf">Lock</span><span class="p">()</span>
+            <span class="c1">// 释放锁
+</span><span class="c1"></span>            <span class="k">defer</span> <span class="nx">cond</span><span class="p">.</span><span class="nx">L</span><span class="p">.</span><span class="nf">Unlock</span><span class="p">()</span>
+            <span class="c1">// 等待通知,阻塞当前协程
+</span><span class="c1"></span>            <span class="nx">cond</span><span class="p">.</span><span class="nf">Wait</span><span class="p">()</span>
+            <span class="c1">// 等待通知后打印输出
+</span><span class="c1"></span>            <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;输出:%d ! \n&#34;</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span>
+        <span class="p">}(</span><span class="nx">i</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="c1">// 单个通知
+</span><span class="c1"></span>    <span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">)</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;单个通知A！&#34;</span><span class="p">)</span>
+    <span class="nx">cond</span><span class="p">.</span><span class="nf">Signal</span><span class="p">()</span>
+    <span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">)</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;单个通知B！&#34;</span><span class="p">)</span>
+    <span class="nx">cond</span><span class="p">.</span><span class="nf">Signal</span><span class="p">()</span>
+    
+    <span class="c1">// 广播通知
+</span><span class="c1"></span>    <span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">)</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;广播通知！并睡眠1秒，等待其他协程输出!&#34;</span><span class="p">)</span>
+    <span class="nx">cond</span><span class="p">.</span><span class="nf">Broadcast</span><span class="p">()</span>
+    <span class="c1">// 等待其他协程处理完
+</span><span class="c1"></span>    <span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">)</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;运行结束！&#34;</span><span class="p">)</span>
 <span class="p">}</span>
 <span class="cm">/**输出
 </span><span class="cm">  单个通知A！
@@ -1203,13 +1244,13 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="6一次once">6.一次(Once)</h3>
+</div><h1 id="6一次once">6.一次(Once)</h1>
 <p><code>sync.Once</code> 是使Go方法只执行一次的对象实现，作用与 <code>init</code> 函数类似,但也有所不同。区别如下:</p>
 <ul>
 <li><strong>init</strong> 函数是在文件包首次被加载的时候执行，且只执行一次</li>
-<li><strong>sync.Onc</strong> 是在代码运行中需要的时候执行，且只执行一次</li>
+<li><strong>sync.Once</strong> 是在代码运行中需要的时候执行，且只执行一次</li>
 </ul>
-<h4 id="61-方法介绍">6.1 方法介绍</h4>
+<h2 id="61-方法介绍">6.1 方法介绍</h2>
 <table>
 <thead>
 <tr>
@@ -1224,8 +1265,8 @@
 </tr>
 </tbody>
 </table>
-<h4 id="62-使用示例">6.2 使用示例</h4>
-<h5 id="示例1-重复调用只执行一次">示例1: 重复调用只执行一次</h5>
+<h2 id="62-使用示例">6.2 使用示例</h2>
+<h3 id="示例1-重复调用只执行一次">示例1: 重复调用只执行一次</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1258,25 +1299,25 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;fmt&#34;</span>
-	<span class="s">&#34;strconv&#34;</span>
-	<span class="s">&#34;sync&#34;</span>
-	<span class="s">&#34;time&#34;</span>
+    <span class="s">&#34;fmt&#34;</span>
+    <span class="s">&#34;strconv&#34;</span>
+    <span class="s">&#34;sync&#34;</span>
+    <span class="s">&#34;time&#34;</span>
 <span class="p">)</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="nx">echo</span> <span class="o">:=</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
-		<span class="nx">t</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Unix</span><span class="p">()</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;输出时间 %v &#34;</span><span class="p">,</span><span class="nx">strconv</span><span class="p">.</span><span class="nf">FormatInt</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
-	<span class="p">}</span>
-	<span class="kd">var</span> <span class="nx">one</span> <span class="nx">sync</span><span class="p">.</span><span class="nx">Once</span>
-  <span class="c1">// 虽然遍历调用，但是只会执行一次
-</span><span class="c1"></span>	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span><span class="p">&lt;</span> <span class="mi">10</span> <span class="p">;</span> <span class="nx">i</span><span class="o">++</span>  <span class="p">{</span>
-		<span class="k">go</span> <span class="kd">func</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
-			<span class="nx">one</span><span class="p">.</span><span class="nf">Do</span><span class="p">(</span><span class="nx">echo</span><span class="p">)</span>
-		<span class="p">}(</span><span class="nx">i</span><span class="p">,</span><span class="nx">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
-	<span class="p">}</span>
-	<span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">)</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;运行结束！&#34;</span><span class="p">)</span>
+    <span class="nx">echo</span> <span class="o">:=</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">t</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Unix</span><span class="p">()</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;输出时间 %v &#34;</span><span class="p">,</span><span class="nx">strconv</span><span class="p">.</span><span class="nf">FormatInt</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+    <span class="p">}</span>
+    <span class="kd">var</span> <span class="nx">one</span> <span class="nx">sync</span><span class="p">.</span><span class="nx">Once</span>
+    <span class="c1">// 虽然遍历调用，但是只会执行一次
+</span><span class="c1"></span>    <span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span><span class="p">&lt;</span> <span class="mi">10</span> <span class="p">;</span> <span class="nx">i</span><span class="o">++</span>  <span class="p">{</span>
+        <span class="k">go</span> <span class="kd">func</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">one</span><span class="p">.</span><span class="nf">Do</span><span class="p">(</span><span class="nx">echo</span><span class="p">)</span>
+        <span class="p">}(</span><span class="nx">i</span><span class="p">,</span><span class="nx">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">)</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;运行结束！&#34;</span><span class="p">)</span>
 <span class="p">}</span>
 <span class="cm">/**输出
 </span><span class="cm">  输出时间 1608083525 
@@ -1295,7 +1336,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2022-09-29
+        2023-03-02
         
     </span>
   </p>

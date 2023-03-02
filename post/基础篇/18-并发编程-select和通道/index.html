@@ -44,11 +44,11 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/%E5%9F%BA%E7%A1%80%E7%AF%87/18-%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-select%E5%92%8C%E9%80%9A%E9%81%93/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-01-18T00:00:00+00:00" />
-<meta property="article:modified_time" content="2022-01-16T18:28:15+08:00" />
+<meta property="article:modified_time" content="2023-03-02T21:52:53+08:00" />
 
 <meta itemprop="name" content="Go学习(十八):并发编程-select和通道">
 <meta itemprop="description" content="1.什么是select？ select语句的机制有点像switch语句，不同的是，select会随机挑选一个可通信的case来执行，如果所有c"><meta itemprop="datePublished" content="2021-01-18T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2022-01-16T18:28:15+08:00" />
+<meta itemprop="dateModified" content="2023-03-02T21:52:53+08:00" />
 <meta itemprop="wordCount" content="796">
 <meta itemprop="keywords" content="Go基础," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go学习(十八):并发编程-select和通道"/>
@@ -144,30 +144,17 @@
   <div class="post-toc-content always-active">
     <nav id="TableOfContents">
   <ul>
-    <li>
-      <ul>
-        <li>
-          <ul>
-            <li><a href="#1什么是select">1.什么是select？</a></li>
-            <li><a href="#2-select使用没有default">2. select使用(没有default)</a></li>
-            <li><a href="#3select使用有default">3.select使用(有default)</a></li>
-          </ul>
-        </li>
-      </ul>
-    </li>
+    <li><a href="#1什么是select">1.什么是select？</a></li>
+    <li><a href="#2-select使用没有default">2. select使用(没有default)</a></li>
+    <li><a href="#3select使用有default">3.select使用(有default)</a></li>
   </ul>
 </nav>
   </div>
 </div>
-  <div class="post-outdated">
-    <div class="warn">
-      <p>【注意】最后更新于 <span class="timeago" datetime="2022-01-16T18:28:15" title="January 16, 2022">January 16, 2022</span>，文中内容可能已过时，请谨慎使用。</p>
-    </div>
-  </div>
     <div class="post-content">
-      <h3 id="1什么是select">1.什么是select？</h3>
+      <h1 id="1什么是select">1.什么是select？</h1>
 <p><code>select</code>语句的机制有点像<code>switch</code>语句，不同的是，<code>select</code>会随机挑选一个可通信的<code>case</code>来执行，如果所有<code>case</code>都没有数据到达，则执行<code>default</code>，如果没有<code>default</code>语句，<code>select</code>就会阻塞，直到有<code>case</code>接收到数据。</p>
-<h3 id="2-select使用没有default">2. select使用(没有default)</h3>
+<h1 id="2-select使用没有default">2. select使用(没有default)</h1>
 <p>如果没有<code>default</code>语句时，<code>select</code>就会阻塞，直到有<code>case</code>接收到数据。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -206,29 +193,29 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;fmt&#34;</span>
-	<span class="s">&#34;strconv&#34;</span>
+    <span class="s">&#34;fmt&#34;</span>
+    <span class="s">&#34;strconv&#34;</span>
 <span class="p">)</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="c1">// 创建通道
-</span><span class="c1"></span>	<span class="nx">intChan</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="kt">int</span><span class="p">)</span>
-	<span class="nx">stringChan</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="kt">string</span><span class="p">)</span>
-
-	<span class="c1">// 写入
-</span><span class="c1"></span>	<span class="k">go</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
-		<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="mi">4</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
-			<span class="nx">intChan</span> <span class="o">&lt;-</span> <span class="nx">i</span>
-			<span class="nx">stringChan</span> <span class="o">&lt;-</span> <span class="s">&#34;张xx-&#34;</span> <span class="o">+</span> <span class="nx">strconv</span><span class="p">.</span><span class="nf">Itoa</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span>
-		<span class="p">}</span>
-	<span class="p">}()</span>
-	<span class="c1">// 使用select 没有default,则会阻塞等待。（会随机运行一次）
-</span><span class="c1"></span>	<span class="k">select</span> <span class="p">{</span>
-	<span class="k">case</span> <span class="nx">n</span> <span class="o">:=</span> <span class="o">&lt;-</span><span class="nx">intChan</span><span class="p">:</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;接收到intChan中的数据: %v\n&#34;</span><span class="p">,</span> <span class="nx">n</span><span class="p">)</span>
-	<span class="k">case</span> <span class="nx">s</span> <span class="o">:=</span> <span class="o">&lt;-</span><span class="nx">stringChan</span><span class="p">:</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;接收到stringChan中的数据: %v\n&#34;</span><span class="p">,</span> <span class="nx">s</span><span class="p">)</span>
-	<span class="p">}</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;运行结束!&#34;</span><span class="p">)</span>
+    <span class="c1">// 创建通道
+</span><span class="c1"></span>    <span class="nx">intChan</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="kt">int</span><span class="p">)</span>
+    <span class="nx">stringChan</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="kt">string</span><span class="p">)</span>
+    
+    <span class="c1">// 写入
+</span><span class="c1"></span>    <span class="k">go</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="mi">4</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+            <span class="nx">intChan</span> <span class="o">&lt;-</span> <span class="nx">i</span>
+            <span class="nx">stringChan</span> <span class="o">&lt;-</span> <span class="s">&#34;张xx-&#34;</span> <span class="o">+</span> <span class="nx">strconv</span><span class="p">.</span><span class="nf">Itoa</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}()</span>
+    <span class="c1">// 使用select 没有default,则会阻塞等待。（会随机运行一次）
+</span><span class="c1"></span>    <span class="k">select</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="nx">n</span> <span class="o">:=</span> <span class="o">&lt;-</span><span class="nx">intChan</span><span class="p">:</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;接收到intChan中的数据: %v\n&#34;</span><span class="p">,</span> <span class="nx">n</span><span class="p">)</span>
+    <span class="k">case</span> <span class="nx">s</span> <span class="o">:=</span> <span class="o">&lt;-</span><span class="nx">stringChan</span><span class="p">:</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;接收到stringChan中的数据: %v\n&#34;</span><span class="p">,</span> <span class="nx">s</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;运行结束!&#34;</span><span class="p">)</span>
 <span class="p">}</span>
 
 <span class="cm">/** 输出：
@@ -237,7 +224,7 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="3select使用有default">3.select使用(有default)</h3>
+</div><h1 id="3select使用有default">3.select使用(有default)</h1>
 <p>如果有<code>default</code>时，所有<code>case</code>都没有数据到达，则执行<code>default</code>。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -278,32 +265,32 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;fmt&#34;</span>
-	<span class="s">&#34;strconv&#34;</span>
+    <span class="s">&#34;fmt&#34;</span>
+    <span class="s">&#34;strconv&#34;</span>
 <span class="p">)</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="c1">// 创建通道
-</span><span class="c1"></span>	<span class="nx">intChan</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="kt">int</span><span class="p">)</span>
-	<span class="nx">stringChan</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="kt">string</span><span class="p">)</span>
-
-	<span class="c1">// 写入
-</span><span class="c1"></span>	<span class="k">go</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
-		<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="mi">4</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
-			<span class="nx">intChan</span> <span class="o">&lt;-</span> <span class="nx">i</span>
-			<span class="nx">stringChan</span> <span class="o">&lt;-</span> <span class="s">&#34;张xx-&#34;</span> <span class="o">+</span> <span class="nx">strconv</span><span class="p">.</span><span class="nf">Itoa</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span>
-		<span class="p">}</span>
-	<span class="p">}()</span>
-
-	<span class="c1">// 使用select 没有default,则会阻塞等待。（会随机运行一次）
-</span><span class="c1"></span>	<span class="k">select</span> <span class="p">{</span>
-	<span class="k">case</span> <span class="nx">n</span> <span class="o">:=</span> <span class="o">&lt;-</span><span class="nx">intChan</span><span class="p">:</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;接收到intChan中的数据: %v\n&#34;</span><span class="p">,</span> <span class="nx">n</span><span class="p">)</span>
-	<span class="k">case</span> <span class="nx">s</span> <span class="o">:=</span> <span class="o">&lt;-</span><span class="nx">stringChan</span><span class="p">:</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;接收到stringChan中的数据: %v\n&#34;</span><span class="p">,</span> <span class="nx">s</span><span class="p">)</span>
-	<span class="k">default</span><span class="p">:</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;什么数据都没收到!&#34;</span><span class="p">)</span>
-	<span class="p">}</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;运行结束!&#34;</span><span class="p">)</span>
+    <span class="c1">// 创建通道
+</span><span class="c1"></span>    <span class="nx">intChan</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="kt">int</span><span class="p">)</span>
+    <span class="nx">stringChan</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="kt">string</span><span class="p">)</span>
+    
+    <span class="c1">// 写入
+</span><span class="c1"></span>    <span class="k">go</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="mi">4</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+            <span class="nx">intChan</span> <span class="o">&lt;-</span> <span class="nx">i</span>
+            <span class="nx">stringChan</span> <span class="o">&lt;-</span> <span class="s">&#34;张xx-&#34;</span> <span class="o">+</span> <span class="nx">strconv</span><span class="p">.</span><span class="nf">Itoa</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}()</span>
+    
+    <span class="c1">// 使用select 没有default,则会阻塞等待。（会随机运行一次）
+</span><span class="c1"></span>    <span class="k">select</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="nx">n</span> <span class="o">:=</span> <span class="o">&lt;-</span><span class="nx">intChan</span><span class="p">:</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;接收到intChan中的数据: %v\n&#34;</span><span class="p">,</span> <span class="nx">n</span><span class="p">)</span>
+    <span class="k">case</span> <span class="nx">s</span> <span class="o">:=</span> <span class="o">&lt;-</span><span class="nx">stringChan</span><span class="p">:</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;接收到stringChan中的数据: %v\n&#34;</span><span class="p">,</span> <span class="nx">s</span><span class="p">)</span>
+    <span class="k">default</span><span class="p">:</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;什么数据都没收到!&#34;</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;运行结束!&#34;</span><span class="p">)</span>
 <span class="p">}</span>
 <span class="cm">/** 输出：
 </span><span class="cm"> 什么数据都没收到!
@@ -322,7 +309,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2022-01-16
+        2023-03-02
         
     </span>
   </p>
