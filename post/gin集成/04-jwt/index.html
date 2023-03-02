@@ -44,12 +44,12 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/gin%E9%9B%86%E6%88%90/04-jwt/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-12-16T00:00:00+00:00" />
-<meta property="article:modified_time" content="2022-08-28T12:07:30+08:00" />
+<meta property="article:modified_time" content="2023-03-02T10:07:45+08:00" />
 
 <meta itemprop="name" content="Gin集成(四):集成JWT">
 <meta itemprop="description" content="1. 介绍 JWT全称JSON Web Token是一种跨域认证解决方案，属于一个开放的标准，它规定了一种Token实现方式，目前多用于前后端分离项目和O"><meta itemprop="datePublished" content="2021-12-16T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2022-08-28T12:07:30+08:00" />
-<meta itemprop="wordCount" content="1610">
+<meta itemprop="dateModified" content="2023-03-02T10:07:45+08:00" />
+<meta itemprop="wordCount" content="1587">
 <meta itemprop="keywords" content="Gin集成," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Gin集成(四):集成JWT"/>
 <meta name="twitter:description" content="1. 介绍 JWT全称JSON Web Token是一种跨域认证解决方案，属于一个开放的标准，它规定了一种Token实现方式，目前多用于前后端分离项目和O"/>
@@ -133,7 +133,7 @@
             <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
             <a href="/categories/go/"> Go </a>
             </div>
-          <span class="more-meta"> 约 1610 字 </span>
+          <span class="more-meta"> 约 1587 字 </span>
           <span class="more-meta"> 预计阅读 4 分钟 </span>
         
       </div>
@@ -144,30 +144,38 @@
   <div class="post-toc-content always-active">
     <nav id="TableOfContents">
   <ul>
-    <li>
+    <li><a href="#1-介绍">1. 介绍</a>
       <ul>
-        <li><a href="#1-介绍">1. 介绍</a>
+        <li><a href="#12-集成示意图">1.2 集成示意图</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-配置">2. 配置</a>
+      <ul>
+        <li><a href="#21-编辑主配置">2.1 编辑主配置</a></li>
+        <li><a href="#22-新增结构体">2.2 新增结构体</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-编辑中间件">3. 编辑中间件</a>
+      <ul>
+        <li><a href="#31-中间件函数">3.1 中间件函数</a></li>
+        <li><a href="#32-创建token">3.2 创建Token</a></li>
+        <li><a href="#33-解析token">3.3 解析Token</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-注册路由">4. 注册路由</a>
+      <ul>
+        <li><a href="#41-不需要登录路由">4.1 不需要登录路由</a>
           <ul>
-            <li><a href="#12-集成示意图">1.2 集成示意图</a></li>
+            <li><a href="#1-注册路由">1. 注册路由</a></li>
+            <li><a href="#2-路由绑定函数">2. 路由绑定函数</a></li>
+            <li><a href="#3-请求返回">3. 请求返回</a></li>
           </ul>
         </li>
-        <li><a href="#2-配置">2. 配置</a>
+        <li><a href="#42-需要登录路由">4.2 需要登录路由</a>
           <ul>
-            <li><a href="#21-编辑主配置">2.1 编辑主配置</a></li>
-            <li><a href="#22-新增结构体">2.2 新增结构体</a></li>
-          </ul>
-        </li>
-        <li><a href="#3-编辑中间件">3. 编辑中间件</a>
-          <ul>
-            <li><a href="#31-中间件函数">3.1 中间件函数</a></li>
-            <li><a href="#32-创建token">3.2 创建Token</a></li>
-            <li><a href="#33-解析token">3.3 解析Token</a></li>
-          </ul>
-        </li>
-        <li><a href="#4-注册路由">4. 注册路由</a>
-          <ul>
-            <li><a href="#41-不需要登录路由">4.1 不需要登录路由</a></li>
-            <li><a href="#42-需要登录路由">4.2 需要登录路由</a></li>
+            <li><a href="#1-注册路由-1">1. 注册路由</a></li>
+            <li><a href="#2-路由绑定函数-1">2. 路由绑定函数</a></li>
+            <li><a href="#3-请求返回-1">3. 请求返回</a></li>
           </ul>
         </li>
       </ul>
@@ -176,21 +184,16 @@
 </nav>
   </div>
 </div>
-  <div class="post-outdated">
-    <div class="warn">
-      <p>【注意】最后更新于 <span class="timeago" datetime="2022-08-28T12:07:30" title="August 28, 2022">August 28, 2022</span>，文中内容可能已过时，请谨慎使用。</p>
-    </div>
-  </div>
     <div class="post-content">
-      <h2 id="1-介绍">1. 介绍</h2>
+      <h1 id="1-介绍">1. 介绍</h1>
 <p><code>JWT</code>全称<code>JSON Web Token</code>是一种跨域认证解决方案，属于一个开放的标准，它规定了一种<code>Token</code>实现方式，目前多用于前后端分离项目和<code>OAuth2.0</code>业务场景下。</p>
 <blockquote>
-<p><a href="https://github.com/dgrijalva/jwt-go">jwt-go</a> 是使用<code>Go</code>语言实现的<code>Json web token (JWT)</code>,目前<code>GitHub Start 9.8k</code>,源码地址: <a href="https://github.com/dgrijalva/jwt-go">https://github.com/dgrijalva/jwt-go</a>，<font color=red>从版本3.2.1开始,源码地址变更为: <code>github.com/golang-jwt/jwt</code>,需要下载最新版本时,可以使用这个地址。</font></p>
+<p><a href="https://github.com/dgrijalva/jwt-go">jwt-go</a> 是使用<code>Go</code>语言实现的<code>Json web token (JWT)</code>,目前<code>GitHub Start 9.8k</code>,源码地址: <a href="https://github.com/dgrijalva/jwt-go">https://github.com/dgrijalva/jwt-go</a>，从版本3.2.1开始,源码地址变更为: <a href="https://github.com/golang-jwt/jwt">https://github.com/golang-jwt/jwt</a>，需要下载最新版本时,可以使用这个地址。</p>
 </blockquote>
-<h3 id="12-集成示意图">1.2 集成示意图</h3>
+<h2 id="12-集成示意图">1.2 集成示意图</h2>
 <p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/20210723174103.png" alt="image-20210723174102427"></p>
-<h2 id="2-配置">2. 配置</h2>
-<h3 id="21-编辑主配置">2.1 编辑主配置</h3>
+<h1 id="2-配置">2. 配置</h1>
+<h2 id="21-编辑主配置">2.1 编辑主配置</h2>
 <p><strong>文件位置：<code>./config.yaml</code></strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -218,7 +221,7 @@
 </span><span class="w">  </span><span class="nt">expire: 3h # 有效时间，值如</span><span class="p">:</span><span class="w"> </span><span class="l">30s|10min|1h</span><span class="w">
 </span></code></pre></td></tr></table>
 </div>
-</div><h3 id="22-新增结构体">2.2 新增结构体</h3>
+</div><h2 id="22-新增结构体">2.2 新增结构体</h2>
 <p><strong>文件位置:  <code>./config/jwt.go</code></strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -244,15 +247,15 @@
 <span class="kn">import</span> <span class="s">&#34;time&#34;</span>
 <span class="c1">// JSON WEB TOKEN 配置
 </span><span class="c1"></span><span class="kd">type</span> <span class="nx">jwt</span> <span class="kd">struct</span> <span class="p">{</span>
-	<span class="nx">Secret</span> <span class="kt">string</span>        <span class="s">`yaml:&#34;secret&#34;`</span>
-	<span class="nx">Issuer</span> <span class="kt">string</span>        <span class="s">`yaml:&#34;issuer&#34;`</span>
-	<span class="nx">Expire</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Duration</span> <span class="s">`yaml:&#34;expire&#34;`</span>
+    <span class="nx">Secret</span> <span class="kt">string</span>        <span class="s">`yaml:&#34;secret&#34;`</span>
+    <span class="nx">Issuer</span> <span class="kt">string</span>        <span class="s">`yaml:&#34;issuer&#34;`</span>
+    <span class="nx">Expire</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Duration</span> <span class="s">`yaml:&#34;expire&#34;`</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h2 id="3-编辑中间件">3. 编辑中间件</h2>
+</div><h1 id="3-编辑中间件">3. 编辑中间件</h1>
 <p><strong>文件位置:<code>./middleware/jwt.go</code></strong>，功能包括有<code>中间件函数/创建Token/解析Token</code></p>
-<h3 id="31-中间件函数">3.1 中间件函数</h3>
+<h2 id="31-中间件函数">3.1 中间件函数</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -342,104 +345,98 @@
 </span><span class="lnt">85
 </span><span class="lnt">86
 </span><span class="lnt">87
-</span><span class="lnt">88
-</span><span class="lnt">89
-</span><span class="lnt">90
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="cm">/**
-</span><span class="cm"> * @Description JWT中间件
-</span><span class="cm"> **/</span>
-<span class="kn">package</span> <span class="nx">middleware</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">middleware</span>
 
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;52lu/go-import-template/global&#34;</span>
-	<span class="s">&#34;52lu/go-import-template/model/dao&#34;</span>
-	<span class="s">&#34;52lu/go-import-template/model/request&#34;</span>
-	<span class="s">&#34;52lu/go-import-template/model/response&#34;</span>
-	<span class="s">&#34;errors&#34;</span>
-	<span class="s">&#34;github.com/gin-gonic/gin&#34;</span>
-	<span class="s">&#34;github.com/golang-jwt/jwt&#34;</span>
-	<span class="s">&#34;go.uber.org/zap&#34;</span>
-	<span class="s">&#34;net/http&#34;</span>
-	<span class="s">&#34;time&#34;</span>
+    <span class="s">&#34;github.com/gin-gonic/gin&#34;</span>
+    <span class="s">&#34;net/http&#34;</span>
+    <span class="s">&#34;shershon1991/gin-api-template/global&#34;</span>
+    <span class="s">&#34;shershon1991/gin-api-template/internal&#34;</span>
+    <span class="s">&#34;shershon1991/gin-api-template/model/dao&#34;</span>
+    <span class="s">&#34;shershon1991/gin-api-template/model/request&#34;</span>
+    <span class="s">&#34;shershon1991/gin-api-template/model/response&#34;</span>
 <span class="p">)</span>
+
 <span class="cm">/**
 </span><span class="cm"> * @description: JWT中间件
 </span><span class="cm"> * @return func(ctx *gin.Context)
 </span><span class="cm"> */</span>
 <span class="kd">func</span> <span class="nf">JWTAuthMiddleware</span><span class="p">()</span> <span class="kd">func</span><span class="p">(</span><span class="nx">ctx</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
-	<span class="k">return</span> <span class="kd">func</span><span class="p">(</span><span class="nx">ctx</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
-		<span class="c1">// 获取参数中的token
-</span><span class="c1"></span>		<span class="nx">token</span> <span class="o">:=</span> <span class="nf">getToken</span><span class="p">(</span><span class="nx">ctx</span><span class="p">)</span>
-		<span class="nx">global</span><span class="p">.</span><span class="nx">GvaLogger</span><span class="p">.</span><span class="nf">Sugar</span><span class="p">().</span><span class="nf">Infof</span><span class="p">(</span><span class="s">&#34;token: %s&#34;</span><span class="p">,</span><span class="nx">token</span><span class="p">)</span>
-		<span class="k">if</span> <span class="nx">token</span> <span class="o">==</span> <span class="s">&#34;&#34;</span> <span class="p">{</span>
-			<span class="nx">response</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="s">&#34;Token不能为空!&#34;</span><span class="p">)</span>
-			<span class="c1">// 中断请求
-</span><span class="c1"></span>			<span class="nx">ctx</span><span class="p">.</span><span class="nf">Abort</span><span class="p">()</span>
-			<span class="k">return</span>
-		<span class="p">}</span>
-		<span class="c1">// 验证Token
-</span><span class="c1"></span>		<span class="nx">userClaim</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nf">ParseToken</span><span class="p">(</span><span class="nx">token</span><span class="p">)</span>
-		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-			<span class="nx">response</span><span class="p">.</span><span class="nf">ErrorWithToken</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="s">&#34;Token error :&#34;</span> <span class="o">+</span> <span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">())</span>
-			<span class="c1">// 中断请求
-</span><span class="c1"></span>			<span class="nx">ctx</span><span class="p">.</span><span class="nf">Abort</span><span class="p">()</span>
-			<span class="k">return</span>
-		<span class="p">}</span>
-		<span class="c1">// 设置到上下文中
-</span><span class="c1"></span>		<span class="nf">setContextData</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="nx">userClaim</span><span class="p">,</span><span class="nx">token</span><span class="p">)</span>
-		<span class="c1">// 继续请求后续流程
-</span><span class="c1"></span>		<span class="nx">ctx</span><span class="p">.</span><span class="nf">Next</span><span class="p">()</span>
-	<span class="p">}</span>
+    <span class="k">return</span> <span class="kd">func</span><span class="p">(</span><span class="nx">ctx</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// 获取参数中的token
+</span><span class="c1"></span>        <span class="nx">token</span> <span class="o">:=</span> <span class="nf">getToken</span><span class="p">(</span><span class="nx">ctx</span><span class="p">)</span>
+        <span class="nx">global</span><span class="p">.</span><span class="nx">GvaLogger</span><span class="p">.</span><span class="nf">Sugar</span><span class="p">().</span><span class="nf">Infof</span><span class="p">(</span><span class="s">&#34;token: %s&#34;</span><span class="p">,</span> <span class="nx">token</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nx">token</span> <span class="o">==</span> <span class="s">&#34;&#34;</span> <span class="p">{</span>
+            <span class="nx">response</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="s">&#34;Token不能为空!&#34;</span><span class="p">)</span>
+            <span class="c1">// 中断请求
+</span><span class="c1"></span>            <span class="nx">ctx</span><span class="p">.</span><span class="nf">Abort</span><span class="p">()</span>
+            <span class="k">return</span>
+        <span class="p">}</span>
+        <span class="c1">// 验证Token
+</span><span class="c1"></span>        <span class="nx">userClaim</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">internal</span><span class="p">.</span><span class="nf">ParseToken</span><span class="p">(</span><span class="nx">token</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+            <span class="nx">response</span><span class="p">.</span><span class="nf">ErrorWithToken</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="s">&#34;Token error :&#34;</span><span class="o">+</span><span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">())</span>
+            <span class="c1">// 中断请求
+</span><span class="c1"></span>            <span class="nx">ctx</span><span class="p">.</span><span class="nf">Abort</span><span class="p">()</span>
+            <span class="k">return</span>
+        <span class="p">}</span>
+        <span class="c1">// 设置到上下文中
+</span><span class="c1"></span>        <span class="nf">setContextData</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">userClaim</span><span class="p">,</span> <span class="nx">token</span><span class="p">)</span>
+        <span class="c1">// 继续请求后续流程
+</span><span class="c1"></span>        <span class="nx">ctx</span><span class="p">.</span><span class="nf">Next</span><span class="p">()</span>
+    <span class="p">}</span>
 <span class="p">}</span>
+
 <span class="c1">// 设置数据到上下文
-</span><span class="c1"></span><span class="kd">func</span> <span class="nf">setContextData</span><span class="p">(</span><span class="nx">ctx</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span><span class="nx">userClaim</span> <span class="o">*</span><span class="nx">request</span><span class="p">.</span><span class="nx">UserClaims</span><span class="p">,</span><span class="nx">token</span> <span class="kt">string</span><span class="p">)</span>  <span class="p">{</span>
-	<span class="nx">userDao</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">dao</span><span class="p">.</span><span class="nx">UserDao</span><span class="p">{</span>
-		<span class="nx">Uid</span><span class="p">:</span> <span class="nx">userClaim</span><span class="p">.</span><span class="nx">Uid</span><span class="p">,</span>
-	<span class="p">}</span>
-	<span class="nx">user</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">userDao</span><span class="p">.</span><span class="nf">FindUser</span><span class="p">()</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="nx">response</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="s">&#34;用户不存在!&#34;</span><span class="p">)</span>
-		<span class="c1">// 中断请求
-</span><span class="c1"></span>		<span class="nx">ctx</span><span class="p">.</span><span class="nf">Abort</span><span class="p">()</span>
-		<span class="k">return</span>
-	<span class="p">}</span>
-	<span class="nx">user</span><span class="p">.</span><span class="nx">Token</span> <span class="p">=</span> <span class="nx">token</span>
-	<span class="nx">ctx</span><span class="p">.</span><span class="nf">Set</span><span class="p">(</span><span class="s">&#34;userClaim&#34;</span><span class="p">,</span><span class="nx">userClaim</span><span class="p">)</span>
-	<span class="nx">ctx</span><span class="p">.</span><span class="nf">Set</span><span class="p">(</span><span class="s">&#34;user&#34;</span><span class="p">,</span><span class="nx">user</span><span class="p">)</span>
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">setContextData</span><span class="p">(</span><span class="nx">ctx</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="nx">userClaim</span> <span class="o">*</span><span class="nx">request</span><span class="p">.</span><span class="nx">UserClaims</span><span class="p">,</span> <span class="nx">token</span> <span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">userDao</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">dao</span><span class="p">.</span><span class="nx">UserDao</span><span class="p">{</span>
+        <span class="nx">Uid</span><span class="p">:</span> <span class="nx">userClaim</span><span class="p">.</span><span class="nx">Uid</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="nx">user</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">userDao</span><span class="p">.</span><span class="nf">FindUser</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="nx">response</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="s">&#34;用户不存在!&#34;</span><span class="p">)</span>
+        <span class="c1">// 中断请求
+</span><span class="c1"></span>        <span class="nx">ctx</span><span class="p">.</span><span class="nf">Abort</span><span class="p">()</span>
+        <span class="k">return</span>
+    <span class="p">}</span>
+    <span class="nx">user</span><span class="p">.</span><span class="nx">Token</span> <span class="p">=</span> <span class="nx">token</span>
+    <span class="nx">ctx</span><span class="p">.</span><span class="nf">Set</span><span class="p">(</span><span class="s">&#34;userClaim&#34;</span><span class="p">,</span> <span class="nx">userClaim</span><span class="p">)</span>
+    <span class="nx">ctx</span><span class="p">.</span><span class="nf">Set</span><span class="p">(</span><span class="s">&#34;user&#34;</span><span class="p">,</span> <span class="nx">user</span><span class="p">)</span>
 <span class="p">}</span>
 
 <span class="c1">// 从请求中获取Token
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">getToken</span><span class="p">(</span><span class="nx">ctx</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="kt">string</span> <span class="p">{</span>
-	<span class="kd">var</span> <span class="nx">token</span> <span class="kt">string</span>
-	<span class="c1">// 从header中获取
-</span><span class="c1"></span>	<span class="nx">token</span> <span class="p">=</span> <span class="nx">ctx</span><span class="p">.</span><span class="nx">Request</span><span class="p">.</span><span class="nx">Header</span><span class="p">.</span><span class="nf">Get</span><span class="p">(</span><span class="s">&#34;TOKEN&#34;</span><span class="p">)</span>
-	<span class="k">if</span> <span class="nx">token</span> <span class="o">!=</span> <span class="s">&#34;&#34;</span> <span class="p">{</span>
-		<span class="k">return</span> <span class="nx">token</span>
-	<span class="p">}</span>
-	<span class="c1">// 获取当前请求方法
-</span><span class="c1"></span>	<span class="k">if</span> <span class="nx">ctx</span><span class="p">.</span><span class="nx">Request</span><span class="p">.</span><span class="nx">Method</span> <span class="o">==</span> <span class="nx">http</span><span class="p">.</span><span class="nx">MethodGet</span> <span class="p">{</span>
-		<span class="c1">// 从Get请求中获取Token
-</span><span class="c1"></span>		<span class="nx">token</span><span class="p">,</span> <span class="nx">ok</span> <span class="o">:=</span> <span class="nx">ctx</span><span class="p">.</span><span class="nf">GetQuery</span><span class="p">(</span><span class="s">&#34;token&#34;</span><span class="p">)</span>
-		<span class="k">if</span> <span class="nx">ok</span> <span class="p">{</span>
-			<span class="k">return</span> <span class="nx">token</span>
-		<span class="p">}</span>
-	<span class="p">}</span>
-	<span class="c1">// 从POST中和获取
-</span><span class="c1"></span>	<span class="k">if</span> <span class="nx">ctx</span><span class="p">.</span><span class="nx">Request</span><span class="p">.</span><span class="nx">Method</span> <span class="o">==</span> <span class="nx">http</span><span class="p">.</span><span class="nx">MethodPost</span> <span class="p">{</span>
-		<span class="nx">postParam</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kd">interface</span><span class="p">{})</span>
-		<span class="nx">_</span> <span class="p">=</span> <span class="nx">ctx</span><span class="p">.</span><span class="nf">ShouldBindJSON</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">postParam</span><span class="p">)</span>
-		<span class="nx">token</span><span class="p">,</span> <span class="nx">ok</span> <span class="o">:=</span> <span class="nx">postParam</span><span class="p">[</span><span class="s">&#34;token&#34;</span><span class="p">]</span>
-		<span class="k">if</span> <span class="nx">ok</span> <span class="p">{</span>
-			<span class="k">return</span> <span class="nx">token</span><span class="p">.(</span><span class="kt">string</span><span class="p">)</span>
-		<span class="p">}</span>
-	<span class="p">}</span>
-	<span class="k">return</span> <span class="s">&#34;&#34;</span>
+    <span class="kd">var</span> <span class="nx">token</span> <span class="kt">string</span>
+    <span class="c1">// 从header中获取
+</span><span class="c1"></span>    <span class="nx">token</span> <span class="p">=</span> <span class="nx">ctx</span><span class="p">.</span><span class="nx">Request</span><span class="p">.</span><span class="nx">Header</span><span class="p">.</span><span class="nf">Get</span><span class="p">(</span><span class="s">&#34;TOKEN&#34;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nx">token</span> <span class="o">!=</span> <span class="s">&#34;&#34;</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">token</span>
+    <span class="p">}</span>
+    <span class="c1">// 获取当前请求方法
+</span><span class="c1"></span>    <span class="k">if</span> <span class="nx">ctx</span><span class="p">.</span><span class="nx">Request</span><span class="p">.</span><span class="nx">Method</span> <span class="o">==</span> <span class="nx">http</span><span class="p">.</span><span class="nx">MethodGet</span> <span class="p">{</span>
+        <span class="c1">// 从Get请求中获取Token
+</span><span class="c1"></span>        <span class="nx">token</span><span class="p">,</span> <span class="nx">ok</span> <span class="o">:=</span> <span class="nx">ctx</span><span class="p">.</span><span class="nf">GetQuery</span><span class="p">(</span><span class="s">&#34;token&#34;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nx">ok</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">token</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="c1">// 从POST中和获取
+</span><span class="c1"></span>    <span class="k">if</span> <span class="nx">ctx</span><span class="p">.</span><span class="nx">Request</span><span class="p">.</span><span class="nx">Method</span> <span class="o">==</span> <span class="nx">http</span><span class="p">.</span><span class="nx">MethodPost</span> <span class="p">{</span>
+        <span class="c1">// 从Get请求中获取Token
+</span><span class="c1"></span>        <span class="nx">postParam</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kd">interface</span><span class="p">{})</span>
+        <span class="nx">_</span> <span class="p">=</span> <span class="nx">ctx</span><span class="p">.</span><span class="nf">ShouldBindJSON</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">postParam</span><span class="p">)</span>
+        <span class="nx">token</span><span class="p">,</span> <span class="nx">ok</span> <span class="o">:=</span> <span class="nx">postParam</span><span class="p">[</span><span class="s">&#34;token&#34;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nx">ok</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">token</span><span class="p">.(</span><span class="kt">string</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="s">&#34;&#34;</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="32-创建token">3.2 创建Token</h3>
+</div><h2 id="32-创建token">3.2 创建Token</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -458,19 +455,19 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 创建Jwt
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">CreateToken</span><span class="p">(</span><span class="nx">uid</span> <span class="kt">uint</span><span class="p">)</span> <span class="p">(</span><span class="kt">string</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
-	<span class="nx">newWithClaims</span> <span class="o">:=</span> <span class="nx">jwt</span><span class="p">.</span><span class="nf">NewWithClaims</span><span class="p">(</span><span class="nx">jwt</span><span class="p">.</span><span class="nx">SigningMethodHS256</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">request</span><span class="p">.</span><span class="nx">UserClaims</span><span class="p">{</span>
-		<span class="nx">StandardClaims</span><span class="p">:</span> <span class="o">&amp;</span><span class="nx">jwt</span><span class="p">.</span><span class="nx">StandardClaims</span><span class="p">{</span>
-			<span class="nx">ExpiresAt</span><span class="p">:</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Add</span><span class="p">(</span><span class="nx">global</span><span class="p">.</span><span class="nx">GvaConfig</span><span class="p">.</span><span class="nx">Jwt</span><span class="p">.</span><span class="nx">Expire</span><span class="p">).</span><span class="nf">Unix</span><span class="p">(),</span> <span class="c1">// 有效期
-</span><span class="c1"></span>			<span class="nx">Issuer</span><span class="p">:</span>    <span class="nx">global</span><span class="p">.</span><span class="nx">GvaConfig</span><span class="p">.</span><span class="nx">Jwt</span><span class="p">.</span><span class="nx">Issuer</span><span class="p">,</span>                  <span class="c1">// 签发人
-</span><span class="c1"></span>			<span class="nx">IssuedAt</span><span class="p">:</span>  <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Unix</span><span class="p">(),</span>                            <span class="c1">// 签发时间
-</span><span class="c1"></span>		<span class="p">},</span>
-		<span class="nx">Uid</span><span class="p">:</span> <span class="nx">uid</span><span class="p">,</span>
-	<span class="p">})</span>
-	<span class="k">return</span> <span class="nx">newWithClaims</span><span class="p">.</span><span class="nf">SignedString</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="nx">global</span><span class="p">.</span><span class="nx">GvaConfig</span><span class="p">.</span><span class="nx">Jwt</span><span class="p">.</span><span class="nx">Secret</span><span class="p">))</span>
+    <span class="nx">newWithClaims</span> <span class="o">:=</span> <span class="nx">jwt</span><span class="p">.</span><span class="nf">NewWithClaims</span><span class="p">(</span><span class="nx">jwt</span><span class="p">.</span><span class="nx">SigningMethodHS256</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">request</span><span class="p">.</span><span class="nx">UserClaims</span><span class="p">{</span>
+        <span class="nx">StandardClaims</span><span class="p">:</span> <span class="o">&amp;</span><span class="nx">jwt</span><span class="p">.</span><span class="nx">StandardClaims</span><span class="p">{</span>
+            <span class="nx">ExpiresAt</span><span class="p">:</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Add</span><span class="p">(</span><span class="nx">global</span><span class="p">.</span><span class="nx">GvaConfig</span><span class="p">.</span><span class="nx">Jwt</span><span class="p">.</span><span class="nx">Expire</span><span class="p">).</span><span class="nf">Unix</span><span class="p">(),</span> <span class="c1">// 有效期
+</span><span class="c1"></span>            <span class="nx">Issuer</span><span class="p">:</span>    <span class="nx">global</span><span class="p">.</span><span class="nx">GvaConfig</span><span class="p">.</span><span class="nx">Jwt</span><span class="p">.</span><span class="nx">Issuer</span><span class="p">,</span>                  <span class="c1">// 签发人
+</span><span class="c1"></span>            <span class="nx">IssuedAt</span><span class="p">:</span>  <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Unix</span><span class="p">(),</span>                            <span class="c1">// 签发时间
+</span><span class="c1"></span>        <span class="p">},</span>
+        <span class="nx">Uid</span><span class="p">:</span> <span class="nx">uid</span><span class="p">,</span>
+    <span class="p">})</span>
+    <span class="k">return</span> <span class="nx">newWithClaims</span><span class="p">.</span><span class="nf">SignedString</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="nx">global</span><span class="p">.</span><span class="nx">GvaConfig</span><span class="p">.</span><span class="nx">Jwt</span><span class="p">.</span><span class="nx">Secret</span><span class="p">))</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="33-解析token">3.3 解析Token</h3>
+</div><h2 id="33-解析token">3.3 解析Token</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -496,29 +493,29 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 验证JWT
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">ParseToken</span><span class="p">(</span><span class="nx">tokenString</span> <span class="kt">string</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="nx">request</span><span class="p">.</span><span class="nx">UserClaims</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
-	<span class="kd">var</span> <span class="nx">err</span> <span class="kt">error</span>
-	<span class="kd">var</span> <span class="nx">token</span> <span class="o">*</span><span class="nx">jwt</span><span class="p">.</span><span class="nx">Token</span>
-	<span class="nx">token</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">jwt</span><span class="p">.</span><span class="nf">ParseWithClaims</span><span class="p">(</span><span class="nx">tokenString</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">request</span><span class="p">.</span><span class="nx">UserClaims</span><span class="p">{},</span> <span class="kd">func</span><span class="p">(</span><span class="nx">token</span> <span class="o">*</span><span class="nx">jwt</span><span class="p">.</span><span class="nx">Token</span><span class="p">)</span> <span class="p">(</span><span class="kd">interface</span><span class="p">{},</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
-		<span class="k">return</span> <span class="p">[]</span><span class="nb">byte</span><span class="p">(</span><span class="nx">global</span><span class="p">.</span><span class="nx">GvaConfig</span><span class="p">.</span><span class="nx">Jwt</span><span class="p">.</span><span class="nx">Secret</span><span class="p">),</span> <span class="kc">nil</span>
-	<span class="p">})</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="nx">global</span><span class="p">.</span><span class="nx">GvaLogger</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="s">&#34;解析JWT失败&#34;</span><span class="p">,</span> <span class="nx">zap</span><span class="p">.</span><span class="nf">String</span><span class="p">(</span><span class="s">&#34;error&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">()))</span>
-		<span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">err</span>
-	<span class="p">}</span>
-	<span class="c1">// 断言
-</span><span class="c1"></span>	<span class="nx">userClaims</span><span class="p">,</span> <span class="nx">ok</span> <span class="o">:=</span> <span class="nx">token</span><span class="p">.</span><span class="nx">Claims</span><span class="p">.(</span><span class="o">*</span><span class="nx">request</span><span class="p">.</span><span class="nx">UserClaims</span><span class="p">)</span>
-	<span class="c1">// 验证
-</span><span class="c1"></span>	<span class="k">if</span> <span class="p">!</span><span class="nx">ok</span> <span class="o">||</span> <span class="p">!</span><span class="nx">token</span><span class="p">.</span><span class="nx">Valid</span> <span class="p">{</span>
-		<span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">errors</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="s">&#34;JWT验证失败&#34;</span><span class="p">)</span>
-	<span class="p">}</span>
-	<span class="k">return</span> <span class="nx">userClaims</span><span class="p">,</span> <span class="kc">nil</span>
+    <span class="kd">var</span> <span class="nx">err</span> <span class="kt">error</span>
+    <span class="kd">var</span> <span class="nx">token</span> <span class="o">*</span><span class="nx">jwt</span><span class="p">.</span><span class="nx">Token</span>
+    <span class="nx">token</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">jwt</span><span class="p">.</span><span class="nf">ParseWithClaims</span><span class="p">(</span><span class="nx">tokenString</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">request</span><span class="p">.</span><span class="nx">UserClaims</span><span class="p">{},</span> <span class="kd">func</span><span class="p">(</span><span class="nx">token</span> <span class="o">*</span><span class="nx">jwt</span><span class="p">.</span><span class="nx">Token</span><span class="p">)</span> <span class="p">(</span><span class="kd">interface</span><span class="p">{},</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">[]</span><span class="nb">byte</span><span class="p">(</span><span class="nx">global</span><span class="p">.</span><span class="nx">GvaConfig</span><span class="p">.</span><span class="nx">Jwt</span><span class="p">.</span><span class="nx">Secret</span><span class="p">),</span> <span class="kc">nil</span>
+    <span class="p">})</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="nx">global</span><span class="p">.</span><span class="nx">GvaLogger</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="s">&#34;解析JWT失败&#34;</span><span class="p">,</span> <span class="nx">zap</span><span class="p">.</span><span class="nf">String</span><span class="p">(</span><span class="s">&#34;error&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">()))</span>
+        <span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">err</span>
+    <span class="p">}</span>
+    <span class="c1">// 断言
+</span><span class="c1"></span>    <span class="nx">userClaims</span><span class="p">,</span> <span class="nx">ok</span> <span class="o">:=</span> <span class="nx">token</span><span class="p">.</span><span class="nx">Claims</span><span class="p">.(</span><span class="o">*</span><span class="nx">request</span><span class="p">.</span><span class="nx">UserClaims</span><span class="p">)</span>
+    <span class="c1">// 验证
+</span><span class="c1"></span>    <span class="k">if</span> <span class="p">!</span><span class="nx">ok</span> <span class="o">||</span> <span class="p">!</span><span class="nx">token</span><span class="p">.</span><span class="nx">Valid</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">errors</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="s">&#34;JWT验证失败&#34;</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">userClaims</span><span class="p">,</span> <span class="kc">nil</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h2 id="4-注册路由">4. 注册路由</h2>
+</div><h1 id="4-注册路由">4. 注册路由</h1>
 <p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/20210723180519.png" alt="注册路由流程"></p>
-<h3 id="41-不需要登录路由">4.1 不需要登录路由</h3>
-<h4 id="1-注册路由">1. 注册路由</h4>
+<h2 id="41-不需要登录路由">4.1 不需要登录路由</h2>
+<h3 id="1-注册路由">1. 注册路由</h3>
 <p><strong>文件位置：<code>router/user_router.go</code></strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -541,16 +538,16 @@
 </span><span class="cm"> * @param engine
 </span><span class="cm"> */</span>
 <span class="kd">func</span> <span class="nf">InitUserRouter</span><span class="p">(</span><span class="nx">engine</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Engine</span><span class="p">)</span> <span class="p">{</span>
-	<span class="c1">// 不需要登录的路由
-</span><span class="c1"></span>	<span class="nx">noLoginGroup</span> <span class="o">:=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Group</span><span class="p">(</span><span class="s">&#34;v1/user&#34;</span><span class="p">)</span>
-	<span class="p">{</span>
-		<span class="c1">// 登录
-</span><span class="c1"></span>		<span class="nx">noLoginGroup</span><span class="p">.</span><span class="nf">POST</span><span class="p">(</span><span class="s">&#34;login&#34;</span><span class="p">,</span> <span class="nx">v1</span><span class="p">.</span><span class="nx">Login</span><span class="p">)</span>
-	<span class="p">}</span>
+    <span class="c1">// 不需要登录的路由
+</span><span class="c1"></span>    <span class="nx">noLoginGroup</span> <span class="o">:=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Group</span><span class="p">(</span><span class="s">&#34;v1/user&#34;</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// 登录
+</span><span class="c1"></span>        <span class="nx">noLoginGroup</span><span class="p">.</span><span class="nf">POST</span><span class="p">(</span><span class="s">&#34;login&#34;</span><span class="p">,</span> <span class="nx">v1</span><span class="p">.</span><span class="nx">Login</span><span class="p">)</span>
+    <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="2-路由绑定函数">2. 路由绑定函数</h4>
+</div><h3 id="2-路由绑定函数">2. 路由绑定函数</h3>
 <p><strong>文件位置:<code>./api/v1/user_api.go</code></strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -580,26 +577,26 @@
 </span><span class="cm"> * @param ctx
 </span><span class="cm"> */</span>
 <span class="kd">func</span> <span class="nf">Login</span><span class="p">(</span><span class="nx">ctx</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
-	<span class="c1">// 绑定参数
-</span><span class="c1"></span>	<span class="kd">var</span> <span class="nx">loginParam</span> <span class="nx">request</span><span class="p">.</span><span class="nx">LoginParam</span>
-	<span class="nx">_</span> <span class="p">=</span> <span class="nx">ctx</span><span class="p">.</span><span class="nf">ShouldBindJSON</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">loginParam</span><span class="p">)</span>
-  <span class="c1">//...(省略)
-</span><span class="c1"></span>	<span class="c1">// 生成token
-</span><span class="c1"></span>	<span class="nx">token</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">middleware</span><span class="p">.</span><span class="nf">CreateToken</span><span class="p">(</span><span class="nx">userRecord</span><span class="p">.</span><span class="nx">ID</span><span class="p">)</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="nx">global</span><span class="p">.</span><span class="nx">GvaLogger</span><span class="p">.</span><span class="nf">Sugar</span><span class="p">().</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;登录失败,Token生成异常:%s&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
-		<span class="nx">response</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="s">&#34;登录失败,账号或者密码错误!&#34;</span><span class="p">)</span>
-		<span class="k">return</span>
-	<span class="p">}</span>
-	<span class="nx">userRecord</span><span class="p">.</span><span class="nx">Token</span> <span class="p">=</span> <span class="nx">token</span>
-	<span class="nx">response</span><span class="p">.</span><span class="nf">OkWithData</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">userRecord</span><span class="p">)</span>
+    <span class="c1">// 绑定参数
+</span><span class="c1"></span>    <span class="kd">var</span> <span class="nx">loginParam</span> <span class="nx">request</span><span class="p">.</span><span class="nx">LoginParam</span>
+    <span class="nx">_</span> <span class="p">=</span> <span class="nx">ctx</span><span class="p">.</span><span class="nf">ShouldBindJSON</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">loginParam</span><span class="p">)</span>
+    <span class="c1">//...(省略)
+</span><span class="c1"></span>    <span class="c1">// 生成token
+</span><span class="c1"></span>    <span class="nx">token</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">middleware</span><span class="p">.</span><span class="nf">CreateToken</span><span class="p">(</span><span class="nx">userRecord</span><span class="p">.</span><span class="nx">ID</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="nx">global</span><span class="p">.</span><span class="nx">GvaLogger</span><span class="p">.</span><span class="nf">Sugar</span><span class="p">().</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;登录失败,Token生成异常:%s&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+        <span class="nx">response</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="s">&#34;登录失败,账号或者密码错误!&#34;</span><span class="p">)</span>
+        <span class="k">return</span>
+    <span class="p">}</span>
+    <span class="nx">userRecord</span><span class="p">.</span><span class="nx">Token</span> <span class="p">=</span> <span class="nx">token</span>
+    <span class="nx">response</span><span class="p">.</span><span class="nf">OkWithData</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">userRecord</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="3-请求返回">3. 请求返回</h4>
+</div><h3 id="3-请求返回">3. 请求返回</h3>
 <p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/20210723183016.png" alt=""></p>
-<h3 id="42-需要登录路由">4.2 需要登录路由</h3>
-<h4 id="1-注册路由-1">1. 注册路由</h4>
+<h2 id="42-需要登录路由">4.2 需要登录路由</h2>
+<h3 id="1-注册路由-1">1. 注册路由</h3>
 <p><strong>文件位置：<code>router/user_router.go</code></strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -623,17 +620,17 @@
 </span><span class="cm"> * @param engine
 </span><span class="cm"> */</span>
 <span class="kd">func</span> <span class="nf">InitUserRouter</span><span class="p">(</span><span class="nx">engine</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Engine</span><span class="p">)</span> <span class="p">{</span>
-	<span class="c1">// 不需要登录的路由
-</span><span class="c1"></span>	<span class="o">...</span>
-	<span class="c1">// 需要登录
-</span><span class="c1"></span>	<span class="nx">tokenGroup</span> <span class="o">:=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Group</span><span class="p">(</span><span class="s">&#34;v1/user&#34;</span><span class="p">).</span><span class="nf">Use</span><span class="p">(</span><span class="nx">middleware</span><span class="p">.</span><span class="nf">JWTAuthMiddleware</span><span class="p">())</span>
-	<span class="p">{</span>
-		<span class="nx">tokenGroup</span><span class="p">.</span><span class="nf">POST</span><span class="p">(</span><span class="s">&#34;/detail&#34;</span><span class="p">,</span> <span class="nx">v1</span><span class="p">.</span><span class="nx">GetUser</span><span class="p">)</span>
-	<span class="p">}</span>
+    <span class="c1">// 不需要登录的路由
+</span><span class="c1"></span>    <span class="o">...</span>
+    <span class="c1">// 需要登录
+</span><span class="c1"></span>    <span class="nx">tokenGroup</span> <span class="o">:=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Group</span><span class="p">(</span><span class="s">&#34;v1/user&#34;</span><span class="p">).</span><span class="nf">Use</span><span class="p">(</span><span class="nx">middleware</span><span class="p">.</span><span class="nf">JWTAuthMiddleware</span><span class="p">())</span>
+    <span class="p">{</span>
+        <span class="nx">tokenGroup</span><span class="p">.</span><span class="nf">POST</span><span class="p">(</span><span class="s">&#34;/detail&#34;</span><span class="p">,</span> <span class="nx">v1</span><span class="p">.</span><span class="nx">GetUser</span><span class="p">)</span>
+    <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="2-路由绑定函数-1">2. 路由绑定函数</h4>
+</div><h3 id="2-路由绑定函数-1">2. 路由绑定函数</h3>
 <p><strong>文件位置:<code>./api/v1/user_api.go</code></strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -648,14 +645,14 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 查询用户信息
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">GetUser</span><span class="p">(</span><span class="nx">ctx</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
-	<span class="c1">// 从上下文中获取用户信息，(经过中间件逻辑时，已经设置到上下文)
-</span><span class="c1"></span>	<span class="nx">user</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">ctx</span><span class="p">.</span><span class="nf">Get</span><span class="p">(</span><span class="s">&#34;user&#34;</span><span class="p">)</span>
-	<span class="nx">response</span><span class="p">.</span><span class="nf">OkWithData</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">user</span><span class="p">)</span>
-	<span class="k">return</span>
+    <span class="c1">// 从上下文中获取用户信息，(经过中间件逻辑时，已经设置到上下文)
+</span><span class="c1"></span>    <span class="nx">user</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">ctx</span><span class="p">.</span><span class="nf">Get</span><span class="p">(</span><span class="s">&#34;user&#34;</span><span class="p">)</span>
+    <span class="nx">response</span><span class="p">.</span><span class="nf">OkWithData</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">user</span><span class="p">)</span>
+    <span class="k">return</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="3-请求返回-1">3. 请求返回</h4>
+</div><h3 id="3-请求返回-1">3. 请求返回</h3>
 <p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/20210723183127.png" alt=""></p>
 
     </div>
@@ -668,7 +665,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2022-08-28
+        2023-03-02
         
     </span>
   </p>
