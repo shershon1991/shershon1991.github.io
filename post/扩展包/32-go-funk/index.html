@@ -44,11 +44,11 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/32-go-funk/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-05-02T00:00:00+00:00" />
-<meta property="article:modified_time" content="2022-10-04T07:42:32+08:00" />
+<meta property="article:modified_time" content="2023-03-04T13:27:21+08:00" />
 
 <meta itemprop="name" content="Go扩展包(三十二):go-funk">
 <meta itemprop="description" content="1. 介绍 Go-funk 是基于反射(reflect )实现的一个现代Go工具库，封装了对slice/map/struct/string等的操作。 2. 下载 1 2 3 4"><meta itemprop="datePublished" content="2021-05-02T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2022-10-04T07:42:32+08:00" />
+<meta itemprop="dateModified" content="2023-03-04T13:27:21+08:00" />
 <meta itemprop="wordCount" content="6405">
 <meta itemprop="keywords" content="Go扩展包," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go扩展包(三十二):go-funk"/>
@@ -144,96 +144,87 @@
   <div class="post-toc-content always-active">
     <nav id="TableOfContents">
   <ul>
-    <li>
+    <li><a href="#1-介绍">1. 介绍</a></li>
+    <li><a href="#2-下载">2. 下载</a></li>
+    <li><a href="#3-切片slice操作">3. 切片(<code>slice</code>)操作</a>
       <ul>
-        <li><a href="#1-介绍">1. 介绍</a></li>
-        <li><a href="#2-下载">2. 下载</a></li>
-        <li><a href="#3-切片slice操作">3. 切片(<code>slice</code>)操作</a>
-          <ul>
-            <li><a href="#31--判断元素是否存在">3.1  判断元素是否存在</a></li>
-            <li><a href="#32-查找元素第一次出现位置">3.2 查找元素第一次出现位置</a></li>
-            <li><a href="#33--查找元素最后一次出现位置">3.3  查找元素最后一次出现位置</a></li>
-            <li><a href="#34--批量查找都有则true">3.4  批量查找(都有则True)</a></li>
-            <li><a href="#35-批量查找有一则true">3.5 批量查找(有一则True)</a></li>
-            <li><a href="#36-获取最后或第一个元素">3.6 获取最后或第一个元素</a></li>
-            <li><a href="#37-用元素填充切片">3.7 用元素填充切片</a></li>
-            <li><a href="#38-取两个切片共同元素结果集">3.8 取两个切片共同元素结果集</a></li>
-            <li><a href="#39--获取去掉两切片共同元素结果集">3.9  获取去掉两切片共同元素结果集</a></li>
-            <li><a href="#310--求只存在某切片的元素除去共同元素">3.10  求只存在某切片的元素(除去共同元素)</a></li>
-            <li><a href="#311-分别去掉两个切片共同元素两结果集">3.11 分别去掉两个切片共同元素(两结果集)</a></li>
-            <li><a href="#312-遍历切片">3.12 遍历切片</a></li>
-            <li><a href="#313-删除首或尾">3.13 删除首或尾</a></li>
-            <li><a href="#314-判断a切片是否属于b切片子集">3.14 判断A切片是否属于B切片子集</a></li>
-            <li><a href="#315-分组">3.15 分组</a></li>
-            <li><a href="#316-把结构体切片转成map">3.16 把结构体切片转成map</a></li>
-            <li><a href="#317-把切片值转成map中的key">3.17 把切片值转成<code>Map</code>中的<code>Key</code></a></li>
-            <li><a href="#318--把二维切片转成一维切片">3.18  把二维切片转成一维切片</a></li>
-            <li><a href="#319-打乱切片">3.19 打乱切片</a></li>
-            <li><a href="#320-反转切片">3.20 反转切片</a></li>
-            <li><a href="#321-元素去重">3.21 元素去重</a></li>
-            <li><a href="#322-删除制定元素">3.22 删除制定元素</a></li>
-          </ul>
-        </li>
-        <li><a href="#4-映射map操作">4. 映射(<code>map</code>)操作</a>
-          <ul>
-            <li><a href="#41-获取所有的key">4.1 获取所有的<code>Key</code></a></li>
-            <li><a href="#42-获取所有的value">4.2 获取所有的<code>Value</code></a></li>
-          </ul>
-        </li>
-        <li><a href="#5-结构体struct切片操作">5. 结构体(<code>struct</code>)切片操作</a>
-          <ul>
-            <li><a href="#51-取结构体某元素为切片">5.1 取结构体某元素为切片</a></li>
-          </ul>
-        </li>
-        <li><a href="#6-判断操作">6. 判断操作</a>
-          <ul>
-            <li><a href="#61-判断相等">6.1 判断相等</a></li>
-            <li><a href="#62-判断类型一致">6.2 判断类型一致</a></li>
-            <li><a href="#63-判断arrayslice">6.3 判断<code>array|slice</code></a></li>
-            <li><a href="#64-判断空">6.4 判断空</a></li>
-          </ul>
-        </li>
-        <li><a href="#7-类型转换">7. 类型转换</a>
-          <ul>
-            <li><a href="#71-任意数字转float64">7.1 任意数字转<code>float64</code></a></li>
-            <li><a href="#72-将x转成x">7.2 将<code>X</code>转成<code>[]X</code></a></li>
-          </ul>
-        </li>
-        <li><a href="#8字符串操作">8.字符串操作</a>
-          <ul>
-            <li><a href="#81-根据字符串生成切片">8.1 根据字符串生成切片</a></li>
-          </ul>
-        </li>
-        <li><a href="#9数字计算">9.数字计算</a>
-          <ul>
-            <li><a href="#91-最大值max">9.1 最大值(<code>Max</code>)</a></li>
-            <li><a href="#92-最小值min">9.2 最小值(<code>Min</code>)</a></li>
-            <li><a href="#93-求和sum">9.3 求和(<code>Sum</code>)</a></li>
-            <li><a href="#94-求乘积product">9.4 求乘积(<code>Product</code>)</a></li>
-          </ul>
-        </li>
-        <li><a href="#10-其他操作">10. 其他操作</a>
-          <ul>
-            <li><a href="#101-生成随机数">10.1 生成随机数</a></li>
-            <li><a href="#102-生成随机字符串">10.2 生成随机字符串</a></li>
-            <li><a href="#103-三元运算">10.3 三元运算</a></li>
-          </ul>
-        </li>
+        <li><a href="#31--判断元素是否存在">3.1  判断元素是否存在</a></li>
+        <li><a href="#32-查找元素第一次出现位置">3.2 查找元素第一次出现位置</a></li>
+        <li><a href="#33--查找元素最后一次出现位置">3.3  查找元素最后一次出现位置</a></li>
+        <li><a href="#34--批量查找都有则true">3.4  批量查找(都有则True)</a></li>
+        <li><a href="#35-批量查找有一则true">3.5 批量查找(有一则True)</a></li>
+        <li><a href="#36-获取最后或第一个元素">3.6 获取最后或第一个元素</a></li>
+        <li><a href="#37-用元素填充切片">3.7 用元素填充切片</a></li>
+        <li><a href="#38-取两个切片共同元素结果集">3.8 取两个切片共同元素结果集</a></li>
+        <li><a href="#39--获取去掉两切片共同元素结果集">3.9  获取去掉两切片共同元素结果集</a></li>
+        <li><a href="#310--求只存在某切片的元素除去共同元素">3.10  求只存在某切片的元素(除去共同元素)</a></li>
+        <li><a href="#311-分别去掉两个切片共同元素两结果集">3.11 分别去掉两个切片共同元素(两结果集)</a></li>
+        <li><a href="#312-遍历切片">3.12 遍历切片</a></li>
+        <li><a href="#313-删除首或尾">3.13 删除首或尾</a></li>
+        <li><a href="#314-判断a切片是否属于b切片子集">3.14 判断A切片是否属于B切片子集</a></li>
+        <li><a href="#315-分组">3.15 分组</a></li>
+        <li><a href="#316-把结构体切片转成map">3.16 把结构体切片转成map</a></li>
+        <li><a href="#317-把切片值转成map中的key">3.17 把切片值转成<code>Map</code>中的<code>Key</code></a></li>
+        <li><a href="#318--把二维切片转成一维切片">3.18  把二维切片转成一维切片</a></li>
+        <li><a href="#319-打乱切片">3.19 打乱切片</a></li>
+        <li><a href="#320-反转切片">3.20 反转切片</a></li>
+        <li><a href="#321-元素去重">3.21 元素去重</a></li>
+        <li><a href="#322-删除制定元素">3.22 删除制定元素</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-映射map操作">4. 映射(<code>map</code>)操作</a>
+      <ul>
+        <li><a href="#41-获取所有的key">4.1 获取所有的<code>Key</code></a></li>
+        <li><a href="#42-获取所有的value">4.2 获取所有的<code>Value</code></a></li>
+      </ul>
+    </li>
+    <li><a href="#5-结构体struct切片操作">5. 结构体(<code>struct</code>)切片操作</a>
+      <ul>
+        <li><a href="#51-取结构体某元素为切片">5.1 取结构体某元素为切片</a></li>
+      </ul>
+    </li>
+    <li><a href="#6-判断操作">6. 判断操作</a>
+      <ul>
+        <li><a href="#61-判断相等">6.1 判断相等</a></li>
+        <li><a href="#62-判断类型一致">6.2 判断类型一致</a></li>
+        <li><a href="#63-判断arrayslice">6.3 判断<code>array|slice</code></a></li>
+        <li><a href="#64-判断空">6.4 判断空</a></li>
+      </ul>
+    </li>
+    <li><a href="#7-类型转换">7. 类型转换</a>
+      <ul>
+        <li><a href="#71-任意数字转float64">7.1 任意数字转<code>float64</code></a></li>
+        <li><a href="#72-将x转成x">7.2 将<code>X</code>转成<code>[]X</code></a></li>
+      </ul>
+    </li>
+    <li><a href="#8字符串操作">8.字符串操作</a>
+      <ul>
+        <li><a href="#81-根据字符串生成切片">8.1 根据字符串生成切片</a></li>
+      </ul>
+    </li>
+    <li><a href="#9数字计算">9.数字计算</a>
+      <ul>
+        <li><a href="#91-最大值max">9.1 最大值(<code>Max</code>)</a></li>
+        <li><a href="#92-最小值min">9.2 最小值(<code>Min</code>)</a></li>
+        <li><a href="#93-求和sum">9.3 求和(<code>Sum</code>)</a></li>
+        <li><a href="#94-求乘积product">9.4 求乘积(<code>Product</code>)</a></li>
+      </ul>
+    </li>
+    <li><a href="#10-其他操作">10. 其他操作</a>
+      <ul>
+        <li><a href="#101-生成随机数">10.1 生成随机数</a></li>
+        <li><a href="#102-生成随机字符串">10.2 生成随机字符串</a></li>
+        <li><a href="#103-三元运算">10.3 三元运算</a></li>
       </ul>
     </li>
   </ul>
 </nav>
   </div>
 </div>
-  <div class="post-outdated">
-    <div class="hint">
-      <p>【注意】最后更新于 <span class="timeago" datetime="2022-10-04T07:42:32" title="October 4, 2022">October 4, 2022</span>，文中内容可能已过时，请谨慎使用。</p>
-    </div>
-  </div>
     <div class="post-content">
-      <h2 id="1-介绍">1. 介绍</h2>
+      <h1 id="1-介绍">1. 介绍</h1>
 <p><code>Go-funk</code> 是基于反射(<code>reflect </code>)实现的一个现代<code>Go</code>工具库，封装了对<code>slice/map/struct/string</code>等的操作。</p>
-<h2 id="2-下载">2. 下载</h2>
+<h1 id="2-下载">2. 下载</h1>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -248,8 +239,8 @@ go get github.com/thoas/go-funk
 import github.com/thoas/go-funk
 </code></pre></td></tr></table>
 </div>
-</div><h2 id="3-切片slice操作">3. 切片(<code>slice</code>)操作</h2>
-<h3 id="31--判断元素是否存在">3.1  判断元素是否存在</h3>
+</div><h1 id="3-切片slice操作">3. 切片(<code>slice</code>)操作</h1>
+<h2 id="31--判断元素是否存在">3.1  判断元素是否存在</h2>
 <ul>
 <li><code>funk.Contains</code>: 接收任意类型。</li>
 <li><code>funk.ContainsX</code>: <code>X</code>代表具体类型，如:<code>ContainsInt、ContainsString...</code></li>
@@ -286,7 +277,7 @@ import github.com/thoas/go-funk
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="32-查找元素第一次出现位置">3.2 查找元素第一次出现位置</h3>
+</div><h2 id="32-查找元素第一次出现位置">3.2 查找元素第一次出现位置</h2>
 <ul>
 <li><code>funk.IndexOf</code>: 接收任意类型,不存在则返回<code>-1</code>。</li>
 <li><code>funk.IndexOfX</code>:  <code>X</code>代表具体类型,不存在则返回<code>-1</code>。</li>
@@ -337,7 +328,7 @@ import github.com/thoas/go-funk
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="33--查找元素最后一次出现位置">3.3  查找元素最后一次出现位置</h3>
+</div><h2 id="33--查找元素最后一次出现位置">3.3  查找元素最后一次出现位置</h2>
 <ul>
 <li><code>funk.LastIndexOf</code>: 接收任意类型,不存在则返回<code>-1</code>。</li>
 <li><code>funk.LastIndexOfX</code>:  <code>X</code>代表具体类型,不存在则返回<code>-1</code>。</li>
@@ -390,7 +381,7 @@ import github.com/thoas/go-funk
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="34--批量查找都有则true">3.4  批量查找(都有则True)</h3>
+</div><h2 id="34--批量查找都有则true">3.4  批量查找(都有则True)</h2>
 <blockquote>
 <p><code>func Every(in interface{}, elements ...interface{}) bool</code></p>
 </blockquote>
@@ -431,7 +422,7 @@ import github.com/thoas/go-funk
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="35-批量查找有一则true">3.5 批量查找(有一则True)</h3>
+</div><h2 id="35-批量查找有一则true">3.5 批量查找(有一则True)</h2>
 <blockquote>
 <p><code>func Some(in interface{}, elements ...interface{}) bool</code></p>
 </blockquote>
@@ -474,7 +465,7 @@ import github.com/thoas/go-funk
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="36-获取最后或第一个元素">3.6 获取最后或第一个元素</h3>
+</div><h2 id="36-获取最后或第一个元素">3.6 获取最后或第一个元素</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -511,7 +502,7 @@ import github.com/thoas/go-funk
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="37-用元素填充切片">3.7 用元素填充切片</h3>
+</div><h2 id="37-用元素填充切片">3.7 用元素填充切片</h2>
 <blockquote>
 <p><code>func Fill(in interface{}, fillValue interface{}) (interface{}, error)</code></p>
 </blockquote>
@@ -568,7 +559,7 @@ import github.com/thoas/go-funk
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="38-取两个切片共同元素结果集">3.8 取两个切片共同元素结果集</h3>
+</div><h2 id="38-取两个切片共同元素结果集">3.8 取两个切片共同元素结果集</h2>
 <ul>
 <li><code>Join(larr, rarr interface{}, fnc JoinFnc)</code>:  当<code>fnc=funk.InnerJoin</code>,代表合并两个任意类型切片。</li>
 <li><code>JoinXXX(larr, rarr interface{}, fnc JoinFnc)</code>: 指定类型合并，推荐使用。</li>
@@ -647,7 +638,7 @@ import github.com/thoas/go-funk
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="39--获取去掉两切片共同元素结果集">3.9  获取去掉两切片共同元素结果集</h3>
+</div><h2 id="39--获取去掉两切片共同元素结果集">3.9  获取去掉两切片共同元素结果集</h2>
 <p>同样使用<code>Join</code>和<code>JoinXXX</code>方法，而<code>fnc</code>设置成<code>funk.OuterJoin</code></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -715,7 +706,7 @@ import github.com/thoas/go-funk
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="310--求只存在某切片的元素除去共同元素">3.10  求只存在某切片的元素(除去共同元素)</h3>
+</div><h2 id="310--求只存在某切片的元素除去共同元素">3.10  求只存在某切片的元素(除去共同元素)</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -756,7 +747,7 @@ import github.com/thoas/go-funk
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="311-分别去掉两个切片共同元素两结果集">3.11 分别去掉两个切片共同元素(两结果集)</h3>
+</div><h2 id="311-分别去掉两个切片共同元素两结果集">3.11 分别去掉两个切片共同元素(两结果集)</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -811,7 +802,7 @@ import github.com/thoas/go-funk
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="312-遍历切片">3.12 遍历切片</h3>
+</div><h2 id="312-遍历切片">3.12 遍历切片</h2>
 <ul>
 <li><code>ForEach</code>: 从左边遍历切片。</li>
 <li><code>ForEachRight</code>: 从右边遍历切片。</li>
@@ -866,7 +857,7 @@ import github.com/thoas/go-funk
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="313-删除首或尾">3.13 删除首或尾</h3>
+</div><h2 id="313-删除首或尾">3.13 删除首或尾</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -903,7 +894,7 @@ import github.com/thoas/go-funk
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="314-判断a切片是否属于b切片子集">3.14 判断A切片是否属于B切片子集</h3>
+</div><h2 id="314-判断a切片是否属于b切片子集">3.14 判断A切片是否属于B切片子集</h2>
 <blockquote>
 <p><code>Subset(x interface{}, y interface{}) bool</code>: 判断<code>x</code>是否属于<code>y</code>的切片。</p>
 </blockquote>
@@ -963,7 +954,7 @@ import github.com/thoas/go-funk
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="315-分组">3.15 分组</h3>
+</div><h2 id="315-分组">3.15 分组</h2>
 <blockquote>
 <p><code>Chunk(arr interface{}, size int) interface{}</code>: 把<code>arr</code>按照<code>每组size个</code>进行分组</p>
 </blockquote>
@@ -1017,7 +1008,7 @@ import github.com/thoas/go-funk
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="316-把结构体切片转成map">3.16 把结构体切片转成map</h3>
+</div><h2 id="316-把结构体切片转成map">3.16 把结构体切片转成map</h2>
 <blockquote>
 <p><code>ToMap(in interface{}, pivot string) interface{}</code>: 把切片<code>in</code>,转成以<code>pivot</code>为<code>key</code>的<code>map</code>。</p>
 </blockquote>
@@ -1059,7 +1050,7 @@ import github.com/thoas/go-funk
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="317-把切片值转成map中的key">3.17 把切片值转成<code>Map</code>中的<code>Key</code></h3>
+</div><h2 id="317-把切片值转成map中的key">3.17 把切片值转成<code>Map</code>中的<code>Key</code></h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1092,7 +1083,7 @@ import github.com/thoas/go-funk
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="318--把二维切片转成一维切片">3.18  把二维切片转成一维切片</h3>
+</div><h2 id="318--把二维切片转成一维切片">3.18  把二维切片转成一维切片</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1125,7 +1116,7 @@ import github.com/thoas/go-funk
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="319-打乱切片">3.19 打乱切片</h3>
+</div><h2 id="319-打乱切片">3.19 打乱切片</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1162,7 +1153,7 @@ import github.com/thoas/go-funk
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="320-反转切片">3.20 反转切片</h3>
+</div><h2 id="320-反转切片">3.20 反转切片</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1197,7 +1188,7 @@ import github.com/thoas/go-funk
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="321-元素去重">3.21 元素去重</h3>
+</div><h2 id="321-元素去重">3.21 元素去重</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1240,7 +1231,7 @@ import github.com/thoas/go-funk
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="322-删除制定元素">3.22 删除制定元素</h3>
+</div><h2 id="322-删除制定元素">3.22 删除制定元素</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1291,8 +1282,8 @@ import github.com/thoas/go-funk
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h2 id="4-映射map操作">4. 映射(<code>map</code>)操作</h2>
-<h3 id="41-获取所有的key">4.1 获取所有的<code>Key</code></h3>
+</div><h1 id="4-映射map操作">4. 映射(<code>map</code>)操作</h1>
+<h2 id="41-获取所有的key">4.1 获取所有的<code>Key</code></h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1331,7 +1322,7 @@ import github.com/thoas/go-funk
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="42-获取所有的value">4.2 获取所有的<code>Value</code></h3>
+</div><h2 id="42-获取所有的value">4.2 获取所有的<code>Value</code></h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1370,8 +1361,8 @@ import github.com/thoas/go-funk
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h2 id="5-结构体struct切片操作">5. 结构体(<code>struct</code>)切片操作</h2>
-<h3 id="51-取结构体某元素为切片">5.1 取结构体某元素为切片</h3>
+</div><h1 id="5-结构体struct切片操作">5. 结构体(<code>struct</code>)切片操作</h1>
+<h2 id="51-取结构体某元素为切片">5.1 取结构体某元素为切片</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1436,8 +1427,8 @@ import github.com/thoas/go-funk
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h2 id="6-判断操作">6. 判断操作</h2>
-<h3 id="61-判断相等">6.1 判断相等</h3>
+</div><h1 id="6-判断操作">6. 判断操作</h1>
+<h2 id="61-判断相等">6.1 判断相等</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1496,7 +1487,7 @@ import github.com/thoas/go-funk
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="62-判断类型一致">6.2 判断类型一致</h3>
+</div><h2 id="62-判断类型一致">6.2 判断类型一致</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1533,7 +1524,7 @@ import github.com/thoas/go-funk
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="63-判断arrayslice">6.3 判断<code>array|slice</code></h3>
+</div><h2 id="63-判断arrayslice">6.3 判断<code>array|slice</code></h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1594,7 +1585,7 @@ import github.com/thoas/go-funk
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="64-判断空">6.4 判断空</h3>
+</div><h2 id="64-判断空">6.4 判断空</h2>
 <ul>
 <li><code>funk.IsEmpty(obj interface{})</code>: 判断为空。</li>
 <li><code>funk.NotEmpty(obj interface{})</code>: 判断不为空。</li>
@@ -1651,8 +1642,8 @@ import github.com/thoas/go-funk
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h2 id="7-类型转换">7. 类型转换</h2>
-<h3 id="71-任意数字转float64">7.1 任意数字转<code>float64</code></h3>
+</div><h1 id="7-类型转换">7. 类型转换</h1>
+<h2 id="71-任意数字转float64">7.1 任意数字转<code>float64</code></h2>
 <blockquote>
 <p><code>func ToFloat64(x interface{}) (float64, bool)</code></p>
 </blockquote>
@@ -1697,7 +1688,7 @@ import github.com/thoas/go-funk
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="72-将x转成x">7.2 将<code>X</code>转成<code>[]X</code></h3>
+</div><h2 id="72-将x转成x">7.2 将<code>X</code>转成<code>[]X</code></h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1734,8 +1725,8 @@ import github.com/thoas/go-funk
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h2 id="8字符串操作">8.字符串操作</h2>
-<h3 id="81-根据字符串生成切片">8.1 根据字符串生成切片</h3>
+</div><h1 id="8字符串操作">8.字符串操作</h1>
+<h2 id="81-根据字符串生成切片">8.1 根据字符串生成切片</h2>
 <blockquote>
 <p><code>func Shard(str string, width int, depth int, restOnly bool) []string</code></p>
 </blockquote>
@@ -1792,8 +1783,8 @@ import github.com/thoas/go-funk
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h2 id="9数字计算">9.数字计算</h2>
-<h3 id="91-最大值max">9.1 最大值(<code>Max</code>)</h3>
+</div><h1 id="9数字计算">9.数字计算</h1>
+<h2 id="91-最大值max">9.1 最大值(<code>Max</code>)</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1832,7 +1823,7 @@ import github.com/thoas/go-funk
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="92-最小值min">9.2 最小值(<code>Min</code>)</h3>
+</div><h2 id="92-最小值min">9.2 最小值(<code>Min</code>)</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1871,7 +1862,7 @@ import github.com/thoas/go-funk
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="93-求和sum">9.3 求和(<code>Sum</code>)</h3>
+</div><h2 id="93-求和sum">9.3 求和(<code>Sum</code>)</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1910,7 +1901,7 @@ import github.com/thoas/go-funk
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="94-求乘积product">9.4 求乘积(<code>Product</code>)</h3>
+</div><h2 id="94-求乘积product">9.4 求乘积(<code>Product</code>)</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1949,8 +1940,8 @@ import github.com/thoas/go-funk
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h2 id="10-其他操作">10. 其他操作</h2>
-<h3 id="101-生成随机数">10.1 生成随机数</h3>
+</div><h1 id="10-其他操作">10. 其他操作</h1>
+<h2 id="101-生成随机数">10.1 生成随机数</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1987,7 +1978,7 @@ import github.com/thoas/go-funk
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="102-生成随机字符串">10.2 生成随机字符串</h3>
+</div><h2 id="102-生成随机字符串">10.2 生成随机字符串</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -2034,7 +2025,7 @@ import github.com/thoas/go-funk
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="103-三元运算">10.3 三元运算</h3>
+</div><h2 id="103-三元运算">10.3 三元运算</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -2080,7 +2071,7 @@ import github.com/thoas/go-funk
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2022-10-04
+        2023-03-04
         
     </span>
   </p>

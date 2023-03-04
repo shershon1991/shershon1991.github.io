@@ -44,11 +44,11 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/gin%E6%A1%86%E6%9E%B6/02-%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B%E5%88%86%E6%9E%90/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-12-02T00:00:00+00:00" />
-<meta property="article:modified_time" content="2022-08-28T11:59:41+08:00" />
+<meta property="article:modified_time" content="2023-03-04T13:24:26+08:00" />
 
 <meta itemprop="name" content="Gin框架(二):启动流程分析">
 <meta itemprop="description" content="1.启动服务 1.1 服务源码 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 package main // 引入gin框架 import &#34;github.com/gin-gonic/gin&#34; func main() { // 创建一个默认的路由引擎 engine := gin.Default() // 注册Get路由 engine.GET(&#34;/&#34;, func(ctx *gin.Context) { ctx.JSON(200,gin.H{ &"><meta itemprop="datePublished" content="2021-12-02T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2022-08-28T11:59:41+08:00" />
+<meta itemprop="dateModified" content="2023-03-04T13:24:26+08:00" />
 <meta itemprop="wordCount" content="1761">
 <meta itemprop="keywords" content="Gin框架," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Gin框架(二):启动流程分析"/>
@@ -144,12 +144,27 @@
   <div class="post-toc-content always-active">
     <nav id="TableOfContents">
   <ul>
-    <li>
+    <li><a href="#1启动服务">1.启动服务</a>
       <ul>
-        <li>
+        <li><a href="#11-服务源码">1.1 服务源码</a></li>
+        <li><a href="#12-启动输出">1.2 启动输出</a></li>
+      </ul>
+    </li>
+    <li><a href="#2代码分析">2.代码分析</a>
+      <ul>
+        <li><a href="#21-import-githubcomgin-gonicgin">2.1 import &ldquo;github.com/gin-gonic/gin&rdquo;</a></li>
+        <li><a href="#22-gindefault">2.2 gin.Default()</a></li>
+        <li><a href="#23-engineget">2.3 engine.GET(&quot;/&quot;,&hellip;)</a>
           <ul>
-            <li><a href="#1启动服务">1.启动服务</a></li>
-            <li><a href="#2代码分析">2.代码分析</a></li>
+            <li><a href="#1源码">1.源码</a></li>
+            <li><a href="#2-多种返回格式">2. 多种返回格式</a></li>
+            <li><a href="#3jsonasciijsonpurejson-对比">3.Json、AsciiJSON、PureJSON 对比</a></li>
+          </ul>
+        </li>
+        <li><a href="#24-enginerun">2.4 engine.Run()</a>
+          <ul>
+            <li><a href="#1run源码如下">1.<code>Run</code>源码如下</a></li>
+            <li><a href="#2为什么默认监听是8080">2.为什么默认监听是&quot;:8080&quot;</a></li>
           </ul>
         </li>
       </ul>
@@ -158,14 +173,9 @@
 </nav>
   </div>
 </div>
-  <div class="post-outdated">
-    <div class="warn">
-      <p>【注意】最后更新于 <span class="timeago" datetime="2022-08-28T11:59:41" title="August 28, 2022">August 28, 2022</span>，文中内容可能已过时，请谨慎使用。</p>
-    </div>
-  </div>
     <div class="post-content">
-      <h3 id="1启动服务">1.启动服务</h3>
-<h4 id="11-服务源码">1.1 服务源码</h4>
+      <h1 id="1启动服务">1.启动服务</h1>
+<h2 id="11-服务源码">1.1 服务源码</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -202,7 +212,7 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="12-启动输出">1.2 启动输出</h4>
+</div><h2 id="12-启动输出">1.2 启动输出</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -229,8 +239,8 @@
 <span class="o">[</span>GIN-debug<span class="o">]</span> Listening and serving HTTP on :8080
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="2代码分析">2.代码分析</h3>
-<h4 id="21-import-githubcomgin-gonicgin">2.1 import &ldquo;github.com/gin-gonic/gin&rdquo;</h4>
+</div><h1 id="2代码分析">2.代码分析</h1>
+<h2 id="21-import-githubcomgin-gonicgin">2.1 import &ldquo;github.com/gin-gonic/gin&rdquo;</h2>
 <p>在引入<code>Gin</code>框架时，包内相关的<code>init()</code>方法都会被执行；经查找发现下面两个<code>init</code>方法;</p>
 <p><strong>a. 第一个init方法</strong></p>
 <p>方法位置: <code>github.com/gin-gonic/gin/context_appengine.go</code></p>
@@ -270,7 +280,7 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="22-gindefault">2.2 gin.Default()</h4>
+</div><h2 id="22-gindefault">2.2 gin.Default()</h2>
 <p><strong>gin.Default源码如下:</strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -297,8 +307,8 @@
 </code></pre></td></tr></table>
 </div>
 </div><p><font color=red>@注意: Gin框架中注册中间件是通过	engine.Use(xx)的方式。 </font></p>
-<h4 id="23-engineget">2.3 engine.GET(&quot;/&quot;,&hellip;)</h4>
-<h5 id="1源码">1.源码</h5>
+<h2 id="23-engineget">2.3 engine.GET(&quot;/&quot;,&hellip;)</h2>
+<h3 id="1源码">1.源码</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -334,7 +344,7 @@
 <span class="p">})</span>
 </code></pre></td></tr></table>
 </div>
-</div><h5 id="2-多种返回格式">2. 多种返回格式</h5>
+</div><h3 id="2-多种返回格式">2. 多种返回格式</h3>
 <p>在<code>gin.Context</code>支持多种返回格式,整理常用的返回格式如下:</p>
 <table>
 <thead>
@@ -358,7 +368,7 @@
 </tr>
 </tbody>
 </table>
-<h5 id="3jsonasciijsonpurejson-对比">3.Json、AsciiJSON、PureJSON 对比</h5>
+<h3 id="3jsonasciijsonpurejson-对比">3.Json、AsciiJSON、PureJSON 对比</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -475,8 +485,8 @@
 </tr>
 </tbody>
 </table>
-<h4 id="24-enginerun">2.4 engine.Run()</h4>
-<h5 id="1run源码如下">1.<code>Run</code>源码如下</h5>
+<h2 id="24-enginerun">2.4 engine.Run()</h2>
+<h3 id="1run源码如下">1.<code>Run</code>源码如下</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -515,7 +525,7 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h5 id="2为什么默认监听是8080">2.为什么默认监听是&quot;:8080&quot;</h5>
+</div><h3 id="2为什么默认监听是8080">2.为什么默认监听是&quot;:8080&quot;</h3>
 <p>在<code>Run</code>方法中调用<code> resolveAddress(addr)</code>,该方法源码如下:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -572,7 +582,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2022-08-28
+        2023-03-04
         
     </span>
   </p>

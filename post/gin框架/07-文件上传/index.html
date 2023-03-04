@@ -44,11 +44,11 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/gin%E6%A1%86%E6%9E%B6/07-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-12-07T00:00:00+00:00" />
-<meta property="article:modified_time" content="2022-08-28T12:01:36+08:00" />
+<meta property="article:modified_time" content="2023-03-04T13:24:26+08:00" />
 
 <meta itemprop="name" content="Gin框架(七):文件上传">
 <meta itemprop="description" content="1.介绍 在Gin框架中已经支持文件上传，包括单文件上传和多文件上传。 2. 单文件上传 在Gin框架中可以通过FormFile(&quot;para"><meta itemprop="datePublished" content="2021-12-07T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2022-08-28T12:01:36+08:00" />
+<meta itemprop="dateModified" content="2023-03-04T13:24:26+08:00" />
 <meta itemprop="wordCount" content="539">
 <meta itemprop="keywords" content="Gin框架," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Gin框架(七):文件上传"/>
@@ -144,32 +144,29 @@
   <div class="post-toc-content always-active">
     <nav id="TableOfContents">
   <ul>
-    <li>
+    <li><a href="#1介绍">1.介绍</a></li>
+    <li><a href="#2-单文件上传">2. 单文件上传</a>
       <ul>
-        <li>
-          <ul>
-            <li><a href="#1介绍">1.介绍</a></li>
-            <li><a href="#2-单文件上传">2. 单文件上传</a></li>
-            <li><a href="#3-多文件上传">3. 多文件上传</a></li>
-          </ul>
-        </li>
+        <li><a href="#21-代码示例">2.1 代码示例</a></li>
+        <li><a href="#22-请求返回">2.2 请求返回</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-多文件上传">3. 多文件上传</a>
+      <ul>
+        <li><a href="#3-1-代码示例">3. 1 代码示例</a></li>
+        <li><a href="#3-2-请求返回">3. 2 请求返回</a></li>
       </ul>
     </li>
   </ul>
 </nav>
   </div>
 </div>
-  <div class="post-outdated">
-    <div class="warn">
-      <p>【注意】最后更新于 <span class="timeago" datetime="2022-08-28T12:01:36" title="August 28, 2022">August 28, 2022</span>，文中内容可能已过时，请谨慎使用。</p>
-    </div>
-  </div>
     <div class="post-content">
-      <h3 id="1介绍">1.介绍</h3>
+      <h1 id="1介绍">1.介绍</h1>
 <p>在<code>Gin</code>框架中已经支持文件上传，包括单文件上传和多文件上传。</p>
-<h3 id="2-单文件上传">2. 单文件上传</h3>
+<h1 id="2-单文件上传">2. 单文件上传</h1>
 <p>在<code>Gin</code>框架中可以通过<code>FormFile(&quot;param&quot;)</code>来接收上传的<strong>单个文件</strong>信息,具体使用参考下面代码:</p>
-<h4 id="21-代码示例">2.1 代码示例</h4>
+<h2 id="21-代码示例">2.1 代码示例</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -256,11 +253,11 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="22-请求返回">2.2 请求返回</h4>
+</div><h2 id="22-请求返回">2.2 请求返回</h2>
 <p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/20210427212847.png" alt="image-20210427212847388"></p>
-<h3 id="3-多文件上传">3. 多文件上传</h3>
+<h1 id="3-多文件上传">3. 多文件上传</h1>
 <p>在<code>Gin</code>框架中可以通过<code>MultipartForm()</code>来接收上传的<strong>多个文件</strong>信息,具体使用参考下面代码:</p>
-<h4 id="3-1-代码示例">3. 1 代码示例</h4>
+<h2 id="3-1-代码示例">3. 1 代码示例</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -325,7 +322,7 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="3-2-请求返回">3. 2 请求返回</h4>
+</div><h2 id="3-2-请求返回">3. 2 请求返回</h2>
 <p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/20210427214144.png" alt="image-20210427214144469"></p>
 
     </div>
@@ -338,7 +335,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2022-08-28
+        2023-03-04
         
     </span>
   </p>

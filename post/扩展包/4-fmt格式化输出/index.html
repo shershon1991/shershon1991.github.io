@@ -44,11 +44,11 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/4-fmt%E6%A0%BC%E5%BC%8F%E5%8C%96%E8%BE%93%E5%87%BA/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-04-04T00:00:00+00:00" />
-<meta property="article:modified_time" content="2022-12-06T15:25:30+08:00" />
+<meta property="article:modified_time" content="2023-03-04T13:27:21+08:00" />
 
 <meta itemprop="name" content="Go扩展包(四):fmt(格式化输出)">
 <meta itemprop="description" content="1.输出控制台 1.1 Printf Printf根据format参数生成格式化的字符串并写入标准输出。返回写入的字节数和遇到的任何错误。 1.format格式 动"><meta itemprop="datePublished" content="2021-04-04T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2022-12-06T15:25:30+08:00" />
+<meta itemprop="dateModified" content="2023-03-04T13:27:21+08:00" />
 <meta itemprop="wordCount" content="2539">
 <meta itemprop="keywords" content="Go扩展包," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go扩展包(四):fmt(格式化输出)"/>
@@ -144,33 +144,53 @@
   <div class="post-toc-content always-active">
     <nav id="TableOfContents">
   <ul>
-    <li>
+    <li><a href="#1输出控制台">1.输出控制台</a>
       <ul>
-        <li>
+        <li><a href="#11-printf">1.1 <code>Printf</code></a>
           <ul>
-            <li><a href="#1输出控制台">1.输出控制台</a></li>
-            <li><a href="#2输出到文件">2.输出到文件</a></li>
-            <li><a href="#3生成字符串">3.生成字符串</a></li>
-            <li><a href="#4生成错误类型">4.生成错误类型</a></li>
-            <li><a href="#5接收控制台输入">5.接收控制台输入</a></li>
+            <li><a href="#1format格式">1.<code>format</code>格式</a></li>
+            <li><a href="#2打印字符串">2.打印字符串</a></li>
+            <li><a href="#3打印布尔类型">3.打印布尔类型</a></li>
+            <li><a href="#4打印浮点型">4.打印浮点型</a></li>
+            <li><a href="#5打印整数">5.打印整数</a></li>
+            <li><a href="#6打印指针">6.打印指针</a></li>
+            <li><a href="#7打印变量类型">7.打印变量类型</a></li>
+            <li><a href="#8打印结构体">8.打印结构体</a></li>
+            <li><a href="#9打印unicode">9.打印<code>Unicode</code></a></li>
           </ul>
         </li>
+        <li><a href="#12-print">1.2 <code>Print</code></a>
+          <ul>
+            <li><a href="#1打印相邻的字符串">1.打印相邻的字符串</a></li>
+          </ul>
+        </li>
+        <li><a href="#13-println">1.3 <code>Println</code></a></li>
+      </ul>
+    </li>
+    <li><a href="#2输出到文件">2.输出到文件</a>
+      <ul>
+        <li><a href="#21-输出到控制台">2.1 输出到控制台</a></li>
+        <li><a href="#22-输出到文件">2.2 输出到文件</a></li>
+      </ul>
+    </li>
+    <li><a href="#3生成字符串">3.生成字符串</a></li>
+    <li><a href="#4生成错误类型">4.生成错误类型</a></li>
+    <li><a href="#5接收控制台输入">5.接收控制台输入</a>
+      <ul>
+        <li><a href="#51-scan">5.1 <code>Scan</code></a></li>
+        <li><a href="#52-scanf">5.2 <code>Scanf</code></a></li>
+        <li><a href="#53-scanln">5.3 <code>Scanln</code></a></li>
       </ul>
     </li>
   </ul>
 </nav>
   </div>
 </div>
-  <div class="post-outdated">
-    <div class="hint">
-      <p>【注意】最后更新于 <span class="timeago" datetime="2022-12-06T15:25:30" title="December 6, 2022">December 6, 2022</span>，文中内容可能已过时，请谨慎使用。</p>
-    </div>
-  </div>
     <div class="post-content">
-      <h3 id="1输出控制台">1.输出控制台</h3>
-<h4 id="11-printf">1.1 <code>Printf</code></h4>
+      <h1 id="1输出控制台">1.输出控制台</h1>
+<h2 id="11-printf">1.1 <code>Printf</code></h2>
 <p><code>Printf</code>根据<code>format</code>参数生成格式化的字符串并写入标准输出。返回写入的字节数和遇到的任何错误。</p>
-<h5 id="1format格式">1.<code>format</code>格式</h5>
+<h3 id="1format格式">1.<code>format</code>格式</h3>
 <table>
 <thead>
 <tr>
@@ -245,7 +265,7 @@
 </tr>
 </tbody>
 </table>
-<h5 id="2打印字符串">2.打印字符串</h5>
+<h3 id="2打印字符串">2.打印字符串</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -266,7 +286,7 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h5 id="3打印布尔类型">3.打印布尔类型</h5>
+</div><h3 id="3打印布尔类型">3.打印布尔类型</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -275,7 +295,7 @@
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%%t-&gt; %t \n&#34;</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span>
 </code></pre></td></tr></table>
 </div>
-</div><h5 id="4打印浮点型">4.打印浮点型</h5>
+</div><h3 id="4打印浮点型">4.打印浮点型</h3>
 <table>
 <thead>
 <tr>
@@ -338,7 +358,7 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h5 id="5打印整数">5.打印整数</h5>
+</div><h3 id="5打印整数">5.打印整数</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -373,7 +393,7 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h5 id="6打印指针">6.打印指针</h5>
+</div><h3 id="6打印指针">6.打印指针</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -386,7 +406,7 @@
 <span class="c1">//输出: 打印指针:0xc000098d50
 </span></code></pre></td></tr></table>
 </div>
-</div><h5 id="7打印变量类型">7.打印变量类型</h5>
+</div><h3 id="7打印变量类型">7.打印变量类型</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -433,7 +453,7 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h5 id="8打印结构体">8.打印结构体</h5>
+</div><h3 id="8打印结构体">8.打印结构体</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -464,7 +484,7 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h5 id="9打印unicode">9.打印<code>Unicode</code></h5>
+</div><h3 id="9打印unicode">9.打印<code>Unicode</code></h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -483,9 +503,9 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="12-print">1.2 <code>Print</code></h4>
+</div><h2 id="12-print">1.2 <code>Print</code></h2>
 <p><code>Print</code>: 采用默认格式将其参数格式化并写入标准输出。如果两个相邻的参数都不是字符串，会在它们的输出之间添加空格。</p>
-<h5 id="1打印相邻的字符串">1.打印相邻的字符串</h5>
+<h3 id="1打印相邻的字符串">1.打印相邻的字符串</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -501,7 +521,7 @@
 </div><blockquote>
 <p>如果两个相邻的参数<font color=red>都不是字符串</font>，会在它们的输出之间添加空格,<font color=red>注意的是,不会自动换行。</font></p>
 </blockquote>
-<h4 id="13-println">1.3 <code>Println</code></h4>
+<h2 id="13-println">1.3 <code>Println</code></h2>
 <p><code>Println</code>: 采用默认格式将其参数格式化并写入标准输出。<font color=red>总是会在相邻参数的输出之间添加空格并在输出结束后添加换行符。</font></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -521,7 +541,7 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="2输出到文件">2.输出到文件</h3>
+</div><h1 id="2输出到文件">2.输出到文件</h1>
 <table>
 <thead>
 <tr>
@@ -545,7 +565,7 @@
 </tbody>
 </table>
 <p><font color=red>上述方法，不但可以输出到文件，也可以输出到控制台。</font></p>
-<h4 id="21-输出到控制台">2.1 输出到控制台</h4>
+<h2 id="21-输出到控制台">2.1 输出到控制台</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -564,7 +584,7 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="22-输出到文件">2.2 输出到文件</h4>
+</div><h2 id="22-输出到文件">2.2 输出到文件</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -591,7 +611,7 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="3生成字符串">3.生成字符串</h3>
+</div><h1 id="3生成字符串">3.生成字符串</h1>
 <table>
 <thead>
 <tr>
@@ -646,7 +666,7 @@
 <span class="nx">safeConnect</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="4生成错误类型">4.生成错误类型</h3>
+</div><h1 id="4生成错误类型">4.生成错误类型</h1>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -661,8 +681,8 @@
 <span class="c1">//输出: 类型:*errors.errorString   内容: 错误信息:参数不全
 </span></code></pre></td></tr></table>
 </div>
-</div><h3 id="5接收控制台输入">5.接收控制台输入</h3>
-<h4 id="51-scan">5.1 <code>Scan</code></h4>
+</div><h1 id="5接收控制台输入">5.接收控制台输入</h1>
+<h2 id="51-scan">5.1 <code>Scan</code></h2>
 <p>接收终端输入，按照参数输入顺序赋值，参数间以空格(或换行)间隔，如果输入的参数少于接收的参数则会报错。类型不一致时也会报错。<font color=red>当参数输入数量不够时，换行时会继续等待输入。</font></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -700,7 +720,7 @@
 </span><span class="c1">// 输出: name:张三 age: 22 isBody:true
 </span></code></pre></td></tr></table>
 </div>
-</div><h4 id="52-scanf">5.2 <code>Scanf</code></h4>
+</div><h2 id="52-scanf">5.2 <code>Scanf</code></h2>
 <p>接收终端输入,按照<code>format</code>参数指定的格式接收参数.<font color=red>当参数输入数量不够时，换行时会直接输出.</font></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -742,7 +762,7 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="53-scanln">5.3 <code>Scanln</code></h4>
+</div><h2 id="53-scanln">5.3 <code>Scanln</code></h2>
 <p><code>Scanln</code>类似<code>Scan</code>，它在遇到换行时才停止扫描。最后一个数据后面必须有换行或者到达结束位置。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -795,7 +815,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2022-12-06
+        2023-03-04
         
     </span>
   </p>

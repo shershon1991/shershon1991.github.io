@@ -44,11 +44,11 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/%E5%9F%BA%E7%A1%80%E7%AF%87/6-%E5%87%BD%E6%95%B0%E4%BD%BF%E7%94%A8/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-01-06T00:00:00+00:00" />
-<meta property="article:modified_time" content="2022-12-04T12:27:48+08:00" />
+<meta property="article:modified_time" content="2023-03-04T13:23:22+08:00" />
 
 <meta itemprop="name" content="Go学习(六):函数使用">
 <meta itemprop="description" content="1.函数申明 1.1 声明语法 1 2 3 4 5 func funcName( param type ) (output1 type1, output2 type2) { //这里是处理逻辑代码 //返回多个值 return value1, value2 } 1.2 语法解析 func: 函数关键字, funcName: 指函数名，在同一个"><meta itemprop="datePublished" content="2021-01-06T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2022-12-04T12:27:48+08:00" />
+<meta itemprop="dateModified" content="2023-03-04T13:23:22+08:00" />
 <meta itemprop="wordCount" content="2214">
 <meta itemprop="keywords" content="Go基础," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go学习(六):函数使用"/>
@@ -144,32 +144,62 @@
   <div class="post-toc-content always-active">
     <nav id="TableOfContents">
   <ul>
-    <li>
+    <li><a href="#1函数申明">1.函数申明</a>
       <ul>
-        <li>
+        <li><a href="#11-声明语法">1.1 声明语法</a></li>
+        <li><a href="#12-语法解析">1.2 语法解析</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-参数接收">2. 参数接收</a>
+      <ul>
+        <li><a href="#21-参数类型简写">2.1 参数类型简写</a>
           <ul>
-            <li><a href="#1函数申明">1.函数申明</a></li>
-            <li><a href="#2-参数接收">2. 参数接收</a></li>
-            <li><a href="#3变量作用域">3.变量作用域</a></li>
-            <li><a href="#4函数类型">4.函数类型</a></li>
-            <li><a href="#5匿名函数">5.匿名函数</a></li>
-            <li><a href="#6递归函数">6.递归函数</a></li>
+            <li><a href="#使用示例">使用示例</a></li>
           </ul>
         </li>
+        <li><a href="#22-可变参数">2.2 可变参数</a>
+          <ul>
+            <li><a href="#使用示例-1">使用示例</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#3变量作用域">3.变量作用域</a>
+      <ul>
+        <li><a href="#31-定义介绍">3.1 定义介绍</a></li>
+        <li><a href="#32-使用示例">3.2 使用示例</a></li>
+      </ul>
+    </li>
+    <li><a href="#4函数类型">4.函数类型</a>
+      <ul>
+        <li><a href="#41-使用示例">4.1 使用示例</a></li>
+      </ul>
+    </li>
+    <li><a href="#5匿名函数">5.匿名函数</a>
+      <ul>
+        <li><a href="#51-语法">5.1 语法</a></li>
+        <li><a href="#52-使用示例">5.2 使用示例</a>
+          <ul>
+            <li><a href="#1-调用匿名函数">1. 调用匿名函数</a></li>
+            <li><a href="#2匿名函数当参数">2.匿名函数当参数</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#6递归函数">6.递归函数</a>
+      <ul>
+        <li><a href="#61-概念">6.1 概念</a></li>
+        <li><a href="#62-使用示例">6.2 使用示例</a></li>
+        <li><a href="#63-使用注意事项">6.3 使用注意事项</a></li>
       </ul>
     </li>
   </ul>
 </nav>
   </div>
 </div>
-  <div class="post-outdated">
-    <div class="hint">
-      <p>【注意】最后更新于 <span class="timeago" datetime="2022-12-04T12:27:48" title="December 4, 2022">December 4, 2022</span>，文中内容可能已过时，请谨慎使用。</p>
-    </div>
-  </div>
     <div class="post-content">
-      <h3 id="1函数申明">1.函数申明</h3>
-<h4 id="11-声明语法">1.1 声明语法</h4>
+      <h1 id="1函数申明">1.函数申明</h1>
+<h2 id="11-声明语法">1.1 声明语法</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -186,17 +216,17 @@
  <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="12-语法解析">1.2 语法解析</h4>
+</div><h2 id="12-语法解析">1.2 语法解析</h2>
 <ul>
 <li><code>func</code>:  函数关键字,</li>
 <li><code>funcName</code>: 指函数名，<font color=red>在同一个包内，函数不能重名。</font></li>
 <li><code>param</code>:  参数列表;参数列表指定的是参数类型、顺序及参数个数,函数可以包含参数也可以不包含。</li>
 <li><code>output1 type1, output2 type2</code>: 返回值列表，Go语言的函数可以返回多个值。返回值可以是返回数据的数据类型，也可以是<code>变量名+变量类型</code>的组合。</li>
 </ul>
-<h3 id="2-参数接收">2. 参数接收</h3>
-<h4 id="21-参数类型简写">2.1 参数类型简写</h4>
+<h1 id="2-参数接收">2. 参数接收</h1>
+<h2 id="21-参数类型简写">2.1 参数类型简写</h2>
 <p>在参数列表中，如果有多个参数变量，则以逗号分隔；如果相邻变量是同类型，则可以将类型省略。</p>
-<h5 id="使用示例">使用示例</h5>
+<h3 id="使用示例">使用示例</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -260,9 +290,9 @@
 </span><span class="c1"></span><span class="nx">total</span><span class="p">:</span> <span class="mi">7</span> <span class="nx">desc</span><span class="p">:</span> <span class="nx">求和</span><span class="p">:</span>  <span class="mi">3</span> <span class="o">+</span> <span class="mi">4</span> <span class="p">=</span> <span class="mi">7</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="22-可变参数">2.2 可变参数</h4>
+</div><h2 id="22-可变参数">2.2 可变参数</h2>
 <p><code>arg ...type</code>: 告诉<code>Go</code>这个函数接受不定数量的参数。<font color=blue>在函数体中，变量arg是一个int的slice（切片）。</font></p>
-<h5 id="使用示例-1">使用示例</h5>
+<h3 id="使用示例-1">使用示例</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -312,13 +342,13 @@
 <li>一个函数最多只能有一个可变参数。</li>
 <li>若参数列表中还有其他类型参数，则可变参数写在所有参数的最后</li>
 </ul>
-<h3 id="3变量作用域">3.变量作用域</h3>
-<h4 id="31-定义介绍">3.1 定义介绍</h4>
+<h1 id="3变量作用域">3.变量作用域</h1>
+<h2 id="31-定义介绍">3.1 定义介绍</h2>
 <p>作用域是变量、常量、类型、函数的作用范围。</p>
 <p><strong>局部变量:</strong> 在函数体内声明的变量称为局部变量，它们的作用域只在函数体内，其生命周期同所在的函数。参数和返回值变量也是局部变量。</p>
 <p><strong>全局变量:</strong> 在函数体外声明的变量称为全局变量，全局变量可以在整个包甚至外部包（被导出后）使用。全局变量的生命周期同<code>main()</code>。</p>
 <p><font color=red>全局变量可以在任何函数中使用。Go语言程序中全局变量与局部变量名称可以相同，但是函数内的局部变量会被优先考虑。</font></p>
-<h4 id="32-使用示例">3.2 使用示例</h4>
+<h2 id="32-使用示例">3.2 使用示例</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -378,10 +408,10 @@
 <span class="nx">add</span> <span class="p">=</span> <span class="mi">250</span> 
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="4函数类型">4.函数类型</h3>
+</div><h1 id="4函数类型">4.函数类型</h1>
 <p>在Go语言中，函数也是一种类型，可以和其他类型（如int32、float等等）一样被保存在变量中。</p>
 <p><font color = blue>在Go语言中可以通过type来定义一个自定义类型。函数的参数完全相同（包括参数类型、个数、顺序），函数返回值相同。</font></p>
-<h4 id="41-使用示例">4.1 使用示例</h4>
+<h2 id="41-使用示例">4.1 使用示例</h2>
 <p><strong>示例1: 不声明函数类型</strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -522,9 +552,9 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="5匿名函数">5.匿名函数</h3>
+</div><h1 id="5匿名函数">5.匿名函数</h1>
 <p>Go语言支持匿名函数，匿名函数没有函数名，只有函数体，函数可以作为一种类型被赋值给变量，匿名函数也往往以变量方式被传递。</p>
-<h4 id="51-语法">5.1 语法</h4>
+<h2 id="51-语法">5.1 语法</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -537,8 +567,8 @@
 </span><span class="c1"></span><span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="52-使用示例">5.2 使用示例</h4>
-<h5 id="1-调用匿名函数">1. 调用匿名函数</h5>
+</div><h2 id="52-使用示例">5.2 使用示例</h2>
+<h3 id="1-调用匿名函数">1. 调用匿名函数</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -569,7 +599,7 @@
 <span class="c1">// 输出: add = 15
 </span></code></pre></td></tr></table>
 </div>
-</div><h5 id="2匿名函数当参数">2.匿名函数当参数</h5>
+</div><h3 id="2匿名函数当参数">2.匿名函数当参数</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -606,15 +636,15 @@
 <span class="c1">// 输出: 返回结果 : 30
 </span></code></pre></td></tr></table>
 </div>
-</div><h3 id="6递归函数">6.递归函数</h3>
-<h4 id="61-概念">6.1 概念</h4>
+</div><h1 id="6递归函数">6.递归函数</h1>
+<h2 id="61-概念">6.1 概念</h2>
 <p>在函数内部，可以调用其他函数。如果一个函数在内部调用自身，那么这个函数就是递归函数。</p>
 <p>递归函数必须满足以下两个条件:</p>
 <ul>
 <li>在每一次调用自己时，必须是（在某种意义上）更接近于解。</li>
 <li>必须有一个终止处理或计算的准则。</li>
 </ul>
-<h4 id="62-使用示例">6.2 使用示例</h4>
+<h2 id="62-使用示例">6.2 使用示例</h2>
 <p>实现阶乘：<code>n!=1×2×3×...×n</code></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -648,7 +678,7 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="63-使用注意事项">6.3 使用注意事项</h4>
+</div><h2 id="63-使用注意事项">6.3 使用注意事项</h2>
 <p>使用递归函数需要注意防止栈溢出。在计算机中，<font color=red>函数调用是通过栈（stack）这种数据结构实现的，每当进入一个函数调用，栈就会加一层，每当函数返回，栈就会减一层。</font>由于栈的大小不是无限的，所以，递归调用的次数过多，会导致栈溢出。</p>
 
     </div>
@@ -661,7 +691,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2022-12-04
+        2023-03-04
         
     </span>
   </p>

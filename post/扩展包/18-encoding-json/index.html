@@ -44,11 +44,11 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/18-encoding-json/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-04-18T00:00:00+00:00" />
-<meta property="article:modified_time" content="2022-10-04T07:42:32+08:00" />
+<meta property="article:modified_time" content="2023-03-04T13:27:21+08:00" />
 
 <meta itemprop="name" content="Go扩展包(十八):encoding-json">
 <meta itemprop="description" content="1. 介绍 Go的标准包 encoding/json实现了json对象的编码和解码。 这篇文章主要讲的是结构体中嵌套匿名字段时的序列化和反序列化，因结"><meta itemprop="datePublished" content="2021-04-18T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2022-10-04T07:42:32+08:00" />
+<meta itemprop="dateModified" content="2023-03-04T13:27:21+08:00" />
 <meta itemprop="wordCount" content="4330">
 <meta itemprop="keywords" content="Go扩展包," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go扩展包(十八):encoding-json"/>
@@ -144,14 +144,56 @@
   <div class="post-toc-content always-active">
     <nav id="TableOfContents">
   <ul>
-    <li>
+    <li><a href="#1-介绍">1. 介绍</a>
       <ul>
-        <li>
+        <li><a href="#11-go和json数据类型">1.1 Go和JSON数据类型</a></li>
+        <li><a href="#12-结构体序列化规则">1.2 结构体序列化规则</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-匿名字段序列化">2. 匿名字段序列化</a>
+      <ul>
+        <li><a href="#21-无json标签">2.1 无<code>JSON</code>标签</a>
           <ul>
-            <li><a href="#1-介绍">1. 介绍</a></li>
-            <li><a href="#2-匿名字段序列化">2. 匿名字段序列化</a></li>
-            <li><a href="#3-匿名字段反序列化">3. 匿名字段反序列化</a></li>
-            <li><a href="#4-匿名字段json总结">4. 匿名字段<code>json</code>总结</a></li>
+            <li><a href="#a-字段标签不重复">a. 字段标签不重复</a></li>
+            <li><a href="#b-字段标签重复">b. 字段标签重复</a></li>
+          </ul>
+        </li>
+        <li><a href="#22-有json标签">2.2 有<code>JSON</code>标签</a>
+          <ul>
+            <li><a href="#a-字段标签重复">a. 字段标签重复</a></li>
+            <li><a href="#b-字段标签不重复">b. 字段标签不重复</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#3-匿名字段反序列化">3. 匿名字段反序列化</a>
+      <ul>
+        <li><a href="#31-无json标签">3.1 无<code>JSON</code>标签</a>
+          <ul>
+            <li><a href="#a-字段标签不重复-1">a. 字段标签不重复</a></li>
+            <li><a href="#b-字段标签重复-1">b. 字段标签重复</a></li>
+          </ul>
+        </li>
+        <li><a href="#32-有json标签">3.2 有<code>JSON</code>标签</a>
+          <ul>
+            <li><a href="#a-字段标签重复-1">a. 字段标签重复</a></li>
+            <li><a href="#b-字段标签不重复-1">b. 字段标签不重复</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#4-匿名字段json总结">4. 匿名字段<code>json</code>总结</a>
+      <ul>
+        <li><a href="#41-序列化">4.1 序列化</a>
+          <ul>
+            <li><a href="#a-匿名字段无标签">a. 匿名字段无标签</a></li>
+            <li><a href="#b-匿名字段有标签">b. 匿名字段有标签</a></li>
+          </ul>
+        </li>
+        <li><a href="#42-反序列化">4.2 反序列化</a>
+          <ul>
+            <li><a href="#a-匿名字段无标签-1">a. 匿名字段无标签</a></li>
+            <li><a href="#b-匿名字段有标签-1">b. 匿名字段有标签</a></li>
           </ul>
         </li>
       </ul>
@@ -160,18 +202,13 @@
 </nav>
   </div>
 </div>
-  <div class="post-outdated">
-    <div class="hint">
-      <p>【注意】最后更新于 <span class="timeago" datetime="2022-10-04T07:42:32" title="October 4, 2022">October 4, 2022</span>，文中内容可能已过时，请谨慎使用。</p>
-    </div>
-  </div>
     <div class="post-content">
-      <h3 id="1-介绍">1. 介绍</h3>
+      <h1 id="1-介绍">1. 介绍</h1>
 <blockquote>
 <p><code>Go</code>的标准包 <code>encoding/json</code>实现了<code>json对象</code>的编码和解码。</p>
 </blockquote>
 <p>这篇文章主要讲的是结构体中嵌套匿名字段时的序列化和反序列化，因结构体在参与序列时会有很多细节规则，平时常用的也是结构体，至于<code>map和slice</code>可参考历史文章 <a href="https://mp.weixin.qq.com/s/lmWYxkLU4dV0h-J99Tztzg">Go学习(二十三):JSON编码解析使用</a></p>
-<h4 id="11-go和json数据类型">1.1 Go和JSON数据类型</h4>
+<h2 id="11-go和json数据类型">1.1 Go和JSON数据类型</h2>
 <table>
 <thead>
 <tr>
@@ -206,7 +243,7 @@
 </tr>
 </tbody>
 </table>
-<h4 id="12-结构体序列化规则">1.2 结构体序列化规则</h4>
+<h2 id="12-结构体序列化规则">1.2 结构体序列化规则</h2>
 <p><strong><font color=red>@注意：可导出的字段(首字母大写)，才能参与Json的序列化</font></strong></p>
 <table>
 <thead>
@@ -316,9 +353,9 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="2-匿名字段序列化">2. 匿名字段序列化</h3>
-<h4 id="21-无json标签">2.1 无<code>JSON</code>标签</h4>
-<h5 id="a-字段标签不重复">a. 字段标签不重复</h5>
+</div><h1 id="2-匿名字段序列化">2. 匿名字段序列化</h1>
+<h2 id="21-无json标签">2.1 无<code>JSON</code>标签</h2>
+<h3 id="a-字段标签不重复">a. 字段标签不重复</h3>
 <p><strong><font color=green>School.Name和StudentA.Name，Json标签不一致。</font></strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -384,7 +421,7 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h5 id="b-字段标签重复">b. 字段标签重复</h5>
+</div><h3 id="b-字段标签重复">b. 字段标签重复</h3>
 <p><strong><font color=green>Class.Name和StudentB.Name，Json标签一致，都是 <code>json:&quot;name&quot;</code>。</font></strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -455,9 +492,9 @@
 </code></pre></td></tr></table>
 </div>
 </div><p><strong><font color=red>根据上面代码，得知如果字段标签冲突，冲突的匿名字段会被忽略。</font></strong></p>
-<h4 id="22-有json标签">2.2 有<code>JSON</code>标签</h4>
+<h2 id="22-有json标签">2.2 有<code>JSON</code>标签</h2>
 <p>当匿名字段设置<code>json</code>标签时, 就不会出现冲突的情况，因为序列化后的匿名字段会变成对象。</p>
-<h5 id="a-字段标签重复">a. 字段标签重复</h5>
+<h3 id="a-字段标签重复">a. 字段标签重复</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -514,7 +551,7 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h5 id="b-字段标签不重复">b. 字段标签不重复</h5>
+</div><h3 id="b-字段标签不重复">b. 字段标签不重复</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -567,9 +604,9 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="3-匿名字段反序列化">3. 匿名字段反序列化</h3>
-<h4 id="31-无json标签">3.1 无<code>JSON</code>标签</h4>
-<h5 id="a-字段标签不重复-1">a. 字段标签不重复</h5>
+</div><h1 id="3-匿名字段反序列化">3. 匿名字段反序列化</h1>
+<h2 id="31-无json标签">3.1 无<code>JSON</code>标签</h2>
+<h3 id="a-字段标签不重复-1">a. 字段标签不重复</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -628,7 +665,7 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h5 id="b-字段标签重复-1">b. 字段标签重复</h5>
+</div><h3 id="b-字段标签重复-1">b. 字段标签重复</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -692,8 +729,8 @@
 </code></pre></td></tr></table>
 </div>
 </div><p><strong><font color=red>@注意: 当字段标签重复时,反序列化会优先给主属性字段赋值。</font></strong></p>
-<h4 id="32-有json标签">3.2 有<code>JSON</code>标签</h4>
-<h5 id="a-字段标签重复-1">a. 字段标签重复</h5>
+<h2 id="32-有json标签">3.2 有<code>JSON</code>标签</h2>
+<h3 id="a-字段标签重复-1">a. 字段标签重复</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -754,7 +791,7 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h5 id="b-字段标签不重复-1">b. 字段标签不重复</h5>
+</div><h3 id="b-字段标签不重复-1">b. 字段标签不重复</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -815,9 +852,9 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="4-匿名字段json总结">4. 匿名字段<code>json</code>总结</h3>
-<h4 id="41-序列化">4.1 序列化</h4>
-<h5 id="a-匿名字段无标签">a. 匿名字段无标签</h5>
+</div><h1 id="4-匿名字段json总结">4. 匿名字段<code>json</code>总结</h1>
+<h2 id="41-序列化">4.1 序列化</h2>
+<h3 id="a-匿名字段无标签">a. 匿名字段无标签</h3>
 <ul>
 <li>
 <p>当匿名字段没有指定标签时，序列化后的结构为同级,如<code>{&quot;..&quot;:&quot;..&quot;,..}</code></p>
@@ -829,19 +866,19 @@
 <p>当匿名属性和主属性的字段标签不一样时，序列化不忽略任何字段。</p>
 </li>
 </ul>
-<h5 id="b-匿名字段有标签">b. 匿名字段有标签</h5>
+<h3 id="b-匿名字段有标签">b. 匿名字段有标签</h3>
 <ul>
 <li>当匿名字段<code>a</code>指定标签时，序列化后的结构为上下级,如<code>{&quot;..&quot;:&quot;..&quot;,&quot;a&quot;:{&quot;xx&quot;:&quot;xx&quot;}}</code></li>
 <li>匿名属性和主属性字段，标签无论是否一致，序列化都不会忽略任何字段。</li>
 </ul>
-<h4 id="42-反序列化">4.2 反序列化</h4>
-<h5 id="a-匿名字段无标签-1">a. 匿名字段无标签</h5>
+<h2 id="42-反序列化">4.2 反序列化</h2>
+<h3 id="a-匿名字段无标签-1">a. 匿名字段无标签</h3>
 <ul>
 <li>当匿名字段没有指定标签时，可解析的<code>JSON</code>结构,为: <code>{&quot;..&quot;:&quot;..&quot;,..}</code></li>
 <li>当匿名属性和主属性的字段标签一样时，会优先将值赋给主属性，匿名属性为类型零值。</li>
 <li>当匿名属性和主属性的字段标签不一样时，会正常解析。</li>
 </ul>
-<h5 id="b-匿名字段有标签-1">b. 匿名字段有标签</h5>
+<h3 id="b-匿名字段有标签-1">b. 匿名字段有标签</h3>
 <ul>
 <li>当匿名字段指定标签时，可解析的<code>JSON</code>结构,为: <code>{&quot;..&quot;:&quot;..&quot;,&quot;a&quot;:{&quot;xx&quot;:&quot;xx&quot;}}</code></li>
 <li>匿名属性和主属性字段，标签无论是否一致，反序列化都能正常赋值。</li>
@@ -860,7 +897,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2022-10-04
+        2023-03-04
         
     </span>
   </p>

@@ -44,11 +44,11 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/%E5%9F%BA%E7%A1%80%E7%AF%87/1-%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-01-01T00:00:00+00:00" />
-<meta property="article:modified_time" content="2022-05-02T12:20:32+08:00" />
+<meta property="article:modified_time" content="2023-03-04T13:23:23+08:00" />
 
 <meta itemprop="name" content="Go学习(一):Mac环境下安装配置">
 <meta itemprop="description" content="1.安装 下载地址（https://golang.org/dl/） 下载之后，双击安装； 2.验证 2.1 查看版本 1 2 3 # 查看版本 ➜ ~ go version go version go1.15.5 darwin/amd64 2.2 查看"><meta itemprop="datePublished" content="2021-01-01T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2022-05-02T12:20:32+08:00" />
+<meta itemprop="dateModified" content="2023-03-04T13:23:23+08:00" />
 <meta itemprop="wordCount" content="683">
 <meta itemprop="keywords" content="Go基础," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go学习(一):Mac环境下安装配置"/>
@@ -144,34 +144,37 @@
   <div class="post-toc-content always-active">
     <nav id="TableOfContents">
   <ul>
-    <li>
+    <li><a href="#1安装">1.安装</a></li>
+    <li><a href="#2验证">2.验证</a>
       <ul>
-        <li>
-          <ul>
-            <li><a href="#1安装">1.安装</a></li>
-            <li><a href="#2验证">2.验证</a></li>
-            <li><a href="#3环境变量介绍">3.环境变量介绍</a></li>
-            <li><a href="#4修改配置">4.修改配置</a></li>
-          </ul>
-        </li>
+        <li><a href="#21-查看版本">2.1 查看版本</a></li>
+        <li><a href="#22-查看go变量">2.2 查看Go变量</a></li>
+        <li><a href="#23-查看环境变量path">2.3 查看环境变量PATH</a></li>
+      </ul>
+    </li>
+    <li><a href="#3环境变量介绍">3.环境变量介绍</a>
+      <ul>
+        <li><a href="#31-goroot">3.1 GOROOT</a></li>
+        <li><a href="#32--gopath">3.2  GOPATH</a></li>
+        <li><a href="#33--gobin">3.3  GOBIN</a></li>
+      </ul>
+    </li>
+    <li><a href="#4修改配置">4.修改配置</a>
+      <ul>
+        <li><a href="#41-配置gopathgobin">4.1 配置GOPATH、GOBIN</a></li>
       </ul>
     </li>
   </ul>
 </nav>
   </div>
 </div>
-  <div class="post-outdated">
-    <div class="warn">
-      <p>【注意】最后更新于 <span class="timeago" datetime="2022-05-02T12:20:32" title="May 2, 2022">May 2, 2022</span>，文中内容可能已过时，请谨慎使用。</p>
-    </div>
-  </div>
     <div class="post-content">
-      <h3 id="1安装">1.安装</h3>
+      <h1 id="1安装">1.安装</h1>
 <p><a href="https://golang.org/dl/">下载地址（https://golang.org/dl/）</a></p>
 <p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/image-20201113095444058.png" alt="image-20201113095444058"></p>
 <p><strong>下载之后，双击安装；</strong></p>
-<h3 id="2验证">2.验证</h3>
-<h4 id="21-查看版本">2.1 查看版本</h4>
+<h1 id="2验证">2.验证</h1>
+<h2 id="21-查看版本">2.1 查看版本</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -184,7 +187,7 @@
 go version go1.15.5 darwin/amd64
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="22-查看go变量">2.2 查看Go变量</h4>
+</div><h2 id="22-查看go变量">2.2 查看Go变量</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -263,7 +266,7 @@ go version go1.15.5 darwin/amd64
 <span class="nv">GOGCCFLAGS</span><span class="o">=</span><span class="s2">&#34;-fPIC -m64 -pthread -fno-caret-diagnostics -Qunused-arguments -fmessage-length=0 -fdebug-prefix-map=/var/folders/8f/vnx2y1h57nzbd2p4vtcl6hv80000gn/T/go-build487191191=/tmp/go-build -gno-record-gcc-switches -fno-common&#34;</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="23-查看环境变量path">2.3 查看环境变量PATH</h4>
+</div><h2 id="23-查看环境变量path">2.3 查看环境变量PATH</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -276,10 +279,10 @@ go version go1.15.5 darwin/amd64
 <span class="c1"># 可以看出/usr/local/go/bin 已经存在</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="3环境变量介绍">3.环境变量介绍</h3>
-<h4 id="31-goroot">3.1 GOROOT</h4>
+</div><h1 id="3环境变量介绍">3.环境变量介绍</h1>
+<h2 id="31-goroot">3.1 GOROOT</h2>
 <p><code>golang</code> 的安装路径,<code>MAC</code>环境下安装后,默认在(<code>/usr/local/go</code>)</p>
-<h4 id="32--gopath">3.2  GOPATH</h4>
+<h2 id="32--gopath">3.2  GOPATH</h2>
 <p>可以理解为工作目录，该目录下约定有三个子目录，分别为:<code>src、pkg、bin</code>;</p>
 <ul>
 <li>
@@ -290,12 +293,12 @@ go version go1.15.5 darwin/amd64
 </li>
 <li>
 <p><code>bin</code>： 存放编译后生成的可执行文件（为了方便，可以把此目录加入到 <code>$PATH</code> 变量中，如果有多个<code>GOPATH</code>，那么使用<code>${GOPATH//://bin:}/bin</code>添加所有的<code>bin</code>目录）</p>
-<h4 id="33--gobin">3.3  GOBIN</h4>
+<h2 id="33--gobin">3.3  GOBIN</h2>
 </li>
 </ul>
 <p>当我们使用<code>go install</code>命令编译和打包应用程序时，该命令会将编译后二进制程序文件 存放到<code>GOBIN</code>目录下，一般我们将<code>GOBIN</code>设置为<code>$GOPATH/bin</code>目录。</p>
-<h3 id="4修改配置">4.修改配置</h3>
-<h4 id="41-配置gopathgobin">4.1 配置GOPATH、GOBIN</h4>
+<h1 id="4修改配置">4.修改配置</h1>
+<h2 id="41-配置gopathgobin">4.1 配置GOPATH、GOBIN</h2>
 <p><code>Go</code>安装后默认<code>GOPATH</code>为: <code>$HOME/go</code>(这里是<code>cd /Users/hui/go</code>);</p>
 <p>修改<code>.bash_profile</code>，如果安装了<code>iTerm2</code>客户端需要修改<code>.zshrc</code>;</p>
 <div class="highlight"><div class="chroma">
@@ -323,7 +326,7 @@ go version go1.15.5 darwin/amd64
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2022-05-02
+        2023-03-04
         
     </span>
   </p>

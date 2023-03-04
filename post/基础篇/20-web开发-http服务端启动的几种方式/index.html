@@ -44,11 +44,11 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/%E5%9F%BA%E7%A1%80%E7%AF%87/20-web%E5%BC%80%E5%8F%91-http%E6%9C%8D%E5%8A%A1%E7%AB%AF%E5%90%AF%E5%8A%A8%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E5%BC%8F/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-01-20T00:00:00+00:00" />
-<meta property="article:modified_time" content="2022-05-02T12:20:32+08:00" />
+<meta property="article:modified_time" content="2023-03-04T13:23:22+08:00" />
 
 <meta itemprop="name" content="Go学习(二十):Web开发-HTTP服务端启动的几种方式">
 <meta itemprop="description" content="1. 怎么启动Web服务？ Go语言标准库内置的net/http包，可以实现HTTP服务端。实现HTTP服务端就是能够启动Web服务，相当于搭建起"><meta itemprop="datePublished" content="2021-01-20T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2022-05-02T12:20:32+08:00" />
+<meta itemprop="dateModified" content="2023-03-04T13:23:22+08:00" />
 <meta itemprop="wordCount" content="2214">
 <meta itemprop="keywords" content="Go基础," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go学习(二十):Web开发-HTTP服务端启动的几种方式"/>
@@ -144,13 +144,31 @@
   <div class="post-toc-content always-active">
     <nav id="TableOfContents">
   <ul>
-    <li>
+    <li><a href="#1-怎么启动web服务">1. 怎么启动Web服务？</a></li>
+    <li><a href="#2启动web服务的几种方式">2.启动Web服务的几种方式</a>
       <ul>
-        <li>
+        <li><a href="#21-httpfileserver-静态文件服务">2.1 http.FileServer: 静态文件服务</a>
           <ul>
-            <li><a href="#1-怎么启动web服务">1. 怎么启动Web服务？</a></li>
-            <li><a href="#2启动web服务的几种方式">2.启动Web服务的几种方式</a></li>
-            <li><a href="#3-自定义多路由实践">3. 自定义多路由实践</a></li>
+            <li><a href="#1使用示例">1.使用示例</a></li>
+          </ul>
+        </li>
+        <li><a href="#22-httphandlefunc-默认的多路由分发服务">2.2 http.HandleFunc: 默认的多路由分发服务</a>
+          <ul>
+            <li><a href="#1使用示例-1">1.使用示例</a></li>
+          </ul>
+        </li>
+        <li><a href="#23-httpnewservemux-自定义多路由分发服务">2.3 http.NewServeMux(): 自定义多路由分发服务</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-自定义多路由实践">3. 自定义多路由实践</a>
+      <ul>
+        <li><a href="#31-代码执行流程">3.1 代码执行流程</a>
+          <ul>
+            <li><a href="#1实例化httpserver并调用listenandserve">1.实例化<code>http.Server</code>,并调用<code>ListenAndServe()</code></a></li>
+            <li><a href="#2监听端口">2.监听端口</a></li>
+            <li><a href="#3启动for无限循环在循环体中accept请求并开启-goroutine为这个请求服务">3.启动for无限循环,在循环体中<code>Accept</code>请求，并开启<code> goroutine</code>为这个请求服务</a></li>
+            <li><a href="#4读取每个请求内容并调用servehttp">4.读取每个请求内容,并调用<code>ServeHTTP</code></a></li>
+            <li><a href="#5-判断handler是否为空如果为空则把handler设置成defaultservemux">5. 判断<code>handler</code>是否为空,如果为空则把<code>handler</code>设置成<code>DefaultServeMux</code>。</a></li>
           </ul>
         </li>
       </ul>
@@ -159,13 +177,8 @@
 </nav>
   </div>
 </div>
-  <div class="post-outdated">
-    <div class="warn">
-      <p>【注意】最后更新于 <span class="timeago" datetime="2022-05-02T12:20:32" title="May 2, 2022">May 2, 2022</span>，文中内容可能已过时，请谨慎使用。</p>
-    </div>
-  </div>
     <div class="post-content">
-      <h3 id="1-怎么启动web服务">1. 怎么启动Web服务？</h3>
+      <h1 id="1-怎么启动web服务">1. 怎么启动Web服务？</h1>
 <p><code>Go</code>语言标准库内置的<code>net/http</code>包，可以实现<code>HTTP</code>服务端。实现<code>HTTP</code>服务端就是能够启动<code>Web</code>服务，相当于搭建起了一个<code>Web</code>服务器。
 <code>http.ListenAndServer()</code>函数用来启动<code>Web</code>服务，绑定并监听<code>http</code>端口。</p>
 <div class="highlight"><div class="chroma">
@@ -180,11 +193,11 @@
 </span><span class="c1">// handler：HTTP处理器Handler
 </span></code></pre></td></tr></table>
 </div>
-</div><h3 id="2启动web服务的几种方式">2.启动Web服务的几种方式</h3>
+</div><h1 id="2启动web服务的几种方式">2.启动Web服务的几种方式</h1>
 <p>根据不同服务返回的<code>handler</code>,常见启动<code>Web</code>服务有以下几种方式。</p>
-<h4 id="21-httpfileserver-静态文件服务">2.1 http.FileServer: 静态文件服务</h4>
+<h2 id="21-httpfileserver-静态文件服务">2.1 http.FileServer: 静态文件服务</h2>
 <p><code>http.FileServer()</code>搭建的服务器只提供静态文件的访问。因为这种<code>web</code>服务只支持静态文件访问，所以称之为静态文件服务。</p>
-<h5 id="1使用示例">1.使用示例</h5>
+<h3 id="1使用示例">1.使用示例</h3>
 <p><strong>文件目录如下:</strong></p>
 <img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/image-20201228174249803.png" alt="image-20201228174249803" style="zoom:63%;" />
 <div class="highlight"><div class="chroma">
@@ -218,7 +231,7 @@
 </code></pre></td></tr></table>
 </div>
 </div><p><font color=red>注意: 启动的时候，需求使用go run main.go。否则会报404</font></p>
-<h4 id="22-httphandlefunc-默认的多路由分发服务">2.2 http.HandleFunc: 默认的多路由分发服务</h4>
+<h2 id="22-httphandlefunc-默认的多路由分发服务">2.2 http.HandleFunc: 默认的多路由分发服务</h2>
 <p><code>http.HandleFunc()</code>的作用是注册网络访问的路由。因为它采用的是默认的路由分发任务方式，所以称之为默认的多路由分发服务。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -239,7 +252,7 @@
 </div><blockquote>
 <p><code>ServeHTTP()</code>方法有两个参数，其中第一个参数是<code>ResponseWriter</code>类型，包含了服务器端给客户端的响应数据。服务器端往<code>ResponseWriter</code>写入了什么内容，浏览器的网页源码就是什么内容。第二个参数是一个 <code>*Request</code>指针，包含了客户端发送给服务器端的请求信息（路径、浏览器类型等）</p>
 </blockquote>
-<h5 id="1使用示例-1">1.使用示例</h5>
+<h3 id="1使用示例-1">1.使用示例</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -309,7 +322,7 @@
 </div><blockquote>
 <p>通过<code>http. HandleFunc()</code>注册网络路由时，<code>http.ListenAndServer()</code>的第二个参数通常为<code>nil</code>，这意味着服务端采用默认的<code>http.DefaultServeMux</code>进行分发处理。</p>
 </blockquote>
-<h4 id="23-httpnewservemux-自定义多路由分发服务">2.3 http.NewServeMux(): 自定义多路由分发服务</h4>
+<h2 id="23-httpnewservemux-自定义多路由分发服务">2.3 http.NewServeMux(): 自定义多路由分发服务</h2>
 <p><code>http.NewServeMux()</code>的作用是注册网络访问的多路路由。因为它采用的是自定义的多路由分发任务方式，所以称之为自定义多路由分发服务。</p>
 <p>注册网络路由时，如果<code>http.ListenAndServer()</code>的第二个参数为<code>nil</code>，那么表示服务端采用默认的<code>http.DefaultServeMux</code>进行分发处理。也可以自定义<code>ServeMux</code>。<code>ServeMux</code>结构体如下</p>
 <div class="highlight"><div class="chroma">
@@ -342,7 +355,7 @@
 </span><span class="c1"></span><span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="3-自定义多路由实践">3. 自定义多路由实践</h3>
+</div><h1 id="3-自定义多路由实践">3. 自定义多路由实践</h1>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -405,9 +418,9 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="31-代码执行流程">3.1 代码执行流程</h4>
+</div><h2 id="31-代码执行流程">3.1 代码执行流程</h2>
 <p>使用<code>http.ListenAndServe(&quot;:10000&quot;,myRoute)</code>启动服务之后，会发生以下操作</p>
-<h5 id="1实例化httpserver并调用listenandserve">1.实例化<code>http.Server</code>,并调用<code>ListenAndServe()</code></h5>
+<h3 id="1实例化httpserver并调用listenandserve">1.实例化<code>http.Server</code>,并调用<code>ListenAndServe()</code></h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -426,7 +439,7 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h5 id="2监听端口">2.监听端口</h5>
+</div><h3 id="2监听端口">2.监听端口</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -465,7 +478,7 @@
    <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h5 id="3启动for无限循环在循环体中accept请求并开启-goroutine为这个请求服务">3.启动for无限循环,在循环体中<code>Accept</code>请求，并开启<code> goroutine</code>为这个请求服务</h5>
+</div><h3 id="3启动for无限循环在循环体中accept请求并开启-goroutine为这个请求服务">3.启动for无限循环,在循环体中<code>Accept</code>请求，并开启<code> goroutine</code>为这个请求服务</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -514,7 +527,7 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h5 id="4读取每个请求内容并调用servehttp">4.读取每个请求内容,并调用<code>ServeHTTP</code></h5>
+</div><h3 id="4读取每个请求内容并调用servehttp">4.读取每个请求内容,并调用<code>ServeHTTP</code></h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -543,7 +556,7 @@
 </span><span class="c1"></span><span class="p">}</span> 
 </code></pre></td></tr></table>
 </div>
-</div><h5 id="5-判断handler是否为空如果为空则把handler设置成defaultservemux">5. 判断<code>handler</code>是否为空,如果为空则把<code>handler</code>设置成<code>DefaultServeMux</code>。</h5>
+</div><h3 id="5-判断handler是否为空如果为空则把handler设置成defaultservemux">5. 判断<code>handler</code>是否为空,如果为空则把<code>handler</code>设置成<code>DefaultServeMux</code>。</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -585,7 +598,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2022-05-02
+        2023-03-04
         
     </span>
   </p>

@@ -44,11 +44,11 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/%E5%9F%BA%E7%A1%80%E7%AF%87/22-web%E5%BC%80%E5%8F%91-http%E5%AE%A2%E6%88%B7%E7%AB%AF%E7%9A%84%E5%AE%9E%E7%8E%B0/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-01-22T00:00:00+00:00" />
-<meta property="article:modified_time" content="2022-01-16T18:28:15+08:00" />
+<meta property="article:modified_time" content="2023-03-04T13:23:22+08:00" />
 
 <meta itemprop="name" content="Go学习(二十二):Web开发-HTTP客户端的实现">
 <meta itemprop="description" content="1.怎么实现HTTP协议客户端? Go语言标准库内置了net/http包，涵盖了HTTP客户端和服务端具体的实现方式。内置的net/http包"><meta itemprop="datePublished" content="2021-01-22T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2022-01-16T18:28:15+08:00" />
+<meta itemprop="dateModified" content="2023-03-04T13:23:22+08:00" />
 <meta itemprop="wordCount" content="2783">
 <meta itemprop="keywords" content="Go基础," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go学习(二十二):Web开发-HTTP客户端的实现"/>
@@ -144,13 +144,46 @@
   <div class="post-toc-content always-active">
     <nav id="TableOfContents">
   <ul>
-    <li>
+    <li><a href="#1怎么实现http协议客户端">1.怎么实现HTTP协议客户端?</a></li>
+    <li><a href="#2get请求">2.Get请求</a>
       <ul>
-        <li>
+        <li><a href="#21-使用httpnewrequest">2.1 使用http.NewRequest</a>
           <ul>
-            <li><a href="#1怎么实现http协议客户端">1.怎么实现HTTP协议客户端?</a></li>
-            <li><a href="#2get请求">2.Get请求</a></li>
-            <li><a href="#3post请求">3.Post请求</a></li>
+            <li><a href="#1-源码">1. 源码</a></li>
+            <li><a href="#2-使用示例">2. 使用示例</a></li>
+          </ul>
+        </li>
+        <li><a href="#22-使用clentget">2.2 使用clent.Get</a>
+          <ul>
+            <li><a href="#1-源码-1">1. 源码</a></li>
+            <li><a href="#2--使用示例">2.  使用示例</a></li>
+          </ul>
+        </li>
+        <li><a href="#23-使用httpget">2.3 使用http.Get</a>
+          <ul>
+            <li><a href="#1源码">1.源码</a></li>
+            <li><a href="#2使用示例">2.使用示例</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#3post请求">3.Post请求</a>
+      <ul>
+        <li><a href="#31-使用httpnewrequest">3.1 使用http.NewRequest</a>
+          <ul>
+            <li><a href="#1-使用示例">1. 使用示例</a></li>
+          </ul>
+        </li>
+        <li><a href="#32-使用clientpost-或clientpostform">3.2 使用client.Post 或client.PostForm</a>
+          <ul>
+            <li><a href="#1源码-1">1.源码</a></li>
+            <li><a href="#2使用示例-1">2.使用示例</a></li>
+          </ul>
+        </li>
+        <li><a href="#33-使用-httppost或httppostform">3.3 使用 http.Post或http.PostForm</a>
+          <ul>
+            <li><a href="#1源码-2">1.源码</a></li>
+            <li><a href="#2使用示例-2">2.使用示例</a></li>
           </ul>
         </li>
       </ul>
@@ -159,18 +192,13 @@
 </nav>
   </div>
 </div>
-  <div class="post-outdated">
-    <div class="warn">
-      <p>【注意】最后更新于 <span class="timeago" datetime="2022-01-16T18:28:15" title="January 16, 2022">January 16, 2022</span>，文中内容可能已过时，请谨慎使用。</p>
-    </div>
-  </div>
     <div class="post-content">
-      <h3 id="1怎么实现http协议客户端">1.怎么实现HTTP协议客户端?</h3>
+      <h1 id="1怎么实现http协议客户端">1.怎么实现HTTP协议客户端?</h1>
 <p><code>Go</code>语言标准库内置了<code>net/http</code>包，涵盖了<code>HTTP</code>客户端和服务端具体的实现方式。内置的<code>net/http</code>包提供了最简洁的<code>HTTP</code>客户端实现方式，无须借助第三方网络通信库，就可以直接使用<code>HTTP</code>中用得最多的<code>GET</code>和<code>POST</code>方式请求数据。</p>
 <p>实现<code>HTTP</code>客户端就是客户端通过网络访问向服务端发送请求，服务端发送响应信息，并将相应信息输出到客户端的过程。实现客户端有以下几种方式。</p>
-<h3 id="2get请求">2.Get请求</h3>
-<h4 id="21-使用httpnewrequest">2.1 使用http.NewRequest</h4>
-<h5 id="1-源码">1. 源码</h5>
+<h1 id="2get请求">2.Get请求</h1>
+<h2 id="21-使用httpnewrequest">2.1 使用http.NewRequest</h2>
+<h3 id="1-源码">1. 源码</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -187,7 +215,7 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h5 id="2-使用示例">2. 使用示例</h5>
+</div><h3 id="2-使用示例">2. 使用示例</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -290,8 +318,8 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="22-使用clentget">2.2 使用clent.Get</h4>
-<h5 id="1-源码-1">1. 源码</h5>
+</div><h2 id="22-使用clentget">2.2 使用clent.Get</h2>
+<h3 id="1-源码-1">1. 源码</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -312,7 +340,7 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h5 id="2--使用示例">2.  使用示例</h5>
+</div><h3 id="2--使用示例">2.  使用示例</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -407,8 +435,8 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="23-使用httpget">2.3 使用http.Get</h4>
-<h5 id="1源码">1.源码</h5>
+</div><h2 id="23-使用httpget">2.3 使用http.Get</h2>
+<h3 id="1源码">1.源码</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -421,7 +449,7 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h5 id="2使用示例">2.使用示例</h5>
+</div><h3 id="2使用示例">2.使用示例</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -514,9 +542,9 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="3post请求">3.Post请求</h3>
-<h4 id="31-使用httpnewrequest">3.1 使用http.NewRequest</h4>
-<h5 id="1-使用示例">1. 使用示例</h5>
+</div><h1 id="3post请求">3.Post请求</h1>
+<h2 id="31-使用httpnewrequest">3.1 使用http.NewRequest</h2>
+<h3 id="1-使用示例">1. 使用示例</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -629,8 +657,8 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="32-使用clientpost-或clientpostform">3.2 使用client.Post 或client.PostForm</h4>
-<h5 id="1源码-1">1.源码</h5>
+</div><h2 id="32-使用clientpost-或clientpostform">3.2 使用client.Post 或client.PostForm</h2>
+<h3 id="1源码-1">1.源码</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -663,7 +691,7 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h5 id="2使用示例-1">2.使用示例</h5>
+</div><h3 id="2使用示例-1">2.使用示例</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -782,8 +810,8 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="33-使用-httppost或httppostform">3.3 使用 http.Post或http.PostForm</h4>
-<h5 id="1源码-2">1.源码</h5>
+</div><h2 id="33-使用-httppost或httppostform">3.3 使用 http.Post或http.PostForm</h2>
+<h3 id="1源码-2">1.源码</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -806,7 +834,7 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h5 id="2使用示例-2">2.使用示例</h5>
+</div><h3 id="2使用示例-2">2.使用示例</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -934,7 +962,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2022-01-16
+        2023-03-04
         
     </span>
   </p>

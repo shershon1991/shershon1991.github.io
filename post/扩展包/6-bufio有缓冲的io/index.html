@@ -44,11 +44,11 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/6-bufio%E6%9C%89%E7%BC%93%E5%86%B2%E7%9A%84io/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-04-06T00:00:00+00:00" />
-<meta property="article:modified_time" content="2022-10-04T07:42:32+08:00" />
+<meta property="article:modified_time" content="2023-03-04T13:27:21+08:00" />
 
 <meta itemprop="name" content="Go扩展包(六):bufio(有缓冲的IO)">
 <meta itemprop="description" content="1.介绍 bufio包实现了有缓冲的I/O。它包装一个io.Reader或io.Writer接口对象，使用这个包可以大幅提高文件读写的效率。 1"><meta itemprop="datePublished" content="2021-04-06T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2022-10-04T07:42:32+08:00" />
+<meta itemprop="dateModified" content="2023-03-04T13:27:21+08:00" />
 <meta itemprop="wordCount" content="2935">
 <meta itemprop="keywords" content="Go扩展包," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go扩展包(六):bufio(有缓冲的IO)"/>
@@ -144,13 +144,74 @@
   <div class="post-toc-content always-active">
     <nav id="TableOfContents">
   <ul>
-    <li>
+    <li><a href="#1介绍">1.介绍</a>
       <ul>
-        <li>
+        <li><a href="#1如何提高效率">1.如何提高效率?</a></li>
+      </ul>
+    </li>
+    <li><a href="#2读取read">2.读取(<code>Read*</code>)</a>
+      <ul>
+        <li><a href="#21-创建读取器">2.1 创建读取器</a>
           <ul>
-            <li><a href="#1介绍">1.介绍</a></li>
-            <li><a href="#2读取read">2.读取(<code>Read*</code>)</a></li>
-            <li><a href="#3写入write">3.写入(<code>Write*</code>)</a></li>
+            <li><a href="#1-创建默认缓冲大小-newreader">1. 创建默认缓冲大小 (<code>NewReader</code>)</a></li>
+          </ul>
+        </li>
+        <li><a href="#a签名">a.签名</a></li>
+        <li><a href="#b使用">b.使用</a>
+          <ul>
+            <li><a href="#2-创建指定缓冲大小-newreadersize">2. 创建指定缓冲大小( <code>NewReaderSize</code>)</a></li>
+          </ul>
+        </li>
+        <li><a href="#1签名">1.签名</a></li>
+        <li><a href="#2使用">2.使用</a></li>
+        <li><a href="#22-读取指定字节read">2.2 读取指定字节(<code>Read</code>)</a>
+          <ul>
+            <li><a href="#1签名-1">1.签名</a></li>
+            <li><a href="#2使用-1">2.使用</a></li>
+          </ul>
+        </li>
+        <li><a href="#23-读取一个字节readbyte">2.3 读取一个字节(<code>ReadByte</code>)</a>
+          <ul>
+            <li><a href="#1签名-2">1.签名</a></li>
+            <li><a href="#2使用-2">2.使用</a></li>
+          </ul>
+        </li>
+        <li><a href="#24-读取一行readline">2.4 读取一行(<code>ReadLine</code>)</a>
+          <ul>
+            <li><a href="#1签名-3">1.签名</a></li>
+            <li><a href="#2当行超过了缓冲缓存时">2.当行超过了缓冲缓存时</a></li>
+            <li><a href="#3当行小于缓冲缓存时">3.当行小于缓冲缓存时</a></li>
+          </ul>
+        </li>
+        <li><a href="#25-读取到指定的字符">2.5 读取到指定的字符</a>
+          <ul>
+            <li><a href="#1同类方法列表">1.同类方法列表</a></li>
+            <li><a href="#2常规使用">2.常规使用</a></li>
+            <li><a href="#3模拟每次读取一行">3.模拟每次读取一行</a></li>
+          </ul>
+        </li>
+        <li><a href="#26-每次读取前几个字节peek">2.6 每次读取前几个字节(Peek)</a>
+          <ul>
+            <li><a href="#1签名-4">1.签名</a></li>
+            <li><a href="#2内容小于n时">2.内容小于<code>n</code>时</a></li>
+            <li><a href="#3当n大于缓冲区大小时">3.当<code>n</code>大于缓冲区大小时</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#3写入write">3.写入(<code>Write*</code>)</a>
+      <ul>
+        <li><a href="#31-创建写入器">3.1 创建写入器</a>
+          <ul>
+            <li><a href="#1创建默认缓冲大小newwriter">1.创建默认缓冲大小(<code>NewWriter</code>)</a></li>
+          </ul>
+        </li>
+        <li><a href="#2创建默认缓冲大小newwriter">2.创建默认缓冲大小(<code>NewWriter</code>)</a></li>
+        <li><a href="#32-write">3.2 <code>Write*</code></a>
+          <ul>
+            <li><a href="#1方法列表">1.方法列表</a></li>
+            <li><a href="#2当写入内容大于缓冲区时">2.当写入内容大于缓冲区时</a></li>
+            <li><a href="#3当写入内容小于缓冲区时">3.当写入内容小于缓冲区时</a></li>
           </ul>
         </li>
       </ul>
@@ -159,15 +220,10 @@
 </nav>
   </div>
 </div>
-  <div class="post-outdated">
-    <div class="hint">
-      <p>【注意】最后更新于 <span class="timeago" datetime="2022-10-04T07:42:32" title="October 4, 2022">October 4, 2022</span>，文中内容可能已过时，请谨慎使用。</p>
-    </div>
-  </div>
     <div class="post-content">
-      <h3 id="1介绍">1.介绍</h3>
+      <h1 id="1介绍">1.介绍</h1>
 <p><code>bufio</code>包实现了有缓冲的<code>I/O</code>。它包装一个<code>io.Reader</code>或<code>io.Writer</code>接口对象，使用这个包可以大幅提高文件读写的效率。</p>
-<h4 id="1如何提高效率">1.如何提高效率?</h4>
+<h2 id="1如何提高效率">1.如何提高效率?</h2>
 <p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/image-20210408135753993.png" alt="image-20210408135753993"></p>
 <p><strong>1.写入流程梳理:</strong></p>
 <ul>
@@ -182,10 +238,10 @@
 <li>当写入内容大于缓冲区(<code>buf</code>)空间时，将内容直接写入文件；</li>
 </ul>
 <p><font color=red>总结:   避免频繁操作文件、减少访问本地磁盘次数，从而提高效率。</font></p>
-<h3 id="2读取read">2.读取(<code>Read*</code>)</h3>
-<h4 id="21-创建读取器">2.1 创建读取器</h4>
-<h5 id="1-创建默认缓冲大小-newreader">1. 创建默认缓冲大小 (<code>NewReader</code>)</h5>
-<h6 id="a签名">a.签名</h6>
+<h1 id="2读取read">2.读取(<code>Read*</code>)</h1>
+<h2 id="21-创建读取器">2.1 创建读取器</h2>
+<h3 id="1-创建默认缓冲大小-newreader">1. 创建默认缓冲大小 (<code>NewReader</code>)</h3>
+<h2 id="a签名">a.签名</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -195,7 +251,7 @@
 </code></pre></td></tr></table>
 </div>
 </div><p>根据<code>rd</code>创建一个具有默认大小缓冲的<code>*Reader</code>。默认大小:<code>4096字节</code></p>
-<h6 id="b使用">b.使用</h6>
+<h2 id="b使用">b.使用</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -208,8 +264,8 @@
 <span class="c1">// 输出: 默认大小:4096
 </span></code></pre></td></tr></table>
 </div>
-</div><h5 id="2-创建指定缓冲大小-newreadersize">2. 创建指定缓冲大小( <code>NewReaderSize</code>)</h5>
-<h6 id="1签名">1.签名</h6>
+</div><h3 id="2-创建指定缓冲大小-newreadersize">2. 创建指定缓冲大小( <code>NewReaderSize</code>)</h3>
+<h2 id="1签名">1.签名</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -219,7 +275,7 @@
 </code></pre></td></tr></table>
 </div>
 </div><p>根据<code>rd</code>创建指定<code>size</code>大小缓冲的<code>*Reader</code>。最小大小为<code>16字节</code></p>
-<h6 id="2使用">2.使用</h6>
+<h2 id="2使用">2.使用</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -242,8 +298,8 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="22-读取指定字节read">2.2 读取指定字节(<code>Read</code>)</h4>
-<h5 id="1签名-1">1.签名</h5>
+</div><h2 id="22-读取指定字节read">2.2 读取指定字节(<code>Read</code>)</h2>
+<h3 id="1签名-1">1.签名</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -253,7 +309,7 @@
 </code></pre></td></tr></table>
 </div>
 </div><p>将读取数据写入<code>p</code>。返回写入<code>p</code>的字节数和错误信息。当读取到达结尾时，返回值n将为0而err将为<code>io.EOF</code>。</p>
-<h5 id="2使用-1">2.使用</h5>
+<h3 id="2使用-1">2.使用</h3>
 <p>现有文件<code>a.txt</code>,内容如下:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -332,8 +388,8 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="23-读取一个字节readbyte">2.3 读取一个字节(<code>ReadByte</code>)</h4>
-<h5 id="1签名-2">1.签名</h5>
+</div><h2 id="23-读取一个字节readbyte">2.3 读取一个字节(<code>ReadByte</code>)</h2>
+<h3 id="1签名-2">1.签名</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -343,7 +399,7 @@
 </code></pre></td></tr></table>
 </div>
 </div><p>每次读取一个字节返回。当读取到达结尾时，返回值n将为0而err将为<code>io.EOF</code>。</p>
-<h5 id="2使用-2">2.使用</h5>
+<h3 id="2使用-2">2.使用</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -396,8 +452,8 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="24-读取一行readline">2.4 读取一行(<code>ReadLine</code>)</h4>
-<h5 id="1签名-3">1.签名</h5>
+</div><h2 id="24-读取一行readline">2.4 读取一行(<code>ReadLine</code>)</h2>
+<h3 id="1签名-3">1.签名</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -414,7 +470,7 @@
 <blockquote>
 <p><font color=red>官方文档中推荐使用 <code>ReadBytes('\n')</code>或<code>ReadString('\n')</code>来代替<code>ReadLine</code>。</font></p>
 </blockquote>
-<h5 id="2当行超过了缓冲缓存时">2.当行超过了缓冲缓存时</h5>
+<h3 id="2当行超过了缓冲缓存时">2.当行超过了缓冲缓存时</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -453,7 +509,7 @@
 </div>
 </div><p><strong>输出:</strong></p>
 <p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/image-20210410172327103.png" alt="image-20210410172327103"></p>
-<h5 id="3当行小于缓冲缓存时">3.当行小于缓冲缓存时</h5>
+<h3 id="3当行小于缓冲缓存时">3.当行小于缓冲缓存时</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -500,8 +556,8 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="25-读取到指定的字符">2.5 读取到指定的字符</h4>
-<h5 id="1同类方法列表">1.同类方法列表</h5>
+</div><h2 id="25-读取到指定的字符">2.5 读取到指定的字符</h2>
+<h3 id="1同类方法列表">1.同类方法列表</h3>
 <table>
 <thead>
 <tr>
@@ -525,7 +581,7 @@
 </tbody>
 </table>
 <p>每次读取到字符<code>delim</code>(包含)</p>
-<h5 id="2常规使用">2.常规使用</h5>
+<h3 id="2常规使用">2.常规使用</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -579,7 +635,7 @@
 </div><blockquote>
 <p>上述例子中<code>C</code>后面没有<code>,</code>,所以不会读出</p>
 </blockquote>
-<h5 id="3模拟每次读取一行">3.模拟每次读取一行</h5>
+<h3 id="3模拟每次读取一行">3.模拟每次读取一行</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -633,8 +689,8 @@
 </div><blockquote>
 <p>虽然每行超过缓冲区大小，但是依然可以整行读出</p>
 </blockquote>
-<h4 id="26-每次读取前几个字节peek">2.6 每次读取前几个字节(Peek)</h4>
-<h5 id="1签名-4">1.签名</h5>
+<h2 id="26-每次读取前几个字节peek">2.6 每次读取前几个字节(Peek)</h2>
+<h3 id="1签名-4">1.签名</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -648,7 +704,7 @@
 <li>当内容小于<code>n</code>时，<code>error</code>会返回<code>io.EOF</code></li>
 <li>当<code>n</code>大于缓冲区大小时，<code>error</code>会返回<code>ErrBufferFull</code></li>
 </ul>
-<h5 id="2内容小于n时">2.内容小于<code>n</code>时</h5>
+<h3 id="2内容小于n时">2.内容小于<code>n</code>时</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -689,7 +745,7 @@
 <span class="c1">// 输出-&gt; 结果: hello 已读完
 </span></code></pre></td></tr></table>
 </div>
-</div><h5 id="3当n大于缓冲区大小时">3.当<code>n</code>大于缓冲区大小时</h5>
+</div><h3 id="3当n大于缓冲区大小时">3.当<code>n</code>大于缓冲区大小时</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -732,9 +788,9 @@
 <span class="c1">// 输出-&gt; 结果: hello err:bufio: buffer full
 </span></code></pre></td></tr></table>
 </div>
-</div><h3 id="3写入write">3.写入(<code>Write*</code>)</h3>
-<h4 id="31-创建写入器">3.1 创建写入器</h4>
-<h5 id="1创建默认缓冲大小newwriter">1.创建默认缓冲大小(<code>NewWriter</code>)</h5>
+</div><h1 id="3写入write">3.写入(<code>Write*</code>)</h1>
+<h2 id="31-创建写入器">3.1 创建写入器</h2>
+<h3 id="1创建默认缓冲大小newwriter">1.创建默认缓冲大小(<code>NewWriter</code>)</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -744,7 +800,7 @@
 </code></pre></td></tr></table>
 </div>
 </div><p>根据<code>w</code>创建一个具有默认大小缓冲的<code>*Writer</code>。默认大小:<code>4096字节</code></p>
-<h6 id="2创建默认缓冲大小newwriter">2.创建默认缓冲大小(<code>NewWriter</code>)</h6>
+<h2 id="2创建默认缓冲大小newwriter">2.创建默认缓冲大小(<code>NewWriter</code>)</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -753,8 +809,8 @@
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">NewWriterSize</span><span class="p">(</span><span class="nx">w</span> <span class="nx">io</span><span class="p">.</span><span class="nx">Writer</span><span class="p">,</span> <span class="nx">size</span> <span class="kt">int</span><span class="p">)</span> <span class="o">*</span><span class="nx">Writer</span> 
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="32-write">3.2 <code>Write*</code></h4>
-<h5 id="1方法列表">1.方法列表</h5>
+</div><h2 id="32-write">3.2 <code>Write*</code></h2>
+<h3 id="1方法列表">1.方法列表</h3>
 <table>
 <thead>
 <tr>
@@ -773,7 +829,7 @@
 </tr>
 </tbody>
 </table>
-<h5 id="2当写入内容大于缓冲区时">2.当写入内容大于缓冲区时</h5>
+<h3 id="2当写入内容大于缓冲区时">2.当写入内容大于缓冲区时</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -806,7 +862,7 @@
 <span class="c1">// 输出——&gt; 直接写入文件: 27
 </span></code></pre></td></tr></table>
 </div>
-</div><h5 id="3当写入内容小于缓冲区时">3.当写入内容小于缓冲区时</h5>
+</div><h3 id="3当写入内容小于缓冲区时">3.当写入内容小于缓冲区时</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -855,7 +911,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2022-10-04
+        2023-03-04
         
     </span>
   </p>

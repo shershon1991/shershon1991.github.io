@@ -44,11 +44,11 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/5-ioutilio%E6%93%8D%E4%BD%9C%E5%87%BD%E6%95%B0%E9%9B%86/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-04-05T00:00:00+00:00" />
-<meta property="article:modified_time" content="2022-10-04T07:42:32+08:00" />
+<meta property="article:modified_time" content="2023-03-04T13:27:21+08:00" />
 
 <meta itemprop="name" content="Go扩展包(五):ioutil(IO操作函数集)">
 <meta itemprop="description" content="1.介绍 在Go语言中，io包主要声明的是对I/O操作的基本接口，而io/ioutil包则实现了对应的方法，方便我们直接使用。 2.方法列表 方法"><meta itemprop="datePublished" content="2021-04-05T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2022-10-04T07:42:32+08:00" />
+<meta itemprop="dateModified" content="2023-03-04T13:27:21+08:00" />
 <meta itemprop="wordCount" content="1423">
 <meta itemprop="keywords" content="Go扩展包," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go扩展包(五):ioutil(IO操作函数集)"/>
@@ -144,35 +144,52 @@
   <div class="post-toc-content always-active">
     <nav id="TableOfContents">
   <ul>
-    <li>
+    <li><a href="#1介绍">1.介绍</a></li>
+    <li><a href="#2方法列表">2.方法列表</a></li>
+    <li><a href="#3readall">3.<code>ReadAll</code></a>
       <ul>
-        <li>
-          <ul>
-            <li><a href="#1介绍">1.介绍</a></li>
-            <li><a href="#2方法列表">2.方法列表</a></li>
-            <li><a href="#3readall">3.<code>ReadAll</code></a></li>
-            <li><a href="#4readfile">4.<code>ReadFile</code></a></li>
-            <li><a href="#5readdir">5.<code>ReadDir</code></a></li>
-            <li><a href="#6tempdir">6.<code>TempDir</code></a></li>
-            <li><a href="#7tempfile">7.<code>TempFile</code></a></li>
-            <li><a href="#8writefile">8.<code>WriteFile</code></a></li>
-          </ul>
-        </li>
+        <li><a href="#31-方法签名">3.1 方法签名</a></li>
+        <li><a href="#32-使用">3.2 使用</a></li>
+      </ul>
+    </li>
+    <li><a href="#4readfile">4.<code>ReadFile</code></a>
+      <ul>
+        <li><a href="#41-方法签名">4.1 方法签名</a></li>
+        <li><a href="#42-使用">4.2 使用</a></li>
+      </ul>
+    </li>
+    <li><a href="#5readdir">5.<code>ReadDir</code></a>
+      <ul>
+        <li><a href="#51-方法签名">5.1 方法签名</a></li>
+        <li><a href="#52-使用">5.2 使用</a></li>
+      </ul>
+    </li>
+    <li><a href="#6tempdir">6.<code>TempDir</code></a>
+      <ul>
+        <li><a href="#61-方法签名">6.1 方法签名</a></li>
+        <li><a href="#62-使用">6.2 使用</a></li>
+      </ul>
+    </li>
+    <li><a href="#7tempfile">7.<code>TempFile</code></a>
+      <ul>
+        <li><a href="#71-方法签名">7.1 方法签名</a></li>
+        <li><a href="#72-使用">7.2 使用</a></li>
+      </ul>
+    </li>
+    <li><a href="#8writefile">8.<code>WriteFile</code></a>
+      <ul>
+        <li><a href="#81-方法签名">8.1 方法签名</a></li>
+        <li><a href="#82-使用">8.2 使用</a></li>
       </ul>
     </li>
   </ul>
 </nav>
   </div>
 </div>
-  <div class="post-outdated">
-    <div class="hint">
-      <p>【注意】最后更新于 <span class="timeago" datetime="2022-10-04T07:42:32" title="October 4, 2022">October 4, 2022</span>，文中内容可能已过时，请谨慎使用。</p>
-    </div>
-  </div>
     <div class="post-content">
-      <h3 id="1介绍">1.介绍</h3>
+      <h1 id="1介绍">1.介绍</h1>
 <p>在<code>Go</code>语言中，<code>io</code>包主要声明的是对<code>I/O</code>操作的基本接口，而<code>io/ioutil</code>包则实现了对应的方法，方便我们直接使用。</p>
-<h3 id="2方法列表">2.方法列表</h3>
+<h1 id="2方法列表">2.方法列表</h1>
 <table>
 <thead>
 <tr>
@@ -211,8 +228,8 @@
 </tr>
 </tbody>
 </table>
-<h3 id="3readall">3.<code>ReadAll</code></h3>
-<h4 id="31-方法签名">3.1 方法签名</h4>
+<h1 id="3readall">3.<code>ReadAll</code></h1>
+<h2 id="31-方法签名">3.1 方法签名</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -222,7 +239,7 @@
 </code></pre></td></tr></table>
 </div>
 </div><p><code>ReadAll</code>从<code>r</code>读取数据直到<code>EOF</code>或<code>error</code>，返回读取内容(<code>[]byte</code>)和错误(<code>error</code>)。读取成功时<code>err返回nil</code>。<font color=purple>因为本函数定义为读取<code>r</code>直到<code>EOF</code>，它不会将读取返回的<code>EOF</code>视为应报告的错误。</font></p>
-<h4 id="32-使用">3.2 使用</h4>
+<h2 id="32-使用">3.2 使用</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -251,8 +268,8 @@
 <span class="c1">// 输出: Hello word !
 </span></code></pre></td></tr></table>
 </div>
-</div><h3 id="4readfile">4.<code>ReadFile</code></h3>
-<h4 id="41-方法签名">4.1 方法签名</h4>
+</div><h1 id="4readfile">4.<code>ReadFile</code></h1>
+<h2 id="41-方法签名">4.1 方法签名</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -262,7 +279,7 @@
 </code></pre></td></tr></table>
 </div>
 </div><p><code>ReadFile</code> 从<code>filename</code>指定的文件中读取内容并返回。读取成功时<code>err返回nil</code>。<font color=purple>因为本函数定义为读取<code>r</code>直到<code>EOF</code>，它不会将读取返回的<code>EOF</code>视为应报告的错误。</font></p>
-<h4 id="42-使用">4.2 使用</h4>
+<h2 id="42-使用">4.2 使用</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -289,8 +306,8 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="5readdir">5.<code>ReadDir</code></h3>
-<h4 id="51-方法签名">5.1 方法签名</h4>
+</div><h1 id="5readdir">5.<code>ReadDir</code></h1>
+<h2 id="51-方法签名">5.1 方法签名</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -300,7 +317,7 @@
 </code></pre></td></tr></table>
 </div>
 </div><p>返回<code>dirname</code>指定的目录的目录信息的有序列表。</p>
-<h4 id="52-使用">5.2 使用</h4>
+<h2 id="52-使用">5.2 使用</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -338,8 +355,8 @@
 </code></pre></td></tr></table>
 </div>
 </div><p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/image-20210402180333879.png" alt="image-20210402180333879"></p>
-<h3 id="6tempdir">6.<code>TempDir</code></h3>
-<h4 id="61-方法签名">6.1 方法签名</h4>
+<h1 id="6tempdir">6.<code>TempDir</code></h1>
+<h2 id="61-方法签名">6.1 方法签名</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -354,7 +371,7 @@
 <li>不同程序同时调用该函数会创建不同的临时目录，</li>
 <li>创建的临时文件夹时在不使用时，需要删除。</li>
 </ul>
-<h4 id="62-使用">6.2 使用</h4>
+<h2 id="62-使用">6.2 使用</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -426,8 +443,8 @@
 </code></pre></td></tr></table>
 </div>
 </div><p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/image-20210402190041423.png" alt="image-20210402190041423"></p>
-<h3 id="7tempfile">7.<code>TempFile</code></h3>
-<h4 id="71-方法签名">7.1 方法签名</h4>
+<h1 id="7tempfile">7.<code>TempFile</code></h1>
+<h2 id="71-方法签名">7.1 方法签名</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -442,7 +459,7 @@
 <li>不同程序同时调用该函数会创建不同的临时文件。</li>
 <li>创建的临时文件夹时在不使用时，需要删除。</li>
 </ul>
-<h4 id="72-使用">7.2 使用</h4>
+<h2 id="72-使用">7.2 使用</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -514,8 +531,8 @@
 </code></pre></td></tr></table>
 </div>
 </div><p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/image-20210402192208342.png" alt="image-20210402192208342"></p>
-<h3 id="8writefile">8.<code>WriteFile</code></h3>
-<h4 id="81-方法签名">8.1 方法签名</h4>
+<h1 id="8writefile">8.<code>WriteFile</code></h1>
+<h2 id="81-方法签名">8.1 方法签名</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -529,7 +546,7 @@
 <li>如果文件不存在,将按给出的权限创建文件，</li>
 <li>如果文件存在,在写入数据之前清空文件。</li>
 </ul>
-<h4 id="82-使用">8.2 使用</h4>
+<h2 id="82-使用">8.2 使用</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -561,7 +578,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2022-10-04
+        2023-03-04
         
     </span>
   </p>

@@ -44,11 +44,11 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/27-cron/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-04-27T00:00:00+00:00" />
-<meta property="article:modified_time" content="2022-10-04T07:42:32+08:00" />
+<meta property="article:modified_time" content="2023-03-04T13:27:21+08:00" />
 
 <meta itemprop="name" content="Go扩展包(二十七):cron">
 <meta itemprop="description" content="1.介绍 在Linux中，通过crontab命令使任务在约定的时间执行已经计划好的工作，而Go由于语言的特性，不适合直接使用crontab来管"><meta itemprop="datePublished" content="2021-04-27T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2022-10-04T07:42:32+08:00" />
+<meta itemprop="dateModified" content="2023-03-04T13:27:21+08:00" />
 <meta itemprop="wordCount" content="1355">
 <meta itemprop="keywords" content="Go扩展包," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go扩展包(二十七):cron"/>
@@ -144,38 +144,35 @@
   <div class="post-toc-content always-active">
     <nav id="TableOfContents">
   <ul>
-    <li>
+    <li><a href="#1介绍">1.介绍</a></li>
+    <li><a href="#2-安装">2. 安装</a></li>
+    <li><a href="#3-快速使用">3. 快速使用</a></li>
+    <li><a href="#4-添加任务方式">4. 添加任务方式</a>
       <ul>
-        <li><a href="#1介绍">1.介绍</a></li>
-        <li><a href="#2-安装">2. 安装</a></li>
-        <li><a href="#3-快速使用">3. 快速使用</a></li>
-        <li><a href="#4-添加任务方式">4. 添加任务方式</a>
-          <ul>
-            <li><a href="#41-通过addfunc">4.1 通过<code>AddFunc</code></a></li>
-            <li><a href="#42-通过addjob">4.2 通过<code>AddJob</code></a></li>
-          </ul>
-        </li>
-        <li><a href="#5-执行频率">5. 执行频率</a>
-          <ul>
-            <li><a href="#51-cron时间表达式">5.1 cron时间表达式</a></li>
-            <li><a href="#52-预定义时间">5.2 预定义时间</a></li>
-          </ul>
-        </li>
+        <li><a href="#41-通过addfunc">4.1 通过<code>AddFunc</code></a></li>
+        <li><a href="#42-通过addjob">4.2 通过<code>AddJob</code></a></li>
+        <li><a href="#1-使用步骤">1. 使用步骤</a></li>
+        <li><a href="#2-使用示例">2. 使用示例</a></li>
+      </ul>
+    </li>
+    <li><a href="#5-执行频率">5. 执行频率</a>
+      <ul>
+        <li><a href="#51-cron时间表达式">5.1 cron时间表达式</a></li>
+        <li><a href="#1-开启秒级别后">1. 开启秒级别后</a></li>
+        <li><a href="#2-示例">2. 示例</a></li>
+        <li><a href="#52-预定义时间">5.2 预定义时间</a></li>
+        <li><a href="#1-预表达式">1. 预表达式</a></li>
+        <li><a href="#2-固定间隔every-">2. 固定间隔(<code>@every </code>)</a></li>
       </ul>
     </li>
   </ul>
 </nav>
   </div>
 </div>
-  <div class="post-outdated">
-    <div class="hint">
-      <p>【注意】最后更新于 <span class="timeago" datetime="2022-10-04T07:42:32" title="October 4, 2022">October 4, 2022</span>，文中内容可能已过时，请谨慎使用。</p>
-    </div>
-  </div>
     <div class="post-content">
-      <h2 id="1介绍">1.介绍</h2>
+      <h1 id="1介绍">1.介绍</h1>
 <p>在<code>Linux</code>中，通过<code>crontab</code>命令使任务在约定的时间执行已经计划好的工作，而<code>Go</code>由于语言的特性，不适合直接使用<code>crontab</code>来管理计划任务，<a href="https://github.com/robfig/cron">cron (目前 Star8.3k)</a>是一个用<code>Go</code>实现的定时任务库，支持秒级定时任务，可以满足绝大多数工作场景需求。</p>
-<h2 id="2-安装">2. 安装</h2>
+<h1 id="2-安装">2. 安装</h1>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -184,7 +181,7 @@
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="k">go</span> <span class="nx">get</span> <span class="nx">github</span><span class="p">.</span><span class="nx">com</span><span class="o">/</span><span class="nx">robfig</span><span class="o">/</span><span class="nx">cron</span><span class="o">/</span><span class="nx">v3</span><span class="err">@</span><span class="nx">v3</span><span class="mf">.0.0</span>
 </code></pre></td></tr></table>
 </div>
-</div><h2 id="3-快速使用">3. 快速使用</h2>
+</div><h1 id="3-快速使用">3. 快速使用</h1>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -253,17 +250,17 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h2 id="4-添加任务方式">4. 添加任务方式</h2>
-<h3 id="41-通过addfunc">4.1 通过<code>AddFunc</code></h3>
+</div><h1 id="4-添加任务方式">4. 添加任务方式</h1>
+<h2 id="41-通过addfunc">4.1 通过<code>AddFunc</code></h2>
 <p><strong>具体使用，参见上面的快速使用案例</strong></p>
-<h3 id="42-通过addjob">4.2 通过<code>AddJob</code></h3>
-<h4 id="1-使用步骤">1. 使用步骤</h4>
+<h2 id="42-通过addjob">4.2 通过<code>AddJob</code></h2>
+<h2 id="1-使用步骤">1. 使用步骤</h2>
 <ul>
 <li>第一步：定义类型</li>
 <li>第二步：实现<code>cron.Job</code>接口，即给自定义类型添加方法<code>Run()</code></li>
 <li>第三步：通过<code>AddJob</code>方法添加到定时任务</li>
 </ul>
-<h4 id="2-使用示例">2. 使用示例</h4>
+<h2 id="2-使用示例">2. 使用示例</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -340,12 +337,12 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h2 id="5-执行频率">5. 执行频率</h2>
-<h3 id="51-cron时间表达式">5.1 cron时间表达式</h3>
+</div><h1 id="5-执行频率">5. 执行频率</h1>
+<h2 id="51-cron时间表达式">5.1 cron时间表达式</h2>
 <p><font color=red>@注意: cron默认支持最小粒度是分钟，若要支持秒级别,需要传入<code>cron.WithSeconds()</code>来开启,开启后的cron时间表达式和Linux中的crontab时间表达式会有区别。</font></p>
-<h4 id="1-开启秒级别后">1. 开启秒级别后</h4>
+<h2 id="1-开启秒级别后">1. 开启秒级别后</h2>
 <p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/20210824114416.png" alt=""></p>
-<h4 id="2-示例">2. 示例</h4>
+<h2 id="2-示例">2. 示例</h2>
 <p><font color=red>@注意：下面表格示例，是在开启秒级级别支持情况下的写法。</font></p>
 <table>
 <thead>
@@ -385,8 +382,8 @@
 </tr>
 </tbody>
 </table>
-<h3 id="52-预定义时间">5.2 预定义时间</h3>
-<h4 id="1-预表达式">1. 预表达式</h4>
+<h2 id="52-预定义时间">5.2 预定义时间</h2>
+<h2 id="1-预表达式">1. 预表达式</h2>
 <p>上面通过表达式写，很容易会写错，还好<code>cron</code>提供了预表达式，可以很方便各种场景的示例,具体如下:</p>
 <table>
 <thead>
@@ -429,7 +426,7 @@
 </tr>
 </tbody>
 </table>
-<h4 id="2-固定间隔every-">2. 固定间隔(<code>@every </code>)</h4>
+<h2 id="2-固定间隔every-">2. 固定间隔(<code>@every </code>)</h2>
 <p><code>@every duration</code>含义为每隔<code>duration</code>触发一次。<code>&lt;duration&gt;</code>会调用<code>time.ParseDuration()</code>函数解析，所以<code>ParseDuration</code>支持的格式都可以。单位为<code>h(小时)、m(分钟)、s(秒)</code></p>
 <table>
 <thead>
@@ -468,7 +465,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2022-10-04
+        2023-03-04
         
     </span>
   </p>

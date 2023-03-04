@@ -44,11 +44,11 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/19-gorm/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-04-19T00:00:00+00:00" />
-<meta property="article:modified_time" content="2022-10-04T07:42:32+08:00" />
+<meta property="article:modified_time" content="2023-03-04T13:27:21+08:00" />
 
 <meta itemprop="name" content="Go扩展包(十九):gorm">
 <meta itemprop="description" content="1. 介绍 gorm是一个使用Go语言编写的ORM框架。 它文档齐全，对开发者友好，支持主流数据库。官方中文文档 https://gorm.io/zh_CN/docs/index.html 2. 安装 1 2 go get -u gorm.io/gorm go get -u gorm.io/driver/sqlite 3. 连接M"><meta itemprop="datePublished" content="2021-04-19T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2022-10-04T07:42:32+08:00" />
+<meta itemprop="dateModified" content="2023-03-04T13:27:21+08:00" />
 <meta itemprop="wordCount" content="5642">
 <meta itemprop="keywords" content="Go扩展包," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go扩展包(十九):gorm"/>
@@ -144,16 +144,60 @@
   <div class="post-toc-content always-active">
     <nav id="TableOfContents">
   <ul>
-    <li>
+    <li><a href="#1-介绍">1. 介绍</a></li>
+    <li><a href="#2-安装">2. 安装</a></li>
+    <li><a href="#3-连接mysql">3. 连接MYSQL</a>
       <ul>
-        <li>
+        <li><a href="#31-安装mysql依赖">3.1 安装<code>mysql</code>依赖</a></li>
+        <li><a href="#32-建立连接">3.2 建立连接</a>
           <ul>
-            <li><a href="#1-介绍">1. 介绍</a></li>
-            <li><a href="#2-安装">2. 安装</a></li>
-            <li><a href="#3-连接mysql">3. 连接MYSQL</a></li>
-            <li><a href="#4-声明模型">4. 声明模型</a></li>
-            <li><a href="#5-迁移">5. 迁移</a></li>
-            <li><a href="#6crud">6.CRUD</a></li>
+            <li><a href="#a-默认连接">a. 默认连接</a></li>
+            <li><a href="#b-自定义配置连接">b. 自定义配置连接</a></li>
+            <li><a href="#c-基于databasesql连接">c. 基于<code>database/sql</code>连接</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#4-声明模型">4. 声明模型</a>
+      <ul>
+        <li><a href="#41-什么是模型">4.1 什么是模型</a></li>
+        <li><a href="#42-字段标签">4.2 字段标签</a></li>
+        <li><a href="#43-创建用户模型">4.3 创建用户模型</a></li>
+      </ul>
+    </li>
+    <li><a href="#5-迁移">5. 迁移</a>
+      <ul>
+        <li><a href="#51-根据模型生成表结构">5.1 根据模型生成表结构</a></li>
+      </ul>
+    </li>
+    <li><a href="#6crud">6.CRUD</a>
+      <ul>
+        <li><a href="#61-初始化客户端">6.1 初始化客户端</a></li>
+        <li><a href="#62-单条插入">6.2 单条插入</a></li>
+        <li><a href="#63-批量插入">6.3 批量插入</a></li>
+        <li><a href="#64-查询">6.4 查询</a>
+          <ul>
+            <li><a href="#a-单条记录-firsttakelast">a. 单条记录: <code>First</code>、<code>Take</code>、<code>Last</code></a></li>
+            <li><a href="#b-多条记录-find">b. 多条记录: Find</a></li>
+            <li><a href="#c-条件查询">c. 条件查询</a></li>
+          </ul>
+        </li>
+        <li><a href="#65-更新">6.5 更新</a>
+          <ul>
+            <li><a href="#a-更新单个字段">a. 更新单个字段</a></li>
+            <li><a href="#b-更新多个字段">b. 更新多个字段</a></li>
+          </ul>
+        </li>
+        <li><a href="#66-删除">6.6 删除</a>
+          <ul>
+            <li><a href="#a-软删除">a. 软删除</a></li>
+            <li><a href="#b-永久删除">b. 永久删除</a></li>
+          </ul>
+        </li>
+        <li><a href="#67-事务">6.7 事务</a>
+          <ul>
+            <li><a href="#a-使用transaction">a. 使用<code>Transaction</code></a></li>
+            <li><a href="#b-手动事务">b. 手动事务</a></li>
           </ul>
         </li>
       </ul>
@@ -162,15 +206,10 @@
 </nav>
   </div>
 </div>
-  <div class="post-outdated">
-    <div class="hint">
-      <p>【注意】最后更新于 <span class="timeago" datetime="2022-10-04T07:42:32" title="October 4, 2022">October 4, 2022</span>，文中内容可能已过时，请谨慎使用。</p>
-    </div>
-  </div>
     <div class="post-content">
-      <h3 id="1-介绍">1. 介绍</h3>
+      <h1 id="1-介绍">1. 介绍</h1>
 <p><code>gorm</code>是一个使用<code>Go</code>语言编写的<code>ORM</code>框架。 它文档齐全，对开发者友好，支持主流数据库。<a href="https://gorm.io/zh_CN/docs/index.html">官方中文文档 https://gorm.io/zh_CN/docs/index.html</a></p>
-<h3 id="2-安装">2. 安装</h3>
+<h1 id="2-安装">2. 安装</h1>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -181,9 +220,9 @@
 <span class="k">go</span> <span class="nx">get</span> <span class="o">-</span><span class="nx">u</span> <span class="nx">gorm</span><span class="p">.</span><span class="nx">io</span><span class="o">/</span><span class="nx">driver</span><span class="o">/</span><span class="nx">sqlite</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="3-连接mysql">3. 连接MYSQL</h3>
+</div><h1 id="3-连接mysql">3. 连接MYSQL</h1>
 <p><code>GORM</code> 官方支持的数据库类型有： <code>MySQL, PostgreSQL, SQlite, SQL Server</code>,这里只讲常见的<code>MYSQL</code>。其他类型数据库参见<a href="https://gorm.io/zh_CN/docs/connecting_to_the_database.html">官方文档</a>。</p>
-<h4 id="31-安装mysql依赖">3.1 安装<code>mysql</code>依赖</h4>
+<h2 id="31-安装mysql依赖">3.1 安装<code>mysql</code>依赖</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -192,8 +231,8 @@
 <pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">go get -u gorm.io/driver/mysql
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="32-建立连接">3.2 建立连接</h4>
-<h5 id="a-默认连接">a. 默认连接</h5>
+</div><h2 id="32-建立连接">3.2 建立连接</h2>
+<h3 id="a-默认连接">a. 默认连接</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -214,7 +253,7 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h5 id="b-自定义配置连接">b. 自定义配置连接</h5>
+</div><h3 id="b-自定义配置连接">b. 自定义配置连接</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -249,7 +288,7 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h5 id="c-基于databasesql连接">c. 基于<code>database/sql</code>连接</h5>
+</div><h3 id="c-基于databasesql连接">c. 基于<code>database/sql</code>连接</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -277,8 +316,8 @@
 </code></pre></td></tr></table>
 </div>
 </div><p><a href="https://gorm.io/zh_CN/docs/gorm_config.html"><code>gorm.Config</code>配置使用,参见官方文档: https://gorm.io/zh_CN/docs/gorm_config.html</a></p>
-<h3 id="4-声明模型">4. 声明模型</h3>
-<h4 id="41-什么是模型">4.1 什么是模型</h4>
+<h1 id="4-声明模型">4. 声明模型</h1>
+<h2 id="41-什么是模型">4.1 什么是模型</h2>
 <p>模型其实就是标准的结构体(<code>struct</code>),其属性和表结构的字段按照 <strong><font color=red>gorm约定</font></strong> 一一对应。约定如下:</p>
 <ul>
 <li><code>gorm</code>使用<code>ID</code>作为主键,对应表中的<code>id</code>。</li>
@@ -286,7 +325,7 @@
 <li>使用 <code>CreatedAt</code>、<code>UpdatedAt</code> 字段追踪创建、更新时间。</li>
 </ul>
 <p><code>gorm</code> 定义一个 <code>gorm.Model</code> 结构体，其包括字段 <code>ID</code>、<code>CreatedAt</code>、<code>UpdatedAt</code>、<code>DeletedAt</code>,其他结构体直接匿名嵌套即可。</p>
-<h4 id="42-字段标签">4.2 字段标签</h4>
+<h2 id="42-字段标签">4.2 字段标签</h2>
 <table>
 <thead>
 <tr>
@@ -338,7 +377,7 @@
 </tbody>
 </table>
 <p><a href="https://gorm.io/zh_CN/docs/models.html">更多约定，请查看官方文档</a></p>
-<h4 id="43-创建用户模型">4.3 创建用户模型</h4>
+<h2 id="43-创建用户模型">4.3 创建用户模型</h2>
 <p>按照<code>gorm</code>约定创建用户模型,便于后面使用。用户模型如下</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -366,8 +405,8 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="5-迁移">5. 迁移</h3>
-<h4 id="51-根据模型生成表结构">5.1 根据模型生成表结构</h4>
+</div><h1 id="5-迁移">5. 迁移</h1>
+<h2 id="51-根据模型生成表结构">5.1 根据模型生成表结构</h2>
 <p>根据上面创建的用户模型<code>User</code>，生成对应的表结构</p>
 <p><strong>a. 代码</strong></p>
 <div class="highlight"><div class="chroma">
@@ -463,8 +502,8 @@
 </span><span class="w"></span><span class="p">)</span><span class="w"> </span><span class="n">ENGINE</span><span class="o">=</span><span class="n">InnoDB</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="n">CHARSET</span><span class="o">=</span><span class="n">utf8mb4</span><span class="w"> </span><span class="k">COLLATE</span><span class="o">=</span><span class="n">utf8mb4_bin</span><span class="w"> </span><span class="k">COMMENT</span><span class="o">=</span><span class="s1">&#39;用户表&#39;</span><span class="p">;</span><span class="w">
 </span></code></pre></td></tr></table>
 </div>
-</div><h3 id="6crud">6.CRUD</h3>
-<h4 id="61-初始化客户端">6.1 初始化客户端</h4>
+</div><h1 id="6crud">6.CRUD</h1>
+<h2 id="61-初始化客户端">6.1 初始化客户端</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -491,7 +530,7 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="62-单条插入">6.2 单条插入</h4>
+</div><h2 id="62-单条插入">6.2 单条插入</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -552,7 +591,7 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="63-批量插入">6.3 批量插入</h4>
+</div><h2 id="63-批量插入">6.3 批量插入</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -614,8 +653,8 @@
 </code></pre></td></tr></table>
 </div>
 </div><p><a href="https://gorm.io/zh_CN/docs/create.html">更新插入方式，参见文档: https://gorm.io/zh_CN/docs/create.html</a></p>
-<h4 id="64-查询">6.4 查询</h4>
-<h5 id="a-单条记录-firsttakelast">a. 单条记录: <code>First</code>、<code>Take</code>、<code>Last</code></h5>
+<h2 id="64-查询">6.4 查询</h2>
+<h3 id="a-单条记录-firsttakelast">a. 单条记录: <code>First</code>、<code>Take</code>、<code>Last</code></h3>
 <ul>
 <li><code>First</code>:  获取第一条记录（主键升序）</li>
 <li><code>Take</code>: 获取一条记录，没有指定排序字段</li>
@@ -672,7 +711,7 @@
 </span><span class="c1"></span><span class="nx">errors</span><span class="p">.</span><span class="nf">Is</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">Error</span><span class="p">,</span> <span class="nx">gorm</span><span class="p">.</span><span class="nx">ErrRecordNotFound</span><span class="p">)</span>
 </code></pre></td></tr></table>
 </div>
-</div><h5 id="b-多条记录-find">b. 多条记录: Find</h5>
+</div><h3 id="b-多条记录-find">b. 多条记录: Find</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -725,7 +764,7 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h5 id="c-条件查询">c. 条件查询</h5>
+</div><h3 id="c-条件查询">c. 条件查询</h3>
 <p><strong>1. String条件</strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -850,8 +889,8 @@
 </div>
 </div></blockquote>
 <p><a href="https://gorm.io/zh_CN/docs/query.html">更多查询规则和方法，见: https://gorm.io/zh_CN/docs/query.html</a></p>
-<h4 id="65-更新">6.5 更新</h4>
-<h5 id="a-更新单个字段">a. 更新单个字段</h5>
+<h2 id="65-更新">6.5 更新</h2>
+<h3 id="a-更新单个字段">a. 更新单个字段</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -898,7 +937,7 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h5 id="b-更新多个字段">b. 更新多个字段</h5>
+</div><h3 id="b-更新多个字段">b. 更新多个字段</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -967,8 +1006,8 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="66-删除">6.6 删除</h4>
-<h5 id="a-软删除">a. 软删除</h5>
+</div><h2 id="66-删除">6.6 删除</h2>
+<h3 id="a-软删除">a. 软删除</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1004,7 +1043,7 @@
 </div><blockquote>
 <p><font color=red>执行上面代码后，发现表里面的记录依然存在，而<code>DeletedAt</code> 置为当前时间。原因是<code>user</code>模型中包含了一个 <code>gorm.DeletedAt</code> 字段，它将自动获得软删除的能力！</font></p>
 </blockquote>
-<h5 id="b-永久删除">b. 永久删除</h5>
+<h3 id="b-永久删除">b. 永久删除</h3>
 <p>可以使用 <code>Unscoped</code> 永久删除匹配的记录。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -1024,8 +1063,8 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="67-事务">6.7 事务</h4>
-<h5 id="a-使用transaction">a. 使用<code>Transaction</code></h5>
+</div><h2 id="67-事务">6.7 事务</h2>
+<h3 id="a-使用transaction">a. 使用<code>Transaction</code></h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1078,7 +1117,7 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h5 id="b-手动事务">b. 手动事务</h5>
+</div><h3 id="b-手动事务">b. 手动事务</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1146,7 +1185,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2022-10-04
+        2023-03-04
         
     </span>
   </p>

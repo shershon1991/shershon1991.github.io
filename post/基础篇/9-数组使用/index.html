@@ -44,11 +44,11 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/%E5%9F%BA%E7%A1%80%E7%AF%87/9-%E6%95%B0%E7%BB%84%E4%BD%BF%E7%94%A8/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-01-09T00:00:00+00:00" />
-<meta property="article:modified_time" content="2022-12-05T16:25:20+08:00" />
+<meta property="article:modified_time" content="2023-03-04T13:23:22+08:00" />
 
 <meta itemprop="name" content="Go学习(九):数组使用">
 <meta itemprop="description" content="1.数组的概念 数组是相同类型的一组数据构成的长度固定的序列，其中数据类型包含了基本数据类型、复合数据类型和自定义类型。因为数组的内存是一段连"><meta itemprop="datePublished" content="2021-01-09T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2022-12-05T16:25:20+08:00" />
+<meta itemprop="dateModified" content="2023-03-04T13:23:22+08:00" />
 <meta itemprop="wordCount" content="1382">
 <meta itemprop="keywords" content="Go基础," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go学习(九):数组使用"/>
@@ -144,32 +144,36 @@
   <div class="post-toc-content always-active">
     <nav id="TableOfContents">
   <ul>
-    <li>
+    <li><a href="#1数组的概念">1.数组的概念</a></li>
+    <li><a href="#2声明数组">2.声明数组</a>
       <ul>
-        <li>
-          <ul>
-            <li><a href="#1数组的概念">1.数组的概念</a></li>
-            <li><a href="#2声明数组">2.声明数组</a></li>
-            <li><a href="#3二维数组">3.二维数组</a></li>
-            <li><a href="#4多维数组">4.多维数组</a></li>
-          </ul>
-        </li>
+        <li><a href="#21-先声明后使用">2.1 先声明后使用</a></li>
+        <li><a href="#22-直接初始化使用">2.2 直接初始化使用</a></li>
+        <li><a href="#23-声明数组不指定长度">2.3 声明数组(不指定长度)</a></li>
+      </ul>
+    </li>
+    <li><a href="#3二维数组">3.二维数组</a>
+      <ul>
+        <li><a href="#31-先声明后使用">3.1 先声明后使用</a></li>
+        <li><a href="#32-直接初始化使用">3.2 直接初始化使用</a></li>
+        <li><a href="#33-遍历数组">3.3 遍历数组</a></li>
+      </ul>
+    </li>
+    <li><a href="#4多维数组">4.多维数组</a>
+      <ul>
+        <li><a href="#41-三维数组声明">4.1 三维数组声明</a></li>
+        <li><a href="#42-遍历三维数组">4.2 遍历三维数组</a></li>
       </ul>
     </li>
   </ul>
 </nav>
   </div>
 </div>
-  <div class="post-outdated">
-    <div class="hint">
-      <p>【注意】最后更新于 <span class="timeago" datetime="2022-12-05T16:25:20" title="December 5, 2022">December 5, 2022</span>，文中内容可能已过时，请谨慎使用。</p>
-    </div>
-  </div>
     <div class="post-content">
-      <h3 id="1数组的概念">1.数组的概念</h3>
+      <h1 id="1数组的概念">1.数组的概念</h1>
 <p>数组是相同类型的一组数据构成的长度固定的序列，其中数据类型包含了基本数据类型、复合数据类型和自定义类型。<font color=red>因为数组的内存是一段连续的存储区域，所以数组的检索速度是非常快的，但是数组也有一定的缺陷，就是定义后长度不能更改。</font></p>
-<h3 id="2声明数组">2.声明数组</h3>
-<h4 id="21-先声明后使用">2.1 先声明后使用</h4>
+<h1 id="2声明数组">2.声明数组</h1>
+<h2 id="21-先声明后使用">2.1 先声明后使用</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -198,7 +202,7 @@
 <span class="c1">// 输出: 数组arr 类型: [3]int  值: [1 3 5]
 </span></code></pre></td></tr></table>
 </div>
-</div><h4 id="22-直接初始化使用">2.2 直接初始化使用</h4>
+</div><h2 id="22-直接初始化使用">2.2 直接初始化使用</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -221,7 +225,7 @@
 <span class="c1">// 输出: 数组arr 类型: [3]int  值: [1 3 5]
 </span></code></pre></td></tr></table>
 </div>
-</div><h4 id="23-声明数组不指定长度">2.3 声明数组(不指定长度)</h4>
+</div><h2 id="23-声明数组不指定长度">2.3 声明数组(不指定长度)</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -244,8 +248,8 @@
 <span class="c1">// 输出：数组arr 类型: [6]int  值: [1 3 5 7 9 11]
 </span></code></pre></td></tr></table>
 </div>
-</div><h3 id="3二维数组">3.二维数组</h3>
-<h4 id="31-先声明后使用">3.1 先声明后使用</h4>
+</div><h1 id="3二维数组">3.二维数组</h1>
+<h2 id="31-先声明后使用">3.1 先声明后使用</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -276,7 +280,7 @@
 <span class="c1">// 输出: 数组arr 类型: [3][4]int  值: [[1 2 3 4] [5 6 7 8] [9 10 11 12]]
 </span></code></pre></td></tr></table>
 </div>
-</div><h4 id="32-直接初始化使用">3.2 直接初始化使用</h4>
+</div><h2 id="32-直接初始化使用">3.2 直接初始化使用</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -307,7 +311,7 @@
 <span class="c1">// 输出: 数组arr 类型: [3][4]int  值: [[1 2 3 4] [5 6 7 8] [9 10 11 12]]
 </span></code></pre></td></tr></table>
 </div>
-</div><h4 id="33-遍历数组">3.3 遍历数组</h4>
+</div><h2 id="33-遍历数组">3.3 遍历数组</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -374,8 +378,8 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="4多维数组">4.多维数组</h3>
-<h4 id="41-三维数组声明">4.1 三维数组声明</h4>
+</div><h1 id="4多维数组">4.多维数组</h1>
+<h2 id="41-三维数组声明">4.1 三维数组声明</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -456,7 +460,7 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="42-遍历三维数组">4.2 遍历三维数组</h4>
+</div><h2 id="42-遍历三维数组">4.2 遍历三维数组</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -538,7 +542,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2022-12-05
+        2023-03-04
         
     </span>
   </p>

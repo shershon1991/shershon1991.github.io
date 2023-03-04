@@ -44,11 +44,11 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/%E5%9F%BA%E7%A1%80%E7%AF%87/24-%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-01-24T00:00:00+00:00" />
-<meta property="article:modified_time" content="2022-01-16T18:30:25+08:00" />
+<meta property="article:modified_time" content="2023-03-04T13:23:22+08:00" />
 
 <meta itemprop="name" content="Go学习(二十四):文件操作">
 <meta itemprop="description" content="1.介绍 在Go语言中，文件操作的大多数函数都在os包里面，文件的信息包括文件名、文件大小、修改权限、修改时间等。 1.1 文件接口属性(FileIn"><meta itemprop="datePublished" content="2021-01-24T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2022-01-16T18:30:25+08:00" />
+<meta itemprop="dateModified" content="2023-03-04T13:23:22+08:00" />
 <meta itemprop="wordCount" content="2823">
 <meta itemprop="keywords" content="Go基础," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go学习(二十四):文件操作"/>
@@ -144,31 +144,68 @@
   <div class="post-toc-content always-active">
     <nav id="TableOfContents">
   <ul>
-    <li>
+    <li><a href="#1介绍">1.介绍</a>
       <ul>
-        <li>
+        <li><a href="#11-文件接口属性fileinfo">1.1 文件接口属性(FileInfo)</a></li>
+        <li><a href="#12-文件信息结构体filestat">1.2 文件信息结构体(fileStat)</a>
           <ul>
-            <li><a href="#1介绍">1.介绍</a></li>
-            <li><a href="#2求路径方法">2.求路径方法</a></li>
-            <li><a href="#3目录操作">3.目录操作</a></li>
-            <li><a href="#4文件操作">4.文件操作</a></li>
+            <li><a href="#1filestat结构体的常用方法汇总">1.fileStat结构体的常用方法汇总</a></li>
+            <li><a href="#2使用示例">2.使用示例</a></li>
           </ul>
         </li>
+      </ul>
+    </li>
+    <li><a href="#2求路径方法">2.求路径方法</a>
+      <ul>
+        <li><a href="#21-方法列表">2.1 方法列表</a></li>
+        <li><a href="#22-使用示例">2.2 使用示例</a></li>
+      </ul>
+    </li>
+    <li><a href="#3目录操作">3.目录操作</a>
+      <ul>
+        <li><a href="#31-创建目录">3.1 创建目录</a>
+          <ul>
+            <li><a href="#1方法列表">1.方法列表</a></li>
+            <li><a href="#2使用示例-1">2.使用示例</a></li>
+          </ul>
+        </li>
+        <li><a href="#32-判断目录是否存在">3.2 判断目录是否存在</a></li>
+        <li><a href="#33-删除目录">3.3 删除目录</a>
+          <ul>
+            <li><a href="#1方法列表-1">1.方法列表</a></li>
+            <li><a href="#2使用示例-2">2.使用示例</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#4文件操作">4.文件操作</a>
+      <ul>
+        <li><a href="#41-创建文件">4.1 创建文件</a>
+          <ul>
+            <li><a href="#使用示例">使用示例</a></li>
+          </ul>
+        </li>
+        <li><a href="#42-打开和关闭文件">4.2 打开和关闭文件</a>
+          <ul>
+            <li><a href="#1方法列表-2">1.方法列表</a></li>
+            <li><a href="#2openfile入参介绍">2.OpenFile入参介绍</a></li>
+            <li><a href="#3使用示例">3.使用示例</a></li>
+          </ul>
+        </li>
+        <li><a href="#43-读取文件">4.3 读取文件</a></li>
+        <li><a href="#44-写入文件">4.4 写入文件</a></li>
+        <li><a href="#45-复制文件">4.5 复制文件</a></li>
+        <li><a href="#46删除文件">4.6删除文件</a></li>
       </ul>
     </li>
   </ul>
 </nav>
   </div>
 </div>
-  <div class="post-outdated">
-    <div class="warn">
-      <p>【注意】最后更新于 <span class="timeago" datetime="2022-01-16T18:30:25" title="January 16, 2022">January 16, 2022</span>，文中内容可能已过时，请谨慎使用。</p>
-    </div>
-  </div>
     <div class="post-content">
-      <h3 id="1介绍">1.介绍</h3>
+      <h1 id="1介绍">1.介绍</h1>
 <p>在<code>Go</code>语言中，文件操作的大多数函数都在<code>os</code>包里面，文件的信息包括文件名、文件大小、修改权限、修改时间等。</p>
-<h4 id="11-文件接口属性fileinfo">1.1 文件接口属性(FileInfo)</h4>
+<h2 id="11-文件接口属性fileinfo">1.1 文件接口属性(FileInfo)</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -191,7 +228,7 @@
 </span><span class="c1"></span><span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="12-文件信息结构体filestat">1.2 文件信息结构体(fileStat)</h4>
+</div><h2 id="12-文件信息结构体filestat">1.2 文件信息结构体(fileStat)</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -212,7 +249,7 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h5 id="1filestat结构体的常用方法汇总">1.fileStat结构体的常用方法汇总</h5>
+</div><h3 id="1filestat结构体的常用方法汇总">1.fileStat结构体的常用方法汇总</h3>
 <table>
 <thead>
 <tr>
@@ -247,7 +284,7 @@
 </tr>
 </tbody>
 </table>
-<h5 id="2使用示例">2.使用示例</h5>
+<h3 id="2使用示例">2.使用示例</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -310,8 +347,8 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="2求路径方法">2.求路径方法</h3>
-<h4 id="21-方法列表">2.1 方法列表</h4>
+</div><h1 id="2求路径方法">2.求路径方法</h1>
+<h2 id="21-方法列表">2.1 方法列表</h2>
 <p>方法的所属包: <code>path/filepath</code></p>
 <table>
 <thead>
@@ -339,7 +376,7 @@
 </tr>
 </tbody>
 </table>
-<h4 id="22-使用示例">2.2 使用示例</h4>
+<h2 id="22-使用示例">2.2 使用示例</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -414,9 +451,9 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="3目录操作">3.目录操作</h3>
-<h4 id="31-创建目录">3.1 创建目录</h4>
-<h5 id="1方法列表">1.方法列表</h5>
+</div><h1 id="3目录操作">3.目录操作</h1>
+<h2 id="31-创建目录">3.1 创建目录</h2>
+<h3 id="1方法列表">1.方法列表</h3>
 <table>
 <thead>
 <tr>
@@ -435,7 +472,7 @@
 </tr>
 </tbody>
 </table>
-<h5 id="2使用示例-1">2.使用示例</h5>
+<h3 id="2使用示例-1">2.使用示例</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -484,7 +521,7 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="32-判断目录是否存在">3.2 判断目录是否存在</h4>
+</div><h2 id="32-判断目录是否存在">3.2 判断目录是否存在</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -522,8 +559,8 @@
 </code></pre></td></tr></table>
 </div>
 </div><p><span id="jump"></span></p>
-<h4 id="33-删除目录">3.3 删除目录</h4>
-<h5 id="1方法列表-1">1.方法列表</h5>
+<h2 id="33-删除目录">3.3 删除目录</h2>
+<h3 id="1方法列表-1">1.方法列表</h3>
 <table>
 <thead>
 <tr>
@@ -542,7 +579,7 @@
 </tr>
 </tbody>
 </table>
-<h5 id="2使用示例-2">2.使用示例</h5>
+<h3 id="2使用示例-2">2.使用示例</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -591,8 +628,8 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="4文件操作">4.文件操作</h3>
-<h4 id="41-创建文件">4.1 创建文件</h4>
+</div><h1 id="4文件操作">4.文件操作</h1>
+<h2 id="41-创建文件">4.1 创建文件</h2>
 <p><code>os.Create()</code>创建文件，如果文件存在，会将其覆盖。<code>os.Create()</code>本质上调用的是<code>OpenFile</code>,源码如下:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -606,7 +643,7 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h5 id="使用示例">使用示例</h5>
+</div><h3 id="使用示例">使用示例</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -643,8 +680,8 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="42-打开和关闭文件">4.2 打开和关闭文件</h4>
-<h5 id="1方法列表-2">1.方法列表</h5>
+</div><h2 id="42-打开和关闭文件">4.2 打开和关闭文件</h2>
+<h3 id="1方法列表-2">1.方法列表</h3>
 <table>
 <thead>
 <tr>
@@ -663,7 +700,7 @@
 </tr>
 </tbody>
 </table>
-<h5 id="2openfile入参介绍">2.OpenFile入参介绍</h5>
+<h3 id="2openfile入参介绍">2.OpenFile入参介绍</h3>
 <table>
 <thead>
 <tr>
@@ -706,7 +743,7 @@
 </tr>
 </tbody>
 </table>
-<h5 id="3使用示例">3.使用示例</h5>
+<h3 id="3使用示例">3.使用示例</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -773,7 +810,7 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="43-读取文件">4.3 读取文件</h4>
+</div><h2 id="43-读取文件">4.3 读取文件</h2>
 <p><strong>读取文件步骤:</strong> 打开文件(<code>Open</code>) 、读取文件(<code>Read</code>)、关闭文件(<code>Close</code>)</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -833,7 +870,7 @@
 <span class="c1">// 输出: 读取内容: Hello Word! 您好，世界！
 </span></code></pre></td></tr></table>
 </div>
-</div><h4 id="44-写入文件">4.4 写入文件</h4>
+</div><h2 id="44-写入文件">4.4 写入文件</h2>
 <p><strong>写入文件步骤:</strong> 打开文件(<code>OpenFile</code>) 、写入文件(<code>Write</code>)、关闭文件(<code>Close</code>)</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -885,7 +922,7 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="45-复制文件">4.5 复制文件</h4>
+</div><h2 id="45-复制文件">4.5 复制文件</h2>
 <p><code>Go</code>语言提供了<code>io.copy()</code>方法，用来复制文件。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -961,7 +998,7 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="46删除文件">4.6删除文件</h4>
+</div><h2 id="46删除文件">4.6删除文件</h2>
 <p>同  <a href="#jump">3.3 删除目录</a></p>
 
     </div>
@@ -974,7 +1011,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2022-01-16
+        2023-03-04
         
     </span>
   </p>

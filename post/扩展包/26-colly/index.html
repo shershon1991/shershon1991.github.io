@@ -44,11 +44,11 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/26-colly/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-04-26T00:00:00+00:00" />
-<meta property="article:modified_time" content="2022-10-04T07:42:32+08:00" />
+<meta property="article:modified_time" content="2023-03-04T13:27:21+08:00" />
 
 <meta itemprop="name" content="Go扩展包(二十六):colly">
 <meta itemprop="description" content="1.介绍 Colly是Golang世界中最知名的Web爬虫框架,它提供简洁的 API，拥有强劲的性能、可以自动处理 cookie&amp;sess"><meta itemprop="datePublished" content="2021-04-26T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2022-10-04T07:42:32+08:00" />
+<meta itemprop="dateModified" content="2023-03-04T13:27:21+08:00" />
 <meta itemprop="wordCount" content="7500">
 <meta itemprop="keywords" content="Go扩展包," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go扩展包(二十六):colly"/>
@@ -144,65 +144,81 @@
   <div class="post-toc-content always-active">
     <nav id="TableOfContents">
   <ul>
-    <li>
+    <li><a href="#1介绍">1.介绍</a></li>
+    <li><a href="#2安装">2.安装</a></li>
+    <li><a href="#3-快速入门">3. 快速入门</a>
       <ul>
-        <li><a href="#1介绍">1.介绍</a></li>
-        <li><a href="#2安装">2.安装</a></li>
-        <li><a href="#3-快速入门">3. 快速入门</a>
-          <ul>
-            <li><a href="#31-语法模板">3.1 语法模板</a></li>
-            <li><a href="#32-回调函数说明">3.2 回调函数说明</a></li>
-            <li><a href="#33-回调函数注册顺序">3.3 回调函数注册顺序</a></li>
-            <li><a href="#34-使用示例">3.4 使用示例</a></li>
-          </ul>
-        </li>
-        <li><a href="#4-配置采集器">4. 配置采集器</a>
-          <ul>
-            <li><a href="#41-配置预览">4.1 配置预览</a></li>
-            <li><a href="#42-部分配置说明">4.2 部分配置说明</a></li>
-            <li><a href="#43-创建采集器">4.3 创建采集器</a></li>
-          </ul>
-        </li>
-        <li><a href="#5-常用解析函数">5. 常用解析函数</a>
-          <ul>
-            <li><a href="#51-attr">5.1 Attr</a></li>
-            <li><a href="#52-childattrchildattrs">5.2 ChildAttr&amp;ChildAttrs</a></li>
-            <li><a href="#53-childtext--childtexts">5.3 ChildText &amp; ChildTexts</a></li>
-            <li><a href="#54-foreach">5.4 ForEach</a></li>
-            <li><a href="#55-unmarshal">5.5 Unmarshal</a></li>
-          </ul>
-        </li>
-        <li><a href="#6常用选择器">6.常用选择器</a>
-          <ul>
-            <li><a href="#61-html内容">6.1 html内容</a></li>
-            <li><a href="#62-使用示例">6.2 使用示例</a></li>
-          </ul>
-        </li>
-        <li><a href="#7-过滤器">7. 过滤器</a>
-          <ul>
-            <li><a href="#71-第一个子元素first-child--first-of-type">7.1 第一个子元素(<code>first-child &amp; first-of-type</code>)</a></li>
-            <li><a href="#72-最后一个子元素last-child--last-of-type">7.2 最后一个子元素(<code>last-child &amp; last-of-type</code>)</a></li>
-            <li><a href="#73-第x个子元素nth-child--nth-of-type">7.3 第x个子元素(<code>nth-child &amp; nth-of-type</code>)</a></li>
-            <li><a href="#74-仅有一个子元素only-child--only-of-type">7.4 仅有一个子元素(<code>only-child &amp; only-of-type</code>)</a></li>
-            <li><a href="#75-内容匹配contains">7.5 内容匹配(<code>contains</code>)</a></li>
-          </ul>
-        </li>
-        <li><a href="#8-爬取限速">8. 爬取限速</a></li>
+        <li><a href="#31-语法模板">3.1 语法模板</a></li>
+        <li><a href="#32-回调函数说明">3.2 回调函数说明</a></li>
+        <li><a href="#33-回调函数注册顺序">3.3 回调函数注册顺序</a></li>
+        <li><a href="#34-使用示例">3.4 使用示例</a></li>
+        <li><a href="#1-分析网页">1. 分析网页</a></li>
+        <li><a href="#2-逻辑分析">2. 逻辑分析</a></li>
+        <li><a href="#3-代码实现">3. 代码实现</a></li>
+        <li><a href="#4-运行结果">4. 运行结果</a></li>
       </ul>
     </li>
+    <li><a href="#4-配置采集器">4. 配置采集器</a>
+      <ul>
+        <li><a href="#41-配置预览">4.1 配置预览</a></li>
+        <li><a href="#42-部分配置说明">4.2 部分配置说明</a></li>
+        <li><a href="#43-创建采集器">4.3 创建采集器</a></li>
+      </ul>
+    </li>
+    <li><a href="#5-常用解析函数">5. 常用解析函数</a>
+      <ul>
+        <li><a href="#51-attr">5.1 Attr</a></li>
+        <li><a href="#1-函数说明">1. 函数说明</a></li>
+        <li><a href="#2-使用示例">2. 使用示例</a></li>
+        <li><a href="#52-childattrchildattrs">5.2 ChildAttr&amp;ChildAttrs</a></li>
+        <li><a href="#1-函数说明-1">1. 函数说明</a></li>
+        <li><a href="#2-使用示例-1">2. 使用示例</a></li>
+        <li><a href="#53-childtext--childtexts">5.3 ChildText &amp; ChildTexts</a></li>
+        <li><a href="#1-函数说明-2">1. 函数说明</a></li>
+        <li><a href="#2-使用示例-2">2. 使用示例</a></li>
+        <li><a href="#54-foreach">5.4 ForEach</a></li>
+        <li><a href="#1-函数说明-3">1. 函数说明</a></li>
+        <li><a href="#2-使用示例-3">2. 使用示例</a></li>
+        <li><a href="#55-unmarshal">5.5 Unmarshal</a></li>
+        <li><a href="#1-函数说明-4">1. 函数说明</a></li>
+        <li><a href="#2-使用示例-4">2. 使用示例</a></li>
+      </ul>
+    </li>
+    <li><a href="#6常用选择器">6.常用选择器</a>
+      <ul>
+        <li><a href="#61-html内容">6.1 html内容</a></li>
+        <li><a href="#62-使用示例">6.2 使用示例</a></li>
+      </ul>
+    </li>
+    <li><a href="#7-过滤器">7. 过滤器</a>
+      <ul>
+        <li><a href="#71-第一个子元素first-child--first-of-type">7.1 第一个子元素(<code>first-child &amp; first-of-type</code>)</a></li>
+        <li><a href="#1-过滤器说明">1. 过滤器说明</a></li>
+        <li><a href="#2-html内容">2. html内容</a></li>
+        <li><a href="#3-代码实现-1">3. 代码实现</a></li>
+        <li><a href="#72-最后一个子元素last-child--last-of-type">7.2 最后一个子元素(<code>last-child &amp; last-of-type</code>)</a></li>
+        <li><a href="#1-过滤器说明-1">1. 过滤器说明</a></li>
+        <li><a href="#73-第x个子元素nth-child--nth-of-type">7.3 第x个子元素(<code>nth-child &amp; nth-of-type</code>)</a></li>
+        <li><a href="#1-过滤器说明-2">1. 过滤器说明</a></li>
+        <li><a href="#2-使用示例-5">2. 使用示例</a></li>
+        <li><a href="#74-仅有一个子元素only-child--only-of-type">7.4 仅有一个子元素(<code>only-child &amp; only-of-type</code>)</a></li>
+        <li><a href="#1-过滤器说明-3">1. 过滤器说明</a></li>
+        <li><a href="#2-html内容-1">2. html内容</a></li>
+        <li><a href="#3-使用示例">3. 使用示例</a></li>
+        <li><a href="#75-内容匹配contains">7.5 内容匹配(<code>contains</code>)</a></li>
+        <li><a href="#1-html内容">1. html内容</a></li>
+        <li><a href="#2-使用示例-6">2. 使用示例</a></li>
+      </ul>
+    </li>
+    <li><a href="#8-爬取限速">8. 爬取限速</a></li>
   </ul>
 </nav>
   </div>
 </div>
-  <div class="post-outdated">
-    <div class="hint">
-      <p>【注意】最后更新于 <span class="timeago" datetime="2022-10-04T07:42:32" title="October 4, 2022">October 4, 2022</span>，文中内容可能已过时，请谨慎使用。</p>
-    </div>
-  </div>
     <div class="post-content">
-      <h2 id="1介绍">1.介绍</h2>
+      <h1 id="1介绍">1.介绍</h1>
 <p><code>Colly</code>是<code>Golang</code>世界中最知名的<code>Web</code>爬虫框架,它提供简洁的 API，拥有强劲的性能、可以自动处理 <code>cookie&amp;session</code>、提供灵活的扩展机制,同时支持分布式抓取和多种存储后端（如内存、<code>Redis</code>、<code>MongoDB</code>等）。</p>
-<h2 id="2安装">2.安装</h2>
+<h1 id="2安装">2.安装</h1>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -213,8 +229,8 @@
 </span><span class="c1"></span><span class="k">go</span> <span class="nx">get</span> <span class="o">-</span><span class="nx">u</span> <span class="nx">github</span><span class="p">.</span><span class="nx">com</span><span class="o">/</span><span class="nx">gocolly</span><span class="o">/</span><span class="nx">colly</span><span class="o">/</span><span class="nx">v2</span>
 </code></pre></td></tr></table>
 </div>
-</div><h2 id="3-快速入门">3. 快速入门</h2>
-<h3 id="31-语法模板">3.1 语法模板</h3>
+</div><h1 id="3-快速入门">3. 快速入门</h1>
+<h2 id="31-语法模板">3.1 语法模板</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -273,7 +289,7 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="32-回调函数说明">3.2 回调函数说明</h3>
+</div><h2 id="32-回调函数说明">3.2 回调函数说明</h2>
 <ul>
 <li><strong>OnRequest</strong>: 在发起请求之前调用。</li>
 <li><strong>OnError</strong>: 如果请求期间发生错误,则调用。</li>
@@ -282,18 +298,18 @@
 <li><strong>OnXML</strong>: 如果收到的响应内容是XML 调用它。写爬虫基本用不到</li>
 <li><strong>OnScraped</strong>：在OnXML/OnHTML回调完成后调用。不过官网写的是<code>Called after OnXML callbacks</code>，实际上对于OnHTML也有效，大家可以注意一下。</li>
 </ul>
-<h3 id="33-回调函数注册顺序">3.3 回调函数注册顺序</h3>
+<h2 id="33-回调函数注册顺序">3.3 回调函数注册顺序</h2>
 <p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/image-20210819234814412.png" alt="image-20210819234814412"></p>
-<h3 id="34-使用示例">3.4 使用示例</h3>
+<h2 id="34-使用示例">3.4 使用示例</h2>
 <p><strong>需求: 抓取豆瓣小说榜单数据</strong></p>
-<h4 id="1-分析网页">1. 分析网页</h4>
+<h2 id="1-分析网页">1. 分析网页</h2>
 <p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/20210820154533.png" alt=""></p>
-<h4 id="2-逻辑分析">2. 逻辑分析</h4>
+<h2 id="2-逻辑分析">2. 逻辑分析</h2>
 <ul>
 <li>第一步: 找到对应的<code>ul</code></li>
 <li>第二步: 遍历<code>ul</code>,然后取出里面没一个<code>li</code>的信息</li>
 </ul>
-<h4 id="3-代码实现">3. 代码实现</h4>
+<h2 id="3-代码实现">3. 代码实现</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -396,7 +412,7 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="4-运行结果">4. 运行结果</h4>
+</div><h2 id="4-运行结果">4. 运行结果</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -447,10 +463,10 @@
 </span><span class="c1"></span><span class="nx">封面</span><span class="p">:</span> <span class="nx">https</span><span class="p">:</span><span class="c1">//img3.doubanio.com/view/subject/s/public/s33718940.jpg 书名:夜晚的潜水艇 作者:陈春成 
 </span></code></pre></td></tr></table>
 </div>
-</div><h2 id="4-配置采集器">4. 配置采集器</h2>
-<h3 id="41-配置预览">4.1 配置预览</h3>
+</div><h1 id="4-配置采集器">4. 配置采集器</h1>
+<h2 id="41-配置预览">4.1 配置预览</h2>
 <p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/20210820172722.png" alt=""></p>
-<h3 id="42-部分配置说明">4.2 部分配置说明</h3>
+<h2 id="42-部分配置说明">4.2 部分配置说明</h2>
 <ul>
 <li><code>AllowedDomains</code>: 设置收集器使用的域白名单，设置后不在白名单内链接，报错:<code>Forbidden domain</code>。</li>
 <li><code>AllowURLRevisit</code>:  设置收集器允许对同一 URL 进行多次下载。</li>
@@ -461,7 +477,7 @@
 <li><code>MaxBodySize</code> : 以字节为单位设置检索到的响应正文的限制。</li>
 <li><code>IgnoreRobotsTxt</code>:  忽略目标机器中的<code>robots.txt</code>声明。</li>
 </ul>
-<h3 id="43-创建采集器">4.3 创建采集器</h3>
+<h2 id="43-创建采集器">4.3 创建采集器</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -488,7 +504,7 @@
 </span><span class="c1"></span>	<span class="p">)</span>
 </code></pre></td></tr></table>
 </div>
-</div><h2 id="5-常用解析函数">5. 常用解析函数</h2>
+</div><h1 id="5-常用解析函数">5. 常用解析函数</h1>
 <p><code>colly</code>爬取到页面之后，又该怎么解析<code>Html</code>内容呢？实际上使用<a href="https://github.com/PuerkitoBio/goquery">goquery</a>包解析这个页面,而<code>colly.HTMLElement</code>其实就是对<code>goquery.Selection</code>的简单封装：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -518,8 +534,8 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="51-attr">5.1 Attr</h3>
-<h4 id="1-函数说明">1. 函数说明</h4>
+</div><h2 id="51-attr">5.1 Attr</h2>
+<h2 id="1-函数说明">1. 函数说明</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -530,7 +546,7 @@
 </span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">h</span> <span class="o">*</span><span class="nx">HTMLElement</span><span class="p">)</span> <span class="nf">Attr</span><span class="p">(</span><span class="nx">k</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">string</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="2-使用示例">2. 使用示例</h4>
+</div><h2 id="2-使用示例">2. 使用示例</h2>
 <p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/20210820190125.png" alt=""></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -568,8 +584,8 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="52-childattrchildattrs">5.2 ChildAttr&amp;ChildAttrs</h3>
-<h4 id="1-函数说明-1">1. 函数说明</h4>
+</div><h2 id="52-childattrchildattrs">5.2 ChildAttr&amp;ChildAttrs</h2>
+<h2 id="1-函数说明-1">1. 函数说明</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -584,7 +600,7 @@
 </span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">h</span> <span class="o">*</span><span class="nx">HTMLElement</span><span class="p">)</span> <span class="nf">ChildAttrs</span><span class="p">(</span><span class="nx">goquerySelector</span><span class="p">,</span> <span class="nx">attrName</span> <span class="kt">string</span><span class="p">)</span> <span class="p">[]</span><span class="kt">string</span> 
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="2-使用示例-1">2. 使用示例</h4>
+</div><h2 id="2-使用示例-1">2. 使用示例</h2>
 <p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/20210821151336.png" alt=""></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -640,8 +656,8 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="53-childtext--childtexts">5.3 ChildText &amp; ChildTexts</h3>
-<h4 id="1-函数说明-2">1. 函数说明</h4>
+</div><h2 id="53-childtext--childtexts">5.3 ChildText &amp; ChildTexts</h2>
+<h2 id="1-函数说明-2">1. 函数说明</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -656,7 +672,7 @@
 </span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">h</span> <span class="o">*</span><span class="nx">HTMLElement</span><span class="p">)</span> <span class="nf">ChildTexts</span><span class="p">(</span><span class="nx">goquerySelector</span> <span class="kt">string</span><span class="p">)</span> <span class="p">[]</span><span class="kt">string</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="2-使用示例-2">2. 使用示例</h4>
+</div><h2 id="2-使用示例-2">2. 使用示例</h2>
 <p><strong>a. 待解析的Html：</strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -749,8 +765,8 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="54-foreach">5.4 ForEach</h3>
-<h4 id="1-函数说明-3">1. 函数说明</h4>
+</div><h2 id="54-foreach">5.4 ForEach</h2>
+<h2 id="1-函数说明-3">1. 函数说明</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -761,7 +777,7 @@
 </span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">h</span> <span class="o">*</span><span class="nx">HTMLElement</span><span class="p">)</span> <span class="nf">ForEach</span><span class="p">(</span><span class="nx">goquerySelector</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">callback</span> <span class="kd">func</span><span class="p">(</span><span class="kt">int</span><span class="p">,</span> <span class="o">*</span><span class="nx">HTMLElement</span><span class="p">))</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="2-使用示例-3">2. 使用示例</h4>
+</div><h2 id="2-使用示例-3">2. 使用示例</h2>
 <p><strong>a. 待解析Html:</strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -866,8 +882,8 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="55-unmarshal">5.5 Unmarshal</h3>
-<h4 id="1-函数说明-4">1. 函数说明</h4>
+</div><h2 id="55-unmarshal">5.5 Unmarshal</h2>
+<h2 id="1-函数说明-4">1. 函数说明</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -878,7 +894,7 @@
 </span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">h</span> <span class="o">*</span><span class="nx">HTMLElement</span><span class="p">)</span> <span class="nf">Unmarshal</span><span class="p">(</span><span class="nx">v</span> <span class="kd">interface</span><span class="p">{})</span> <span class="kt">error</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="2-使用示例-4">2. 使用示例</h4>
+</div><h2 id="2-使用示例-4">2. 使用示例</h2>
 <p><strong>a. 待解析Html</strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -989,8 +1005,8 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h2 id="6常用选择器">6.常用选择器</h2>
-<h3 id="61-html内容">6.1 html内容</h3>
+</div><h1 id="6常用选择器">6.常用选择器</h1>
+<h2 id="61-html内容">6.1 html内容</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1043,7 +1059,7 @@
 <span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="62-使用示例">6.2 使用示例</h3>
+</div><h2 id="62-使用示例">6.2 使用示例</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1120,9 +1136,9 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h2 id="7-过滤器">7. 过滤器</h2>
-<h3 id="71-第一个子元素first-child--first-of-type">7.1 第一个子元素(<code>first-child &amp; first-of-type</code>)</h3>
-<h4 id="1-过滤器说明">1. 过滤器说明</h4>
+</div><h1 id="7-过滤器">7. 过滤器</h1>
+<h2 id="71-第一个子元素first-child--first-of-type">7.1 第一个子元素(<code>first-child &amp; first-of-type</code>)</h2>
+<h2 id="1-过滤器说明">1. 过滤器说明</h2>
 <table>
 <thead>
 <tr>
@@ -1141,7 +1157,7 @@
 </tr>
 </tbody>
 </table>
-<h4 id="2-html内容">2. html内容</h4>
+<h2 id="2-html内容">2. html内容</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1184,7 +1200,7 @@
 <span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="3-代码实现-1">3. 代码实现</h4>
+</div><h2 id="3-代码实现-1">3. 代码实现</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1227,8 +1243,8 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="72-最后一个子元素last-child--last-of-type">7.2 最后一个子元素(<code>last-child &amp; last-of-type</code>)</h3>
-<h4 id="1-过滤器说明-1">1. 过滤器说明</h4>
+</div><h2 id="72-最后一个子元素last-child--last-of-type">7.2 最后一个子元素(<code>last-child &amp; last-of-type</code>)</h2>
+<h2 id="1-过滤器说明-1">1. 过滤器说明</h2>
 <table>
 <thead>
 <tr>
@@ -1248,8 +1264,8 @@
 </tbody>
 </table>
 <p><font color=red>使用方法和上面<code>筛选第一个子元素</code>一样，不在啰嗦。</font></p>
-<h3 id="73-第x个子元素nth-child--nth-of-type">7.3 第x个子元素(<code>nth-child &amp; nth-of-type</code>)</h3>
-<h4 id="1-过滤器说明-2">1. 过滤器说明</h4>
+<h2 id="73-第x个子元素nth-child--nth-of-type">7.3 第x个子元素(<code>nth-child &amp; nth-of-type</code>)</h2>
+<h2 id="1-过滤器说明-2">1. 过滤器说明</h2>
 <table>
 <thead>
 <tr>
@@ -1276,7 +1292,7 @@
 </tr>
 </tbody>
 </table>
-<h4 id="2-使用示例-5">2. 使用示例</h4>
+<h2 id="2-使用示例-5">2. 使用示例</h2>
 <p><font color=green>html内容和上面(7.1中)的html内容一样。</font></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -1348,8 +1364,8 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="74-仅有一个子元素only-child--only-of-type">7.4 仅有一个子元素(<code>only-child &amp; only-of-type</code>)</h3>
-<h4 id="1-过滤器说明-3">1. 过滤器说明</h4>
+</div><h2 id="74-仅有一个子元素only-child--only-of-type">7.4 仅有一个子元素(<code>only-child &amp; only-of-type</code>)</h2>
+<h2 id="1-过滤器说明-3">1. 过滤器说明</h2>
 <table>
 <thead>
 <tr>
@@ -1368,7 +1384,7 @@
 </tr>
 </tbody>
 </table>
-<h4 id="2-html内容-1">2. html内容</h4>
+<h2 id="2-html内容-1">2. html内容</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1403,7 +1419,7 @@
 <span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="3-使用示例">3. 使用示例</h4>
+</div><h2 id="3-使用示例">3. 使用示例</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1452,8 +1468,8 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="75-内容匹配contains">7.5 内容匹配(<code>contains</code>)</h3>
-<h4 id="1-html内容">1. html内容</h4>
+</div><h2 id="75-内容匹配contains">7.5 内容匹配(<code>contains</code>)</h2>
+<h2 id="1-html内容">1. html内容</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1480,7 +1496,7 @@
 <span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="2-使用示例-6">2. 使用示例</h4>
+</div><h2 id="2-使用示例-6">2. 使用示例</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1523,7 +1539,7 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h2 id="8-爬取限速">8. 爬取限速</h2>
+</div><h1 id="8-爬取限速">8. 爬取限速</h1>
 <p>有时候并发请求太多，网站会限制访问。这时就需要使用<code>LimitRule</code>了。说白了，<code>LimitRule</code>就是限制访问速度和并发量的：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -1558,7 +1574,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2022-10-04
+        2023-03-04
         
     </span>
   </p>

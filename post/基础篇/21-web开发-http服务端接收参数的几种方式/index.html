@@ -44,11 +44,11 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/%E5%9F%BA%E7%A1%80%E7%AF%87/21-web%E5%BC%80%E5%8F%91-http%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%8E%A5%E6%94%B6%E5%8F%82%E6%95%B0%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E5%BC%8F/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-01-21T00:00:00+00:00" />
-<meta property="article:modified_time" content="2022-05-02T12:20:32+08:00" />
+<meta property="article:modified_time" content="2023-03-04T13:23:22+08:00" />
 
 <meta itemprop="name" content="Go学习(二十一):Web开发-HTTP服务端接收参数的几种方式">
 <meta itemprop="description" content="1.获取GET参数 1.1 方法列表 方法名 描述 (r *Request) ParseForm() error 判断是否解析传参时出错 (r *Request) FormValue(key string) string 接收指定key的参数值 1.2 使用示例 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15"><meta itemprop="datePublished" content="2021-01-21T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2022-05-02T12:20:32+08:00" />
+<meta itemprop="dateModified" content="2023-03-04T13:23:22+08:00" />
 <meta itemprop="wordCount" content="1887">
 <meta itemprop="keywords" content="Go基础," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go学习(二十一):Web开发-HTTP服务端接收参数的几种方式"/>
@@ -144,29 +144,36 @@
   <div class="post-toc-content always-active">
     <nav id="TableOfContents">
   <ul>
-    <li>
+    <li><a href="#1获取get参数">1.获取GET参数</a>
       <ul>
-        <li>
+        <li><a href="#11-方法列表">1.1 方法列表</a></li>
+        <li><a href="#12-使用示例">1.2 使用示例</a></li>
+      </ul>
+    </li>
+    <li><a href="#2获取post参数">2.获取POST参数</a>
+      <ul>
+        <li><a href="#21-接收post参数分以下两种情况">2.1 接收POST参数分以下两种情况</a></li>
+        <li><a href="#22--普通的post表单rpostformvalue">2.2  普通的Post表单(r.PostFormValue)</a></li>
+        <li><a href="#23--有文件上传的post表单rformfile">2.3  有文件上传的Post表单(r.FormFile)</a>
           <ul>
-            <li><a href="#1获取get参数">1.获取GET参数</a></li>
-            <li><a href="#2获取post参数">2.获取POST参数</a></li>
-            <li><a href="#3获取cookie中的值">3.获取Cookie中的值</a></li>
+            <li><a href="#运行结果">运行结果</a></li>
           </ul>
         </li>
+      </ul>
+    </li>
+    <li><a href="#3获取cookie中的值">3.获取Cookie中的值</a>
+      <ul>
+        <li><a href="#31-cookie的数据结构">3.1 cookie的数据结构</a></li>
+        <li><a href="#32-使用示例">3.2 使用示例</a></li>
       </ul>
     </li>
   </ul>
 </nav>
   </div>
 </div>
-  <div class="post-outdated">
-    <div class="warn">
-      <p>【注意】最后更新于 <span class="timeago" datetime="2022-05-02T12:20:32" title="May 2, 2022">May 2, 2022</span>，文中内容可能已过时，请谨慎使用。</p>
-    </div>
-  </div>
     <div class="post-content">
-      <h3 id="1获取get参数">1.获取GET参数</h3>
-<h4 id="11-方法列表">1.1 方法列表</h4>
+      <h1 id="1获取get参数">1.获取GET参数</h1>
+<h2 id="11-方法列表">1.1 方法列表</h2>
 <table>
 <thead>
 <tr>
@@ -185,7 +192,7 @@
 </tr>
 </tbody>
 </table>
-<h4 id="12-使用示例">1.2 使用示例</h4>
+<h2 id="12-使用示例">1.2 使用示例</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -248,13 +255,13 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="2获取post参数">2.获取POST参数</h3>
-<h4 id="21-接收post参数分以下两种情况">2.1 接收POST参数分以下两种情况</h4>
+</div><h1 id="2获取post参数">2.获取POST参数</h1>
+<h2 id="21-接收post参数分以下两种情况">2.1 接收POST参数分以下两种情况</h2>
 <ul>
 <li>普通的Post表单: <code>Content-Type=application/x-www-form-urlencoded</code></li>
 <li>有文件上传的Post表单: <code>Content-Type=multipart/form-data</code></li>
 </ul>
-<h4 id="22--普通的post表单rpostformvalue">2.2  普通的Post表单(r.PostFormValue)</h4>
+<h2 id="22--普通的post表单rpostformvalue">2.2  普通的Post表单(r.PostFormValue)</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -325,7 +332,7 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="23--有文件上传的post表单rformfile">2.3  有文件上传的Post表单(r.FormFile)</h4>
+</div><h2 id="23--有文件上传的post表单rformfile">2.3  有文件上传的Post表单(r.FormFile)</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -472,11 +479,11 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h5 id="运行结果">运行结果</h5>
+</div><h3 id="运行结果">运行结果</h3>
 <p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/image-20210106172843665.png" alt="image-20210106172843665"></p>
 <p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/image-20210106172900613.png" alt="image-20210106172900613"></p>
-<h3 id="3获取cookie中的值">3.获取Cookie中的值</h3>
-<h4 id="31-cookie的数据结构">3.1 cookie的数据结构</h4>
+<h1 id="3获取cookie中的值">3.获取Cookie中的值</h1>
+<h2 id="31-cookie的数据结构">3.1 cookie的数据结构</h2>
 <p><code>Cookie</code>是一个结构体,其中有<code>Cookie</code>的名和值、<code>domain</code>、过期时间等信息,具体定义方式如下所示:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -512,7 +519,7 @@
 </span><span class="c1"></span><span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="32-使用示例">3.2 使用示例</h4>
+</div><h2 id="32-使用示例">3.2 使用示例</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -626,7 +633,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2022-05-02
+        2023-03-04
         
     </span>
   </p>

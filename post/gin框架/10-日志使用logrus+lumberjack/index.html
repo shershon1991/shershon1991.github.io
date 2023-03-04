@@ -44,11 +44,11 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/gin%E6%A1%86%E6%9E%B6/10-%E6%97%A5%E5%BF%97%E4%BD%BF%E7%94%A8logrus&#43;lumberjack/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-12-10T00:00:00+00:00" />
-<meta property="article:modified_time" content="2022-08-28T12:02:05+08:00" />
+<meta property="article:modified_time" content="2023-03-04T13:24:26+08:00" />
 
 <meta itemprop="name" content="Gin框架(十):日志使用(logrus&#43;lumberjack)">
 <meta itemprop="description" content="1.框架自带 gin框架自带日志记录功能,通过fmt.Fprint和fmt.Fprintf来记录日志信息，默认是将日志写到终端,可以通过gin"><meta itemprop="datePublished" content="2021-12-10T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2022-08-28T12:02:05+08:00" />
+<meta itemprop="dateModified" content="2023-03-04T13:24:26+08:00" />
 <meta itemprop="wordCount" content="2236">
 <meta itemprop="keywords" content="Gin框架," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Gin框架(十):日志使用(logrus&#43;lumberjack)"/>
@@ -144,30 +144,42 @@
   <div class="post-toc-content always-active">
     <nav id="TableOfContents">
   <ul>
-    <li>
+    <li><a href="#1框架自带">1.框架自带</a>
       <ul>
-        <li>
+        <li><a href="#11-终端禁用颜色">1.1 终端禁用颜色</a></li>
+        <li><a href="#12-只写入文件">1.2 只写入文件</a></li>
+        <li><a href="#13-同时写入文件和终端">1.3 同时写入文件和终端</a></li>
+      </ul>
+    </li>
+    <li><a href="#2集成logrus">2.集成logrus</a>
+      <ul>
+        <li><a href="#21-安装">2.1 安装</a></li>
+        <li><a href="#22-设置属性">2.2 设置属性</a></li>
+        <li><a href="#23-使用">2.3 使用</a></li>
+        <li><a href="#24-日志内容">2.4 日志内容</a>
           <ul>
-            <li><a href="#1框架自带">1.框架自带</a></li>
-            <li><a href="#2集成logrus">2.集成logrus</a></li>
-            <li><a href="#3压缩滚动">3.压缩滚动</a></li>
+            <li><a href="#json格式">JSON格式</a></li>
+            <li><a href="#text格式">Text格式</a></li>
           </ul>
         </li>
+      </ul>
+    </li>
+    <li><a href="#3压缩滚动">3.压缩滚动</a>
+      <ul>
+        <li><a href="#31-安装">3.1 安装</a></li>
+        <li><a href="#32-导入">3.2 导入</a></li>
+        <li><a href="#33-使用">3.3 使用</a></li>
+        <li><a href="#34-效果">3.4 效果</a></li>
       </ul>
     </li>
   </ul>
 </nav>
   </div>
 </div>
-  <div class="post-outdated">
-    <div class="warn">
-      <p>【注意】最后更新于 <span class="timeago" datetime="2022-08-28T12:02:05" title="August 28, 2022">August 28, 2022</span>，文中内容可能已过时，请谨慎使用。</p>
-    </div>
-  </div>
     <div class="post-content">
-      <h3 id="1框架自带">1.框架自带</h3>
+      <h1 id="1框架自带">1.框架自带</h1>
 <p><code>gin</code>框架自带日志记录功能,通过<code>fmt.Fprint</code>和<code>fmt.Fprintf</code>来记录日志信息，默认是将日志写到终端,可以通过<code>gin.DefaultWriter</code>来设置写入文件。</p>
-<h4 id="11-终端禁用颜色">1.1 终端禁用颜色</h4>
+<h2 id="11-终端禁用颜色">1.1 终端禁用颜色</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -176,7 +188,7 @@
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"> <span class="nx">gin</span><span class="p">.</span><span class="nf">DisableConsoleColor</span><span class="p">()</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="12-只写入文件">1.2 只写入文件</h4>
+</div><h2 id="12-只写入文件">1.2 只写入文件</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -262,7 +274,7 @@
 <span class="o">[</span>GIN<span class="o">]</span> 2021/05/25 - 17:59:53 <span class="p">|</span> <span class="m">200</span> <span class="p">|</span>     455.954µs <span class="p">|</span>       127.0.0.1 <span class="p">|</span> GET      <span class="s2">&#34;/log&#34;</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="13-同时写入文件和终端">1.3 同时写入文件和终端</h4>
+</div><h2 id="13-同时写入文件和终端">1.3 同时写入文件和终端</h2>
 <p>如果想将日志同时写入文件和终端,只需要修改上述代码中的<code>io.MultiWriter(f)</code>即可，修改成以下内容</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -288,9 +300,9 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="2集成logrus">2.集成logrus</h3>
+</div><h1 id="2集成logrus">2.集成logrus</h1>
 <p><code>logrus</code>可能是<code> Go</code> 目前最受欢迎的第三方日志库。目前<code>Github Star = 17.9k</code>,源码地址:<a href="https://github.com/sirupsen/logrus">https://github.com/sirupsen/logrus</a></p>
-<h4 id="21-安装">2.1 安装</h4>
+<h2 id="21-安装">2.1 安装</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -299,7 +311,7 @@
 <pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">go get -u github.com/sirupsen/logrus
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="22-设置属性">2.2 设置属性</h4>
+</div><h2 id="22-设置属性">2.2 设置属性</h2>
 <p>创建<code>logrus_use.go</code>文件，编写代码如下:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -357,7 +369,7 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="23-使用">2.3 使用</h4>
+</div><h2 id="23-使用">2.3 使用</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -434,9 +446,9 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="24-日志内容">2.4 日志内容</h4>
+</div><h2 id="24-日志内容">2.4 日志内容</h2>
 <p>日志文件:<code>log/gin.log</code></p>
-<h5 id="json格式">JSON格式</h5>
+<h3 id="json格式">JSON格式</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -449,7 +461,7 @@
 <span class="p">{</span><span class="nt">&#34;code&#34;</span><span class="p">:</span><span class="mi">200</span><span class="p">,</span><span class="nt">&#34;level&#34;</span><span class="p">:</span><span class="s2">&#34;info&#34;</span><span class="p">,</span><span class="nt">&#34;method&#34;</span><span class="p">:</span><span class="s2">&#34;GET&#34;</span><span class="p">,</span><span class="nt">&#34;msg&#34;</span><span class="p">:</span><span class="s2">&#34;info级别日志&#34;</span><span class="p">,</span><span class="nt">&#34;time&#34;</span><span class="p">:</span><span class="s2">&#34;2021-05-27T16:06:30+08:00&#34;</span><span class="p">,</span><span class="nt">&#34;url&#34;</span><span class="p">:</span><span class="s2">&#34;/log&#34;</span><span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h5 id="text格式">Text格式</h5>
+</div><h3 id="text格式">Text格式</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -462,9 +474,9 @@
 <span class="nv">time</span><span class="o">=</span><span class="s2">&#34;2021-05-27T16:35:16+08:00&#34;</span> <span class="nv">level</span><span class="o">=</span>info <span class="nv">msg</span><span class="o">=</span><span class="s2">&#34;info级别日志&#34;</span> <span class="nv">code</span><span class="o">=</span><span class="m">200</span> <span class="nv">method</span><span class="o">=</span>GET <span class="nv">url</span><span class="o">=</span>/log
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="3压缩滚动">3.压缩滚动</h3>
+</div><h1 id="3压缩滚动">3.压缩滚动</h1>
 <p><a href="https://github.com/natefinch/lumberjack">Lumberjack:https://github.com/natefinch/lumberjack</a>是一个<code>Go</code>包，用于将日志写入滚动文件。</p>
-<h4 id="31-安装">3.1 安装</h4>
+<h2 id="31-安装">3.1 安装</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -473,7 +485,7 @@
 <pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"> go get -u github.com/natefinch/lumberjack
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="32-导入">3.2 导入</h4>
+</div><h2 id="32-导入">3.2 导入</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -482,7 +494,7 @@
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">import</span> <span class="s">&#34;github.com/natefinch/lumberjack&#34;</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="33-使用">3.3 使用</h4>
+</div><h2 id="33-使用">3.3 使用</h2>
 <p>修改<code>logrus_use.go</code>文件代码</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -639,7 +651,7 @@
 
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="34-效果">3.4 效果</h4>
+</div><h2 id="34-效果">3.4 效果</h2>
 <p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/20210527185343.png" alt=""></p>
 
     </div>
@@ -652,7 +664,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2022-08-28
+        2023-03-04
         
     </span>
   </p>

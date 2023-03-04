@@ -44,11 +44,11 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/%E5%B7%A5%E5%85%B7%E7%AF%87/01-gvm/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-03-01T00:00:00+00:00" />
-<meta property="article:modified_time" content="2022-01-16T20:06:38+08:00" />
+<meta property="article:modified_time" content="2023-03-04T13:25:10+08:00" />
 
 <meta itemprop="name" content="Go工具(一):gvm">
 <meta itemprop="description" content="1. 什么是Gvm Go 语言版本管理器（Gvm）是管理 Go 语言环境的开源工具。Gvm 「pkgsets」 支持安装多个版本的 Go 并管理每个项目的模块。它最初"><meta itemprop="datePublished" content="2021-03-01T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2022-01-16T20:06:38+08:00" />
+<meta itemprop="dateModified" content="2023-03-04T13:25:10+08:00" />
 <meta itemprop="wordCount" content="913">
 <meta itemprop="keywords" content="Go工具," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go工具(一):gvm"/>
@@ -144,37 +144,28 @@
   <div class="post-toc-content always-active">
     <nav id="TableOfContents">
   <ul>
-    <li>
+    <li><a href="#1-什么是gvm">1. 什么是Gvm</a></li>
+    <li><a href="#2-安装gvm">2. 安装Gvm</a></li>
+    <li><a href="#3-gvm功能预览">3. Gvm功能预览</a></li>
+    <li><a href="#4-使用gvm">4. 使用Gvm</a>
       <ul>
-        <li><a href="#1-什么是gvm">1. 什么是Gvm</a></li>
-        <li><a href="#2-安装gvm">2. 安装Gvm</a></li>
-        <li><a href="#3-gvm功能预览">3. Gvm功能预览</a></li>
-        <li><a href="#4-使用gvm">4. 使用Gvm</a>
-          <ul>
-            <li><a href="#41-查看go所有版本">4.1 查看Go所有版本</a></li>
-            <li><a href="#42-安装go某版本">4.2 安装Go某版本</a></li>
-            <li><a href="#43-使用go某版本">4.3 使用Go某版本</a></li>
-            <li><a href="#44-查看当前使用版本">4.4 查看当前使用版本</a></li>
-          </ul>
-        </li>
-        <li><a href="#5-设置全局go-env">5. 设置全局<code>go env</code></a>
-          <ul>
-            <li><a href="#51-修改bashrc">5.1 修改<code>.bashrc</code></a></li>
-          </ul>
-        </li>
+        <li><a href="#41-查看go所有版本">4.1 查看Go所有版本</a></li>
+        <li><a href="#42-安装go某版本">4.2 安装Go某版本</a></li>
+        <li><a href="#43-使用go某版本">4.3 使用Go某版本</a></li>
+        <li><a href="#44-查看当前使用版本">4.4 查看当前使用版本</a></li>
+      </ul>
+    </li>
+    <li><a href="#5-设置全局go-env">5. 设置全局<code>go env</code></a>
+      <ul>
+        <li><a href="#51-修改bashrc">5.1 修改<code>.bashrc</code></a></li>
       </ul>
     </li>
   </ul>
 </nav>
   </div>
 </div>
-  <div class="post-outdated">
-    <div class="warn">
-      <p>【注意】最后更新于 <span class="timeago" datetime="2022-01-16T20:06:38" title="January 16, 2022">January 16, 2022</span>，文中内容可能已过时，请谨慎使用。</p>
-    </div>
-  </div>
     <div class="post-content">
-      <h2 id="1-什么是gvm">1. 什么是Gvm</h2>
+      <h1 id="1-什么是gvm">1. 什么是Gvm</h1>
 <p><code>Go</code> 语言版本管理器（<code>Gvm</code>）是管理 <code>Go</code> 语言环境的开源工具。<code>Gvm 「pkgsets」</code> 支持安装多个版本的 <code>Go</code> 并管理每个项目的模块。它最初由 <code>Josh Bussdieker</code> 开发，<code>Gvm</code> 与 <code>Ruby RVM</code> 类似，允许你为每个项目或一组项目创建一个开发环境，分离不同的 <code>Go</code> 版本和包依赖关系，来提供更大的灵活性，以防不同版本造成的问题。<code>Gvm</code> 主要有以下几个特性：</p>
 <ul>
 <li>管理 <code>Go</code> 的多个版本，包括安装、卸载和指定使用 <code>Go</code> 的某个版本</li>
@@ -187,7 +178,7 @@
 <blockquote>
 <p><a href="https://github.com/moovweb/gvm">gvm Star6.8k 源码地址：https://github.com/moovweb/gvm</a></p>
 </blockquote>
-<h2 id="2-安装gvm">2. 安装Gvm</h2>
+<h1 id="2-安装gvm">2. 安装Gvm</h1>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -196,7 +187,7 @@
 <pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">bash &lt; &lt;<span class="o">(</span>curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer<span class="o">)</span>
 </code></pre></td></tr></table>
 </div>
-</div><h2 id="3-gvm功能预览">3. Gvm功能预览</h2>
+</div><h1 id="3-gvm功能预览">3. Gvm功能预览</h1>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -277,8 +268,8 @@ Commands:
   pkgenv     - edit the environment <span class="k">for</span> a package <span class="nb">set</span>
 </code></pre></td></tr></table>
 </div>
-</div><h2 id="4-使用gvm">4. 使用Gvm</h2>
-<h3 id="41-查看go所有版本">4.1 查看Go所有版本</h3>
+</div><h1 id="4-使用gvm">4. 使用Gvm</h1>
+<h2 id="41-查看go所有版本">4.1 查看Go所有版本</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -309,7 +300,7 @@ gvm gos <span class="o">(</span>available<span class="o">)</span>
    ...
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="42-安装go某版本">4.2 安装Go某版本</h3>
+</div><h2 id="42-安装go某版本">4.2 安装Go某版本</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -326,7 +317,7 @@ Installing go1.18beta1...
 go1.18beta1 successfully installed!
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="43-使用go某版本">4.3 使用Go某版本</h3>
+</div><h2 id="43-使用go某版本">4.3 使用Go某版本</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -341,7 +332,7 @@ go1.18beta1 successfully installed!
 ➜ gvm use go1.18beta1 --default
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="44-查看当前使用版本">4.4 查看当前使用版本</h3>
+</div><h2 id="44-查看当前使用版本">4.4 查看当前使用版本</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -360,8 +351,8 @@ gvm gos <span class="o">(</span>installed<span class="o">)</span>
    system
 </code></pre></td></tr></table>
 </div>
-</div><h2 id="5-设置全局go-env">5. 设置全局<code>go env</code></h2>
-<h3 id="51-修改bashrc">5.1 修改<code>.bashrc</code></h3>
+</div><h1 id="5-设置全局go-env">5. 设置全局<code>go env</code></h1>
+<h2 id="51-修改bashrc">5.1 修改<code>.bashrc</code></h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -399,7 +390,7 @@ gvm gos <span class="o">(</span>installed<span class="o">)</span>
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2022-01-16
+        2023-03-04
         
     </span>
   </p>

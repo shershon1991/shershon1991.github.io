@@ -44,11 +44,11 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/%E9%A1%B9%E7%9B%AE%E7%AF%87/%E7%88%AC%E8%99%AB/6-docker-push/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-08-06T00:00:00+00:00" />
-<meta property="article:modified_time" content="2022-09-22T13:09:50+08:00" />
+<meta property="article:modified_time" content="2023-03-04T13:28:44+08:00" />
 
 <meta itemprop="name" content="基金分析系统(六):通过docker-compose项目部署">
 <meta itemprop="description" content="1.项目目录 1 2 3 4 5 6 7 8 9 10 ├── Dockerfile # dockerFile文件 ├── config-dev.yaml # dev环境配置文件 ├── config-local.yaml # 本地测试文件 ├── docker-compose.yaml # docker-"><meta itemprop="datePublished" content="2021-08-06T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2022-09-22T13:09:50+08:00" />
+<meta itemprop="dateModified" content="2023-03-04T13:28:44+08:00" />
 <meta itemprop="wordCount" content="1395">
 <meta itemprop="keywords" content="Go实战," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="基金分析系统(六):通过docker-compose项目部署"/>
@@ -144,17 +144,21 @@
   <div class="post-toc-content always-active">
     <nav id="TableOfContents">
   <ul>
-    <li>
+    <li><a href="#1项目目录">1.项目目录</a></li>
+    <li><a href="#2-新增dockerfile">2. 新增<code>dockerfile</code></a></li>
+    <li><a href="#3-新增docker-composeyaml">3. 新增<code>docker-compose.yaml</code></a></li>
+    <li><a href="#4-新增环境变量文件env">4. 新增环境变量文件<code>.env</code></a></li>
+    <li><a href="#5编译docker-compose-build">5.编译<code>docker-compose build</code></a></li>
+    <li><a href="#6运行docker-compose-up--d">6.运行<code>docker-compose up -d</code></a></li>
+    <li><a href="#7-踩坑记录connect-no-route-to-host">7. 踩坑记录<code>connect: no route to host</code></a>
       <ul>
-        <li>
+        <li><a href="#71-报错信息">7.1 报错信息</a></li>
+        <li><a href="#72-解决方法">7.2 解决方法</a>
           <ul>
-            <li><a href="#1项目目录">1.项目目录</a></li>
-            <li><a href="#2-新增dockerfile">2. 新增<code>dockerfile</code></a></li>
-            <li><a href="#3-新增docker-composeyaml">3. 新增<code>docker-compose.yaml</code></a></li>
-            <li><a href="#4-新增环境变量文件env">4. 新增环境变量文件<code>.env</code></a></li>
-            <li><a href="#5编译docker-compose-build">5.编译<code>docker-compose build</code></a></li>
-            <li><a href="#6运行docker-compose-up--d">6.运行<code>docker-compose up -d</code></a></li>
-            <li><a href="#7-踩坑记录connect-no-route-to-host">7. 踩坑记录<code>connect: no route to host</code></a></li>
+            <li><a href="#1-替换mysql的host">1. 替换mysql的host</a></li>
+            <li><a href="#2-修改防火墙配置文件">2. 修改防火墙配置文件</a></li>
+            <li><a href="#3-重启防火墙">3. 重启防火墙</a></li>
+            <li><a href="#4-重启服务">4. 重启服务</a></li>
           </ul>
         </li>
       </ul>
@@ -163,13 +167,8 @@
 </nav>
   </div>
 </div>
-  <div class="post-outdated">
-    <div class="hint">
-      <p>【注意】最后更新于 <span class="timeago" datetime="2022-09-22T13:09:50" title="September 22, 2022">September 22, 2022</span>，文中内容可能已过时，请谨慎使用。</p>
-    </div>
-  </div>
     <div class="post-content">
-      <h3 id="1项目目录">1.项目目录</h3>
+      <h1 id="1项目目录">1.项目目录</h1>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -196,7 +195,7 @@
 ├── main.go
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="2-新增dockerfile">2. 新增<code>dockerfile</code></h3>
+</div><h1 id="2-新增dockerfile">2. 新增<code>dockerfile</code></h1>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -257,7 +256,7 @@
 </span><span class="err"></span><span class="k">RUN</span> go build -o app .<span class="err">
 </span><span class="err">
 </span><span class="err">
-</span><span class="err"></span><span class="c">### --------- 二阶段，构建一个小镜像 ---------</span><span class="err">
+</span><span class="err"></span><span class="c"># --------- 二阶段，构建一个小镜像 ---------</span><span class="err">
 </span><span class="err"></span><span class="k">FROM</span><span class="s"> registry.cn-beijing.aliyuncs.com/liuqinghui/go-env:stretch-slim</span><span class="err">
 </span><span class="err">
 </span><span class="err"></span><span class="c"># 项目目录</span><span class="err">
@@ -271,7 +270,7 @@
 </span><span class="err"></span><span class="k">COPY</span> --from<span class="o">=</span>builder /build/app /www<span class="err">
 </span></code></pre></td></tr></table>
 </div>
-</div><h3 id="3-新增docker-composeyaml">3. 新增<code>docker-compose.yaml</code></h3>
+</div><h1 id="3-新增docker-composeyaml">3. 新增<code>docker-compose.yaml</code></h1>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -310,7 +309,7 @@
 </span><span class="w">      </span>- <span class="s2">&#34;${APP_PORT}:8088&#34;</span><span class="w">
 </span></code></pre></td></tr></table>
 </div>
-</div><h3 id="4-新增环境变量文件env">4. 新增环境变量文件<code>.env</code></h3>
+</div><h1 id="4-新增环境变量文件env">4. 新增环境变量文件<code>.env</code></h1>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -339,7 +338,7 @@ APP_PORT=8081
 
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="5编译docker-compose-build">5.编译<code>docker-compose build</code></h3>
+</div><h1 id="5编译docker-compose-build">5.编译<code>docker-compose build</code></h1>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -418,7 +417,7 @@ Successfully built 951dce0d6536
 Successfully tagged fund-server_app:latest
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="6运行docker-compose-up--d">6.运行<code>docker-compose up -d</code></h3>
+</div><h1 id="6运行docker-compose-up--d">6.运行<code>docker-compose up -d</code></h1>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -457,9 +456,9 @@ app_1  <span class="p">|</span> <span class="o">[</span>GIN-debug<span class="o"
 app_1  <span class="p">|</span> 【 当前环境: dev 当前版本: v1.0.0 接口地址: http://0.0.0.0:8081 启动时间:2021-10-18 22:10:23 】
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="7-踩坑记录connect-no-route-to-host">7. 踩坑记录<code>connect: no route to host</code></h3>
+</div><h1 id="7-踩坑记录connect-no-route-to-host">7. 踩坑记录<code>connect: no route to host</code></h1>
 <p>启动容器后，在容器内访问本地mysql报错: <code>connect: no route to host</code></p>
-<h4 id="71-报错信息">7.1 报错信息</h4>
+<h2 id="71-报错信息">7.1 报错信息</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -494,8 +493,8 @@ app_1  <span class="p">|</span> 	/build/main.go:18 +0x45
 fund-server_app_1 exited with code <span class="m">2</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="72-解决方法">7.2 解决方法</h4>
-<h5 id="1-替换mysql的host">1. 替换mysql的host</h5>
+</div><h2 id="72-解决方法">7.2 解决方法</h2>
+<h3 id="1-替换mysql的host">1. 替换mysql的host</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -568,7 +567,7 @@ eth0: <span class="nv">flags</span><span class="o">=</span>4163&lt;UP,BROADCAST,
         TX errors <span class="m">0</span>  dropped <span class="m">0</span> overruns <span class="m">0</span>  carrier <span class="m">0</span>  collisions <span class="m">0</span>
 </code></pre></td></tr></table>
 </div>
-</div><h5 id="2-修改防火墙配置文件">2. 修改防火墙配置文件</h5>
+</div><h3 id="2-修改防火墙配置文件">2. 修改防火墙配置文件</h3>
 <p><code>vim /etc/firewalld/zones/public.xml</code></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -634,7 +633,7 @@ eth0: <span class="nv">flags</span><span class="o">=</span>4163&lt;UP,BROADCAST,
 &lt;/zone&gt;
 </code></pre></td></tr></table>
 </div>
-</div><h5 id="3-重启防火墙">3. 重启防火墙</h5>
+</div><h3 id="3-重启防火墙">3. 重启防火墙</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -647,7 +646,7 @@ eth0: <span class="nv">flags</span><span class="o">=</span>4163&lt;UP,BROADCAST,
 Redirecting to /bin/systemctl restart firewalld.service
 </code></pre></td></tr></table>
 </div>
-</div><h5 id="4-重启服务">4. 重启服务</h5>
+</div><h3 id="4-重启服务">4. 重启服务</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -669,7 +668,7 @@ Redirecting to /bin/systemctl restart firewalld.service
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2022-09-22
+        2023-03-04
         
     </span>
   </p>

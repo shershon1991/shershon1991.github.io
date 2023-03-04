@@ -44,11 +44,11 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/%E9%A1%B9%E7%9B%AE%E7%AF%87/%E7%88%AC%E8%99%AB/2-database/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-08-02T00:00:00+00:00" />
-<meta property="article:modified_time" content="2022-09-22T13:09:59+08:00" />
+<meta property="article:modified_time" content="2023-03-04T13:28:44+08:00" />
 
 <meta itemprop="name" content="基金分析系统(二):通过数据模型建表">
 <meta itemprop="description" content="1. 介绍 数据模型指的是和表结构一一对应的结构体，通过编写结构体可通过迁移直接创建表结构,后续作为对表的增删改查的参数。 2. 用户模型 2.1 用户表 文件："><meta itemprop="datePublished" content="2021-08-02T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2022-09-22T13:09:59+08:00" />
+<meta itemprop="dateModified" content="2023-03-04T13:28:44+08:00" />
 <meta itemprop="wordCount" content="5105">
 <meta itemprop="keywords" content="Go实战," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="基金分析系统(二):通过数据模型建表"/>
@@ -144,57 +144,48 @@
   <div class="post-toc-content always-active">
     <nav id="TableOfContents">
   <ul>
-    <li>
+    <li><a href="#1-介绍">1. 介绍</a></li>
+    <li><a href="#2-用户模型">2. 用户模型</a>
       <ul>
-        <li><a href="#1-介绍">1. 介绍</a></li>
-        <li><a href="#2-用户模型">2. 用户模型</a>
-          <ul>
-            <li><a href="#21-用户表">2.1 用户表</a></li>
-            <li><a href="#22-用户信息表">2.2 用户信息表</a></li>
-          </ul>
-        </li>
-        <li><a href="#3-基金模型">3. 基金模型</a>
-          <ul>
-            <li><a href="#31-基金基础表">3.1 基金基础表</a></li>
-            <li><a href="#32-基金持仓表">3.2 基金持仓表</a></li>
-            <li><a href="#33-基金每日排行表">3.3 基金每日排行表</a></li>
-          </ul>
-        </li>
-        <li><a href="#4-股票模型">4. 股票模型</a>
-          <ul>
-            <li><a href="#41-股票基础表">4.1 股票基础表</a></li>
-            <li><a href="#42-股票行情表">4.2 股票行情表</a></li>
-          </ul>
-        </li>
-        <li><a href="#5-编写迁移代码">5. 编写迁移代码</a>
-          <ul>
-            <li><a href="#51-添加对应的方法">5.1 添加对应的方法</a></li>
-            <li><a href="#52-修改迁移入口函数">5.2 修改迁移入口函数</a></li>
-          </ul>
-        </li>
-        <li><a href="#6-启动项目">6. 启动项目</a>
-          <ul>
-            <li><a href="#61-修改配置">6.1 修改配置</a></li>
-            <li><a href="#62-自动创建表">6.2 自动创建表</a></li>
-          </ul>
-        </li>
-        <li><a href="#7-表关系图">7. 表关系图</a></li>
+        <li><a href="#21-用户表">2.1 用户表</a></li>
+        <li><a href="#22-用户信息表">2.2 用户信息表</a></li>
       </ul>
     </li>
+    <li><a href="#3-基金模型">3. 基金模型</a>
+      <ul>
+        <li><a href="#31-基金基础表">3.1 基金基础表</a></li>
+        <li><a href="#32-基金持仓表">3.2 基金持仓表</a></li>
+        <li><a href="#33-基金每日排行表">3.3 基金每日排行表</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-股票模型">4. 股票模型</a>
+      <ul>
+        <li><a href="#41-股票基础表">4.1 股票基础表</a></li>
+        <li><a href="#42-股票行情表">4.2 股票行情表</a></li>
+      </ul>
+    </li>
+    <li><a href="#5-编写迁移代码">5. 编写迁移代码</a>
+      <ul>
+        <li><a href="#51-添加对应的方法">5.1 添加对应的方法</a></li>
+        <li><a href="#52-修改迁移入口函数">5.2 修改迁移入口函数</a></li>
+      </ul>
+    </li>
+    <li><a href="#6-启动项目">6. 启动项目</a>
+      <ul>
+        <li><a href="#61-修改配置">6.1 修改配置</a></li>
+        <li><a href="#62-自动创建表">6.2 自动创建表</a></li>
+      </ul>
+    </li>
+    <li><a href="#7-表关系图">7. 表关系图</a></li>
   </ul>
 </nav>
   </div>
 </div>
-  <div class="post-outdated">
-    <div class="hint">
-      <p>【注意】最后更新于 <span class="timeago" datetime="2022-09-22T13:09:59" title="September 22, 2022">September 22, 2022</span>，文中内容可能已过时，请谨慎使用。</p>
-    </div>
-  </div>
     <div class="post-content">
-      <h2 id="1-介绍">1. 介绍</h2>
+      <h1 id="1-介绍">1. 介绍</h1>
 <p>数据模型指的是和表结构一一对应的结构体，通过编写结构体可通过迁移直接创建表结构,后续作为对表的增删改查的参数。</p>
-<h2 id="2-用户模型">2. 用户模型</h2>
-<h3 id="21-用户表">2.1 用户表</h3>
+<h1 id="2-用户模型">2. 用户模型</h1>
+<h2 id="21-用户表">2.1 用户表</h2>
 <p><strong>文件：<code>model/entity/user.go</code></strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -222,7 +213,7 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="22-用户信息表">2.2 用户信息表</h3>
+</div><h2 id="22-用户信息表">2.2 用户信息表</h2>
 <p><strong>文件：<code>model/entity/user.go</code></strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -244,8 +235,8 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h2 id="3-基金模型">3. 基金模型</h2>
-<h3 id="31-基金基础表">3.1 基金基础表</h3>
+</div><h1 id="3-基金模型">3. 基金模型</h1>
+<h2 id="31-基金基础表">3.1 基金基础表</h2>
 <p><strong>文件：<code>model/entity/fund.go</code></strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -285,7 +276,7 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="32-基金持仓表">3.2 基金持仓表</h3>
+</div><h2 id="32-基金持仓表">3.2 基金持仓表</h2>
 <p><strong>文件：<code>model/entity/fund.go</code></strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -313,7 +304,7 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="33-基金每日排行表">3.3 基金每日排行表</h3>
+</div><h2 id="33-基金每日排行表">3.3 基金每日排行表</h2>
 <p><strong>文件：<code>model/entity/fund.go</code></strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -359,8 +350,8 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h2 id="4-股票模型">4. 股票模型</h2>
-<h3 id="41-股票基础表">4.1 股票基础表</h3>
+</div><h1 id="4-股票模型">4. 股票模型</h1>
+<h2 id="41-股票基础表">4.1 股票基础表</h2>
 <p><strong>文件：<code>model/entity/stock.go</code></strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -404,7 +395,7 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="42-股票行情表">4.2 股票行情表</h3>
+</div><h2 id="42-股票行情表">4.2 股票行情表</h2>
 <p><strong>文件：<code>model/entity/stock.go</code></strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -460,8 +451,8 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h2 id="5-编写迁移代码">5. 编写迁移代码</h2>
-<h3 id="51-添加对应的方法">5.1 添加对应的方法</h3>
+</div><h1 id="5-编写迁移代码">5. 编写迁移代码</h1>
+<h2 id="51-添加对应的方法">5.1 添加对应的方法</h2>
 <p><strong>文件：<code>model/migrate/migrate.go</code></strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -527,7 +518,7 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="52-修改迁移入口函数">5.2 修改迁移入口函数</h3>
+</div><h2 id="52-修改迁移入口函数">5.2 修改迁移入口函数</h2>
 <p><strong>文件：<code>model/migrate/migrate.go</code></strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -553,8 +544,8 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h2 id="6-启动项目">6. 启动项目</h2>
-<h3 id="61-修改配置">6.1 修改配置</h3>
+</div><h1 id="6-启动项目">6. 启动项目</h1>
+<h2 id="61-修改配置">6.1 修改配置</h2>
 <p><strong>文件：<code>./config.yaml</code></strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -582,10 +573,10 @@
 </span><span class="w">    </span><span class="l">...</span><span class="w">
 </span></code></pre></td></tr></table>
 </div>
-</div><h3 id="62-自动创建表">6.2 自动创建表</h3>
+</div><h2 id="62-自动创建表">6.2 自动创建表</h2>
 <p>当在配置中,打开<code>autoMigrate=true</code>时，成功启动项目后，会创建以下表信息。</p>
 <p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/20210831154957.png" alt="i"></p>
-<h2 id="7-表关系图">7. 表关系图</h2>
+<h1 id="7-表关系图">7. 表关系图</h1>
 <p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/20210831155140.png" alt=""></p>
 
     </div>
@@ -598,7 +589,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2022-09-22
+        2023-03-04
         
     </span>
   </p>

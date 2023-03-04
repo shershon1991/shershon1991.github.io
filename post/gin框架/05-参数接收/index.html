@@ -44,11 +44,11 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/gin%E6%A1%86%E6%9E%B6/05-%E5%8F%82%E6%95%B0%E6%8E%A5%E6%94%B6/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-12-05T00:00:00+00:00" />
-<meta property="article:modified_time" content="2022-08-28T12:01:13+08:00" />
+<meta property="article:modified_time" content="2023-03-04T13:24:26+08:00" />
 
 <meta itemprop="name" content="Gin框架(五):参数接收">
 <meta itemprop="description" content="1.路由参数 1.1 Param 当注册路由格式为:/path/:a/:b 时，:x指的就是路由参数，可以直接通过Param(&quot;x&quot;)获取值"><meta itemprop="datePublished" content="2021-12-05T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2022-08-28T12:01:13+08:00" />
+<meta itemprop="dateModified" content="2023-03-04T13:24:26+08:00" />
 <meta itemprop="wordCount" content="3581">
 <meta itemprop="keywords" content="Gin框架," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Gin框架(五):参数接收"/>
@@ -144,13 +144,27 @@
   <div class="post-toc-content always-active">
     <nav id="TableOfContents">
   <ul>
-    <li>
+    <li><a href="#1路由参数">1.路由参数</a>
       <ul>
-        <li>
+        <li><a href="#11-param">1.1 <code>Param</code></a></li>
+      </ul>
+    </li>
+    <li><a href="#2get参数">2.<code>GET</code>参数</a>
+      <ul>
+        <li><a href="#21--接收单值">2.1  接收单值</a></li>
+        <li><a href="#22-接收数组">2.2 接收数组</a></li>
+        <li><a href="#23-接收map">2.3 接收Map</a></li>
+      </ul>
+    </li>
+    <li><a href="#3post参数">3.<code>POST</code>参数</a>
+      <ul>
+        <li><a href="#31-接收单值">3.1 接收单值</a></li>
+        <li><a href="#32-接收数组">3.2 接收数组</a></li>
+        <li><a href="#33-接收map">3.3 接收Map</a></li>
+        <li><a href="#34-接收json">3.4 接收JSON</a>
           <ul>
-            <li><a href="#1路由参数">1.路由参数</a></li>
-            <li><a href="#2get参数">2.<code>GET</code>参数</a></li>
-            <li><a href="#3post参数">3.<code>POST</code>参数</a></li>
+            <li><a href="#1直接赋值">1.直接赋值</a></li>
+            <li><a href="#2绑定到结构体">2.绑定到结构体</a></li>
           </ul>
         </li>
       </ul>
@@ -159,14 +173,9 @@
 </nav>
   </div>
 </div>
-  <div class="post-outdated">
-    <div class="warn">
-      <p>【注意】最后更新于 <span class="timeago" datetime="2022-08-28T12:01:13" title="August 28, 2022">August 28, 2022</span>，文中内容可能已过时，请谨慎使用。</p>
-    </div>
-  </div>
     <div class="post-content">
-      <h3 id="1路由参数">1.路由参数</h3>
-<h4 id="11-param">1.1 <code>Param</code></h4>
+      <h1 id="1路由参数">1.路由参数</h1>
+<h2 id="11-param">1.1 <code>Param</code></h2>
 <p>当注册路由格式为:<code>/path/:a/:b</code> 时，<code>:x</code>指的就是路由参数，可以直接通过<code>Param(&quot;x&quot;)</code>获取值信息。</p>
 <p><strong>a.代码示例:</strong></p>
 <div class="highlight"><div class="chroma">
@@ -268,8 +277,8 @@
 <span class="o">{</span><span class="s2">&#34;height&#34;</span>:<span class="s2">&#34;170&#34;</span>,<span class="s2">&#34;msg&#34;</span>:<span class="s2">&#34;success&#34;</span>,<span class="s2">&#34;name&#34;</span>:<span class="s2">&#34;张三&#34;</span>,<span class="s2">&#34;phone&#34;</span>:<span class="s2">&#34;18&#34;</span><span class="o">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="2get参数">2.<code>GET</code>参数</h3>
-<h4 id="21--接收单值">2.1  接收单值</h4>
+</div><h1 id="2get参数">2.<code>GET</code>参数</h1>
+<h2 id="21--接收单值">2.1  接收单值</h2>
 <p>在<code>Gin</code>框架中可以通过<code>Query、DefaultQuery、GetQuery</code>来获取<code>Get</code>参数信息，而<code>Query、DefaultQuery</code>是对<code>GetQuery</code>的二次封装。</p>
 <p><strong>a.代码示例:</strong></p>
 <div class="highlight"><div class="chroma">
@@ -353,7 +362,7 @@
 <span class="o">{</span><span class="s2">&#34;context.DefaultQuery-&gt;age&#34;</span>:<span class="s2">&#34;23&#34;</span>,<span class="s2">&#34;context.GetQuery-&gt;ok&#34;</span>:true,<span class="s2">&#34;context.GetQuery-&gt;home&#34;</span>:<span class="s2">&#34;北京&#34;</span>,<span class="s2">&#34;context.Query-&gt;name&#34;</span>:<span class="s2">&#34;小明&#34;</span>,<span class="s2">&#34;msg&#34;</span>:<span class="s2">&#34;success&#34;</span><span class="o">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="22-接收数组">2.2 接收数组</h4>
+</div><h2 id="22-接收数组">2.2 接收数组</h2>
 <p>在<code>Gin</code>框架中可以通过<code>QueryArray(&quot;param[]&quot;)</code>和<code>GetQueryArray(&quot;param[]&quot;)</code>获取<code>GET</code>方式提交中的数组值信息，而<code>QueryArray</code>是对<code>GetQueryArray</code>二次封装， 具体使用参考下面代码:</p>
 <p><strong>a.代码示例:</strong></p>
 <div class="highlight"><div class="chroma">
@@ -412,7 +421,7 @@
 </div>
 </div><p><strong>b.请求返回:</strong></p>
 <p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/20210427161130.png" alt=""></p>
-<h4 id="23-接收map">2.3 接收Map</h4>
+<h2 id="23-接收map">2.3 接收Map</h2>
 <p>在<code>Gin</code>框架中可以通过<code>QueryMap(&quot;param&quot;)</code>和<code>GetQueryMap(&quot;param&quot;)</code>获取<code>GET</code>方式提交中的<code>map</code>值信息，而<code>QueryMap</code>是对<code>GetQueryMap</code>二次封装,具体使用参考下面代码:</p>
 <p><strong>a.代码示例:</strong></p>
 <div class="highlight"><div class="chroma">
@@ -473,8 +482,8 @@
 </div>
 </div><p><strong>b.请求返回:</strong></p>
 <p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/20210427164158.png" alt="image-20210427164158662"></p>
-<h3 id="3post参数">3.<code>POST</code>参数</h3>
-<h4 id="31-接收单值">3.1 接收单值</h4>
+<h1 id="3post参数">3.<code>POST</code>参数</h1>
+<h2 id="31-接收单值">3.1 接收单值</h2>
 <p>在<code>Gin</code>框架中可以通过<code>PostForm、DefaultPostForm、GetPostForm</code>来获取<code>Post</code>提交的参数信息，而<code>PostForm、DefaultPostForm</code>同样是对<code>GetPostForm</code>的二次封装。</p>
 <p><strong>a.代码示例:</strong></p>
 <div class="highlight"><div class="chroma">
@@ -560,7 +569,7 @@
 <span class="o">{</span><span class="s2">&#34;DefaultQuery&#34;</span>:<span class="s2">&#34;22&#34;</span>,<span class="s2">&#34;GetPostForm.home&#34;</span>:<span class="s2">&#34;南京&#34;</span>,<span class="s2">&#34;GetPostForm.ok&#34;</span>:true,<span class="s2">&#34;postForm&#34;</span>:<span class="s2">&#34;张三&#34;</span><span class="o">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="32-接收数组">3.2 接收数组</h4>
+</div><h2 id="32-接收数组">3.2 接收数组</h2>
 <p>在<code>Gin</code>框架中可以通过<code>PostFormArray(&quot;param[]&quot;)</code>和<code>GetPostFormArray(&quot;param[]&quot;)</code>获取<code>POST</code>方式提交中的数组值信息，而<code>PostFormArray</code>是对<code>GetPostFormArray</code>二次封装，具体使用参考下面代码:</p>
 <p><strong>a.代码示例:</strong></p>
 <div class="highlight"><div class="chroma">
@@ -626,7 +635,7 @@
 <span class="o">{</span><span class="s2">&#34;postArr&#34;</span>:<span class="o">[</span><span class="s2">&#34;张三&#34;</span>,<span class="s2">&#34;李东&#34;</span><span class="o">]}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="33-接收map">3.3 接收Map</h4>
+</div><h2 id="33-接收map">3.3 接收Map</h2>
 <p>在<code>Gin</code>框架中可以通过<code>PostFormMap(&quot;param&quot;)</code>和<code>GetPostFormMap(&quot;param&quot;)</code>获取<code>POST</code>方式提交中的映射(<code>map</code>)信息，具体使用参考下面代码:</p>
 <p><strong>a.代码示例:</strong></p>
 <div class="highlight"><div class="chroma">
@@ -688,9 +697,9 @@
 <span class="o">{</span><span class="s2">&#34;map&#34;</span>:<span class="o">{</span><span class="s2">&#34;数学&#34;</span>:<span class="s2">&#34;100&#34;</span>,<span class="s2">&#34;语文&#34;</span>:<span class="s2">&#34;100&#34;</span><span class="o">}}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="34-接收json">3.4 接收JSON</h4>
+</div><h2 id="34-接收json">3.4 接收JSON</h2>
 <p>在<code>Gin</code>框架中可以通过<code>BindJSON(&amp;param)</code>来接收提交的<code>json</code>格式数据,具体使用参考下面代码:</p>
-<h5 id="1直接赋值">1.直接赋值</h5>
+<h3 id="1直接赋值">1.直接赋值</h3>
 <p><strong>a.代码示例:</strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -773,7 +782,7 @@
 <span class="o">{</span><span class="s2">&#34;return&#34;</span>:<span class="o">{</span><span class="s2">&#34;age&#34;</span>:20,<span class="s2">&#34;likes&#34;</span>:<span class="o">[</span><span class="s2">&#34;打游戏&#34;</span>,<span class="s2">&#34;旅游&#34;</span><span class="o">]</span>,<span class="s2">&#34;name&#34;</span>:<span class="s2">&#34;张三&#34;</span><span class="o">}}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h5 id="2绑定到结构体">2.绑定到结构体</h5>
+</div><h3 id="2绑定到结构体">2.绑定到结构体</h3>
 <p><strong>a.代码示例:</strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -855,7 +864,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2022-08-28
+        2023-03-04
         
     </span>
   </p>

@@ -44,11 +44,11 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/25-es/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-04-25T00:00:00+00:00" />
-<meta property="article:modified_time" content="2022-10-04T07:42:32+08:00" />
+<meta property="article:modified_time" content="2023-03-04T13:27:21+08:00" />
 
 <meta itemprop="name" content="Go扩展包(二十五):es">
 <meta itemprop="description" content="1.介绍 Elasticsearch（ES）是一个基于Lucene构建的开源、分布式、RESTful接口的全文搜索引擎。Elasticsear"><meta itemprop="datePublished" content="2021-04-25T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2022-10-04T07:42:32+08:00" />
+<meta itemprop="dateModified" content="2023-03-04T13:27:21+08:00" />
 <meta itemprop="wordCount" content="3249">
 <meta itemprop="keywords" content="Go扩展包," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go扩展包(二十五):es"/>
@@ -144,34 +144,33 @@
   <div class="post-toc-content always-active">
     <nav id="TableOfContents">
   <ul>
-    <li>
+    <li><a href="#1介绍">1.介绍</a></li>
+    <li><a href="#2安装">2.安装</a></li>
+    <li><a href="#3-使用">3. 使用</a>
       <ul>
-        <li><a href="#1介绍">1.介绍</a></li>
-        <li><a href="#2安装">2.安装</a></li>
-        <li><a href="#3-使用">3. 使用</a>
-          <ul>
-            <li><a href="#31-创建客户端">3.1 创建客户端</a></li>
-            <li><a href="#32-创建索引">3.2 创建索引</a></li>
-            <li><a href="#33-添加数据">3.3 添加数据</a></li>
-            <li><a href="#34-单条更新">3.4 单条更新</a></li>
-            <li><a href="#35-批量更新">3.5 批量更新</a></li>
-            <li><a href="#36-查询">3.6 查询</a></li>
-            <li><a href="#37-删除">3.7 删除</a></li>
-          </ul>
-        </li>
+        <li><a href="#31-创建客户端">3.1 创建客户端</a></li>
+        <li><a href="#32-创建索引">3.2 创建索引</a></li>
+        <li><a href="#33-添加数据">3.3 添加数据</a></li>
+        <li><a href="#1-单条添加">1. 单条添加</a></li>
+        <li><a href="#2-批量添加">2. 批量添加</a></li>
+        <li><a href="#34-单条更新">3.4 单条更新</a></li>
+        <li><a href="#1-单字段更新script">1. 单字段更新(<code>Script</code>)</a></li>
+        <li><a href="#2-多字段更新doc">2. 多字段更新(<code>doc</code>)</a></li>
+        <li><a href="#35-批量更新">3.5 批量更新</a></li>
+        <li><a href="#36-查询">3.6 查询</a></li>
+        <li><a href="#1-单条查询">1. 单条查询</a></li>
+        <li><a href="#2-批量查询">2. 批量查询</a></li>
+        <li><a href="#37-删除">3.7 删除</a></li>
+        <li><a href="#1-根据id删除">1. 根据ID删除</a></li>
+        <li><a href="#2-根据条件删除">2. 根据条件删除</a></li>
       </ul>
     </li>
   </ul>
 </nav>
   </div>
 </div>
-  <div class="post-outdated">
-    <div class="hint">
-      <p>【注意】最后更新于 <span class="timeago" datetime="2022-10-04T07:42:32" title="October 4, 2022">October 4, 2022</span>，文中内容可能已过时，请谨慎使用。</p>
-    </div>
-  </div>
     <div class="post-content">
-      <h2 id="1介绍">1.介绍</h2>
+      <h1 id="1介绍">1.介绍</h1>
 <p><code>Elasticsearch（ES）</code>是一个基于<code>Lucene</code>构建的开源、分布式、<code>RESTful</code>接口的全文搜索引擎。<code>Elasticsearch</code>还是一个分布式文档数据库，其中每个字段均可被索引，而且每个字段的数据均可被搜索，<code>ES</code>能够横向扩展至数以百计的服务器存储以及处理<strong>PB</strong>级的数据。可以在极短的时间内存储、搜索和分析大量的数据。通常作为具有复杂搜索场景情况下的核心发动机。根据<code>DB-Engines</code>的排名显示，<code>Elasticsearch</code>是最受欢迎的企业搜索引擎。</p>
 <p>在<code>Go</code>语言中经常使用的包有以下两个,截止到(2021.07.10):</p>
 <table>
@@ -198,7 +197,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="2安装">2.安装</h2>
+<h1 id="2安装">2.安装</h1>
 <p>这里使用<code>olivere/elastic</code>，<font color=red><b>@注意: 下载包的版本需要和ES版本相同，如我们这里使用的ES是7.13.3的版本，那么我们就需要下载<code>olivere/elastic/v7</code>。</b></font></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -210,8 +209,8 @@
 go get github.com/olivere/elastic/v7
 </code></pre></td></tr></table>
 </div>
-</div><h2 id="3-使用">3. 使用</h2>
-<h3 id="31-创建客户端">3.1 创建客户端</h3>
+</div><h1 id="3-使用">3. 使用</h1>
+<h2 id="31-创建客户端">3.1 创建客户端</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -350,7 +349,7 @@ go get github.com/olivere/elastic/v7
 </div><blockquote>
 <p><font color=red><b>@注意：如果你的ElasticSearch是通过docker安装，若不设置<code>elastic.SetSniff(false)</code>，会报错: <code>no active connection found: no Elasticsearch node available</code></b></font></p>
 </blockquote>
-<h3 id="32-创建索引">3.2 创建索引</h3>
+<h2 id="32-创建索引">3.2 创建索引</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -460,8 +459,8 @@ go get github.com/olivere/elastic/v7
 </span><span class="c1"></span><span class="nx">res</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">CreateIndex</span><span class="p">(</span><span class="nx">indexName</span><span class="p">).</span><span class="nf">Do</span><span class="p">(</span><span class="nx">ctx</span><span class="p">)</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="33-添加数据">3.3 添加数据</h3>
-<h4 id="1-单条添加">1. 单条添加</h4>
+</div><h2 id="33-添加数据">3.3 添加数据</h2>
+<h2 id="1-单条添加">1. 单条添加</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -524,7 +523,7 @@ go get github.com/olivere/elastic/v7
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="2-批量添加">2. 批量添加</h4>
+</div><h2 id="2-批量添加">2. 批量添加</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -609,8 +608,8 @@ go get github.com/olivere/elastic/v7
 <span class="nx">PASS</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="34-单条更新">3.4 单条更新</h3>
-<h4 id="1-单字段更新script">1. 单字段更新(<code>Script</code>)</h4>
+</div><h2 id="34-单条更新">3.4 单条更新</h2>
+<h2 id="1-单字段更新script">1. 单字段更新(<code>Script</code>)</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -677,7 +676,7 @@ go get github.com/olivere/elastic/v7
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="2-多字段更新doc">2. 多字段更新(<code>doc</code>)</h4>
+</div><h2 id="2-多字段更新doc">2. 多字段更新(<code>doc</code>)</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -714,7 +713,7 @@ go get github.com/olivere/elastic/v7
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="35-批量更新">3.5 批量更新</h3>
+</div><h2 id="35-批量更新">3.5 批量更新</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -777,8 +776,8 @@ go get github.com/olivere/elastic/v7
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="36-查询">3.6 查询</h3>
-<h4 id="1-单条查询">1. 单条查询</h4>
+</div><h2 id="36-查询">3.6 查询</h2>
+<h2 id="1-单条查询">1. 单条查询</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -825,7 +824,7 @@ go get github.com/olivere/elastic/v7
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="2-批量查询">2. 批量查询</h4>
+</div><h2 id="2-批量查询">2. 批量查询</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -888,8 +887,8 @@ go get github.com/olivere/elastic/v7
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="37-删除">3.7 删除</h3>
-<h4 id="1-根据id删除">1. 根据ID删除</h4>
+</div><h2 id="37-删除">3.7 删除</h2>
+<h2 id="1-根据id删除">1. 根据ID删除</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -932,7 +931,7 @@ go get github.com/olivere/elastic/v7
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="2-根据条件删除">2. 根据条件删除</h4>
+</div><h2 id="2-根据条件删除">2. 根据条件删除</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -988,7 +987,7 @@ go get github.com/olivere/elastic/v7
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2022-10-04
+        2023-03-04
         
     </span>
   </p>

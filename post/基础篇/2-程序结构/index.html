@@ -44,11 +44,11 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/%E5%9F%BA%E7%A1%80%E7%AF%87/2-%E7%A8%8B%E5%BA%8F%E7%BB%93%E6%9E%84/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-01-02T00:00:00+00:00" />
-<meta property="article:modified_time" content="2022-11-25T15:45:03+08:00" />
+<meta property="article:modified_time" content="2023-03-04T13:23:23+08:00" />
 
 <meta itemprop="name" content="Go学习(二):程序组成结构及规范说明">
 <meta itemprop="description" content="1. 程序示例 以实际代码进行讲解: 1 2 3 4 5 6 7 8 9 10 11 12 package main // 这是引入包 import &#34;fmt&#34; // 入口函数 func main() { // 定义变量 str := &#34;hello word&#34; // 输出语句 fmt.Println(str) } 2. 程序组成 2.1 包名:"><meta itemprop="datePublished" content="2021-01-02T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2022-11-25T15:45:03+08:00" />
+<meta itemprop="dateModified" content="2023-03-04T13:23:23+08:00" />
 <meta itemprop="wordCount" content="925">
 <meta itemprop="keywords" content="Go基础," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go学习(二):程序组成结构及规范说明"/>
@@ -144,29 +144,24 @@
   <div class="post-toc-content always-active">
     <nav id="TableOfContents">
   <ul>
-    <li>
+    <li><a href="#1--程序示例">1.  程序示例</a></li>
+    <li><a href="#2--程序组成">2.  程序组成</a>
       <ul>
-        <li>
-          <ul>
-            <li><a href="#1--程序示例">1.  程序示例</a></li>
-            <li><a href="#2--程序组成">2.  程序组成</a></li>
-            <li><a href="#3-可见性规则">3. 可见性规则</a></li>
-            <li><a href="#4项目工程结构">4.项目工程结构</a></li>
-          </ul>
-        </li>
+        <li><a href="#21-包名-package-main">2.1 包名: package main</a></li>
+        <li><a href="#22-导入包-import--fmt">2.2 导入包: import  &ldquo;fmt&rdquo;</a></li>
+        <li><a href="#23-主函数-func-main">2.3 主函数: func main()</a></li>
+        <li><a href="#24-注释">2.4 注释</a></li>
+        <li><a href="#25-语句结束">2.5 语句结束</a></li>
       </ul>
     </li>
+    <li><a href="#3-可见性规则">3. 可见性规则</a></li>
+    <li><a href="#4项目工程结构">4.项目工程结构</a></li>
   </ul>
 </nav>
   </div>
 </div>
-  <div class="post-outdated">
-    <div class="hint">
-      <p>【注意】最后更新于 <span class="timeago" datetime="2022-11-25T15:45:03" title="November 25, 2022">November 25, 2022</span>，文中内容可能已过时，请谨慎使用。</p>
-    </div>
-  </div>
     <div class="post-content">
-      <h3 id="1--程序示例">1.  程序示例</h3>
+      <h1 id="1--程序示例">1.  程序示例</h1>
 <p>以实际代码进行讲解:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -198,39 +193,39 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="2--程序组成">2.  程序组成</h3>
-<h4 id="21-包名-package-main">2.1 包名: package main</h4>
+</div><h1 id="2--程序组成">2.  程序组成</h1>
+<h2 id="21-包名-package-main">2.1 包名: package main</h2>
 <p><code>package</code>定义包名,必须在源文件中非注释的第一行指明这个文件属于哪个包。<font color=red>每个 <code>Go</code> 应用程序都包含一个名为 <code>main</code> 的包,并且该包包含一个叫<code>main()</code>的函数（该函数是<code>Go</code>程序执行的起点，既不能带参数，也不能定义返回值）。</font></p>
 <p><strong>注意事项:</strong></p>
 <ul>
 <li>只有<code>package</code>名称为<code>main</code>的包可以包含<code>main()</code>函数。</li>
 <li>一个可执行程序有且仅有一个<code>main</code>包。</li>
 </ul>
-<h4 id="22-导入包-import--fmt">2.2 导入包: import  &ldquo;fmt&rdquo;</h4>
+<h2 id="22-导入包-import--fmt">2.2 导入包: import  &ldquo;fmt&rdquo;</h2>
 <p><code>import</code>语句用于导入该程序所依赖的包。由于本示例程序用到了<code>Println()</code>函数，所以需要导入该函数所属的<code>fmt</code>包。<code>fmt</code>包实现了格式化<code>IO（输入/输出）</code>。</p>
 <p><strong>注意事项:</strong></p>
 <ul>
 <li>通过<code>import</code>关键字来导入其他<code>非main</code>包。</li>
 <li>可以通过<code>import</code>关键字单个导入，也可以同时导入多个。</li>
 </ul>
-<h4 id="23-主函数-func-main">2.3 主函数: func main()</h4>
+<h2 id="23-主函数-func-main">2.3 主函数: func main()</h2>
 <p><code>func main()</code>是程序入口。所有<code>Go</code>函数以关键字<code>func</code>开头，每一个可执行程序都必须包含<code>main()</code>函数，通常是程序启动后第一个执行的函数，<font color=red>如果有init()函数则会先执行init()函数。</font></p>
-<h4 id="24-注释">2.4 注释</h4>
+<h2 id="24-注释">2.4 注释</h2>
 <p>注释就是对代码的功能进行解释，方便开发人员理解被注释的代码。Go 语言中有以下两种形式。</p>
 <ul>
 <li>单行注释： <code>// </code>。</li>
 <li>多行注释: <code> /**/</code>,不可以嵌套使用。</li>
 </ul>
-<h4 id="25-语句结束">2.5 语句结束</h4>
+<h2 id="25-语句结束">2.5 语句结束</h2>
 <p><code>Go</code>语言中<font color=red>一行代表一个语句结束。</font>每个语句不需要像<code>C</code> 家族中的其它语言一样以分号<code>;</code> 结尾。</p>
 <p>如果打算将多个语句写在同一行，它们则必须使用分号<code>;</code>人为区分；<font color=red>但在实际开发中并不鼓励这种做法。</font></p>
-<h3 id="3-可见性规则">3. 可见性规则</h3>
+<h1 id="3-可见性规则">3. 可见性规则</h1>
 <p><code>Go</code>语言中，使用<code>大小写</code>来决定标识符（常量、变量、类型、接口、结构或函数）是否可以被外部包所调用。</p>
 <ul>
 <li>如果标识符<font color=red>以大写字母开头</font>，那么其对象就可以被外部包的代码所使用（使用时程序需要先导入这个包），如同面向对象语言中的<code>public</code>。</li>
 <li>如果标识符<font color=red>以小写字母开头</font>，则对包外是不可见的，但是它们在整个包的内部是可见并且可用的，如同面向对象语言中的<code>private</code>。</li>
 </ul>
-<h3 id="4项目工程结构">4.项目工程结构</h3>
+<h1 id="4项目工程结构">4.项目工程结构</h1>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -284,7 +279,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2022-11-25
+        2023-03-04
         
     </span>
   </p>

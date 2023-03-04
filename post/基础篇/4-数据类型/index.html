@@ -44,11 +44,11 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/%E5%9F%BA%E7%A1%80%E7%AF%87/4-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-01-04T00:00:00+00:00" />
-<meta property="article:modified_time" content="2022-11-27T16:51:30+08:00" />
+<meta property="article:modified_time" content="2023-03-04T13:23:22+08:00" />
 
 <meta itemprop="name" content="Go学习(四):数据类型">
 <meta itemprop="description" content="1.类型介绍 在Go语言中，有基本数据类型（原生数据类型）和复合数据类型（派生数据类型）。 2.值类型 2.1 整型 整型分两大类： 有符号整型：int8、"><meta itemprop="datePublished" content="2021-01-04T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2022-11-27T16:51:30+08:00" />
+<meta itemprop="dateModified" content="2023-03-04T13:23:22+08:00" />
 <meta itemprop="wordCount" content="2299">
 <meta itemprop="keywords" content="Go基础," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go学习(四):数据类型"/>
@@ -144,49 +144,45 @@
   <div class="post-toc-content always-active">
     <nav id="TableOfContents">
   <ul>
-    <li>
+    <li><a href="#1类型介绍">1.类型介绍</a></li>
+    <li><a href="#2值类型">2.值类型</a>
       <ul>
-        <li><a href="#1类型介绍">1.类型介绍</a></li>
-        <li><a href="#2值类型">2.值类型</a>
-          <ul>
-            <li><a href="#21-整型">2.1 整型</a></li>
-            <li><a href="#22-浮点数">2.2 浮点数</a></li>
-            <li><a href="#23-布尔类型">2.3 布尔类型</a></li>
-            <li><a href="#24-字符串">2.4 字符串</a></li>
-            <li><a href="#25-字符">2.5 字符</a></li>
-            <li><a href="#26-数组array">2.6 数组(array)</a></li>
-            <li><a href="#27-结构体struct">2.7 结构体(struct)</a></li>
-          </ul>
-        </li>
-        <li><a href="#3-引用类型">3. 引用类型</a>
-          <ul>
-            <li><a href="#31-切片slice">3.1 切片(slice)</a></li>
-            <li><a href="#32--映射map">3.2  映射(map)</a></li>
-          </ul>
-        </li>
-        <li><a href="#4常量">4.常量</a>
-          <ul>
-            <li><a href="#41-iota-枚举">4.1 iota 枚举</a></li>
-          </ul>
-        </li>
-        <li><a href="#5-复数型">5. 复数型</a></li>
+        <li><a href="#21-整型">2.1 整型</a></li>
+        <li><a href="#22-浮点数">2.2 浮点数</a></li>
+        <li><a href="#23-布尔类型">2.3 布尔类型</a></li>
+        <li><a href="#24-字符串">2.4 字符串</a></li>
+        <li><a href="#25-字符">2.5 字符</a></li>
+        <li><a href="#26-数组array">2.6 数组(array)</a></li>
+        <li><a href="#27-结构体struct">2.7 结构体(struct)</a></li>
       </ul>
     </li>
+    <li><a href="#3-引用类型">3. 引用类型</a>
+      <ul>
+        <li><a href="#31-切片slice">3.1 切片(slice)</a>
+          <ul>
+            <li><a href="#1基于数组创建">1.基于数组创建</a></li>
+            <li><a href="#2直接创建">2.直接创建</a></li>
+          </ul>
+        </li>
+        <li><a href="#32--映射map">3.2  映射(map)</a></li>
+      </ul>
+    </li>
+    <li><a href="#4常量">4.常量</a>
+      <ul>
+        <li><a href="#41-iota-枚举">4.1 iota 枚举</a></li>
+      </ul>
+    </li>
+    <li><a href="#5-复数型">5. 复数型</a></li>
   </ul>
 </nav>
   </div>
 </div>
-  <div class="post-outdated">
-    <div class="hint">
-      <p>【注意】最后更新于 <span class="timeago" datetime="2022-11-27T16:51:30" title="November 27, 2022">November 27, 2022</span>，文中内容可能已过时，请谨慎使用。</p>
-    </div>
-  </div>
     <div class="post-content">
-      <h2 id="1类型介绍">1.类型介绍</h2>
+      <h1 id="1类型介绍">1.类型介绍</h1>
 <p>在<code>Go</code>语言中，有基本数据类型（原生数据类型）和复合数据类型（派生数据类型）。</p>
 <p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/image-20201118214224831.png" alt="image-20201118214224831"></p>
-<h2 id="2值类型">2.值类型</h2>
-<h3 id="21-整型">2.1 整型</h3>
+<h1 id="2值类型">2.值类型</h1>
+<h2 id="21-整型">2.1 整型</h2>
 <p><strong>整型分两大类：</strong></p>
 <ul>
 <li>
@@ -198,7 +194,7 @@
 </ul>
 <p><strong>整型取值范围：</strong></p>
 <p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/image-20201114224740194.png" alt="image-20201114224740194"></p>
-<h3 id="22-浮点数">2.2 浮点数</h3>
+<h2 id="22-浮点数">2.2 浮点数</h2>
 <p>浮点型表示存储的数据是实数,浮点类型分: <code>float32</code> 和<code>float64</code> 两种，默认是<code>float64</code></p>
 <table>
 <thead>
@@ -236,9 +232,9 @@
 <li>常量<code>math.MaxFloat64</code>表示float64能获取的最大值，大约是1.8e308；</li>
 <li>常量<code>math.SmallestNonzeroFloat64</code>表示float64能获取的最小值，大约为4.9e-324。</li>
 </ul>
-<h3 id="23-布尔类型">2.3 布尔类型</h3>
+<h2 id="23-布尔类型">2.3 布尔类型</h2>
 <p>布尔值的类型为bool，值是true或false，默认为false</p>
-<h3 id="24-字符串">2.4 字符串</h3>
+<h2 id="24-字符串">2.4 字符串</h2>
 <p>字符串都是采用UTF-8字符集编码。字符串是用一对双引号（&quot;&quot;）或反引号（` `）括起来定义,<code>字符串不可变，可以用 + 操作符 连接两个字符串</code></p>
 <p><strong>声明使用:</strong></p>
 <div class="highlight"><div class="chroma">
@@ -263,7 +259,7 @@
 </span><span class="s">`</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="25-字符">2.5 字符</h3>
+</div><h2 id="25-字符">2.5 字符</h2>
 <p>字符串中的每一个元素叫作“字符”，<font color=red>定义字符时使用<strong>单引号</strong></font>。Go语言的字符有两种，如下表:</p>
 <table>
 <thead>
@@ -297,7 +293,7 @@
 </span><span class="c1"></span><span class="kd">var</span> <span class="nx">b</span> <span class="kt">rune</span> <span class="p">=</span> <span class="sc">&#39;六&#39;</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="26-数组array">2.6 数组(array)</h3>
+</div><h2 id="26-数组array">2.6 数组(array)</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -338,7 +334,7 @@
 </div><blockquote>
 <p>如果在 <code>数组的长度</code> 位置出现的是“&hellip;”省略号，则表示数组的长度是根据初始化值的个数来计算</p>
 </blockquote>
-<h3 id="27-结构体struct">2.7 结构体(struct)</h3>
+<h2 id="27-结构体struct">2.7 结构体(struct)</h2>
 <blockquote>
 <p>结构体是一种聚合的数据类型，是由零个或多个任意类型的值聚合成的实体。每个值称为结构体的成员。</p>
 </blockquote>
@@ -385,10 +381,10 @@
 </div><blockquote>
 <p>结构体的初始化可以使用<code>new</code>关键词和<code>var</code>关键词，不同的是如果使用<code>new</code>，则返回类型是一个指针，使用<code>var</code>，则是结构体自身。</p>
 </blockquote>
-<h2 id="3-引用类型">3. 引用类型</h2>
-<h3 id="31-切片slice">3.1 切片(slice)</h3>
+<h1 id="3-引用类型">3. 引用类型</h1>
+<h2 id="31-切片slice">3.1 切片(slice)</h2>
 <p>创建slice主要两种：1.基于数组创建。2.直接创建</p>
-<h4 id="1基于数组创建">1.基于数组创建</h4>
+<h3 id="1基于数组创建">1.基于数组创建</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -404,7 +400,7 @@
 </div><blockquote>
 <p>数组arrVar和sliceVar里面的地址其实是一样的，也就是说如果你改变sliceVar里面的变量，那么arrVar里面的变量也会随之改变。</p>
 </blockquote>
-<h4 id="2直接创建">2.直接创建</h4>
+<h3 id="2直接创建">2.直接创建</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -422,7 +418,7 @@
 </div><blockquote>
 <p>可以使用内置的make()函数来创建。事实上还是会创建一个匿名的数组，只是不需要我们来定义。</p>
 </blockquote>
-<h3 id="32--映射map">3.2  映射(map)</h3>
+<h2 id="32--映射map">3.2  映射(map)</h2>
 <p>可以使用内建函数 make 也可以使用 map 关键字来定义 Map:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -467,7 +463,7 @@
 </div><blockquote>
 <p>myMap是声明的变量名，keyType是对应的Key的类型，valueType是value的类型。</p>
 </blockquote>
-<h2 id="4常量">4.常量</h2>
+<h1 id="4常量">4.常量</h1>
 <p>程序编译阶段就确定下来的值，而程序在运行时则无法改变该值。在Go语言程序中，常量可定义为数值、布尔值或字符串等类型。<font color=red>常量定义后未被使用，不会在编译时报错。</font></p>
 <blockquote>
 <p>常量中的数据类型只可以是布尔型、数字型（整型、浮点型和复数型）和字符串。</p>
@@ -493,7 +489,7 @@
 <span class="kd">const</span> <span class="nx">Prex</span> <span class="p">=</span> <span class="s">&#34;Go_&#34;</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="41-iota-枚举">4.1 iota 枚举</h3>
+</div><h2 id="41-iota-枚举">4.1 iota 枚举</h2>
 <p>Go语言里面有一个关键字iota，这个关键字用来声明enum的时候采用，它默认开始值是0，每调用一次加1。每个const分组的第一个常量被默认设置为它的0值，第二及后续的常量被默认设置为它前面那个常量的值，如果前面那个常量的值是iota，则它也被设置为iota。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -518,7 +514,7 @@
 </div><blockquote>
 <p>每遇到一个const关键字，iota就会重置</p>
 </blockquote>
-<h2 id="5-复数型">5. 复数型</h2>
+<h1 id="5-复数型">5. 复数型</h1>
 <p>默认类型是<code>complex128</code>（64位实数＋64位虚数）。如果需要小一些的，也有<code>complex64</code>（32位实数＋32位虚数）。复数的形式为<code>RE＋IMi</code>，<font color=red>其中RE是实数部分，IM是虚数部分，而最后的i是虚数单位。</font></p>
 <p><strong>声明使用:</strong></p>
 <div class="highlight"><div class="chroma">
@@ -540,7 +536,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2022-11-27
+        2023-03-04
         
     </span>
   </p>

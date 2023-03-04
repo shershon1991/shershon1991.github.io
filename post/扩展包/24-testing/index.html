@@ -44,11 +44,11 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/24-testing/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-04-24T00:00:00+00:00" />
-<meta property="article:modified_time" content="2022-10-04T07:42:32+08:00" />
+<meta property="article:modified_time" content="2023-03-04T13:27:21+08:00" />
 
 <meta itemprop="name" content="Go扩展包(二十四):testing">
 <meta itemprop="description" content="1. 介绍 testing 包为Go 语言提供自动化测试的支持。通过 go test 命令来执行单元测试文件，单元测试文件命名格式为: xxx_test.go,在单元测试文件中,"><meta itemprop="datePublished" content="2021-04-24T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2022-10-04T07:42:32+08:00" />
+<meta itemprop="dateModified" content="2023-03-04T13:27:21+08:00" />
 <meta itemprop="wordCount" content="3420">
 <meta itemprop="keywords" content="Go扩展包," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go扩展包(二十四):testing"/>
@@ -144,39 +144,51 @@
   <div class="post-toc-content always-active">
     <nav id="TableOfContents">
   <ul>
-    <li>
+    <li><a href="#1-介绍">1. 介绍</a></li>
+    <li><a href="#2-功能测试">2. 功能测试</a>
       <ul>
-        <li><a href="#1-介绍">1. 介绍</a></li>
-        <li><a href="#2-功能测试">2. 功能测试</a>
-          <ul>
-            <li><a href="#21-编写规范">2.1 编写规范</a></li>
-            <li><a href="#22-测试示例">2.2 测试示例</a></li>
-            <li><a href="#23-子测试">2.3 子测试</a></li>
-          </ul>
-        </li>
-        <li><a href="#3-基准测试">3. 基准测试</a>
-          <ul>
-            <li><a href="#31-编写规范">3.1 编写规范</a></li>
-            <li><a href="#32-测试示例">3.2 测试示例</a></li>
-            <li><a href="#33-提高精准度">3.3 提高精准度</a></li>
-            <li><a href="#34-计时方法">3.4 计时方法</a></li>
-            <li><a href="#35-并行测试">3.5 并行测试</a></li>
-          </ul>
-        </li>
-        <li><a href="#4-报告函数">4. 报告函数</a></li>
+        <li><a href="#21-编写规范">2.1 编写规范</a></li>
+        <li><a href="#1-函数格式">1. 函数格式</a></li>
+        <li><a href="#2-运行格式">2. 运行格式</a></li>
+        <li><a href="#22-测试示例">2.2 测试示例</a></li>
+        <li><a href="#1-代码详情">1. 代码详情</a></li>
+        <li><a href="#2-运行全部函数">2. 运行全部函数</a></li>
+        <li><a href="#3-运行指定函数">3. 运行指定函数</a></li>
+        <li><a href="#23-子测试">2.3 子测试</a></li>
+        <li><a href="#1-代码">1. 代码</a></li>
+        <li><a href="#2-运行">2. 运行</a></li>
       </ul>
     </li>
+    <li><a href="#3-基准测试">3. 基准测试</a>
+      <ul>
+        <li><a href="#31-编写规范">3.1 编写规范</a></li>
+        <li><a href="#1-函数格式-1">1. 函数格式</a></li>
+        <li><a href="#2-运行格式-1">2. 运行格式</a></li>
+        <li><a href="#32-测试示例">3.2 测试示例</a></li>
+        <li><a href="#1-代码详情-1">1. 代码详情</a></li>
+        <li><a href="#2-运行全部函数-1">2. 运行全部函数</a></li>
+        <li><a href="#3-运行指定函数-1">3. 运行指定函数</a></li>
+        <li><a href="#4-测试结果说明">4. 测试结果说明</a></li>
+        <li><a href="#5-更多维度数据">5. 更多维度数据</a></li>
+        <li><a href="#33-提高精准度">3.3 提高精准度</a></li>
+        <li><a href="#1-提高运行时间">1. 提高运行时间</a></li>
+        <li><a href="#2-设置次数运行结果">2. 设置次数运行结果</a></li>
+        <li><a href="#34-计时方法">3.4 计时方法</a></li>
+        <li><a href="#1-函数列表">1. 函数列表</a></li>
+        <li><a href="#2-使用示例">2. 使用示例</a></li>
+        <li><a href="#35-并行测试">3.5 并行测试</a></li>
+        <li><a href="#1-函数格式-2">1. 函数格式</a></li>
+        <li><a href="#2-代码示例">2. 代码示例</a></li>
+        <li><a href="#4-运行测试">4. 运行测试</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-报告函数">4. 报告函数</a></li>
   </ul>
 </nav>
   </div>
 </div>
-  <div class="post-outdated">
-    <div class="hint">
-      <p>【注意】最后更新于 <span class="timeago" datetime="2022-10-04T07:42:32" title="October 4, 2022">October 4, 2022</span>，文中内容可能已过时，请谨慎使用。</p>
-    </div>
-  </div>
     <div class="post-content">
-      <h2 id="1-介绍">1. 介绍</h2>
+      <h1 id="1-介绍">1. 介绍</h1>
 <p><code>testing</code> 包为<code>Go</code> 语言提供自动化测试的支持。通过 <code>go test</code> 命令来执行单元测试文件，<strong>单元测试文件命名格式为: <code>xxx_test.go</code></strong>,在单元测试文件中,根据测试类型不同可以分为:<strong>功能测试函数、基准测试函数</strong>,区别如下:</p>
 <table>
 <thead>
@@ -199,9 +211,9 @@
 </tr>
 </tbody>
 </table>
-<h2 id="2-功能测试">2. 功能测试</h2>
-<h3 id="21-编写规范">2.1 编写规范</h3>
-<h4 id="1-函数格式">1. 函数格式</h4>
+<h1 id="2-功能测试">2. 功能测试</h1>
+<h2 id="21-编写规范">2.1 编写规范</h2>
+<h2 id="1-函数格式">1. 函数格式</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -237,7 +249,7 @@
 <li>参数为<code>t *testing.T</code></li>
 <li>函数没有返回参数</li>
 </ul>
-<h4 id="2-运行格式">2. 运行格式</h4>
+<h2 id="2-运行格式">2. 运行格式</h2>
 <p>通过在<code>go test</code>命令后添加<code>-run</code>参数，其值对应的是个正则表达式，只有匹配上的函数才会被<code>go test</code>命令执行，如下示例:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -272,8 +284,8 @@ go <span class="nb">test</span> -run<span class="o">=</span>? 文件<span class=
 </tr>
 </tbody>
 </table>
-<h3 id="22-测试示例">2.2 测试示例</h3>
-<h4 id="1-代码详情">1. 代码详情</h4>
+<h2 id="22-测试示例">2.2 测试示例</h2>
+<h2 id="1-代码详情">1. 代码详情</h2>
 <p><strong>文件名:<code>go_test.go </code></strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -311,7 +323,7 @@ go <span class="nb">test</span> -run<span class="o">=</span>? 文件<span class=
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="2-运行全部函数">2. 运行全部函数</h4>
+</div><h2 id="2-运行全部函数">2. 运行全部函数</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -339,7 +351,7 @@ FAIL
 </code></pre></td></tr></table>
 </div>
 </div><p><font color=red><b><code>go test</code>命令添加<code>-v</code>参数，可以查看测试函数名称和运行时间</b></font></p>
-<h4 id="3-运行指定函数">3. 运行指定函数</h4>
+<h2 id="3-运行指定函数">3. 运行指定函数</h2>
 <p><font color=red><code>go test</code>命令后添加<code>-run</code>参数，其值对应的是个正则表达式，只有匹配上的函数才会被<code>go test</code>命令执行，如下示例:</font></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -377,9 +389,9 @@ FAIL    command-line-arguments  0.198s
 FAIL
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="23-子测试">2.3 子测试</h3>
+</div><h2 id="23-子测试">2.3 子测试</h2>
 <p>从<code>Go1.7+</code>后新增了子测试，我们可以通过使用<code>t.Run</code>来执行子测试,具体使用如下:</p>
-<h4 id="1-代码">1. 代码</h4>
+<h2 id="1-代码">1. 代码</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -420,7 +432,7 @@ FAIL
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="2-运行">2. 运行</h4>
+</div><h2 id="2-运行">2. 运行</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -451,9 +463,9 @@ FAIL    command-line-arguments  0.851s
 FAIL
 </code></pre></td></tr></table>
 </div>
-</div><h2 id="3-基准测试">3. 基准测试</h2>
-<h3 id="31-编写规范">3.1 编写规范</h3>
-<h4 id="1-函数格式-1">1. 函数格式</h4>
+</div><h1 id="3-基准测试">3. 基准测试</h1>
+<h2 id="31-编写规范">3.1 编写规范</h2>
+<h2 id="1-函数格式-1">1. 函数格式</h2>
 <p>基准测试就是在一定的工作负载之下检测程序性能的一种方法。基准测试函数的格式如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -487,7 +499,7 @@ FAIL
 <li><code>b.N</code>是基准测试框架提供的，表示循环的次数，</li>
 <li>函数没有返回参数</li>
 </ul>
-<h4 id="2-运行格式-1">2. 运行格式</h4>
+<h2 id="2-运行格式-1">2. 运行格式</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -517,8 +529,8 @@ go <span class="nb">test</span> -bench<span class="o">=</span>? 文件<span clas
 </tr>
 </tbody>
 </table>
-<h3 id="32-测试示例">3.2 测试示例</h3>
-<h4 id="1-代码详情-1">1. 代码详情</h4>
+<h2 id="32-测试示例">3.2 测试示例</h2>
+<h2 id="1-代码详情-1">1. 代码详情</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -566,7 +578,7 @@ go <span class="nb">test</span> -bench<span class="o">=</span>? 文件<span clas
 </code></pre></td></tr></table>
 </div>
 </div><p><font color=red><b>@注意: 默认情况下，每个基准测试至少运行1秒。如果在Benchmark函数返回时没有到1秒，则b.N的值会增加，并且函数会再次运行。</b></font></p>
-<h4 id="2-运行全部函数-1">2. 运行全部函数</h4>
+<h2 id="2-运行全部函数-1">2. 运行全部函数</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -591,7 +603,7 @@ PASS
 ok      command-line-arguments  1.187s
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="3-运行指定函数-1">3. 运行指定函数</h4>
+</div><h2 id="3-运行指定函数-1">3. 运行指定函数</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -614,7 +626,7 @@ PASS
 ok      command-line-arguments  0.457s
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="4-测试结果说明">4. 测试结果说明</h4>
+</div><h2 id="4-测试结果说明">4. 测试结果说明</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -637,7 +649,7 @@ PASS
 ok      command-line-arguments  43.349s
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="5-更多维度数据">5. 更多维度数据</h4>
+</div><h2 id="5-更多维度数据">5. 更多维度数据</h2>
 <p>可以通过添加参数<code>-benchmem</code>来获取更多的性能数据，执行如下:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -683,8 +695,8 @@ ok      command-line-arguments  36.462s
 </tr>
 </tbody>
 </table>
-<h3 id="33-提高精准度">3.3 提高精准度</h3>
-<h4 id="1-提高运行时间">1. 提高运行时间</h4>
+<h2 id="33-提高精准度">3.3 提高精准度</h2>
+<h2 id="1-提高运行时间">1. 提高运行时间</h2>
 <p>默认情况下，每个基准测试至少运行1秒。如果在<code>Benchmark</code>函数返回时没有到1秒，则<code>b.N</code>的值会自增加，并且函数再次运行。如果想运行更长时间，可以通过参数<code>-benchtime</code>设置，如<code>-benchtime=5s代表最少运行5秒</code>，下面是两种情况的使用方法</p>
 <p><strong>a. 被测代码详情</strong></p>
 <div class="highlight"><div class="chroma">
@@ -788,7 +800,7 @@ ok      command-line-arguments  6.208s
 </code></pre></td></tr></table>
 </div>
 </div><p><font color=red><b>@注意:通过上面代码发现不管是运行1.5秒还是运行6.2秒，每次消耗时间没有太大差异，从侧面说明被测函数性能稳定。</b></font></p>
-<h4 id="2-设置次数运行结果">2. 设置次数运行结果</h4>
+<h2 id="2-设置次数运行结果">2. 设置次数运行结果</h2>
 <p>默认每次都是运行一次基准测试函数活的一次运行的结果,但是可以通过参数<code>-count</code>来设置获取运行多次的结果，具体使用如下:</p>
 <p><strong>执行上面示例:</strong></p>
 <div class="highlight"><div class="chroma">
@@ -821,8 +833,8 @@ PASS
 ok      command-line-arguments  6.523s
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="34-计时方法">3.4 计时方法</h3>
-<h4 id="1-函数列表">1. 函数列表</h4>
+</div><h2 id="34-计时方法">3.4 计时方法</h2>
+<h2 id="1-函数列表">1. 函数列表</h2>
 <table>
 <thead>
 <tr>
@@ -848,7 +860,7 @@ ok      command-line-arguments  6.523s
 <blockquote>
 <p>进行基准测试之前可能会做一些准备，比如构建测试数据等，这些准备也需要消耗时间，所以需要把这部分时间排除在外。这时候我们可以使用 <code>ResetTimer</code> 方法来重置计时器，避免准备数据的耗时对测试数据造成干扰</p>
 </blockquote>
-<h4 id="2-使用示例">2. 使用示例</h4>
+<h2 id="2-使用示例">2. 使用示例</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -875,7 +887,7 @@ ok      command-line-arguments  6.523s
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="35-并行测试">3.5 并行测试</h3>
+</div><h2 id="35-并行测试">3.5 并行测试</h2>
 <p>在基准测试中可以使用<code>RunParallel</code>函数,来运行并行测试，它创建多个<code>goroutine</code>，并在其中分配<code>b.N</code>个迭代。 <code>goroutine</code>的数量默认为<code>GOMAXPROCS</code>。要想增加非<code>CPU</code>基准测试的并行度，可以在调用<code>RunParallel</code>之前调用<code>SetParallelism</code>。 也可以通过<code>-cpu=</code>来设置使用。函数签名具体如下:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -888,7 +900,7 @@ ok      command-line-arguments  6.523s
 </div><blockquote>
 <p><code>body</code>将在每个<code>goroutine</code>中运行。它应该设置任何<code>goroutine-loca</code>l状态，然后迭代直到<code>pb.Next</code>返回<code>false</code>。它不应使用<code>StartTimer</code>，<code>StopTimer</code>或<code>ResetTimer</code>函数，因为它们具有全局作用。它也不应调用运行。</p>
 </blockquote>
-<h4 id="1-函数格式-2">1. 函数格式</h4>
+<h2 id="1-函数格式-2">1. 函数格式</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -911,7 +923,7 @@ ok      command-line-arguments  6.523s
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="2-代码示例">2. 代码示例</h4>
+</div><h2 id="2-代码示例">2. 代码示例</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -934,7 +946,7 @@ ok      command-line-arguments  6.523s
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="4-运行测试">4. 运行测试</h4>
+</div><h2 id="4-运行测试">4. 运行测试</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -973,7 +985,7 @@ PASS
 ok      command-line-arguments  4.240s
 </code></pre></td></tr></table>
 </div>
-</div><h2 id="4-报告函数">4. 报告函数</h2>
+</div><h1 id="4-报告函数">4. 报告函数</h1>
 <p><code>类型testing.T和testing.B</code>都继承了类型<code>testing.common</code>,<code>testing.common</code>常用的报告函数，整理如下:</p>
 <table>
 <thead>
@@ -1041,7 +1053,7 @@ ok      command-line-arguments  4.240s
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2022-10-04
+        2023-03-04
         
     </span>
   </p>

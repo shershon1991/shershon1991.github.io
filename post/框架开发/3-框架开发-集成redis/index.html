@@ -44,11 +44,11 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91/3-%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91-%E9%9B%86%E6%88%90redis/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-06-03T00:00:00+00:00" />
-<meta property="article:modified_time" content="2022-08-28T13:59:48+08:00" />
+<meta property="article:modified_time" content="2023-03-04T13:28:44+08:00" />
 
 <meta itemprop="name" content="框架开发(三):框架开发-集成Redis">
 <meta itemprop="description" content="1.客户端介绍 redis官网推荐使用redigo(https://github.com/gomodule/redigo)，截止到今天Gith"><meta itemprop="datePublished" content="2021-06-03T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2022-08-28T13:59:48+08:00" />
+<meta itemprop="dateModified" content="2023-03-04T13:28:44+08:00" />
 <meta itemprop="wordCount" content="2001">
 <meta itemprop="keywords" content="框架开发," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="框架开发(三):框架开发-集成Redis"/>
@@ -144,32 +144,36 @@
   <div class="post-toc-content always-active">
     <nav id="TableOfContents">
   <ul>
-    <li>
+    <li><a href="#1客户端介绍">1.客户端介绍</a></li>
+    <li><a href="#2安装">2.安装</a></li>
+    <li><a href="#3编写配置">3.编写配置</a>
       <ul>
-        <li>
-          <ul>
-            <li><a href="#1客户端介绍">1.客户端介绍</a></li>
-            <li><a href="#2安装">2.安装</a></li>
-            <li><a href="#3编写配置">3.编写配置</a></li>
-            <li><a href="#4初始化客户端">4.初始化客户端</a></li>
-            <li><a href="#5使用">5.使用</a></li>
-          </ul>
-        </li>
+        <li><a href="#31-编写配置文件">3.1 编写配置文件</a></li>
+        <li><a href="#32-编写redis配置结构">3.2 编写Redis配置结构</a></li>
+      </ul>
+    </li>
+    <li><a href="#4初始化客户端">4.初始化客户端</a>
+      <ul>
+        <li><a href="#41-创建全局redis客户端">4.1 创建全局Redis客户端</a></li>
+        <li><a href="#42-建立连接">4.2 建立连接</a></li>
+      </ul>
+    </li>
+    <li><a href="#5使用">5.使用</a>
+      <ul>
+        <li><a href="#51-set--get">5.1 Set &amp; Get</a></li>
+        <li><a href="#52-有序集合sorted-set">5.2 有序集合(Sorted Set)</a></li>
+        <li><a href="#53-hash操作">5.3 Hash操作</a></li>
+        <li><a href="#54-列表操作list">5.4 列表操作(List)</a></li>
       </ul>
     </li>
   </ul>
 </nav>
   </div>
 </div>
-  <div class="post-outdated">
-    <div class="warn">
-      <p>【注意】最后更新于 <span class="timeago" datetime="2022-08-28T13:59:48" title="August 28, 2022">August 28, 2022</span>，文中内容可能已过时，请谨慎使用。</p>
-    </div>
-  </div>
     <div class="post-content">
-      <h3 id="1客户端介绍">1.客户端介绍</h3>
+      <h1 id="1客户端介绍">1.客户端介绍</h1>
 <p><code>redis</code>官网推荐使用<code>redigo</code>(<code>https://github.com/gomodule/redigo</code>)，截止到今天<code>Github Start是8.2k</code> 但<code>go-redis(https://github.com/go-redis/redis)</code>使用的人更多， 并且<code>go-redis</code>封装得更好。截止到今天<code>Github Start 是10.8k</code>。</p>
-<h3 id="2安装">2.安装</h3>
+<h1 id="2安装">2.安装</h1>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -178,8 +182,8 @@
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="k">go</span> <span class="nx">get</span> <span class="nx">github</span><span class="p">.</span><span class="nx">com</span><span class="o">/</span><span class="k">go</span><span class="o">-</span><span class="nx">redis</span><span class="o">/</span><span class="nx">redis</span><span class="o">/</span><span class="nx">v8</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="3编写配置">3.编写配置</h3>
-<h4 id="31-编写配置文件">3.1 编写配置文件</h4>
+</div><h1 id="3编写配置">3.编写配置</h1>
+<h2 id="31-编写配置文件">3.1 编写配置文件</h2>
 <p><strong>文件:</strong><code>app/config/*.ini</code></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -205,7 +209,7 @@
 <span class="na">...</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="32-编写redis配置结构">3.2 编写Redis配置结构</h4>
+</div><h2 id="32-编写redis配置结构">3.2 编写Redis配置结构</h2>
 <p><strong>文件:</strong><code>app/config/config.go</code></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -233,8 +237,8 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="4初始化客户端">4.初始化客户端</h3>
-<h4 id="41-创建全局redis客户端">4.1 创建全局Redis客户端</h4>
+</div><h1 id="4初始化客户端">4.初始化客户端</h1>
+<h2 id="41-创建全局redis客户端">4.1 创建全局Redis客户端</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -243,7 +247,7 @@
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">RedisClient</span>  <span class="o">*</span><span class="nx">redis</span><span class="p">.</span><span class="nx">Client</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="42-建立连接">4.2 建立连接</h4>
+</div><h2 id="42-建立连接">4.2 建立连接</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -290,9 +294,9 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="5使用">5.使用</h3>
+</div><h1 id="5使用">5.使用</h1>
 <p><strong>源码文件</strong>：https://github.com/52lu/goe/blob/master/app/controllers/v1/redis.go</p>
-<h4 id="51-set--get">5.1 Set &amp; Get</h4>
+<h2 id="51-set--get">5.1 Set &amp; Get</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -345,7 +349,7 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="52-有序集合sorted-set">5.2 有序集合(Sorted Set)</h4>
+</div><h2 id="52-有序集合sorted-set">5.2 有序集合(Sorted Set)</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -450,7 +454,7 @@
 	<span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="53-hash操作">5.3 Hash操作</h4>
+</div><h2 id="53-hash操作">5.3 Hash操作</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -545,7 +549,7 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="54-列表操作list">5.4 列表操作(List)</h4>
+</div><h2 id="54-列表操作list">5.4 列表操作(List)</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -659,7 +663,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2022-08-28
+        2023-03-04
         
     </span>
   </p>

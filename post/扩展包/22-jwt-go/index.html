@@ -44,11 +44,11 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/22-jwt-go/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-04-22T00:00:00+00:00" />
-<meta property="article:modified_time" content="2022-10-04T07:42:32+08:00" />
+<meta property="article:modified_time" content="2023-03-04T13:27:21+08:00" />
 
 <meta itemprop="name" content="Go扩展包(二十二):jwt-go">
 <meta itemprop="description" content="1. 介绍 JWT全称JSON Web Token是一种跨域认证解决方案，属于一个开放的标准，它规定了一种Token实现方式，目前多用于前后端分离项目和O"><meta itemprop="datePublished" content="2021-04-22T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2022-10-04T07:42:32+08:00" />
+<meta itemprop="dateModified" content="2023-03-04T13:27:21+08:00" />
 <meta itemprop="wordCount" content="811">
 <meta itemprop="keywords" content="Go扩展包," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go扩展包(二十二):jwt-go"/>
@@ -144,30 +144,21 @@
   <div class="post-toc-content always-active">
     <nav id="TableOfContents">
   <ul>
-    <li>
-      <ul>
-        <li><a href="#1-介绍">1. 介绍</a></li>
-        <li><a href="#2-安装">2. 安装</a></li>
-        <li><a href="#3生成jwt">3.生成JWT</a></li>
-        <li><a href="#4-解析jwt">4. 解析JWT</a></li>
-      </ul>
-    </li>
+    <li><a href="#1-介绍">1. 介绍</a></li>
+    <li><a href="#2-安装">2. 安装</a></li>
+    <li><a href="#3生成jwt">3.生成JWT</a></li>
+    <li><a href="#4-解析jwt">4. 解析JWT</a></li>
   </ul>
 </nav>
   </div>
 </div>
-  <div class="post-outdated">
-    <div class="hint">
-      <p>【注意】最后更新于 <span class="timeago" datetime="2022-10-04T07:42:32" title="October 4, 2022">October 4, 2022</span>，文中内容可能已过时，请谨慎使用。</p>
-    </div>
-  </div>
     <div class="post-content">
-      <h2 id="1-介绍">1. 介绍</h2>
+      <h1 id="1-介绍">1. 介绍</h1>
 <p><code>JWT</code>全称<code>JSON Web Token</code>是一种跨域认证解决方案，属于一个开放的标准，它规定了一种<code>Token</code>实现方式，目前多用于前后端分离项目和<code>OAuth2.0</code>业务场景下。</p>
 <blockquote>
 <p><a href="https://github.com/dgrijalva/jwt-go">jwt-go</a> 是使用<code>Go</code>语言实现的<code>Json web token (JWT)</code>,目前<code>GitHub Start 9.8k</code>,源码地址: <a href="https://github.com/dgrijalva/jwt-go">https://github.com/dgrijalva/jwt-go</a>，<font color=red>从版本3.2.1开始,源码地址变更为: <code>github.com/golang-jwt/jwt</code>,需要下载最新版本时,可以使用这个地址。</font></p>
 </blockquote>
-<h2 id="2-安装">2. 安装</h2>
+<h1 id="2-安装">2. 安装</h1>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -178,7 +169,7 @@
 </span><span class="c1"></span><span class="k">go</span> <span class="nx">get</span> <span class="o">-</span><span class="nx">u</span> <span class="nx">github</span><span class="p">.</span><span class="nx">com</span><span class="o">/</span><span class="nx">golang</span><span class="o">-</span><span class="nx">jwt</span><span class="o">/</span><span class="nx">jwt</span>
 </code></pre></td></tr></table>
 </div>
-</div><h2 id="3生成jwt">3.生成JWT</h2>
+</div><h1 id="3生成jwt">3.生成JWT</h1>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -255,7 +246,7 @@
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h2 id="4-解析jwt">4. 解析JWT</h2>
+</div><h1 id="4-解析jwt">4. 解析JWT</h1>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -328,7 +319,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2022-10-04
+        2023-03-04
         
     </span>
   </p>

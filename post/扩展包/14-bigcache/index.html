@@ -44,11 +44,11 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/14-bigcache/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-04-14T00:00:00+00:00" />
-<meta property="article:modified_time" content="2022-10-04T07:42:32+08:00" />
+<meta property="article:modified_time" content="2023-03-04T13:27:21+08:00" />
 
 <meta itemprop="name" content="Go扩展包(十四):bigCache">
 <meta itemprop="description" content="1. 介绍 BigCache 是一个快速，支持并发访问，自淘汰的内存型缓存，可以在存储大量元素的同时依然保持高性能。BigCache将元素保存在堆上却避免了GC的"><meta itemprop="datePublished" content="2021-04-14T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2022-10-04T07:42:32+08:00" />
+<meta itemprop="dateModified" content="2023-03-04T13:27:21+08:00" />
 <meta itemprop="wordCount" content="2098">
 <meta itemprop="keywords" content="Go扩展包," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go扩展包(十四):bigCache"/>
@@ -144,31 +144,35 @@
   <div class="post-toc-content always-active">
     <nav id="TableOfContents">
   <ul>
-    <li>
+    <li><a href="#1-介绍">1. 介绍</a>
       <ul>
-        <li>
-          <ul>
-            <li><a href="#1-介绍">1. 介绍</a></li>
-            <li><a href="#2-安装">2. 安装</a></li>
-            <li><a href="#3-初始化">3. 初始化</a></li>
-            <li><a href="#4使用">4.使用</a></li>
-          </ul>
-        </li>
+        <li><a href="#11-为什么开发bigcache">1.1 为什么开发<code>bigcache</code>?</a></li>
+        <li><a href="#12-为什么不用第三方服务">1.2 为什么不用第三方服务?</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-安装">2. 安装</a></li>
+    <li><a href="#3-初始化">3. 初始化</a>
+      <ul>
+        <li><a href="#31-默认初始化">3.1 默认初始化</a></li>
+        <li><a href="#32-自定义初始化">3.2 自定义初始化</a></li>
+      </ul>
+    </li>
+    <li><a href="#4使用">4.使用</a>
+      <ul>
+        <li><a href="#41-添加和获取-setget">4.1 添加和获取( <code>Set|Get</code>)</a></li>
+        <li><a href="#42-删除缓存delete">4.2 删除缓存(<code>Delete</code>)</a></li>
+        <li><a href="#43-长度和容量lencapacity">4.3 长度和容量(<code>Len|Capacity</code>)</a></li>
+        <li><a href="#44-重置reset">4.4 重置(<code>Reset</code>)</a></li>
       </ul>
     </li>
   </ul>
 </nav>
   </div>
 </div>
-  <div class="post-outdated">
-    <div class="hint">
-      <p>【注意】最后更新于 <span class="timeago" datetime="2022-10-04T07:42:32" title="October 4, 2022">October 4, 2022</span>，文中内容可能已过时，请谨慎使用。</p>
-    </div>
-  </div>
     <div class="post-content">
-      <h3 id="1-介绍">1. 介绍</h3>
+      <h1 id="1-介绍">1. 介绍</h1>
 <p><code>BigCache</code> 是一个快速，支持并发访问，自淘汰的内存型缓存，可以在存储大量元素的同时依然保持高性能。<code>BigCache</code>将元素保存在堆上却避免了<code>GC</code>的开销。<a href="https://github.com/allegro/bigcache">源码地址:https://github.com/allegro/bigcache</a></p>
-<h4 id="11-为什么开发bigcache">1.1 为什么开发<code>bigcache</code>?</h4>
+<h2 id="11-为什么开发bigcache">1.1 为什么开发<code>bigcache</code>?</h2>
 <p><code>bigcache</code>团队接到一个任务，需要开发一个非常快速的缓存服务，并满足以下几点需求:</p>
 <ul>
 <li>使用 HTTP 协议处理请求。</li>
@@ -181,7 +185,7 @@
 <blockquote>
 <p><font color=red>简单地说，我们的任务是编写一个带有过期和 REST 接口的快速字典。</font></p>
 </blockquote>
-<h4 id="12-为什么不用第三方服务">1.2 为什么不用第三方服务?</h4>
+<h2 id="12-为什么不用第三方服务">1.2 为什么不用第三方服务?</h2>
 <p>为了满足上述任务需求,要求开发的<code>cache</code>库要保证：</p>
 <ul>
 <li>即使有百万的缓存对象也要非常快</li>
@@ -196,7 +200,7 @@
 <blockquote>
 <p>考虑到第一点，我们决定放弃外部缓存，如 Redis，Memcached 或 Couchbase 主要是因为额外的时间需要在网络上。因此，我们主要关注内存缓存。在 Go 中已经有这种类型的缓存，如 <code>LRU groups cache</code>、<code> Go-cache</code>、 <code>ttlcache</code> 和<code> freecache</code>。只有 <code>freecache </code>满足了我们的需要。接下来的分章揭示了为什么我们决定滚动我们自己的无论如何，并描述了如何实现上面提到的特点。</p>
 </blockquote>
-<h3 id="2-安装">2. 安装</h3>
+<h1 id="2-安装">2. 安装</h1>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -205,8 +209,8 @@
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="k">go</span> <span class="nx">get</span> <span class="o">-</span><span class="nx">u</span> <span class="nx">github</span><span class="p">.</span><span class="nx">com</span><span class="o">/</span><span class="nx">allegro</span><span class="o">/</span><span class="nx">bigcache</span> 
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="3-初始化">3. 初始化</h3>
-<h4 id="31-默认初始化">3.1 默认初始化</h4>
+</div><h1 id="3-初始化">3. 初始化</h1>
+<h2 id="31-默认初始化">3.1 默认初始化</h2>
 <p><strong>a. 代码示例</strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -263,7 +267,7 @@
 PASS
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="32-自定义初始化">3.2 自定义初始化</h4>
+</div><h2 id="32-自定义初始化">3.2 自定义初始化</h2>
 <p><strong>a. 代码示例</strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -375,8 +379,8 @@ PASS
 </div><blockquote>
 <p><font color=red>在实际使用中发现,只设置<code>CleanWindow = n</code>,缓存并不一定会在<code>n</code>秒后自动删除，需要结合</font><code>LifeWindow</code>。如<code>CleanWindow = 4s LifeWindow=3s 代表 4s后会删除LifeWindow中已经被标记为不活跃的缓存(有效期为3s)</code></p>
 </blockquote>
-<h3 id="4使用">4.使用</h3>
-<h4 id="41-添加和获取-setget">4.1 添加和获取( <code>Set|Get</code>)</h4>
+<h1 id="4使用">4.使用</h1>
+<h2 id="41-添加和获取-setget">4.1 添加和获取( <code>Set|Get</code>)</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -427,7 +431,7 @@ PASS
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="42-删除缓存delete">4.2 删除缓存(<code>Delete</code>)</h4>
+</div><h2 id="42-删除缓存delete">4.2 删除缓存(<code>Delete</code>)</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -470,7 +474,7 @@ PASS
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="43-长度和容量lencapacity">4.3 长度和容量(<code>Len|Capacity</code>)</h4>
+</div><h2 id="43-长度和容量lencapacity">4.3 长度和容量(<code>Len|Capacity</code>)</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -513,7 +517,7 @@ PASS
 </span><span class="cm">*/</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="44-重置reset">4.4 重置(<code>Reset</code>)</h4>
+</div><h2 id="44-重置reset">4.4 重置(<code>Reset</code>)</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -569,7 +573,7 @@ PASS
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2022-10-04
+        2023-03-04
         
     </span>
   </p>
