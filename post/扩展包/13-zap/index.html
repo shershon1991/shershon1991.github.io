@@ -44,12 +44,12 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/13-zap/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-04-13T00:00:00+00:00" />
-<meta property="article:modified_time" content="2023-03-03T16:31:26+08:00" />
+<meta property="article:modified_time" content="2023-03-07T15:48:08+08:00" />
 
 <meta itemprop="name" content="Go扩展包(十三):zap">
 <meta itemprop="description" content="1.介绍 Zap是uber开源的日志库，支持日志级别分级 、结构化记录，对性能和内存分配做了极致的优化。目前 Star 12.8 源码地址: https://github.com/uber-go/zap 官方性能测试图 2.安"><meta itemprop="datePublished" content="2021-04-13T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2023-03-03T16:31:26+08:00" />
-<meta itemprop="wordCount" content="4425">
+<meta itemprop="dateModified" content="2023-03-07T15:48:08+08:00" />
+<meta itemprop="wordCount" content="4431">
 <meta itemprop="keywords" content="Go扩展包," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go扩展包(十三):zap"/>
 <meta name="twitter:description" content="1.介绍 Zap是uber开源的日志库，支持日志级别分级 、结构化记录，对性能和内存分配做了极致的优化。目前 Star 12.8 源码地址: https://github.com/uber-go/zap 官方性能测试图 2.安"/>
@@ -133,7 +133,7 @@
             <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
             <a href="/categories/go/"> Go </a>
             </div>
-          <span class="more-meta"> 约 4425 字 </span>
+          <span class="more-meta"> 约 4431 字 </span>
           <span class="more-meta"> 预计阅读 9 分钟 </span>
         
       </div>
@@ -182,7 +182,11 @@
             <li><a href="#a代码示例-2">a.代码示例</a></li>
           </ul>
         </li>
-        <li><a href="#62-定制二-同时输入文件和控制台">6.2 定制二: 同时输入文件和控制台</a></li>
+        <li><a href="#62-定制二-同时输入文件和控制台">6.2 定制二: 同时输入文件和控制台</a>
+          <ul>
+            <li><a href="#a代码示例-3">a.代码示例</a></li>
+          </ul>
+        </li>
       </ul>
     </li>
     <li><a href="#7切割日志">7.切割日志</a>
@@ -488,6 +492,7 @@ PASS
 </code></pre></td></tr></table>
 </div>
 </div><h2 id="62-定制二-同时输入文件和控制台">6.2 定制二: 同时输入文件和控制台</h2>
+<h3 id="a代码示例-3">a.代码示例</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -512,7 +517,7 @@ PASS
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestPrintFileAndStd</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
 	<span class="c1">// 指定写入文件
 </span><span class="c1"></span>	<span class="nx">fileHandle</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="s">&#34;./test.log&#34;</span><span class="p">)</span>
-  <span class="c1">// 同时写入文件和控制台 (只修改这一行)
+    <span class="c1">// 同时写入文件和控制台 (只修改这一行)
 </span><span class="c1"></span>	<span class="nx">writeFile</span> <span class="o">:=</span> <span class="nx">zapcore</span><span class="p">.</span><span class="nf">NewMultiWriteSyncer</span><span class="p">(</span><span class="nx">fileHandle</span><span class="p">,</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stdout</span><span class="p">)</span>
 	<span class="c1">// 设置日志输出格式为JSON (参数复用NewDevelopmentEncoderConfig)
 </span><span class="c1"></span>	<span class="nx">encoder</span> <span class="o">:=</span> <span class="nx">zapcore</span><span class="p">.</span><span class="nf">NewJSONEncoder</span><span class="p">(</span><span class="nx">zap</span><span class="p">.</span><span class="nf">NewDevelopmentEncoderConfig</span><span class="p">())</span>
@@ -605,7 +610,7 @@ PASS
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2023-03-03
+        2023-03-07
         
     </span>
   </p>

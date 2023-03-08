@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Go底层探索(二):字符串 - Learn Go</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Learn Go" /><meta name="description" content="1.介绍 @注：一下内容来自《Go语言底层原理剖析》书中的摘要信息，本人使用版本（Go1.19）与书中不一致，源码路径可能会有出入。 字符串在编" /><meta name="keywords" content="博客, Learn Go, hugo" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.90.1 with theme even" />
+
+
+<link rel="canonical" href="https://shershon1991.github.io/post/%E8%BF%9B%E9%98%B6%E7%AF%87/%E5%BA%95%E5%B1%82%E6%8E%A2%E7%B4%A2/02-%E5%AD%97%E7%AC%A6%E4%B8%B2/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Go底层探索(二):字符串" />
+<meta property="og:description" content="1.介绍 @注：一下内容来自《Go语言底层原理剖析》书中的摘要信息，本人使用版本（Go1.19）与书中不一致，源码路径可能会有出入。 字符串在编" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://shershon1991.github.io/post/%E8%BF%9B%E9%98%B6%E7%AF%87/%E5%BA%95%E5%B1%82%E6%8E%A2%E7%B4%A2/02-%E5%AD%97%E7%AC%A6%E4%B8%B2/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2023-03-08T00:00:00+00:00" />
+<meta property="article:modified_time" content="2023-03-08T16:41:18+08:00" />
+
+<meta itemprop="name" content="Go底层探索(二):字符串">
+<meta itemprop="description" content="1.介绍 @注：一下内容来自《Go语言底层原理剖析》书中的摘要信息，本人使用版本（Go1.19）与书中不一致，源码路径可能会有出入。 字符串在编"><meta itemprop="datePublished" content="2023-03-08T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2023-03-08T16:41:18+08:00" />
+<meta itemprop="wordCount" content="1830">
+<meta itemprop="keywords" content="Go进阶,Go底层探索," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Go底层探索(二):字符串"/>
+<meta name="twitter:description" content="1.介绍 @注：一下内容来自《Go语言底层原理剖析》书中的摘要信息，本人使用版本（Go1.19）与书中不一致，源码路径可能会有出入。 字符串在编"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Learn Go</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">首页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"/><header id="header" class="header">
+    <div class="logo-wrapper">
+        <a href="/" class="logo">Learn Go</a>
+    </div>
+    <nav class="site-navbar">
+        <ul id="menu" class="menu"><li style="display:inline-block;margin-right:10px;">
+                <input type="search" class="docsearch-input" placeholder="Search"/>
+            </li><li class="menu-item">
+                <a class="menu-item-link" href="/">首页</a>
+            </li>
+            <li class="menu-item">
+                <a class="menu-item-link" href="/post/">归档</a>
+            </li>
+            <li class="menu-item">
+                <a class="menu-item-link" href="/tags/">标签</a>
+            </li>
+            <li class="menu-item">
+                <a class="menu-item-link" href="/categories/">分类</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Go底层探索(二):字符串</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2023-03-08 </span>
+        <div class="post-category">
+            <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+            <a href="/categories/go/"> Go </a>
+            </div>
+          <span class="more-meta"> 约 1830 字 </span>
+          <span class="more-meta"> 预计阅读 4 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1介绍">1.介绍</a>
+      <ul>
+        <li><a href="#11-字符串的长度">1.1 字符串的长度</a></li>
+        <li><a href="#12-字符串的终止方式">1.2 字符串的终止方式</a></li>
+      </ul>
+    </li>
+    <li><a href="#2结构内存">2.结构&amp;内存</a>
+      <ul>
+        <li><a href="#21-数据结构">2.1 数据结构</a></li>
+        <li><a href="#22-内存占用">2.2 内存占用</a></li>
+      </ul>
+    </li>
+    <li><a href="#3字符串解析">3.字符串解析</a>
+      <ul>
+        <li><a href="#31-解析源码">3.1 解析源码</a></li>
+        <li><a href="#32-解析函数rawstring">3.2 解析函数：rawString</a></li>
+        <li><a href="#33-解析函数stdstring">3.3 解析函数：stdString</a></li>
+      </ul>
+    </li>
+    <li><a href="#4字符串拼接">4.字符串拼接</a>
+      <ul>
+        <li><a href="#41-非运行时拼接">4.1 非运行时拼接</a></li>
+        <li><a href="#42-运行时拼接">4.2 运行时拼接</a></li>
+      </ul>
+    </li>
+    <li><a href="#5与字节数组转换">5.与字节数组转换</a>
+      <ul>
+        <li><a href="#51-注意事项">5.1 注意事项</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h1 id="1介绍">1.介绍</h1>
+<blockquote>
+<p><font color=red>@注：一下内容来自《Go语言底层原理剖析》书中的摘要信息，本人使用版本（Go1.19）与书中不一致，源码路径可能会有出入。</font></p>
+</blockquote>
+<p>字符串在编程语言中无处不在，程序的源文件本就是由众多字符组成。在程序开发中的存储、传输、日志打印等环节，都离不开字符串的显示、表达和处理。因此，字符和字符串是编程中最基本的知识，不同的编程语言对于字符串的结构、处理有所差异。</p>
+<h2 id="11-字符串的长度">1.1 字符串的长度</h2>
+<p>在编程语言中，字符串是一种重要的数据结构，通常由一系列字符组成，字符串一般有两种类型：</p>
+<ul>
+<li>一种是在编译时指定长度，不能修改</li>
+<li>一种是具有动态的长度，可以修改</li>
+</ul>
+<p><font color=red>在Go中，字符串不能被修改，只能被访问。</font></p>
+<p><strong>错误示例</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">str</span> <span class="p">=</span> <span class="s">&#34;hello world!&#34;</span>
+<span class="c1">// 这里想把e改成o，不支持
+</span><span class="c1"></span><span class="nx">str</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">=</span> <span class="sc">&#39;o&#39;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="12-字符串的终止方式">1.2 字符串的终止方式</h2>
+<p>字符串的终止有两种方式：</p>
+<ul>
+<li>一种是 <code>C</code> 语言中的隐式声明，以字符 <code>&quot;\0&quot;</code> 为终止符</li>
+<li>一种是 <code>Go</code> 语言中的显式声明</li>
+</ul>
+<h1 id="2结构内存">2.结构&amp;内存</h1>
+<h2 id="21-数据结构">2.1 数据结构</h2>
+<p><code>Go</code> 语言运行时字符串 <code>string</code> 的结构如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">StringHeader</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">Data</span> <span class="kt">uintptr</span>
+	<span class="nx">Len</span>  <span class="kt">int</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>Data: 指向底层的字符数组</li>
+<li>Len: 代表字符串的长度</li>
+</ul>
+<blockquote>
+<p><font color=blue>字符串在本质上是一串字符数组。</font></p>
+</blockquote>
+<h2 id="22-内存占用">2.2 内存占用</h2>
+<p><code>Go</code> 语言中所有的文件都是采用 <code>UTF-8</code> 编码，同时字符常量使用 <code>UTF-8</code> 的字符编码集。</p>
+<blockquote>
+<p><code>UTF-8</code> 是一种长度可变的编码方式，可包含世界上大部分的字符。在 <code>UTF-8</code> 中，大部分字符都只占据1个字节，<font color=red>但是特殊的字符（例如大部分中文）会占据3个字节。</font></p>
+</blockquote>
+<p>实例如下：变量 <code>str</code> 看起来只有4个字节，但是 <code>len(str)</code> 获取的长度为8，字符串 <code>str</code> 中每个中文都占据3个字节。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">TestRun</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">str</span> <span class="o">:=</span> <span class="s">&#34;Go语言&#34;</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;str长度：&#34;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="nx">str</span><span class="p">))</span>
+<span class="p">}</span>
+<span class="cm">/**
+</span><span class="cm">str长度： 8
+</span><span class="cm"> */</span>
+</code></pre></td></tr></table>
+</div>
+</div><h1 id="3字符串解析">3.字符串解析</h1>
+<h2 id="31-解析源码">3.1 解析源码</h2>
+<p>字符串常量在词法解析阶段最终会被标记成 <code>StringLit</code> 类型的 <code>token</code> 并被传递到编译的下一阶段。在语法分析阶段，采取递归下降的方式读取 <code>UTF-8</code> 字符，<font color=red>单撇号或双引号是字符串的标识。</font></p>
+<p><code>go1.19/src/cmd/compile/internal/syntax/scanner.go:88</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">scanner</span><span class="p">)</span> <span class="nf">next</span><span class="p">()</span> <span class="p">{</span>
+<span class="o">...</span>
+    <span class="k">switch</span> <span class="nx">s</span><span class="p">.</span><span class="nx">ch</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+    <span class="o">...</span>
+    <span class="k">case</span> <span class="sc">&#39;&#34;&#39;</span><span class="p">:</span>
+        <span class="nx">s</span><span class="p">.</span><span class="nf">stdString</span><span class="p">()</span>
+    <span class="k">case</span> <span class="sc">&#39;`&#39;</span><span class="p">:</span>
+        <span class="nx">s</span><span class="p">.</span><span class="nf">rawString</span><span class="p">()</span>
+<span class="o">...</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>根据上面源码解析可知：</p>
+<ul>
+<li>如果在代码中识别到单撇号，则调用 <code>rawString</code> 函数</li>
+<li>如果识别到是双引号，则调用 <code>stdString</code> 函数</li>
+</ul>
+<blockquote>
+<p><code>rawString</code> 函数和 <code>stdString</code> 函数对字符串的解析也略有不同。</p>
+</blockquote>
+<h2 id="32-解析函数rawstring">3.2 解析函数：rawString</h2>
+<p>对于单撇号的处理比较简单：一直循环向后读取，直到找到配对的单撇号，源码如下：</p>
+<p><code>go1.19/src/cmd/compile/internal/syntax/scanner.go:706</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">scanner</span><span class="p">)</span> <span class="nf">rawString</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">ok</span> <span class="o">:=</span> <span class="kc">true</span>
+	<span class="nx">s</span><span class="p">.</span><span class="nf">nextch</span><span class="p">()</span>
+
+	<span class="k">for</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="nx">s</span><span class="p">.</span><span class="nx">ch</span> <span class="o">==</span> <span class="sc">&#39;`&#39;</span> <span class="p">{</span>
+			<span class="nx">s</span><span class="p">.</span><span class="nf">nextch</span><span class="p">()</span>
+			<span class="k">break</span>
+		<span class="p">}</span>
+		<span class="k">if</span> <span class="nx">s</span><span class="p">.</span><span class="nx">ch</span> <span class="p">&lt;</span> <span class="mi">0</span> <span class="p">{</span>
+			<span class="nx">s</span><span class="p">.</span><span class="nf">errorAtf</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s">&#34;string not terminated&#34;</span><span class="p">)</span>
+			<span class="nx">ok</span> <span class="p">=</span> <span class="kc">false</span>
+			<span class="k">break</span>
+		<span class="p">}</span>
+		<span class="nx">s</span><span class="p">.</span><span class="nf">nextch</span><span class="p">()</span>
+	<span class="p">}</span>
+	<span class="c1">// We leave CRs in the string since they are part of the
+</span><span class="c1"></span>	<span class="c1">// literal (even though they are not part of the literal
+</span><span class="c1"></span>	<span class="c1">// value).
+</span><span class="c1"></span>
+	<span class="nx">s</span><span class="p">.</span><span class="nf">setLit</span><span class="p">(</span><span class="nx">StringLit</span><span class="p">,</span> <span class="nx">ok</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="33-解析函数stdstring">3.3 解析函数：stdString</h2>
+<p>双引号调用 <code>stdString</code> 函数，如果出现另一个双引号则直接退出，如果出现了 <code>\\</code>,则对后面的字符进行转义。</p>
+<p><code>go1.19/src/cmd/compile/internal/syntax/scanner.go:674</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">scanner</span><span class="p">)</span> <span class="nf">stdString</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">ok</span> <span class="o">:=</span> <span class="kc">true</span>
+	<span class="nx">s</span><span class="p">.</span><span class="nf">nextch</span><span class="p">()</span>
+
+	<span class="k">for</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="nx">s</span><span class="p">.</span><span class="nx">ch</span> <span class="o">==</span> <span class="sc">&#39;&#34;&#39;</span> <span class="p">{</span>
+			<span class="nx">s</span><span class="p">.</span><span class="nf">nextch</span><span class="p">()</span>
+			<span class="k">break</span>
+		<span class="p">}</span>
+		<span class="k">if</span> <span class="nx">s</span><span class="p">.</span><span class="nx">ch</span> <span class="o">==</span> <span class="sc">&#39;\\&#39;</span> <span class="p">{</span>
+			<span class="nx">s</span><span class="p">.</span><span class="nf">nextch</span><span class="p">()</span>
+			<span class="k">if</span> <span class="p">!</span><span class="nx">s</span><span class="p">.</span><span class="nf">escape</span><span class="p">(</span><span class="sc">&#39;&#34;&#39;</span><span class="p">)</span> <span class="p">{</span>
+				<span class="nx">ok</span> <span class="p">=</span> <span class="kc">false</span>
+			<span class="p">}</span>
+			<span class="k">continue</span>
+		<span class="p">}</span>
+		<span class="c1">// 双引号中不能出现换行符
+</span><span class="c1"></span>		<span class="k">if</span> <span class="nx">s</span><span class="p">.</span><span class="nx">ch</span> <span class="o">==</span> <span class="sc">&#39;\n&#39;</span> <span class="p">{</span>
+			<span class="nx">s</span><span class="p">.</span><span class="nf">errorf</span><span class="p">(</span><span class="s">&#34;newline in string&#34;</span><span class="p">)</span>
+			<span class="nx">ok</span> <span class="p">=</span> <span class="kc">false</span>
+			<span class="k">break</span>
+		<span class="p">}</span>
+		<span class="k">if</span> <span class="nx">s</span><span class="p">.</span><span class="nx">ch</span> <span class="p">&lt;</span> <span class="mi">0</span> <span class="p">{</span>
+			<span class="nx">s</span><span class="p">.</span><span class="nf">errorAtf</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s">&#34;string not terminated&#34;</span><span class="p">)</span>
+			<span class="nx">ok</span> <span class="p">=</span> <span class="kc">false</span>
+			<span class="k">break</span>
+		<span class="p">}</span>
+		<span class="nx">s</span><span class="p">.</span><span class="nf">nextch</span><span class="p">()</span>
+	<span class="p">}</span>
+
+	<span class="nx">s</span><span class="p">.</span><span class="nf">setLit</span><span class="p">(</span><span class="nx">StringLit</span><span class="p">,</span> <span class="nx">ok</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p><font color=red>@注：在双引号中不能出现换行符，以下代码在编译时会报错：newline in string。这是通过对每个字符判断 r=='\n&rsquo;实现的。</font></p>
+</blockquote>
+<h1 id="4字符串拼接">4.字符串拼接</h1>
+<h2 id="41-非运行时拼接">4.1 非运行时拼接</h2>
+<p>在 <code>Go</code> 语言中，可以方便地通过加号操作符 <code>(+)</code> 对字符串进行拼接，示例如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">str</span> <span class="o">:=</span> <span class="s">&#34;hello&#34;</span> <span class="o">+</span> <span class="s">&#34;world&#34;</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>由于数字的加法操作也是使用加号操作符 <code>(+)</code>，因此编译时需要知道具体是何种操作：</p>
+<ul>
+<li>在抽象语法树阶段：当加号操作符两边是字符串时，具体操作的 <code>Op</code> 会被解析为 <code>OADDSTR</code></li>
+<li>在语法分析阶段：调用 <code>noder.sum</code> 函数，将所有的字符串常量放到字符串数组中，然后调用 <code>strings.Join</code> 函数完成对字符串常量数组的拼接。</li>
+</ul>
+<h2 id="42-运行时拼接">4.2 运行时拼接</h2>
+<p>运行时字符串的拼接原理，如图5-1所示，<font color=red>其并不是简单地将一个字符串合并到另一个字符串中，而是找到一个更大的空间，并通过内存复制的形式将字符串复制到其中。</font></p>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/image-20230128153635563.png" alt=""></p>
+<blockquote>
+<p>拼接后的字符串大于或小于32字节时的操作：</p>
+<ul>
+<li><font color=blue>当拼接后的字符串小于32字节时，会有一个临时的缓存供其使用</font></li>
+<li><font color=blue>当拼接后的字符串大于32字节时，堆区会开辟一个足够大的内存空间，并将多个字符串存入其中，期间会涉及内存的复制</font></li>
+</ul>
+</blockquote>
+<h1 id="5与字节数组转换">5.与字节数组转换</h1>
+<p><font color=red>字节数组与字符串可以相互转换。</font>示例如下，字符串 <code>a</code> 强制转换为字节数组 <code>b</code>，字节数组 <code>b</code> 强制转换为字符串 <code>c</code>.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">a</span> <span class="o">:=</span> <span class="s">&#34;hello go&#34;</span>
+<span class="c1">// a强制转换为字节数组b
+</span><span class="c1"></span><span class="nx">b</span> <span class="o">:=</span> <span class="p">[]</span><span class="nb">byte</span><span class="p">(</span><span class="nx">a</span><span class="p">)</span>
+<span class="c1">// 字节数组b强制转换为字符串c
+</span><span class="c1"></span><span class="nx">c</span> <span class="o">:=</span> <span class="nb">string</span><span class="p">(</span><span class="nx">b</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="51-注意事项">5.1 注意事项</h2>
+<p>字符数组和字符串的相互转换<strong>并不是简单的指针引用，而是涉及到了内存复制。</strong></p>
+<ul>
+<li>当字符串小于 <code>32</code> 字节时：可以直接使用缓存</li>
+<li>当字符串大于 <code>32</code> 字节时：需要想堆区申请足够的内存空间，最后使用 <code>copy</code> 函数完成内存复制。</li>
+</ul>
+<blockquote>
+<p><font color=red>@注: 在涉及一些密集的转换场景时，需要评估这种转换带来的性能损耗。</font></p>
+</blockquote>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Learn Go</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2023-03-08
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/go%E8%BF%9B%E9%98%B6/">Go进阶</a>
+          <a href="/tags/go%E5%BA%95%E5%B1%82%E6%8E%A2%E7%B4%A2/">Go底层探索</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/%E8%BF%9B%E9%98%B6%E7%AF%87/%E5%BA%95%E5%B1%82%E6%8E%A2%E7%B4%A2/01-%E7%BC%96%E8%AF%91%E5%99%A8/">
+            <span class="next-text nav-default">Go底层探索(一):编译器</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/shershon1991" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/shershon520" class="iconfont icon-zhihu" title="zhihu"></a>
+  <a href="https://shershon1991.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2021 - 
+    2023<span class="heart"><i class="iconfont icon-heart"></i></span><span>Learn Go</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+<script>
+    docsearch({
+        apiKey: "9f0c02b55e9885568dcbf6ef094b433c",
+        indexName: "hugo",
+        appId: "TTENARPLYL",
+        inputSelector: '.docsearch-input',
+        debug: false,
+    });
+</script>
+</body>
+</html>

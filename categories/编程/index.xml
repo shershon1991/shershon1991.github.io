@@ -6,7 +6,16 @@
     <description>Recent content in 编程 on Learn Go</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 27 Feb 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://shershon1991.github.io/categories/%E7%BC%96%E7%A8%8B/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 08 Mar 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://shershon1991.github.io/categories/%E7%BC%96%E7%A8%8B/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Go底层探索(二):字符串</title>
+      <link>https://shershon1991.github.io/post/%E8%BF%9B%E9%98%B6%E7%AF%87/%E5%BA%95%E5%B1%82%E6%8E%A2%E7%B4%A2/02-%E5%AD%97%E7%AC%A6%E4%B8%B2/</link>
+      <pubDate>Wed, 08 Mar 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://shershon1991.github.io/post/%E8%BF%9B%E9%98%B6%E7%AF%87/%E5%BA%95%E5%B1%82%E6%8E%A2%E7%B4%A2/02-%E5%AD%97%E7%AC%A6%E4%B8%B2/</guid>
+      <description>1.介绍 @注：一下内容来自《Go语言底层原理剖析》书中的摘要信息，本人使用版本（Go1.19）与书中不一致，源码路径可能会有出入。 字符串在编</description>
+    </item>
+    
     <item>
       <title>Go底层探索(一):编译器</title>
       <link>https://shershon1991.github.io/post/%E8%BF%9B%E9%98%B6%E7%AF%87/%E5%BA%95%E5%B1%82%E6%8E%A2%E7%B4%A2/01-%E7%BC%96%E8%AF%91%E5%99%A8/</link>
