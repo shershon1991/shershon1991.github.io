@@ -6,14 +6,23 @@
     <description>Recent content on Learn Go</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 08 Mar 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://shershon1991.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 09 Mar 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://shershon1991.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Go底层探索(三):切片</title>
+      <link>https://shershon1991.github.io/post/%E8%BF%9B%E9%98%B6%E7%AF%87/%E5%BA%95%E5%B1%82%E6%8E%A2%E7%B4%A2/03-%E5%88%87%E7%89%87/</link>
+      <pubDate>Thu, 09 Mar 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://shershon1991.github.io/post/%E8%BF%9B%E9%98%B6%E7%AF%87/%E5%BA%95%E5%B1%82%E6%8E%A2%E7%B4%A2/03-%E5%88%87%E7%89%87/</guid>
+      <description>@注：以下内容来自《Go语言底层原理剖析》、《Go语言设计与实现》书中的摘要信息，本人使用版本（Go1.19）与书中不一致，源码路径可能会有</description>
+    </item>
+    
     <item>
       <title>Go底层探索(二):字符串</title>
       <link>https://shershon1991.github.io/post/%E8%BF%9B%E9%98%B6%E7%AF%87/%E5%BA%95%E5%B1%82%E6%8E%A2%E7%B4%A2/02-%E5%AD%97%E7%AC%A6%E4%B8%B2/</link>
       <pubDate>Wed, 08 Mar 2023 00:00:00 +0000</pubDate>
       
       <guid>https://shershon1991.github.io/post/%E8%BF%9B%E9%98%B6%E7%AF%87/%E5%BA%95%E5%B1%82%E6%8E%A2%E7%B4%A2/02-%E5%AD%97%E7%AC%A6%E4%B8%B2/</guid>
-      <description>1.介绍 @注：一下内容来自《Go语言底层原理剖析》书中的摘要信息，本人使用版本（Go1.19）与书中不一致，源码路径可能会有出入。 字符串在编</description>
+      <description>1.介绍 @注：以下内容来自《Go语言底层原理剖析》书中的摘要信息，本人使用版本（Go1.19）与书中不一致，源码路径可能会有出入。 字符串在编</description>
     </item>
     
     <item>
