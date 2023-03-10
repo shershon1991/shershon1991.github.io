@@ -44,12 +44,12 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/%E8%BF%9B%E9%98%B6%E7%AF%87/%E5%BA%95%E5%B1%82%E6%8E%A2%E7%B4%A2/03-%E5%88%87%E7%89%87/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2023-03-10T00:00:00+00:00" />
-<meta property="article:modified_time" content="2023-03-10T16:42:14+08:00" />
+<meta property="article:modified_time" content="2023-03-10T17:18:52+08:00" />
 
 <meta itemprop="name" content="Go底层探索(三):切片">
 <meta itemprop="description" content="@注：以下内容来自《Go语言底层原理剖析》、《Go语言设计与实现》书中的摘要信息，本人使用版本（Go1.19）与书中不一致，源码路径可能会有"><meta itemprop="datePublished" content="2023-03-10T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2023-03-10T16:42:14+08:00" />
-<meta itemprop="wordCount" content="4512">
+<meta itemprop="dateModified" content="2023-03-10T17:18:52+08:00" />
+<meta itemprop="wordCount" content="4292">
 <meta itemprop="keywords" content="Go进阶,Go底层探索," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go底层探索(三):切片"/>
 <meta name="twitter:description" content="@注：以下内容来自《Go语言底层原理剖析》、《Go语言设计与实现》书中的摘要信息，本人使用版本（Go1.19）与书中不一致，源码路径可能会有"/>
@@ -133,8 +133,8 @@
             <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
             <a href="/categories/go/"> Go </a>
             </div>
-          <span class="more-meta"> 约 4512 字 </span>
-          <span class="more-meta"> 预计阅读 10 分钟 </span>
+          <span class="more-meta"> 约 4292 字 </span>
+          <span class="more-meta"> 预计阅读 9 分钟 </span>
         
       </div>
     </header>
@@ -195,7 +195,7 @@
 <span class="p">[]</span><span class="kd">interface</span><span class="p">{}</span>
 </code></pre></td></tr></table>
 </div>
-</div><p>从切片的定义，我们可以推测出，切片在编译期间生成的类型只会包含切片中的元素类型，即<code>int</code>或<code>interface{}</code>等，<a href="https://draveness.me/golang/tree/cmd/compile/internal/types.NewSlice"><code>cmd/compile/internal/types.NewSlice</code></a>{:target=&quot;_blank}就是编译期间用于创建切片类型的函数。</p>
+</div><p>从切片的定义，我们可以推测出，切片在编译期间生成的类型只会包含切片中的元素类型，即<code>int</code>或<code>interface{}</code>等，<a href="https://draveness.me/golang/tree/cmd/compile/internal/types.NewSlice"><code>cmd/compile/internal/types.NewSlice</code></a>就是编译期间用于创建切片类型的函数。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -250,7 +250,7 @@
 <p>上述方法返回结构体中的<code>Extra</code>字段是一个只包含切片内元素类型的结构，<font color=red>也就是说切片内元素的类型是在编译期间确定的</font>，编译器确定了类型之后，会将类型存储在<code>Extra</code>字段中帮助程序在运行时动态获取。</p>
 </blockquote>
 <h1 id="2数据结构">2.数据结构</h1>
-<p>编译期间的切片<a href="https://draveness.me/golang/tree/cmd/compile/internal/types.Slice"><code>cmd/compile/internal/types.Slice</code></a>{:target=&quot;_blank}类型，但是在运行时切片会转换成<a href="https://draveness.me/golang/tree/reflect.SliceHeader"><code>reflect.SliceHeader</code></a>{:target=&quot;_blank}结构体，如下：</p>
+<p>编译期间的切片<a href="https://draveness.me/golang/tree/cmd/compile/internal/types.Slice"><code>cmd/compile/internal/types.Slice</code></a>类型，但是在运行时切片会转换成<a href="https://draveness.me/golang/tree/reflect.SliceHeader"><code>reflect.SliceHeader</code></a>结构体，如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -353,7 +353,7 @@
 </code></pre></td></tr></table>
 </div>
 </div><h2 id="32-使用字面量">3.2 使用字面量</h2>
-<p>当我们使用字面量<code>[]int{1,2,3}</code>创建新切片时，<a href="https://draveness.me/golang/tree/cmd/compile/internal/gc.slicelit"><code>cmd/compile/internal/gc.slicelit</code></a>{:target=&quot;_blank}函数会在编译期间将它展开成如下所示的代码片段：</p>
+<p>当我们使用字面量<code>[]int{1,2,3}</code>创建新切片时，<a href="https://draveness.me/golang/tree/cmd/compile/internal/gc.slicelit"><code>cmd/compile/internal/gc.slicelit</code></a>函数会在编译期间将它展开成如下所示的代码片段：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -387,7 +387,7 @@
 </blockquote>
 <h2 id="33-使用make">3.3 使用<code>make</code></h2>
 <p>如果使用字面量的方式创建切片，大部分的工作都是在编译期完成。但是我们使用<code>make</code>关键字创建切片时，很多工作都需要运行时的参与；调用方必须向<code>make</code>函数传入切片的大小以及可选的容量。</p>
-<p>类型检查期间的<a href="https://draveness.me/golang/tree/cmd/compile/internal/gc.typecheck1"><code>cmd/compile/internal/gc.typecheck1</code></a>{:target=&quot;_blank}函数会校验入参：</p>
+<p>类型检查期间的<a href="https://draveness.me/golang/tree/cmd/compile/internal/gc.typecheck1"><code>cmd/compile/internal/gc.typecheck1</code></a>函数会校验入参：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -464,12 +464,12 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><p>上述函数不仅会检查<code>len</code>是否传入，还会保证传入的容量<code>cap</code>一定大于或等于<code>len</code>。除了校验参数，当前函数会将<code>OMAKE</code>节点转换成<code>OMAKESLICE</code>，中间代码生成的<a href="https://draveness.me/golang/tree/cmd/compile/internal/gc.walkexpr"><code>cmd/compile/internal/gc.walkexpr</code></a>{:target=&quot;_blank}函数会依据下面两个条件转换成<code>OMAKESLICE</code>类型的节点。</p>
+</div><p>上述函数不仅会检查<code>len</code>是否传入，还会保证传入的容量<code>cap</code>一定大于或等于<code>len</code>。除了校验参数，当前函数会将<code>OMAKE</code>节点转换成<code>OMAKESLICE</code>，中间代码生成的<a href="https://draveness.me/golang/tree/cmd/compile/internal/gc.walkexpr"><code>cmd/compile/internal/gc.walkexpr</code></a>函数会依据下面两个条件转换成<code>OMAKESLICE</code>类型的节点。</p>
 <ol>
 <li>切片的大小和容量是否足够小</li>
 <li>切片是否发生了逃逸，最终在堆上初始化</li>
 </ol>
-<p><font color=red>当切片发生逃逸或者非常大时，运行时需要<a href="https://draveness.me/golang/tree/runtime.makeslice"><code>runtime.makeslice</code></a>{:target=&quot;_blank}在堆上初始化切片，如果当前的切片不会发生逃逸并且切片非常小的时候，那么切片运行时最终会被分配在栈区。</font></p>
+<p><font color=red>当切片发生逃逸或者非常大时，运行时需要<a href="https://draveness.me/golang/tree/runtime.makeslice"><code>runtime.makeslice</code></a>在堆上初始化切片，如果当前的切片不会发生逃逸并且切片非常小的时候，那么切片运行时最终会被分配在栈区。</font></p>
 <blockquote>
 <p>此临界值定义在<code>cmd/compile/internal/ir.MaxImplicitStackVarSize</code>变量中，默认为<code>64KB</code>，可以通过指定编译时<code>smallframes</code>标识进行更新，因此，<code>make([]int64，1023)</code>与<code>make([]int64，1024)</code>实现的细节是截然不同的。</p>
 </blockquote>
@@ -532,7 +532,7 @@
 <li>切片<code>b</code>容量为3，目前长度也是3（<code>初始化3个0</code>），如果再<code>append</code>，切片容量会不足，便会进行扩容。所以<code>cap</code>为6，至于为什么是6，看后续源码分析</li>
 </ul>
 <h2 id="42-容量判定">4.2 容量判定</h2>
-<p>当切片的容量不足时，<code>append</code>函数在运行时会调用<a href="https://draveness.me/golang/tree/runtime.growslice"><code>runtime.growslice</code></a>{:target=&quot;_blank}函数为切片扩容。</p>
+<p>当切片的容量不足时，<code>append</code>函数在运行时会调用<a href="https://draveness.me/golang/tree/runtime.growslice"><code>runtime.growslice</code></a>函数为切片扩容。</p>
 <blockquote>
 <p><font color=red>扩容是为切片分配新的内存空间，并拷贝原切片中的元素到新空间的过程。</font></p>
 </blockquote>
@@ -681,7 +681,7 @@
 </code></pre></td></tr></table>
 </div>
 </div><blockquote>
-<p><code>copy</code>函数在运行时主要调用了<code>memmove</code>函数，<font color=blue>用于实现内存的复制</font>。如果采用协程调用的方式<code>go copy(numbers1, numbers)</code>后者加入了<code>race</code>检测，则会调用运行时<a href="https://draveness.me/golang/tree/runtime.slicecopy"><code>runtime.slicecopy</code></a>{:target=&quot;_blank}函数，<font color=red>无论是编译期间拷贝还是运行时拷贝，两种拷贝方式都会通过<a href="https://draveness.me/golang/tree/runtime.memmove"><code>runtime.memmove</code></a>{:target=&quot;_blank}将整块内存的内容拷贝到目标的内存区域中</font>。</p>
+<p><code>copy</code>函数在运行时主要调用了<code>memmove</code>函数，<font color=blue>用于实现内存的复制</font>。如果采用协程调用的方式<code>go copy(numbers1, numbers)</code>后者加入了<code>race</code>检测，则会调用运行时<a href="https://draveness.me/golang/tree/runtime.slicecopy"><code>runtime.slicecopy</code></a>函数，<font color=red>无论是编译期间拷贝还是运行时拷贝，两种拷贝方式都会通过<a href="https://draveness.me/golang/tree/runtime.memmove"><code>runtime.memmove</code></a>将整块内存的内容拷贝到目标的内存区域中</font>。</p>
 </blockquote>
 
     </div>
