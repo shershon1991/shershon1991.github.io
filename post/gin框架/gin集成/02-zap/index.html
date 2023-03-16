@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Gin集成(二):集成高性能日志zap - Learn Go</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Learn Go" /><meta name="description" content="1.项目介绍 Gin框架学习使用,并实践常用包在Gin框架中的集成和使用。源码地址: https://github.com/shershon1991/gin-api-template.git 1.1 项目结构 1 2 3 4 5 6 7 8 9 10 11 12 ├── api # 接口 ├── config" /><meta name="keywords" content="博客, Learn Go, hugo" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.90.1 with theme even" />
+
+
+<link rel="canonical" href="https://shershon1991.github.io/post/gin%E6%A1%86%E6%9E%B6/gin%E9%9B%86%E6%88%90/02-zap/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Gin集成(二):集成高性能日志zap" />
+<meta property="og:description" content="1.项目介绍 Gin框架学习使用,并实践常用包在Gin框架中的集成和使用。源码地址: https://github.com/shershon1991/gin-api-template.git 1.1 项目结构 1 2 3 4 5 6 7 8 9 10 11 12 ├── api # 接口 ├── config" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://shershon1991.github.io/post/gin%E6%A1%86%E6%9E%B6/gin%E9%9B%86%E6%88%90/02-zap/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2021-12-14T00:00:00+00:00" />
+<meta property="article:modified_time" content="2023-03-16T17:13:05+08:00" />
+
+<meta itemprop="name" content="Gin集成(二):集成高性能日志zap">
+<meta itemprop="description" content="1.项目介绍 Gin框架学习使用,并实践常用包在Gin框架中的集成和使用。源码地址: https://github.com/shershon1991/gin-api-template.git 1.1 项目结构 1 2 3 4 5 6 7 8 9 10 11 12 ├── api # 接口 ├── config"><meta itemprop="datePublished" content="2021-12-14T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2023-03-16T17:13:05+08:00" />
+<meta itemprop="wordCount" content="1563">
+<meta itemprop="keywords" content="Gin框架,Gin集成," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Gin集成(二):集成高性能日志zap"/>
+<meta name="twitter:description" content="1.项目介绍 Gin框架学习使用,并实践常用包在Gin框架中的集成和使用。源码地址: https://github.com/shershon1991/gin-api-template.git 1.1 项目结构 1 2 3 4 5 6 7 8 9 10 11 12 ├── api # 接口 ├── config"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Learn Go</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">首页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"/><header id="header" class="header">
+    <div class="logo-wrapper">
+        <a href="/" class="logo">Learn Go</a>
+    </div>
+    <nav class="site-navbar">
+        <ul id="menu" class="menu"><li style="display:inline-block;margin-right:10px;">
+                <input type="search" class="docsearch-input" placeholder="Search"/>
+            </li><li class="menu-item">
+                <a class="menu-item-link" href="/">首页</a>
+            </li>
+            <li class="menu-item">
+                <a class="menu-item-link" href="/post/">归档</a>
+            </li>
+            <li class="menu-item">
+                <a class="menu-item-link" href="/tags/">标签</a>
+            </li>
+            <li class="menu-item">
+                <a class="menu-item-link" href="/categories/">分类</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Gin集成(二):集成高性能日志zap</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-12-14 </span>
+        <div class="post-category">
+            <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+            <a href="/categories/go/"> Go </a>
+            </div>
+          <span class="more-meta"> 约 1563 字 </span>
+          <span class="more-meta"> 预计阅读 4 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1项目介绍">1.项目介绍</a>
+      <ul>
+        <li><a href="#11-项目结构">1.1 项目结构</a></li>
+        <li><a href="#12-集成流程">1.2 集成流程</a></li>
+      </ul>
+    </li>
+    <li><a href="#2安装">2.安装</a></li>
+    <li><a href="#3配置">3.配置</a>
+      <ul>
+        <li><a href="#31-编辑appyaml">3.1 编辑<code>app.yaml</code></a></li>
+        <li><a href="#32-新增对应结构体">3.2 新增对应结构体</a></li>
+        <li><a href="#33-嵌入主配置">3.3 嵌入主配置</a></li>
+        <li><a href="#34-定义全局变量logger">3.4 定义全局变量<code>logger</code></a></li>
+      </ul>
+    </li>
+    <li><a href="#4-具体代码">4. 具体代码</a>
+      <ul>
+        <li><a href="#41-集成入口initlogger">4.1 集成入口(<code>InitLogger</code>)</a></li>
+        <li><a href="#42-获取最低记录级别">4.2 获取最低记录级别</a></li>
+        <li><a href="#43-自定义日志输出字段">4.3 自定义日志输出字段</a></li>
+        <li><a href="#44-日志文件切割">4.4 日志文件切割</a></li>
+      </ul>
+    </li>
+    <li><a href="#5-测试验证">5. 测试验证</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h1 id="1项目介绍">1.项目介绍</h1>
+<p><code>Gin</code>框架学习使用,并实践常用包在<code>Gin</code>框架中的集成和使用。<a href="https://github.com/shershon1991/gin-api-template.git">源码地址: https://github.com/shershon1991/gin-api-template.git</a></p>
+<h2 id="11-项目结构">1.1 项目结构</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">├── api <span class="c1"># 接口</span>
+├── config <span class="c1"># 配置</span>
+├── core <span class="c1"># 核心代码</span>
+├── global <span class="c1"># 全局变量和常量</span>
+├── initialize <span class="c1"># 初始化相关</span>
+├── logs <span class="c1"># 日志目录</span>
+├── main.go <span class="c1"># 启动文件</span>
+├── model <span class="c1"># 实体</span>
+├── router <span class="c1"># 路由</span>
+    └── middleware <span class="c1">#中间件</span>
+├── <span class="nb">test</span> <span class="c1"># 单元测试目录</span>
+└── utils <span class="c1"># 工具包</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="12-集成流程">1.2 集成流程</h2>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/20210706163200.png" alt="集成代码流程"></p>
+<h1 id="2安装">2.安装</h1>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 安装zap</span>
+go get -u go.uber.org/zap
+<span class="c1"># 安装lumberjack(日志切割和打包)</span>
+go get -u github.com/natefinch/lumberjack
+</code></pre></td></tr></table>
+</div>
+</div><h1 id="3配置">3.配置</h1>
+<h2 id="31-编辑appyaml">3.1 编辑<code>app.yaml</code></h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nn">...</span><span class="w">
+</span><span class="w"></span><span class="nt">log</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">./logs</span><span class="w"> </span><span class="c"># 日志文件目录</span><span class="w">
+</span><span class="w">  </span><span class="nt">filePrefix</span><span class="p">:</span><span class="w"> </span><span class="l">gin</span><span class="w"> </span><span class="c"># 日志文件前缀</span><span class="w">
+</span><span class="w">  </span><span class="nt">fileFormat</span><span class="p">:</span><span class="w"> </span><span class="ld">2006-01-02</span><span class="w"> </span><span class="c"># 日志文件名格式</span><span class="w">
+</span><span class="w">  </span><span class="nt">level</span><span class="p">:</span><span class="w"> </span><span class="l">debug</span><span class="w"> </span><span class="c"># 最低记录级别</span><span class="w">
+</span><span class="w">  </span><span class="nt">writeWay</span><span class="p">:</span><span class="w"> </span><span class="l">file</span><span class="w"> </span><span class="c"># file/console/all</span><span class="w">
+</span><span class="w">  </span><span class="nt">outFormat</span><span class="p">:</span><span class="w"> </span><span class="l">json</span><span class="w"> </span><span class="c"># json/console</span><span class="w">
+</span><span class="w">  </span><span class="nt">zap</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">outFormat</span><span class="p">:</span><span class="w"> </span><span class="l">json</span><span class="w"> </span><span class="c"># json/</span><span class="w">
+</span><span class="w">  </span><span class="nt">lumberJack</span><span class="p">:</span><span class="w"> </span><span class="c"># 日志文件切割和压缩</span><span class="w">
+</span><span class="w">    </span><span class="nt">maxSize</span><span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="c"># 单文件最大容量(单位MB)</span><span class="w">
+</span><span class="w">    </span><span class="nt">maxBackups</span><span class="p">:</span><span class="w"> </span><span class="m">3</span><span class="w"> </span><span class="c"># 保留旧文件的最大数量</span><span class="w">
+</span><span class="w">    </span><span class="nt">maxAge</span><span class="p">:</span><span class="w"> </span><span class="m">30</span><span class="w"> </span><span class="c"># 旧文件最多保存几天</span><span class="w">
+</span><span class="w">    </span><span class="nt">compress</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w"> </span><span class="c">#是否压缩/归档旧文件</span><span class="w">
+</span><span class="w"></span><span class="nn">...</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><h2 id="32-新增对应结构体">3.2 新增对应结构体</h2>
+<p>新建文件:<code>config/log.go</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">config</span>
+<span class="c1">// 日志信息
+</span><span class="c1"></span><span class="kd">type</span> <span class="nx">log</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">Path</span>       <span class="kt">string</span>     <span class="s">`yaml:&#34;path&#34;`</span>
+	<span class="nx">Level</span>      <span class="kt">string</span>     <span class="s">`yaml:&#34;level&#34;`</span>
+	<span class="nx">FilePrefix</span> <span class="kt">string</span>     <span class="s">`yaml:&#34;filePrefix&#34;`</span>
+	<span class="nx">FileFormat</span> <span class="kt">string</span>     <span class="s">`yaml:&#34;fileFormat&#34;`</span>
+	<span class="nx">OutFormat</span>  <span class="kt">string</span>     <span class="s">`yaml:&#34;outFormat&#34;`</span>
+	<span class="nx">LumberJack</span> <span class="nx">lumberJack</span> <span class="s">`yaml:&#34;lumberJack&#34;`</span>
+<span class="p">}</span>
+<span class="c1">// 日志切割
+</span><span class="c1"></span><span class="kd">type</span> <span class="nx">lumberJack</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">MaxSize</span>    <span class="kt">int</span>  <span class="s">`yaml:&#34;maxSize&#34;`</span>    <span class="c1">//单文件最大容量(单位MB)
+</span><span class="c1"></span>	<span class="nx">MaxBackups</span> <span class="kt">int</span>  <span class="s">`yaml:&#34;maxBackups&#34;`</span> <span class="c1">// 保留旧文件的最大数量
+</span><span class="c1"></span>	<span class="nx">MaxAge</span>     <span class="kt">int</span>  <span class="s">`yaml:&#34;maxAge&#34;`</span>     <span class="c1">// 旧文件最多保存几天
+</span><span class="c1"></span>	<span class="nx">Compress</span>   <span class="kt">bool</span> <span class="s">`yaml:&#34;compress&#34;`</span>   <span class="c1">// 是否压缩/归档旧文件
+</span><span class="c1"></span><span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="33-嵌入主配置">3.3 嵌入主配置</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// ServerConfig 配置信息
+</span><span class="c1"></span><span class="kd">type</span> <span class="nx">ServerConfig</span> <span class="kd">struct</span> <span class="p">{</span>
+  <span class="o">...</span><span class="p">.</span>
+	<span class="nx">Log</span>   <span class="nx">log</span>   <span class="s">`yaml:&#34;log&#34;`</span> <span class="c1">// 嵌入日志配置
+</span><span class="c1"></span><span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="34-定义全局变量logger">3.4 定义全局变量<code>logger</code></h2>
+<p>编辑文件:<code>global/global.go</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 变量
+</span><span class="c1"></span><span class="kd">var</span> <span class="p">(</span>
+	<span class="o">...</span>
+	<span class="nx">GvaLogger</span> <span class="o">*</span><span class="nx">zap</span><span class="p">.</span><span class="nx">Logger</span>         <span class="c1">// 日志
+</span><span class="c1"></span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><h1 id="4-具体代码">4. 具体代码</h1>
+<h2 id="41-集成入口initlogger">4.1 集成入口(<code>InitLogger</code>)</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">const</span> <span class="p">(</span>
+	<span class="c1">// 日志输出格式
+</span><span class="c1"></span>	<span class="nx">outJson</span> <span class="p">=</span> <span class="s">&#34;json&#34;</span>
+<span class="p">)</span>
+<span class="kd">func</span> <span class="nf">InitLogger</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">logConfig</span> <span class="o">:=</span> <span class="nx">global</span><span class="p">.</span><span class="nx">GvaConfig</span><span class="p">.</span><span class="nx">Log</span>
+	<span class="c1">// 判断日志目录是否存在
+</span><span class="c1"></span>	<span class="k">if</span> <span class="nx">exist</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">utils</span><span class="p">.</span><span class="nf">DirExist</span><span class="p">(</span><span class="nx">logConfig</span><span class="p">.</span><span class="nx">Path</span><span class="p">);</span> <span class="p">!</span><span class="nx">exist</span> <span class="p">{</span>
+		<span class="nx">_</span> <span class="p">=</span> <span class="nx">utils</span><span class="p">.</span><span class="nf">CreateDir</span><span class="p">(</span><span class="nx">logConfig</span><span class="p">.</span><span class="nx">Path</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="c1">// 设置输出格式
+</span><span class="c1"></span>	<span class="kd">var</span> <span class="nx">encoder</span> <span class="nx">zapcore</span><span class="p">.</span><span class="nx">Encoder</span>
+	<span class="k">if</span> <span class="nx">logConfig</span><span class="p">.</span><span class="nx">OutFormat</span> <span class="o">==</span> <span class="nx">outJson</span> <span class="p">{</span>
+		<span class="nx">encoder</span> <span class="p">=</span> <span class="nx">zapcore</span><span class="p">.</span><span class="nf">NewJSONEncoder</span><span class="p">(</span><span class="nf">getEncoderConfig</span><span class="p">())</span>
+	<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+		<span class="nx">encoder</span> <span class="p">=</span> <span class="nx">zapcore</span><span class="p">.</span><span class="nf">NewConsoleEncoder</span><span class="p">(</span><span class="nf">getEncoderConfig</span><span class="p">())</span>
+	<span class="p">}</span>
+	<span class="c1">// 设置日志文件切割
+</span><span class="c1"></span>	<span class="nx">writeSyncer</span> <span class="o">:=</span> <span class="nx">zapcore</span><span class="p">.</span><span class="nf">AddSync</span><span class="p">(</span><span class="nf">getLumberjackWriteSyncer</span><span class="p">())</span>
+	<span class="c1">// 创建NewCore
+</span><span class="c1"></span>	<span class="nx">zapCore</span> <span class="o">:=</span> <span class="nx">zapcore</span><span class="p">.</span><span class="nf">NewCore</span><span class="p">(</span><span class="nx">encoder</span><span class="p">,</span> <span class="nx">writeSyncer</span><span class="p">,</span> <span class="nf">getLevel</span><span class="p">())</span>
+	<span class="c1">// 创建logger
+</span><span class="c1"></span>	<span class="nx">logger</span> <span class="o">:=</span> <span class="nx">zap</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="nx">zapCore</span><span class="p">)</span>
+	<span class="k">defer</span> <span class="nx">logger</span><span class="p">.</span><span class="nf">Sync</span><span class="p">()</span>
+	<span class="c1">// 赋值给全局变量
+</span><span class="c1"></span>	<span class="nx">global</span><span class="p">.</span><span class="nx">GvaLogger</span> <span class="p">=</span> <span class="nx">logger</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="42-获取最低记录级别">4.2 获取最低记录级别</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 获取最低记录日志级别
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">getLevel</span><span class="p">()</span> <span class="nx">zapcore</span><span class="p">.</span><span class="nx">Level</span> <span class="p">{</span>
+	<span class="nx">levelMap</span> <span class="o">:=</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="nx">zapcore</span><span class="p">.</span><span class="nx">Level</span><span class="p">{</span>
+		<span class="s">&#34;debug&#34;</span><span class="p">:</span>  <span class="nx">zapcore</span><span class="p">.</span><span class="nx">DebugLevel</span><span class="p">,</span>
+		<span class="s">&#34;info&#34;</span><span class="p">:</span>   <span class="nx">zapcore</span><span class="p">.</span><span class="nx">InfoLevel</span><span class="p">,</span>
+		<span class="s">&#34;warn&#34;</span><span class="p">:</span>   <span class="nx">zapcore</span><span class="p">.</span><span class="nx">WarnLevel</span><span class="p">,</span>
+		<span class="s">&#34;error&#34;</span><span class="p">:</span>  <span class="nx">zapcore</span><span class="p">.</span><span class="nx">ErrorLevel</span><span class="p">,</span>
+		<span class="s">&#34;dpanic&#34;</span><span class="p">:</span> <span class="nx">zapcore</span><span class="p">.</span><span class="nx">DPanicLevel</span><span class="p">,</span>
+		<span class="s">&#34;panic&#34;</span><span class="p">:</span>  <span class="nx">zapcore</span><span class="p">.</span><span class="nx">PanicLevel</span><span class="p">,</span>
+		<span class="s">&#34;fatal&#34;</span><span class="p">:</span>  <span class="nx">zapcore</span><span class="p">.</span><span class="nx">FatalLevel</span><span class="p">,</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="nx">level</span><span class="p">,</span> <span class="nx">ok</span> <span class="o">:=</span> <span class="nx">levelMap</span><span class="p">[</span><span class="nx">global</span><span class="p">.</span><span class="nx">GvaConfig</span><span class="p">.</span><span class="nx">Log</span><span class="p">.</span><span class="nx">Level</span><span class="p">];</span> <span class="nx">ok</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nx">level</span>
+	<span class="p">}</span>
+  <span class="c1">// 默认info级别
+</span><span class="c1"></span>	<span class="k">return</span> <span class="nx">zapcore</span><span class="p">.</span><span class="nx">InfoLevel</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="43-自定义日志输出字段">4.3 自定义日志输出字段</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 自定义日志输出字段
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">getEncoderConfig</span><span class="p">()</span> <span class="nx">zapcore</span><span class="p">.</span><span class="nx">EncoderConfig</span> <span class="p">{</span>
+	<span class="nx">config</span> <span class="o">:=</span> <span class="nx">zapcore</span><span class="p">.</span><span class="nx">EncoderConfig</span><span class="p">{</span>
+		<span class="c1">// Keys can be anything except the empty string.
+</span><span class="c1"></span>		<span class="nx">TimeKey</span><span class="p">:</span>        <span class="s">&#34;time&#34;</span><span class="p">,</span>
+		<span class="nx">LevelKey</span><span class="p">:</span>       <span class="s">&#34;level&#34;</span><span class="p">,</span>
+		<span class="nx">NameKey</span><span class="p">:</span>        <span class="s">&#34;logger&#34;</span><span class="p">,</span>
+		<span class="nx">CallerKey</span><span class="p">:</span>      <span class="s">&#34;caller&#34;</span><span class="p">,</span>
+		<span class="nx">FunctionKey</span><span class="p">:</span>    <span class="nx">zapcore</span><span class="p">.</span><span class="nx">OmitKey</span><span class="p">,</span>
+		<span class="nx">MessageKey</span><span class="p">:</span>     <span class="s">&#34;msg&#34;</span><span class="p">,</span>
+		<span class="nx">StacktraceKey</span><span class="p">:</span>  <span class="s">&#34;S&#34;</span><span class="p">,</span>
+		<span class="nx">LineEnding</span><span class="p">:</span>     <span class="nx">zapcore</span><span class="p">.</span><span class="nx">DefaultLineEnding</span><span class="p">,</span>
+		<span class="nx">EncodeLevel</span><span class="p">:</span>    <span class="nx">zapcore</span><span class="p">.</span><span class="nx">CapitalLevelEncoder</span><span class="p">,</span>
+		<span class="nx">EncodeTime</span><span class="p">:</span>     <span class="nx">getEncodeTime</span><span class="p">,</span> <span class="c1">// 自定义输出时间格式
+</span><span class="c1"></span>		<span class="nx">EncodeDuration</span><span class="p">:</span> <span class="nx">zapcore</span><span class="p">.</span><span class="nx">StringDurationEncoder</span><span class="p">,</span>
+		<span class="nx">EncodeCaller</span><span class="p">:</span>   <span class="nx">zapcore</span><span class="p">.</span><span class="nx">ShortCallerEncoder</span><span class="p">,</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="nx">config</span>
+<span class="p">}</span>
+<span class="c1">// 定义日志输出时间格式
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">getEncodeTime</span><span class="p">(</span><span class="nx">t</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Time</span><span class="p">,</span> <span class="nx">enc</span> <span class="nx">zapcore</span><span class="p">.</span><span class="nx">PrimitiveArrayEncoder</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">enc</span><span class="p">.</span><span class="nf">AppendString</span><span class="p">(</span><span class="nx">t</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span><span class="s">&#34;2006/01/02 - 15:04:05.000&#34;</span><span class="p">))</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>效果如下:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 默认</span>
+<span class="o">{</span><span class="s2">&#34;L&#34;</span>:<span class="s2">&#34;INFO&#34;</span>,<span class="s2">&#34;T&#34;</span>:<span class="s2">&#34;2021-07-06T11:59:10.763+0800&#34;</span>,<span class="s2">&#34;M&#34;</span>:<span class="s2">&#34;Info记录&#34;</span>,<span class="s2">&#34;name&#34;</span>:<span class="s2">&#34;张三&#34;</span><span class="o">}</span>
+<span class="c1"># 自定义后</span>
+<span class="o">{</span><span class="s2">&#34;level&#34;</span>:<span class="s2">&#34;INFO&#34;</span>,<span class="s2">&#34;time&#34;</span>:<span class="s2">&#34;2021/07/06 - 11:59:29.906&#34;</span>,<span class="s2">&#34;msg&#34;</span>:<span class="s2">&#34;Info记录&#34;</span>,<span class="s2">&#34;name&#34;</span>:<span class="s2">&#34;张三&#34;</span><span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="44-日志文件切割">4.4 日志文件切割</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 获取文件切割和归档配置信息
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">getLumberjackWriteSyncer</span><span class="p">()</span> <span class="nx">zapcore</span><span class="p">.</span><span class="nx">WriteSyncer</span> <span class="p">{</span>
+	<span class="nx">lumberjackConfig</span> <span class="o">:=</span> <span class="nx">global</span><span class="p">.</span><span class="nx">GvaConfig</span><span class="p">.</span><span class="nx">Log</span><span class="p">.</span><span class="nx">LumberJack</span>
+	<span class="nx">lumberjackLogger</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">lumberjack</span><span class="p">.</span><span class="nx">Logger</span><span class="p">{</span>
+		<span class="nx">Filename</span><span class="p">:</span>   <span class="nf">getLogFile</span><span class="p">(),</span>                <span class="c1">//日志文件
+</span><span class="c1"></span>		<span class="nx">MaxSize</span><span class="p">:</span>    <span class="nx">lumberjackConfig</span><span class="p">.</span><span class="nx">MaxSize</span><span class="p">,</span>    <span class="c1">//单文件最大容量(单位MB)
+</span><span class="c1"></span>		<span class="nx">MaxBackups</span><span class="p">:</span> <span class="nx">lumberjackConfig</span><span class="p">.</span><span class="nx">MaxBackups</span><span class="p">,</span> <span class="c1">//保留旧文件的最大数量
+</span><span class="c1"></span>		<span class="nx">MaxAge</span><span class="p">:</span>     <span class="nx">lumberjackConfig</span><span class="p">.</span><span class="nx">MaxAge</span><span class="p">,</span>     <span class="c1">// 旧文件最多保存几天
+</span><span class="c1"></span>		<span class="nx">Compress</span><span class="p">:</span>   <span class="nx">lumberjackConfig</span><span class="p">.</span><span class="nx">Compress</span><span class="p">,</span>   <span class="c1">// 是否压缩/归档旧文件
+</span><span class="c1"></span>	<span class="p">}</span>
+	<span class="c1">// 设置日志文件切割
+</span><span class="c1"></span>	<span class="k">return</span> <span class="nx">zapcore</span><span class="p">.</span><span class="nf">AddSync</span><span class="p">(</span><span class="nx">lumberjackLogger</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="c1">// 获取日志文件名
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">getLogFile</span><span class="p">()</span> <span class="kt">string</span> <span class="p">{</span>
+	<span class="nx">fileFormat</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Format</span><span class="p">(</span><span class="nx">global</span><span class="p">.</span><span class="nx">GvaConfig</span><span class="p">.</span><span class="nx">Log</span><span class="p">.</span><span class="nx">FileFormat</span><span class="p">)</span>
+	<span class="nx">fileName</span> <span class="o">:=</span> <span class="nx">strings</span><span class="p">.</span><span class="nf">Join</span><span class="p">([]</span><span class="kt">string</span><span class="p">{</span>
+		<span class="nx">global</span><span class="p">.</span><span class="nx">GvaConfig</span><span class="p">.</span><span class="nx">Log</span><span class="p">.</span><span class="nx">FilePrefix</span><span class="p">,</span>
+		<span class="nx">fileFormat</span><span class="p">,</span>
+		<span class="s">&#34;log&#34;</span><span class="p">},</span> <span class="s">&#34;.&#34;</span><span class="p">)</span>
+	<span class="k">return</span> <span class="nx">path</span><span class="p">.</span><span class="nf">Join</span><span class="p">(</span><span class="nx">global</span><span class="p">.</span><span class="nx">GvaConfig</span><span class="p">.</span><span class="nx">Log</span><span class="p">.</span><span class="nx">Path</span><span class="p">,</span> <span class="nx">fileName</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h1 id="5-测试验证">5. 测试验证</h1>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// Sugar模式
+</span><span class="c1"></span><span class="nx">global</span><span class="p">.</span><span class="nx">GvaLogger</span><span class="p">.</span><span class="nf">Sugar</span><span class="p">().</span><span class="nf">Infof</span><span class="p">(</span><span class="s">&#34;日志写入测试: %v&#34;</span><span class="p">,</span><span class="nx">strings</span><span class="p">.</span><span class="nf">Repeat</span><span class="p">(</span><span class="s">&#34;hello&#34;</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+<span class="c1">// 默认模式
+</span><span class="c1"></span><span class="nx">global</span><span class="p">.</span><span class="nx">GvaLogger</span><span class="p">.</span><span class="nf">Info</span><span class="p">(</span><span class="s">&#34;Info记录&#34;</span><span class="p">,</span><span class="nx">zap</span><span class="p">.</span><span class="nf">String</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">,</span><span class="s">&#34;张三&#34;</span><span class="p">))</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Learn Go</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2023-03-16
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/gin%E6%A1%86%E6%9E%B6/">Gin框架</a>
+          <a href="/tags/gin%E9%9B%86%E6%88%90/">Gin集成</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/gin%E6%A1%86%E6%9E%B6/gin%E9%9B%86%E6%88%90/03-gorm/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Gin集成(三):集成全功能orm框架-gorm</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/gin%E6%A1%86%E6%9E%B6/gin%E9%9B%86%E6%88%90/01-viper/">
+            <span class="next-text nav-default">Gin集成(一):集成viper配置解析包</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/shershon1991" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/shershon520" class="iconfont icon-zhihu" title="zhihu"></a>
+  <a href="https://shershon1991.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2021 - 
+    2023<span class="heart"><i class="iconfont icon-heart"></i></span><span>Learn Go</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+<script>
+    docsearch({
+        apiKey: "9f0c02b55e9885568dcbf6ef094b433c",
+        indexName: "hugo",
+        appId: "TTENARPLYL",
+        inputSelector: '.docsearch-input',
+        debug: false,
+    });
+</script>
+</body>
+</html>

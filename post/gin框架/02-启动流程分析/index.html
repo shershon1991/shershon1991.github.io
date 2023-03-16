@@ -44,12 +44,12 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/gin%E6%A1%86%E6%9E%B6/02-%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B%E5%88%86%E6%9E%90/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-12-02T00:00:00+00:00" />
-<meta property="article:modified_time" content="2023-03-04T13:24:26+08:00" />
+<meta property="article:modified_time" content="2023-03-16T16:50:46+08:00" />
 
 <meta itemprop="name" content="Gin框架(二):启动流程分析">
 <meta itemprop="description" content="1.启动服务 1.1 服务源码 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 package main // 引入gin框架 import &#34;github.com/gin-gonic/gin&#34; func main() { // 创建一个默认的路由引擎 engine := gin.Default() // 注册Get路由 engine.GET(&#34;/&#34;, func(ctx *gin.Context) { ctx.JSON(200,gin.H{ &"><meta itemprop="datePublished" content="2021-12-02T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2023-03-04T13:24:26+08:00" />
-<meta itemprop="wordCount" content="1761">
+<meta itemprop="dateModified" content="2023-03-16T16:50:46+08:00" />
+<meta itemprop="wordCount" content="1762">
 <meta itemprop="keywords" content="Gin框架," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Gin框架(二):启动流程分析"/>
 <meta name="twitter:description" content="1.启动服务 1.1 服务源码 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 package main // 引入gin框架 import &#34;github.com/gin-gonic/gin&#34; func main() { // 创建一个默认的路由引擎 engine := gin.Default() // 注册Get路由 engine.GET(&#34;/&#34;, func(ctx *gin.Context) { ctx.JSON(200,gin.H{ &"/>
@@ -133,7 +133,7 @@
             <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
             <a href="/categories/go/"> Go </a>
             </div>
-          <span class="more-meta"> 约 1761 字 </span>
+          <span class="more-meta"> 约 1762 字 </span>
           <span class="more-meta"> 预计阅读 4 分钟 </span>
         
       </div>
@@ -152,19 +152,19 @@
     </li>
     <li><a href="#2代码分析">2.代码分析</a>
       <ul>
-        <li><a href="#21-import-githubcomgin-gonicgin">2.1 import &ldquo;github.com/gin-gonic/gin&rdquo;</a></li>
-        <li><a href="#22-gindefault">2.2 gin.Default()</a></li>
-        <li><a href="#23-engineget">2.3 engine.GET(&quot;/&quot;,&hellip;)</a>
+        <li><a href="#21-import-githubcomgin-gonicgin">2.1 <code>import &quot;github.com/gin-gonic/gin&quot;</code></a></li>
+        <li><a href="#22-gindefault">2.2 <code>gin.Default()</code></a></li>
+        <li><a href="#23-engineget">2.3 <code>engine.GET(&quot;/&quot;,...)</code></a>
           <ul>
             <li><a href="#1源码">1.源码</a></li>
             <li><a href="#2-多种返回格式">2. 多种返回格式</a></li>
-            <li><a href="#3jsonasciijsonpurejson-对比">3.Json、AsciiJSON、PureJSON 对比</a></li>
+            <li><a href="#3jsonasciijsonpurejson-对比">3.<code>Json</code>、<code>AsciiJSON</code>、<code>PureJSON</code> 对比</a></li>
           </ul>
         </li>
-        <li><a href="#24-enginerun">2.4 engine.Run()</a>
+        <li><a href="#24-enginerun">2.4 <code>engine.Run()</code></a>
           <ul>
             <li><a href="#1run源码如下">1.<code>Run</code>源码如下</a></li>
-            <li><a href="#2为什么默认监听是8080">2.为什么默认监听是&quot;:8080&quot;</a></li>
+            <li><a href="#2为什么默认监听是8080">2.为什么默认监听是<code>&quot;:8080&quot;</code></a></li>
           </ul>
         </li>
       </ul>
@@ -199,16 +199,16 @@
 <span class="c1">// 引入gin框架
 </span><span class="c1"></span><span class="kn">import</span> <span class="s">&#34;github.com/gin-gonic/gin&#34;</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="c1">// 创建一个默认的路由引擎
-</span><span class="c1"></span>	<span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
-	<span class="c1">// 注册Get路由
-</span><span class="c1"></span>	<span class="nx">engine</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">ctx</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
-		<span class="nx">ctx</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span>
-			<span class="s">&#34;msg&#34;</span><span class="p">:</span><span class="s">&#34;请求成功&#34;</span><span class="p">,</span>
-		<span class="p">})</span>
-	<span class="p">})</span>
-  <span class="c1">// 默认监听的是 0.0.0.0:8080
-</span><span class="c1"></span>	<span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
+    <span class="c1">// 创建一个默认的路由引擎
+</span><span class="c1"></span>    <span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
+    <span class="c1">// 注册Get路由
+</span><span class="c1"></span>    <span class="nx">engine</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">ctx</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">ctx</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span>
+            <span class="s">&#34;msg&#34;</span><span class="p">:</span><span class="s">&#34;请求成功&#34;</span><span class="p">,</span>
+        <span class="p">})</span>
+    <span class="p">})</span>
+    <span class="c1">// 默认监听的是 0.0.0.0:8080
+</span><span class="c1"></span>    <span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -240,7 +240,7 @@
 </code></pre></td></tr></table>
 </div>
 </div><h1 id="2代码分析">2.代码分析</h1>
-<h2 id="21-import-githubcomgin-gonicgin">2.1 import &ldquo;github.com/gin-gonic/gin&rdquo;</h2>
+<h2 id="21-import-githubcomgin-gonicgin">2.1 <code>import &quot;github.com/gin-gonic/gin&quot;</code></h2>
 <p>在引入<code>Gin</code>框架时，包内相关的<code>init()</code>方法都会被执行；经查找发现下面两个<code>init</code>方法;</p>
 <p><strong>a. 第一个init方法</strong></p>
 <p>方法位置: <code>github.com/gin-gonic/gin/context_appengine.go</code></p>
@@ -255,8 +255,8 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">gin</span>
 <span class="kd">func</span> <span class="nf">init</span><span class="p">()</span> <span class="p">{</span>
-  <span class="c1">// 设置AppEngine = true
-</span><span class="c1"></span>	<span class="nx">defaultAppEngine</span> <span class="p">=</span> <span class="kc">true</span>
+    <span class="c1">// 设置AppEngine = true
+</span><span class="c1"></span>    <span class="nx">defaultAppEngine</span> <span class="p">=</span> <span class="kc">true</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -273,14 +273,14 @@
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">init</span><span class="p">()</span> <span class="p">{</span>
-  <span class="c1">// 设置服务的运行模式，默认是DebugMode
-</span><span class="c1"></span>  <span class="c1">// 分别有三种模式:DebugMode=0(开发模式)、releaseCode=1(生产模式)、testCode=2(测试模式)
-</span><span class="c1"></span>	<span class="nx">mode</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nf">Getenv</span><span class="p">(</span><span class="nx">EnvGinMode</span><span class="p">)</span>
-	<span class="nf">SetMode</span><span class="p">(</span><span class="nx">mode</span><span class="p">)</span>
+    <span class="c1">// 设置服务的运行模式，默认是DebugMode
+</span><span class="c1"></span>    <span class="c1">// 分别有三种模式:debugCode=0(开发模式)、releaseCode=1(生产模式)、testCode=2(测试模式)
+</span><span class="c1"></span>    <span class="nx">mode</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nf">Getenv</span><span class="p">(</span><span class="nx">EnvGinMode</span><span class="p">)</span>
+    <span class="nf">SetMode</span><span class="p">(</span><span class="nx">mode</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h2 id="22-gindefault">2.2 gin.Default()</h2>
+</div><h2 id="22-gindefault">2.2 <code>gin.Default()</code></h2>
 <p><strong>gin.Default源码如下:</strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -296,18 +296,18 @@
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">Default</span><span class="p">()</span> <span class="o">*</span><span class="nx">Engine</span> <span class="p">{</span>
-  <span class="c1">// 打印gin-debug信息
-</span><span class="c1"></span>	<span class="nf">debugPrintWARNINGDefault</span><span class="p">()</span>
-  <span class="c1">// 新建一个无路由无中间的引擎
-</span><span class="c1"></span>	<span class="nx">engine</span> <span class="o">:=</span> <span class="nf">New</span><span class="p">()</span>
-  <span class="c1">// 注册全局日志和异常捕获中间件
-</span><span class="c1"></span>	<span class="nx">engine</span><span class="p">.</span><span class="nf">Use</span><span class="p">(</span><span class="nf">Logger</span><span class="p">(),</span> <span class="nf">Recovery</span><span class="p">())</span>
-	<span class="k">return</span> <span class="nx">engine</span>
+    <span class="c1">// 打印gin-debug信息
+</span><span class="c1"></span>    <span class="nf">debugPrintWARNINGDefault</span><span class="p">()</span>
+    <span class="c1">// 新建一个无路由无中间件的引擎
+</span><span class="c1"></span>    <span class="nx">engine</span> <span class="o">:=</span> <span class="nf">New</span><span class="p">()</span>
+    <span class="c1">// 注册全局日志和异常捕获中间件
+</span><span class="c1"></span>    <span class="nx">engine</span><span class="p">.</span><span class="nf">Use</span><span class="p">(</span><span class="nf">Logger</span><span class="p">(),</span> <span class="nf">Recovery</span><span class="p">())</span>
+    <span class="k">return</span> <span class="nx">engine</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
 </div><p><font color=red>@注意: Gin框架中注册中间件是通过	engine.Use(xx)的方式。 </font></p>
-<h2 id="23-engineget">2.3 engine.GET(&quot;/&quot;,&hellip;)</h2>
+<h2 id="23-engineget">2.3 <code>engine.GET(&quot;/&quot;,...)</code></h2>
 <h3 id="1源码">1.源码</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -321,7 +321,7 @@
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 注册一个匹配路径(relativePath)的Get请求路由
 </span><span class="c1">// handlers是对应的处理逻辑
 </span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">group</span> <span class="o">*</span><span class="nx">RouterGroup</span><span class="p">)</span> <span class="nf">GET</span><span class="p">(</span><span class="nx">relativePath</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">handlers</span> <span class="o">...</span><span class="nx">HandlerFunc</span><span class="p">)</span> <span class="nx">IRoutes</span> <span class="p">{</span>
-	<span class="k">return</span> <span class="nx">group</span><span class="p">.</span><span class="nf">handle</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nx">MethodGet</span><span class="p">,</span> <span class="nx">relativePath</span><span class="p">,</span> <span class="nx">handlers</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nx">group</span><span class="p">.</span><span class="nf">handle</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nx">MethodGet</span><span class="p">,</span> <span class="nx">relativePath</span><span class="p">,</span> <span class="nx">handlers</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -368,7 +368,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="3jsonasciijsonpurejson-对比">3.Json、AsciiJSON、PureJSON 对比</h3>
+<h3 id="3jsonasciijsonpurejson-对比">3.<code>Json</code>、<code>AsciiJSON</code>、<code>PureJSON</code> 对比</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -408,33 +408,33 @@
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="s">&#34;github.com/gin-gonic/gin&#34;</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="c1">// 创建一个默认的路由引擎
-</span><span class="c1"></span>	<span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
-	<span class="c1">// 注册Get路由
-</span><span class="c1"></span>	<span class="nx">engine</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">ctx</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
-		<span class="nx">key</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">ctx</span><span class="p">.</span><span class="nf">GetQuery</span><span class="p">(</span><span class="s">&#34;key&#34;</span><span class="p">)</span>
-		<span class="nx">msgBody</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span>
-			<span class="s">&#34;msg&#34;</span><span class="p">:</span> <span class="s">&#34;请求成功&#34;</span><span class="p">,</span>
-			<span class="s">&#34;html&#34;</span><span class="p">:</span><span class="s">&#34;&lt;span&gt;我是一段html代码&lt;/span&gt;&#34;</span><span class="p">,</span>
-		<span class="p">}</span>
-		<span class="k">switch</span> <span class="nx">key</span> <span class="p">{</span>
-		<span class="k">case</span> <span class="s">&#34;1&#34;</span><span class="p">:</span>
-			<span class="nx">msgBody</span><span class="p">[</span><span class="s">&#34;method&#34;</span><span class="p">]</span> <span class="p">=</span> <span class="s">&#34;ctx.JSON&#34;</span>
-			<span class="nx">ctx</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">msgBody</span><span class="p">)</span>
-		<span class="k">case</span> <span class="s">&#34;2&#34;</span><span class="p">:</span>
-			<span class="nx">msgBody</span><span class="p">[</span><span class="s">&#34;method&#34;</span><span class="p">]</span> <span class="p">=</span> <span class="s">&#34;ctx.PureJSON&#34;</span>
-			<span class="nx">ctx</span><span class="p">.</span><span class="nf">PureJSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">msgBody</span><span class="p">)</span>
-		<span class="k">case</span> <span class="s">&#34;3&#34;</span><span class="p">:</span>
-			<span class="nx">msgBody</span><span class="p">[</span><span class="s">&#34;method&#34;</span><span class="p">]</span> <span class="p">=</span> <span class="s">&#34;ctx.AsciiJSON&#34;</span>
-			<span class="nx">ctx</span><span class="p">.</span><span class="nf">AsciiJSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">msgBody</span><span class="p">)</span>
-		<span class="k">default</span><span class="p">:</span>
-			<span class="nx">ctx</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span>
-				<span class="s">&#34;msg&#34;</span><span class="p">:</span> <span class="s">&#34;请求失败&#34;</span><span class="p">,</span>
-			<span class="p">})</span>
-		<span class="p">}</span>
-		<span class="k">return</span>
-	<span class="p">})</span>
-	<span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
+    <span class="c1">// 创建一个默认的路由引擎
+</span><span class="c1"></span>    <span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
+    <span class="c1">// 注册Get路由
+</span><span class="c1"></span>    <span class="nx">engine</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">ctx</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">key</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">ctx</span><span class="p">.</span><span class="nf">GetQuery</span><span class="p">(</span><span class="s">&#34;key&#34;</span><span class="p">)</span>
+        <span class="nx">msgBody</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span>
+            <span class="s">&#34;msg&#34;</span><span class="p">:</span> <span class="s">&#34;请求成功&#34;</span><span class="p">,</span>
+            <span class="s">&#34;html&#34;</span><span class="p">:</span><span class="s">&#34;&lt;span&gt;我是一段html代码&lt;/span&gt;&#34;</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">switch</span> <span class="nx">key</span> <span class="p">{</span>
+        <span class="k">case</span> <span class="s">&#34;1&#34;</span><span class="p">:</span>
+            <span class="nx">msgBody</span><span class="p">[</span><span class="s">&#34;method&#34;</span><span class="p">]</span> <span class="p">=</span> <span class="s">&#34;ctx.JSON&#34;</span>
+            <span class="nx">ctx</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">msgBody</span><span class="p">)</span>
+        <span class="k">case</span> <span class="s">&#34;2&#34;</span><span class="p">:</span>
+            <span class="nx">msgBody</span><span class="p">[</span><span class="s">&#34;method&#34;</span><span class="p">]</span> <span class="p">=</span> <span class="s">&#34;ctx.PureJSON&#34;</span>
+            <span class="nx">ctx</span><span class="p">.</span><span class="nf">PureJSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">msgBody</span><span class="p">)</span>
+        <span class="k">case</span> <span class="s">&#34;3&#34;</span><span class="p">:</span>
+            <span class="nx">msgBody</span><span class="p">[</span><span class="s">&#34;method&#34;</span><span class="p">]</span> <span class="p">=</span> <span class="s">&#34;ctx.AsciiJSON&#34;</span>
+            <span class="nx">ctx</span><span class="p">.</span><span class="nf">AsciiJSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">msgBody</span><span class="p">)</span>
+        <span class="k">default</span><span class="p">:</span>
+            <span class="nx">ctx</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span>
+                <span class="s">&#34;msg&#34;</span><span class="p">:</span> <span class="s">&#34;请求失败&#34;</span><span class="p">,</span>
+            <span class="p">})</span>
+        <span class="p">}</span>
+        <span class="k">return</span>
+    <span class="p">})</span>
+    <span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
 <span class="p">}</span>
 
 </code></pre></td></tr></table>
@@ -485,7 +485,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="24-enginerun">2.4 engine.Run()</h2>
+<h2 id="24-enginerun">2.4 <code>engine.Run()</code></h2>
 <h3 id="1run源码如下">1.<code>Run</code>源码如下</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -508,24 +508,24 @@
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-Go" data-lang="Go"><span class="kd">func</span> <span class="p">(</span><span class="nx">engine</span> <span class="o">*</span><span class="nx">Engine</span><span class="p">)</span> <span class="nf">Run</span><span class="p">(</span><span class="nx">addr</span> <span class="o">...</span><span class="kt">string</span><span class="p">)</span> <span class="p">(</span><span class="nx">err</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
-  <span class="c1">// 延迟关闭输出ERROR类型的日志信息
-</span><span class="c1"></span>	<span class="k">defer</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span> <span class="nf">debugPrintError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">}()</span>
-  <span class="c1">// 设置CIDR（无类型域间路由)信息，默认返回: 0.0.0.0/0
-</span><span class="c1"></span>	<span class="nx">trustedCIDRs</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">prepareTrustedCIDRs</span><span class="p">()</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="k">return</span> <span class="nx">err</span>
-	<span class="p">}</span>
-	<span class="nx">engine</span><span class="p">.</span><span class="nx">trustedCIDRs</span> <span class="p">=</span> <span class="nx">trustedCIDRs</span>
-  <span class="c1">// 设置监听IP和端口信息，默认是&#34;:8080&#34;
-</span><span class="c1"></span>	<span class="nx">address</span> <span class="o">:=</span> <span class="nf">resolveAddress</span><span class="p">(</span><span class="nx">addr</span><span class="p">)</span>
-	<span class="nf">debugPrint</span><span class="p">(</span><span class="s">&#34;Listening and serving HTTP on %s\n&#34;</span><span class="p">,</span> <span class="nx">address</span><span class="p">)</span>
-  <span class="c1">// 启动服务
-</span><span class="c1"></span>	<span class="nx">err</span> <span class="p">=</span> <span class="nx">http</span><span class="p">.</span><span class="nf">ListenAndServe</span><span class="p">(</span><span class="nx">address</span><span class="p">,</span> <span class="nx">engine</span><span class="p">)</span>
-	<span class="k">return</span>
+    <span class="c1">// 延迟关闭输出ERROR类型的日志信息
+</span><span class="c1"></span>    <span class="k">defer</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span> <span class="nf">debugPrintError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">}()</span>
+    <span class="c1">// 设置CIDR（无类型域间路由)信息，默认返回: 0.0.0.0/0
+</span><span class="c1"></span>    <span class="nx">trustedCIDRs</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">prepareTrustedCIDRs</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">err</span>
+    <span class="p">}</span>
+    <span class="nx">engine</span><span class="p">.</span><span class="nx">trustedCIDRs</span> <span class="p">=</span> <span class="nx">trustedCIDRs</span>
+    <span class="c1">// 设置监听IP和端口信息，默认是&#34;:8080&#34;
+</span><span class="c1"></span>    <span class="nx">address</span> <span class="o">:=</span> <span class="nf">resolveAddress</span><span class="p">(</span><span class="nx">addr</span><span class="p">)</span>
+    <span class="nf">debugPrint</span><span class="p">(</span><span class="s">&#34;Listening and serving HTTP on %s\n&#34;</span><span class="p">,</span> <span class="nx">address</span><span class="p">)</span>
+    <span class="c1">// 启动服务
+</span><span class="c1"></span>    <span class="nx">err</span> <span class="p">=</span> <span class="nx">http</span><span class="p">.</span><span class="nf">ListenAndServe</span><span class="p">(</span><span class="nx">address</span><span class="p">,</span> <span class="nx">engine</span><span class="p">)</span>
+    <span class="k">return</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="2为什么默认监听是8080">2.为什么默认监听是&quot;:8080&quot;</h3>
+</div><h3 id="2为什么默认监听是8080">2.为什么默认监听是<code>&quot;:8080&quot;</code></h3>
 <p>在<code>Run</code>方法中调用<code> resolveAddress(addr)</code>,该方法源码如下:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -552,22 +552,22 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 接收一个字符串切片参数
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">resolveAddress</span><span class="p">(</span><span class="nx">addr</span> <span class="p">[]</span><span class="kt">string</span><span class="p">)</span> <span class="kt">string</span> <span class="p">{</span>
-  <span class="c1">// 如果参数长度为0，默认监听8080
-</span><span class="c1"></span>	<span class="k">switch</span> <span class="nb">len</span><span class="p">(</span><span class="nx">addr</span><span class="p">)</span> <span class="p">{</span>
-	<span class="k">case</span> <span class="mi">0</span><span class="p">:</span>
-		<span class="k">if</span> <span class="nx">port</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nf">Getenv</span><span class="p">(</span><span class="s">&#34;PORT&#34;</span><span class="p">);</span> <span class="nx">port</span> <span class="o">!=</span> <span class="s">&#34;&#34;</span> <span class="p">{</span>
-			<span class="nf">debugPrint</span><span class="p">(</span><span class="s">&#34;Environment variable PORT=\&#34;%s\&#34;&#34;</span><span class="p">,</span> <span class="nx">port</span><span class="p">)</span>
-			<span class="k">return</span> <span class="s">&#34;:&#34;</span> <span class="o">+</span> <span class="nx">port</span>
-		<span class="p">}</span>
-		<span class="nf">debugPrint</span><span class="p">(</span><span class="s">&#34;Environment variable PORT is undefined. Using port :8080 by default&#34;</span><span class="p">)</span>
-		<span class="k">return</span> <span class="s">&#34;:8080&#34;</span>
-	<span class="k">case</span> <span class="mi">1</span><span class="p">:</span>
-      <span class="c1">// 如果参数长度为1，监听IP和端口
-</span><span class="c1"></span>		<span class="k">return</span> <span class="nx">addr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-	<span class="k">default</span><span class="p">:</span>
-     <span class="c1">//  如果参数长度大于1，则报错
-</span><span class="c1"></span>		<span class="nb">panic</span><span class="p">(</span><span class="s">&#34;too many parameters&#34;</span><span class="p">)</span>
-	<span class="p">}</span>
+    <span class="c1">// 如果参数长度为0，默认监听8080
+</span><span class="c1"></span>    <span class="k">switch</span> <span class="nb">len</span><span class="p">(</span><span class="nx">addr</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nx">port</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nf">Getenv</span><span class="p">(</span><span class="s">&#34;PORT&#34;</span><span class="p">);</span> <span class="nx">port</span> <span class="o">!=</span> <span class="s">&#34;&#34;</span> <span class="p">{</span>
+            <span class="nf">debugPrint</span><span class="p">(</span><span class="s">&#34;Environment variable PORT=\&#34;%s\&#34;&#34;</span><span class="p">,</span> <span class="nx">port</span><span class="p">)</span>
+            <span class="k">return</span> <span class="s">&#34;:&#34;</span> <span class="o">+</span> <span class="nx">port</span>
+        <span class="p">}</span>
+        <span class="nf">debugPrint</span><span class="p">(</span><span class="s">&#34;Environment variable PORT is undefined. Using port :8080 by default&#34;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s">&#34;:8080&#34;</span>
+    <span class="k">case</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="c1">// 如果参数长度为1，监听IP和端口
+</span><span class="c1"></span>        <span class="k">return</span> <span class="nx">addr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">default</span><span class="p">:</span>
+        <span class="c1">// 如果参数长度大于1，则报错
+</span><span class="c1"></span>        <span class="nb">panic</span><span class="p">(</span><span class="s">&#34;too many parameters&#34;</span><span class="p">)</span>
+    <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -582,7 +582,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2023-03-04
+        2023-03-16
         
     </span>
   </p>
