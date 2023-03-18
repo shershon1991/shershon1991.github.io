@@ -44,11 +44,11 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/gin%E6%A1%86%E6%9E%B6/gin%E9%9B%86%E6%88%90/03-gorm/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-12-15T00:00:00+00:00" />
-<meta property="article:modified_time" content="2023-03-16T17:13:05+08:00" />
+<meta property="article:modified_time" content="2023-03-18T17:47:05+08:00" />
 
 <meta itemprop="name" content="Gin集成(三):集成全功能orm框架-gorm">
 <meta itemprop="description" content="1. 介绍 gorm是一个使用Go语言编写的ORM框架。 它文档齐全，对开发者友好，支持主流数据库。具体使用可参考之前的文章Go常用包(十九):全功"><meta itemprop="datePublished" content="2021-12-15T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2023-03-16T17:13:05+08:00" />
+<meta itemprop="dateModified" content="2023-03-18T17:47:05+08:00" />
 <meta itemprop="wordCount" content="3551">
 <meta itemprop="keywords" content="Gin框架,Gin集成," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Gin集成(三):集成全功能orm框架-gorm"/>
@@ -193,7 +193,7 @@
 </div>
     <div class="post-content">
       <h1 id="1-介绍">1. 介绍</h1>
-<p><code>gorm</code>是一个使用<code>Go</code>语言编写的<code>ORM</code>框架。 它文档齐全，对开发者友好，支持主流数据库。具体使用可参考之前的文章<a href="https://mp.weixin.qq.com/s/uQ3KOpRwtwNQoeAjNSne9A">Go常用包(十九):全功能ORM框架(gorm)</a></p>
+<p><code>gorm</code>是一个使用<code>Go</code>语言编写的<code>ORM</code>框架。 它文档齐全，对开发者友好，支持主流数据库。具体使用可参考之前的文章<a href="https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/19-gorm/s/uQ3KOpRwtwNQoeAjNSne9A">Go常用包(十九):全功能ORM框架(gorm)</a></p>
 <h2 id="11-集成流程">1.1 集成流程</h2>
 <p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/20210717125819.png" alt=""></p>
 <h2 id="12-涉及目录">1.2 涉及目录</h2>
@@ -302,31 +302,31 @@
 
 <span class="c1">// MySQL信息
 </span><span class="c1"></span><span class="kd">type</span> <span class="nx">mysql</span> <span class="kd">struct</span> <span class="p">{</span>
-	<span class="nx">Host</span>                      <span class="kt">string</span>        <span class="s">`yaml:&#34;host&#34;`</span>
-	<span class="nx">Port</span>                      <span class="kt">string</span>        <span class="s">`yaml:&#34;port&#34;`</span>
-	<span class="nx">User</span>                      <span class="kt">string</span>        <span class="s">`yaml:&#34;user&#34;`</span>
-	<span class="nx">Password</span>                  <span class="kt">string</span>        <span class="s">`yaml:&#34;password&#34;`</span>
-	<span class="nx">Database</span>                  <span class="kt">string</span>        <span class="s">`yaml:&#34;database&#34;`</span>
-	<span class="nx">Charset</span>                   <span class="kt">string</span>        <span class="s">`yaml:&#34;charset&#34;`</span>                   <span class="c1">//要支持完整的UTF-8编码,需设置成: utf8mb4
-</span><span class="c1"></span>	<span class="nx">AutoMigrate</span>               <span class="kt">bool</span>          <span class="s">`yaml:&#34;autoMigrate&#34;`</span>               <span class="c1">// 初始化时调用数据迁移
-</span><span class="c1"></span>	<span class="nx">ParseTime</span>                 <span class="kt">bool</span>          <span class="s">`yaml:&#34;parseTime&#34;`</span>                 <span class="c1">//解析time.Time类型
-</span><span class="c1"></span>	<span class="nx">TimeZone</span>                  <span class="kt">string</span>        <span class="s">`yaml:&#34;timeZone&#34;`</span>                  <span class="c1">// 时区,若设置 Asia/Shanghai,需写成: Asia%2fShanghai
-</span><span class="c1"></span>	<span class="nx">DefaultStringSize</span>         <span class="kt">uint</span>          <span class="s">`yaml:&#34;defaultStringSize&#34;`</span>         <span class="c1">// string 类型字段的默认长度
-</span><span class="c1"></span>	<span class="nx">DisableDatetimePrecision</span>  <span class="kt">bool</span>          <span class="s">`yaml:&#34;disableDatetimePrecision&#34;`</span>  <span class="c1">// 禁用 datetime 精度
-</span><span class="c1"></span>	<span class="nx">SkipInitializeWithVersion</span> <span class="kt">bool</span>          <span class="s">`yaml:&#34;skipInitializeWithVersion&#34;`</span> <span class="c1">// 根据当前 MySQL 版本自动配置
-</span><span class="c1"></span>	<span class="nx">Gorm</span>                      <span class="nx">gorm</span>          <span class="s">`yaml:&#34;gorm&#34;`</span>
-	<span class="nx">SlowSql</span>                   <span class="nx">time</span><span class="p">.</span><span class="nx">Duration</span> <span class="s">`yaml:&#34;slowSql&#34;`</span>                   <span class="c1">//慢SQL
-</span><span class="c1"></span>	<span class="nx">LogLevel</span>                  <span class="kt">string</span>        <span class="s">`yaml:&#34;logLevel&#34;`</span>                  <span class="c1">// 日志记录级别
-</span><span class="c1"></span>	<span class="nx">IgnoreRecordNotFoundError</span> <span class="kt">bool</span>          <span class="s">`yaml:&#34;ignoreRecordNotFoundError&#34;`</span> <span class="c1">// 是否忽略ErrRecordNotFound(未查到记录错误)
+    <span class="nx">Host</span>                      <span class="kt">string</span>        <span class="s">`yaml:&#34;host&#34;`</span>
+    <span class="nx">Port</span>                      <span class="kt">string</span>        <span class="s">`yaml:&#34;port&#34;`</span>
+    <span class="nx">User</span>                      <span class="kt">string</span>        <span class="s">`yaml:&#34;user&#34;`</span>
+    <span class="nx">Password</span>                  <span class="kt">string</span>        <span class="s">`yaml:&#34;password&#34;`</span>
+    <span class="nx">Database</span>                  <span class="kt">string</span>        <span class="s">`yaml:&#34;database&#34;`</span>
+    <span class="nx">Charset</span>                   <span class="kt">string</span>        <span class="s">`yaml:&#34;charset&#34;`</span>                   <span class="c1">//要支持完整的UTF-8编码,需设置成: utf8mb4
+</span><span class="c1"></span>    <span class="nx">AutoMigrate</span>               <span class="kt">bool</span>          <span class="s">`yaml:&#34;autoMigrate&#34;`</span>               <span class="c1">// 初始化时调用数据迁移
+</span><span class="c1"></span>    <span class="nx">ParseTime</span>                 <span class="kt">bool</span>          <span class="s">`yaml:&#34;parseTime&#34;`</span>                 <span class="c1">//解析time.Time类型
+</span><span class="c1"></span>    <span class="nx">TimeZone</span>                  <span class="kt">string</span>        <span class="s">`yaml:&#34;timeZone&#34;`</span>                  <span class="c1">// 时区,若设置 Asia/Shanghai,需写成: Asia%2fShanghai
+</span><span class="c1"></span>    <span class="nx">DefaultStringSize</span>         <span class="kt">uint</span>          <span class="s">`yaml:&#34;defaultStringSize&#34;`</span>         <span class="c1">// string 类型字段的默认长度
+</span><span class="c1"></span>    <span class="nx">DisableDatetimePrecision</span>  <span class="kt">bool</span>          <span class="s">`yaml:&#34;disableDatetimePrecision&#34;`</span>  <span class="c1">// 禁用 datetime 精度
+</span><span class="c1"></span>    <span class="nx">SkipInitializeWithVersion</span> <span class="kt">bool</span>          <span class="s">`yaml:&#34;skipInitializeWithVersion&#34;`</span> <span class="c1">// 根据当前 MySQL 版本自动配置
+</span><span class="c1"></span>    <span class="nx">Gorm</span>                      <span class="nx">gorm</span>          <span class="s">`yaml:&#34;gorm&#34;`</span>
+    <span class="nx">SlowSql</span>                   <span class="nx">time</span><span class="p">.</span><span class="nx">Duration</span> <span class="s">`yaml:&#34;slowSql&#34;`</span>                   <span class="c1">//慢SQL
+</span><span class="c1"></span>    <span class="nx">LogLevel</span>                  <span class="kt">string</span>        <span class="s">`yaml:&#34;logLevel&#34;`</span>                  <span class="c1">// 日志记录级别
+</span><span class="c1"></span>    <span class="nx">IgnoreRecordNotFoundError</span> <span class="kt">bool</span>          <span class="s">`yaml:&#34;ignoreRecordNotFoundError&#34;`</span> <span class="c1">// 是否忽略ErrRecordNotFound(未查到记录错误)
 </span><span class="c1"></span><span class="p">}</span>
 <span class="c1">// gorm 配置信息
 </span><span class="c1"></span><span class="kd">type</span> <span class="nx">gorm</span> <span class="kd">struct</span> <span class="p">{</span>
-	<span class="nx">SkipDefaultTx</span>   <span class="kt">bool</span>   <span class="s">`yaml:&#34;skipDefaultTx&#34;`</span>                            <span class="c1">//是否跳过默认事务
-</span><span class="c1"></span>	<span class="nx">CoverLogger</span>     <span class="kt">bool</span>   <span class="s">`yaml:&#34;coverLogger&#34;`</span>                              <span class="c1">//是否覆盖默认logger
-</span><span class="c1"></span>	<span class="nx">PreparedStmt</span>    <span class="kt">bool</span>   <span class="s">`yaml:&#34;prepareStmt&#34;`</span>                              <span class="c1">// 设置SQL缓存
-</span><span class="c1"></span>	<span class="nx">CloseForeignKey</span> <span class="kt">bool</span>   <span class="s">`yaml:&#34;disableForeignKeyConstraintWhenMigrating&#34;`</span> <span class="c1">// 禁用外键约束
-</span><span class="c1"></span>	<span class="nx">TablePrefix</span>     <span class="kt">string</span> <span class="s">`yaml:&#34;tablePrefix&#34;`</span>                              <span class="c1">// 表前缀
-</span><span class="c1"></span>	<span class="nx">SingularTable</span>   <span class="kt">bool</span>   <span class="s">`yaml:&#34;singularTable&#34;`</span>                            <span class="c1">//是否使用单数表名(默认复数)，启用后，User结构体表将是user
+    <span class="nx">SkipDefaultTx</span>   <span class="kt">bool</span>   <span class="s">`yaml:&#34;skipDefaultTx&#34;`</span>                            <span class="c1">//是否跳过默认事务
+</span><span class="c1"></span>    <span class="nx">CoverLogger</span>     <span class="kt">bool</span>   <span class="s">`yaml:&#34;coverLogger&#34;`</span>                              <span class="c1">//是否覆盖默认logger
+</span><span class="c1"></span>    <span class="nx">PreparedStmt</span>    <span class="kt">bool</span>   <span class="s">`yaml:&#34;prepareStmt&#34;`</span>                              <span class="c1">// 设置SQL缓存
+</span><span class="c1"></span>    <span class="nx">CloseForeignKey</span> <span class="kt">bool</span>   <span class="s">`yaml:&#34;disableForeignKeyConstraintWhenMigrating&#34;`</span> <span class="c1">// 禁用外键约束
+</span><span class="c1"></span>    <span class="nx">TablePrefix</span>     <span class="kt">string</span> <span class="s">`yaml:&#34;tablePrefix&#34;`</span>                              <span class="c1">// 表前缀
+</span><span class="c1"></span>    <span class="nx">SingularTable</span>   <span class="kt">bool</span>   <span class="s">`yaml:&#34;singularTable&#34;`</span>                            <span class="c1">//是否使用单数表名(默认复数)，启用后，User结构体表将是user
 </span><span class="c1"></span><span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -345,8 +345,8 @@
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="o">...</span>
 <span class="c1">// ServerConfig 配置信息
 </span><span class="c1"></span><span class="kd">type</span> <span class="nx">ServerConfig</span> <span class="kd">struct</span> <span class="p">{</span>
-  <span class="o">...</span><span class="p">.</span>
-	<span class="nx">Mysql</span> <span class="nx">mysql</span> <span class="s">`yaml:&#34;mysql&#34;`</span> <span class="c1">// 嵌入MySQL配置
+    <span class="o">...</span><span class="p">.</span>
+    <span class="nx">Mysql</span> <span class="nx">mysql</span> <span class="s">`yaml:&#34;mysql&#34;`</span> <span class="c1">// 嵌入MySQL配置
 </span><span class="c1"></span><span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -363,8 +363,8 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 变量
 </span><span class="c1"></span><span class="kd">var</span> <span class="p">(</span>
-	<span class="o">...</span>
-	<span class="nx">GvaMysqlClient</span> <span class="o">*</span><span class="nx">gorm</span><span class="p">.</span><span class="nx">DB</span>            <span class="c1">//Mysql客户端
+    <span class="o">...</span>
+    <span class="nx">GvaMysqlClient</span> <span class="o">*</span><span class="nx">gorm</span><span class="p">.</span><span class="nx">DB</span>            <span class="c1">//Mysql客户端
 </span><span class="c1"></span><span class="p">)</span>
 </code></pre></td></tr></table>
 </div>
@@ -385,13 +385,13 @@
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">init</span><span class="p">()</span> <span class="p">{</span>
-	<span class="o">...</span>
-	<span class="c1">// 初始化gorm
-</span><span class="c1"></span>	<span class="nx">initialize</span><span class="p">.</span><span class="nf">InitGorm</span><span class="p">()</span>
+    <span class="o">...</span>
+    <span class="c1">// 初始化gorm
+</span><span class="c1"></span>    <span class="nx">initialize</span><span class="p">.</span><span class="nf">InitGorm</span><span class="p">()</span>
 <span class="p">}</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="c1">// 启动服务
-</span><span class="c1"></span>	<span class="o">...</span>
+    <span class="c1">// 启动服务
+</span><span class="c1"></span>    <span class="o">...</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -443,43 +443,43 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 初始化mysql客户端
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">InitGorm</span><span class="p">()</span> <span class="p">{</span>
-	<span class="nx">mysqlConfig</span> <span class="o">:=</span> <span class="nx">global</span><span class="p">.</span><span class="nx">GvaConfig</span><span class="p">.</span><span class="nx">Mysql</span>
-	<span class="c1">// user:pass@tcp(127.0.0.1:3306)/dbname?charset=utf8mb4&amp;parseTime=True&amp;loc=Local
-</span><span class="c1"></span>	<span class="nx">dsn</span> <span class="o">:=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;%s:%s@tcp(%s:%s)/%s?charset=%s&amp;parseTime=%t&amp;loc=%s&#34;</span><span class="p">,</span>
-		<span class="nx">mysqlConfig</span><span class="p">.</span><span class="nx">User</span><span class="p">,</span> <span class="nx">mysqlConfig</span><span class="p">.</span><span class="nx">Password</span><span class="p">,</span> <span class="nx">mysqlConfig</span><span class="p">.</span><span class="nx">Host</span><span class="p">,</span> <span class="nx">mysqlConfig</span><span class="p">.</span><span class="nx">Port</span><span class="p">,</span> <span class="nx">mysqlConfig</span><span class="p">.</span><span class="nx">Database</span><span class="p">,</span> <span class="nx">mysqlConfig</span><span class="p">.</span><span class="nx">Charset</span><span class="p">,</span>
-		<span class="nx">mysqlConfig</span><span class="p">.</span><span class="nx">ParseTime</span><span class="p">,</span> <span class="nx">mysqlConfig</span><span class="p">.</span><span class="nx">TimeZone</span><span class="p">)</span>
-	<span class="c1">// 设置gorm配置
-</span><span class="c1"></span>	<span class="nx">gormConfig</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">gorm</span><span class="p">.</span><span class="nx">Config</span><span class="p">{</span>
-		<span class="nx">SkipDefaultTransaction</span><span class="p">:</span> <span class="nx">mysqlConfig</span><span class="p">.</span><span class="nx">Gorm</span><span class="p">.</span><span class="nx">SkipDefaultTx</span><span class="p">,</span> <span class="c1">//是否跳过默认事务
-</span><span class="c1"></span>		<span class="c1">// 命名策略
-</span><span class="c1"></span>		<span class="nx">NamingStrategy</span><span class="p">:</span> <span class="nx">schema</span><span class="p">.</span><span class="nx">NamingStrategy</span><span class="p">{</span>
-			<span class="nx">TablePrefix</span><span class="p">:</span>   <span class="nx">mysqlConfig</span><span class="p">.</span><span class="nx">Gorm</span><span class="p">.</span><span class="nx">TablePrefix</span><span class="p">,</span>
-			<span class="nx">SingularTable</span><span class="p">:</span> <span class="nx">mysqlConfig</span><span class="p">.</span><span class="nx">Gorm</span><span class="p">.</span><span class="nx">SingularTable</span><span class="p">,</span>
-		<span class="p">},</span>
-		<span class="c1">// 执行任何SQL时都会创建一个prepared statement并将其缓存，以提高后续的效率
-</span><span class="c1"></span>		<span class="nx">PrepareStmt</span><span class="p">:</span> <span class="nx">mysqlConfig</span><span class="p">.</span><span class="nx">Gorm</span><span class="p">.</span><span class="nx">PreparedStmt</span><span class="p">,</span>
-		<span class="c1">//在AutoMigrate 或 CreateTable 时，GORM 会自动创建外键约束，若要禁用该特性，可将其设置为 true
-</span><span class="c1"></span>		<span class="nx">DisableForeignKeyConstraintWhenMigrating</span><span class="p">:</span> <span class="nx">mysqlConfig</span><span class="p">.</span><span class="nx">Gorm</span><span class="p">.</span><span class="nx">CloseForeignKey</span><span class="p">,</span>
-	<span class="p">}</span>
-	<span class="c1">// 是否覆盖默认sql配置
-</span><span class="c1"></span>	<span class="k">if</span> <span class="nx">mysqlConfig</span><span class="p">.</span><span class="nx">Gorm</span><span class="p">.</span><span class="nx">CoverLogger</span> <span class="p">{</span>
-		<span class="nf">setNewLogger</span><span class="p">(</span><span class="nx">gormConfig</span><span class="p">)</span>
-	<span class="p">}</span>
-	<span class="nx">client</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">gorm</span><span class="p">.</span><span class="nf">Open</span><span class="p">(</span><span class="nx">mysql</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="nx">mysql</span><span class="p">.</span><span class="nx">Config</span><span class="p">{</span>
-		<span class="nx">DSN</span><span class="p">:</span>                       <span class="nx">dsn</span><span class="p">,</span>
-		<span class="nx">DefaultStringSize</span><span class="p">:</span>         <span class="nx">mysqlConfig</span><span class="p">.</span><span class="nx">DefaultStringSize</span><span class="p">,</span>
-		<span class="nx">DisableDatetimePrecision</span><span class="p">:</span>  <span class="nx">mysqlConfig</span><span class="p">.</span><span class="nx">DisableDatetimePrecision</span><span class="p">,</span>
-		<span class="nx">SkipInitializeWithVersion</span><span class="p">:</span> <span class="nx">mysqlConfig</span><span class="p">.</span><span class="nx">SkipInitializeWithVersion</span><span class="p">,</span>
-	<span class="p">}),</span> <span class="nx">gormConfig</span><span class="p">)</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="nb">panic</span><span class="p">(</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;创建mysql客户端失败: %s&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">))</span>
-	<span class="p">}</span>
-	<span class="c1">// 赋值给全局变量
-</span><span class="c1"></span>	<span class="nx">global</span><span class="p">.</span><span class="nx">GvaMysqlClient</span> <span class="p">=</span> <span class="nx">client</span>
-	<span class="c1">// 是否调用数据迁移
-</span><span class="c1"></span>	<span class="k">if</span> <span class="nx">mysqlConfig</span><span class="p">.</span><span class="nx">AutoMigrate</span> <span class="p">{</span>
-		<span class="nx">core</span><span class="p">.</span><span class="nf">AutoMigrate</span><span class="p">()</span>
-	<span class="p">}</span>
+    <span class="nx">mysqlConfig</span> <span class="o">:=</span> <span class="nx">global</span><span class="p">.</span><span class="nx">GvaConfig</span><span class="p">.</span><span class="nx">Mysql</span>
+    <span class="c1">// user:pass@tcp(127.0.0.1:3306)/dbname?charset=utf8mb4&amp;parseTime=True&amp;loc=Local
+</span><span class="c1"></span>    <span class="nx">dsn</span> <span class="o">:=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;%s:%s@tcp(%s:%s)/%s?charset=%s&amp;parseTime=%t&amp;loc=%s&#34;</span><span class="p">,</span>
+        <span class="nx">mysqlConfig</span><span class="p">.</span><span class="nx">User</span><span class="p">,</span> <span class="nx">mysqlConfig</span><span class="p">.</span><span class="nx">Password</span><span class="p">,</span> <span class="nx">mysqlConfig</span><span class="p">.</span><span class="nx">Host</span><span class="p">,</span> <span class="nx">mysqlConfig</span><span class="p">.</span><span class="nx">Port</span><span class="p">,</span> <span class="nx">mysqlConfig</span><span class="p">.</span><span class="nx">Database</span><span class="p">,</span> <span class="nx">mysqlConfig</span><span class="p">.</span><span class="nx">Charset</span><span class="p">,</span>
+        <span class="nx">mysqlConfig</span><span class="p">.</span><span class="nx">ParseTime</span><span class="p">,</span> <span class="nx">mysqlConfig</span><span class="p">.</span><span class="nx">TimeZone</span><span class="p">)</span>
+    <span class="c1">// 设置gorm配置
+</span><span class="c1"></span>    <span class="nx">gormConfig</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">gorm</span><span class="p">.</span><span class="nx">Config</span><span class="p">{</span>
+        <span class="nx">SkipDefaultTransaction</span><span class="p">:</span> <span class="nx">mysqlConfig</span><span class="p">.</span><span class="nx">Gorm</span><span class="p">.</span><span class="nx">SkipDefaultTx</span><span class="p">,</span> <span class="c1">//是否跳过默认事务
+</span><span class="c1"></span>        <span class="c1">// 命名策略
+</span><span class="c1"></span>        <span class="nx">NamingStrategy</span><span class="p">:</span> <span class="nx">schema</span><span class="p">.</span><span class="nx">NamingStrategy</span><span class="p">{</span>
+            <span class="nx">TablePrefix</span><span class="p">:</span>   <span class="nx">mysqlConfig</span><span class="p">.</span><span class="nx">Gorm</span><span class="p">.</span><span class="nx">TablePrefix</span><span class="p">,</span>
+            <span class="nx">SingularTable</span><span class="p">:</span> <span class="nx">mysqlConfig</span><span class="p">.</span><span class="nx">Gorm</span><span class="p">.</span><span class="nx">SingularTable</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="c1">// 执行任何SQL时都会创建一个prepared statement并将其缓存，以提高后续的效率
+</span><span class="c1"></span>        <span class="nx">PrepareStmt</span><span class="p">:</span> <span class="nx">mysqlConfig</span><span class="p">.</span><span class="nx">Gorm</span><span class="p">.</span><span class="nx">PreparedStmt</span><span class="p">,</span>
+        <span class="c1">//在AutoMigrate 或 CreateTable 时，GORM 会自动创建外键约束，若要禁用该特性，可将其设置为 true
+</span><span class="c1"></span>        <span class="nx">DisableForeignKeyConstraintWhenMigrating</span><span class="p">:</span> <span class="nx">mysqlConfig</span><span class="p">.</span><span class="nx">Gorm</span><span class="p">.</span><span class="nx">CloseForeignKey</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="c1">// 是否覆盖默认sql配置
+</span><span class="c1"></span>    <span class="k">if</span> <span class="nx">mysqlConfig</span><span class="p">.</span><span class="nx">Gorm</span><span class="p">.</span><span class="nx">CoverLogger</span> <span class="p">{</span>
+        <span class="nf">setNewLogger</span><span class="p">(</span><span class="nx">gormConfig</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="nx">client</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">gorm</span><span class="p">.</span><span class="nf">Open</span><span class="p">(</span><span class="nx">mysql</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="nx">mysql</span><span class="p">.</span><span class="nx">Config</span><span class="p">{</span>
+        <span class="nx">DSN</span><span class="p">:</span>                       <span class="nx">dsn</span><span class="p">,</span>
+        <span class="nx">DefaultStringSize</span><span class="p">:</span>         <span class="nx">mysqlConfig</span><span class="p">.</span><span class="nx">DefaultStringSize</span><span class="p">,</span>
+        <span class="nx">DisableDatetimePrecision</span><span class="p">:</span>  <span class="nx">mysqlConfig</span><span class="p">.</span><span class="nx">DisableDatetimePrecision</span><span class="p">,</span>
+        <span class="nx">SkipInitializeWithVersion</span><span class="p">:</span> <span class="nx">mysqlConfig</span><span class="p">.</span><span class="nx">SkipInitializeWithVersion</span><span class="p">,</span>
+    <span class="p">}),</span> <span class="nx">gormConfig</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="nb">panic</span><span class="p">(</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;创建mysql客户端失败: %s&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">))</span>
+    <span class="p">}</span>
+    <span class="c1">// 赋值给全局变量
+</span><span class="c1"></span>    <span class="nx">global</span><span class="p">.</span><span class="nx">GvaMysqlClient</span> <span class="p">=</span> <span class="nx">client</span>
+    <span class="c1">// 是否调用数据迁移
+</span><span class="c1"></span>    <span class="k">if</span> <span class="nx">mysqlConfig</span><span class="p">.</span><span class="nx">AutoMigrate</span> <span class="p">{</span>
+        <span class="nx">core</span><span class="p">.</span><span class="nf">AutoMigrate</span><span class="p">()</span>
+    <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -515,26 +515,26 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 设置新的Logger
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">setNewLogger</span><span class="p">(</span><span class="nx">gConfig</span> <span class="o">*</span><span class="nx">gorm</span><span class="p">.</span><span class="nx">Config</span><span class="p">)</span> <span class="p">{</span>
-	<span class="nx">logPath</span> <span class="o">:=</span> <span class="nx">global</span><span class="p">.</span><span class="nx">GvaConfig</span><span class="p">.</span><span class="nx">Log</span><span class="p">.</span><span class="nx">Path</span>
-	<span class="nx">file</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nf">OpenFile</span><span class="p">(</span><span class="nx">logPath</span><span class="o">+</span><span class="s">&#34;/sql.log&#34;</span><span class="p">,</span> <span class="nx">os</span><span class="p">.</span><span class="nx">O_RDWR</span><span class="p">|</span><span class="nx">os</span><span class="p">.</span><span class="nx">O_CREATE</span><span class="p">|</span><span class="nx">os</span><span class="p">.</span><span class="nx">O_APPEND</span><span class="p">,</span> <span class="nx">os</span><span class="p">.</span><span class="nx">ModePerm</span><span class="p">)</span>
-	<span class="c1">// 日志级别映射 error、info、warn
-</span><span class="c1"></span>	<span class="nx">logLevelMap</span> <span class="o">:=</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="nx">logger</span><span class="p">.</span><span class="nx">LogLevel</span><span class="p">{</span>
-		<span class="s">&#34;error&#34;</span><span class="p">:</span> <span class="nx">logger</span><span class="p">.</span><span class="nx">Error</span><span class="p">,</span>
-		<span class="s">&#34;info&#34;</span><span class="p">:</span>  <span class="nx">logger</span><span class="p">.</span><span class="nx">Info</span><span class="p">,</span>
-		<span class="s">&#34;warn&#34;</span><span class="p">:</span>  <span class="nx">logger</span><span class="p">.</span><span class="nx">Warn</span><span class="p">,</span>
-	<span class="p">}</span>
-	<span class="kd">var</span> <span class="nx">logLevel</span> <span class="nx">logger</span><span class="p">.</span><span class="nx">LogLevel</span>
-	<span class="kd">var</span> <span class="nx">ok</span> <span class="kt">bool</span>
-	<span class="k">if</span> <span class="nx">logLevel</span><span class="p">,</span> <span class="nx">ok</span> <span class="p">=</span> <span class="nx">logLevelMap</span><span class="p">[</span><span class="nx">global</span><span class="p">.</span><span class="nx">GvaConfig</span><span class="p">.</span><span class="nx">Mysql</span><span class="p">.</span><span class="nx">LogLevel</span><span class="p">];</span> <span class="p">!</span><span class="nx">ok</span> <span class="p">{</span>
-		<span class="nx">logLevel</span> <span class="p">=</span> <span class="nx">logger</span><span class="p">.</span><span class="nx">Error</span>
-	<span class="p">}</span>
-	<span class="nx">newLogger</span> <span class="o">:=</span> <span class="nx">logger</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="nx">log</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="nx">file</span><span class="p">,</span> <span class="s">&#34;\r\n&#34;</span><span class="p">,</span> <span class="nx">log</span><span class="p">.</span><span class="nx">LstdFlags</span><span class="p">),</span> <span class="nx">logger</span><span class="p">.</span><span class="nx">Config</span><span class="p">{</span>
-		<span class="nx">SlowThreshold</span><span class="p">:</span>             <span class="nx">global</span><span class="p">.</span><span class="nx">GvaConfig</span><span class="p">.</span><span class="nx">Mysql</span><span class="p">.</span><span class="nx">SlowSql</span><span class="p">,</span>                   <span class="c1">//慢SQL时间
-</span><span class="c1"></span>		<span class="nx">LogLevel</span><span class="p">:</span>                  <span class="nx">logLevel</span><span class="p">,</span>                                         <span class="c1">// 记录日志级别
-</span><span class="c1"></span>		<span class="nx">IgnoreRecordNotFoundError</span><span class="p">:</span> <span class="nx">global</span><span class="p">.</span><span class="nx">GvaConfig</span><span class="p">.</span><span class="nx">Mysql</span><span class="p">.</span><span class="nx">IgnoreRecordNotFoundError</span><span class="p">,</span> <span class="c1">// 是否忽略ErrRecordNotFound(未查到记录错误)
-</span><span class="c1"></span>		<span class="nx">Colorful</span><span class="p">:</span>                  <span class="kc">false</span><span class="p">,</span>                                            <span class="c1">// 开关颜色
-</span><span class="c1"></span>	<span class="p">})</span>
-	<span class="nx">gConfig</span><span class="p">.</span><span class="nx">Logger</span> <span class="p">=</span> <span class="nx">newLogger</span>
+    <span class="nx">logPath</span> <span class="o">:=</span> <span class="nx">global</span><span class="p">.</span><span class="nx">GvaConfig</span><span class="p">.</span><span class="nx">Log</span><span class="p">.</span><span class="nx">Path</span>
+    <span class="nx">file</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nf">OpenFile</span><span class="p">(</span><span class="nx">logPath</span><span class="o">+</span><span class="s">&#34;/sql.log&#34;</span><span class="p">,</span> <span class="nx">os</span><span class="p">.</span><span class="nx">O_RDWR</span><span class="p">|</span><span class="nx">os</span><span class="p">.</span><span class="nx">O_CREATE</span><span class="p">|</span><span class="nx">os</span><span class="p">.</span><span class="nx">O_APPEND</span><span class="p">,</span> <span class="nx">os</span><span class="p">.</span><span class="nx">ModePerm</span><span class="p">)</span>
+    <span class="c1">// 日志级别映射 error、info、warn
+</span><span class="c1"></span>    <span class="nx">logLevelMap</span> <span class="o">:=</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="nx">logger</span><span class="p">.</span><span class="nx">LogLevel</span><span class="p">{</span>
+        <span class="s">&#34;error&#34;</span><span class="p">:</span> <span class="nx">logger</span><span class="p">.</span><span class="nx">Error</span><span class="p">,</span>
+        <span class="s">&#34;info&#34;</span><span class="p">:</span>  <span class="nx">logger</span><span class="p">.</span><span class="nx">Info</span><span class="p">,</span>
+        <span class="s">&#34;warn&#34;</span><span class="p">:</span>  <span class="nx">logger</span><span class="p">.</span><span class="nx">Warn</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="kd">var</span> <span class="nx">logLevel</span> <span class="nx">logger</span><span class="p">.</span><span class="nx">LogLevel</span>
+    <span class="kd">var</span> <span class="nx">ok</span> <span class="kt">bool</span>
+    <span class="k">if</span> <span class="nx">logLevel</span><span class="p">,</span> <span class="nx">ok</span> <span class="p">=</span> <span class="nx">logLevelMap</span><span class="p">[</span><span class="nx">global</span><span class="p">.</span><span class="nx">GvaConfig</span><span class="p">.</span><span class="nx">Mysql</span><span class="p">.</span><span class="nx">LogLevel</span><span class="p">];</span> <span class="p">!</span><span class="nx">ok</span> <span class="p">{</span>
+        <span class="nx">logLevel</span> <span class="p">=</span> <span class="nx">logger</span><span class="p">.</span><span class="nx">Error</span>
+    <span class="p">}</span>
+    <span class="nx">newLogger</span> <span class="o">:=</span> <span class="nx">logger</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="nx">log</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="nx">file</span><span class="p">,</span> <span class="s">&#34;\r\n&#34;</span><span class="p">,</span> <span class="nx">log</span><span class="p">.</span><span class="nx">LstdFlags</span><span class="p">),</span> <span class="nx">logger</span><span class="p">.</span><span class="nx">Config</span><span class="p">{</span>
+        <span class="nx">SlowThreshold</span><span class="p">:</span>             <span class="nx">global</span><span class="p">.</span><span class="nx">GvaConfig</span><span class="p">.</span><span class="nx">Mysql</span><span class="p">.</span><span class="nx">SlowSql</span><span class="p">,</span>                   <span class="c1">//慢SQL时间
+</span><span class="c1"></span>        <span class="nx">LogLevel</span><span class="p">:</span>                  <span class="nx">logLevel</span><span class="p">,</span>                                         <span class="c1">// 记录日志级别
+</span><span class="c1"></span>        <span class="nx">IgnoreRecordNotFoundError</span><span class="p">:</span> <span class="nx">global</span><span class="p">.</span><span class="nx">GvaConfig</span><span class="p">.</span><span class="nx">Mysql</span><span class="p">.</span><span class="nx">IgnoreRecordNotFoundError</span><span class="p">,</span> <span class="c1">// 是否忽略ErrRecordNotFound(未查到记录错误)
+</span><span class="c1"></span>        <span class="nx">Colorful</span><span class="p">:</span>                  <span class="kc">false</span><span class="p">,</span>                                            <span class="c1">// 开关颜色
+</span><span class="c1"></span>    <span class="p">})</span>
+    <span class="nx">gConfig</span><span class="p">.</span><span class="nx">Logger</span> <span class="p">=</span> <span class="nx">newLogger</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -577,25 +577,25 @@
 <span class="kn">package</span> <span class="nx">entity</span>
 
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;shershon1991/gin-api-template/global&#34;</span>
+    <span class="s">&#34;shershon1991/gin-api-template/global&#34;</span>
 <span class="p">)</span>
 
 <span class="c1">// 用户表
 </span><span class="c1"></span><span class="kd">type</span> <span class="nx">User</span> <span class="kd">struct</span> <span class="p">{</span>
-	<span class="nx">global</span><span class="p">.</span><span class="nx">BaseModel</span>
-	<span class="nx">NickName</span> <span class="kt">string</span>   <span class="s">`json:&#34;nickName&#34; gorm:&#34;type:varchar(20);not null;default:&#39;&#39;;comment:昵称&#34;`</span>
-	<span class="nx">Phone</span>    <span class="kt">string</span>   <span class="s">`json:&#34;phone&#34; gorm:&#34;type:char(11);unique:un_phone;comment:手机号&#34;`</span>
-	<span class="nx">Password</span> <span class="kt">string</span>   <span class="s">`json:&#34;password&#34; gorm:&#34;type:varchar(20);comment:密码&#34;`</span>
-	<span class="nx">Status</span>   <span class="kt">int</span>      <span class="s">`json:&#34;status&#34; gorm:&#34;size:4;default:1;comment:状态 1:正常 2:白名单 3:黑名单&#34;`</span>
-	<span class="nx">UserInfo</span> <span class="nx">UserInfo</span> <span class="s">`json:&#34;userInfo&#34; gorm:&#34;-&#34;`</span>
+    <span class="nx">global</span><span class="p">.</span><span class="nx">BaseModel</span>
+    <span class="nx">NickName</span> <span class="kt">string</span>   <span class="s">`json:&#34;nickName&#34; gorm:&#34;type:varchar(20);not null;default:&#39;&#39;;comment:昵称&#34;`</span>
+    <span class="nx">Phone</span>    <span class="kt">string</span>   <span class="s">`json:&#34;phone&#34; gorm:&#34;type:char(11);unique:un_phone;comment:手机号&#34;`</span>
+    <span class="nx">Password</span> <span class="kt">string</span>   <span class="s">`json:&#34;password&#34; gorm:&#34;type:varchar(20);comment:密码&#34;`</span>
+    <span class="nx">Status</span>   <span class="kt">int</span>      <span class="s">`json:&#34;status&#34; gorm:&#34;size:4;default:1;comment:状态 1:正常 2:白名单 3:黑名单&#34;`</span>
+    <span class="nx">UserInfo</span> <span class="nx">UserInfo</span> <span class="s">`json:&#34;userInfo&#34; gorm:&#34;-&#34;`</span>
 <span class="p">}</span>
 
 <span class="c1">// 用户信息表
 </span><span class="c1"></span><span class="kd">type</span> <span class="nx">UserInfo</span> <span class="kd">struct</span> <span class="p">{</span>
-	<span class="nx">global</span><span class="p">.</span><span class="nx">BaseModel</span>
-	<span class="nx">Uid</span>      <span class="kt">uint</span>   <span class="s">`json:&#34;uid&#34; gorm:&#34;comment:用户id&#34;`</span>
-	<span class="nx">Birthday</span> <span class="kt">string</span> <span class="s">`json:&#34;birthday&#34; gorm:&#34;type:varchar(10);comment:生日&#34;`</span>
-	<span class="nx">Address</span>  <span class="kt">string</span> <span class="s">`json:&#34;address&#34; gorm:&#34;type:text;comment:地址&#34;`</span>
+    <span class="nx">global</span><span class="p">.</span><span class="nx">BaseModel</span>
+    <span class="nx">Uid</span>      <span class="kt">uint</span>   <span class="s">`json:&#34;uid&#34; gorm:&#34;comment:用户id&#34;`</span>
+    <span class="nx">Birthday</span> <span class="kt">string</span> <span class="s">`json:&#34;birthday&#34; gorm:&#34;type:varchar(10);comment:生日&#34;`</span>
+    <span class="nx">Address</span>  <span class="kt">string</span> <span class="s">`json:&#34;address&#34; gorm:&#34;type:text;comment:地址&#34;`</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -639,27 +639,27 @@
 <span class="kn">package</span> <span class="nx">core</span>
 
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;shershon1991/gin-api-template/global&#34;</span>
-	<span class="s">&#34;shershon1991/gin-api-template/model/entity&#34;</span>
-	<span class="s">&#34;fmt&#34;</span>
-	<span class="s">&#34;gorm.io/gorm&#34;</span>
+    <span class="s">&#34;shershon1991/gin-api-template/global&#34;</span>
+    <span class="s">&#34;shershon1991/gin-api-template/model/entity&#34;</span>
+    <span class="s">&#34;fmt&#34;</span>
+    <span class="s">&#34;gorm.io/gorm&#34;</span>
 <span class="p">)</span>
 <span class="c1">// 设置表信息
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">setTableOption</span><span class="p">(</span><span class="nx">tableComment</span> <span class="kt">string</span><span class="p">)</span> <span class="o">*</span><span class="nx">gorm</span><span class="p">.</span><span class="nx">DB</span> <span class="p">{</span>
-	<span class="nx">value</span> <span class="o">:=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;ENGINE=InnoDB COMMENT=&#39;%s&#39;&#34;</span><span class="p">,</span> <span class="nx">tableComment</span><span class="p">)</span>
-	<span class="k">return</span> <span class="nx">global</span><span class="p">.</span><span class="nx">GvaMysqlClient</span><span class="p">.</span><span class="nf">Set</span><span class="p">(</span><span class="s">&#34;gorm:table_options&#34;</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span>
+    <span class="nx">value</span> <span class="o">:=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;ENGINE=InnoDB COMMENT=&#39;%s&#39;&#34;</span><span class="p">,</span> <span class="nx">tableComment</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nx">global</span><span class="p">.</span><span class="nx">GvaMysqlClient</span><span class="p">.</span><span class="nf">Set</span><span class="p">(</span><span class="s">&#34;gorm:table_options&#34;</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span>
 <span class="p">}</span>
 <span class="c1">// 用户相关表
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">userTable</span><span class="p">()</span> <span class="p">{</span>
-	<span class="c1">// 用户账号表
-</span><span class="c1"></span>	<span class="nx">_</span> <span class="p">=</span> <span class="nf">setTableOption</span><span class="p">(</span><span class="s">&#34;用户表&#34;</span><span class="p">).</span><span class="nf">AutoMigrate</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">entity</span><span class="p">.</span><span class="nx">User</span><span class="p">{})</span>
-	<span class="c1">// 用户信息表
-</span><span class="c1"></span>	<span class="nx">_</span> <span class="p">=</span> <span class="nf">setTableOption</span><span class="p">(</span><span class="s">&#34;用户信息表&#34;</span><span class="p">).</span><span class="nf">AutoMigrate</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">entity</span><span class="p">.</span><span class="nx">UserInfo</span><span class="p">{})</span>
+    <span class="c1">// 用户账号表
+</span><span class="c1"></span>    <span class="nx">_</span> <span class="p">=</span> <span class="nf">setTableOption</span><span class="p">(</span><span class="s">&#34;用户表&#34;</span><span class="p">).</span><span class="nf">AutoMigrate</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">entity</span><span class="p">.</span><span class="nx">User</span><span class="p">{})</span>
+    <span class="c1">// 用户信息表
+</span><span class="c1"></span>    <span class="nx">_</span> <span class="p">=</span> <span class="nf">setTableOption</span><span class="p">(</span><span class="s">&#34;用户信息表&#34;</span><span class="p">).</span><span class="nf">AutoMigrate</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">entity</span><span class="p">.</span><span class="nx">UserInfo</span><span class="p">{})</span>
 <span class="p">}</span>
 <span class="c1">// 数据表迁移
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">AutoMigrate</span><span class="p">()</span> <span class="p">{</span>
-	<span class="c1">// 创建用户相关表
-</span><span class="c1"></span>	<span class="nf">userTable</span><span class="p">()</span>
+    <span class="c1">// 创建用户相关表
+</span><span class="c1"></span>    <span class="nf">userTable</span><span class="p">()</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -737,14 +737,14 @@
 <span class="kn">package</span> <span class="nx">v1</span>
 
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;shershon1991/gin-api-template/global&#34;</span>
-	<span class="s">&#34;shershon1991/gin-api-template/model/entity&#34;</span>
-	<span class="s">&#34;shershon1991/gin-api-template/model/request&#34;</span>
-	<span class="s">&#34;shershon1991/gin-api-template/model/response&#34;</span>
-	<span class="s">&#34;shershon1991/gin-api-template/service&#34;</span>
-	<span class="s">&#34;fmt&#34;</span>
-	<span class="s">&#34;github.com/gin-gonic/gin&#34;</span>
-	<span class="s">&#34;go.uber.org/zap&#34;</span>
+    <span class="s">&#34;shershon1991/gin-api-template/global&#34;</span>
+    <span class="s">&#34;shershon1991/gin-api-template/model/entity&#34;</span>
+    <span class="s">&#34;shershon1991/gin-api-template/model/request&#34;</span>
+    <span class="s">&#34;shershon1991/gin-api-template/model/response&#34;</span>
+    <span class="s">&#34;shershon1991/gin-api-template/service&#34;</span>
+    <span class="s">&#34;fmt&#34;</span>
+    <span class="s">&#34;github.com/gin-gonic/gin&#34;</span>
+    <span class="s">&#34;go.uber.org/zap&#34;</span>
 <span class="p">)</span>
 
 <span class="cm">/**
@@ -752,17 +752,17 @@
 </span><span class="cm"> * @param ctx
 </span><span class="cm"> */</span>
 <span class="kd">func</span> <span class="nf">Register</span><span class="p">(</span><span class="nx">ctx</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
-	<span class="c1">// 绑定参数
-</span><span class="c1"></span>	<span class="kd">var</span> <span class="nx">registerParam</span> <span class="nx">request</span><span class="p">.</span><span class="nx">RegisterParam</span>
-	<span class="nx">_</span> <span class="p">=</span> <span class="nx">ctx</span><span class="p">.</span><span class="nf">ShouldBindJSON</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">registerParam</span><span class="p">)</span>
-	<span class="c1">// todo 参数校验
-</span><span class="c1"></span>	<span class="c1">// 调用注册
-</span><span class="c1"></span>	<span class="nx">register</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">service</span><span class="p">.</span><span class="nf">Register</span><span class="p">(</span><span class="nx">registerParam</span><span class="p">)</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="nx">response</span><span class="p">.</span><span class="nf">Fail</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="s">&#34;注册失败!&#34;</span><span class="p">)</span>
-		<span class="k">return</span>
-	<span class="p">}</span>
-	<span class="nx">response</span><span class="p">.</span><span class="nf">OkWithData</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="nx">register</span><span class="p">)</span>
+    <span class="c1">// 绑定参数
+</span><span class="c1"></span>    <span class="kd">var</span> <span class="nx">registerParam</span> <span class="nx">request</span><span class="p">.</span><span class="nx">RegisterParam</span>
+    <span class="nx">_</span> <span class="p">=</span> <span class="nx">ctx</span><span class="p">.</span><span class="nf">ShouldBindJSON</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">registerParam</span><span class="p">)</span>
+    <span class="c1">// todo 参数校验
+</span><span class="c1"></span>    <span class="c1">// 调用注册
+</span><span class="c1"></span>    <span class="nx">register</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">service</span><span class="p">.</span><span class="nf">Register</span><span class="p">(</span><span class="nx">registerParam</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="nx">response</span><span class="p">.</span><span class="nf">Fail</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="s">&#34;注册失败!&#34;</span><span class="p">)</span>
+        <span class="k">return</span>
+    <span class="p">}</span>
+    <span class="nx">response</span><span class="p">.</span><span class="nf">OkWithData</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="nx">register</span><span class="p">)</span>
 <span class="p">}</span>
 
 <span class="cm">/**
@@ -770,22 +770,22 @@
 </span><span class="cm"> * @param ctx
 </span><span class="cm"> */</span>
 <span class="kd">func</span> <span class="nf">Login</span><span class="p">(</span><span class="nx">ctx</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
-	<span class="c1">// 绑定参数
-</span><span class="c1"></span>	<span class="kd">var</span> <span class="nx">loginParam</span> <span class="nx">request</span><span class="p">.</span><span class="nx">LoginParam</span>
-	<span class="nx">_</span> <span class="p">=</span> <span class="nx">ctx</span><span class="p">.</span><span class="nf">ShouldBindJSON</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">loginParam</span><span class="p">)</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;参数:&#34;</span><span class="p">,</span> <span class="nx">loginParam</span><span class="p">)</span>
-	<span class="k">if</span> <span class="nx">loginParam</span><span class="p">.</span><span class="nx">Password</span> <span class="o">==</span> <span class="s">&#34;&#34;</span> <span class="o">||</span> <span class="nx">loginParam</span><span class="p">.</span><span class="nx">Phone</span> <span class="o">==</span> <span class="s">&#34;&#34;</span> <span class="p">{</span>
-		<span class="nx">response</span><span class="p">.</span><span class="nf">Fail</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="s">&#34;手机号和密码不能为空！&#34;</span><span class="p">)</span>
-		<span class="k">return</span>
-	<span class="p">}</span>
-	<span class="c1">// 调用登录服务
-</span><span class="c1"></span>	<span class="nx">userRecord</span> <span class="o">:=</span> <span class="nx">entity</span><span class="p">.</span><span class="nx">User</span><span class="p">{</span><span class="nx">Phone</span><span class="p">:</span> <span class="nx">loginParam</span><span class="p">.</span><span class="nx">Phone</span><span class="p">,</span> <span class="nx">Password</span><span class="p">:</span> <span class="nx">loginParam</span><span class="p">.</span><span class="nx">Password</span><span class="p">}</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">service</span><span class="p">.</span><span class="nf">LoginPwd</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">userRecord</span><span class="p">);</span><span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="nx">global</span><span class="p">.</span><span class="nx">GvaLogger</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="s">&#34;登录失败:&#34;</span><span class="p">,</span><span class="nx">zap</span><span class="p">.</span><span class="nf">Any</span><span class="p">(</span><span class="s">&#34;user&#34;</span><span class="p">,</span><span class="nx">userRecord</span><span class="p">))</span>
-		<span class="nx">response</span><span class="p">.</span><span class="nf">Fail</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="s">&#34;登录失败,账号或者密码错误!&#34;</span><span class="p">)</span>
-		<span class="k">return</span>
-	<span class="p">}</span>
-	<span class="nx">response</span><span class="p">.</span><span class="nf">OkWithData</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">userRecord</span><span class="p">)</span>
+    <span class="c1">// 绑定参数
+</span><span class="c1"></span>    <span class="kd">var</span> <span class="nx">loginParam</span> <span class="nx">request</span><span class="p">.</span><span class="nx">LoginParam</span>
+    <span class="nx">_</span> <span class="p">=</span> <span class="nx">ctx</span><span class="p">.</span><span class="nf">ShouldBindJSON</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">loginParam</span><span class="p">)</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;参数:&#34;</span><span class="p">,</span> <span class="nx">loginParam</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nx">loginParam</span><span class="p">.</span><span class="nx">Password</span> <span class="o">==</span> <span class="s">&#34;&#34;</span> <span class="o">||</span> <span class="nx">loginParam</span><span class="p">.</span><span class="nx">Phone</span> <span class="o">==</span> <span class="s">&#34;&#34;</span> <span class="p">{</span>
+        <span class="nx">response</span><span class="p">.</span><span class="nf">Fail</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="s">&#34;手机号和密码不能为空！&#34;</span><span class="p">)</span>
+        <span class="k">return</span>
+    <span class="p">}</span>
+    <span class="c1">// 调用登录服务
+</span><span class="c1"></span>    <span class="nx">userRecord</span> <span class="o">:=</span> <span class="nx">entity</span><span class="p">.</span><span class="nx">User</span><span class="p">{</span><span class="nx">Phone</span><span class="p">:</span> <span class="nx">loginParam</span><span class="p">.</span><span class="nx">Phone</span><span class="p">,</span> <span class="nx">Password</span><span class="p">:</span> <span class="nx">loginParam</span><span class="p">.</span><span class="nx">Password</span><span class="p">}</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">service</span><span class="p">.</span><span class="nf">LoginPwd</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">userRecord</span><span class="p">);</span><span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="nx">global</span><span class="p">.</span><span class="nx">GvaLogger</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="s">&#34;登录失败:&#34;</span><span class="p">,</span><span class="nx">zap</span><span class="p">.</span><span class="nf">Any</span><span class="p">(</span><span class="s">&#34;user&#34;</span><span class="p">,</span><span class="nx">userRecord</span><span class="p">))</span>
+        <span class="nx">response</span><span class="p">.</span><span class="nf">Fail</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="s">&#34;登录失败,账号或者密码错误!&#34;</span><span class="p">)</span>
+        <span class="k">return</span>
+    <span class="p">}</span>
+    <span class="nx">response</span><span class="p">.</span><span class="nf">OkWithData</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">userRecord</span><span class="p">)</span>
 <span class="p">}</span>
 
 </code></pre></td></tr></table>
@@ -816,22 +816,22 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">router</span>
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="nx">v1</span> <span class="s">&#34;shershon1991/gin-api-template/api/v1&#34;</span>
-	<span class="s">&#34;github.com/gin-gonic/gin&#34;</span>
+    <span class="nx">v1</span> <span class="s">&#34;shershon1991/gin-api-template/api/v1&#34;</span>
+    <span class="s">&#34;github.com/gin-gonic/gin&#34;</span>
 <span class="p">)</span>
 <span class="cm">/**
 </span><span class="cm"> * @description: 用户相关的路由
 </span><span class="cm"> * @param engine
 </span><span class="cm"> */</span>
 <span class="kd">func</span> <span class="nf">InitUserRouter</span><span class="p">(</span><span class="nx">engine</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Engine</span><span class="p">)</span> <span class="p">{</span>
-	<span class="c1">// 不需要登录的路由
-</span><span class="c1"></span>	<span class="nx">noLoginGroup</span> <span class="o">:=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Group</span><span class="p">(</span><span class="s">&#34;v1/user&#34;</span><span class="p">)</span>
-	<span class="p">{</span>
-		<span class="c1">// 登录
-</span><span class="c1"></span>		<span class="nx">noLoginGroup</span><span class="p">.</span><span class="nf">POST</span><span class="p">(</span><span class="s">&#34;login&#34;</span><span class="p">,</span> <span class="nx">v1</span><span class="p">.</span><span class="nx">Login</span><span class="p">)</span>
-		<span class="c1">// 注册
-</span><span class="c1"></span>		<span class="nx">noLoginGroup</span><span class="p">.</span><span class="nf">POST</span><span class="p">(</span><span class="s">&#34;register&#34;</span><span class="p">,</span> <span class="nx">v1</span><span class="p">.</span><span class="nx">Register</span><span class="p">)</span>
-	<span class="p">}</span>
+    <span class="c1">// 不需要登录的路由
+</span><span class="c1"></span>    <span class="nx">noLoginGroup</span> <span class="o">:=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Group</span><span class="p">(</span><span class="s">&#34;v1/user&#34;</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// 登录
+</span><span class="c1"></span>        <span class="nx">noLoginGroup</span><span class="p">.</span><span class="nf">POST</span><span class="p">(</span><span class="s">&#34;login&#34;</span><span class="p">,</span> <span class="nx">v1</span><span class="p">.</span><span class="nx">Login</span><span class="p">)</span>
+        <span class="c1">// 注册
+</span><span class="c1"></span>        <span class="nx">noLoginGroup</span><span class="p">.</span><span class="nf">POST</span><span class="p">(</span><span class="s">&#34;register&#34;</span><span class="p">,</span> <span class="nx">v1</span><span class="p">.</span><span class="nx">Register</span><span class="p">)</span>
+    <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -896,10 +896,10 @@
 <span class="kn">package</span> <span class="nx">service</span>
 
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;shershon1991/gin-api-template/global&#34;</span>
-	<span class="s">&#34;shershon1991/gin-api-template/model/entity&#34;</span>
-	<span class="s">&#34;shershon1991/gin-api-template/model/request&#34;</span>
-	<span class="s">&#34;gorm.io/gorm&#34;</span>
+    <span class="s">&#34;shershon1991/gin-api-template/global&#34;</span>
+    <span class="s">&#34;shershon1991/gin-api-template/model/entity&#34;</span>
+    <span class="s">&#34;shershon1991/gin-api-template/model/request&#34;</span>
+    <span class="s">&#34;gorm.io/gorm&#34;</span>
 <span class="p">)</span>
 
 <span class="cm">/**
@@ -907,37 +907,37 @@
 </span><span class="cm"> * @param user
 </span><span class="cm"> */</span>
 <span class="kd">func</span> <span class="nf">LoginPwd</span><span class="p">(</span><span class="nx">user</span> <span class="o">*</span><span class="nx">entity</span><span class="p">.</span><span class="nx">User</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
-	<span class="c1">//校验账户和密码
-</span><span class="c1"></span>	<span class="nx">result</span> <span class="o">:=</span> <span class="nx">global</span><span class="p">.</span><span class="nx">GvaMysqlClient</span><span class="p">.</span><span class="nf">Where</span><span class="p">(</span><span class="s">&#34;phone=? and password=?&#34;</span><span class="p">,</span> <span class="nx">user</span><span class="p">.</span><span class="nx">Phone</span><span class="p">,</span> <span class="nx">user</span><span class="p">.</span><span class="nx">Password</span><span class="p">).</span>
-		<span class="nf">First</span><span class="p">(</span><span class="nx">user</span><span class="p">)</span>
-	<span class="k">return</span> <span class="nx">result</span><span class="p">.</span><span class="nx">Error</span>
+    <span class="c1">//校验账户和密码
+</span><span class="c1"></span>    <span class="nx">result</span> <span class="o">:=</span> <span class="nx">global</span><span class="p">.</span><span class="nx">GvaMysqlClient</span><span class="p">.</span><span class="nf">Where</span><span class="p">(</span><span class="s">&#34;phone=? and password=?&#34;</span><span class="p">,</span> <span class="nx">user</span><span class="p">.</span><span class="nx">Phone</span><span class="p">,</span> <span class="nx">user</span><span class="p">.</span><span class="nx">Password</span><span class="p">).</span>
+        <span class="nf">First</span><span class="p">(</span><span class="nx">user</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nx">result</span><span class="p">.</span><span class="nx">Error</span>
 <span class="p">}</span>
 
 <span class="c1">// 注册用户
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">Register</span><span class="p">(</span><span class="nx">param</span> <span class="nx">request</span><span class="p">.</span><span class="nx">RegisterParam</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="nx">entity</span><span class="p">.</span><span class="nx">User</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
-	<span class="nx">user</span> <span class="o">:=</span> <span class="nx">entity</span><span class="p">.</span><span class="nx">User</span><span class="p">{</span>
-		<span class="nx">NickName</span><span class="p">:</span> <span class="nx">param</span><span class="p">.</span><span class="nx">NickName</span><span class="p">,</span>
-		<span class="nx">Phone</span><span class="p">:</span>    <span class="nx">param</span><span class="p">.</span><span class="nx">Phone</span><span class="p">,</span>
-		<span class="nx">Password</span><span class="p">:</span> <span class="nx">param</span><span class="p">.</span><span class="nx">Password</span><span class="p">,</span>
-	<span class="p">}</span>
-	<span class="nx">_</span> <span class="p">=</span> <span class="nx">global</span><span class="p">.</span><span class="nx">GvaMysqlClient</span><span class="p">.</span><span class="nf">Transaction</span><span class="p">(</span><span class="kd">func</span><span class="p">(</span><span class="nx">tx</span> <span class="o">*</span><span class="nx">gorm</span><span class="p">.</span><span class="nx">DB</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
-		<span class="k">if</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">tx</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">user</span><span class="p">).</span><span class="nx">Error</span><span class="p">;</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-			<span class="nx">global</span><span class="p">.</span><span class="nx">GvaLogger</span><span class="p">.</span><span class="nf">Sugar</span><span class="p">().</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;新增用户失败: %s&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
-			<span class="k">return</span> <span class="nx">err</span>
-		<span class="p">}</span>
-		<span class="nx">userInfo</span> <span class="o">:=</span> <span class="nx">entity</span><span class="p">.</span><span class="nx">UserInfo</span><span class="p">{</span>
-			<span class="nx">Uid</span><span class="p">:</span>      <span class="nx">user</span><span class="p">.</span><span class="nx">ID</span><span class="p">,</span>
-			<span class="nx">Birthday</span><span class="p">:</span> <span class="nx">param</span><span class="p">.</span><span class="nx">Birthday</span><span class="p">,</span>
-			<span class="nx">Address</span><span class="p">:</span>  <span class="nx">param</span><span class="p">.</span><span class="nx">Address</span><span class="p">,</span>
-		<span class="p">}</span>
-		<span class="k">if</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">tx</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">userInfo</span><span class="p">).</span><span class="nx">Error</span><span class="p">;</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-			<span class="nx">global</span><span class="p">.</span><span class="nx">GvaLogger</span><span class="p">.</span><span class="nf">Sugar</span><span class="p">().</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;新增用户信息失败: %s&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
-			<span class="k">return</span> <span class="nx">err</span>
-		<span class="p">}</span>
-		<span class="nx">user</span><span class="p">.</span><span class="nx">UserInfo</span> <span class="p">=</span> <span class="nx">userInfo</span>
-		<span class="k">return</span> <span class="kc">nil</span>
-	<span class="p">})</span>
-	<span class="k">return</span> <span class="o">&amp;</span><span class="nx">user</span><span class="p">,</span> <span class="kc">nil</span>
+    <span class="nx">user</span> <span class="o">:=</span> <span class="nx">entity</span><span class="p">.</span><span class="nx">User</span><span class="p">{</span>
+        <span class="nx">NickName</span><span class="p">:</span> <span class="nx">param</span><span class="p">.</span><span class="nx">NickName</span><span class="p">,</span>
+        <span class="nx">Phone</span><span class="p">:</span>    <span class="nx">param</span><span class="p">.</span><span class="nx">Phone</span><span class="p">,</span>
+        <span class="nx">Password</span><span class="p">:</span> <span class="nx">param</span><span class="p">.</span><span class="nx">Password</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="nx">_</span> <span class="p">=</span> <span class="nx">global</span><span class="p">.</span><span class="nx">GvaMysqlClient</span><span class="p">.</span><span class="nf">Transaction</span><span class="p">(</span><span class="kd">func</span><span class="p">(</span><span class="nx">tx</span> <span class="o">*</span><span class="nx">gorm</span><span class="p">.</span><span class="nx">DB</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">tx</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">user</span><span class="p">).</span><span class="nx">Error</span><span class="p">;</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+            <span class="nx">global</span><span class="p">.</span><span class="nx">GvaLogger</span><span class="p">.</span><span class="nf">Sugar</span><span class="p">().</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;新增用户失败: %s&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nx">err</span>
+        <span class="p">}</span>
+        <span class="nx">userInfo</span> <span class="o">:=</span> <span class="nx">entity</span><span class="p">.</span><span class="nx">UserInfo</span><span class="p">{</span>
+            <span class="nx">Uid</span><span class="p">:</span>      <span class="nx">user</span><span class="p">.</span><span class="nx">ID</span><span class="p">,</span>
+            <span class="nx">Birthday</span><span class="p">:</span> <span class="nx">param</span><span class="p">.</span><span class="nx">Birthday</span><span class="p">,</span>
+            <span class="nx">Address</span><span class="p">:</span>  <span class="nx">param</span><span class="p">.</span><span class="nx">Address</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">tx</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">userInfo</span><span class="p">).</span><span class="nx">Error</span><span class="p">;</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+            <span class="nx">global</span><span class="p">.</span><span class="nx">GvaLogger</span><span class="p">.</span><span class="nf">Sugar</span><span class="p">().</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;新增用户信息失败: %s&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nx">err</span>
+        <span class="p">}</span>
+        <span class="nx">user</span><span class="p">.</span><span class="nx">UserInfo</span> <span class="p">=</span> <span class="nx">userInfo</span>
+        <span class="k">return</span> <span class="kc">nil</span>
+    <span class="p">})</span>
+    <span class="k">return</span> <span class="o">&amp;</span><span class="nx">user</span><span class="p">,</span> <span class="kc">nil</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -952,7 +952,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2023-03-16
+        2023-03-18
         
     </span>
   </p>
