@@ -44,11 +44,11 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/gin%E6%A1%86%E6%9E%B6/11-%E9%AA%8C%E8%AF%81%E5%99%A8validator/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-12-11T00:00:00+00:00" />
-<meta property="article:modified_time" content="2023-03-04T13:24:26+08:00" />
+<meta property="article:modified_time" content="2023-03-17T15:28:34+08:00" />
 
 <meta itemprop="name" content="Gin框架(十一):验证器(validator)">
 <meta itemprop="description" content="1.介绍 validator是一个开源的验证器包，可以快速校验输入信息是否符合自定规则。目前Star 7.8k,源码地址: https://github.com/go-playground/validator 1.1 安装 1 go get github.com/go-playground/validator 1.2 引用"><meta itemprop="datePublished" content="2021-12-11T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2023-03-04T13:24:26+08:00" />
+<meta itemprop="dateModified" content="2023-03-17T15:28:34+08:00" />
 <meta itemprop="wordCount" content="2918">
 <meta itemprop="keywords" content="Gin框架," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Gin框架(十一):验证器(validator)"/>
@@ -241,39 +241,39 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;fmt&#34;</span>
-	<span class="s">&#34;github.com/gin-gonic/gin&#34;</span>
-	<span class="s">&#34;github.com/go-playground/validator/v10&#34;</span>
+    <span class="s">&#34;fmt&#34;</span>
+    <span class="s">&#34;github.com/gin-gonic/gin&#34;</span>
+    <span class="s">&#34;github.com/go-playground/validator/v10&#34;</span>
 <span class="p">)</span>
 <span class="c1">// 定义一个添加用户参数结构体
 </span><span class="c1"></span><span class="kd">type</span> <span class="nx">AddUserPost</span> <span class="kd">struct</span> <span class="p">{</span>
-	<span class="nx">Name</span>  <span class="kt">string</span> <span class="s">`json:&#34;name&#34; validate:&#34;required&#34;`</span>        <span class="c1">//必填
-</span><span class="c1"></span>	<span class="nx">Email</span> <span class="kt">string</span> <span class="s">`json:&#34;email&#34; validate:&#34;required,email&#34;`</span> <span class="c1">// 必填，并且格式是email
-</span><span class="c1"></span>	<span class="nx">Age</span>   <span class="kt">uint8</span>    <span class="s">`json:&#34;age&#34; validate:&#34;gte=18,lte=30&#34;`</span> <span class="c1">// 年龄范围
+    <span class="nx">Name</span>  <span class="kt">string</span> <span class="s">`json:&#34;name&#34; validate:&#34;required&#34;`</span>        <span class="c1">//必填
+</span><span class="c1"></span>    <span class="nx">Email</span> <span class="kt">string</span> <span class="s">`json:&#34;email&#34; validate:&#34;required,email&#34;`</span> <span class="c1">// 必填，并且格式是email
+</span><span class="c1"></span>    <span class="nx">Age</span>   <span class="kt">uint8</span>    <span class="s">`json:&#34;age&#34; validate:&#34;gte=18,lte=30&#34;`</span> <span class="c1">// 年龄范围
 </span><span class="c1"></span><span class="p">}</span>
 <span class="c1">// 简单示例
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
-	<span class="nx">engine</span><span class="p">.</span><span class="nf">POST</span><span class="p">(</span><span class="s">&#34;/valid&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
-		<span class="kd">var</span> <span class="nx">adduserPost</span>  <span class="nx">AddUserPost</span>
-		<span class="c1">// 接收参数
-</span><span class="c1"></span>		<span class="nx">err</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">ShouldBindJSON</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">adduserPost</span><span class="p">)</span>
-		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-			<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span><span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;msg&#34;</span><span class="p">:</span><span class="nx">err</span><span class="p">})</span>
-			<span class="k">return</span>
-		<span class="p">}</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;adduserPost: %+v\n&#34;</span><span class="p">,</span><span class="nx">adduserPost</span><span class="p">)</span>
-		<span class="c1">// 使用Validate验证
-</span><span class="c1"></span>		<span class="nx">validate</span> <span class="o">:=</span> <span class="nx">validator</span><span class="p">.</span><span class="nf">New</span><span class="p">()</span>
-		<span class="nx">err</span> <span class="p">=</span> <span class="nx">validate</span><span class="p">.</span><span class="nf">Struct</span><span class="p">(</span><span class="nx">adduserPost</span><span class="p">)</span>
-		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-			<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span><span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;msg&#34;</span><span class="p">:</span><span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">()})</span>
-			<span class="k">return</span>
-		<span class="p">}</span>
-		<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;msg&#34;</span><span class="p">:</span><span class="s">&#34;success&#34;</span><span class="p">})</span>
-	<span class="p">})</span>
-	<span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
+    <span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
+    <span class="nx">engine</span><span class="p">.</span><span class="nf">POST</span><span class="p">(</span><span class="s">&#34;/valid&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">adduserPost</span>  <span class="nx">AddUserPost</span>
+        <span class="c1">// 接收参数
+</span><span class="c1"></span>        <span class="nx">err</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">ShouldBindJSON</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">adduserPost</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+            <span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span><span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;msg&#34;</span><span class="p">:</span><span class="nx">err</span><span class="p">})</span>
+            <span class="k">return</span>
+        <span class="p">}</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;adduserPost: %+v\n&#34;</span><span class="p">,</span><span class="nx">adduserPost</span><span class="p">)</span>
+        <span class="c1">// 使用Validate验证
+</span><span class="c1"></span>        <span class="nx">validate</span> <span class="o">:=</span> <span class="nx">validator</span><span class="p">.</span><span class="nf">New</span><span class="p">()</span>
+        <span class="nx">err</span> <span class="p">=</span> <span class="nx">validate</span><span class="p">.</span><span class="nf">Struct</span><span class="p">(</span><span class="nx">adduserPost</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+            <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+            <span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span><span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;msg&#34;</span><span class="p">:</span><span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">()})</span>
+            <span class="k">return</span>
+        <span class="p">}</span>
+        <span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;msg&#34;</span><span class="p">:</span><span class="s">&#34;success&#34;</span><span class="p">})</span>
+    <span class="p">})</span>
+    <span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -357,50 +357,50 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;github.com/gin-gonic/gin&#34;</span>
-	<span class="s">&#34;github.com/go-playground/locales/zh&#34;</span>
-	<span class="nx">ut</span> <span class="s">&#34;github.com/go-playground/universal-translator&#34;</span>
-	<span class="s">&#34;github.com/go-playground/validator/v10&#34;</span>
-	<span class="nx">zhs</span> <span class="s">&#34;github.com/go-playground/validator/v10/translations/zh&#34;</span>
+    <span class="s">&#34;github.com/gin-gonic/gin&#34;</span>
+    <span class="s">&#34;github.com/go-playground/locales/zh&#34;</span>
+    <span class="nx">ut</span> <span class="s">&#34;github.com/go-playground/universal-translator&#34;</span>
+    <span class="s">&#34;github.com/go-playground/validator/v10&#34;</span>
+    <span class="nx">zhs</span> <span class="s">&#34;github.com/go-playground/validator/v10/translations/zh&#34;</span>
 <span class="p">)</span>
 <span class="kd">var</span> <span class="p">(</span>
-	<span class="nx">validate</span> <span class="p">=</span> <span class="nx">validator</span><span class="p">.</span><span class="nf">New</span><span class="p">()</span>          <span class="c1">// 实例化验证器
-</span><span class="c1"></span>	<span class="nx">chinese</span>  <span class="p">=</span> <span class="nx">zh</span><span class="p">.</span><span class="nf">New</span><span class="p">()</span>                 <span class="c1">// 获取中文翻译器
-</span><span class="c1"></span>	<span class="nx">uni</span>      <span class="p">=</span> <span class="nx">ut</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="nx">chinese</span><span class="p">,</span> <span class="nx">chinese</span><span class="p">)</span> <span class="c1">// 设置成中文翻译器
-</span><span class="c1"></span>	<span class="nx">trans</span><span class="p">,</span> <span class="nx">_</span> <span class="p">=</span> <span class="nx">uni</span><span class="p">.</span><span class="nf">GetTranslator</span><span class="p">(</span><span class="s">&#34;zh&#34;</span><span class="p">)</span>  <span class="c1">// 获取翻译字典
+    <span class="nx">validate</span> <span class="p">=</span> <span class="nx">validator</span><span class="p">.</span><span class="nf">New</span><span class="p">()</span>          <span class="c1">// 实例化验证器
+</span><span class="c1"></span>    <span class="nx">chinese</span>  <span class="p">=</span> <span class="nx">zh</span><span class="p">.</span><span class="nf">New</span><span class="p">()</span>                 <span class="c1">// 获取中文翻译器
+</span><span class="c1"></span>    <span class="nx">uni</span>      <span class="p">=</span> <span class="nx">ut</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="nx">chinese</span><span class="p">,</span> <span class="nx">chinese</span><span class="p">)</span> <span class="c1">// 设置成中文翻译器
+</span><span class="c1"></span>    <span class="nx">trans</span><span class="p">,</span> <span class="nx">_</span> <span class="p">=</span> <span class="nx">uni</span><span class="p">.</span><span class="nf">GetTranslator</span><span class="p">(</span><span class="s">&#34;zh&#34;</span><span class="p">)</span>  <span class="c1">// 获取翻译字典
 </span><span class="c1"></span><span class="p">)</span>
 <span class="kd">type</span> <span class="nx">User</span> <span class="kd">struct</span> <span class="p">{</span>
-	<span class="nx">Name</span>  <span class="kt">string</span> <span class="s">`form:&#34;name&#34; validate:&#34;required,min=3,max=5&#34;`</span>
-	<span class="nx">Email</span> <span class="kt">string</span> <span class="s">`form:&#34;email&#34; validate:&#34;email&#34;`</span>
-	<span class="nx">Age</span>   <span class="kt">int8</span>   <span class="s">`form:&#34;age&#34; validate:&#34;gte=18,lte=20&#34;`</span>
+    <span class="nx">Name</span>  <span class="kt">string</span> <span class="s">`form:&#34;name&#34; validate:&#34;required,min=3,max=5&#34;`</span>
+    <span class="nx">Email</span> <span class="kt">string</span> <span class="s">`form:&#34;email&#34; validate:&#34;email&#34;`</span>
+    <span class="nx">Age</span>   <span class="kt">int8</span>   <span class="s">`form:&#34;age&#34; validate:&#34;gte=18,lte=20&#34;`</span>
 <span class="p">}</span>
 
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
-	<span class="nx">engine</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/language&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
-		<span class="kd">var</span> <span class="nx">user</span> <span class="nx">User</span>
-		<span class="nx">err</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">ShouldBindQuery</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">user</span><span class="p">)</span>
-		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-			<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;msg&#34;</span><span class="p">:</span> <span class="nx">err</span><span class="p">})</span>
-			<span class="k">return</span>
-		<span class="p">}</span>
-		<span class="c1">// 注册翻译器
-</span><span class="c1"></span>		<span class="nx">_</span> <span class="p">=</span> <span class="nx">zhs</span><span class="p">.</span><span class="nf">RegisterDefaultTranslations</span><span class="p">(</span><span class="nx">validate</span><span class="p">,</span> <span class="nx">trans</span><span class="p">)</span>
-		<span class="c1">// 使用验证器验证
-</span><span class="c1"></span>		<span class="nx">err</span> <span class="p">=</span> <span class="nx">validate</span><span class="p">.</span><span class="nf">Struct</span><span class="p">(</span><span class="nx">user</span><span class="p">)</span>
-		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-			<span class="k">if</span> <span class="nx">errors</span><span class="p">,</span> <span class="nx">ok</span> <span class="o">:=</span> <span class="nx">err</span><span class="p">.(</span><span class="nx">validator</span><span class="p">.</span><span class="nx">ValidationErrors</span><span class="p">);</span> <span class="nx">ok</span> <span class="p">{</span>
-				<span class="c1">// 翻译，并返回
-</span><span class="c1"></span>				<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span>
-					<span class="s">&#34;翻译前&#34;</span><span class="p">:</span> <span class="nx">errors</span><span class="p">.</span><span class="nf">Error</span><span class="p">(),</span>
-					<span class="s">&#34;翻译后&#34;</span><span class="p">:</span> <span class="nx">errors</span><span class="p">.</span><span class="nf">Translate</span><span class="p">(</span><span class="nx">trans</span><span class="p">),</span>
-				<span class="p">})</span>
-				<span class="k">return</span>
-			<span class="p">}</span>
-		<span class="p">}</span>
-		<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;msg&#34;</span><span class="p">:</span><span class="s">&#34;success&#34;</span><span class="p">})</span>
-	<span class="p">})</span>
-	<span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
+    <span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
+    <span class="nx">engine</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/language&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">user</span> <span class="nx">User</span>
+        <span class="nx">err</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">ShouldBindQuery</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">user</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+            <span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;msg&#34;</span><span class="p">:</span> <span class="nx">err</span><span class="p">})</span>
+            <span class="k">return</span>
+        <span class="p">}</span>
+        <span class="c1">// 注册翻译器
+</span><span class="c1"></span>        <span class="nx">_</span> <span class="p">=</span> <span class="nx">zhs</span><span class="p">.</span><span class="nf">RegisterDefaultTranslations</span><span class="p">(</span><span class="nx">validate</span><span class="p">,</span> <span class="nx">trans</span><span class="p">)</span>
+        <span class="c1">// 使用验证器验证
+</span><span class="c1"></span>        <span class="nx">err</span> <span class="p">=</span> <span class="nx">validate</span><span class="p">.</span><span class="nf">Struct</span><span class="p">(</span><span class="nx">user</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="nx">errors</span><span class="p">,</span> <span class="nx">ok</span> <span class="o">:=</span> <span class="nx">err</span><span class="p">.(</span><span class="nx">validator</span><span class="p">.</span><span class="nx">ValidationErrors</span><span class="p">);</span> <span class="nx">ok</span> <span class="p">{</span>
+                <span class="c1">// 翻译，并返回
+</span><span class="c1"></span>                <span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span>
+                    <span class="s">&#34;翻译前&#34;</span><span class="p">:</span> <span class="nx">errors</span><span class="p">.</span><span class="nf">Error</span><span class="p">(),</span>
+                    <span class="s">&#34;翻译后&#34;</span><span class="p">:</span> <span class="nx">errors</span><span class="p">.</span><span class="nf">Translate</span><span class="p">(</span><span class="nx">trans</span><span class="p">),</span>
+                <span class="p">})</span>
+                <span class="k">return</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;msg&#34;</span><span class="p">:</span><span class="s">&#34;success&#34;</span><span class="p">})</span>
+    <span class="p">})</span>
+    <span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -520,27 +520,27 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;fmt&#34;</span>
-	<span class="s">&#34;github.com/go-playground/validator/v10&#34;</span>
+    <span class="s">&#34;fmt&#34;</span>
+    <span class="s">&#34;github.com/go-playground/validator/v10&#34;</span>
 <span class="p">)</span>
 <span class="c1">// 验证pre
 </span><span class="c1"></span><span class="kd">type</span> <span class="nx">CustomParam</span> <span class="kd">struct</span> <span class="p">{</span>
-	<span class="nx">Pre</span> <span class="kt">string</span> <span class="s">`validate:&#34;pre=go_&#34;`</span>
+    <span class="nx">Pre</span> <span class="kt">string</span> <span class="s">`validate:&#34;pre=go_&#34;`</span>
 <span class="p">}</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span>  <span class="p">{</span>
-	<span class="c1">// 实例化验证器
-</span><span class="c1"></span>	<span class="nx">validate</span> <span class="p">=</span> <span class="nx">validator</span><span class="p">.</span><span class="nf">New</span><span class="p">()</span>
-	<span class="c1">// 注册自定义标签
-</span><span class="c1"></span>	<span class="nx">_</span> <span class="p">=</span> <span class="nx">validate</span><span class="p">.</span><span class="nf">RegisterValidation</span><span class="p">(</span><span class="s">&#34;pre&#34;</span><span class="p">,</span> <span class="nx">ValidatePre</span><span class="p">)</span>
-	<span class="nx">cusParam</span> <span class="o">:=</span> <span class="nx">CustomParam</span><span class="p">{</span>
-		<span class="nx">Pre</span><span class="p">:</span> <span class="s">&#34;php_&#34;</span><span class="p">,</span>
-	<span class="p">}</span>
-	<span class="nx">err</span> <span class="o">:=</span> <span class="nx">validate</span><span class="p">.</span><span class="nf">Struct</span><span class="p">(</span><span class="nx">cusParam</span><span class="p">)</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+    <span class="c1">// 实例化验证器
+</span><span class="c1"></span>    <span class="nx">validate</span> <span class="p">=</span> <span class="nx">validator</span><span class="p">.</span><span class="nf">New</span><span class="p">()</span>
+    <span class="c1">// 注册自定义标签
+</span><span class="c1"></span>    <span class="nx">_</span> <span class="p">=</span> <span class="nx">validate</span><span class="p">.</span><span class="nf">RegisterValidation</span><span class="p">(</span><span class="s">&#34;pre&#34;</span><span class="p">,</span> <span class="nx">ValidatePre</span><span class="p">)</span>
+    <span class="nx">cusParam</span> <span class="o">:=</span> <span class="nx">CustomParam</span><span class="p">{</span>
+        <span class="nx">Pre</span><span class="p">:</span> <span class="s">&#34;php_&#34;</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="nx">err</span> <span class="o">:=</span> <span class="nx">validate</span><span class="p">.</span><span class="nf">Struct</span><span class="p">(</span><span class="nx">cusParam</span><span class="p">)</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
 <span class="p">}</span>
 <span class="c1">// 自定义验证规则
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">ValidatePre</span><span class="p">(</span><span class="nx">fl</span> <span class="nx">validator</span><span class="p">.</span><span class="nx">FieldLevel</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
-	<span class="k">return</span> <span class="nx">fl</span><span class="p">.</span><span class="nf">Field</span><span class="p">().</span><span class="nf">String</span><span class="p">()</span> <span class="o">==</span> <span class="s">&#34;go_&#34;</span>
+    <span class="k">return</span> <span class="nx">fl</span><span class="p">.</span><span class="nf">Field</span><span class="p">().</span><span class="nf">String</span><span class="p">()</span> <span class="o">==</span> <span class="s">&#34;go_&#34;</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -606,48 +606,48 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;github.com/gin-gonic/gin&#34;</span>
-	<span class="s">&#34;github.com/gin-gonic/gin/binding&#34;</span>
-	<span class="s">&#34;github.com/go-playground/validator/v10&#34;</span>
-	<span class="s">&#34;net/http&#34;</span>
-	<span class="s">&#34;time&#34;</span>
+    <span class="s">&#34;github.com/gin-gonic/gin&#34;</span>
+    <span class="s">&#34;github.com/gin-gonic/gin/binding&#34;</span>
+    <span class="s">&#34;github.com/go-playground/validator/v10&#34;</span>
+    <span class="s">&#34;net/http&#34;</span>
+    <span class="s">&#34;time&#34;</span>
 <span class="p">)</span>
 <span class="c1">// 定义结构体
 </span><span class="c1"></span><span class="kd">type</span> <span class="nx">User</span> <span class="kd">struct</span> <span class="p">{</span>
-	<span class="nx">Name</span> <span class="kt">string</span> <span class="s">`form:&#34;name&#34; binding:&#34;required,min=3,max=5&#34; `</span>
-	<span class="nx">BirthDate</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Time</span> <span class="s">`form:&#34;date&#34; binding:&#34;required,birth&#34; time_format:&#34;2006-01-02&#34;`</span>
+    <span class="nx">Name</span> <span class="kt">string</span> <span class="s">`form:&#34;name&#34; binding:&#34;required,min=3,max=5&#34; `</span>
+    <span class="nx">BirthDate</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Time</span> <span class="s">`form:&#34;date&#34; binding:&#34;required,birth&#34; time_format:&#34;2006-01-02&#34;`</span>
 <span class="p">}</span>
 
 <span class="c1">// 运行程序
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span>  <span class="p">{</span>
-	<span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
-  <span class="c1">// 注册自定义验证标签:birth
-</span><span class="c1"></span>	<span class="k">if</span> <span class="nx">validate</span><span class="p">,</span><span class="nx">ok</span>  <span class="o">:=</span> <span class="nx">binding</span><span class="p">.</span><span class="nx">Validator</span><span class="p">.</span><span class="nf">Engine</span><span class="p">().(</span><span class="o">*</span><span class="nx">validator</span><span class="p">.</span><span class="nx">Validate</span><span class="p">);</span><span class="nx">ok</span> <span class="p">{</span>
-		<span class="nx">_</span> <span class="p">=</span> <span class="nx">validate</span><span class="p">.</span><span class="nf">RegisterValidation</span><span class="p">(</span><span class="s">&#34;birth&#34;</span><span class="p">,</span><span class="nx">checkBirthDate</span><span class="p">)</span>
-	<span class="p">}</span>
-  <span class="c1">// 接收请求
-</span><span class="c1"></span>	<span class="nx">engine</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/valid&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
-		<span class="kd">var</span> <span class="nx">user</span> <span class="nx">User</span>
-    <span class="c1">// 集成验证
-</span><span class="c1"></span>		<span class="nx">err</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">ShouldBindQuery</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">user</span><span class="p">)</span>
-		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-			<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusBadRequest</span><span class="p">,</span><span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;error&#34;</span><span class="p">:</span><span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">()})</span>
-			<span class="k">return</span>
-		<span class="p">}</span>
-		<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusOK</span><span class="p">,</span><span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;msg&#34;</span><span class="p">:</span><span class="s">&#34;success&#34;</span><span class="p">})</span>
-	<span class="p">})</span>
-	<span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
+    <span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
+    <span class="c1">// 注册自定义验证标签:birth
+</span><span class="c1"></span>    <span class="k">if</span> <span class="nx">validate</span><span class="p">,</span><span class="nx">ok</span>  <span class="o">:=</span> <span class="nx">binding</span><span class="p">.</span><span class="nx">Validator</span><span class="p">.</span><span class="nf">Engine</span><span class="p">().(</span><span class="o">*</span><span class="nx">validator</span><span class="p">.</span><span class="nx">Validate</span><span class="p">);</span><span class="nx">ok</span> <span class="p">{</span>
+        <span class="nx">_</span> <span class="p">=</span> <span class="nx">validate</span><span class="p">.</span><span class="nf">RegisterValidation</span><span class="p">(</span><span class="s">&#34;birth&#34;</span><span class="p">,</span><span class="nx">checkBirthDate</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="c1">// 接收请求
+</span><span class="c1"></span>    <span class="nx">engine</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/valid&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">user</span> <span class="nx">User</span>
+        <span class="c1">// 集成验证
+</span><span class="c1"></span>        <span class="nx">err</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">ShouldBindQuery</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">user</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+            <span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusBadRequest</span><span class="p">,</span><span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;error&#34;</span><span class="p">:</span><span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">()})</span>
+            <span class="k">return</span>
+        <span class="p">}</span>
+        <span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusOK</span><span class="p">,</span><span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;msg&#34;</span><span class="p">:</span><span class="s">&#34;success&#34;</span><span class="p">})</span>
+    <span class="p">})</span>
+    <span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
 <span class="p">}</span>
 <span class="c1">// 检测生日
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">checkBirthDate</span><span class="p">(</span><span class="nx">fl</span> <span class="nx">validator</span><span class="p">.</span><span class="nx">FieldLevel</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
-	<span class="nx">t</span><span class="p">,</span><span class="nx">ok</span> <span class="o">:=</span> <span class="nx">fl</span><span class="p">.</span><span class="nf">Field</span><span class="p">().</span><span class="nf">Interface</span><span class="p">().(</span><span class="nx">time</span><span class="p">.</span><span class="nx">Time</span><span class="p">)</span>
-	<span class="k">if</span> <span class="nx">ok</span> <span class="p">{</span>
-		<span class="c1">// 当前时间应该大于生日时间
-</span><span class="c1"></span>		<span class="k">if</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">After</span><span class="p">(</span><span class="nx">t</span><span class="p">)</span> <span class="p">{</span>
-			<span class="k">return</span> <span class="kc">true</span>
-		<span class="p">}</span>
-	<span class="p">}</span>
-	<span class="k">return</span> <span class="kc">false</span>
+    <span class="nx">t</span><span class="p">,</span><span class="nx">ok</span> <span class="o">:=</span> <span class="nx">fl</span><span class="p">.</span><span class="nf">Field</span><span class="p">().</span><span class="nf">Interface</span><span class="p">().(</span><span class="nx">time</span><span class="p">.</span><span class="nx">Time</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nx">ok</span> <span class="p">{</span>
+        <span class="c1">// 当前时间应该大于生日时间
+</span><span class="c1"></span>        <span class="k">if</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">After</span><span class="p">(</span><span class="nx">t</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="kc">true</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="kc">false</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -697,19 +697,19 @@
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="o">...</span><span class="p">.</span>	
- <span class="c1">// 注册一个获取json tag的自定义方法
-</span><span class="c1"></span>	<span class="nx">validate</span><span class="p">.</span><span class="nf">RegisterTagNameFunc</span><span class="p">(</span><span class="kd">func</span><span class="p">(</span><span class="nx">field</span> <span class="nx">reflect</span><span class="p">.</span><span class="nx">StructField</span><span class="p">)</span> <span class="kt">string</span> <span class="p">{</span>
-		<span class="nx">splitN</span> <span class="o">:=</span> <span class="nx">strings</span><span class="p">.</span><span class="nf">SplitN</span><span class="p">(</span><span class="nx">field</span><span class="p">.</span><span class="nx">Tag</span><span class="p">.</span><span class="nf">Get</span><span class="p">(</span><span class="s">&#34;json&#34;</span><span class="p">),</span> <span class="s">&#34;,&#34;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">splitN</span><span class="p">)</span>
-		<span class="nx">n</span> <span class="o">:=</span> <span class="nx">splitN</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-		<span class="k">if</span> <span class="nx">n</span> <span class="o">==</span> <span class="s">&#34;-&#34;</span> <span class="p">{</span>
-			<span class="k">return</span> <span class="s">&#34;&#34;</span>
-		<span class="p">}</span>
-		<span class="k">return</span> <span class="nx">n</span>
-	<span class="p">})</span>
-	<span class="nx">err</span> <span class="o">:=</span> <span class="nx">validate</span><span class="p">.</span><span class="nf">Struct</span><span class="p">(</span><span class="nx">s</span><span class="p">)</span>
+<span class="c1">// 注册一个获取json tag的自定义方法
+</span><span class="c1"></span><span class="nx">validate</span><span class="p">.</span><span class="nf">RegisterTagNameFunc</span><span class="p">(</span><span class="kd">func</span><span class="p">(</span><span class="nx">field</span> <span class="nx">reflect</span><span class="p">.</span><span class="nx">StructField</span><span class="p">)</span> <span class="kt">string</span> <span class="p">{</span>
+    <span class="nx">splitN</span> <span class="o">:=</span> <span class="nx">strings</span><span class="p">.</span><span class="nf">SplitN</span><span class="p">(</span><span class="nx">field</span><span class="p">.</span><span class="nx">Tag</span><span class="p">.</span><span class="nf">Get</span><span class="p">(</span><span class="s">&#34;json&#34;</span><span class="p">),</span> <span class="s">&#34;,&#34;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">splitN</span><span class="p">)</span>
+    <span class="nx">n</span> <span class="o">:=</span> <span class="nx">splitN</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nx">n</span> <span class="o">==</span> <span class="s">&#34;-&#34;</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="s">&#34;&#34;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">n</span>
+<span class="p">})</span>
+<span class="nx">err</span> <span class="o">:=</span> <span class="nx">validate</span><span class="p">.</span><span class="nf">Struct</span><span class="p">(</span><span class="nx">s</span><span class="p">)</span>
 <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-  <span class="o">...</span><span class="p">.</span>
+    <span class="o">...</span><span class="p">.</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -1036,7 +1036,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2023-03-04
+        2023-03-17
         
     </span>
   </p>

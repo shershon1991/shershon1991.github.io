@@ -44,11 +44,11 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/gin%E6%A1%86%E6%9E%B6/10-%E6%97%A5%E5%BF%97%E4%BD%BF%E7%94%A8logrus&#43;lumberjack/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-12-10T00:00:00+00:00" />
-<meta property="article:modified_time" content="2023-03-04T13:24:26+08:00" />
+<meta property="article:modified_time" content="2023-03-17T14:05:13+08:00" />
 
 <meta itemprop="name" content="Gin框架(十):日志使用(logrus&#43;lumberjack)">
 <meta itemprop="description" content="1.框架自带 gin框架自带日志记录功能,通过fmt.Fprint和fmt.Fprintf来记录日志信息，默认是将日志写到终端,可以通过gin"><meta itemprop="datePublished" content="2021-12-10T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2023-03-04T13:24:26+08:00" />
+<meta itemprop="dateModified" content="2023-03-17T14:05:13+08:00" />
 <meta itemprop="wordCount" content="2236">
 <meta itemprop="keywords" content="Gin框架," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Gin框架(十):日志使用(logrus&#43;lumberjack)"/>
@@ -215,23 +215,23 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 日志记录使用
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span>  <span class="p">{</span>
-  <span class="c1">// 禁用控制台颜色，将日志写入文件时不需要控制台颜色
-</span><span class="c1"></span>	<span class="nx">gin</span><span class="p">.</span><span class="nf">DisableConsoleColor</span><span class="p">()</span>
-	<span class="c1">// 记录到指定文件
-</span><span class="c1"></span>	<span class="nx">f</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="s">&#34;gin.log&#34;</span><span class="p">)</span>
-	<span class="nx">gin</span><span class="p">.</span><span class="nx">DefaultWriter</span> <span class="p">=</span> <span class="nx">io</span><span class="p">.</span><span class="nf">MultiWriter</span><span class="p">(</span><span class="nx">f</span><span class="p">)</span>
-	<span class="c1">// 创建容器
-</span><span class="c1"></span>	<span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
-	<span class="nx">engine</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/log&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
-		<span class="c1">// 记录日志
-</span><span class="c1"></span>		<span class="nx">_</span><span class="p">,</span> <span class="nx">_</span> <span class="p">=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintf</span><span class="p">(</span><span class="nx">gin</span><span class="p">.</span><span class="nx">DefaultWriter</span><span class="p">,</span> <span class="s">&#34;[gin-log] 日志测试使用 \n&#34;</span><span class="p">)</span>
-		<span class="nx">_</span><span class="p">,</span> <span class="nx">_</span> <span class="p">=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintf</span><span class="p">(</span><span class="nx">gin</span><span class="p">.</span><span class="nx">DefaultWriter</span><span class="p">,</span> <span class="s">&#34;[gin-log] Method: %v \n&#34;</span><span class="p">,</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Request</span><span class="p">.</span><span class="nx">Method</span><span class="p">)</span>
-		<span class="nx">_</span><span class="p">,</span> <span class="nx">_</span> <span class="p">=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintf</span><span class="p">(</span><span class="nx">gin</span><span class="p">.</span><span class="nx">DefaultWriter</span><span class="p">,</span> <span class="s">&#34;[gin-log] Url: %v \n&#34;</span><span class="p">,</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Request</span><span class="p">.</span><span class="nx">URL</span><span class="p">)</span>
-		<span class="nx">_</span><span class="p">,</span> <span class="nx">_</span> <span class="p">=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintf</span><span class="p">(</span><span class="nx">gin</span><span class="p">.</span><span class="nx">DefaultWriter</span><span class="p">,</span> <span class="s">&#34;[gin-log] Header: %v \n&#34;</span><span class="p">,</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Request</span><span class="p">.</span><span class="nx">Header</span><span class="p">)</span>
-		<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;msg&#34;</span><span class="p">:</span> <span class="s">&#34;success&#34;</span><span class="p">})</span>
-	<span class="p">})</span>
-	<span class="c1">// 启动服务
-</span><span class="c1"></span>	<span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
+    <span class="c1">// 禁用控制台颜色，将日志写入文件时不需要控制台颜色
+</span><span class="c1"></span>    <span class="nx">gin</span><span class="p">.</span><span class="nf">DisableConsoleColor</span><span class="p">()</span>
+    <span class="c1">// 记录到指定文件
+</span><span class="c1"></span>    <span class="nx">f</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="s">&#34;gin.log&#34;</span><span class="p">)</span>
+    <span class="nx">gin</span><span class="p">.</span><span class="nx">DefaultWriter</span> <span class="p">=</span> <span class="nx">io</span><span class="p">.</span><span class="nf">MultiWriter</span><span class="p">(</span><span class="nx">f</span><span class="p">)</span>
+    <span class="c1">// 创建容器
+</span><span class="c1"></span>    <span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
+    <span class="nx">engine</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/log&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// 记录日志
+</span><span class="c1"></span>        <span class="nx">_</span><span class="p">,</span> <span class="nx">_</span> <span class="p">=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintf</span><span class="p">(</span><span class="nx">gin</span><span class="p">.</span><span class="nx">DefaultWriter</span><span class="p">,</span> <span class="s">&#34;[gin-log] 日志测试使用 \n&#34;</span><span class="p">)</span>
+        <span class="nx">_</span><span class="p">,</span> <span class="nx">_</span> <span class="p">=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintf</span><span class="p">(</span><span class="nx">gin</span><span class="p">.</span><span class="nx">DefaultWriter</span><span class="p">,</span> <span class="s">&#34;[gin-log] Method: %v \n&#34;</span><span class="p">,</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Request</span><span class="p">.</span><span class="nx">Method</span><span class="p">)</span>
+        <span class="nx">_</span><span class="p">,</span> <span class="nx">_</span> <span class="p">=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintf</span><span class="p">(</span><span class="nx">gin</span><span class="p">.</span><span class="nx">DefaultWriter</span><span class="p">,</span> <span class="s">&#34;[gin-log] Url: %v \n&#34;</span><span class="p">,</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Request</span><span class="p">.</span><span class="nx">URL</span><span class="p">)</span>
+        <span class="nx">_</span><span class="p">,</span> <span class="nx">_</span> <span class="p">=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintf</span><span class="p">(</span><span class="nx">gin</span><span class="p">.</span><span class="nx">DefaultWriter</span><span class="p">,</span> <span class="s">&#34;[gin-log] Header: %v \n&#34;</span><span class="p">,</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Request</span><span class="p">.</span><span class="nx">Header</span><span class="p">)</span>
+        <span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;msg&#34;</span><span class="p">:</span> <span class="s">&#34;success&#34;</span><span class="p">})</span>
+    <span class="p">})</span>
+    <span class="c1">// 启动服务
+</span><span class="c1"></span>    <span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -290,13 +290,13 @@
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span>  <span class="p">{</span>
-  <span class="o">...</span>
-	<span class="nx">f</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="s">&#34;gin.log&#34;</span><span class="p">)</span>
-  	<span class="c1">// 同时将日志写入文件和控制台
-</span><span class="c1"></span>	<span class="nx">gin</span><span class="p">.</span><span class="nx">DefaultWriter</span> <span class="p">=</span> <span class="nx">io</span><span class="p">.</span><span class="nf">MultiWriter</span><span class="p">(</span><span class="nx">f</span><span class="p">,</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stdout</span><span class="p">)</span>
-	<span class="o">...</span>
-	<span class="c1">// 启动服务
-</span><span class="c1"></span>	<span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
+    <span class="o">...</span>
+    <span class="nx">f</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="s">&#34;gin.log&#34;</span><span class="p">)</span>
+    <span class="c1">// 同时将日志写入文件和控制台
+</span><span class="c1"></span>    <span class="nx">gin</span><span class="p">.</span><span class="nx">DefaultWriter</span> <span class="p">=</span> <span class="nx">io</span><span class="p">.</span><span class="nf">MultiWriter</span><span class="p">(</span><span class="nx">f</span><span class="p">,</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stdout</span><span class="p">)</span>
+    <span class="o">...</span>
+    <span class="c1">// 启动服务
+</span><span class="c1"></span>    <span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -344,28 +344,28 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;github.com/sirupsen/logrus&#34;</span>
-	<span class="s">&#34;os&#34;</span>
-	<span class="s">&#34;path&#34;</span>
+    <span class="s">&#34;github.com/sirupsen/logrus&#34;</span>
+    <span class="s">&#34;os&#34;</span>
+    <span class="s">&#34;path&#34;</span>
 <span class="p">)</span>
 <span class="kd">var</span> <span class="p">(</span>
-	<span class="nx">logPath</span> <span class="p">=</span> <span class="s">&#34;./log&#34;</span>
-	<span class="nx">logFile</span> <span class="p">=</span> <span class="s">&#34;gin.log&#34;</span>
+    <span class="nx">logPath</span> <span class="p">=</span> <span class="s">&#34;./log&#34;</span>
+    <span class="nx">logFile</span> <span class="p">=</span> <span class="s">&#34;gin.log&#34;</span>
 <span class="p">)</span>
 <span class="kd">var</span> <span class="nx">LogInstance</span> <span class="p">=</span> <span class="nx">logrus</span><span class="p">.</span><span class="nf">New</span><span class="p">()</span>
 <span class="kd">func</span> <span class="nf">init</span><span class="p">()</span>  <span class="p">{</span>
-	<span class="c1">// 打开文件
-</span><span class="c1"></span>	<span class="nx">logFileName</span> <span class="o">:=</span> <span class="nx">path</span><span class="p">.</span><span class="nf">Join</span><span class="p">(</span><span class="nx">logPath</span><span class="p">,</span> <span class="nx">logFile</span><span class="p">)</span>
-	<span class="nx">fileWriter</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nf">OpenFile</span><span class="p">(</span><span class="nx">logFileName</span><span class="p">,</span> <span class="nx">os</span><span class="p">.</span><span class="nx">O_APPEND</span><span class="p">|</span><span class="nx">os</span><span class="p">.</span><span class="nx">O_WRONLY</span><span class="p">|</span><span class="nx">os</span><span class="p">.</span><span class="nx">O_CREATE</span><span class="p">,</span> <span class="nx">os</span><span class="p">.</span><span class="nx">ModePerm</span><span class="p">)</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="nb">panic</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-	<span class="p">}</span>
-	<span class="c1">// 设置日志输出到文件
-</span><span class="c1"></span>	<span class="nx">LogInstance</span><span class="p">.</span><span class="nf">SetOutput</span><span class="p">(</span><span class="nx">fileWriter</span><span class="p">)</span>
-	<span class="c1">// 设置日志输出格式
-</span><span class="c1"></span>	<span class="nx">LogInstance</span><span class="p">.</span><span class="nf">SetFormatter</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">logrus</span><span class="p">.</span><span class="nx">JSONFormatter</span><span class="p">{})</span>
-	<span class="c1">// 设置日志记录级别
-</span><span class="c1"></span>	<span class="nx">LogInstance</span><span class="p">.</span><span class="nf">SetLevel</span><span class="p">(</span><span class="nx">logrus</span><span class="p">.</span><span class="nx">DebugLevel</span><span class="p">)</span>
+    <span class="c1">// 打开文件
+</span><span class="c1"></span>    <span class="nx">logFileName</span> <span class="o">:=</span> <span class="nx">path</span><span class="p">.</span><span class="nf">Join</span><span class="p">(</span><span class="nx">logPath</span><span class="p">,</span> <span class="nx">logFile</span><span class="p">)</span>
+    <span class="nx">fileWriter</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nf">OpenFile</span><span class="p">(</span><span class="nx">logFileName</span><span class="p">,</span> <span class="nx">os</span><span class="p">.</span><span class="nx">O_APPEND</span><span class="p">|</span><span class="nx">os</span><span class="p">.</span><span class="nx">O_WRONLY</span><span class="p">|</span><span class="nx">os</span><span class="p">.</span><span class="nx">O_CREATE</span><span class="p">,</span> <span class="nx">os</span><span class="p">.</span><span class="nx">ModePerm</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="nb">panic</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="c1">// 设置日志输出到文件
+</span><span class="c1"></span>    <span class="nx">LogInstance</span><span class="p">.</span><span class="nf">SetOutput</span><span class="p">(</span><span class="nx">fileWriter</span><span class="p">)</span>
+    <span class="c1">// 设置日志输出格式
+</span><span class="c1"></span>    <span class="nx">LogInstance</span><span class="p">.</span><span class="nf">SetFormatter</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">logrus</span><span class="p">.</span><span class="nx">JSONFormatter</span><span class="p">{})</span>
+    <span class="c1">// 设置日志记录级别
+</span><span class="c1"></span>    <span class="nx">LogInstance</span><span class="p">.</span><span class="nf">SetLevel</span><span class="p">(</span><span class="nx">logrus</span><span class="p">.</span><span class="nx">DebugLevel</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -411,38 +411,38 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;github.com/gin-gonic/gin&#34;</span>
-	<span class="s">&#34;github.com/sirupsen/logrus&#34;</span>
+    <span class="s">&#34;github.com/gin-gonic/gin&#34;</span>
+    <span class="s">&#34;github.com/sirupsen/logrus&#34;</span>
 <span class="p">)</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
-	<span class="nx">engine</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/log&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
-		<span class="c1">// Warning级别日志
-</span><span class="c1"></span>		<span class="nx">LogInstance</span><span class="p">.</span><span class="nf">WithFields</span><span class="p">(</span><span class="nx">logrus</span><span class="p">.</span><span class="nx">Fields</span><span class="p">{</span>
-			<span class="s">&#34;Method&#34;</span><span class="p">:</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Request</span><span class="p">.</span><span class="nx">Method</span><span class="p">,</span>
-		<span class="p">}).</span><span class="nf">Warning</span><span class="p">(</span><span class="s">&#34;Warning级别日志&#34;</span><span class="p">)</span>
-
-		<span class="c1">// Error级别日志
-</span><span class="c1"></span>		<span class="nx">LogInstance</span><span class="p">.</span><span class="nf">WithFields</span><span class="p">(</span><span class="nx">logrus</span><span class="p">.</span><span class="nx">Fields</span><span class="p">{</span>
-			<span class="s">&#34;param-name&#34;</span><span class="p">:</span> <span class="nx">context</span><span class="p">.</span><span class="nf">DefaultQuery</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">,</span><span class="s">&#34;&#34;</span><span class="p">),</span>
-		<span class="p">}).</span><span class="nf">Error</span><span class="p">(</span><span class="s">&#34;Error级别日志&#34;</span><span class="p">)</span>
-
-		<span class="k">if</span> <span class="nx">context</span><span class="p">.</span><span class="nf">DefaultQuery</span><span class="p">(</span><span class="s">&#34;key&#34;</span><span class="p">,</span><span class="s">&#34;&#34;</span><span class="p">)</span> <span class="o">==</span> <span class="s">&#34;1&#34;</span> <span class="p">{</span>
-			<span class="c1">// Fatal级别日志(此类日志会让服务结束)
-</span><span class="c1"></span>			<span class="nx">LogInstance</span><span class="p">.</span><span class="nf">WithFields</span><span class="p">(</span><span class="nx">logrus</span><span class="p">.</span><span class="nx">Fields</span><span class="p">{</span>
-				<span class="s">&#34;Host&#34;</span><span class="p">:</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Request</span><span class="p">.</span><span class="nx">Host</span><span class="p">,</span>
-			<span class="p">}).</span><span class="nf">Fatal</span><span class="p">(</span><span class="s">&#34;Fatal级别日志&#34;</span><span class="p">)</span>
-		<span class="p">}</span>
-
-		<span class="c1">// info级别日志
-</span><span class="c1"></span>		<span class="nx">LogInstance</span><span class="p">.</span><span class="nf">WithFields</span><span class="p">(</span><span class="nx">logrus</span><span class="p">.</span><span class="nx">Fields</span><span class="p">{</span>
-			<span class="s">&#34;code&#34;</span><span class="p">:</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Writer</span><span class="p">.</span><span class="nf">Status</span><span class="p">(),</span>
-			<span class="s">&#34;url&#34;</span> <span class="p">:</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Request</span><span class="p">.</span><span class="nx">URL</span><span class="p">.</span><span class="nx">Path</span><span class="p">,</span>
-			<span class="s">&#34;method&#34;</span> <span class="p">:</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Request</span><span class="p">.</span><span class="nx">Method</span><span class="p">,</span>
-		<span class="p">}).</span><span class="nf">Info</span><span class="p">(</span><span class="s">&#34;info级别日志&#34;</span><span class="p">)</span>
-		<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;msg&#34;</span><span class="p">:</span><span class="s">&#34;success&#34;</span><span class="p">})</span>
-	<span class="p">})</span>
-	<span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
+    <span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
+    <span class="nx">engine</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/log&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// Warning级别日志
+</span><span class="c1"></span>        <span class="nx">LogInstance</span><span class="p">.</span><span class="nf">WithFields</span><span class="p">(</span><span class="nx">logrus</span><span class="p">.</span><span class="nx">Fields</span><span class="p">{</span>
+            <span class="s">&#34;Method&#34;</span><span class="p">:</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Request</span><span class="p">.</span><span class="nx">Method</span><span class="p">,</span>
+        <span class="p">}).</span><span class="nf">Warning</span><span class="p">(</span><span class="s">&#34;Warning级别日志&#34;</span><span class="p">)</span>
+    
+        <span class="c1">// Error级别日志
+</span><span class="c1"></span>        <span class="nx">LogInstance</span><span class="p">.</span><span class="nf">WithFields</span><span class="p">(</span><span class="nx">logrus</span><span class="p">.</span><span class="nx">Fields</span><span class="p">{</span>
+            <span class="s">&#34;param-name&#34;</span><span class="p">:</span> <span class="nx">context</span><span class="p">.</span><span class="nf">DefaultQuery</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">,</span><span class="s">&#34;&#34;</span><span class="p">),</span>
+        <span class="p">}).</span><span class="nf">Error</span><span class="p">(</span><span class="s">&#34;Error级别日志&#34;</span><span class="p">)</span>
+    
+        <span class="k">if</span> <span class="nx">context</span><span class="p">.</span><span class="nf">DefaultQuery</span><span class="p">(</span><span class="s">&#34;key&#34;</span><span class="p">,</span><span class="s">&#34;&#34;</span><span class="p">)</span> <span class="o">==</span> <span class="s">&#34;1&#34;</span> <span class="p">{</span>
+            <span class="c1">// Fatal级别日志(此类日志会让服务结束)
+</span><span class="c1"></span>            <span class="nx">LogInstance</span><span class="p">.</span><span class="nf">WithFields</span><span class="p">(</span><span class="nx">logrus</span><span class="p">.</span><span class="nx">Fields</span><span class="p">{</span>
+                <span class="s">&#34;Host&#34;</span><span class="p">:</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Request</span><span class="p">.</span><span class="nx">Host</span><span class="p">,</span>
+            <span class="p">}).</span><span class="nf">Fatal</span><span class="p">(</span><span class="s">&#34;Fatal级别日志&#34;</span><span class="p">)</span>
+        <span class="p">}</span>
+    
+        <span class="c1">// info级别日志
+</span><span class="c1"></span>        <span class="nx">LogInstance</span><span class="p">.</span><span class="nf">WithFields</span><span class="p">(</span><span class="nx">logrus</span><span class="p">.</span><span class="nx">Fields</span><span class="p">{</span>
+            <span class="s">&#34;code&#34;</span><span class="p">:</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Writer</span><span class="p">.</span><span class="nf">Status</span><span class="p">(),</span>
+            <span class="s">&#34;url&#34;</span> <span class="p">:</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Request</span><span class="p">.</span><span class="nx">URL</span><span class="p">.</span><span class="nx">Path</span><span class="p">,</span>
+            <span class="s">&#34;method&#34;</span> <span class="p">:</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Request</span><span class="p">.</span><span class="nx">Method</span><span class="p">,</span>
+        <span class="p">}).</span><span class="nf">Info</span><span class="p">(</span><span class="s">&#34;info级别日志&#34;</span><span class="p">)</span>
+        <span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;msg&#34;</span><span class="p">:</span><span class="s">&#34;success&#34;</span><span class="p">})</span>
+    <span class="p">})</span>
+    <span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -536,37 +536,37 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;github.com/natefinch/lumberjack&#34;</span>
-	<span class="s">&#34;github.com/sirupsen/logrus&#34;</span>
-	<span class="s">&#34;path&#34;</span>
+    <span class="s">&#34;github.com/natefinch/lumberjack&#34;</span>
+    <span class="s">&#34;github.com/sirupsen/logrus&#34;</span>
+    <span class="s">&#34;path&#34;</span>
 <span class="p">)</span>
 <span class="kd">var</span> <span class="p">(</span>
-	<span class="nx">logPath</span> <span class="p">=</span> <span class="s">&#34;./log&#34;</span>
-	<span class="nx">logFile</span> <span class="p">=</span> <span class="s">&#34;gin.log&#34;</span>
+    <span class="nx">logPath</span> <span class="p">=</span> <span class="s">&#34;./log&#34;</span>
+    <span class="nx">logFile</span> <span class="p">=</span> <span class="s">&#34;gin.log&#34;</span>
 <span class="p">)</span>
 <span class="kd">var</span> <span class="nx">LogInstance</span> <span class="p">=</span> <span class="nx">logrus</span><span class="p">.</span><span class="nf">New</span><span class="p">()</span>
 <span class="c1">// 日志初始化
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">init</span><span class="p">()</span>  <span class="p">{</span>
-	<span class="c1">// 打开文件
-</span><span class="c1"></span>	<span class="nx">logFileName</span> <span class="o">:=</span> <span class="nx">path</span><span class="p">.</span><span class="nf">Join</span><span class="p">(</span><span class="nx">logPath</span><span class="p">,</span> <span class="nx">logFile</span><span class="p">)</span>
-	<span class="c1">// 使用滚动压缩方式记录日志
-</span><span class="c1"></span>	<span class="nf">rolling</span><span class="p">(</span><span class="nx">logFileName</span><span class="p">)</span>
-	<span class="c1">// 设置日志输出JSON格式
-</span><span class="c1"></span>	<span class="c1">//LogInstance.SetFormatter(&amp;logrus.JSONFormatter{})
-</span><span class="c1"></span>	<span class="nx">LogInstance</span><span class="p">.</span><span class="nf">SetFormatter</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">logrus</span><span class="p">.</span><span class="nx">TextFormatter</span><span class="p">{})</span>
-	<span class="c1">// 设置日志记录级别
-</span><span class="c1"></span>	<span class="nx">LogInstance</span><span class="p">.</span><span class="nf">SetLevel</span><span class="p">(</span><span class="nx">logrus</span><span class="p">.</span><span class="nx">DebugLevel</span><span class="p">)</span>
+    <span class="c1">// 打开文件
+</span><span class="c1"></span>    <span class="nx">logFileName</span> <span class="o">:=</span> <span class="nx">path</span><span class="p">.</span><span class="nf">Join</span><span class="p">(</span><span class="nx">logPath</span><span class="p">,</span> <span class="nx">logFile</span><span class="p">)</span>
+    <span class="c1">// 使用滚动压缩方式记录日志
+</span><span class="c1"></span>    <span class="nf">rolling</span><span class="p">(</span><span class="nx">logFileName</span><span class="p">)</span>
+    <span class="c1">// 设置日志输出JSON格式
+</span><span class="c1"></span>    <span class="c1">//LogInstance.SetFormatter(&amp;logrus.JSONFormatter{})
+</span><span class="c1"></span>    <span class="nx">LogInstance</span><span class="p">.</span><span class="nf">SetFormatter</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">logrus</span><span class="p">.</span><span class="nx">TextFormatter</span><span class="p">{})</span>
+    <span class="c1">// 设置日志记录级别
+</span><span class="c1"></span>    <span class="nx">LogInstance</span><span class="p">.</span><span class="nf">SetLevel</span><span class="p">(</span><span class="nx">logrus</span><span class="p">.</span><span class="nx">DebugLevel</span><span class="p">)</span>
 <span class="p">}</span>
 <span class="c1">// 日志滚动设置
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">rolling</span><span class="p">(</span><span class="nx">logFile</span> <span class="kt">string</span><span class="p">)</span>  <span class="p">{</span>
-	<span class="c1">// 设置输出
-</span><span class="c1"></span>	<span class="nx">LogInstance</span><span class="p">.</span><span class="nf">SetOutput</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">lumberjack</span><span class="p">.</span><span class="nx">Logger</span><span class="p">{</span>
-		<span class="nx">Filename</span><span class="p">:</span><span class="nx">logFile</span><span class="p">,</span> <span class="c1">//日志文件位置
-</span><span class="c1"></span>		<span class="nx">MaxSize</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span><span class="c1">// 单文件最大容量,单位是MB
-</span><span class="c1"></span>		<span class="nx">MaxBackups</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span><span class="c1">// 最大保留过期文件个数
-</span><span class="c1"></span>		<span class="nx">MaxAge</span><span class="p">:</span> <span class="mi">1</span> <span class="p">,</span><span class="c1">// 保留过期文件的最大时间间隔,单位是天
-</span><span class="c1"></span>		<span class="nx">Compress</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span><span class="c1">// 是否需要压缩滚动日志, 使用的 gzip 压缩
-</span><span class="c1"></span>	<span class="p">})</span>
+    <span class="c1">// 设置输出
+</span><span class="c1"></span>    <span class="nx">LogInstance</span><span class="p">.</span><span class="nf">SetOutput</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">lumberjack</span><span class="p">.</span><span class="nx">Logger</span><span class="p">{</span>
+        <span class="nx">Filename</span><span class="p">:</span><span class="nx">logFile</span><span class="p">,</span> <span class="c1">//日志文件位置
+</span><span class="c1"></span>        <span class="nx">MaxSize</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span><span class="c1">// 单文件最大容量,单位是MB
+</span><span class="c1"></span>        <span class="nx">MaxBackups</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span><span class="c1">// 最大保留过期文件个数
+</span><span class="c1"></span>        <span class="nx">MaxAge</span><span class="p">:</span> <span class="mi">1</span> <span class="p">,</span><span class="c1">// 保留过期文件的最大时间间隔,单位是天
+</span><span class="c1"></span>        <span class="nx">Compress</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span><span class="c1">// 是否需要压缩滚动日志, 使用的 gzip 压缩
+</span><span class="c1"></span>    <span class="p">})</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -614,39 +614,39 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;github.com/gin-gonic/gin&#34;</span>
-	<span class="s">&#34;github.com/sirupsen/logrus&#34;</span>
-	<span class="s">&#34;strings&#34;</span>
+    <span class="s">&#34;github.com/gin-gonic/gin&#34;</span>
+    <span class="s">&#34;github.com/sirupsen/logrus&#34;</span>
+    <span class="s">&#34;strings&#34;</span>
 <span class="p">)</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
-	<span class="nx">engine</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/log&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
-		<span class="c1">// Warning级别日志
-</span><span class="c1"></span>		<span class="nx">LogInstance</span><span class="p">.</span><span class="nf">WithFields</span><span class="p">(</span><span class="nx">logrus</span><span class="p">.</span><span class="nx">Fields</span><span class="p">{</span>
-			<span class="s">&#34;Method&#34;</span><span class="p">:</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Request</span><span class="p">.</span><span class="nx">Method</span><span class="p">,</span>
-		<span class="p">}).</span><span class="nf">Warning</span><span class="p">(</span><span class="s">&#34;Warning级别日志&#34;</span><span class="p">)</span>
-
-		<span class="c1">// Error级别日志
-</span><span class="c1"></span>		<span class="nx">LogInstance</span><span class="p">.</span><span class="nf">WithFields</span><span class="p">(</span><span class="nx">logrus</span><span class="p">.</span><span class="nx">Fields</span><span class="p">{</span>
-			<span class="s">&#34;param-name&#34;</span><span class="p">:</span> <span class="nx">context</span><span class="p">.</span><span class="nf">DefaultQuery</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">,</span><span class="s">&#34;&#34;</span><span class="p">),</span>
-		<span class="p">}).</span><span class="nf">Error</span><span class="p">(</span><span class="s">&#34;Error级别日志&#34;</span><span class="p">)</span>
-
-		<span class="k">if</span> <span class="nx">context</span><span class="p">.</span><span class="nf">DefaultQuery</span><span class="p">(</span><span class="s">&#34;key&#34;</span><span class="p">,</span><span class="s">&#34;&#34;</span><span class="p">)</span> <span class="o">==</span> <span class="s">&#34;1&#34;</span> <span class="p">{</span>
-			<span class="c1">// Fatal级别日志(此类日志会让服务结束)
-</span><span class="c1"></span>			<span class="nx">LogInstance</span><span class="p">.</span><span class="nf">WithFields</span><span class="p">(</span><span class="nx">logrus</span><span class="p">.</span><span class="nx">Fields</span><span class="p">{</span>
-				<span class="s">&#34;Host&#34;</span><span class="p">:</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Request</span><span class="p">.</span><span class="nx">Host</span><span class="p">,</span>
-			<span class="p">}).</span><span class="nf">Fatal</span><span class="p">(</span><span class="s">&#34;Fatal级别日志&#34;</span><span class="p">)</span>
-		<span class="p">}</span>
-
-		<span class="c1">// info级别日志
-</span><span class="c1"></span>		<span class="nx">LogInstance</span><span class="p">.</span><span class="nf">WithFields</span><span class="p">(</span><span class="nx">logrus</span><span class="p">.</span><span class="nx">Fields</span><span class="p">{</span>
-			<span class="s">&#34;code&#34;</span><span class="p">:</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Writer</span><span class="p">.</span><span class="nf">Status</span><span class="p">(),</span>
-			<span class="s">&#34;url&#34;</span> <span class="p">:</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Request</span><span class="p">.</span><span class="nx">URL</span><span class="p">.</span><span class="nx">Path</span><span class="p">,</span>
-			<span class="s">&#34;context&#34;</span> <span class="p">:</span> <span class="nx">strings</span><span class="p">.</span><span class="nf">Repeat</span><span class="p">(</span><span class="s">&#34;测试&#34;</span><span class="p">,</span><span class="mi">50000</span><span class="p">),</span><span class="c1">// 重复
-</span><span class="c1"></span>		<span class="p">}).</span><span class="nf">Info</span><span class="p">(</span><span class="s">&#34;info级别日志&#34;</span><span class="p">)</span>
-		<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;msg&#34;</span><span class="p">:</span><span class="s">&#34;success&#34;</span><span class="p">})</span>
-	<span class="p">})</span>
-	<span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
+    <span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
+    <span class="nx">engine</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/log&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// Warning级别日志
+</span><span class="c1"></span>        <span class="nx">LogInstance</span><span class="p">.</span><span class="nf">WithFields</span><span class="p">(</span><span class="nx">logrus</span><span class="p">.</span><span class="nx">Fields</span><span class="p">{</span>
+            <span class="s">&#34;Method&#34;</span><span class="p">:</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Request</span><span class="p">.</span><span class="nx">Method</span><span class="p">,</span>
+        <span class="p">}).</span><span class="nf">Warning</span><span class="p">(</span><span class="s">&#34;Warning级别日志&#34;</span><span class="p">)</span>
+    
+        <span class="c1">// Error级别日志
+</span><span class="c1"></span>        <span class="nx">LogInstance</span><span class="p">.</span><span class="nf">WithFields</span><span class="p">(</span><span class="nx">logrus</span><span class="p">.</span><span class="nx">Fields</span><span class="p">{</span>
+            <span class="s">&#34;param-name&#34;</span><span class="p">:</span> <span class="nx">context</span><span class="p">.</span><span class="nf">DefaultQuery</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">,</span><span class="s">&#34;&#34;</span><span class="p">),</span>
+        <span class="p">}).</span><span class="nf">Error</span><span class="p">(</span><span class="s">&#34;Error级别日志&#34;</span><span class="p">)</span>
+    
+        <span class="k">if</span> <span class="nx">context</span><span class="p">.</span><span class="nf">DefaultQuery</span><span class="p">(</span><span class="s">&#34;key&#34;</span><span class="p">,</span><span class="s">&#34;&#34;</span><span class="p">)</span> <span class="o">==</span> <span class="s">&#34;1&#34;</span> <span class="p">{</span>
+            <span class="c1">// Fatal级别日志(此类日志会让服务结束)
+</span><span class="c1"></span>            <span class="nx">LogInstance</span><span class="p">.</span><span class="nf">WithFields</span><span class="p">(</span><span class="nx">logrus</span><span class="p">.</span><span class="nx">Fields</span><span class="p">{</span>
+                <span class="s">&#34;Host&#34;</span><span class="p">:</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Request</span><span class="p">.</span><span class="nx">Host</span><span class="p">,</span>
+            <span class="p">}).</span><span class="nf">Fatal</span><span class="p">(</span><span class="s">&#34;Fatal级别日志&#34;</span><span class="p">)</span>
+        <span class="p">}</span>
+    
+        <span class="c1">// info级别日志
+</span><span class="c1"></span>        <span class="nx">LogInstance</span><span class="p">.</span><span class="nf">WithFields</span><span class="p">(</span><span class="nx">logrus</span><span class="p">.</span><span class="nx">Fields</span><span class="p">{</span>
+            <span class="s">&#34;code&#34;</span><span class="p">:</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Writer</span><span class="p">.</span><span class="nf">Status</span><span class="p">(),</span>
+            <span class="s">&#34;url&#34;</span> <span class="p">:</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Request</span><span class="p">.</span><span class="nx">URL</span><span class="p">.</span><span class="nx">Path</span><span class="p">,</span>
+            <span class="s">&#34;context&#34;</span> <span class="p">:</span> <span class="nx">strings</span><span class="p">.</span><span class="nf">Repeat</span><span class="p">(</span><span class="s">&#34;测试&#34;</span><span class="p">,</span><span class="mi">50000</span><span class="p">),</span><span class="c1">// 重复
+</span><span class="c1"></span>        <span class="p">}).</span><span class="nf">Info</span><span class="p">(</span><span class="s">&#34;info级别日志&#34;</span><span class="p">)</span>
+        <span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;msg&#34;</span><span class="p">:</span><span class="s">&#34;success&#34;</span><span class="p">})</span>
+    <span class="p">})</span>
+    <span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
 <span class="p">}</span>
 
 </code></pre></td></tr></table>
@@ -664,7 +664,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2023-03-04
+        2023-03-17
         
     </span>
   </p>

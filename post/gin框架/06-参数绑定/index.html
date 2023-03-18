@@ -44,11 +44,11 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/gin%E6%A1%86%E6%9E%B6/06-%E5%8F%82%E6%95%B0%E7%BB%91%E5%AE%9A/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-12-06T00:00:00+00:00" />
-<meta property="article:modified_time" content="2023-03-04T13:24:26+08:00" />
+<meta property="article:modified_time" content="2023-03-17T10:46:14+08:00" />
 
 <meta itemprop="name" content="Gin框架(六):参数绑定">
 <meta itemprop="description" content="1.介绍 在Gin框架中参数不但能通过指定key接收,也可以直接绑定到结构体中,本篇主要讲解怎么直接绑定到结构体中,若要查看通过指定key接收"><meta itemprop="datePublished" content="2021-12-06T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2023-03-04T13:24:26+08:00" />
+<meta itemprop="dateModified" content="2023-03-17T10:46:14+08:00" />
 <meta itemprop="wordCount" content="2286">
 <meta itemprop="keywords" content="Gin框架," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Gin框架(六):参数绑定"/>
@@ -180,9 +180,9 @@
 </div>
     <div class="post-content">
       <h1 id="1介绍">1.介绍</h1>
-<p>在<code>Gin</code>框架中参数不但能通过指定<code>key</code>接收,也可以直接绑定到结构体中,本篇主要讲解怎么直接绑定到结构体中,若要查看通过指定<code>key</code>接收，可查看历史文章<a href="https://mp.weixin.qq.com/s/RYe6Zn5xqMD27fHE7zU5fg">Gin框架(五):参数接收</a>；</p>
+<p>在<code>Gin</code>框架中参数不但能通过指定<code>key</code>接收,也可以直接绑定到结构体中,本篇主要讲解怎么直接绑定到结构体中,若要查看通过指定<code>key</code>接收，可查看历史文章<a href="https://shershon1991.github.io/post/gin%E6%A1%86%E6%9E%B6/05-%E5%8F%82%E6%95%B0%E6%8E%A5%E6%94%B6/">Gin框架(五):参数接收</a>；</p>
 <h2 id="11-绑定方法">1.1 绑定方法</h2>
-<p><code>	Gin</code>提供了<code>Must bind 和 Should bind</code>两种类型的绑定方法，这两种类型对应的方法如下:</p>
+<p><code>Gin</code>提供了<code>Must bind 和 Should bind</code>两种类型的绑定方法，这两种类型对应的方法如下:</p>
 <table>
 <thead>
 <tr>
@@ -233,7 +233,7 @@
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">StructName</span> <span class="kd">struct</span> <span class="p">{</span>
-  <span class="nx">Xxx</span>  <span class="kd">type</span>  <span class="s">`form:&#34;paramName&#34; binding:&#34;required&#34;`</span>
+    <span class="nx">Xxx</span>  <span class="kd">type</span>  <span class="s">`form:&#34;paramName&#34; binding:&#34;required&#34;`</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -291,41 +291,41 @@
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">//-------- main.go ---------------
 </span><span class="c1"></span><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;github.com/gin-gonic/gin&#34;</span> <span class="c1">// 引入Gin框架
-</span><span class="c1"></span>	<span class="s">&#34;go-use/practise&#34;</span> <span class="c1">// 代码示例包
+    <span class="s">&#34;github.com/gin-gonic/gin&#34;</span> <span class="c1">// 引入Gin框架
+</span><span class="c1"></span>    <span class="s">&#34;go-use/practise&#34;</span> <span class="c1">// 代码示例包
 </span><span class="c1"></span><span class="p">)</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
-	<span class="nx">practise</span><span class="p">.</span><span class="nf">TestBindQuery</span><span class="p">(</span><span class="nx">engine</span><span class="p">)</span>
-	<span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
+    <span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
+    <span class="nx">practise</span><span class="p">.</span><span class="nf">TestBindQuery</span><span class="p">(</span><span class="nx">engine</span><span class="p">)</span>
+    <span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
 <span class="p">}</span>
 <span class="c1">//------ go-use/practise/param_bind.go -------
 </span><span class="c1">// 定义结构体
 </span><span class="c1"></span><span class="kd">type</span> <span class="nx">UriParam</span> <span class="kd">struct</span> <span class="p">{</span>
-	<span class="nx">Name</span>  <span class="kt">string</span>   <span class="s">`form:&#34;name&#34; binding:&#34;required&#34;`</span>
-	<span class="nx">Age</span>   <span class="kt">int</span>      <span class="s">`form:&#34;age&#34;`</span>
- 	<span class="nx">Home</span>  <span class="kt">string</span>   <span class="s">`form:&#34;home&#34;`</span>
+    <span class="nx">Name</span>  <span class="kt">string</span>   <span class="s">`form:&#34;name&#34; binding:&#34;required&#34;`</span>
+    <span class="nx">Age</span>   <span class="kt">int</span>      <span class="s">`form:&#34;age&#34;`</span>
+    <span class="nx">Home</span>  <span class="kt">string</span>   <span class="s">`form:&#34;home&#34;`</span>
 <span class="p">}</span>
 <span class="c1">// 绑定GET(BindQuery和ShouldBindQuery)
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestBindQuery</span><span class="p">(</span><span class="nx">engine</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Engine</span><span class="p">)</span> <span class="p">{</span>
-	<span class="nx">engine</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/bindQuery&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
-		<span class="nx">bindType</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">Query</span><span class="p">(</span><span class="s">&#34;type&#34;</span><span class="p">)</span>
-		<span class="kd">var</span> <span class="nx">uriParam</span> <span class="nx">UriParam</span>
-		<span class="kd">var</span> <span class="nx">err</span> <span class="kt">error</span>
-		<span class="k">if</span> <span class="nx">bindType</span> <span class="o">==</span> <span class="s">&#34;1&#34;</span> <span class="p">{</span>
-			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;BindQuery&#34;</span><span class="p">)</span>
-			<span class="nx">err</span> <span class="p">=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">BindQuery</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">uriParam</span><span class="p">)</span>
-		<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;ShouldBindQuery&#34;</span><span class="p">)</span>
-			<span class="nx">err</span> <span class="p">=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">ShouldBindQuery</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">uriParam</span><span class="p">)</span>
-		<span class="p">}</span>
-		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-			<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;error&#34;</span><span class="p">:</span> <span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">()})</span>
-			<span class="k">return</span>
-		<span class="p">}</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;uriParam:%+v\n&#34;</span><span class="p">,</span> <span class="nx">uriParam</span><span class="p">)</span>
-		<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;result&#34;</span><span class="p">:</span> <span class="nx">uriParam</span><span class="p">})</span>
-	<span class="p">})</span>
+    <span class="nx">engine</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/bindQuery&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">bindType</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">Query</span><span class="p">(</span><span class="s">&#34;type&#34;</span><span class="p">)</span>
+        <span class="kd">var</span> <span class="nx">uriParam</span> <span class="nx">UriParam</span>
+        <span class="kd">var</span> <span class="nx">err</span> <span class="kt">error</span>
+        <span class="k">if</span> <span class="nx">bindType</span> <span class="o">==</span> <span class="s">&#34;1&#34;</span> <span class="p">{</span>
+            <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;BindQuery&#34;</span><span class="p">)</span>
+            <span class="nx">err</span> <span class="p">=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">BindQuery</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">uriParam</span><span class="p">)</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;ShouldBindQuery&#34;</span><span class="p">)</span>
+            <span class="nx">err</span> <span class="p">=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">ShouldBindQuery</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">uriParam</span><span class="p">)</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+            <span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;error&#34;</span><span class="p">:</span> <span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">()})</span>
+            <span class="k">return</span>
+        <span class="p">}</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;uriParam:%+v\n&#34;</span><span class="p">,</span> <span class="nx">uriParam</span><span class="p">)</span>
+        <span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;result&#34;</span><span class="p">:</span> <span class="nx">uriParam</span><span class="p">})</span>
+    <span class="p">})</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -399,39 +399,39 @@
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">//-------- main.go ---------------
 </span><span class="c1"></span><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;github.com/gin-gonic/gin&#34;</span> <span class="c1">// 引入Gin框架
-</span><span class="c1"></span>	<span class="s">&#34;go-use/practise&#34;</span> <span class="c1">// 代码示例包
+    <span class="s">&#34;github.com/gin-gonic/gin&#34;</span> <span class="c1">// 引入Gin框架
+</span><span class="c1"></span>    <span class="s">&#34;go-use/practise&#34;</span> <span class="c1">// 代码示例包
 </span><span class="c1"></span><span class="p">)</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
-	<span class="nx">practise</span><span class="p">.</span><span class="nf">TestBindJson</span><span class="p">(</span><span class="nx">engine</span><span class="p">)</span>
-	<span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
+    <span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
+    <span class="nx">practise</span><span class="p">.</span><span class="nf">TestBindJson</span><span class="p">(</span><span class="nx">engine</span><span class="p">)</span>
+    <span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
 <span class="p">}</span>
 <span class="c1">//------ go-use/practise/param_bind.go -------
 </span><span class="c1">// 定义待绑定的JSON结构体
 </span><span class="c1"></span><span class="kd">type</span> <span class="nx">Param</span> <span class="kd">struct</span> <span class="p">{</span>
-	<span class="nx">Name</span>  <span class="kt">string</span>   <span class="s">`json:&#34;name&#34;`</span>
-	<span class="nx">Age</span>   <span class="kt">int</span>      <span class="s">`json:&#34;age&#34;`</span>
-	<span class="nx">Likes</span> <span class="p">[]</span><span class="kt">string</span> <span class="s">`json:&#34;likes&#34;`</span>
+    <span class="nx">Name</span>  <span class="kt">string</span>   <span class="s">`json:&#34;name&#34;`</span>
+    <span class="nx">Age</span>   <span class="kt">int</span>      <span class="s">`json:&#34;age&#34;`</span>
+    <span class="nx">Likes</span> <span class="p">[]</span><span class="kt">string</span> <span class="s">`json:&#34;likes&#34;`</span>
 <span class="p">}</span>
 <span class="c1">// 绑定提交的Json数据
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestBindJson</span><span class="p">(</span><span class="nx">engine</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Engine</span><span class="p">)</span> <span class="p">{</span>
-	<span class="nx">engine</span><span class="p">.</span><span class="nf">POST</span><span class="p">(</span><span class="s">&#34;/bindJson&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
-		<span class="kd">var</span> <span class="nx">jsonParam</span> <span class="nx">Param</span>
-		<span class="kd">var</span> <span class="nx">err</span> <span class="kt">error</span>
-		<span class="nx">bindType</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">Query</span><span class="p">(</span><span class="s">&#34;type&#34;</span><span class="p">)</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">bindType</span><span class="p">)</span>
-		<span class="k">if</span> <span class="nx">bindType</span> <span class="o">==</span> <span class="s">&#34;1&#34;</span> <span class="p">{</span>
-			<span class="nx">err</span> <span class="p">=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">BindJSON</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">jsonParam</span><span class="p">)</span>
-		<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-			<span class="nx">err</span> <span class="p">=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">ShouldBindJSON</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">jsonParam</span><span class="p">)</span>
-		<span class="p">}</span>
-		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-			<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;error&#34;</span><span class="p">:</span> <span class="nx">err</span><span class="p">})</span>
-			<span class="k">return</span>
-		<span class="p">}</span>
-		<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;result&#34;</span><span class="p">:</span> <span class="nx">jsonParam</span><span class="p">})</span>
-	<span class="p">})</span>
+    <span class="nx">engine</span><span class="p">.</span><span class="nf">POST</span><span class="p">(</span><span class="s">&#34;/bindJson&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">jsonParam</span> <span class="nx">Param</span>
+        <span class="kd">var</span> <span class="nx">err</span> <span class="kt">error</span>
+        <span class="nx">bindType</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">Query</span><span class="p">(</span><span class="s">&#34;type&#34;</span><span class="p">)</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">bindType</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nx">bindType</span> <span class="o">==</span> <span class="s">&#34;1&#34;</span> <span class="p">{</span>
+            <span class="nx">err</span> <span class="p">=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">BindJSON</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">jsonParam</span><span class="p">)</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">err</span> <span class="p">=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">ShouldBindJSON</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">jsonParam</span><span class="p">)</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+            <span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;error&#34;</span><span class="p">:</span> <span class="nx">err</span><span class="p">})</span>
+            <span class="k">return</span>
+        <span class="p">}</span>
+        <span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;result&#34;</span><span class="p">:</span> <span class="nx">jsonParam</span><span class="p">})</span>
+    <span class="p">})</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -483,38 +483,38 @@
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">//-------- main.go ---------------
 </span><span class="c1"></span><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;github.com/gin-gonic/gin&#34;</span> <span class="c1">// 引入Gin框架
-</span><span class="c1"></span>	<span class="s">&#34;go-use/practise&#34;</span> <span class="c1">// 代码示例包
+    <span class="s">&#34;github.com/gin-gonic/gin&#34;</span> <span class="c1">// 引入Gin框架
+</span><span class="c1"></span>    <span class="s">&#34;go-use/practise&#34;</span> <span class="c1">// 代码示例包
 </span><span class="c1"></span><span class="p">)</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
-	<span class="nx">practise</span><span class="p">.</span><span class="nf">TestBindXml</span><span class="p">(</span><span class="nx">engine</span><span class="p">)</span>
-	<span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
+    <span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
+    <span class="nx">practise</span><span class="p">.</span><span class="nf">TestBindXml</span><span class="p">(</span><span class="nx">engine</span><span class="p">)</span>
+    <span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
 <span class="p">}</span>
 <span class="c1">//------ go-use/practise/param_bind.go -------
 </span><span class="c1">// 修改待绑定的JSON结构体,添加XML标签
 </span><span class="c1"></span><span class="kd">type</span> <span class="nx">Param</span> <span class="kd">struct</span> <span class="p">{</span>
-	<span class="nx">Name</span>  <span class="kt">string</span>   <span class="s">`json:&#34;name&#34; xml:&#34;name&#34;`</span>
-	<span class="nx">Age</span>   <span class="kt">int</span>      <span class="s">`json:&#34;age&#34; xml:&#34;age&#34;`</span>
-	<span class="nx">Likes</span> <span class="p">[]</span><span class="kt">string</span> <span class="s">`json:&#34;likes&#34; xml:&#34;likes&#34;`</span>
+    <span class="nx">Name</span>  <span class="kt">string</span>   <span class="s">`json:&#34;name&#34; xml:&#34;name&#34;`</span>
+    <span class="nx">Age</span>   <span class="kt">int</span>      <span class="s">`json:&#34;age&#34; xml:&#34;age&#34;`</span>
+    <span class="nx">Likes</span> <span class="p">[]</span><span class="kt">string</span> <span class="s">`json:&#34;likes&#34; xml:&#34;likes&#34;`</span>
 <span class="p">}</span>
 <span class="c1">// 绑定Xml信息
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestBindXml</span><span class="p">(</span><span class="nx">engine</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Engine</span><span class="p">)</span> <span class="p">{</span>
-	<span class="nx">engine</span><span class="p">.</span><span class="nf">POST</span><span class="p">(</span><span class="s">&#34;/bindXml&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
-		<span class="kd">var</span> <span class="nx">param</span> <span class="nx">Param</span>
-		<span class="kd">var</span> <span class="nx">err</span> <span class="kt">error</span>
-		<span class="nx">bindType</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">Query</span><span class="p">(</span><span class="s">&#34;type&#34;</span><span class="p">)</span>
-		<span class="k">if</span> <span class="nx">bindType</span> <span class="o">==</span> <span class="s">&#34;1&#34;</span> <span class="p">{</span>
-			<span class="nx">err</span> <span class="p">=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">BindXML</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">param</span><span class="p">)</span>
-		<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-			<span class="nx">err</span> <span class="p">=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">ShouldBindXML</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">param</span><span class="p">)</span>
-		<span class="p">}</span>
-		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-			<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;error&#34;</span><span class="p">:</span> <span class="nx">err</span><span class="p">})</span>
-			<span class="k">return</span>
-		<span class="p">}</span>
-		<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;result&#34;</span><span class="p">:</span> <span class="nx">param</span><span class="p">})</span>
-	<span class="p">})</span>
+    <span class="nx">engine</span><span class="p">.</span><span class="nf">POST</span><span class="p">(</span><span class="s">&#34;/bindXml&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">param</span> <span class="nx">Param</span>
+        <span class="kd">var</span> <span class="nx">err</span> <span class="kt">error</span>
+        <span class="nx">bindType</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">Query</span><span class="p">(</span><span class="s">&#34;type&#34;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nx">bindType</span> <span class="o">==</span> <span class="s">&#34;1&#34;</span> <span class="p">{</span>
+            <span class="nx">err</span> <span class="p">=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">BindXML</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">param</span><span class="p">)</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">err</span> <span class="p">=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">ShouldBindXML</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">param</span><span class="p">)</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+            <span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;error&#34;</span><span class="p">:</span> <span class="nx">err</span><span class="p">})</span>
+            <span class="k">return</span>
+        <span class="p">}</span>
+        <span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;result&#34;</span><span class="p">:</span> <span class="nx">param</span><span class="p">})</span>
+    <span class="p">})</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -561,32 +561,32 @@
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">//-------- main.go ---------------
 </span><span class="c1"></span><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;github.com/gin-gonic/gin&#34;</span> <span class="c1">// 引入Gin框架
-</span><span class="c1"></span>	<span class="s">&#34;go-use/practise&#34;</span> <span class="c1">// 代码示例包
+    <span class="s">&#34;github.com/gin-gonic/gin&#34;</span> <span class="c1">// 引入Gin框架
+</span><span class="c1"></span>    <span class="s">&#34;go-use/practise&#34;</span> <span class="c1">// 代码示例包
 </span><span class="c1"></span><span class="p">)</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
-	<span class="nx">practise</span><span class="p">.</span><span class="nf">TestBindXml</span><span class="p">(</span><span class="nx">engine</span><span class="p">)</span>
-	<span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
+    <span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
+    <span class="nx">practise</span><span class="p">.</span><span class="nf">TestBindXml</span><span class="p">(</span><span class="nx">engine</span><span class="p">)</span>
+    <span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
 <span class="p">}</span>
 <span class="c1">//------ go-use/practise/param_bind.go -------
 </span><span class="c1"></span><span class="kd">type</span> <span class="nx">BodyAParam</span> <span class="kd">struct</span> <span class="p">{</span>
-	<span class="nx">Name</span> <span class="kt">string</span> <span class="s">`json:&#34;name&#34;`</span>
+    <span class="nx">Name</span> <span class="kt">string</span> <span class="s">`json:&#34;name&#34;`</span>
 <span class="p">}</span>
 <span class="kd">type</span> <span class="nx">BodyBParam</span> <span class="kd">struct</span> <span class="p">{</span>
-	<span class="nx">Home</span> <span class="kt">string</span> <span class="s">`json:&#34;home&#34;`</span>
+    <span class="nx">Home</span> <span class="kt">string</span> <span class="s">`json:&#34;home&#34;`</span>
 <span class="p">}</span>
 <span class="c1">// 重复绑定request.Body（错误示例）
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestBindBody</span><span class="p">(</span><span class="nx">engine</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Engine</span><span class="p">)</span> <span class="p">{</span>
-	<span class="nx">engine</span><span class="p">.</span><span class="nf">POST</span><span class="p">(</span><span class="s">&#34;/body&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
-		<span class="nx">paramA</span> <span class="o">:=</span> <span class="nx">BodyAParam</span><span class="p">{}</span>
-		<span class="nx">paramB</span> <span class="o">:=</span> <span class="nx">BodyBParam</span><span class="p">{}</span>
-		<span class="c1">// c.ShouldBind 使用了 c.Request.Body，不可重用。
-</span><span class="c1"></span>		<span class="nx">_</span> <span class="p">=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">ShouldBindJSON</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">paramA</span><span class="p">)</span>
-		<span class="c1">// 因为现在 c.Request.Body 是 EOF，所以这里会报错。
-</span><span class="c1"></span>		<span class="nx">_</span> <span class="p">=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">ShouldBindJSON</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">paramB</span><span class="p">)</span>
-		<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;paramA&#34;</span><span class="p">:</span><span class="nx">paramA</span><span class="p">,</span><span class="s">&#34;paramB&#34;</span><span class="p">:</span><span class="nx">paramB</span><span class="p">})</span>
-	<span class="p">})</span>
+    <span class="nx">engine</span><span class="p">.</span><span class="nf">POST</span><span class="p">(</span><span class="s">&#34;/body&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">paramA</span> <span class="o">:=</span> <span class="nx">BodyAParam</span><span class="p">{}</span>
+        <span class="nx">paramB</span> <span class="o">:=</span> <span class="nx">BodyBParam</span><span class="p">{}</span>
+        <span class="c1">// c.ShouldBind 使用了 c.Request.Body，不可重用。
+</span><span class="c1"></span>        <span class="nx">_</span> <span class="p">=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">ShouldBindJSON</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">paramA</span><span class="p">)</span>
+        <span class="c1">// 因为现在 c.Request.Body 是 EOF，所以这里会报错。
+</span><span class="c1"></span>        <span class="nx">_</span> <span class="p">=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">ShouldBindJSON</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">paramB</span><span class="p">)</span>
+        <span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;paramA&#34;</span><span class="p">:</span><span class="nx">paramA</span><span class="p">,</span><span class="s">&#34;paramB&#34;</span><span class="p">:</span><span class="nx">paramB</span><span class="p">})</span>
+    <span class="p">})</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -642,32 +642,32 @@
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">//-------- main.go ---------------
 </span><span class="c1"></span><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;github.com/gin-gonic/gin&#34;</span> <span class="c1">// 引入Gin框架
-</span><span class="c1"></span>	<span class="s">&#34;go-use/practise&#34;</span> <span class="c1">// 代码示例包
+    <span class="s">&#34;github.com/gin-gonic/gin&#34;</span> <span class="c1">// 引入Gin框架
+</span><span class="c1"></span>    <span class="s">&#34;go-use/practise&#34;</span> <span class="c1">// 代码示例包
 </span><span class="c1"></span><span class="p">)</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
-	<span class="nx">practise</span><span class="p">.</span><span class="nf">TestBindXml</span><span class="p">(</span><span class="nx">engine</span><span class="p">)</span>
-	<span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
+    <span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
+    <span class="nx">practise</span><span class="p">.</span><span class="nf">TestBindXml</span><span class="p">(</span><span class="nx">engine</span><span class="p">)</span>
+    <span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
 <span class="p">}</span>
 <span class="c1">//------ go-use/practise/param_bind.go -------
 </span><span class="c1"></span><span class="kd">type</span> <span class="nx">BodyAParam</span> <span class="kd">struct</span> <span class="p">{</span>
-	<span class="nx">Name</span> <span class="kt">string</span> <span class="s">`json:&#34;name&#34;`</span>
+    <span class="nx">Name</span> <span class="kt">string</span> <span class="s">`json:&#34;name&#34;`</span>
 <span class="p">}</span>
 <span class="kd">type</span> <span class="nx">BodyBParam</span> <span class="kd">struct</span> <span class="p">{</span>
-	<span class="nx">Home</span> <span class="kt">string</span> <span class="s">`json:&#34;home&#34;`</span>
+    <span class="nx">Home</span> <span class="kt">string</span> <span class="s">`json:&#34;home&#34;`</span>
 <span class="p">}</span>
 <span class="c1">// 重复绑定request.Body（正确示例）
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestBindBody2</span><span class="p">(</span><span class="nx">engine</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Engine</span><span class="p">)</span> <span class="p">{</span>
-	<span class="nx">engine</span><span class="p">.</span><span class="nf">POST</span><span class="p">(</span><span class="s">&#34;/body2&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
-		<span class="nx">paramA</span> <span class="o">:=</span> <span class="nx">BodyAParam</span><span class="p">{}</span>
-		<span class="nx">paramB</span> <span class="o">:=</span> <span class="nx">BodyBParam</span><span class="p">{}</span>
-		<span class="c1">// 读取 c.Request.Body 并将结果存入上下文。
-</span><span class="c1"></span>		<span class="nx">_</span> <span class="p">=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">ShouldBindBodyWith</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">paramA</span><span class="p">,</span><span class="nx">binding</span><span class="p">.</span><span class="nx">JSON</span><span class="p">)</span>
-		<span class="c1">// 这时, 复用存储在上下文中的 body。
-</span><span class="c1"></span>		<span class="nx">_</span> <span class="p">=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">ShouldBindBodyWith</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">paramB</span><span class="p">,</span><span class="nx">binding</span><span class="p">.</span><span class="nx">JSON</span><span class="p">)</span>
-		<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;paramA&#34;</span><span class="p">:</span><span class="nx">paramA</span><span class="p">,</span><span class="s">&#34;paramB&#34;</span><span class="p">:</span><span class="nx">paramB</span><span class="p">})</span>
-	<span class="p">})</span>
+    <span class="nx">engine</span><span class="p">.</span><span class="nf">POST</span><span class="p">(</span><span class="s">&#34;/body2&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">paramA</span> <span class="o">:=</span> <span class="nx">BodyAParam</span><span class="p">{}</span>
+        <span class="nx">paramB</span> <span class="o">:=</span> <span class="nx">BodyBParam</span><span class="p">{}</span>
+        <span class="c1">// 读取 c.Request.Body 并将结果存入上下文。
+</span><span class="c1"></span>        <span class="nx">_</span> <span class="p">=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">ShouldBindBodyWith</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">paramA</span><span class="p">,</span><span class="nx">binding</span><span class="p">.</span><span class="nx">JSON</span><span class="p">)</span>
+        <span class="c1">// 这时, 复用存储在上下文中的 body。
+</span><span class="c1"></span>        <span class="nx">_</span> <span class="p">=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">ShouldBindBodyWith</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">paramB</span><span class="p">,</span><span class="nx">binding</span><span class="p">.</span><span class="nx">JSON</span><span class="p">)</span>
+        <span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;paramA&#34;</span><span class="p">:</span><span class="nx">paramA</span><span class="p">,</span><span class="s">&#34;paramB&#34;</span><span class="p">:</span><span class="nx">paramB</span><span class="p">})</span>
+    <span class="p">})</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -695,7 +695,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2023-03-04
+        2023-03-17
         
     </span>
   </p>

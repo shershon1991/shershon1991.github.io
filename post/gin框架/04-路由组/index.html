@@ -44,12 +44,12 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/gin%E6%A1%86%E6%9E%B6/04-%E8%B7%AF%E7%94%B1%E7%BB%84/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-12-04T00:00:00+00:00" />
-<meta property="article:modified_time" content="2023-03-04T13:24:26+08:00" />
+<meta property="article:modified_time" content="2023-03-17T09:30:56+08:00" />
 
 <meta itemprop="name" content="Gin框架(四):路由组">
 <meta itemprop="description" content="1.什么是路由组? 从字面意思理解,路由组指的就是一组路由。那么什么样的路由可以归类到一组呢？在实际使用中，比较常见的场景的是根据版本分组。比"><meta itemprop="datePublished" content="2021-12-04T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2023-03-04T13:24:26+08:00" />
-<meta itemprop="wordCount" content="1300">
+<meta itemprop="dateModified" content="2023-03-17T09:30:56+08:00" />
+<meta itemprop="wordCount" content="1302">
 <meta itemprop="keywords" content="Gin框架," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Gin框架(四):路由组"/>
 <meta name="twitter:description" content="1.什么是路由组? 从字面意思理解,路由组指的就是一组路由。那么什么样的路由可以归类到一组呢？在实际使用中，比较常见的场景的是根据版本分组。比"/>
@@ -133,7 +133,7 @@
             <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
             <a href="/categories/go/"> Go </a>
             </div>
-          <span class="more-meta"> 约 1300 字 </span>
+          <span class="more-meta"> 约 1302 字 </span>
           <span class="more-meta"> 预计阅读 3 分钟 </span>
         
       </div>
@@ -186,12 +186,12 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">v1</span> <span class="o">:=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Group</span><span class="p">(</span><span class="s">&#34;v1&#34;</span><span class="p">)</span>
 <span class="p">{</span> 
-	<span class="nx">v1</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/path/xxx&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
-		<span class="o">...</span>
-	<span class="p">})</span>
-	<span class="nx">v1</span><span class="p">.</span><span class="nf">POST</span><span class="p">(</span><span class="s">&#34;/user/xxx&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
-		<span class="o">...</span>
-	<span class="p">})</span>
+    <span class="nx">v1</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/path/xxx&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+        <span class="o">...</span>
+    <span class="p">})</span>
+    <span class="nx">v1</span><span class="p">.</span><span class="nf">POST</span><span class="p">(</span><span class="s">&#34;/user/xxx&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+        <span class="o">...</span>
+    <span class="p">})</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -214,15 +214,15 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">api</span> <span class="o">:=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Group</span><span class="p">(</span><span class="s">&#34;api&#34;</span><span class="p">)</span>
 <span class="p">{</span>
-	<span class="nx">user</span> <span class="o">:=</span> <span class="nx">api</span><span class="p">.</span><span class="nf">Group</span><span class="p">(</span><span class="s">&#34;user&#34;</span><span class="p">)</span>
-	<span class="p">{</span>
-		<span class="nx">user</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;path&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
-			<span class="o">...</span>
-		<span class="p">})</span>
-   	<span class="nx">user</span><span class="p">.</span><span class="nf">POST</span><span class="p">(</span><span class="s">&#34;path&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
-			<span class="o">...</span>
-		<span class="p">})</span>
-	<span class="p">}</span>
+    <span class="nx">user</span> <span class="o">:=</span> <span class="nx">api</span><span class="p">.</span><span class="nf">Group</span><span class="p">(</span><span class="s">&#34;user&#34;</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nx">user</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;path&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+            <span class="o">...</span>
+        <span class="p">})</span>
+        <span class="nx">user</span><span class="p">.</span><span class="nf">POST</span><span class="p">(</span><span class="s">&#34;path&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+            <span class="o">...</span>
+        <span class="p">})</span>
+    <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -270,47 +270,49 @@
 </span><span class="lnt">38
 </span><span class="lnt">39
 </span><span class="lnt">40
+</span><span class="lnt">41
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">//-- main.go -------
 </span><span class="c1"></span><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;github.com/gin-gonic/gin&#34;</span> <span class="c1">// 引入Gin框架
-</span><span class="c1"></span>	<span class="s">&#34;go-use/practise&#34;</span> <span class="c1">// 代码示例包
+    <span class="s">&#34;github.com/gin-gonic/gin&#34;</span> <span class="c1">// 引入Gin框架
+</span><span class="c1"></span>    <span class="s">&#34;go-use/practise&#34;</span> <span class="c1">// 代码示例包
 </span><span class="c1"></span><span class="p">)</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="c1">// 创建一个默认的路由引擎
-</span><span class="c1"></span>	<span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
-	<span class="c1">// 注册路由
-</span><span class="c1"></span>	<span class="nx">practise</span><span class="p">.</span><span class="nf">TestRouteGroup</span><span class="p">(</span><span class="nx">engine</span><span class="p">)</span>
-	<span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
+    <span class="c1">// 创建一个默认的路由引擎
+</span><span class="c1"></span>    <span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
+    <span class="c1">// 注册路由
+</span><span class="c1"></span>    <span class="nx">practise</span><span class="p">.</span><span class="nf">TestRouteGroup</span><span class="p">(</span><span class="nx">engine</span><span class="p">)</span>
+    <span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
 <span class="p">}</span>
+
 <span class="c1">//--- go-use/practise/routing_use.go -------
 </span><span class="c1">// --- 路由组使用
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestRouteGroup</span><span class="p">(</span><span class="nx">engine</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Engine</span><span class="p">)</span> <span class="p">{</span>
-	<span class="c1">// 路由组A(v1版本)
-</span><span class="c1"></span>	<span class="nx">v1</span> <span class="o">:=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Group</span><span class="p">(</span><span class="s">&#34;v1&#34;</span><span class="p">)</span>
-	<span class="p">{</span>
-		<span class="nx">v1</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/user/login&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
-			<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;msg&#34;</span><span class="p">:</span> <span class="s">&#34;v1-登录成功&#34;</span><span class="p">})</span>
-		<span class="p">})</span>
-		<span class="nx">v1</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/user/register&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
-			<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;msg&#34;</span><span class="p">:</span> <span class="s">&#34;v1-注册成功&#34;</span><span class="p">})</span>
-		<span class="p">})</span>
-		<span class="nx">v1</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/user/del&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
-			<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;msg&#34;</span><span class="p">:</span> <span class="s">&#34;v1-注销成功&#34;</span><span class="p">})</span>
-		<span class="p">})</span>
-	<span class="p">}</span>
-	<span class="c1">// 路由组B(v2版本)
-</span><span class="c1"></span>	<span class="nx">v2</span> <span class="o">:=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Group</span><span class="p">(</span><span class="s">&#34;v2&#34;</span><span class="p">)</span>
-	<span class="p">{</span>
-		<span class="nx">v2</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/user/login&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
-			<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;msg&#34;</span><span class="p">:</span> <span class="s">&#34;v2-登录成功&#34;</span><span class="p">})</span>
-		<span class="p">})</span>
-		<span class="nx">v2</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/user/out&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
-			<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;msg&#34;</span><span class="p">:</span> <span class="s">&#34;v2-用户退出&#34;</span><span class="p">})</span>
-		<span class="p">})</span>
-	<span class="p">}</span>
+    <span class="c1">// 路由组A(v1版本)
+</span><span class="c1"></span>    <span class="nx">v1</span> <span class="o">:=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Group</span><span class="p">(</span><span class="s">&#34;v1&#34;</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nx">v1</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/user/login&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;msg&#34;</span><span class="p">:</span> <span class="s">&#34;v1-登录成功&#34;</span><span class="p">})</span>
+        <span class="p">})</span>
+        <span class="nx">v1</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/user/register&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;msg&#34;</span><span class="p">:</span> <span class="s">&#34;v1-注册成功&#34;</span><span class="p">})</span>
+        <span class="p">})</span>
+        <span class="nx">v1</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/user/del&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;msg&#34;</span><span class="p">:</span> <span class="s">&#34;v1-注销成功&#34;</span><span class="p">})</span>
+        <span class="p">})</span>
+    <span class="p">}</span>
+    <span class="c1">// 路由组B(v2版本)
+</span><span class="c1"></span>    <span class="nx">v2</span> <span class="o">:=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Group</span><span class="p">(</span><span class="s">&#34;v2&#34;</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nx">v2</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/user/login&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;msg&#34;</span><span class="p">:</span> <span class="s">&#34;v2-登录成功&#34;</span><span class="p">})</span>
+        <span class="p">})</span>
+        <span class="nx">v2</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/user/out&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;msg&#34;</span><span class="p">:</span> <span class="s">&#34;v2-用户退出&#34;</span><span class="p">})</span>
+        <span class="p">})</span>
+    <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -422,44 +424,46 @@
 </span><span class="lnt">35
 </span><span class="lnt">36
 </span><span class="lnt">37
+</span><span class="lnt">38
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">//-- main.go -------
 </span><span class="c1"></span><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;github.com/gin-gonic/gin&#34;</span>
-	<span class="s">&#34;go-use/practise&#34;</span>
+    <span class="s">&#34;github.com/gin-gonic/gin&#34;</span>
+    <span class="s">&#34;go-use/practise&#34;</span>
 <span class="p">)</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="c1">// 创建一个默认的路由引擎
-</span><span class="c1"></span>	<span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
-	<span class="c1">// 注册路由
-</span><span class="c1"></span>	<span class="nx">practise</span><span class="p">.</span><span class="nf">TestRouteGroupNested</span><span class="p">(</span><span class="nx">engine</span><span class="p">)</span>
-	<span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
+    <span class="c1">// 创建一个默认的路由引擎
+</span><span class="c1"></span>    <span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
+    <span class="c1">// 注册路由
+</span><span class="c1"></span>    <span class="nx">practise</span><span class="p">.</span><span class="nf">TestRouteGroupNested</span><span class="p">(</span><span class="nx">engine</span><span class="p">)</span>
+    <span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
 <span class="p">}</span>
+
 <span class="c1">//--- go-use/practise/routing_use.go -------
 </span><span class="c1">// 路由嵌套分组
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestRouteGroupNested</span><span class="p">(</span><span class="nx">engine</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Engine</span><span class="p">)</span> <span class="p">{</span>
-	<span class="c1">// 接口
-</span><span class="c1"></span>	<span class="nx">api</span> <span class="o">:=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Group</span><span class="p">(</span><span class="s">&#34;api&#34;</span><span class="p">)</span>
-	<span class="p">{</span>
-		<span class="nx">user</span> <span class="o">:=</span> <span class="nx">api</span><span class="p">.</span><span class="nf">Group</span><span class="p">(</span><span class="s">&#34;user&#34;</span><span class="p">)</span>
-		<span class="p">{</span>
-			<span class="nx">user</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;login&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
-				<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;msg&#34;</span><span class="p">:</span> <span class="s">&#34;api-登录成功&#34;</span><span class="p">})</span>
-			<span class="p">})</span>
-		<span class="p">}</span>
-	<span class="p">}</span>
-	<span class="c1">// 后台
-</span><span class="c1"></span>	<span class="nx">admin</span> <span class="o">:=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Group</span><span class="p">(</span><span class="s">&#34;admin&#34;</span><span class="p">)</span>
-	<span class="p">{</span>
-		<span class="nx">user</span> <span class="o">:=</span> <span class="nx">admin</span><span class="p">.</span><span class="nf">Group</span><span class="p">(</span><span class="s">&#34;user&#34;</span><span class="p">)</span>
-		<span class="p">{</span>
-			<span class="nx">user</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;login&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
-				<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;msg&#34;</span><span class="p">:</span> <span class="s">&#34;admin-登录成功&#34;</span><span class="p">})</span>
-			<span class="p">})</span>
-		<span class="p">}</span>
-	<span class="p">}</span>
+    <span class="c1">// 接口
+</span><span class="c1"></span>    <span class="nx">api</span> <span class="o">:=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Group</span><span class="p">(</span><span class="s">&#34;api&#34;</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nx">user</span> <span class="o">:=</span> <span class="nx">api</span><span class="p">.</span><span class="nf">Group</span><span class="p">(</span><span class="s">&#34;user&#34;</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="nx">user</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;login&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;msg&#34;</span><span class="p">:</span> <span class="s">&#34;api-登录成功&#34;</span><span class="p">})</span>
+            <span class="p">})</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="c1">// 后台
+</span><span class="c1"></span>    <span class="nx">admin</span> <span class="o">:=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Group</span><span class="p">(</span><span class="s">&#34;admin&#34;</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nx">user</span> <span class="o">:=</span> <span class="nx">admin</span><span class="p">.</span><span class="nf">Group</span><span class="p">(</span><span class="s">&#34;user&#34;</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="nx">user</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;login&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;msg&#34;</span><span class="p">:</span> <span class="s">&#34;admin-登录成功&#34;</span><span class="p">})</span>
+            <span class="p">})</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -516,7 +520,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2023-03-04
+        2023-03-17
         
     </span>
   </p>

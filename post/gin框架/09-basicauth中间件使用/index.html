@@ -44,11 +44,11 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/gin%E6%A1%86%E6%9E%B6/09-basicauth%E4%B8%AD%E9%97%B4%E4%BB%B6%E4%BD%BF%E7%94%A8/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-12-09T00:00:00+00:00" />
-<meta property="article:modified_time" content="2023-03-04T13:24:26+08:00" />
+<meta property="article:modified_time" content="2023-03-17T13:00:04+08:00" />
 
 <meta itemprop="name" content="Gin框架(九):BasicAuth中间件使用">
 <meta itemprop="description" content="1.什么是BasicAuth? Basic Auth是一种开放平台认证方式，简单的说就是需要你输入用户名和密码才能继续访问。 2.在单路由中使用 ​ 如果需要"><meta itemprop="datePublished" content="2021-12-09T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2023-03-04T13:24:26+08:00" />
+<meta itemprop="dateModified" content="2023-03-17T13:00:04+08:00" />
 <meta itemprop="wordCount" content="312">
 <meta itemprop="keywords" content="Gin框架," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Gin框架(九):BasicAuth中间件使用"/>
@@ -189,20 +189,20 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 使用BasicAuth中间件
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">main</span><span class="p">(){</span>
-	<span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
-  <span class="c1">// 设置账号和密码，key:代表账号,value:代表密码
-</span><span class="c1"></span>	<span class="nx">ginAccounts</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">Accounts</span><span class="p">{</span>
-		<span class="s">&#34;user&#34;</span><span class="p">:</span><span class="s">&#34;password&#34;</span><span class="p">,</span>
-		<span class="s">&#34;abc&#34;</span><span class="p">:</span><span class="s">&#34;123&#34;</span><span class="p">,</span>
-	<span class="p">}</span>
-  <span class="c1">// 注册路由和中间件
-</span><span class="c1"></span>	<span class="nx">engine</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/test&#34;</span><span class="p">,</span><span class="nx">gin</span><span class="p">.</span><span class="nf">BasicAuth</span><span class="p">(</span><span class="nx">ginAccounts</span><span class="p">),</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
-		<span class="c1">// 获取中间件BasicAuth
-</span><span class="c1"></span>		<span class="nx">user</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">MustGet</span><span class="p">(</span><span class="nx">gin</span><span class="p">.</span><span class="nx">AuthUserKey</span><span class="p">).(</span><span class="kt">string</span><span class="p">)</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">user</span><span class="p">)</span>
-		<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;msg&#34;</span><span class="p">:</span><span class="s">&#34;success&#34;</span><span class="p">})</span>
-	<span class="p">})</span> 
-	<span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
+    <span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
+    <span class="c1">// 设置账号和密码，key:代表账号,value:代表密码
+</span><span class="c1"></span>    <span class="nx">ginAccounts</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">Accounts</span><span class="p">{</span>
+        <span class="s">&#34;user&#34;</span><span class="p">:</span><span class="s">&#34;password&#34;</span><span class="p">,</span>
+        <span class="s">&#34;abc&#34;</span><span class="p">:</span><span class="s">&#34;123&#34;</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="c1">// 注册路由和中间件
+</span><span class="c1"></span>    <span class="nx">engine</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/test&#34;</span><span class="p">,</span><span class="nx">gin</span><span class="p">.</span><span class="nf">BasicAuth</span><span class="p">(</span><span class="nx">ginAccounts</span><span class="p">),</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// 获取中间件BasicAuth
+</span><span class="c1"></span>        <span class="nx">user</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">MustGet</span><span class="p">(</span><span class="nx">gin</span><span class="p">.</span><span class="nx">AuthUserKey</span><span class="p">).(</span><span class="kt">string</span><span class="p">)</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">user</span><span class="p">)</span>
+        <span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;msg&#34;</span><span class="p">:</span><span class="s">&#34;success&#34;</span><span class="p">})</span>
+    <span class="p">})</span> 
+    <span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -226,14 +226,14 @@
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">RunUseBasicAuthWithGroup</span><span class="p">()</span> <span class="p">{</span>
-	<span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
-	<span class="c1">// 注册路由组和中间件
-</span><span class="c1"></span>	<span class="nx">userGroup</span> <span class="o">:=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Group</span><span class="p">(</span><span class="s">&#34;/user&#34;</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">BasicAuth</span><span class="p">(</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Accounts</span><span class="p">{</span>
-		<span class="s">&#34;abc&#34;</span><span class="p">:</span> <span class="s">&#34;123&#34;</span><span class="p">,</span>
-	<span class="p">}))</span>
-	<span class="nx">userGroup</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;info&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
-		<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;msg&#34;</span><span class="p">:</span> <span class="s">&#34;user.info&#34;</span><span class="p">})</span>
-	<span class="p">})</span>
+    <span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
+    <span class="c1">// 注册路由组和中间件
+</span><span class="c1"></span>    <span class="nx">userGroup</span> <span class="o">:=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Group</span><span class="p">(</span><span class="s">&#34;/user&#34;</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">BasicAuth</span><span class="p">(</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Accounts</span><span class="p">{</span>
+        <span class="s">&#34;abc&#34;</span><span class="p">:</span> <span class="s">&#34;123&#34;</span><span class="p">,</span>
+    <span class="p">}))</span>
+    <span class="nx">userGroup</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;info&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;msg&#34;</span><span class="p">:</span> <span class="s">&#34;user.info&#34;</span><span class="p">})</span>
+    <span class="p">})</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -249,7 +249,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2023-03-04
+        2023-03-17
         
     </span>
   </p>

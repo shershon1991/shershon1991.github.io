@@ -44,12 +44,12 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/gin%E6%A1%86%E6%9E%B6/05-%E5%8F%82%E6%95%B0%E6%8E%A5%E6%94%B6/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-12-05T00:00:00+00:00" />
-<meta property="article:modified_time" content="2023-03-04T13:24:26+08:00" />
+<meta property="article:modified_time" content="2023-03-17T10:16:07+08:00" />
 
 <meta itemprop="name" content="Gin框架(五):参数接收">
 <meta itemprop="description" content="1.路由参数 1.1 Param 当注册路由格式为:/path/:a/:b 时，:x指的就是路由参数，可以直接通过Param(&quot;x&quot;)获取值"><meta itemprop="datePublished" content="2021-12-05T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2023-03-04T13:24:26+08:00" />
-<meta itemprop="wordCount" content="3581">
+<meta itemprop="dateModified" content="2023-03-17T10:16:07+08:00" />
+<meta itemprop="wordCount" content="3598">
 <meta itemprop="keywords" content="Gin框架," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Gin框架(五):参数接收"/>
 <meta name="twitter:description" content="1.路由参数 1.1 Param 当注册路由格式为:/path/:a/:b 时，:x指的就是路由参数，可以直接通过Param(&quot;x&quot;)获取值"/>
@@ -133,7 +133,7 @@
             <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
             <a href="/categories/go/"> Go </a>
             </div>
-          <span class="more-meta"> 约 3581 字 </span>
+          <span class="more-meta"> 约 3598 字 </span>
           <span class="more-meta"> 预计阅读 8 分钟 </span>
         
       </div>
@@ -163,8 +163,8 @@
         <li><a href="#33-接收map">3.3 接收Map</a></li>
         <li><a href="#34-接收json">3.4 接收JSON</a>
           <ul>
-            <li><a href="#1直接赋值">1.直接赋值</a></li>
-            <li><a href="#2绑定到结构体">2.绑定到结构体</a></li>
+            <li><a href="#1绑定到map">1.绑定到<code>map</code></a></li>
+            <li><a href="#2绑定到struct">2.绑定到<code>struct</code></a></li>
           </ul>
         </li>
       </ul>
@@ -217,44 +217,50 @@
 </span><span class="lnt">35
 </span><span class="lnt">36
 </span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;github.com/gin-gonic/gin&#34;</span> <span class="c1">// 引入Gin框架
+    <span class="s">&#34;github.com/gin-gonic/gin&#34;</span> <span class="c1">// 引入Gin框架
 </span><span class="c1"></span><span class="p">)</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="c1">// 创建一个默认的路由引擎
-</span><span class="c1"></span>	<span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
-	<span class="c1">// 注册路由
-</span><span class="c1"></span>	<span class="nx">engine</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/test/:name&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
-		<span class="c1">// 接收参数
-</span><span class="c1"></span>		<span class="nx">name</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">Param</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">)</span>
-		<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;msg&#34;</span><span class="p">:</span> <span class="s">&#34;success&#34;</span><span class="p">,</span> <span class="s">&#34;name&#34;</span><span class="p">:</span> <span class="nx">name</span><span class="p">})</span>
-	<span class="p">})</span>
-	<span class="nx">engine</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/test/:name/:age&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
-		<span class="c1">// 接收参数
-</span><span class="c1"></span>		<span class="nx">name</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">Param</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">)</span>
-		<span class="nx">age</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">Param</span><span class="p">(</span><span class="s">&#34;age&#34;</span><span class="p">)</span>
-		<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span>
-			<span class="s">&#34;msg&#34;</span><span class="p">:</span> <span class="s">&#34;success&#34;</span><span class="p">,</span>
-			<span class="s">&#34;name&#34;</span><span class="p">:</span> <span class="nx">name</span><span class="p">,</span>
-			<span class="s">&#34;phone&#34;</span><span class="p">:</span><span class="nx">age</span><span class="p">,</span>
-		<span class="p">})</span>
-	<span class="p">})</span>
-	<span class="nx">engine</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/test/:name/:age/:height&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
-		<span class="c1">// 接收参数
-</span><span class="c1"></span>		<span class="nx">name</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">Param</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">)</span>
-		<span class="nx">age</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">Param</span><span class="p">(</span><span class="s">&#34;age&#34;</span><span class="p">)</span>
-		<span class="nx">height</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">Param</span><span class="p">(</span><span class="s">&#34;height&#34;</span><span class="p">)</span>
-		<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span>
-			<span class="s">&#34;msg&#34;</span><span class="p">:</span> <span class="s">&#34;success&#34;</span><span class="p">,</span>
-			<span class="s">&#34;name&#34;</span><span class="p">:</span> <span class="nx">name</span><span class="p">,</span>
-			<span class="s">&#34;phone&#34;</span><span class="p">:</span><span class="nx">age</span><span class="p">,</span>
-			<span class="s">&#34;height&#34;</span><span class="p">:</span><span class="nx">height</span><span class="p">,</span>
-		<span class="p">})</span>
-	<span class="p">})</span>
-	<span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
+    <span class="c1">// 创建一个默认的路由引擎
+</span><span class="c1"></span>    <span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
+    <span class="c1">// 注册路由
+</span><span class="c1"></span>    <span class="nx">engine</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/test/:name&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// 接收参数
+</span><span class="c1"></span>        <span class="nx">name</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">Param</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">)</span>
+        <span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span>
+            <span class="s">&#34;msg&#34;</span><span class="p">:</span> <span class="s">&#34;success&#34;</span><span class="p">,</span> 
+            <span class="s">&#34;name&#34;</span><span class="p">:</span> <span class="nx">name</span><span class="p">,</span>
+        <span class="p">})</span>
+    <span class="p">})</span>
+    <span class="nx">engine</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/test/:name/:age&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// 接收参数
+</span><span class="c1"></span>        <span class="nx">name</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">Param</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">)</span>
+        <span class="nx">age</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">Param</span><span class="p">(</span><span class="s">&#34;age&#34;</span><span class="p">)</span>
+        <span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span>
+            <span class="s">&#34;msg&#34;</span><span class="p">:</span> <span class="s">&#34;success&#34;</span><span class="p">,</span>
+            <span class="s">&#34;name&#34;</span><span class="p">:</span> <span class="nx">name</span><span class="p">,</span>
+            <span class="s">&#34;age&#34;</span><span class="p">:</span> <span class="nx">age</span><span class="p">,</span>
+        <span class="p">})</span>
+    <span class="p">})</span>
+    <span class="nx">engine</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/test/:name/:age/:height&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// 接收参数
+</span><span class="c1"></span>        <span class="nx">name</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">Param</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">)</span>
+        <span class="nx">age</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">Param</span><span class="p">(</span><span class="s">&#34;age&#34;</span><span class="p">)</span>
+        <span class="nx">height</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">Param</span><span class="p">(</span><span class="s">&#34;height&#34;</span><span class="p">)</span>
+        <span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span>
+            <span class="s">&#34;msg&#34;</span><span class="p">:</span> <span class="s">&#34;success&#34;</span><span class="p">,</span>
+            <span class="s">&#34;name&#34;</span><span class="p">:</span> <span class="nx">name</span><span class="p">,</span>
+            <span class="s">&#34;age&#34;</span><span class="p">:</span> <span class="nx">age</span><span class="p">,</span>
+            <span class="s">&#34;height&#34;</span><span class="p">:</span> <span class="nx">height</span><span class="p">,</span>
+        <span class="p">})</span>
+    <span class="p">})</span>
+    <span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -272,9 +278,9 @@
 <pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">➜ curl -X GET http://127.0.0.1:8080/test/张三
 <span class="o">{</span><span class="s2">&#34;msg&#34;</span>:<span class="s2">&#34;success&#34;</span>,<span class="s2">&#34;name&#34;</span>:<span class="s2">&#34;张三&#34;</span><span class="o">}</span>
 ➜ curl -X GET http://127.0.0.1:8080/test/张三/18
-<span class="o">{</span><span class="s2">&#34;msg&#34;</span>:<span class="s2">&#34;success&#34;</span>,<span class="s2">&#34;name&#34;</span>:<span class="s2">&#34;张三&#34;</span>,<span class="s2">&#34;phone&#34;</span>:<span class="s2">&#34;18&#34;</span><span class="o">}</span>
+<span class="o">{</span><span class="s2">&#34;msg&#34;</span>:<span class="s2">&#34;success&#34;</span>,<span class="s2">&#34;name&#34;</span>:<span class="s2">&#34;张三&#34;</span>,<span class="s2">&#34;age&#34;</span>:<span class="s2">&#34;18&#34;</span><span class="o">}</span>
 ➜ curl -X GET http://127.0.0.1:8080/test/张三/18/170
-<span class="o">{</span><span class="s2">&#34;height&#34;</span>:<span class="s2">&#34;170&#34;</span>,<span class="s2">&#34;msg&#34;</span>:<span class="s2">&#34;success&#34;</span>,<span class="s2">&#34;name&#34;</span>:<span class="s2">&#34;张三&#34;</span>,<span class="s2">&#34;phone&#34;</span>:<span class="s2">&#34;18&#34;</span><span class="o">}</span>
+<span class="o">{</span><span class="s2">&#34;height&#34;</span>:<span class="s2">&#34;170&#34;</span>,<span class="s2">&#34;msg&#34;</span>:<span class="s2">&#34;success&#34;</span>,<span class="s2">&#34;name&#34;</span>:<span class="s2">&#34;张三&#34;</span>,<span class="s2">&#34;age&#34;</span>:<span class="s2">&#34;18&#34;</span><span class="o">}</span>
 </code></pre></td></tr></table>
 </div>
 </div><h1 id="2get参数">2.<code>GET</code>参数</h1>
@@ -311,35 +317,39 @@
 </span><span class="lnt">26
 </span><span class="lnt">27
 </span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">//-------- main.go ---------------
+</span><span class="c1"></span><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;github.com/gin-gonic/gin&#34;</span> <span class="c1">// 引入Gin框架
+    <span class="s">&#34;github.com/gin-gonic/gin&#34;</span> <span class="c1">// 引入Gin框架
 </span><span class="c1"></span><span class="p">)</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="c1">// 创建一个默认的路由引擎
-</span><span class="c1"></span>	<span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
-	<span class="c1">// 注册路由
-</span><span class="c1"></span>	<span class="nf">testReceiveGetParam</span><span class="p">(</span><span class="nx">engine</span><span class="p">)</span>
-	<span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
+    <span class="c1">// 创建一个默认的路由引擎
+</span><span class="c1"></span>    <span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
+    <span class="c1">// 注册路由
+</span><span class="c1"></span>    <span class="nf">testReceiveGetParam</span><span class="p">(</span><span class="nx">engine</span><span class="p">)</span>
+    <span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
 <span class="p">}</span>
-<span class="kd">func</span> <span class="nf">testReceiveGetParam</span><span class="p">(</span> <span class="nx">engine</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Engine</span><span class="p">)</span>  <span class="p">{</span>
-	<span class="nx">engine</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/receive&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
-		<span class="c1">// 如果不存在或为空,则返回:&#34;&#34;
-</span><span class="c1"></span>		<span class="nx">name</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">Query</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">)</span>
-		<span class="c1">// 如果不存在或为空,则返回默认值
-</span><span class="c1"></span>		<span class="nx">age</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">DefaultQuery</span><span class="p">(</span><span class="s">&#34;age&#34;</span><span class="p">,</span><span class="s">&#34;18&#34;</span><span class="p">)</span>
-		<span class="c1">// 直接使用GetQuery
-</span><span class="c1"></span>		<span class="nx">home</span><span class="p">,</span> <span class="nx">ok</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">GetQuery</span><span class="p">(</span><span class="s">&#34;home&#34;</span><span class="p">)</span>
-		<span class="nx">context</span><span class="p">.</span><span class="nf">PureJSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span>
-			<span class="s">&#34;msg&#34;</span><span class="p">:</span><span class="s">&#34;success&#34;</span><span class="p">,</span>
-			<span class="s">&#34;context.Query-&gt;name&#34;</span><span class="p">:</span><span class="nx">name</span><span class="p">,</span>
-			<span class="s">&#34;context.DefaultQuery-&gt;age&#34;</span><span class="p">:</span><span class="nx">age</span><span class="p">,</span>
-			<span class="s">&#34;context.GetQuery-&gt;home&#34;</span><span class="p">:</span><span class="nx">home</span><span class="p">,</span>
-			<span class="s">&#34;context.GetQuery-&gt;ok&#34;</span><span class="p">:</span><span class="nx">ok</span><span class="p">,</span>
-		<span class="p">})</span>
-	<span class="p">})</span>
+<span class="c1">//------ go-use/practise/param_receice.go -------
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">testReceiveGetParam</span><span class="p">(</span> <span class="nx">engine</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Engine</span><span class="p">)</span>  <span class="p">{</span>
+    <span class="nx">engine</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/receive&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// 如果不存在或为空,则返回:&#34;&#34;
+</span><span class="c1"></span>        <span class="nx">name</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">Query</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">)</span>
+        <span class="c1">// 如果不存在或为空,则返回默认值
+</span><span class="c1"></span>        <span class="nx">age</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">DefaultQuery</span><span class="p">(</span><span class="s">&#34;age&#34;</span><span class="p">,</span><span class="s">&#34;18&#34;</span><span class="p">)</span>
+        <span class="c1">// 直接使用GetQuery
+</span><span class="c1"></span>        <span class="nx">home</span><span class="p">,</span> <span class="nx">ok</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">GetQuery</span><span class="p">(</span><span class="s">&#34;home&#34;</span><span class="p">)</span>
+        <span class="nx">context</span><span class="p">.</span><span class="nf">PureJSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span>
+            <span class="s">&#34;msg&#34;</span><span class="p">:</span><span class="s">&#34;success&#34;</span><span class="p">,</span>
+            <span class="s">&#34;context.Query-&gt;name&#34;</span><span class="p">:</span><span class="nx">name</span><span class="p">,</span>
+            <span class="s">&#34;context.DefaultQuery-&gt;age&#34;</span><span class="p">:</span><span class="nx">age</span><span class="p">,</span>
+            <span class="s">&#34;context.GetQuery-&gt;home&#34;</span><span class="p">:</span><span class="nx">home</span><span class="p">,</span>
+            <span class="s">&#34;context.GetQuery-&gt;ok&#34;</span><span class="p">:</span><span class="nx">ok</span><span class="p">,</span>
+        <span class="p">})</span>
+    <span class="p">})</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -396,26 +406,26 @@
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">//-------- main.go ---------------
 </span><span class="c1"></span><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;github.com/gin-gonic/gin&#34;</span> <span class="c1">// 引入Gin框架
-</span><span class="c1"></span>	<span class="s">&#34;go-use/practise&#34;</span> <span class="c1">// 代码示例包
+    <span class="s">&#34;github.com/gin-gonic/gin&#34;</span> <span class="c1">// 引入Gin框架
+</span><span class="c1"></span>    <span class="s">&#34;go-use/practise&#34;</span> <span class="c1">// 代码示例包
 </span><span class="c1"></span><span class="p">)</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="c1">// 创建一个默认的路由引擎
-</span><span class="c1"></span>	<span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
-	<span class="c1">// 注册路由
-</span><span class="c1"></span>	<span class="nx">practise</span><span class="p">.</span><span class="nf">TestReceiveGetArrayParam</span><span class="p">(</span><span class="nx">engine</span><span class="p">)</span>
-	<span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
+    <span class="c1">// 创建一个默认的路由引擎
+</span><span class="c1"></span>    <span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
+    <span class="c1">// 注册路由
+</span><span class="c1"></span>    <span class="nx">practise</span><span class="p">.</span><span class="nf">TestReceiveGetArrayParam</span><span class="p">(</span><span class="nx">engine</span><span class="p">)</span>
+    <span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
 <span class="p">}</span>
 <span class="c1">//------ go-use/practise/param_receice.go -------
 </span><span class="c1">// 接收数组
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestReceiveGetArrayParam</span><span class="p">(</span><span class="nx">engine</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Engine</span><span class="p">)</span>  <span class="p">{</span>
-	<span class="nx">engine</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/getArr&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
-		<span class="c1">// 接收GET数组：/getArr?name[]=张三&amp;name[]=李四
-</span><span class="c1"></span>		<span class="nx">nameList</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">QueryArray</span><span class="p">(</span><span class="s">&#34;name[]&#34;</span><span class="p">)</span>
-		<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span>
-			<span class="s">&#34;arr&#34;</span><span class="p">:</span> <span class="nx">nameList</span><span class="p">,</span>
-		<span class="p">})</span>
-	<span class="p">})</span>
+    <span class="nx">engine</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/getArr&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// 接收GET数组：/getArr?name[]=张三&amp;name[]=李四
+</span><span class="c1"></span>        <span class="nx">nameList</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">QueryArray</span><span class="p">(</span><span class="s">&#34;name[]&#34;</span><span class="p">)</span>
+        <span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span>
+            <span class="s">&#34;arr&#34;</span><span class="p">:</span> <span class="nx">nameList</span><span class="p">,</span>
+        <span class="p">})</span>
+    <span class="p">})</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -456,27 +466,27 @@
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">//-------- main.go ---------------
 </span><span class="c1"></span><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;github.com/gin-gonic/gin&#34;</span> <span class="c1">// 引入Gin框架
-</span><span class="c1"></span>	<span class="s">&#34;go-use/practise&#34;</span> <span class="c1">// 代码示例包
+    <span class="s">&#34;github.com/gin-gonic/gin&#34;</span> <span class="c1">// 引入Gin框架
+</span><span class="c1"></span>    <span class="s">&#34;go-use/practise&#34;</span> <span class="c1">// 代码示例包
 </span><span class="c1"></span><span class="p">)</span>
 
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="c1">// 创建一个默认的路由引擎
-</span><span class="c1"></span>	<span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
-	<span class="c1">// 注册路由
-</span><span class="c1"></span>	<span class="nx">practise</span><span class="p">.</span><span class="nf">TestRecGetMapParam</span><span class="p">(</span><span class="nx">engine</span><span class="p">)</span>
-	<span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
+    <span class="c1">// 创建一个默认的路由引擎
+</span><span class="c1"></span>    <span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
+    <span class="c1">// 注册路由
+</span><span class="c1"></span>    <span class="nx">practise</span><span class="p">.</span><span class="nf">TestRecGetMapParam</span><span class="p">(</span><span class="nx">engine</span><span class="p">)</span>
+    <span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
 <span class="p">}</span>
 <span class="c1">//------ go-use/practise/param_receice.go -------
 </span><span class="c1">// 接收map
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestRecGetMapParam</span><span class="p">(</span><span class="nx">engine</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Engine</span><span class="p">)</span>  <span class="p">{</span>
-	<span class="nx">engine</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/getMap&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
-		<span class="c1">//接收GET map：/getMap?score[语文]=95&amp;score[数学]=100
-</span><span class="c1"></span>		<span class="nx">queryMap</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">QueryMap</span><span class="p">(</span><span class="s">&#34;score&#34;</span><span class="p">)</span>
-		<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span>
-			<span class="s">&#34;map&#34;</span><span class="p">:</span><span class="nx">queryMap</span><span class="p">,</span>
-		<span class="p">})</span>
-	<span class="p">})</span>
+    <span class="nx">engine</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/getMap&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">//接收GET map：/getMap?score[语文]=95&amp;score[数学]=100
+</span><span class="c1"></span>        <span class="nx">queryMap</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">QueryMap</span><span class="p">(</span><span class="s">&#34;score&#34;</span><span class="p">)</span>
+        <span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span>
+            <span class="s">&#34;map&#34;</span><span class="p">:</span><span class="nx">queryMap</span><span class="p">,</span>
+        <span class="p">})</span>
+    <span class="p">})</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -521,30 +531,30 @@
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">//-------- main.go ---------------
 </span><span class="c1"></span><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;github.com/gin-gonic/gin&#34;</span>
-	<span class="s">&#34;go-use/practise&#34;</span>
+    <span class="s">&#34;github.com/gin-gonic/gin&#34;</span>
+    <span class="s">&#34;go-use/practise&#34;</span>
 <span class="p">)</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="c1">// 创建一个默认的路由引擎
-</span><span class="c1"></span>	<span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
-	<span class="c1">// 注册路由
-</span><span class="c1"></span>	<span class="nx">practise</span><span class="p">.</span><span class="nf">TestRecPostSingleValue</span><span class="p">(</span><span class="nx">engine</span><span class="p">)</span>
-	<span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
+    <span class="c1">// 创建一个默认的路由引擎
+</span><span class="c1"></span>    <span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
+    <span class="c1">// 注册路由
+</span><span class="c1"></span>    <span class="nx">practise</span><span class="p">.</span><span class="nf">TestRecPostSingleValue</span><span class="p">(</span><span class="nx">engine</span><span class="p">)</span>
+    <span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
 <span class="p">}</span>
 <span class="c1">//------ go-use/practise/param_receice.go -------
 </span><span class="c1">// 接收单值: PostForm、DefaultPostForm、GetPostForm
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestRecPostSingleValue</span><span class="p">(</span><span class="nx">engine</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Engine</span><span class="p">)</span> <span class="p">{</span>
-	<span class="nx">engine</span><span class="p">.</span><span class="nf">POST</span><span class="p">(</span><span class="s">&#34;/postSingle&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
-		<span class="nx">name</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">PostForm</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">)</span>
-		<span class="nx">age</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">DefaultQuery</span><span class="p">(</span><span class="s">&#34;age&#34;</span><span class="p">,</span> <span class="s">&#34;22&#34;</span><span class="p">)</span>
-		<span class="nx">home</span><span class="p">,</span> <span class="nx">ok</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">GetPostForm</span><span class="p">(</span><span class="s">&#34;home&#34;</span><span class="p">)</span>
-		<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span>
-			<span class="s">&#34;postForm&#34;</span><span class="p">:</span>         <span class="nx">name</span><span class="p">,</span>
-			<span class="s">&#34;DefaultQuery&#34;</span><span class="p">:</span>     <span class="nx">age</span><span class="p">,</span>
-			<span class="s">&#34;GetPostForm.home&#34;</span><span class="p">:</span> <span class="nx">home</span><span class="p">,</span>
-			<span class="s">&#34;GetPostForm.ok&#34;</span><span class="p">:</span>   <span class="nx">ok</span><span class="p">,</span>
-		<span class="p">})</span>
-	<span class="p">})</span>
+    <span class="nx">engine</span><span class="p">.</span><span class="nf">POST</span><span class="p">(</span><span class="s">&#34;/postSingle&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">name</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">PostForm</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">)</span>
+        <span class="nx">age</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">DefaultQuery</span><span class="p">(</span><span class="s">&#34;age&#34;</span><span class="p">,</span> <span class="s">&#34;22&#34;</span><span class="p">)</span>
+        <span class="nx">home</span><span class="p">,</span> <span class="nx">ok</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">GetPostForm</span><span class="p">(</span><span class="s">&#34;home&#34;</span><span class="p">)</span>
+        <span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span>
+            <span class="s">&#34;postForm&#34;</span><span class="p">:</span>         <span class="nx">name</span><span class="p">,</span>
+            <span class="s">&#34;DefaultQuery&#34;</span><span class="p">:</span>     <span class="nx">age</span><span class="p">,</span>
+            <span class="s">&#34;GetPostForm.home&#34;</span><span class="p">:</span> <span class="nx">home</span><span class="p">,</span>
+            <span class="s">&#34;GetPostForm.ok&#34;</span><span class="p">:</span>   <span class="nx">ok</span><span class="p">,</span>
+        <span class="p">})</span>
+    <span class="p">})</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -602,25 +612,25 @@
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">//-------- main.go ---------------
 </span><span class="c1"></span><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;github.com/gin-gonic/gin&#34;</span>
-	<span class="s">&#34;go-use/practise&#34;</span>
+    <span class="s">&#34;github.com/gin-gonic/gin&#34;</span>
+    <span class="s">&#34;go-use/practise&#34;</span>
 <span class="p">)</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="c1">// 创建一个默认的路由引擎
-</span><span class="c1"></span>	<span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
-	<span class="c1">// 注册路由
-</span><span class="c1"></span>	<span class="nx">practise</span><span class="p">.</span><span class="nf">TestRecPostArrValue</span><span class="p">(</span><span class="nx">engine</span><span class="p">)</span>
-	<span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
+    <span class="c1">// 创建一个默认的路由引擎
+</span><span class="c1"></span>    <span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
+    <span class="c1">// 注册路由
+</span><span class="c1"></span>    <span class="nx">practise</span><span class="p">.</span><span class="nf">TestRecPostArrValue</span><span class="p">(</span><span class="nx">engine</span><span class="p">)</span>
+    <span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
 <span class="p">}</span>
 <span class="c1">//------ go-use/practise/param_receice.go -------
 </span><span class="c1">// 接收POST提交的数组
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestRecPostArrValue</span><span class="p">(</span><span class="nx">engine</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Engine</span><span class="p">)</span> <span class="p">{</span>
-	<span class="nx">engine</span><span class="p">.</span><span class="nf">POST</span><span class="p">(</span><span class="s">&#34;/postArr&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
-		<span class="nx">arr</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">PostFormArray</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">)</span>
-		<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span>
-			<span class="s">&#34;postArr&#34;</span><span class="p">:</span> <span class="nx">arr</span><span class="p">,</span>
-		<span class="p">})</span>
-	<span class="p">})</span>
+    <span class="nx">engine</span><span class="p">.</span><span class="nf">POST</span><span class="p">(</span><span class="s">&#34;/postArr&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">arr</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">PostFormArray</span><span class="p">(</span><span class="s">&#34;name[]&#34;</span><span class="p">)</span>
+        <span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span>
+            <span class="s">&#34;postArr&#34;</span><span class="p">:</span> <span class="nx">arr</span><span class="p">,</span>
+        <span class="p">})</span>
+    <span class="p">})</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -666,23 +676,23 @@
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">//--- main.go ---------------
 </span><span class="c1"></span><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;github.com/gin-gonic/gin&#34;</span>
-	<span class="s">&#34;go-use/practise&#34;</span>
+    <span class="s">&#34;github.com/gin-gonic/gin&#34;</span>
+    <span class="s">&#34;go-use/practise&#34;</span>
 <span class="p">)</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="c1">// 创建一个默认的路由引擎
-</span><span class="c1"></span>	<span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
-	<span class="c1">// 注册路由
-</span><span class="c1"></span>	<span class="nx">practise</span><span class="p">.</span><span class="nf">TestRecPostMapValue</span><span class="p">(</span><span class="nx">engine</span><span class="p">)</span>
-	<span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
+    <span class="c1">// 创建一个默认的路由引擎
+</span><span class="c1"></span>    <span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
+    <span class="c1">// 注册路由
+</span><span class="c1"></span>    <span class="nx">practise</span><span class="p">.</span><span class="nf">TestRecPostMapValue</span><span class="p">(</span><span class="nx">engine</span><span class="p">)</span>
+    <span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
 <span class="p">}</span>
 <span class="c1">//--- go-use/practise/param_receice.go -------
 </span><span class="c1">// 接收POST提交的Map信息
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestRecPostMapValue</span><span class="p">(</span><span class="nx">engine</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Engine</span><span class="p">)</span>  <span class="p">{</span>
-	<span class="nx">engine</span><span class="p">.</span><span class="nf">POST</span><span class="p">(</span><span class="s">&#34;/postMap&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
-		<span class="nx">formMap</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">PostFormMap</span><span class="p">(</span><span class="s">&#34;score&#34;</span><span class="p">)</span>
-		<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;map&#34;</span><span class="p">:</span><span class="nx">formMap</span><span class="p">})</span>
-	<span class="p">})</span>
+    <span class="nx">engine</span><span class="p">.</span><span class="nf">POST</span><span class="p">(</span><span class="s">&#34;/postMap&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">formMap</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">PostFormMap</span><span class="p">(</span><span class="s">&#34;score&#34;</span><span class="p">)</span>
+        <span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;map&#34;</span><span class="p">:</span><span class="nx">formMap</span><span class="p">})</span>
+    <span class="p">})</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -699,7 +709,7 @@
 </div>
 </div><h2 id="34-接收json">3.4 接收JSON</h2>
 <p>在<code>Gin</code>框架中可以通过<code>BindJSON(&amp;param)</code>来接收提交的<code>json</code>格式数据,具体使用参考下面代码:</p>
-<h3 id="1直接赋值">1.直接赋值</h3>
+<h3 id="1绑定到map">1.绑定到<code>map</code></h3>
 <p><strong>a.代码示例:</strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -734,28 +744,28 @@
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">//--- main.go ---------------
 </span><span class="c1"></span><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;github.com/gin-gonic/gin&#34;</span>
-	<span class="s">&#34;go-use/practise&#34;</span>
+    <span class="s">&#34;github.com/gin-gonic/gin&#34;</span>
+    <span class="s">&#34;go-use/practise&#34;</span>
 <span class="p">)</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="c1">// 创建一个默认的路由引擎
-</span><span class="c1"></span>	<span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
-	<span class="c1">// 注册路由
-</span><span class="c1"></span>	<span class="nx">practise</span><span class="p">.</span><span class="nf">TestRecPostJson</span><span class="p">(</span><span class="nx">engine</span><span class="p">)</span>
-	<span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
+    <span class="c1">// 创建一个默认的路由引擎
+</span><span class="c1"></span>    <span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
+    <span class="c1">// 注册路由
+</span><span class="c1"></span>    <span class="nx">practise</span><span class="p">.</span><span class="nf">TestRecPostJson</span><span class="p">(</span><span class="nx">engine</span><span class="p">)</span>
+    <span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
 <span class="p">}</span>
 <span class="c1">//--- go-use/practise/param_receice.go -------
 </span><span class="c1">// 方式一: 将接收POST提交的JSON，直接赋值给变量
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestRecPostJson</span><span class="p">(</span><span class="nx">engine</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Engine</span><span class="p">)</span> <span class="p">{</span>
-	<span class="nx">engine</span><span class="p">.</span><span class="nf">POST</span><span class="p">(</span><span class="s">&#34;/postJson&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
-		<span class="nx">param</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kd">interface</span><span class="p">{})</span>
-		<span class="nx">err</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">BindJSON</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">param</span><span class="p">)</span>
-		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-			<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;err&#34;</span><span class="p">:</span> <span class="nx">err</span><span class="p">})</span>
-      <span class="k">return</span>
-		<span class="p">}</span>
-		<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;return&#34;</span><span class="p">:</span> <span class="nx">param</span><span class="p">})</span>
-	<span class="p">})</span>
+    <span class="nx">engine</span><span class="p">.</span><span class="nf">POST</span><span class="p">(</span><span class="s">&#34;/postJson&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">param</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kd">interface</span><span class="p">{})</span>
+        <span class="nx">err</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">BindJSON</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">param</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+            <span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;err&#34;</span><span class="p">:</span> <span class="nx">err</span><span class="p">})</span>
+            <span class="k">return</span>
+        <span class="p">}</span>
+        <span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;return&#34;</span><span class="p">:</span> <span class="nx">param</span><span class="p">})</span>
+    <span class="p">})</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -782,7 +792,7 @@
 <span class="o">{</span><span class="s2">&#34;return&#34;</span>:<span class="o">{</span><span class="s2">&#34;age&#34;</span>:20,<span class="s2">&#34;likes&#34;</span>:<span class="o">[</span><span class="s2">&#34;打游戏&#34;</span>,<span class="s2">&#34;旅游&#34;</span><span class="o">]</span>,<span class="s2">&#34;name&#34;</span>:<span class="s2">&#34;张三&#34;</span><span class="o">}}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="2绑定到结构体">2.绑定到结构体</h3>
+</div><h3 id="2绑定到struct">2.绑定到<code>struct</code></h3>
 <p><strong>a.代码示例:</strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -822,33 +832,33 @@
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">//--- main.go ---------------
 </span><span class="c1"></span><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;github.com/gin-gonic/gin&#34;</span>
-	<span class="s">&#34;go-use/practise&#34;</span>
+    <span class="s">&#34;github.com/gin-gonic/gin&#34;</span>
+    <span class="s">&#34;go-use/practise&#34;</span>
 <span class="p">)</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="c1">// 创建一个默认的路由引擎
-</span><span class="c1"></span>	<span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
-	<span class="c1">// 注册路由
-</span><span class="c1"></span>	<span class="nx">practise</span><span class="p">.</span><span class="nf">TestRecPostJson2</span><span class="p">(</span><span class="nx">engine</span><span class="p">)</span>
-	<span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
+    <span class="c1">// 创建一个默认的路由引擎
+</span><span class="c1"></span>    <span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
+    <span class="c1">// 注册路由
+</span><span class="c1"></span>    <span class="nx">practise</span><span class="p">.</span><span class="nf">TestRecPostJson2</span><span class="p">(</span><span class="nx">engine</span><span class="p">)</span>
+    <span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
 <span class="p">}</span>
 <span class="c1">//--- go-use/practise/param_receice.go -------
 </span><span class="c1">// 定义被绑定的结构体
 </span><span class="c1"></span><span class="kd">type</span> <span class="nx">People</span> <span class="kd">struct</span> <span class="p">{</span>
-	<span class="nx">Name</span>  <span class="kt">string</span>   <span class="s">`json:&#34;name&#34;`</span>
-	<span class="nx">Age</span>   <span class="kt">int</span>      <span class="s">`json:&#34;age&#34;`</span>
-	<span class="nx">Likes</span> <span class="p">[]</span><span class="kt">string</span> <span class="s">`json:&#34;likes&#34;`</span>
+    <span class="nx">Name</span>  <span class="kt">string</span>   <span class="s">`json:&#34;name&#34;`</span>
+    <span class="nx">Age</span>   <span class="kt">int</span>      <span class="s">`json:&#34;age&#34;`</span>
+    <span class="nx">Likes</span> <span class="p">[]</span><span class="kt">string</span> <span class="s">`json:&#34;likes&#34;`</span>
 <span class="p">}</span>
 <span class="c1">// 方式二: 将接收POST提交的JSON，绑定到结构体
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestRecPostJson2</span><span class="p">(</span><span class="nx">engine</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Engine</span><span class="p">)</span> <span class="p">{</span>
-	<span class="nx">engine</span><span class="p">.</span><span class="nf">POST</span><span class="p">(</span><span class="s">&#34;/postJson2&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
-		<span class="nx">people</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">People</span><span class="p">{}</span>
-		<span class="nx">err</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">BindJSON</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">people</span><span class="p">)</span>
-		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-			<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;err&#34;</span><span class="p">:</span> <span class="nx">err</span><span class="p">})</span>
-		<span class="p">}</span>
-		<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;return&#34;</span><span class="p">:</span> <span class="nx">people</span><span class="p">})</span>
-	<span class="p">})</span>
+    <span class="nx">engine</span><span class="p">.</span><span class="nf">POST</span><span class="p">(</span><span class="s">&#34;/postJson2&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">people</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">People</span><span class="p">{}</span>
+        <span class="nx">err</span> <span class="o">:=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">BindJSON</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">people</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+            <span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;err&#34;</span><span class="p">:</span> <span class="nx">err</span><span class="p">})</span>
+        <span class="p">}</span>
+        <span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="s">&#34;return&#34;</span><span class="p">:</span> <span class="nx">people</span><span class="p">})</span>
+    <span class="p">})</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -864,7 +874,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2023-03-04
+        2023-03-17
         
     </span>
   </p>
