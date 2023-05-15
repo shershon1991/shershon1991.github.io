@@ -44,11 +44,11 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/%E5%9F%BA%E7%A1%80%E7%AF%87/21-web%E5%BC%80%E5%8F%91-http%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%8E%A5%E6%94%B6%E5%8F%82%E6%95%B0%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E5%BC%8F/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-01-21T00:00:00+00:00" />
-<meta property="article:modified_time" content="2023-03-04T13:23:22+08:00" />
+<meta property="article:modified_time" content="2023-03-19T12:17:37+08:00" />
 
 <meta itemprop="name" content="Go学习(二十一):Web开发-HTTP服务端接收参数的几种方式">
 <meta itemprop="description" content="1.获取GET参数 1.1 方法列表 方法名 描述 (r *Request) ParseForm() error 判断是否解析传参时出错 (r *Request) FormValue(key string) string 接收指定key的参数值 1.2 使用示例 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15"><meta itemprop="datePublished" content="2021-01-21T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2023-03-04T13:23:22+08:00" />
+<meta itemprop="dateModified" content="2023-03-19T12:17:37+08:00" />
 <meta itemprop="wordCount" content="1887">
 <meta itemprop="keywords" content="Go基础," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go学习(二十一):Web开发-HTTP服务端接收参数的几种方式"/>
@@ -171,6 +171,11 @@
 </nav>
   </div>
 </div>
+  <div class="post-outdated">
+    <div class="hint">
+      <p>【注意】最后更新于 <span class="timeago" datetime="2023-03-19T12:17:37" title="March 19, 2023">March 19, 2023</span>，文中内容可能已过时，请谨慎使用。</p>
+    </div>
+  </div>
     <div class="post-content">
       <h1 id="1获取get参数">1.获取GET参数</h1>
 <h2 id="11-方法列表">1.1 方法列表</h2>
@@ -228,30 +233,30 @@
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 服务端代码
 </span><span class="c1"></span><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;fmt&#34;</span>
-	<span class="s">&#34;net/http&#34;</span>
+    <span class="s">&#34;fmt&#34;</span>
+    <span class="s">&#34;net/http&#34;</span>
 <span class="p">)</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="nx">http</span><span class="p">.</span><span class="nf">HandleFunc</span><span class="p">(</span><span class="s">&#34;/login&#34;</span><span class="p">,</span> <span class="nx">login</span><span class="p">)</span>
-	<span class="nx">_</span> <span class="p">=</span> <span class="nx">http</span><span class="p">.</span><span class="nf">ListenAndServe</span><span class="p">(</span><span class="s">&#34;:8888&#34;</span><span class="p">,</span> <span class="kc">nil</span><span class="p">)</span>
+    <span class="nx">http</span><span class="p">.</span><span class="nf">HandleFunc</span><span class="p">(</span><span class="s">&#34;/login&#34;</span><span class="p">,</span> <span class="nx">login</span><span class="p">)</span>
+    <span class="nx">_</span> <span class="p">=</span> <span class="nx">http</span><span class="p">.</span><span class="nf">ListenAndServe</span><span class="p">(</span><span class="s">&#34;:8888&#34;</span><span class="p">,</span> <span class="kc">nil</span><span class="p">)</span>
 <span class="p">}</span>
 <span class="kd">func</span> <span class="nf">login</span><span class="p">(</span><span class="nx">w</span> <span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="nx">r</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="p">{</span>
-  <span class="c1">// 判断参数是否是Get请求，并且参数解析正常
-</span><span class="c1"></span>	<span class="k">if</span> <span class="nx">r</span><span class="p">.</span><span class="nx">Method</span> <span class="o">==</span> <span class="s">&#34;GET&#34;</span> <span class="o">&amp;&amp;</span> <span class="nx">r</span><span class="p">.</span><span class="nf">ParseForm</span><span class="p">()</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
-    <span class="c1">// 接收参数
-</span><span class="c1"></span>		<span class="nx">userName</span> <span class="o">:=</span> <span class="nx">r</span><span class="p">.</span><span class="nf">FormValue</span><span class="p">(</span><span class="s">&#34;userName&#34;</span><span class="p">)</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;userName: %s \n&#34;</span><span class="p">,</span> <span class="nx">userName</span><span class="p">)</span>
-		<span class="nx">passWord</span> <span class="o">:=</span> <span class="nx">r</span><span class="p">.</span><span class="nf">FormValue</span><span class="p">(</span><span class="s">&#34;passWord&#34;</span><span class="p">)</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;passWord: %s \n&#34;</span><span class="p">,</span> <span class="nx">passWord</span><span class="p">)</span>
-		<span class="k">if</span> <span class="nx">userName</span> <span class="o">==</span> <span class="s">&#34;&#34;</span> <span class="o">||</span> <span class="nx">passWord</span> <span class="o">==</span> <span class="s">&#34;&#34;</span> <span class="p">{</span>
-			<span class="nx">w</span><span class="p">.</span><span class="nf">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;用户名或密码不能为空&#34;</span><span class="p">))</span>
-		<span class="p">}</span>
-		<span class="k">if</span> <span class="nx">userName</span> <span class="o">==</span> <span class="s">&#34;admin&#34;</span> <span class="o">&amp;&amp;</span> <span class="nx">passWord</span> <span class="o">==</span> <span class="s">&#34;1234&#34;</span> <span class="p">{</span>
-			<span class="nx">w</span><span class="p">.</span><span class="nf">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;登录成功！&#34;</span><span class="p">))</span>
-		<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-			<span class="nx">w</span><span class="p">.</span><span class="nf">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;用户名或密码错误！&#34;</span><span class="p">))</span>
-		<span class="p">}</span>
-	<span class="p">}</span>
+    <span class="c1">// 判断参数是否是Get请求，并且参数解析正常
+</span><span class="c1"></span>    <span class="k">if</span> <span class="nx">r</span><span class="p">.</span><span class="nx">Method</span> <span class="o">==</span> <span class="s">&#34;GET&#34;</span> <span class="o">&amp;&amp;</span> <span class="nx">r</span><span class="p">.</span><span class="nf">ParseForm</span><span class="p">()</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="c1">// 接收参数
+</span><span class="c1"></span>        <span class="nx">userName</span> <span class="o">:=</span> <span class="nx">r</span><span class="p">.</span><span class="nf">FormValue</span><span class="p">(</span><span class="s">&#34;userName&#34;</span><span class="p">)</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;userName: %s \n&#34;</span><span class="p">,</span> <span class="nx">userName</span><span class="p">)</span>
+        <span class="nx">passWord</span> <span class="o">:=</span> <span class="nx">r</span><span class="p">.</span><span class="nf">FormValue</span><span class="p">(</span><span class="s">&#34;passWord&#34;</span><span class="p">)</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;passWord: %s \n&#34;</span><span class="p">,</span> <span class="nx">passWord</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nx">userName</span> <span class="o">==</span> <span class="s">&#34;&#34;</span> <span class="o">||</span> <span class="nx">passWord</span> <span class="o">==</span> <span class="s">&#34;&#34;</span> <span class="p">{</span>
+            <span class="nx">w</span><span class="p">.</span><span class="nf">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;用户名或密码不能为空&#34;</span><span class="p">))</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="nx">userName</span> <span class="o">==</span> <span class="s">&#34;admin&#34;</span> <span class="o">&amp;&amp;</span> <span class="nx">passWord</span> <span class="o">==</span> <span class="s">&#34;1234&#34;</span> <span class="p">{</span>
+            <span class="nx">w</span><span class="p">.</span><span class="nf">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;登录成功！&#34;</span><span class="p">))</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">w</span><span class="p">.</span><span class="nf">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;用户名或密码错误！&#34;</span><span class="p">))</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -301,34 +306,34 @@
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 服务端代码
 </span><span class="c1"></span><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;fmt&#34;</span>
-	<span class="s">&#34;net/http&#34;</span>
+    <span class="s">&#34;fmt&#34;</span>
+    <span class="s">&#34;net/http&#34;</span>
 <span class="p">)</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="nx">http</span><span class="p">.</span><span class="nf">HandleFunc</span><span class="p">(</span><span class="s">&#34;/login&#34;</span><span class="p">,</span> <span class="nx">login</span><span class="p">)</span>
-	<span class="nx">_</span> <span class="p">=</span> <span class="nx">http</span><span class="p">.</span><span class="nf">ListenAndServe</span><span class="p">(</span><span class="s">&#34;:8888&#34;</span><span class="p">,</span> <span class="kc">nil</span><span class="p">)</span>
+    <span class="nx">http</span><span class="p">.</span><span class="nf">HandleFunc</span><span class="p">(</span><span class="s">&#34;/login&#34;</span><span class="p">,</span> <span class="nx">login</span><span class="p">)</span>
+    <span class="nx">_</span> <span class="p">=</span> <span class="nx">http</span><span class="p">.</span><span class="nf">ListenAndServe</span><span class="p">(</span><span class="s">&#34;:8888&#34;</span><span class="p">,</span> <span class="kc">nil</span><span class="p">)</span>
 <span class="p">}</span>
 <span class="c1">// 登录
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">login</span><span class="p">(</span><span class="nx">w</span> <span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="nx">r</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="p">{</span>
-	<span class="k">if</span> <span class="nx">r</span><span class="p">.</span><span class="nx">Method</span> <span class="o">==</span> <span class="s">&#34;POST&#34;</span> <span class="o">&amp;&amp;</span> <span class="nx">r</span><span class="p">.</span><span class="nf">ParseForm</span><span class="p">()</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="c1">// 接收post参数
-</span><span class="c1"></span>		<span class="nx">userName</span> <span class="o">:=</span> <span class="nx">r</span><span class="p">.</span><span class="nf">PostFormValue</span><span class="p">(</span><span class="s">&#34;userName&#34;</span><span class="p">)</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;userName: %s \n&#34;</span><span class="p">,</span> <span class="nx">userName</span><span class="p">)</span>
-		<span class="nx">passWord</span> <span class="o">:=</span> <span class="nx">r</span><span class="p">.</span><span class="nf">PostFormValue</span><span class="p">(</span><span class="s">&#34;passWord&#34;</span><span class="p">)</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;passWord: %s \n&#34;</span><span class="p">,</span> <span class="nx">passWord</span><span class="p">)</span>
-		<span class="k">if</span> <span class="nx">userName</span> <span class="o">==</span> <span class="s">&#34;&#34;</span> <span class="o">||</span> <span class="nx">passWord</span> <span class="o">==</span> <span class="s">&#34;&#34;</span> <span class="p">{</span>
-			<span class="nx">w</span><span class="p">.</span><span class="nf">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;用户名或密码不能为空&#34;</span><span class="p">))</span>
-			<span class="k">return</span>
-		<span class="p">}</span>
-		<span class="k">if</span> <span class="nx">userName</span> <span class="o">==</span> <span class="s">&#34;admin&#34;</span> <span class="o">&amp;&amp;</span> <span class="nx">passWord</span> <span class="o">==</span> <span class="s">&#34;1234&#34;</span> <span class="p">{</span>
-			<span class="nx">w</span><span class="p">.</span><span class="nf">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;登录成功！&#34;</span><span class="p">))</span>
-			<span class="k">return</span>
-		<span class="p">}</span>
-		<span class="nx">w</span><span class="p">.</span><span class="nf">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;用户名或密码错误！&#34;</span><span class="p">))</span>
-	<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-		<span class="nx">w</span><span class="p">.</span><span class="nf">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;当前接口，仅支持POST请求！&#34;</span><span class="p">))</span>
-	<span class="p">}</span>
-	<span class="k">return</span>
+    <span class="k">if</span> <span class="nx">r</span><span class="p">.</span><span class="nx">Method</span> <span class="o">==</span> <span class="s">&#34;POST&#34;</span> <span class="o">&amp;&amp;</span> <span class="nx">r</span><span class="p">.</span><span class="nf">ParseForm</span><span class="p">()</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="c1">// 接收post参数
+</span><span class="c1"></span>        <span class="nx">userName</span> <span class="o">:=</span> <span class="nx">r</span><span class="p">.</span><span class="nf">PostFormValue</span><span class="p">(</span><span class="s">&#34;userName&#34;</span><span class="p">)</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;userName: %s \n&#34;</span><span class="p">,</span> <span class="nx">userName</span><span class="p">)</span>
+        <span class="nx">passWord</span> <span class="o">:=</span> <span class="nx">r</span><span class="p">.</span><span class="nf">PostFormValue</span><span class="p">(</span><span class="s">&#34;passWord&#34;</span><span class="p">)</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;passWord: %s \n&#34;</span><span class="p">,</span> <span class="nx">passWord</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nx">userName</span> <span class="o">==</span> <span class="s">&#34;&#34;</span> <span class="o">||</span> <span class="nx">passWord</span> <span class="o">==</span> <span class="s">&#34;&#34;</span> <span class="p">{</span>
+            <span class="nx">w</span><span class="p">.</span><span class="nf">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;用户名或密码不能为空&#34;</span><span class="p">))</span>
+            <span class="k">return</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="nx">userName</span> <span class="o">==</span> <span class="s">&#34;admin&#34;</span> <span class="o">&amp;&amp;</span> <span class="nx">passWord</span> <span class="o">==</span> <span class="s">&#34;1234&#34;</span> <span class="p">{</span>
+            <span class="nx">w</span><span class="p">.</span><span class="nf">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;登录成功！&#34;</span><span class="p">))</span>
+            <span class="k">return</span>
+        <span class="p">}</span>
+        <span class="nx">w</span><span class="p">.</span><span class="nf">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;用户名或密码错误！&#34;</span><span class="p">))</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">w</span><span class="p">.</span><span class="nf">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;当前接口，仅支持POST请求！&#34;</span><span class="p">))</span>
+    <span class="p">}</span>
+    <span class="k">return</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -409,73 +414,73 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;fmt&#34;</span>
-	<span class="s">&#34;io&#34;</span>
-	<span class="s">&#34;net/http&#34;</span>
-	<span class="s">&#34;os&#34;</span>
-	<span class="s">&#34;path&#34;</span>
+    <span class="s">&#34;fmt&#34;</span>
+    <span class="s">&#34;io&#34;</span>
+    <span class="s">&#34;net/http&#34;</span>
+    <span class="s">&#34;os&#34;</span>
+    <span class="s">&#34;path&#34;</span>
 <span class="p">)</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="nx">http</span><span class="p">.</span><span class="nf">HandleFunc</span><span class="p">(</span><span class="s">&#34;/upload&#34;</span><span class="p">,</span> <span class="nx">upload</span><span class="p">)</span>
-	<span class="nx">_</span> <span class="p">=</span> <span class="nx">http</span><span class="p">.</span><span class="nf">ListenAndServe</span><span class="p">(</span><span class="s">&#34;:8888&#34;</span><span class="p">,</span> <span class="kc">nil</span><span class="p">)</span>
+    <span class="nx">http</span><span class="p">.</span><span class="nf">HandleFunc</span><span class="p">(</span><span class="s">&#34;/upload&#34;</span><span class="p">,</span> <span class="nx">upload</span><span class="p">)</span>
+    <span class="nx">_</span> <span class="p">=</span> <span class="nx">http</span><span class="p">.</span><span class="nf">ListenAndServe</span><span class="p">(</span><span class="s">&#34;:8888&#34;</span><span class="p">,</span> <span class="kc">nil</span><span class="p">)</span>
 <span class="p">}</span>
 <span class="c1">// 上传文件
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">upload</span><span class="p">(</span><span class="nx">w</span> <span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="nx">r</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="p">{</span>
-	<span class="k">if</span> <span class="nx">r</span><span class="p">.</span><span class="nx">Method</span> <span class="o">==</span> <span class="s">&#34;POST&#34;</span> <span class="o">&amp;&amp;</span> <span class="nx">r</span><span class="p">.</span><span class="nf">ParseForm</span><span class="p">()</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="c1">// 接收上传文件的参数
-</span><span class="c1"></span>		<span class="nx">formFile</span><span class="p">,</span> <span class="nx">fileHeader</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">r</span><span class="p">.</span><span class="nf">FormFile</span><span class="p">(</span><span class="s">&#34;file&#34;</span><span class="p">)</span>
-		<span class="k">if</span> <span class="nx">formFile</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
-			<span class="nx">http</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="s">&#34;上传的文件不能为空!&#34;</span><span class="p">,</span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusInternalServerError</span><span class="p">)</span>
-			<span class="k">return</span>
-		<span class="p">}</span>
-		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-			<span class="nx">http</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">(),</span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusInternalServerError</span><span class="p">)</span>
-			<span class="k">return</span>
-		<span class="p">}</span>
-		<span class="c1">// 延迟关闭文件
-</span><span class="c1"></span>		<span class="k">defer</span> <span class="nx">formFile</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
-		<span class="c1">// 获取上传文件的名称
-</span><span class="c1"></span>		<span class="nx">filename</span> <span class="o">:=</span> <span class="nx">fileHeader</span><span class="p">.</span><span class="nx">Filename</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;文件名称: %s \n&#34;</span><span class="p">,</span><span class="nx">filename</span><span class="p">)</span>
-		<span class="c1">// 获取文件的后缀
-</span><span class="c1"></span>		<span class="nx">ext</span> <span class="o">:=</span> <span class="nx">path</span><span class="p">.</span><span class="nf">Ext</span><span class="p">(</span><span class="nx">filename</span><span class="p">)</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;文件后缀: %s \n&#34;</span><span class="p">,</span><span class="nx">ext</span><span class="p">)</span>
-		<span class="c1">// 创建新文件,如果同名文件存在，则会清空
-</span><span class="c1"></span>		<span class="nx">pathName</span> <span class="o">:=</span> <span class="s">&#34;public/img&#34;</span>
-		<span class="k">if</span> <span class="p">!</span><span class="nf">pathExist</span><span class="p">(</span><span class="nx">pathName</span><span class="p">)</span> <span class="p">{</span>
-			<span class="nx">err</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nf">MkdirAll</span><span class="p">(</span><span class="nx">pathName</span><span class="p">,</span> <span class="nx">os</span><span class="p">.</span><span class="nx">ModePerm</span><span class="p">)</span>
-			<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-				<span class="nx">http</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="s">&#34;创建目录失败: &#34;</span><span class="o">+</span> <span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">(),</span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusInternalServerError</span><span class="p">)</span>
-				<span class="k">return</span>
-			<span class="p">}</span>
-		<span class="p">}</span>
-		<span class="nx">newFile</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="nx">pathName</span> <span class="o">+</span><span class="s">&#34;/&#34;</span><span class="o">+</span> <span class="nx">filename</span><span class="p">)</span>
-		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-			<span class="nx">http</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="s">&#34;创建文件失败: &#34;</span><span class="o">+</span> <span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">(),</span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusInternalServerError</span><span class="p">)</span>
-			<span class="k">return</span>
-		<span class="p">}</span>
-		<span class="k">defer</span> <span class="nx">newFile</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
-		<span class="c1">// 将formFile复制到newFile,从而实现上传的功能
-</span><span class="c1"></span>		<span class="nx">written</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">io</span><span class="p">.</span><span class="nf">Copy</span><span class="p">(</span><span class="nx">newFile</span><span class="p">,</span> <span class="nx">formFile</span><span class="p">)</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;上传结果: %d \n&#34;</span><span class="p">,</span><span class="nx">written</span><span class="p">)</span>
-		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-			<span class="nx">http</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="s">&#34;文件上传失败: &#34;</span><span class="o">+</span> <span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">(),</span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusInternalServerError</span><span class="p">)</span>
-			<span class="k">return</span>
-		<span class="p">}</span>
-		<span class="nx">w</span><span class="p">.</span><span class="nf">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;文件上传成功!&#34;</span><span class="p">))</span>
-	<span class="p">}</span>
-	<span class="k">return</span>
+    <span class="k">if</span> <span class="nx">r</span><span class="p">.</span><span class="nx">Method</span> <span class="o">==</span> <span class="s">&#34;POST&#34;</span> <span class="o">&amp;&amp;</span> <span class="nx">r</span><span class="p">.</span><span class="nf">ParseForm</span><span class="p">()</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="c1">// 接收上传文件的参数
+</span><span class="c1"></span>        <span class="nx">formFile</span><span class="p">,</span> <span class="nx">fileHeader</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">r</span><span class="p">.</span><span class="nf">FormFile</span><span class="p">(</span><span class="s">&#34;file&#34;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nx">formFile</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
+            <span class="nx">http</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="s">&#34;上传的文件不能为空!&#34;</span><span class="p">,</span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusInternalServerError</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+            <span class="nx">http</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">(),</span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusInternalServerError</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="p">}</span>
+        <span class="c1">// 延迟关闭文件
+</span><span class="c1"></span>        <span class="k">defer</span> <span class="nx">formFile</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
+        <span class="c1">// 获取上传文件的名称
+</span><span class="c1"></span>        <span class="nx">filename</span> <span class="o">:=</span> <span class="nx">fileHeader</span><span class="p">.</span><span class="nx">Filename</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;文件名称: %s \n&#34;</span><span class="p">,</span><span class="nx">filename</span><span class="p">)</span>
+        <span class="c1">// 获取文件的后缀
+</span><span class="c1"></span>        <span class="nx">ext</span> <span class="o">:=</span> <span class="nx">path</span><span class="p">.</span><span class="nf">Ext</span><span class="p">(</span><span class="nx">filename</span><span class="p">)</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;文件后缀: %s \n&#34;</span><span class="p">,</span><span class="nx">ext</span><span class="p">)</span>
+        <span class="c1">// 创建新文件,如果同名文件存在，则会清空
+</span><span class="c1"></span>        <span class="nx">pathName</span> <span class="o">:=</span> <span class="s">&#34;public/img&#34;</span>
+        <span class="k">if</span> <span class="p">!</span><span class="nf">pathExist</span><span class="p">(</span><span class="nx">pathName</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">err</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nf">MkdirAll</span><span class="p">(</span><span class="nx">pathName</span><span class="p">,</span> <span class="nx">os</span><span class="p">.</span><span class="nx">ModePerm</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+                <span class="nx">http</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="s">&#34;创建目录失败: &#34;</span><span class="o">+</span> <span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">(),</span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusInternalServerError</span><span class="p">)</span>
+                <span class="k">return</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="nx">newFile</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="nx">pathName</span> <span class="o">+</span><span class="s">&#34;/&#34;</span><span class="o">+</span> <span class="nx">filename</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+            <span class="nx">http</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="s">&#34;创建文件失败: &#34;</span><span class="o">+</span> <span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">(),</span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusInternalServerError</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="p">}</span>
+        <span class="k">defer</span> <span class="nx">newFile</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
+        <span class="c1">// 将formFile复制到newFile,从而实现上传的功能
+</span><span class="c1"></span>        <span class="nx">written</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">io</span><span class="p">.</span><span class="nf">Copy</span><span class="p">(</span><span class="nx">newFile</span><span class="p">,</span> <span class="nx">formFile</span><span class="p">)</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;上传结果: %d \n&#34;</span><span class="p">,</span><span class="nx">written</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+            <span class="nx">http</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="s">&#34;文件上传失败: &#34;</span><span class="o">+</span> <span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">(),</span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusInternalServerError</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="p">}</span>
+        <span class="nx">w</span><span class="p">.</span><span class="nf">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;文件上传成功!&#34;</span><span class="p">))</span>
+    <span class="p">}</span>
+    <span class="k">return</span>
 <span class="p">}</span>
 <span class="c1">// 判断目录是否存在
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">pathExist</span><span class="p">(</span><span class="nx">path</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">bool</span>  <span class="p">{</span>
-	<span class="nx">_</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nf">Stat</span><span class="p">(</span><span class="nx">path</span><span class="p">)</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="k">if</span> <span class="nx">os</span><span class="p">.</span><span class="nf">IsExist</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
-			<span class="k">return</span> <span class="kc">true</span>
-		<span class="p">}</span>
-		<span class="k">return</span> <span class="kc">false</span>
-	<span class="p">}</span>
-	<span class="k">return</span> <span class="kc">true</span>
+    <span class="nx">_</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nf">Stat</span><span class="p">(</span><span class="nx">path</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="nx">os</span><span class="p">.</span><span class="nf">IsExist</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="kc">true</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="kc">false</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="kc">true</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -504,18 +509,18 @@
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">Cookie</span> <span class="kd">struct</span> <span class="p">{</span>
-	<span class="nx">Name</span>  <span class="kt">string</span> <span class="c1">// 变量名
-</span><span class="c1"></span>	<span class="nx">Value</span> <span class="kt">string</span> <span class="c1">// 变量值
-</span><span class="c1"></span>	<span class="nx">Path</span>       <span class="kt">string</span>    <span class="c1">// 设置访问哪些路径,应该携带这个cookie,不设置则代表所有
-</span><span class="c1"></span>	<span class="nx">Domain</span>     <span class="kt">string</span>    <span class="c1">// 设置访问域名范围的主机时,应该携带这个cookie,不设置则代表所有
-</span><span class="c1"></span>	<span class="nx">Expires</span>    <span class="nx">time</span><span class="p">.</span><span class="nx">Time</span> <span class="c1">// 一个时间值，代表什么时候过期
-</span><span class="c1"></span>	<span class="nx">RawExpires</span> <span class="kt">string</span>    <span class="c1">// for reading cookies only
-</span><span class="c1"></span>	<span class="nx">MaxAge</span>   <span class="kt">int</span> <span class="c1">//用来设置过期，为负数或等于0表示立即过期，大于0表示过多少秒之后过期
-</span><span class="c1"></span>	<span class="nx">Secure</span>   <span class="kt">bool</span>
-	<span class="nx">HttpOnly</span> <span class="kt">bool</span>
-	<span class="nx">SameSite</span> <span class="nx">SameSite</span>
-	<span class="nx">Raw</span>      <span class="kt">string</span>
-	<span class="nx">Unparsed</span> <span class="p">[]</span><span class="kt">string</span> <span class="c1">// Raw text of unparsed attribute-value pairs
+    <span class="nx">Name</span>  <span class="kt">string</span> <span class="c1">// 变量名
+</span><span class="c1"></span>    <span class="nx">Value</span> <span class="kt">string</span> <span class="c1">// 变量值
+</span><span class="c1"></span>    <span class="nx">Path</span>       <span class="kt">string</span>    <span class="c1">// 设置访问哪些路径,应该携带这个cookie,不设置则代表所有
+</span><span class="c1"></span>    <span class="nx">Domain</span>     <span class="kt">string</span>    <span class="c1">// 设置访问域名范围的主机时,应该携带这个cookie,不设置则代表所有
+</span><span class="c1"></span>    <span class="nx">Expires</span>    <span class="nx">time</span><span class="p">.</span><span class="nx">Time</span> <span class="c1">// 一个时间值，代表什么时候过期
+</span><span class="c1"></span>    <span class="nx">RawExpires</span> <span class="kt">string</span>    <span class="c1">// for reading cookies only
+</span><span class="c1"></span>    <span class="nx">MaxAge</span>   <span class="kt">int</span> <span class="c1">//用来设置过期，为负数或等于0表示立即过期，大于0表示过多少秒之后过期
+</span><span class="c1"></span>    <span class="nx">Secure</span>   <span class="kt">bool</span>
+    <span class="nx">HttpOnly</span> <span class="kt">bool</span>
+    <span class="nx">SameSite</span> <span class="nx">SameSite</span>
+    <span class="nx">Raw</span>      <span class="kt">string</span>
+    <span class="nx">Unparsed</span> <span class="p">[]</span><span class="kt">string</span> <span class="c1">// Raw text of unparsed attribute-value pairs
 </span><span class="c1"></span><span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -574,51 +579,51 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;encoding/base64&#34;</span>
-	<span class="s">&#34;fmt&#34;</span>
-	<span class="s">&#34;net/http&#34;</span>
+    <span class="s">&#34;encoding/base64&#34;</span>
+    <span class="s">&#34;fmt&#34;</span>
+    <span class="s">&#34;net/http&#34;</span>
 <span class="p">)</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="nx">http</span><span class="p">.</span><span class="nf">HandleFunc</span><span class="p">(</span><span class="s">&#34;/setCookie&#34;</span><span class="p">,</span> <span class="nx">setCookie</span><span class="p">)</span>
-	<span class="nx">http</span><span class="p">.</span><span class="nf">HandleFunc</span><span class="p">(</span><span class="s">&#34;/getCookie&#34;</span><span class="p">,</span> <span class="nx">getCookie</span><span class="p">)</span>
-	<span class="nx">_</span> <span class="p">=</span> <span class="nx">http</span><span class="p">.</span><span class="nf">ListenAndServe</span><span class="p">(</span><span class="s">&#34;:8888&#34;</span><span class="p">,</span> <span class="kc">nil</span><span class="p">)</span>
+    <span class="nx">http</span><span class="p">.</span><span class="nf">HandleFunc</span><span class="p">(</span><span class="s">&#34;/setCookie&#34;</span><span class="p">,</span> <span class="nx">setCookie</span><span class="p">)</span>
+    <span class="nx">http</span><span class="p">.</span><span class="nf">HandleFunc</span><span class="p">(</span><span class="s">&#34;/getCookie&#34;</span><span class="p">,</span> <span class="nx">getCookie</span><span class="p">)</span>
+    <span class="nx">_</span> <span class="p">=</span> <span class="nx">http</span><span class="p">.</span><span class="nf">ListenAndServe</span><span class="p">(</span><span class="s">&#34;:8888&#34;</span><span class="p">,</span> <span class="kc">nil</span><span class="p">)</span>
 <span class="p">}</span>
 
 <span class="c1">// 设置cookie中的值
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">setCookie</span><span class="p">(</span><span class="nx">w</span> <span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="nx">r</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span>  <span class="p">{</span>
-	<span class="nx">cookie1</span> <span class="o">:=</span> <span class="nx">http</span><span class="p">.</span><span class="nx">Cookie</span><span class="p">{</span>
-		<span class="nx">Name</span><span class="p">:</span>   <span class="s">&#34;uid&#34;</span><span class="p">,</span>
-		<span class="nx">Value</span><span class="p">:</span>  <span class="s">&#34;10001&#34;</span><span class="p">,</span>
-		<span class="nx">MaxAge</span><span class="p">:</span> <span class="mi">3600</span><span class="p">,</span> <span class="c1">//一小时后过期
-</span><span class="c1"></span>	<span class="p">}</span>
-	<span class="nx">name</span> <span class="o">:=</span> <span class="nx">base64</span><span class="p">.</span><span class="nx">URLEncoding</span><span class="p">.</span><span class="nf">EncodeToString</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;张三&#34;</span><span class="p">))</span>
-	<span class="nx">cookie2</span> <span class="o">:=</span> <span class="nx">http</span><span class="p">.</span><span class="nx">Cookie</span><span class="p">{</span>
-		<span class="nx">Name</span><span class="p">:</span>   <span class="s">&#34;name&#34;</span><span class="p">,</span>
-		<span class="nx">Value</span><span class="p">:</span>  <span class="nx">name</span><span class="p">,</span>
-		<span class="nx">MaxAge</span><span class="p">:</span> <span class="mi">3600</span><span class="p">,</span> <span class="c1">//一小时后过期
-</span><span class="c1"></span>	<span class="p">}</span>
-	<span class="nx">http</span><span class="p">.</span><span class="nf">SetCookie</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="o">&amp;</span><span class="nx">cookie1</span><span class="p">)</span>
-	<span class="nx">http</span><span class="p">.</span><span class="nf">SetCookie</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="o">&amp;</span><span class="nx">cookie2</span><span class="p">)</span>
-	<span class="nx">w</span><span class="p">.</span><span class="nf">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;cookie已设置!&#34;</span><span class="p">))</span>
+    <span class="nx">cookie1</span> <span class="o">:=</span> <span class="nx">http</span><span class="p">.</span><span class="nx">Cookie</span><span class="p">{</span>
+        <span class="nx">Name</span><span class="p">:</span>   <span class="s">&#34;uid&#34;</span><span class="p">,</span>
+        <span class="nx">Value</span><span class="p">:</span>  <span class="s">&#34;10001&#34;</span><span class="p">,</span>
+        <span class="nx">MaxAge</span><span class="p">:</span> <span class="mi">3600</span><span class="p">,</span> <span class="c1">//一小时后过期
+</span><span class="c1"></span>    <span class="p">}</span>
+    <span class="nx">name</span> <span class="o">:=</span> <span class="nx">base64</span><span class="p">.</span><span class="nx">URLEncoding</span><span class="p">.</span><span class="nf">EncodeToString</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;张三&#34;</span><span class="p">))</span>
+    <span class="nx">cookie2</span> <span class="o">:=</span> <span class="nx">http</span><span class="p">.</span><span class="nx">Cookie</span><span class="p">{</span>
+        <span class="nx">Name</span><span class="p">:</span>   <span class="s">&#34;name&#34;</span><span class="p">,</span>
+        <span class="nx">Value</span><span class="p">:</span>  <span class="nx">name</span><span class="p">,</span>
+        <span class="nx">MaxAge</span><span class="p">:</span> <span class="mi">3600</span><span class="p">,</span> <span class="c1">//一小时后过期
+</span><span class="c1"></span>    <span class="p">}</span>
+    <span class="nx">http</span><span class="p">.</span><span class="nf">SetCookie</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="o">&amp;</span><span class="nx">cookie1</span><span class="p">)</span>
+    <span class="nx">http</span><span class="p">.</span><span class="nf">SetCookie</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="o">&amp;</span><span class="nx">cookie2</span><span class="p">)</span>
+    <span class="nx">w</span><span class="p">.</span><span class="nf">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;cookie已设置!&#34;</span><span class="p">))</span>
 <span class="p">}</span>
 <span class="c1">// 获取cookie中的值
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">getCookie</span><span class="p">(</span><span class="nx">w</span> <span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="nx">r</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="p">{</span>
-	<span class="nx">key</span> <span class="o">:=</span> <span class="nx">r</span><span class="p">.</span><span class="nf">FormValue</span><span class="p">(</span><span class="s">&#34;key&#34;</span><span class="p">)</span>
-	<span class="k">if</span> <span class="nx">key</span> <span class="o">==</span> <span class="s">&#34;&#34;</span> <span class="p">{</span>
-		<span class="nx">http</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="s">&#34;key不能为空!&#34;</span><span class="p">,</span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusInternalServerError</span><span class="p">)</span>
-		<span class="k">return</span>
-	<span class="p">}</span>
-	<span class="nx">cookie</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">r</span><span class="p">.</span><span class="nf">Cookie</span><span class="p">(</span><span class="nx">key</span><span class="p">)</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="nx">http</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="s">&#34;获取失败: &#34;</span> <span class="o">+</span> <span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">(),</span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusInternalServerError</span><span class="p">)</span>
-		<span class="k">return</span>
-	<span class="p">}</span>
-	<span class="nx">result</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">string</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
-	<span class="nx">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">=</span> <span class="nx">cookie</span><span class="p">.</span><span class="nx">Value</span>
-	<span class="nx">decodeString</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">base64</span><span class="p">.</span><span class="nx">URLEncoding</span><span class="p">.</span><span class="nf">DecodeString</span><span class="p">(</span><span class="nx">cookie</span><span class="p">.</span><span class="nx">Value</span><span class="p">)</span>
-	<span class="nx">result</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">=</span> <span class="nb">string</span><span class="p">(</span><span class="nx">decodeString</span><span class="p">)</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">result</span><span class="p">)</span>
-	<span class="nx">w</span><span class="p">.</span><span class="nf">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;cookie已获取!&#34;</span><span class="p">))</span>
+    <span class="nx">key</span> <span class="o">:=</span> <span class="nx">r</span><span class="p">.</span><span class="nf">FormValue</span><span class="p">(</span><span class="s">&#34;key&#34;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nx">key</span> <span class="o">==</span> <span class="s">&#34;&#34;</span> <span class="p">{</span>
+        <span class="nx">http</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="s">&#34;key不能为空!&#34;</span><span class="p">,</span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusInternalServerError</span><span class="p">)</span>
+        <span class="k">return</span>
+    <span class="p">}</span>
+    <span class="nx">cookie</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">r</span><span class="p">.</span><span class="nf">Cookie</span><span class="p">(</span><span class="nx">key</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="nx">http</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="s">&#34;获取失败: &#34;</span> <span class="o">+</span> <span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">(),</span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusInternalServerError</span><span class="p">)</span>
+        <span class="k">return</span>
+    <span class="p">}</span>
+    <span class="nx">result</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">string</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+    <span class="nx">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">=</span> <span class="nx">cookie</span><span class="p">.</span><span class="nx">Value</span>
+    <span class="nx">decodeString</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">base64</span><span class="p">.</span><span class="nx">URLEncoding</span><span class="p">.</span><span class="nf">DecodeString</span><span class="p">(</span><span class="nx">cookie</span><span class="p">.</span><span class="nx">Value</span><span class="p">)</span>
+    <span class="nx">result</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">=</span> <span class="nb">string</span><span class="p">(</span><span class="nx">decodeString</span><span class="p">)</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">result</span><span class="p">)</span>
+    <span class="nx">w</span><span class="p">.</span><span class="nf">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;cookie已获取!&#34;</span><span class="p">))</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -633,7 +638,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2023-03-04
+        2023-03-19
         
     </span>
   </p>

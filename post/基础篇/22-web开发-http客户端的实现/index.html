@@ -44,11 +44,11 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/%E5%9F%BA%E7%A1%80%E7%AF%87/22-web%E5%BC%80%E5%8F%91-http%E5%AE%A2%E6%88%B7%E7%AB%AF%E7%9A%84%E5%AE%9E%E7%8E%B0/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-01-22T00:00:00+00:00" />
-<meta property="article:modified_time" content="2023-03-04T13:23:22+08:00" />
+<meta property="article:modified_time" content="2023-03-19T12:19:40+08:00" />
 
 <meta itemprop="name" content="Go学习(二十二):Web开发-HTTP客户端的实现">
 <meta itemprop="description" content="1.怎么实现HTTP协议客户端? Go语言标准库内置了net/http包，涵盖了HTTP客户端和服务端具体的实现方式。内置的net/http包"><meta itemprop="datePublished" content="2021-01-22T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2023-03-04T13:23:22+08:00" />
+<meta itemprop="dateModified" content="2023-03-19T12:19:40+08:00" />
 <meta itemprop="wordCount" content="2783">
 <meta itemprop="keywords" content="Go基础," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go学习(二十二):Web开发-HTTP客户端的实现"/>
@@ -192,6 +192,11 @@
 </nav>
   </div>
 </div>
+  <div class="post-outdated">
+    <div class="hint">
+      <p>【注意】最后更新于 <span class="timeago" datetime="2023-03-19T12:19:40" title="March 19, 2023">March 19, 2023</span>，文中内容可能已过时，请谨慎使用。</p>
+    </div>
+  </div>
     <div class="post-content">
       <h1 id="1怎么实现http协议客户端">1.怎么实现HTTP协议客户端?</h1>
 <p><code>Go</code>语言标准库内置了<code>net/http</code>包，涵盖了<code>HTTP</code>客户端和服务端具体的实现方式。内置的<code>net/http</code>包提供了最简洁的<code>HTTP</code>客户端实现方式，无须借助第三方网络通信库，就可以直接使用<code>HTTP</code>中用得最多的<code>GET</code>和<code>POST</code>方式请求数据。</p>
@@ -211,7 +216,7 @@
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// method：GET | POST
 </span><span class="c1">// url:
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">NewRequest</span><span class="p">(</span><span class="nx">method</span><span class="p">,</span> <span class="nx">url</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">body</span> <span class="nx">io</span><span class="p">.</span><span class="nx">Reader</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="nx">Request</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
-	<span class="k">return</span> <span class="nf">NewRequestWithContext</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">Background</span><span class="p">(),</span> <span class="nx">method</span><span class="p">,</span> <span class="nx">url</span><span class="p">,</span> <span class="nx">body</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nf">NewRequestWithContext</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">Background</span><span class="p">(),</span> <span class="nx">method</span><span class="p">,</span> <span class="nx">url</span><span class="p">,</span> <span class="nx">body</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -270,51 +275,51 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;fmt&#34;</span>
-	<span class="s">&#34;io/ioutil&#34;</span>
-	<span class="s">&#34;net/http&#34;</span>
+    <span class="s">&#34;fmt&#34;</span>
+    <span class="s">&#34;io/ioutil&#34;</span>
+    <span class="s">&#34;net/http&#34;</span>
 <span class="p">)</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="nf">testHttpNewRequestByGet</span><span class="p">()</span>
+    <span class="nf">testHttpNewRequestByGet</span><span class="p">()</span>
 <span class="p">}</span>
 <span class="kd">func</span> <span class="nf">testHttpNewRequestByGet</span><span class="p">()</span>  <span class="p">{</span>
-	<span class="c1">// 1.创建一个客户端
-</span><span class="c1"></span>	<span class="nx">client</span> <span class="o">:=</span> <span class="nx">http</span><span class="p">.</span><span class="nx">Client</span><span class="p">{}</span>
-	<span class="c1">// 2.创建一个请求,请求方式可以是GET，也可以是POST
-</span><span class="c1"></span>	<span class="nx">request</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">http</span><span class="p">.</span><span class="nf">NewRequest</span><span class="p">(</span><span class="s">&#34;GET&#34;</span><span class="p">,</span> <span class="s">&#34;https://api.apiopen.top/getJoke?page=1&amp;count=2&amp;type=text&#34;</span><span class="p">,</span> <span class="kc">nil</span><span class="p">)</span>
-	<span class="nf">catchError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-	<span class="c1">// 3.示范添加cookie
-</span><span class="c1"></span>	<span class="nx">cookie1</span> <span class="o">:=</span> <span class="nx">http</span><span class="p">.</span><span class="nx">Cookie</span><span class="p">{</span><span class="nx">Name</span><span class="p">:</span> <span class="s">&#34;uid&#34;</span><span class="p">,</span> <span class="nx">Value</span><span class="p">:</span> <span class="s">&#34;1001&#34;</span><span class="p">}</span>
-	<span class="nx">request</span><span class="p">.</span><span class="nf">AddCookie</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">cookie1</span><span class="p">)</span>
-	<span class="c1">// 4.发起请求数据
-</span><span class="c1"></span>	<span class="nx">response</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">Do</span><span class="p">(</span><span class="nx">request</span><span class="p">)</span>
-	<span class="nf">catchError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-	<span class="c1">// 5.解析返回数据
-</span><span class="c1"></span>	<span class="k">if</span> <span class="nx">response</span><span class="p">.</span><span class="nx">StatusCode</span> <span class="o">!=</span> <span class="mi">200</span> <span class="p">{</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;网络请求失败！&#34;</span> <span class="p">)</span>
-	<span class="p">}</span>
-  <span class="c1">// 6.读取后需要关闭response.Body
-</span><span class="c1"></span>	<span class="k">defer</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
-		<span class="nx">response</span><span class="p">.</span><span class="nx">Body</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
-	<span class="p">}()</span>
-	<span class="c1">// 7.读取response.Body
-</span><span class="c1"></span>	<span class="nx">body</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ioutil</span><span class="p">.</span><span class="nf">ReadAll</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">Body</span><span class="p">)</span>
-	<span class="nf">catchError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;请求结果:  &#34;</span> <span class="o">+</span> <span class="nb">string</span><span class="p">(</span><span class="nx">body</span><span class="p">))</span>
+    <span class="c1">// 1.创建一个客户端
+</span><span class="c1"></span>    <span class="nx">client</span> <span class="o">:=</span> <span class="nx">http</span><span class="p">.</span><span class="nx">Client</span><span class="p">{}</span>
+    <span class="c1">// 2.创建一个请求,请求方式可以是GET，也可以是POST
+</span><span class="c1"></span>    <span class="nx">request</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">http</span><span class="p">.</span><span class="nf">NewRequest</span><span class="p">(</span><span class="s">&#34;GET&#34;</span><span class="p">,</span> <span class="s">&#34;https://api.apiopen.top/getJoke?page=1&amp;count=2&amp;type=text&#34;</span><span class="p">,</span> <span class="kc">nil</span><span class="p">)</span>
+    <span class="nf">catchError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+    <span class="c1">// 3.示范添加cookie
+</span><span class="c1"></span>    <span class="nx">cookie1</span> <span class="o">:=</span> <span class="nx">http</span><span class="p">.</span><span class="nx">Cookie</span><span class="p">{</span><span class="nx">Name</span><span class="p">:</span> <span class="s">&#34;uid&#34;</span><span class="p">,</span> <span class="nx">Value</span><span class="p">:</span> <span class="s">&#34;1001&#34;</span><span class="p">}</span>
+    <span class="nx">request</span><span class="p">.</span><span class="nf">AddCookie</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">cookie1</span><span class="p">)</span>
+    <span class="c1">// 4.发起请求数据
+</span><span class="c1"></span>    <span class="nx">response</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">Do</span><span class="p">(</span><span class="nx">request</span><span class="p">)</span>
+    <span class="nf">catchError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+    <span class="c1">// 5.解析返回数据
+</span><span class="c1"></span>    <span class="k">if</span> <span class="nx">response</span><span class="p">.</span><span class="nx">StatusCode</span> <span class="o">!=</span> <span class="mi">200</span> <span class="p">{</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;网络请求失败！&#34;</span> <span class="p">)</span>
+    <span class="p">}</span>
+    <span class="c1">// 6.读取后需要关闭response.Body
+</span><span class="c1"></span>    <span class="k">defer</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">response</span><span class="p">.</span><span class="nx">Body</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
+    <span class="p">}()</span>
+    <span class="c1">// 7.读取response.Body
+</span><span class="c1"></span>    <span class="nx">body</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ioutil</span><span class="p">.</span><span class="nf">ReadAll</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">Body</span><span class="p">)</span>
+    <span class="nf">catchError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;请求结果:  &#34;</span> <span class="o">+</span> <span class="nb">string</span><span class="p">(</span><span class="nx">body</span><span class="p">))</span>
 <span class="p">}</span>
 
 <span class="c1">// 捕获错误
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">catchError</span><span class="p">(</span><span class="nx">err</span> <span class="kt">error</span><span class="p">)</span>  <span class="p">{</span>
-	<span class="c1">// 使用延迟函数捕获错误
-</span><span class="c1"></span>	<span class="k">defer</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
-		<span class="k">if</span> <span class="nx">er</span> <span class="o">:=</span> <span class="nb">recover</span><span class="p">();</span> <span class="nx">er</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;系统崩溃:%v&#34;</span><span class="p">,</span><span class="nx">er</span><span class="p">))</span>
-		<span class="p">}</span>
-	<span class="p">}()</span>
-	<span class="c1">// 抛出错误
-</span><span class="c1"></span>	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="nb">panic</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-	<span class="p">}</span>
+    <span class="c1">// 使用延迟函数捕获错误
+</span><span class="c1"></span>    <span class="k">defer</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="nx">er</span> <span class="o">:=</span> <span class="nb">recover</span><span class="p">();</span> <span class="nx">er</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+            <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;系统崩溃:%v&#34;</span><span class="p">,</span><span class="nx">er</span><span class="p">))</span>
+        <span class="p">}</span>
+    <span class="p">}()</span>
+    <span class="c1">// 抛出错误
+</span><span class="c1"></span>    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="nb">panic</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+    <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -332,11 +337,11 @@
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="p">(</span><span class="nx">c</span> <span class="o">*</span><span class="nx">Client</span><span class="p">)</span> <span class="nf">Get</span><span class="p">(</span><span class="nx">url</span> <span class="kt">string</span><span class="p">)</span> <span class="p">(</span><span class="nx">resp</span> <span class="o">*</span><span class="nx">Response</span><span class="p">,</span> <span class="nx">err</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
-	<span class="nx">req</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nf">NewRequest</span><span class="p">(</span><span class="s">&#34;GET&#34;</span><span class="p">,</span> <span class="nx">url</span><span class="p">,</span> <span class="kc">nil</span><span class="p">)</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">err</span>
-	<span class="p">}</span>
-	<span class="k">return</span> <span class="nx">c</span><span class="p">.</span><span class="nf">Do</span><span class="p">(</span><span class="nx">req</span><span class="p">)</span>
+    <span class="nx">req</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nf">NewRequest</span><span class="p">(</span><span class="s">&#34;GET&#34;</span><span class="p">,</span> <span class="nx">url</span><span class="p">,</span> <span class="kc">nil</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">err</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">c</span><span class="p">.</span><span class="nf">Do</span><span class="p">(</span><span class="nx">req</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -391,47 +396,47 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;fmt&#34;</span>
-	<span class="s">&#34;io/ioutil&#34;</span>
-	<span class="s">&#34;net/http&#34;</span>
+    <span class="s">&#34;fmt&#34;</span>
+    <span class="s">&#34;io/ioutil&#34;</span>
+    <span class="s">&#34;net/http&#34;</span>
 <span class="p">)</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="nf">testClientGet</span><span class="p">()</span>
+    <span class="nf">testClientGet</span><span class="p">()</span>
 <span class="p">}</span>
 <span class="c1">// 测试client.Get方法
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">testClientGet</span><span class="p">()</span> <span class="p">{</span>
-	<span class="c1">// 1.创建客户端
-</span><span class="c1"></span>	<span class="nx">client</span> <span class="o">:=</span> <span class="nx">http</span><span class="p">.</span><span class="nx">Client</span><span class="p">{}</span>
-	<span class="c1">// 2.调用客户端的Get方法
-</span><span class="c1"></span>	<span class="nx">response</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">Get</span><span class="p">(</span><span class="s">&#34;https://api.apiopen.top/getJoke?page=1&amp;count=2&amp;type=text&#34;</span><span class="p">)</span>
-	<span class="nf">catchError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-	<span class="c1">// 3.解析返回数据
-</span><span class="c1"></span>	<span class="k">if</span> <span class="nx">response</span><span class="p">.</span><span class="nx">StatusCode</span> <span class="o">!=</span> <span class="mi">200</span> <span class="p">{</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;网络请求失败！&#34;</span><span class="p">)</span>
-	<span class="p">}</span>
-	<span class="c1">// 4.读取后需要关闭response.Body
-</span><span class="c1"></span>	<span class="k">defer</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
-		<span class="nx">response</span><span class="p">.</span><span class="nx">Body</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
-	<span class="p">}()</span>
+    <span class="c1">// 1.创建客户端
+</span><span class="c1"></span>    <span class="nx">client</span> <span class="o">:=</span> <span class="nx">http</span><span class="p">.</span><span class="nx">Client</span><span class="p">{}</span>
+    <span class="c1">// 2.调用客户端的Get方法
+</span><span class="c1"></span>    <span class="nx">response</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">Get</span><span class="p">(</span><span class="s">&#34;https://api.apiopen.top/getJoke?page=1&amp;count=2&amp;type=text&#34;</span><span class="p">)</span>
+    <span class="nf">catchError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+    <span class="c1">// 3.解析返回数据
+</span><span class="c1"></span>    <span class="k">if</span> <span class="nx">response</span><span class="p">.</span><span class="nx">StatusCode</span> <span class="o">!=</span> <span class="mi">200</span> <span class="p">{</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;网络请求失败！&#34;</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="c1">// 4.读取后需要关闭response.Body
+</span><span class="c1"></span>    <span class="k">defer</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">response</span><span class="p">.</span><span class="nx">Body</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
+    <span class="p">}()</span>
     <span class="c1">// 5.读取response.Body
-</span><span class="c1"></span>	<span class="nx">res</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ioutil</span><span class="p">.</span><span class="nf">ReadAll</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">Body</span><span class="p">)</span>
-	<span class="nf">catchError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-	<span class="c1">// 6.打印输出
-</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;返回结果: %s\n&#34;</span><span class="p">,</span><span class="nx">res</span><span class="p">)</span>
+</span><span class="c1"></span>    <span class="nx">res</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ioutil</span><span class="p">.</span><span class="nf">ReadAll</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">Body</span><span class="p">)</span>
+    <span class="nf">catchError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+    <span class="c1">// 6.打印输出
+</span><span class="c1"></span>    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;返回结果: %s\n&#34;</span><span class="p">,</span><span class="nx">res</span><span class="p">)</span>
 <span class="p">}</span>
 
 <span class="c1">// 捕获错误
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">catchError</span><span class="p">(</span><span class="nx">err</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
-	<span class="c1">// 使用延迟函数捕获错误
-</span><span class="c1"></span>	<span class="k">defer</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
-		<span class="k">if</span> <span class="nx">er</span> <span class="o">:=</span> <span class="nb">recover</span><span class="p">();</span> <span class="nx">er</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;系统崩溃:%v&#34;</span><span class="p">,</span> <span class="nx">er</span><span class="p">))</span>
-		<span class="p">}</span>
-	<span class="p">}()</span>
-	<span class="c1">// 抛出错误
-</span><span class="c1"></span>	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="nb">panic</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-	<span class="p">}</span>
+    <span class="c1">// 使用延迟函数捕获错误
+</span><span class="c1"></span>    <span class="k">defer</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="nx">er</span> <span class="o">:=</span> <span class="nb">recover</span><span class="p">();</span> <span class="nx">er</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+            <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;系统崩溃:%v&#34;</span><span class="p">,</span> <span class="nx">er</span><span class="p">))</span>
+        <span class="p">}</span>
+    <span class="p">}()</span>
+    <span class="c1">// 抛出错误
+</span><span class="c1"></span>    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="nb">panic</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+    <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -445,7 +450,7 @@
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">Get</span><span class="p">(</span><span class="nx">url</span> <span class="kt">string</span><span class="p">)</span> <span class="p">(</span><span class="nx">resp</span> <span class="o">*</span><span class="nx">Response</span><span class="p">,</span> <span class="nx">err</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
-	<span class="k">return</span> <span class="nx">DefaultClient</span><span class="p">.</span><span class="nf">Get</span><span class="p">(</span><span class="nx">url</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nx">DefaultClient</span><span class="p">.</span><span class="nf">Get</span><span class="p">(</span><span class="nx">url</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -499,46 +504,46 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;fmt&#34;</span>
-	<span class="s">&#34;io/ioutil&#34;</span>
-	<span class="s">&#34;net/http&#34;</span>
+    <span class="s">&#34;fmt&#34;</span>
+    <span class="s">&#34;io/ioutil&#34;</span>
+    <span class="s">&#34;net/http&#34;</span>
 <span class="p">)</span>
 
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="nf">testClientGet</span><span class="p">()</span>
+    <span class="nf">testClientGet</span><span class="p">()</span>
 <span class="p">}</span>
 <span class="c1">// 测试client.Get方法
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">testClientGet</span><span class="p">()</span> <span class="p">{</span>
-	<span class="c1">// 1.直接调用http.Get
-</span><span class="c1"></span>	<span class="nx">response</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">http</span><span class="p">.</span><span class="nf">Get</span><span class="p">(</span><span class="s">&#34;https://api.apiopen.top/getJoke?page=1&amp;count=2&amp;type=text&#34;</span><span class="p">)</span>
-	<span class="nf">catchError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-	<span class="c1">// 2.解析返回数据
-</span><span class="c1"></span>	<span class="k">if</span> <span class="nx">response</span><span class="p">.</span><span class="nx">StatusCode</span> <span class="o">!=</span> <span class="mi">200</span> <span class="p">{</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;网络请求失败！&#34;</span><span class="p">)</span>
-	<span class="p">}</span>
-	<span class="c1">// 3.读取后需要关闭response.Body
-</span><span class="c1"></span>	<span class="k">defer</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
-		<span class="nx">response</span><span class="p">.</span><span class="nx">Body</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
-	<span class="p">}()</span>
-  <span class="c1">// 4.读取response.Body
-</span><span class="c1"></span>	<span class="nx">res</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ioutil</span><span class="p">.</span><span class="nf">ReadAll</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">Body</span><span class="p">)</span>
-	<span class="nf">catchError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-	<span class="c1">// 5.打印输出
-</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;返回结果: %s\n&#34;</span><span class="p">,</span><span class="nx">res</span><span class="p">)</span>
+    <span class="c1">// 1.直接调用http.Get
+</span><span class="c1"></span>    <span class="nx">response</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">http</span><span class="p">.</span><span class="nf">Get</span><span class="p">(</span><span class="s">&#34;https://api.apiopen.top/getJoke?page=1&amp;count=2&amp;type=text&#34;</span><span class="p">)</span>
+    <span class="nf">catchError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+    <span class="c1">// 2.解析返回数据
+</span><span class="c1"></span>    <span class="k">if</span> <span class="nx">response</span><span class="p">.</span><span class="nx">StatusCode</span> <span class="o">!=</span> <span class="mi">200</span> <span class="p">{</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;网络请求失败！&#34;</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="c1">// 3.读取后需要关闭response.Body
+</span><span class="c1"></span>    <span class="k">defer</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">response</span><span class="p">.</span><span class="nx">Body</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
+    <span class="p">}()</span>
+    <span class="c1">// 4.读取response.Body
+</span><span class="c1"></span>    <span class="nx">res</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ioutil</span><span class="p">.</span><span class="nf">ReadAll</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">Body</span><span class="p">)</span>
+    <span class="nf">catchError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+    <span class="c1">// 5.打印输出
+</span><span class="c1"></span>    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;返回结果: %s\n&#34;</span><span class="p">,</span><span class="nx">res</span><span class="p">)</span>
 <span class="p">}</span>
 
 <span class="c1">// 捕获错误
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">catchError</span><span class="p">(</span><span class="nx">err</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
-	<span class="c1">// 使用延迟函数捕获错误
-</span><span class="c1"></span>	<span class="k">defer</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
-		<span class="k">if</span> <span class="nx">er</span> <span class="o">:=</span> <span class="nb">recover</span><span class="p">();</span> <span class="nx">er</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;系统崩溃:%v&#34;</span><span class="p">,</span> <span class="nx">er</span><span class="p">))</span>
-		<span class="p">}</span>
-	<span class="p">}()</span>
-	<span class="c1">// 抛出错误
-</span><span class="c1"></span>	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="nb">panic</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-	<span class="p">}</span>
+    <span class="c1">// 使用延迟函数捕获错误
+</span><span class="c1"></span>    <span class="k">defer</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="nx">er</span> <span class="o">:=</span> <span class="nb">recover</span><span class="p">();</span> <span class="nx">er</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+            <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;系统崩溃:%v&#34;</span><span class="p">,</span> <span class="nx">er</span><span class="p">))</span>
+        <span class="p">}</span>
+    <span class="p">}()</span>
+    <span class="c1">// 抛出错误
+</span><span class="c1"></span>    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="nb">panic</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+    <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -604,56 +609,56 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;fmt&#34;</span>
-	<span class="s">&#34;io/ioutil&#34;</span>
-	<span class="s">&#34;net/http&#34;</span>
-	<span class="s">&#34;strings&#34;</span>
+    <span class="s">&#34;fmt&#34;</span>
+    <span class="s">&#34;io/ioutil&#34;</span>
+    <span class="s">&#34;net/http&#34;</span>
+    <span class="s">&#34;strings&#34;</span>
 <span class="p">)</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="nf">testHttpNewRequestByPost</span><span class="p">()</span>
+    <span class="nf">testHttpNewRequestByPost</span><span class="p">()</span>
 <span class="p">}</span>
 
 <span class="kd">func</span> <span class="nf">testHttpNewRequestByPost</span><span class="p">()</span>  <span class="p">{</span>
-	<span class="c1">// 1.创建一个客户端
-</span><span class="c1"></span>	<span class="nx">client</span> <span class="o">:=</span> <span class="nx">http</span><span class="p">.</span><span class="nx">Client</span><span class="p">{}</span>
-	<span class="c1">// 2.添加参数,并将参数转成io.Reader类型
-</span><span class="c1"></span>	<span class="nx">paramStr</span> <span class="o">:=</span> <span class="s">&#34;userName=admin&amp;passWord=1234&#34;</span>
-	<span class="c1">// 3.创建一个POST请求
-</span><span class="c1"></span>	<span class="nx">request</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">http</span><span class="p">.</span><span class="nf">NewRequest</span><span class="p">(</span><span class="s">&#34;POST&#34;</span><span class="p">,</span> <span class="s">&#34;http://127.0.0.1:8888/login&#34;</span><span class="p">,</span> <span class="nx">strings</span><span class="p">.</span><span class="nf">NewReader</span><span class="p">(</span><span class="nx">paramStr</span><span class="p">))</span>
-	<span class="nf">catchError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-	<span class="c1">// 4.添加header头
-</span><span class="c1"></span>	<span class="nx">request</span><span class="p">.</span><span class="nx">Header</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="s">&#34;Content-Type&#34;</span><span class="p">,</span><span class="s">&#34;application/x-www-form-urlencoded&#34;</span><span class="p">)</span>
-	<span class="c1">// 5.设置cookie示例
-</span><span class="c1"></span>	<span class="nx">request</span><span class="p">.</span><span class="nx">Header</span><span class="p">.</span><span class="nf">Set</span><span class="p">(</span><span class="s">&#34;Cookie&#34;</span><span class="p">,</span><span class="s">&#34;uid=199&#34;</span><span class="p">)</span>
-	<span class="c1">// 6.发起请求数据
-</span><span class="c1"></span>	<span class="nx">response</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">Do</span><span class="p">(</span><span class="nx">request</span><span class="p">)</span>
-	<span class="nf">catchError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-	<span class="c1">// 7.解析返回数据
-</span><span class="c1"></span>	<span class="k">if</span> <span class="nx">response</span><span class="p">.</span><span class="nx">StatusCode</span> <span class="o">!=</span> <span class="mi">200</span> <span class="p">{</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;网络请求失败！&#34;</span> <span class="p">)</span>
-	<span class="p">}</span>
-	<span class="c1">// 8.读取后需要关闭response.Body
-</span><span class="c1"></span>	<span class="k">defer</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
-		<span class="nx">response</span><span class="p">.</span><span class="nx">Body</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
-	<span class="p">}()</span>
-	<span class="c1">// 9.读取response.Body
-</span><span class="c1"></span>	<span class="nx">body</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ioutil</span><span class="p">.</span><span class="nf">ReadAll</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">Body</span><span class="p">)</span>
-	<span class="nf">catchError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;请求结果:  &#34;</span> <span class="o">+</span> <span class="nb">string</span><span class="p">(</span><span class="nx">body</span><span class="p">))</span>
+    <span class="c1">// 1.创建一个客户端
+</span><span class="c1"></span>    <span class="nx">client</span> <span class="o">:=</span> <span class="nx">http</span><span class="p">.</span><span class="nx">Client</span><span class="p">{}</span>
+    <span class="c1">// 2.添加参数,并将参数转成io.Reader类型
+</span><span class="c1"></span>    <span class="nx">paramStr</span> <span class="o">:=</span> <span class="s">&#34;userName=admin&amp;passWord=1234&#34;</span>
+    <span class="c1">// 3.创建一个POST请求
+</span><span class="c1"></span>    <span class="nx">request</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">http</span><span class="p">.</span><span class="nf">NewRequest</span><span class="p">(</span><span class="s">&#34;POST&#34;</span><span class="p">,</span> <span class="s">&#34;http://127.0.0.1:8888/login&#34;</span><span class="p">,</span> <span class="nx">strings</span><span class="p">.</span><span class="nf">NewReader</span><span class="p">(</span><span class="nx">paramStr</span><span class="p">))</span>
+    <span class="nf">catchError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+    <span class="c1">// 4.添加header头
+</span><span class="c1"></span>    <span class="nx">request</span><span class="p">.</span><span class="nx">Header</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="s">&#34;Content-Type&#34;</span><span class="p">,</span><span class="s">&#34;application/x-www-form-urlencoded&#34;</span><span class="p">)</span>
+    <span class="c1">// 5.设置cookie示例
+</span><span class="c1"></span>    <span class="nx">request</span><span class="p">.</span><span class="nx">Header</span><span class="p">.</span><span class="nf">Set</span><span class="p">(</span><span class="s">&#34;Cookie&#34;</span><span class="p">,</span><span class="s">&#34;uid=199&#34;</span><span class="p">)</span>
+    <span class="c1">// 6.发起请求数据
+</span><span class="c1"></span>    <span class="nx">response</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">Do</span><span class="p">(</span><span class="nx">request</span><span class="p">)</span>
+    <span class="nf">catchError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+    <span class="c1">// 7.解析返回数据
+</span><span class="c1"></span>    <span class="k">if</span> <span class="nx">response</span><span class="p">.</span><span class="nx">StatusCode</span> <span class="o">!=</span> <span class="mi">200</span> <span class="p">{</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;网络请求失败！&#34;</span> <span class="p">)</span>
+    <span class="p">}</span>
+    <span class="c1">// 8.读取后需要关闭response.Body
+</span><span class="c1"></span>    <span class="k">defer</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">response</span><span class="p">.</span><span class="nx">Body</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
+    <span class="p">}()</span>
+    <span class="c1">// 9.读取response.Body
+</span><span class="c1"></span>    <span class="nx">body</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ioutil</span><span class="p">.</span><span class="nf">ReadAll</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">Body</span><span class="p">)</span>
+    <span class="nf">catchError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;请求结果:  &#34;</span> <span class="o">+</span> <span class="nb">string</span><span class="p">(</span><span class="nx">body</span><span class="p">))</span>
 <span class="p">}</span>
 
 <span class="c1">// 捕获错误
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">catchError</span><span class="p">(</span><span class="nx">err</span> <span class="kt">error</span><span class="p">)</span>  <span class="p">{</span>
-	<span class="c1">// 使用延迟函数捕获错误
-</span><span class="c1"></span>	<span class="k">defer</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
-		<span class="k">if</span> <span class="nx">er</span> <span class="o">:=</span> <span class="nb">recover</span><span class="p">();</span> <span class="nx">er</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;系统崩溃:%v&#34;</span><span class="p">,</span><span class="nx">er</span><span class="p">))</span>
-		<span class="p">}</span>
-	<span class="p">}()</span>
-	<span class="c1">// 抛出错误
-</span><span class="c1"></span>	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="nb">panic</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-	<span class="p">}</span>
+    <span class="c1">// 使用延迟函数捕获错误
+</span><span class="c1"></span>    <span class="k">defer</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="nx">er</span> <span class="o">:=</span> <span class="nb">recover</span><span class="p">();</span> <span class="nx">er</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+            <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;系统崩溃:%v&#34;</span><span class="p">,</span><span class="nx">er</span><span class="p">))</span>
+        <span class="p">}</span>
+    <span class="p">}()</span>
+    <span class="c1">// 抛出错误
+</span><span class="c1"></span>    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="nb">panic</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+    <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -678,16 +683,16 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">//client.Post 
 </span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">c</span> <span class="o">*</span><span class="nx">Client</span><span class="p">)</span> <span class="nf">Post</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="nx">contentType</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">body</span> <span class="nx">io</span><span class="p">.</span><span class="nx">Reader</span><span class="p">)</span> <span class="p">(</span><span class="nx">resp</span> <span class="o">*</span><span class="nx">Response</span><span class="p">,</span> <span class="nx">err</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
-	<span class="nx">req</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nf">NewRequest</span><span class="p">(</span><span class="s">&#34;POST&#34;</span><span class="p">,</span> <span class="nx">url</span><span class="p">,</span> <span class="nx">body</span><span class="p">)</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">err</span>
-	<span class="p">}</span>
-	<span class="nx">req</span><span class="p">.</span><span class="nx">Header</span><span class="p">.</span><span class="nf">Set</span><span class="p">(</span><span class="s">&#34;Content-Type&#34;</span><span class="p">,</span> <span class="nx">contentType</span><span class="p">)</span>
-	<span class="k">return</span> <span class="nx">c</span><span class="p">.</span><span class="nf">Do</span><span class="p">(</span><span class="nx">req</span><span class="p">)</span>
+    <span class="nx">req</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nf">NewRequest</span><span class="p">(</span><span class="s">&#34;POST&#34;</span><span class="p">,</span> <span class="nx">url</span><span class="p">,</span> <span class="nx">body</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">err</span>
+    <span class="p">}</span>
+    <span class="nx">req</span><span class="p">.</span><span class="nx">Header</span><span class="p">.</span><span class="nf">Set</span><span class="p">(</span><span class="s">&#34;Content-Type&#34;</span><span class="p">,</span> <span class="nx">contentType</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nx">c</span><span class="p">.</span><span class="nf">Do</span><span class="p">(</span><span class="nx">req</span><span class="p">)</span>
 <span class="p">}</span>
 <span class="c1">// client.PostForm
 </span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">c</span> <span class="o">*</span><span class="nx">Client</span><span class="p">)</span> <span class="nf">PostForm</span><span class="p">(</span><span class="nx">url</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">data</span> <span class="nx">url</span><span class="p">.</span><span class="nx">Values</span><span class="p">)</span> <span class="p">(</span><span class="nx">resp</span> <span class="o">*</span><span class="nx">Response</span><span class="p">,</span> <span class="nx">err</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
-	<span class="k">return</span> <span class="nx">c</span><span class="p">.</span><span class="nf">Post</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="s">&#34;application/x-www-form-urlencoded&#34;</span><span class="p">,</span> <span class="nx">strings</span><span class="p">.</span><span class="nf">NewReader</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nf">Encode</span><span class="p">()))</span>
+    <span class="k">return</span> <span class="nx">c</span><span class="p">.</span><span class="nf">Post</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="s">&#34;application/x-www-form-urlencoded&#34;</span><span class="p">,</span> <span class="nx">strings</span><span class="p">.</span><span class="nf">NewReader</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nf">Encode</span><span class="p">()))</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -754,59 +759,59 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;fmt&#34;</span>
-	<span class="s">&#34;io/ioutil&#34;</span>
-	<span class="s">&#34;net/http&#34;</span>
-	<span class="s">&#34;net/url&#34;</span>
-	<span class="s">&#34;strings&#34;</span>
+    <span class="s">&#34;fmt&#34;</span>
+    <span class="s">&#34;io/ioutil&#34;</span>
+    <span class="s">&#34;net/http&#34;</span>
+    <span class="s">&#34;net/url&#34;</span>
+    <span class="s">&#34;strings&#34;</span>
 <span class="p">)</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span>  <span class="p">{</span>
-	<span class="nx">reqType</span> <span class="o">:=</span> <span class="mi">2</span>
-	<span class="c1">// 1.创建一个客户端
-</span><span class="c1"></span>	<span class="nx">client</span> <span class="o">:=</span> <span class="nx">http</span><span class="p">.</span><span class="nx">Client</span><span class="p">{}</span>
-	<span class="kd">var</span> <span class="nx">response</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Response</span>
-	<span class="kd">var</span> <span class="nx">err</span> <span class="kt">error</span>
-	<span class="k">if</span> <span class="nx">reqType</span>  <span class="o">==</span> <span class="mi">1</span><span class="p">{</span>
-		<span class="c1">// 2.添加参数,参数类型为io.Reader
-</span><span class="c1"></span>		<span class="nx">paramStr</span> <span class="o">:=</span> <span class="s">&#34;userName=admin&amp;passWord=1234&#34;</span>
-		<span class="c1">// 3.创建一个请求,请求方式可以是GET，也可以是POST
-</span><span class="c1"></span>		<span class="nx">response</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">Post</span><span class="p">(</span><span class="s">&#34;http://127.0.0.1:8888/login&#34;</span><span class="p">,</span><span class="s">&#34;application/x-www-form-urlencoded&#34;</span><span class="p">,</span> <span class="nx">strings</span><span class="p">.</span><span class="nf">NewReader</span><span class="p">(</span><span class="nx">paramStr</span><span class="p">))</span>
-	<span class="p">}</span> <span class="k">else</span>  <span class="p">{</span>
-		<span class="c1">// 2.添加参数,参数类型为url.Values
-</span><span class="c1"></span>		<span class="nx">param</span> <span class="o">:=</span> <span class="nx">url</span><span class="p">.</span><span class="nx">Values</span><span class="p">{</span>
-			<span class="s">&#34;userName&#34;</span><span class="p">:</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;admin&#34;</span><span class="p">},</span>
-			<span class="s">&#34;passWord&#34;</span><span class="p">:</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;1234&#34;</span><span class="p">},</span>
-		<span class="p">}</span>
-		<span class="c1">// 3.创建一个POST请求
-</span><span class="c1"></span>		<span class="nx">response</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">PostForm</span><span class="p">(</span><span class="s">&#34;http://127.0.0.1:8888/login&#34;</span><span class="p">,</span> <span class="nx">param</span><span class="p">)</span>
-	<span class="p">}</span>
-	<span class="nf">catchError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-	<span class="c1">// 4.解析返回数据
-</span><span class="c1"></span>	<span class="k">if</span> <span class="nx">response</span><span class="p">.</span><span class="nx">StatusCode</span> <span class="o">!=</span> <span class="mi">200</span> <span class="p">{</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;网络请求失败！&#34;</span> <span class="p">)</span>
-	<span class="p">}</span>
-	<span class="c1">// 5.读取后需要关闭response.Body
-</span><span class="c1"></span>	<span class="k">defer</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
-		<span class="nx">response</span><span class="p">.</span><span class="nx">Body</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
-	<span class="p">}()</span>
-	<span class="c1">// 6.读取response.Body
-</span><span class="c1"></span>	<span class="nx">body</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ioutil</span><span class="p">.</span><span class="nf">ReadAll</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">Body</span><span class="p">)</span>
-	<span class="nf">catchError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;请求结果:  &#34;</span> <span class="o">+</span> <span class="nb">string</span><span class="p">(</span><span class="nx">body</span><span class="p">))</span>
+    <span class="nx">reqType</span> <span class="o">:=</span> <span class="mi">2</span>
+    <span class="c1">// 1.创建一个客户端
+</span><span class="c1"></span>    <span class="nx">client</span> <span class="o">:=</span> <span class="nx">http</span><span class="p">.</span><span class="nx">Client</span><span class="p">{}</span>
+    <span class="kd">var</span> <span class="nx">response</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Response</span>
+    <span class="kd">var</span> <span class="nx">err</span> <span class="kt">error</span>
+    <span class="k">if</span> <span class="nx">reqType</span>  <span class="o">==</span> <span class="mi">1</span><span class="p">{</span>
+        <span class="c1">// 2.添加参数,参数类型为io.Reader
+</span><span class="c1"></span>        <span class="nx">paramStr</span> <span class="o">:=</span> <span class="s">&#34;userName=admin&amp;passWord=1234&#34;</span>
+        <span class="c1">// 3.创建一个请求,请求方式可以是GET，也可以是POST
+</span><span class="c1"></span>        <span class="nx">response</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">Post</span><span class="p">(</span><span class="s">&#34;http://127.0.0.1:8888/login&#34;</span><span class="p">,</span><span class="s">&#34;application/x-www-form-urlencoded&#34;</span><span class="p">,</span> <span class="nx">strings</span><span class="p">.</span><span class="nf">NewReader</span><span class="p">(</span><span class="nx">paramStr</span><span class="p">))</span>
+    <span class="p">}</span> <span class="k">else</span>  <span class="p">{</span>
+        <span class="c1">// 2.添加参数,参数类型为url.Values
+</span><span class="c1"></span>        <span class="nx">param</span> <span class="o">:=</span> <span class="nx">url</span><span class="p">.</span><span class="nx">Values</span><span class="p">{</span>
+            <span class="s">&#34;userName&#34;</span><span class="p">:</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;admin&#34;</span><span class="p">},</span>
+            <span class="s">&#34;passWord&#34;</span><span class="p">:</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;1234&#34;</span><span class="p">},</span>
+        <span class="p">}</span>
+        <span class="c1">// 3.创建一个POST请求
+</span><span class="c1"></span>        <span class="nx">response</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">PostForm</span><span class="p">(</span><span class="s">&#34;http://127.0.0.1:8888/login&#34;</span><span class="p">,</span> <span class="nx">param</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="nf">catchError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+    <span class="c1">// 4.解析返回数据
+</span><span class="c1"></span>    <span class="k">if</span> <span class="nx">response</span><span class="p">.</span><span class="nx">StatusCode</span> <span class="o">!=</span> <span class="mi">200</span> <span class="p">{</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;网络请求失败！&#34;</span> <span class="p">)</span>
+    <span class="p">}</span>
+    <span class="c1">// 5.读取后需要关闭response.Body
+</span><span class="c1"></span>    <span class="k">defer</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">response</span><span class="p">.</span><span class="nx">Body</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
+    <span class="p">}()</span>
+    <span class="c1">// 6.读取response.Body
+</span><span class="c1"></span>    <span class="nx">body</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ioutil</span><span class="p">.</span><span class="nf">ReadAll</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">Body</span><span class="p">)</span>
+    <span class="nf">catchError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;请求结果:  &#34;</span> <span class="o">+</span> <span class="nb">string</span><span class="p">(</span><span class="nx">body</span><span class="p">))</span>
 <span class="p">}</span>
 
 <span class="c1">// 捕获错误
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">catchError</span><span class="p">(</span><span class="nx">err</span> <span class="kt">error</span><span class="p">)</span>  <span class="p">{</span>
-	<span class="c1">// 使用延迟函数捕获错误
-</span><span class="c1"></span>	<span class="k">defer</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
-		<span class="k">if</span> <span class="nx">er</span> <span class="o">:=</span> <span class="nb">recover</span><span class="p">();</span> <span class="nx">er</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;系统崩溃:%v&#34;</span><span class="p">,</span><span class="nx">er</span><span class="p">))</span>
-		<span class="p">}</span>
-	<span class="p">}()</span>
-	<span class="c1">// 抛出错误
-</span><span class="c1"></span>	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="nb">panic</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-	<span class="p">}</span>
+    <span class="c1">// 使用延迟函数捕获错误
+</span><span class="c1"></span>    <span class="k">defer</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="nx">er</span> <span class="o">:=</span> <span class="nb">recover</span><span class="p">();</span> <span class="nx">er</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+            <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;系统崩溃:%v&#34;</span><span class="p">,</span><span class="nx">er</span><span class="p">))</span>
+        <span class="p">}</span>
+    <span class="p">}()</span>
+    <span class="c1">// 抛出错误
+</span><span class="c1"></span>    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="nb">panic</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+    <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -826,11 +831,11 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// http.Post
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">Post</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="nx">contentType</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">body</span> <span class="nx">io</span><span class="p">.</span><span class="nx">Reader</span><span class="p">)</span> <span class="p">(</span><span class="nx">resp</span> <span class="o">*</span><span class="nx">Response</span><span class="p">,</span> <span class="nx">err</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
-	<span class="k">return</span> <span class="nx">DefaultClient</span><span class="p">.</span><span class="nf">Post</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="nx">contentType</span><span class="p">,</span> <span class="nx">body</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nx">DefaultClient</span><span class="p">.</span><span class="nf">Post</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="nx">contentType</span><span class="p">,</span> <span class="nx">body</span><span class="p">)</span>
 <span class="p">}</span>
 <span class="c1">// http.PostForm
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">PostForm</span><span class="p">(</span><span class="nx">url</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">data</span> <span class="nx">url</span><span class="p">.</span><span class="nx">Values</span><span class="p">)</span> <span class="p">(</span><span class="nx">resp</span> <span class="o">*</span><span class="nx">Response</span><span class="p">,</span> <span class="nx">err</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
-	<span class="k">return</span> <span class="nx">DefaultClient</span><span class="p">.</span><span class="nf">PostForm</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nx">DefaultClient</span><span class="p">.</span><span class="nf">PostForm</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -896,58 +901,58 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;fmt&#34;</span>
-	<span class="s">&#34;io/ioutil&#34;</span>
-	<span class="s">&#34;net/http&#34;</span>
-	<span class="s">&#34;net/url&#34;</span>
-	<span class="s">&#34;strings&#34;</span>
+    <span class="s">&#34;fmt&#34;</span>
+    <span class="s">&#34;io/ioutil&#34;</span>
+    <span class="s">&#34;net/http&#34;</span>
+    <span class="s">&#34;net/url&#34;</span>
+    <span class="s">&#34;strings&#34;</span>
 <span class="p">)</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span>  <span class="p">{</span>
-	<span class="nx">reqType</span> <span class="o">:=</span> <span class="mi">1</span>
-	<span class="kd">var</span> <span class="nx">response</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Response</span>
-	<span class="kd">var</span> <span class="nx">err</span> <span class="kt">error</span>
-	<span class="k">if</span> <span class="nx">reqType</span>  <span class="o">==</span> <span class="mi">1</span><span class="p">{</span>
-		<span class="c1">// 1.添加参数,参数类型为io.Reader
-</span><span class="c1"></span>		<span class="nx">paramStr</span> <span class="o">:=</span> <span class="s">&#34;userName=admin&amp;passWord=1234&#34;</span>
-		<span class="c1">// 2.创建一个请求,请求方式可以是GET，也可以是POST
-</span><span class="c1"></span>		<span class="nx">response</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">http</span><span class="p">.</span><span class="nf">Post</span><span class="p">(</span><span class="s">&#34;http://127.0.0.1:8888/login&#34;</span><span class="p">,</span><span class="s">&#34;application/x-www-form-urlencoded&#34;</span><span class="p">,</span> <span class="nx">strings</span><span class="p">.</span><span class="nf">NewReader</span><span class="p">(</span><span class="nx">paramStr</span><span class="p">))</span>
-	<span class="p">}</span> <span class="k">else</span>  <span class="p">{</span>
-		<span class="c1">// 1.添加参数,参数类型为url.Values
-</span><span class="c1"></span>		<span class="nx">param</span> <span class="o">:=</span> <span class="nx">url</span><span class="p">.</span><span class="nx">Values</span><span class="p">{</span>
-			<span class="s">&#34;userName&#34;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#34;admin&#34;</span><span class="p">},</span>
-			<span class="s">&#34;passWord&#34;</span><span class="p">:</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;1234&#34;</span><span class="p">},</span>
-		<span class="p">}</span>
-		<span class="c1">// 2.创建一个POST请求
-</span><span class="c1"></span>		<span class="nx">response</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">http</span><span class="p">.</span><span class="nf">PostForm</span><span class="p">(</span><span class="s">&#34;http://127.0.0.1:8888/login&#34;</span><span class="p">,</span> <span class="nx">param</span><span class="p">)</span>
-	<span class="p">}</span>
-	<span class="nf">catchError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-	<span class="c1">// 3.解析返回数据
-</span><span class="c1"></span>	<span class="k">if</span> <span class="nx">response</span><span class="p">.</span><span class="nx">StatusCode</span> <span class="o">!=</span> <span class="mi">200</span> <span class="p">{</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;网络请求失败！&#34;</span> <span class="p">)</span>
-	<span class="p">}</span>
-	<span class="c1">// 4.读取后需要关闭response.Body
-</span><span class="c1"></span>	<span class="k">defer</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
-		<span class="nx">response</span><span class="p">.</span><span class="nx">Body</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
-	<span class="p">}()</span>
-	<span class="c1">// 5
-</span><span class="c1"></span>	<span class="c1">//.读取response.Body
-</span><span class="c1"></span>	<span class="nx">body</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ioutil</span><span class="p">.</span><span class="nf">ReadAll</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">Body</span><span class="p">)</span>
-	<span class="nf">catchError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;请求结果:  &#34;</span> <span class="o">+</span> <span class="nb">string</span><span class="p">(</span><span class="nx">body</span><span class="p">))</span>
+    <span class="nx">reqType</span> <span class="o">:=</span> <span class="mi">1</span>
+    <span class="kd">var</span> <span class="nx">response</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Response</span>
+    <span class="kd">var</span> <span class="nx">err</span> <span class="kt">error</span>
+    <span class="k">if</span> <span class="nx">reqType</span>  <span class="o">==</span> <span class="mi">1</span><span class="p">{</span>
+        <span class="c1">// 1.添加参数,参数类型为io.Reader
+</span><span class="c1"></span>        <span class="nx">paramStr</span> <span class="o">:=</span> <span class="s">&#34;userName=admin&amp;passWord=1234&#34;</span>
+        <span class="c1">// 2.创建一个请求,请求方式可以是GET，也可以是POST
+</span><span class="c1"></span>        <span class="nx">response</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">http</span><span class="p">.</span><span class="nf">Post</span><span class="p">(</span><span class="s">&#34;http://127.0.0.1:8888/login&#34;</span><span class="p">,</span><span class="s">&#34;application/x-www-form-urlencoded&#34;</span><span class="p">,</span> <span class="nx">strings</span><span class="p">.</span><span class="nf">NewReader</span><span class="p">(</span><span class="nx">paramStr</span><span class="p">))</span>
+    <span class="p">}</span> <span class="k">else</span>  <span class="p">{</span>
+        <span class="c1">// 1.添加参数,参数类型为url.Values
+</span><span class="c1"></span>        <span class="nx">param</span> <span class="o">:=</span> <span class="nx">url</span><span class="p">.</span><span class="nx">Values</span><span class="p">{</span>
+            <span class="s">&#34;userName&#34;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#34;admin&#34;</span><span class="p">},</span>
+            <span class="s">&#34;passWord&#34;</span><span class="p">:</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;1234&#34;</span><span class="p">},</span>
+        <span class="p">}</span>
+        <span class="c1">// 2.创建一个POST请求
+</span><span class="c1"></span>        <span class="nx">response</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">http</span><span class="p">.</span><span class="nf">PostForm</span><span class="p">(</span><span class="s">&#34;http://127.0.0.1:8888/login&#34;</span><span class="p">,</span> <span class="nx">param</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="nf">catchError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+    <span class="c1">// 3.解析返回数据
+</span><span class="c1"></span>    <span class="k">if</span> <span class="nx">response</span><span class="p">.</span><span class="nx">StatusCode</span> <span class="o">!=</span> <span class="mi">200</span> <span class="p">{</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;网络请求失败！&#34;</span> <span class="p">)</span>
+    <span class="p">}</span>
+    <span class="c1">// 4.读取后需要关闭response.Body
+</span><span class="c1"></span>    <span class="k">defer</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">response</span><span class="p">.</span><span class="nx">Body</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
+    <span class="p">}()</span>
+    <span class="c1">// 5
+</span><span class="c1"></span>    <span class="c1">//.读取response.Body
+</span><span class="c1"></span>    <span class="nx">body</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ioutil</span><span class="p">.</span><span class="nf">ReadAll</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">Body</span><span class="p">)</span>
+    <span class="nf">catchError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;请求结果:  &#34;</span> <span class="o">+</span> <span class="nb">string</span><span class="p">(</span><span class="nx">body</span><span class="p">))</span>
 <span class="p">}</span>
 
 <span class="c1">// 捕获错误
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">catchError</span><span class="p">(</span><span class="nx">err</span> <span class="kt">error</span><span class="p">)</span>  <span class="p">{</span>
-	<span class="c1">// 使用延迟函数捕获错误
-</span><span class="c1"></span>	<span class="k">defer</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
-		<span class="k">if</span> <span class="nx">er</span> <span class="o">:=</span> <span class="nb">recover</span><span class="p">();</span> <span class="nx">er</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;系统崩溃:%v&#34;</span><span class="p">,</span><span class="nx">er</span><span class="p">))</span>
-		<span class="p">}</span>
-	<span class="p">}()</span>
-	<span class="c1">// 抛出错误
-</span><span class="c1"></span>	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="nb">panic</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-	<span class="p">}</span>
+    <span class="c1">// 使用延迟函数捕获错误
+</span><span class="c1"></span>    <span class="k">defer</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="nx">er</span> <span class="o">:=</span> <span class="nb">recover</span><span class="p">();</span> <span class="nx">er</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+            <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;系统崩溃:%v&#34;</span><span class="p">,</span><span class="nx">er</span><span class="p">))</span>
+        <span class="p">}</span>
+    <span class="p">}()</span>
+    <span class="c1">// 抛出错误
+</span><span class="c1"></span>    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="nb">panic</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+    <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -962,7 +967,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2023-03-04
+        2023-03-19
         
     </span>
   </p>

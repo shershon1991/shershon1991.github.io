@@ -172,6 +172,11 @@
 </nav>
   </div>
 </div>
+  <div class="post-outdated">
+    <div class="hint">
+      <p>【注意】最后更新于 <span class="timeago" datetime="2023-03-16T17:44:16" title="March 16, 2023">March 16, 2023</span>，文中内容可能已过时，请谨慎使用。</p>
+    </div>
+  </div>
     <div class="post-content">
       <h1 id="1介绍">1.介绍</h1>
 <p><code>Gin</code>框架的路由功能是基于<a href="https://github.com/julienschmidt/httprouter">httprouter(https://github.com/julienschmidt/httprouter)</a>设计的，<code>httprouter</code>是一个由<code>golang</code>实现的路由组件。<code>httprouter</code>使用<a href="https://baike.baidu.com/item/%E5%9F%BA%E6%95%B0%E6%A0%91">基数树(也叫<strong>基数特里树</strong>或<strong>压缩前缀树</strong>)</a>这种数据结构来维护映射路由关系，通过前缀树快速路由。同时其里面的<code>HttpRouter</code>结构体实现了<code>golang</code>的<code>net.http.server</code>的<code>Handler</code>接口，可以作为<code>httpHandle</code>发布。</p>

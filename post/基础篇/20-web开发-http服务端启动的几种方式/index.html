@@ -44,12 +44,12 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/%E5%9F%BA%E7%A1%80%E7%AF%87/20-web%E5%BC%80%E5%8F%91-http%E6%9C%8D%E5%8A%A1%E7%AB%AF%E5%90%AF%E5%8A%A8%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E5%BC%8F/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-01-20T00:00:00+00:00" />
-<meta property="article:modified_time" content="2023-03-04T13:23:22+08:00" />
+<meta property="article:modified_time" content="2023-03-19T12:16:18+08:00" />
 
 <meta itemprop="name" content="Go学习(二十):Web开发-HTTP服务端启动的几种方式">
 <meta itemprop="description" content="1. 怎么启动Web服务？ Go语言标准库内置的net/http包，可以实现HTTP服务端。实现HTTP服务端就是能够启动Web服务，相当于搭建起"><meta itemprop="datePublished" content="2021-01-20T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2023-03-04T13:23:22+08:00" />
-<meta itemprop="wordCount" content="2214">
+<meta itemprop="dateModified" content="2023-03-19T12:16:18+08:00" />
+<meta itemprop="wordCount" content="2216">
 <meta itemprop="keywords" content="Go基础," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go学习(二十):Web开发-HTTP服务端启动的几种方式"/>
 <meta name="twitter:description" content="1. 怎么启动Web服务？ Go语言标准库内置的net/http包，可以实现HTTP服务端。实现HTTP服务端就是能够启动Web服务，相当于搭建起"/>
@@ -133,7 +133,7 @@
             <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
             <a href="/categories/go/"> Go </a>
             </div>
-          <span class="more-meta"> 约 2214 字 </span>
+          <span class="more-meta"> 约 2216 字 </span>
           <span class="more-meta"> 预计阅读 5 分钟 </span>
         
       </div>
@@ -177,6 +177,11 @@
 </nav>
   </div>
 </div>
+  <div class="post-outdated">
+    <div class="hint">
+      <p>【注意】最后更新于 <span class="timeago" datetime="2023-03-19T12:16:18" title="March 19, 2023">March 19, 2023</span>，文中内容可能已过时，请谨慎使用。</p>
+    </div>
+  </div>
     <div class="post-content">
       <h1 id="1-怎么启动web服务">1. 怎么启动Web服务？</h1>
 <p><code>Go</code>语言标准库内置的<code>net/http</code>包，可以实现<code>HTTP</code>服务端。实现<code>HTTP</code>服务端就是能够启动<code>Web</code>服务，相当于搭建起了一个<code>Web</code>服务器。
@@ -218,15 +223,15 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;net/http&#34;</span>
+    <span class="s">&#34;net/http&#34;</span>
 <span class="p">)</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="nf">runFileServer</span><span class="p">()</span>
+    <span class="nf">runFileServer</span><span class="p">()</span>
 <span class="p">}</span>
 <span class="c1">// 启动一个文件服务器
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">runFileServer</span><span class="p">()</span>  <span class="p">{</span>
-	<span class="c1">// 如果改路径下有index.html,则会优先显示index.html,否则会看到文件目录
-</span><span class="c1"></span>	<span class="nx">http</span><span class="p">.</span><span class="nf">ListenAndServe</span><span class="p">(</span><span class="s">&#34;:3000&#34;</span><span class="p">,</span><span class="nx">http</span><span class="p">.</span><span class="nf">FileServer</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nf">Dir</span><span class="p">(</span><span class="s">&#34;./public/&#34;</span><span class="p">)))</span>
+    <span class="c1">// 如果改路径下有index.html,则会优先显示index.html,否则会看到文件目录
+</span><span class="c1"></span>    <span class="nx">http</span><span class="p">.</span><span class="nf">ListenAndServe</span><span class="p">(</span><span class="s">&#34;:3000&#34;</span><span class="p">,</span><span class="nx">http</span><span class="p">.</span><span class="nf">FileServer</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nf">Dir</span><span class="p">(</span><span class="s">&#34;./public/&#34;</span><span class="p">)))</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -243,7 +248,7 @@
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">HandleFunc</span><span class="p">(</span><span class="nx">pattern</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">handler</span> <span class="kd">func</span><span class="p">(</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="o">*</span><span class="nx">Request</span><span class="p">))</span> <span class="p">{</span>
-	<span class="nx">DefaultServeMux</span><span class="p">.</span><span class="nf">HandleFunc</span><span class="p">(</span><span class="nx">pattern</span><span class="p">,</span> <span class="nx">handler</span><span class="p">)</span>
+    <span class="nx">DefaultServeMux</span><span class="p">.</span><span class="nf">HandleFunc</span><span class="p">(</span><span class="nx">pattern</span><span class="p">,</span> <span class="nx">handler</span><span class="p">)</span>
 <span class="p">}</span>
 <span class="c1">// pattern:请求路径的匹配模式
 </span><span class="c1">// handler:函数类型，表示这个请求需要处理的事情，其实就是Handler接口中的ServeHTTP()方法。
@@ -289,31 +294,31 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;fmt&#34;</span>
-	<span class="s">&#34;net/http&#34;</span>
+    <span class="s">&#34;fmt&#34;</span>
+    <span class="s">&#34;net/http&#34;</span>
 <span class="p">)</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="c1">// 绑定路由/hello
-</span><span class="c1"></span>	<span class="nx">http</span><span class="p">.</span><span class="nf">HandleFunc</span><span class="p">(</span><span class="s">&#34;/hello&#34;</span><span class="p">,</span><span class="nx">helloHandle</span><span class="p">)</span>
-	<span class="c1">// 绑定路由到/test
-</span><span class="c1"></span>	<span class="nx">http</span><span class="p">.</span><span class="nf">HandleFunc</span><span class="p">(</span><span class="s">&#34;/test&#34;</span><span class="p">,</span><span class="nx">testHandle</span><span class="p">)</span>
-	<span class="c1">// 启动服务
-</span><span class="c1"></span>	<span class="nx">err</span> <span class="o">:=</span> <span class="nx">http</span><span class="p">.</span><span class="nf">ListenAndServe</span><span class="p">(</span><span class="s">&#34;:5000&#34;</span><span class="p">,</span><span class="kc">nil</span><span class="p">)</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+    <span class="c1">// 绑定路由/hello
+</span><span class="c1"></span>    <span class="nx">http</span><span class="p">.</span><span class="nf">HandleFunc</span><span class="p">(</span><span class="s">&#34;/hello&#34;</span><span class="p">,</span><span class="nx">helloHandle</span><span class="p">)</span>
+    <span class="c1">// 绑定路由到/test
+</span><span class="c1"></span>    <span class="nx">http</span><span class="p">.</span><span class="nf">HandleFunc</span><span class="p">(</span><span class="s">&#34;/test&#34;</span><span class="p">,</span><span class="nx">testHandle</span><span class="p">)</span>
+    <span class="c1">// 启动服务
+</span><span class="c1"></span>    <span class="nx">err</span> <span class="o">:=</span> <span class="nx">http</span><span class="p">.</span><span class="nf">ListenAndServe</span><span class="p">(</span><span class="s">&#34;:5000&#34;</span><span class="p">,</span><span class="kc">nil</span><span class="p">)</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
 <span class="p">}</span>
 <span class="c1">// 处理路由hello
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">helloHandle</span><span class="p">(</span><span class="nx">w</span> <span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="nx">r</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span>  <span class="p">{</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;访问路由hello&#34;</span><span class="p">)</span>
-	<span class="c1">// 解析url参数
-</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">r</span><span class="p">.</span><span class="nx">URL</span><span class="p">.</span><span class="nf">Query</span><span class="p">())</span>
-	<span class="nx">w</span><span class="p">.</span><span class="nf">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;hello word!&#34;</span><span class="p">))</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;访问路由hello&#34;</span><span class="p">)</span>
+    <span class="c1">// 解析url参数
+</span><span class="c1"></span>    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">r</span><span class="p">.</span><span class="nx">URL</span><span class="p">.</span><span class="nf">Query</span><span class="p">())</span>
+    <span class="nx">w</span><span class="p">.</span><span class="nf">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;hello word!&#34;</span><span class="p">))</span>
 <span class="p">}</span>
 <span class="c1">// 处理路由test
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">testHandle</span><span class="p">(</span><span class="nx">w</span> <span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="nx">r</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span>  <span class="p">{</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;访问路由test&#34;</span><span class="p">)</span>
-	<span class="c1">// 解析url参数,并输出
-</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">r</span><span class="p">.</span><span class="nx">URL</span><span class="p">.</span><span class="nf">Query</span><span class="p">())</span>
-	<span class="nx">w</span><span class="p">.</span><span class="nf">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;test doing!&#34;</span><span class="p">))</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;访问路由test&#34;</span><span class="p">)</span>
+    <span class="c1">// 解析url参数,并输出
+</span><span class="c1"></span>    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">r</span><span class="p">.</span><span class="nx">URL</span><span class="p">.</span><span class="nf">Query</span><span class="p">())</span>
+    <span class="nx">w</span><span class="p">.</span><span class="nf">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;test doing!&#34;</span><span class="p">))</span>
 <span class="p">}</span>
 <span class="c1">// 访问: http://127.0.0.1:5000/test?a=1001
 </span><span class="c1">// 访问: http://127.0.0.1:5000/hello?b=990
@@ -343,15 +348,15 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// ServeMux结构体源码
 </span><span class="c1"></span><span class="kd">type</span> <span class="nx">ServeMux</span> <span class="kd">struct</span> <span class="p">{</span>
-	<span class="nx">mu</span>    <span class="nx">sync</span><span class="p">.</span><span class="nx">RWMutex</span> <span class="c1">// 锁,由于请求涉及到并发处理，因此这里有个锁机制 
-</span><span class="c1"></span>	<span class="nx">m</span>     <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="nx">muxEntry</span> <span class="c1">// 存放具体的路由信息 
-</span><span class="c1"></span>	<span class="nx">es</span>    <span class="p">[]</span><span class="nx">muxEntry</span> <span class="c1">// 按照路由长度从大到小的存放处理函数
-</span><span class="c1"></span>	<span class="nx">hosts</span> <span class="kt">bool</span>       <span class="c1">// 标记路由中是否带有主机名
+    <span class="nx">mu</span>    <span class="nx">sync</span><span class="p">.</span><span class="nx">RWMutex</span> <span class="c1">// 锁,由于请求涉及到并发处理，因此这里有个锁机制 
+</span><span class="c1"></span>    <span class="nx">m</span>     <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="nx">muxEntry</span> <span class="c1">// 存放具体的路由信息 
+</span><span class="c1"></span>    <span class="nx">es</span>    <span class="p">[]</span><span class="nx">muxEntry</span> <span class="c1">// 按照路由长度从大到小的存放处理函数
+</span><span class="c1"></span>    <span class="nx">hosts</span> <span class="kt">bool</span>       <span class="c1">// 标记路由中是否带有主机名
 </span><span class="c1"></span><span class="p">}</span>
 <span class="c1">// muxEntry是路由的具体条目
 </span><span class="c1"></span><span class="kd">type</span> <span class="nx">muxEntry</span> <span class="kd">struct</span> <span class="p">{</span>
-	<span class="nx">h</span>       <span class="nx">Handler</span> <span class="c1">// 处理函数
-</span><span class="c1"></span>	<span class="nx">pattern</span> <span class="kt">string</span>  <span class="c1">// 路由路径
+    <span class="nx">h</span>       <span class="nx">Handler</span> <span class="c1">// 处理函数
+</span><span class="c1"></span>    <span class="nx">pattern</span> <span class="kt">string</span>  <span class="c1">// 路由路径
 </span><span class="c1"></span><span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -390,31 +395,31 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;fmt&#34;</span>
-	<span class="s">&#34;net/http&#34;</span>
+    <span class="s">&#34;fmt&#34;</span>
+    <span class="s">&#34;net/http&#34;</span>
 <span class="p">)</span>
 <span class="c1">// 定义一个接口体，用来实现http.Handler
 </span><span class="c1"></span><span class="kd">type</span> <span class="nx">MyRoute</span> <span class="kd">struct</span> <span class="p">{</span>
 <span class="p">}</span>
 <span class="c1">// 实现http.Handler接口中的ServeHTTP方法
 </span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">m</span> <span class="o">*</span><span class="nx">MyRoute</span><span class="p">)</span><span class="nf">ServeHTTP</span><span class="p">(</span><span class="nx">w</span> <span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span><span class="nx">r</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span>  <span class="p">{</span>
-	<span class="nx">path</span> <span class="o">:=</span> <span class="nx">r</span><span class="p">.</span><span class="nx">URL</span><span class="p">.</span><span class="nx">Path</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">path</span><span class="p">)</span>
-	<span class="k">switch</span> <span class="nx">path</span> <span class="p">{</span>
-	<span class="k">case</span>  <span class="s">&#34;/&#34;</span><span class="p">:</span>
-		<span class="nx">w</span><span class="p">.</span><span class="nf">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;首页&#34;</span><span class="p">))</span>
-	<span class="k">case</span> <span class="s">&#34;/hello&#34;</span><span class="p">:</span>
-		<span class="nx">w</span><span class="p">.</span><span class="nf">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;say hello&#34;</span><span class="p">))</span>
-	<span class="k">case</span> <span class="s">&#34;/test&#34;</span><span class="p">:</span>
-		<span class="nx">w</span><span class="p">.</span><span class="nf">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;test doing&#34;</span><span class="p">))</span>
-	<span class="k">default</span><span class="p">:</span>
-		<span class="nx">http</span><span class="p">.</span><span class="nf">NotFound</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="nx">r</span><span class="p">)</span>
-	<span class="p">}</span>
-	<span class="k">return</span>
+    <span class="nx">path</span> <span class="o">:=</span> <span class="nx">r</span><span class="p">.</span><span class="nx">URL</span><span class="p">.</span><span class="nx">Path</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">path</span><span class="p">)</span>
+    <span class="k">switch</span> <span class="nx">path</span> <span class="p">{</span>
+    <span class="k">case</span>  <span class="s">&#34;/&#34;</span><span class="p">:</span>
+        <span class="nx">w</span><span class="p">.</span><span class="nf">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;首页&#34;</span><span class="p">))</span>
+    <span class="k">case</span> <span class="s">&#34;/hello&#34;</span><span class="p">:</span>
+        <span class="nx">w</span><span class="p">.</span><span class="nf">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;say hello&#34;</span><span class="p">))</span>
+    <span class="k">case</span> <span class="s">&#34;/test&#34;</span><span class="p">:</span>
+        <span class="nx">w</span><span class="p">.</span><span class="nf">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;test doing&#34;</span><span class="p">))</span>
+    <span class="k">default</span><span class="p">:</span>
+        <span class="nx">http</span><span class="p">.</span><span class="nf">NotFound</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="nx">r</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="k">return</span>
 <span class="p">}</span>
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="nx">myRoute</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">MyRoute</span><span class="p">{}</span>
-	<span class="nx">http</span><span class="p">.</span><span class="nf">ListenAndServe</span><span class="p">(</span><span class="s">&#34;:10000&#34;</span><span class="p">,</span><span class="nx">myRoute</span><span class="p">)</span>
+    <span class="nx">myRoute</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">MyRoute</span><span class="p">{}</span>
+    <span class="nx">http</span><span class="p">.</span><span class="nf">ListenAndServe</span><span class="p">(</span><span class="s">&#34;:10000&#34;</span><span class="p">,</span><span class="nx">myRoute</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -432,10 +437,10 @@
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">ListenAndServe</span><span class="p">(</span><span class="nx">addr</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">handler</span> <span class="nx">Handler</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
-  <span class="c1">// 实例化 Server
-</span><span class="c1"></span>	<span class="nx">server</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">Server</span><span class="p">{</span><span class="nx">Addr</span><span class="p">:</span> <span class="nx">addr</span><span class="p">,</span> <span class="nx">Handler</span><span class="p">:</span> <span class="nx">handler</span><span class="p">}</span>
-  <span class="c1">// 调用 ListenAndServe()
-</span><span class="c1"></span>	<span class="k">return</span> <span class="nx">server</span><span class="p">.</span><span class="nf">ListenAndServe</span><span class="p">()</span>
+    <span class="c1">// 实例化 Server
+</span><span class="c1"></span>    <span class="nx">server</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">Server</span><span class="p">{</span><span class="nx">Addr</span><span class="p">:</span> <span class="nx">addr</span><span class="p">,</span> <span class="nx">Handler</span><span class="p">:</span> <span class="nx">handler</span><span class="p">}</span>
+    <span class="c1">// 调用 ListenAndServe()
+</span><span class="c1"></span>    <span class="k">return</span> <span class="nx">server</span><span class="p">.</span><span class="nf">ListenAndServe</span><span class="p">()</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -460,22 +465,22 @@
 </span><span class="lnt">16
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go">   <span class="kd">func</span> <span class="p">(</span><span class="nx">srv</span> <span class="o">*</span><span class="nx">Server</span><span class="p">)</span> <span class="nf">ListenAndServe</span><span class="p">()</span> <span class="kt">error</span> <span class="p">{</span>
-   	<span class="k">if</span> <span class="nx">srv</span><span class="p">.</span><span class="nf">shuttingDown</span><span class="p">()</span> <span class="p">{</span>
-   		<span class="k">return</span> <span class="nx">ErrServerClosed</span>
-   	<span class="p">}</span>
-   	<span class="nx">addr</span> <span class="o">:=</span> <span class="nx">srv</span><span class="p">.</span><span class="nx">Addr</span>
-   	<span class="k">if</span> <span class="nx">addr</span> <span class="o">==</span> <span class="s">&#34;&#34;</span> <span class="p">{</span>
-   		<span class="nx">addr</span> <span class="p">=</span> <span class="s">&#34;:http&#34;</span>
-   	<span class="p">}</span>
-     <span class="c1">// 监听端口
-</span><span class="c1"></span>   	<span class="nx">ln</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">net</span><span class="p">.</span><span class="nf">Listen</span><span class="p">(</span><span class="s">&#34;tcp&#34;</span><span class="p">,</span> <span class="nx">addr</span><span class="p">)</span>
-   	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-   		<span class="k">return</span> <span class="nx">err</span>
-   	<span class="p">}</span>
-     <span class="c1">// 启动服务
-</span><span class="c1"></span>   	<span class="k">return</span> <span class="nx">srv</span><span class="p">.</span><span class="nf">Serve</span><span class="p">(</span><span class="nx">ln</span><span class="p">)</span>
-   <span class="p">}</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="p">(</span><span class="nx">srv</span> <span class="o">*</span><span class="nx">Server</span><span class="p">)</span> <span class="nf">ListenAndServe</span><span class="p">()</span> <span class="kt">error</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="nx">srv</span><span class="p">.</span><span class="nf">shuttingDown</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">ErrServerClosed</span>
+    <span class="p">}</span>
+    <span class="nx">addr</span> <span class="o">:=</span> <span class="nx">srv</span><span class="p">.</span><span class="nx">Addr</span>
+    <span class="k">if</span> <span class="nx">addr</span> <span class="o">==</span> <span class="s">&#34;&#34;</span> <span class="p">{</span>
+        <span class="nx">addr</span> <span class="p">=</span> <span class="s">&#34;:http&#34;</span>
+    <span class="p">}</span>
+	<span class="c1">// 监听端口
+</span><span class="c1"></span>    <span class="nx">ln</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">net</span><span class="p">.</span><span class="nf">Listen</span><span class="p">(</span><span class="s">&#34;tcp&#34;</span><span class="p">,</span> <span class="nx">addr</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">err</span>
+    <span class="p">}</span>
+	<span class="c1">// 启动服务
+</span><span class="c1"></span>    <span class="k">return</span> <span class="nx">srv</span><span class="p">.</span><span class="nf">Serve</span><span class="p">(</span><span class="nx">ln</span><span class="p">)</span>    
+<span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
 </div><h3 id="3启动for无限循环在循环体中accept请求并开启-goroutine为这个请求服务">3.启动for无限循环,在循环体中<code>Accept</code>请求，并开启<code> goroutine</code>为这个请求服务</h3>
@@ -505,25 +510,25 @@
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="p">(</span><span class="nx">srv</span> <span class="o">*</span><span class="nx">Server</span><span class="p">)</span> <span class="nf">Serve</span><span class="p">(</span><span class="nx">l</span> <span class="nx">net</span><span class="p">.</span><span class="nx">Listener</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
-  	<span class="c1">//...省略N行代码
-</span><span class="c1"></span>	<span class="k">for</span> <span class="p">{</span>
-		<span class="nx">rw</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">l</span><span class="p">.</span><span class="nf">Accept</span><span class="p">()</span>
-		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		 	<span class="c1">//...省略N行代码
-</span><span class="c1"></span>		<span class="p">}</span>
-		<span class="nx">connCtx</span> <span class="o">:=</span> <span class="nx">ctx</span>
-		<span class="k">if</span> <span class="nx">cc</span> <span class="o">:=</span> <span class="nx">srv</span><span class="p">.</span><span class="nx">ConnContext</span><span class="p">;</span> <span class="nx">cc</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-			<span class="nx">connCtx</span> <span class="p">=</span> <span class="nf">cc</span><span class="p">(</span><span class="nx">connCtx</span><span class="p">,</span> <span class="nx">rw</span><span class="p">)</span>
-			<span class="k">if</span> <span class="nx">connCtx</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
-				<span class="nb">panic</span><span class="p">(</span><span class="s">&#34;ConnContext returned nil&#34;</span><span class="p">)</span>
-			<span class="p">}</span>
-		<span class="p">}</span>
-		<span class="nx">tempDelay</span> <span class="p">=</span> <span class="mi">0</span>
-		<span class="nx">c</span> <span class="o">:=</span> <span class="nx">srv</span><span class="p">.</span><span class="nf">newConn</span><span class="p">(</span><span class="nx">rw</span><span class="p">)</span>
-		<span class="nx">c</span><span class="p">.</span><span class="nf">setState</span><span class="p">(</span><span class="nx">c</span><span class="p">.</span><span class="nx">rwc</span><span class="p">,</span> <span class="nx">StateNew</span><span class="p">)</span>
-    <span class="c1">// 开启goroutine为这个请求服务
-</span><span class="c1"></span>		<span class="k">go</span> <span class="nx">c</span><span class="p">.</span><span class="nf">serve</span><span class="p">(</span><span class="nx">connCtx</span><span class="p">)</span>
-	<span class="p">}</span>
+    <span class="c1">//...省略N行代码
+</span><span class="c1"></span>    <span class="k">for</span> <span class="p">{</span>
+        <span class="nx">rw</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">l</span><span class="p">.</span><span class="nf">Accept</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+            <span class="c1">//...省略N行代码
+</span><span class="c1"></span>        <span class="p">}</span>
+        <span class="nx">connCtx</span> <span class="o">:=</span> <span class="nx">ctx</span>
+        <span class="k">if</span> <span class="nx">cc</span> <span class="o">:=</span> <span class="nx">srv</span><span class="p">.</span><span class="nx">ConnContext</span><span class="p">;</span> <span class="nx">cc</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+            <span class="nx">connCtx</span> <span class="p">=</span> <span class="nf">cc</span><span class="p">(</span><span class="nx">connCtx</span><span class="p">,</span> <span class="nx">rw</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nx">connCtx</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
+                <span class="nb">panic</span><span class="p">(</span><span class="s">&#34;ConnContext returned nil&#34;</span><span class="p">)</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="nx">tempDelay</span> <span class="p">=</span> <span class="mi">0</span>
+        <span class="nx">c</span> <span class="o">:=</span> <span class="nx">srv</span><span class="p">.</span><span class="nf">newConn</span><span class="p">(</span><span class="nx">rw</span><span class="p">)</span>
+        <span class="nx">c</span><span class="p">.</span><span class="nf">setState</span><span class="p">(</span><span class="nx">c</span><span class="p">.</span><span class="nx">rwc</span><span class="p">,</span> <span class="nx">StateNew</span><span class="p">)</span>
+        <span class="c1">// 开启goroutine为这个请求服务
+</span><span class="c1"></span>        <span class="k">go</span> <span class="nx">c</span><span class="p">.</span><span class="nf">serve</span><span class="p">(</span><span class="nx">connCtx</span><span class="p">)</span>
+    <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -541,19 +546,21 @@
 </span><span class="lnt"> 9
 </span><span class="lnt">10
 </span><span class="lnt">11
+</span><span class="lnt">12
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="p">(</span><span class="nx">c</span> <span class="o">*</span><span class="nx">conn</span><span class="p">)</span> <span class="nf">serve</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
-	<span class="c1">//...省略N行代码
-</span><span class="c1"></span>	<span class="k">for</span> <span class="p">{</span>
-    <span class="c1">// 读取每个请求内容
-</span><span class="c1"></span>		<span class="nx">w</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">c</span><span class="p">.</span><span class="nf">readRequest</span><span class="p">(</span><span class="nx">ctx</span><span class="p">)</span>
     <span class="c1">//...省略N行代码
+</span><span class="c1"></span>    <span class="k">for</span> <span class="p">{</span>
+        <span class="c1">// 读取每个请求内容
+</span><span class="c1"></span>        <span class="nx">w</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">c</span><span class="p">.</span><span class="nf">readRequest</span><span class="p">(</span><span class="nx">ctx</span><span class="p">)</span>
+        <span class="c1">//...省略N行代码
 </span><span class="c1"></span>    
-    <span class="c1">// 调用ServeHTTP
-</span><span class="c1"></span>		<span class="nx">serverHandler</span><span class="p">{</span><span class="nx">c</span><span class="p">.</span><span class="nx">server</span><span class="p">}.</span><span class="nf">ServeHTTP</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">w</span><span class="p">.</span><span class="nx">req</span><span class="p">)</span>
-		<span class="c1">//...省略N行代码
-</span><span class="c1"></span><span class="p">}</span> 
+        <span class="c1">// 调用ServeHTTP
+</span><span class="c1"></span>        <span class="nx">serverHandler</span><span class="p">{</span><span class="nx">c</span><span class="p">.</span><span class="nx">server</span><span class="p">}.</span><span class="nf">ServeHTTP</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">w</span><span class="p">.</span><span class="nx">req</span><span class="p">)</span>
+        <span class="c1">//...省略N行代码
+</span><span class="c1"></span>	<span class="p">}</span>
+<span class="p">}</span> 
 </code></pre></td></tr></table>
 </div>
 </div><h3 id="5-判断handler是否为空如果为空则把handler设置成defaultservemux">5. 判断<code>handler</code>是否为空,如果为空则把<code>handler</code>设置成<code>DefaultServeMux</code>。</h3>
@@ -574,16 +581,16 @@
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="p">(</span><span class="nx">sh</span> <span class="nx">serverHandler</span><span class="p">)</span> <span class="nf">ServeHTTP</span><span class="p">(</span><span class="nx">rw</span> <span class="nx">ResponseWriter</span><span class="p">,</span> <span class="nx">req</span> <span class="o">*</span><span class="nx">Request</span><span class="p">)</span> <span class="p">{</span>
-	<span class="nx">handler</span> <span class="o">:=</span> <span class="nx">sh</span><span class="p">.</span><span class="nx">srv</span><span class="p">.</span><span class="nx">Handler</span>
-	<span class="k">if</span> <span class="nx">handler</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
+    <span class="nx">handler</span> <span class="o">:=</span> <span class="nx">sh</span><span class="p">.</span><span class="nx">srv</span><span class="p">.</span><span class="nx">Handler</span>
+    <span class="k">if</span> <span class="nx">handler</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
     <span class="c1">// 如果为空则把handler设置成DefaultServeMux。
-</span><span class="c1"></span>		<span class="nx">handler</span> <span class="p">=</span> <span class="nx">DefaultServeMux</span>
-	<span class="p">}</span>
-	<span class="k">if</span> <span class="nx">req</span><span class="p">.</span><span class="nx">RequestURI</span> <span class="o">==</span> <span class="s">&#34;*&#34;</span> <span class="o">&amp;&amp;</span> <span class="nx">req</span><span class="p">.</span><span class="nx">Method</span> <span class="o">==</span> <span class="s">&#34;OPTIONS&#34;</span> <span class="p">{</span>
-		<span class="nx">handler</span> <span class="p">=</span> <span class="nx">globalOptionsHandler</span><span class="p">{}</span>
-	<span class="p">}</span>
-  <span class="c1">// 上述示例中，传的是&amp;MyRoute，所以会调用MyRoute.ServeHTTP
-</span><span class="c1"></span>	<span class="nx">handler</span><span class="p">.</span><span class="nf">ServeHTTP</span><span class="p">(</span><span class="nx">rw</span><span class="p">,</span> <span class="nx">req</span><span class="p">)</span>
+</span><span class="c1"></span>        <span class="nx">handler</span> <span class="p">=</span> <span class="nx">DefaultServeMux</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="nx">req</span><span class="p">.</span><span class="nx">RequestURI</span> <span class="o">==</span> <span class="s">&#34;*&#34;</span> <span class="o">&amp;&amp;</span> <span class="nx">req</span><span class="p">.</span><span class="nx">Method</span> <span class="o">==</span> <span class="s">&#34;OPTIONS&#34;</span> <span class="p">{</span>
+        <span class="nx">handler</span> <span class="p">=</span> <span class="nx">globalOptionsHandler</span><span class="p">{}</span>
+    <span class="p">}</span>
+    <span class="c1">// 上述示例中，传的是&amp;MyRoute，所以会调用MyRoute.ServeHTTP
+</span><span class="c1"></span>    <span class="nx">handler</span><span class="p">.</span><span class="nf">ServeHTTP</span><span class="p">(</span><span class="nx">rw</span><span class="p">,</span> <span class="nx">req</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -598,7 +605,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2023-03-04
+        2023-03-19
         
     </span>
   </p>

@@ -44,11 +44,11 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91/5-%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91-%E9%9B%86%E6%88%90elasticsearch/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-06-05T00:00:00+00:00" />
-<meta property="article:modified_time" content="2023-03-04T13:28:44+08:00" />
+<meta property="article:modified_time" content="2023-03-19T10:39:47+08:00" />
 
 <meta itemprop="name" content="框架开发(五):框架开发-集成ElasticSearch">
 <meta itemprop="description" content="1.介绍 Elasticsearch是一个分布式、可扩展、近实时的高性能搜索与数据分析引擎。在Go中经常使用的包有以下两个: 包 文档 Star 数量 olivere/elastic https://olivere.github.io/elastic/ 5.7k"><meta itemprop="datePublished" content="2021-06-05T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2023-03-04T13:28:44+08:00" />
+<meta itemprop="dateModified" content="2023-03-19T10:39:47+08:00" />
 <meta itemprop="wordCount" content="1561">
 <meta itemprop="keywords" content="框架开发," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="框架开发(五):框架开发-集成ElasticSearch"/>
@@ -168,6 +168,11 @@
 </nav>
   </div>
 </div>
+  <div class="post-outdated">
+    <div class="hint">
+      <p>【注意】最后更新于 <span class="timeago" datetime="2023-03-19T10:39:47" title="March 19, 2023">March 19, 2023</span>，文中内容可能已过时，请谨慎使用。</p>
+    </div>
+  </div>
     <div class="post-content">
       <h1 id="1介绍">1.介绍</h1>
 <p><code>Elasticsearch</code>是一个分布式、可扩展、近实时的高性能搜索与数据分析引擎。在<code>Go</code>中经常使用的包有以下两个:</p>
@@ -250,10 +255,10 @@ go get github.com/olivere/elastic/v7
 </span><span class="cm"> * @user: Shershon
 </span><span class="cm"> */</span>
 <span class="kd">type</span> <span class="nx">ElasticConfig</span> <span class="kd">struct</span> <span class="p">{</span>
-	<span class="nx">Enabled</span>             <span class="kt">bool</span>   <span class="s">`ini:&#34;enabled&#34;`</span>
-	<span class="nx">Url</span>                 <span class="kt">string</span> <span class="s">`ini:&#34;url&#34;`</span>
-	<span class="nx">SnifferEnabled</span>      <span class="kt">bool</span>   <span class="s">`ini:&#34;sniffer_enabled&#34;`</span>
-	<span class="nx">HealthCheckInterval</span> <span class="kt">string</span> <span class="s">`ini:&#34;health_check_interval&#34;`</span>
+    <span class="nx">Enabled</span>             <span class="kt">bool</span>   <span class="s">`ini:&#34;enabled&#34;`</span>
+    <span class="nx">Url</span>                 <span class="kt">string</span> <span class="s">`ini:&#34;url&#34;`</span>
+    <span class="nx">SnifferEnabled</span>      <span class="kt">bool</span>   <span class="s">`ini:&#34;sniffer_enabled&#34;`</span>
+    <span class="nx">HealthCheckInterval</span> <span class="kt">string</span> <span class="s">`ini:&#34;health_check_interval&#34;`</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -291,20 +296,20 @@ go get github.com/olivere/elastic/v7
 </span><span class="cm"> * @date 2021-02-04 15:29:17
 </span><span class="cm"> */</span>
 <span class="kd">func</span> <span class="p">(</span><span class="nx">app</span> <span class="o">*</span><span class="nx">App</span><span class="p">)</span> <span class="nf">loadConfig</span><span class="p">()</span> <span class="p">{</span>
-	<span class="nx">iniPath</span> <span class="o">:=</span> <span class="nx">ConfigPath</span> <span class="o">+</span> <span class="nx">app</span><span class="p">.</span><span class="nx">Env</span> <span class="o">+</span> <span class="s">&#34;.ini&#34;</span>
-	<span class="nx">CliInfoInstance</span><span class="p">.</span><span class="nx">ConfigFile</span> <span class="p">=</span> <span class="nx">iniPath</span>
-	<span class="nx">cfg</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ini</span><span class="p">.</span><span class="nf">Load</span><span class="p">(</span><span class="nx">iniPath</span><span class="p">)</span>
-	<span class="nx">BusErrorInstance</span><span class="p">.</span><span class="nf">ThrowError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-	<span class="nx">err</span> <span class="p">=</span> <span class="nx">cfg</span><span class="p">.</span><span class="nf">Section</span><span class="p">(</span><span class="s">&#34;app&#34;</span><span class="p">).</span><span class="nf">MapTo</span><span class="p">(</span><span class="nx">app</span><span class="p">)</span>
-	<span class="c1">// 加载mysql配置
-</span><span class="c1"></span>	<span class="nx">err</span> <span class="p">=</span> <span class="nx">cfg</span><span class="p">.</span><span class="nf">Section</span><span class="p">(</span><span class="s">&#34;mysql&#34;</span><span class="p">).</span><span class="nf">MapTo</span><span class="p">(</span><span class="nx">MysqlConfigInstance</span><span class="p">)</span>
-	<span class="c1">// 加载redis配置
-</span><span class="c1"></span>	<span class="nx">err</span> <span class="p">=</span> <span class="nx">cfg</span><span class="p">.</span><span class="nf">Section</span><span class="p">(</span><span class="s">&#34;redis&#34;</span><span class="p">).</span><span class="nf">MapTo</span><span class="p">(</span><span class="nx">RedisConfigInstance</span><span class="p">)</span>
-	<span class="c1">// 加载日志配置
-</span><span class="c1"></span>	<span class="nx">err</span> <span class="p">=</span> <span class="nx">cfg</span><span class="p">.</span><span class="nf">Section</span><span class="p">(</span><span class="s">&#34;log&#34;</span><span class="p">).</span><span class="nf">MapTo</span><span class="p">(</span><span class="nx">LogrusConfigInstance</span><span class="p">)</span>
-	<span class="c1">// 加载ES配置
-</span><span class="c1"></span>	<span class="nx">err</span> <span class="p">=</span> <span class="nx">cfg</span><span class="p">.</span><span class="nf">Section</span><span class="p">(</span><span class="s">&#34;elastic&#34;</span><span class="p">).</span><span class="nf">MapTo</span><span class="p">(</span><span class="nx">ElasticConfigInstance</span><span class="p">)</span>
-	<span class="nx">BusErrorInstance</span><span class="p">.</span><span class="nf">ThrowError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+    <span class="nx">iniPath</span> <span class="o">:=</span> <span class="nx">ConfigPath</span> <span class="o">+</span> <span class="nx">app</span><span class="p">.</span><span class="nx">Env</span> <span class="o">+</span> <span class="s">&#34;.ini&#34;</span>
+    <span class="nx">CliInfoInstance</span><span class="p">.</span><span class="nx">ConfigFile</span> <span class="p">=</span> <span class="nx">iniPath</span>
+    <span class="nx">cfg</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ini</span><span class="p">.</span><span class="nf">Load</span><span class="p">(</span><span class="nx">iniPath</span><span class="p">)</span>
+    <span class="nx">BusErrorInstance</span><span class="p">.</span><span class="nf">ThrowError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+    <span class="nx">err</span> <span class="p">=</span> <span class="nx">cfg</span><span class="p">.</span><span class="nf">Section</span><span class="p">(</span><span class="s">&#34;app&#34;</span><span class="p">).</span><span class="nf">MapTo</span><span class="p">(</span><span class="nx">app</span><span class="p">)</span>
+    <span class="c1">// 加载mysql配置
+</span><span class="c1"></span>    <span class="nx">err</span> <span class="p">=</span> <span class="nx">cfg</span><span class="p">.</span><span class="nf">Section</span><span class="p">(</span><span class="s">&#34;mysql&#34;</span><span class="p">).</span><span class="nf">MapTo</span><span class="p">(</span><span class="nx">MysqlConfigInstance</span><span class="p">)</span>
+    <span class="c1">// 加载redis配置
+</span><span class="c1"></span>    <span class="nx">err</span> <span class="p">=</span> <span class="nx">cfg</span><span class="p">.</span><span class="nf">Section</span><span class="p">(</span><span class="s">&#34;redis&#34;</span><span class="p">).</span><span class="nf">MapTo</span><span class="p">(</span><span class="nx">RedisConfigInstance</span><span class="p">)</span>
+    <span class="c1">// 加载日志配置
+</span><span class="c1"></span>    <span class="nx">err</span> <span class="p">=</span> <span class="nx">cfg</span><span class="p">.</span><span class="nf">Section</span><span class="p">(</span><span class="s">&#34;log&#34;</span><span class="p">).</span><span class="nf">MapTo</span><span class="p">(</span><span class="nx">LogrusConfigInstance</span><span class="p">)</span>
+    <span class="c1">// 加载ES配置
+</span><span class="c1"></span>    <span class="nx">err</span> <span class="p">=</span> <span class="nx">cfg</span><span class="p">.</span><span class="nf">Section</span><span class="p">(</span><span class="s">&#34;elastic&#34;</span><span class="p">).</span><span class="nf">MapTo</span><span class="p">(</span><span class="nx">ElasticConfigInstance</span><span class="p">)</span>
+    <span class="nx">BusErrorInstance</span><span class="p">.</span><span class="nf">ThrowError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -341,19 +346,19 @@ go get github.com/olivere/elastic/v7
 </span><span class="cm"> * @date 2021-03-11 15:56:48
 </span><span class="cm"> */</span>
 <span class="kd">func</span> <span class="nf">connectElastic</span><span class="p">()</span> <span class="p">{</span>
-	<span class="nx">duration</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">ParseDuration</span><span class="p">(</span><span class="nx">ElasticConfigInstance</span><span class="p">.</span><span class="nx">HealthCheckInterval</span><span class="p">)</span>
-	<span class="nx">BusErrorInstance</span><span class="p">.</span><span class="nf">ThrowError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-  <span class="c1">// ElasticClient是全局变量
-</span><span class="c1"></span>	<span class="nx">ElasticClient</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">elastic</span><span class="p">.</span><span class="nf">NewClient</span><span class="p">(</span>
-		<span class="nx">elastic</span><span class="p">.</span><span class="nf">SetURL</span><span class="p">(</span><span class="nx">ElasticConfigInstance</span><span class="p">.</span><span class="nx">Url</span><span class="p">),</span>
-		<span class="nx">elastic</span><span class="p">.</span><span class="nf">SetSniff</span><span class="p">(</span><span class="nx">ElasticConfigInstance</span><span class="p">.</span><span class="nx">SnifferEnabled</span><span class="p">),</span>
-		<span class="nx">elastic</span><span class="p">.</span><span class="nf">SetHealthcheckInterval</span><span class="p">(</span><span class="nx">duration</span><span class="p">),</span>
-		<span class="nx">elastic</span><span class="p">.</span><span class="nf">SetErrorLog</span><span class="p">(</span><span class="nx">log</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stderr</span><span class="p">,</span> <span class="s">&#34;ES &#34;</span><span class="p">,</span> <span class="nx">log</span><span class="p">.</span><span class="nx">LstdFlags</span><span class="p">)),</span>
-		<span class="nx">elastic</span><span class="p">.</span><span class="nf">SetInfoLog</span><span class="p">(</span><span class="nx">log</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stdout</span><span class="p">,</span> <span class="s">&#34; &#34;</span><span class="p">,</span> <span class="nx">log</span><span class="p">.</span><span class="nx">LstdFlags</span><span class="p">)),</span>
-	<span class="p">)</span>
-	<span class="nx">BusErrorInstance</span><span class="p">.</span><span class="nf">ThrowError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-	<span class="nx">res</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ElasticClient</span><span class="p">.</span><span class="nf">ClusterHealth</span><span class="p">().</span><span class="nf">Index</span><span class="p">(</span><span class="s">&#34;test&#34;</span><span class="p">).</span><span class="nf">Level</span><span class="p">(</span><span class="s">&#34;shards&#34;</span><span class="p">).</span><span class="nf">Pretty</span><span class="p">(</span><span class="kc">true</span><span class="p">).</span><span class="nf">Do</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">TODO</span><span class="p">())</span>
-	<span class="nx">LoggerClient</span><span class="p">.</span><span class="nf">Info</span><span class="p">(</span><span class="s">&#34;es:%v&#34;</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span>
+    <span class="nx">duration</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">ParseDuration</span><span class="p">(</span><span class="nx">ElasticConfigInstance</span><span class="p">.</span><span class="nx">HealthCheckInterval</span><span class="p">)</span>
+    <span class="nx">BusErrorInstance</span><span class="p">.</span><span class="nf">ThrowError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+    <span class="c1">// ElasticClient是全局变量
+</span><span class="c1"></span>    <span class="nx">ElasticClient</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">elastic</span><span class="p">.</span><span class="nf">NewClient</span><span class="p">(</span>
+        <span class="nx">elastic</span><span class="p">.</span><span class="nf">SetURL</span><span class="p">(</span><span class="nx">ElasticConfigInstance</span><span class="p">.</span><span class="nx">Url</span><span class="p">),</span>
+        <span class="nx">elastic</span><span class="p">.</span><span class="nf">SetSniff</span><span class="p">(</span><span class="nx">ElasticConfigInstance</span><span class="p">.</span><span class="nx">SnifferEnabled</span><span class="p">),</span>
+        <span class="nx">elastic</span><span class="p">.</span><span class="nf">SetHealthcheckInterval</span><span class="p">(</span><span class="nx">duration</span><span class="p">),</span>
+        <span class="nx">elastic</span><span class="p">.</span><span class="nf">SetErrorLog</span><span class="p">(</span><span class="nx">log</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stderr</span><span class="p">,</span> <span class="s">&#34;ES &#34;</span><span class="p">,</span> <span class="nx">log</span><span class="p">.</span><span class="nx">LstdFlags</span><span class="p">)),</span>
+        <span class="nx">elastic</span><span class="p">.</span><span class="nf">SetInfoLog</span><span class="p">(</span><span class="nx">log</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stdout</span><span class="p">,</span> <span class="s">&#34; &#34;</span><span class="p">,</span> <span class="nx">log</span><span class="p">.</span><span class="nx">LstdFlags</span><span class="p">)),</span>
+    <span class="p">)</span>
+    <span class="nx">BusErrorInstance</span><span class="p">.</span><span class="nf">ThrowError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+    <span class="nx">res</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ElasticClient</span><span class="p">.</span><span class="nf">ClusterHealth</span><span class="p">().</span><span class="nf">Index</span><span class="p">(</span><span class="s">&#34;test&#34;</span><span class="p">).</span><span class="nf">Level</span><span class="p">(</span><span class="s">&#34;shards&#34;</span><span class="p">).</span><span class="nf">Pretty</span><span class="p">(</span><span class="kc">true</span><span class="p">).</span><span class="nf">Do</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">TODO</span><span class="p">())</span>
+    <span class="nx">LoggerClient</span><span class="p">.</span><span class="nf">Info</span><span class="p">(</span><span class="s">&#34;es:%v&#34;</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -453,22 +458,22 @@ go get github.com/olivere/elastic/v7
 <span class="kd">var</span> <span class="nx">esCtx</span> <span class="p">=</span> <span class="nx">context</span><span class="p">.</span><span class="nf">Background</span><span class="p">()</span>
 <span class="c1">// 创建索引
 </span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">e</span> <span class="nx">ElasticController</span><span class="p">)</span> <span class="nf">CreateIndex</span><span class="p">()</span> <span class="kt">error</span> <span class="p">{</span>
-	<span class="nx">exist</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ElasticClient</span><span class="p">.</span><span class="nf">IndexExists</span><span class="p">(</span><span class="nx">userIndex</span><span class="p">).</span><span class="nf">Do</span><span class="p">(</span><span class="nx">esCtx</span><span class="p">)</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="k">return</span> <span class="nx">e</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">())</span>
-	<span class="p">}</span>
-	<span class="k">if</span> <span class="nx">exist</span> <span class="p">{</span>
-		<span class="k">return</span> <span class="nx">e</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="s">&#34;索引已经存在，无需重复创建!&#34;</span><span class="p">)</span>
-	<span class="p">}</span>
-	<span class="c1">// 创建索引
-</span><span class="c1"></span>	<span class="nx">res</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ElasticClient</span><span class="p">.</span><span class="nf">CreateIndex</span><span class="p">(</span><span class="nx">userIndex</span><span class="p">).</span><span class="nf">BodyString</span><span class="p">(</span><span class="nx">userMapping</span><span class="p">).</span><span class="nf">Do</span><span class="p">(</span><span class="nx">esCtx</span><span class="p">)</span>
-	<span class="nx">LoggerClient</span><span class="p">.</span><span class="nf">WithFields</span><span class="p">(</span><span class="nx">logrus</span><span class="p">.</span><span class="nx">Fields</span><span class="p">{</span>
-		<span class="s">&#34;res&#34;</span><span class="p">:</span> <span class="nx">res</span><span class="p">,</span>
-	<span class="p">}).</span><span class="nf">Info</span><span class="p">(</span><span class="s">&#34;es返回&#34;</span><span class="p">)</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="k">return</span> <span class="nx">e</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">())</span>
-	<span class="p">}</span>
-	<span class="k">return</span> <span class="nx">e</span><span class="p">.</span><span class="nf">Success</span><span class="p">(</span><span class="nx">res</span><span class="p">)</span>
+    <span class="nx">exist</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ElasticClient</span><span class="p">.</span><span class="nf">IndexExists</span><span class="p">(</span><span class="nx">userIndex</span><span class="p">).</span><span class="nf">Do</span><span class="p">(</span><span class="nx">esCtx</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">e</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">())</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="nx">exist</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">e</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="s">&#34;索引已经存在，无需重复创建!&#34;</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="c1">// 创建索引
+</span><span class="c1"></span>    <span class="nx">res</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ElasticClient</span><span class="p">.</span><span class="nf">CreateIndex</span><span class="p">(</span><span class="nx">userIndex</span><span class="p">).</span><span class="nf">BodyString</span><span class="p">(</span><span class="nx">userMapping</span><span class="p">).</span><span class="nf">Do</span><span class="p">(</span><span class="nx">esCtx</span><span class="p">)</span>
+    <span class="nx">LoggerClient</span><span class="p">.</span><span class="nf">WithFields</span><span class="p">(</span><span class="nx">logrus</span><span class="p">.</span><span class="nx">Fields</span><span class="p">{</span>
+        <span class="s">&#34;res&#34;</span><span class="p">:</span> <span class="nx">res</span><span class="p">,</span>
+    <span class="p">}).</span><span class="nf">Info</span><span class="p">(</span><span class="s">&#34;es返回&#34;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">e</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">())</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">e</span><span class="p">.</span><span class="nf">Success</span><span class="p">(</span><span class="nx">res</span><span class="p">)</span>
 <span class="p">}</span>
 
 </code></pre></td></tr></table>
@@ -501,26 +506,26 @@ go get github.com/olivere/elastic/v7
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">User</span> <span class="kd">struct</span> <span class="p">{</span>
-	<span class="nx">Name</span>   <span class="kt">string</span>    <span class="s">`json:&#34;name&#34;`</span>
-	<span class="nx">Age</span>    <span class="kt">int</span>       <span class="s">`json:&#34;age&#34;`</span>
-	<span class="nx">Phone</span>  <span class="kt">string</span>    <span class="s">`json:&#34;phone&#34;`</span>
-	<span class="nx">Birth</span>  <span class="nx">time</span><span class="p">.</span><span class="nx">Time</span> <span class="s">`json:&#34;birth&#34;`</span>
-	<span class="nx">Height</span> <span class="kt">float32</span>   <span class="s">`json:&#34;height&#34;`</span>
-	<span class="nx">Smoke</span>  <span class="kt">bool</span>      <span class="s">`json:&#34;smoke&#34;`</span>
-	<span class="nx">Home</span>   <span class="kt">string</span>    <span class="s">`json:&#34;home&#34;`</span>
+    <span class="nx">Name</span>   <span class="kt">string</span>    <span class="s">`json:&#34;name&#34;`</span>
+    <span class="nx">Age</span>    <span class="kt">int</span>       <span class="s">`json:&#34;age&#34;`</span>
+    <span class="nx">Phone</span>  <span class="kt">string</span>    <span class="s">`json:&#34;phone&#34;`</span>
+    <span class="nx">Birth</span>  <span class="nx">time</span><span class="p">.</span><span class="nx">Time</span> <span class="s">`json:&#34;birth&#34;`</span>
+    <span class="nx">Height</span> <span class="kt">float32</span>   <span class="s">`json:&#34;height&#34;`</span>
+    <span class="nx">Smoke</span>  <span class="kt">bool</span>      <span class="s">`json:&#34;smoke&#34;`</span>
+    <span class="nx">Home</span>   <span class="kt">string</span>    <span class="s">`json:&#34;home&#34;`</span>
 <span class="p">}</span>
 
 <span class="c1">// 添加文档
 </span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">e</span> <span class="nx">ElasticController</span><span class="p">)</span> <span class="nf">AddOneDoc</span><span class="p">()</span> <span class="kt">error</span> <span class="p">{</span>
-	<span class="c1">// 定义上下文
-</span><span class="c1"></span>	<span class="nx">loc</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">LoadLocation</span><span class="p">(</span><span class="s">&#34;Local&#34;</span><span class="p">)</span>
-	<span class="nx">birth</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">ParseInLocation</span><span class="p">(</span><span class="s">&#34;2006-01-02&#34;</span><span class="p">,</span> <span class="s">&#34;1991-04-25&#34;</span><span class="p">,</span> <span class="nx">loc</span><span class="p">)</span>
-	<span class="nx">userOne</span> <span class="o">:=</span> <span class="nx">User</span><span class="p">{</span><span class="s">&#34;张三&#34;</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="s">&#34;17600000000&#34;</span><span class="p">,</span> <span class="nx">birth</span><span class="p">,</span> <span class="mf">170.5</span><span class="p">,</span> <span class="kc">false</span><span class="p">,</span> <span class="s">&#34;41.40338,2.17403&#34;</span><span class="p">}</span>
-	<span class="nx">do</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ElasticClient</span><span class="p">.</span><span class="nf">Index</span><span class="p">().</span><span class="nf">Index</span><span class="p">(</span><span class="nx">userIndex</span><span class="p">).</span><span class="nf">Id</span><span class="p">(</span><span class="nx">strconv</span><span class="p">.</span><span class="nf">FormatInt</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">UnixNano</span><span class="p">(),</span> <span class="mi">10</span><span class="p">)).</span><span class="nf">BodyJson</span><span class="p">(</span><span class="nx">userOne</span><span class="p">).</span><span class="nf">Do</span><span class="p">(</span><span class="nx">esCtx</span><span class="p">)</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="k">return</span> <span class="nx">e</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">())</span>
-	<span class="p">}</span>
-	<span class="k">return</span> <span class="nx">e</span><span class="p">.</span><span class="nf">Success</span><span class="p">(</span><span class="nx">do</span><span class="p">)</span>
+    <span class="c1">// 定义上下文
+</span><span class="c1"></span>    <span class="nx">loc</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">LoadLocation</span><span class="p">(</span><span class="s">&#34;Local&#34;</span><span class="p">)</span>
+    <span class="nx">birth</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">ParseInLocation</span><span class="p">(</span><span class="s">&#34;2006-01-02&#34;</span><span class="p">,</span> <span class="s">&#34;1991-04-25&#34;</span><span class="p">,</span> <span class="nx">loc</span><span class="p">)</span>
+    <span class="nx">userOne</span> <span class="o">:=</span> <span class="nx">User</span><span class="p">{</span><span class="s">&#34;张三&#34;</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="s">&#34;17600000000&#34;</span><span class="p">,</span> <span class="nx">birth</span><span class="p">,</span> <span class="mf">170.5</span><span class="p">,</span> <span class="kc">false</span><span class="p">,</span> <span class="s">&#34;41.40338,2.17403&#34;</span><span class="p">}</span>
+    <span class="nx">do</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ElasticClient</span><span class="p">.</span><span class="nf">Index</span><span class="p">().</span><span class="nf">Index</span><span class="p">(</span><span class="nx">userIndex</span><span class="p">).</span><span class="nf">Id</span><span class="p">(</span><span class="nx">strconv</span><span class="p">.</span><span class="nf">FormatInt</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">UnixNano</span><span class="p">(),</span> <span class="mi">10</span><span class="p">)).</span><span class="nf">BodyJson</span><span class="p">(</span><span class="nx">userOne</span><span class="p">).</span><span class="nf">Do</span><span class="p">(</span><span class="nx">esCtx</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">e</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">())</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">e</span><span class="p">.</span><span class="nf">Success</span><span class="p">(</span><span class="nx">do</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -564,36 +569,36 @@ go get github.com/olivere/elastic/v7
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 批量添加
 </span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">e</span> <span class="nx">ElasticController</span><span class="p">)</span> <span class="nf">BatchAddDoc</span><span class="p">()</span> <span class="kt">error</span> <span class="p">{</span>
-	<span class="nx">userBulk</span> <span class="o">:=</span> <span class="nx">ElasticClient</span><span class="p">.</span><span class="nf">Bulk</span><span class="p">().</span><span class="nf">Index</span><span class="p">(</span><span class="nx">userIndex</span><span class="p">)</span>
-	<span class="nx">loc</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">LoadLocation</span><span class="p">(</span><span class="s">&#34;Local&#34;</span><span class="p">)</span>
-	<span class="c1">// 生日
-</span><span class="c1"></span>	<span class="nx">birthSlice</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;1991-04-25&#34;</span><span class="p">,</span> <span class="s">&#34;1990-01-15&#34;</span><span class="p">,</span> <span class="s">&#34;1989-11-05&#34;</span><span class="p">,</span> <span class="s">&#34;1988-01-25&#34;</span><span class="p">,</span> <span class="s">&#34;1994-10-12&#34;</span><span class="p">}</span>
-	<span class="c1">// 姓名
-</span><span class="c1"></span>	<span class="nx">nameSlice</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;李四&#34;</span><span class="p">,</span> <span class="s">&#34;张飞&#34;</span><span class="p">,</span> <span class="s">&#34;赵云&#34;</span><span class="p">,</span> <span class="s">&#34;关羽&#34;</span><span class="p">,</span> <span class="s">&#34;刘备&#34;</span><span class="p">}</span>
-	<span class="nx">rand</span><span class="p">.</span><span class="nf">Seed</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Unix</span><span class="p">())</span>
-	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="mi">20</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
-		<span class="nx">birth</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">ParseInLocation</span><span class="p">(</span><span class="s">&#34;2006-01-02&#34;</span><span class="p">,</span> <span class="nx">birthSlice</span><span class="p">[</span><span class="nx">rand</span><span class="p">.</span><span class="nf">Intn</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nx">birthSlice</span><span class="p">))],</span> <span class="nx">loc</span><span class="p">)</span>
-		<span class="nx">height</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">strconv</span><span class="p">.</span><span class="nf">ParseFloat</span><span class="p">(</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;%.2f&#34;</span><span class="p">,</span> <span class="nx">rand</span><span class="p">.</span><span class="nf">Float32</span><span class="p">()</span><span class="o">+</span><span class="mf">175.0</span><span class="p">),</span> <span class="mi">32</span><span class="p">)</span>
-		<span class="nx">user</span> <span class="o">:=</span> <span class="nx">User</span><span class="p">{</span>
-			<span class="nx">nameSlice</span><span class="p">[</span><span class="nx">rand</span><span class="p">.</span><span class="nf">Intn</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nx">nameSlice</span><span class="p">))],</span>
-			<span class="nx">rand</span><span class="p">.</span><span class="nf">Intn</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">+</span> <span class="mi">18</span><span class="p">,</span>
-			<span class="s">&#34;1760000000&#34;</span> <span class="o">+</span> <span class="nx">strconv</span><span class="p">.</span><span class="nf">Itoa</span><span class="p">(</span><span class="nx">i</span><span class="p">),</span>
-			<span class="nx">birth</span><span class="p">,</span>
-			<span class="nb">float32</span><span class="p">(</span><span class="nx">height</span><span class="p">),</span>
-			<span class="kc">false</span><span class="p">,</span>
-			<span class="s">&#34;41.40338,2.17403&#34;</span><span class="p">,</span>
-		<span class="p">}</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">user</span><span class="p">,</span> <span class="nx">userBulk</span><span class="p">)</span>
-		<span class="nx">doc</span> <span class="o">:=</span> <span class="nx">elastic</span><span class="p">.</span><span class="nf">NewBulkIndexRequest</span><span class="p">().</span><span class="nf">Id</span><span class="p">(</span><span class="nx">strconv</span><span class="p">.</span><span class="nf">FormatInt</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">UnixNano</span><span class="p">(),</span> <span class="mi">10</span><span class="p">)).</span><span class="nf">Doc</span><span class="p">(</span><span class="nx">user</span><span class="p">)</span>
-		<span class="nx">userBulk</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="nx">doc</span><span class="p">)</span>
-	<span class="p">}</span>
-	<span class="k">if</span> <span class="nx">userBulk</span><span class="p">.</span><span class="nf">NumberOfActions</span><span class="p">()</span> <span class="p">&lt;</span> <span class="mi">0</span> <span class="p">{</span>
-		<span class="k">return</span> <span class="nx">e</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="s">&#34;没有要保存的数据&#34;</span><span class="p">)</span>
-	<span class="p">}</span>
-	<span class="k">if</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">userBulk</span><span class="p">.</span><span class="nf">Do</span><span class="p">(</span><span class="nx">esCtx</span><span class="p">);</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="k">return</span> <span class="nx">e</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">())</span>
-	<span class="p">}</span>
-	<span class="k">return</span> <span class="nx">e</span><span class="p">.</span><span class="nf">Success</span><span class="p">(</span><span class="kc">nil</span><span class="p">)</span>
+    <span class="nx">userBulk</span> <span class="o">:=</span> <span class="nx">ElasticClient</span><span class="p">.</span><span class="nf">Bulk</span><span class="p">().</span><span class="nf">Index</span><span class="p">(</span><span class="nx">userIndex</span><span class="p">)</span>
+    <span class="nx">loc</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">LoadLocation</span><span class="p">(</span><span class="s">&#34;Local&#34;</span><span class="p">)</span>
+    <span class="c1">// 生日
+</span><span class="c1"></span>    <span class="nx">birthSlice</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;1991-04-25&#34;</span><span class="p">,</span> <span class="s">&#34;1990-01-15&#34;</span><span class="p">,</span> <span class="s">&#34;1989-11-05&#34;</span><span class="p">,</span> <span class="s">&#34;1988-01-25&#34;</span><span class="p">,</span> <span class="s">&#34;1994-10-12&#34;</span><span class="p">}</span>
+    <span class="c1">// 姓名
+</span><span class="c1"></span>    <span class="nx">nameSlice</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;李四&#34;</span><span class="p">,</span> <span class="s">&#34;张飞&#34;</span><span class="p">,</span> <span class="s">&#34;赵云&#34;</span><span class="p">,</span> <span class="s">&#34;关羽&#34;</span><span class="p">,</span> <span class="s">&#34;刘备&#34;</span><span class="p">}</span>
+    <span class="nx">rand</span><span class="p">.</span><span class="nf">Seed</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Unix</span><span class="p">())</span>
+    <span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="mi">20</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="nx">birth</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">ParseInLocation</span><span class="p">(</span><span class="s">&#34;2006-01-02&#34;</span><span class="p">,</span> <span class="nx">birthSlice</span><span class="p">[</span><span class="nx">rand</span><span class="p">.</span><span class="nf">Intn</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nx">birthSlice</span><span class="p">))],</span> <span class="nx">loc</span><span class="p">)</span>
+        <span class="nx">height</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">strconv</span><span class="p">.</span><span class="nf">ParseFloat</span><span class="p">(</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;%.2f&#34;</span><span class="p">,</span> <span class="nx">rand</span><span class="p">.</span><span class="nf">Float32</span><span class="p">()</span><span class="o">+</span><span class="mf">175.0</span><span class="p">),</span> <span class="mi">32</span><span class="p">)</span>
+        <span class="nx">user</span> <span class="o">:=</span> <span class="nx">User</span><span class="p">{</span>
+            <span class="nx">nameSlice</span><span class="p">[</span><span class="nx">rand</span><span class="p">.</span><span class="nf">Intn</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nx">nameSlice</span><span class="p">))],</span>
+            <span class="nx">rand</span><span class="p">.</span><span class="nf">Intn</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">+</span> <span class="mi">18</span><span class="p">,</span>
+            <span class="s">&#34;1760000000&#34;</span> <span class="o">+</span> <span class="nx">strconv</span><span class="p">.</span><span class="nf">Itoa</span><span class="p">(</span><span class="nx">i</span><span class="p">),</span>
+            <span class="nx">birth</span><span class="p">,</span>
+            <span class="nb">float32</span><span class="p">(</span><span class="nx">height</span><span class="p">),</span>
+            <span class="kc">false</span><span class="p">,</span>
+            <span class="s">&#34;41.40338,2.17403&#34;</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">user</span><span class="p">,</span> <span class="nx">userBulk</span><span class="p">)</span>
+        <span class="nx">doc</span> <span class="o">:=</span> <span class="nx">elastic</span><span class="p">.</span><span class="nf">NewBulkIndexRequest</span><span class="p">().</span><span class="nf">Id</span><span class="p">(</span><span class="nx">strconv</span><span class="p">.</span><span class="nf">FormatInt</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">UnixNano</span><span class="p">(),</span> <span class="mi">10</span><span class="p">)).</span><span class="nf">Doc</span><span class="p">(</span><span class="nx">user</span><span class="p">)</span>
+        <span class="nx">userBulk</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="nx">doc</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="nx">userBulk</span><span class="p">.</span><span class="nf">NumberOfActions</span><span class="p">()</span> <span class="p">&lt;</span> <span class="mi">0</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">e</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="s">&#34;没有要保存的数据&#34;</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">userBulk</span><span class="p">.</span><span class="nf">Do</span><span class="p">(</span><span class="nx">esCtx</span><span class="p">);</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">e</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">())</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">e</span><span class="p">.</span><span class="nf">Success</span><span class="p">(</span><span class="kc">nil</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -626,25 +631,25 @@ go get github.com/olivere/elastic/v7
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 根据名字查询
 </span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">e</span> <span class="nx">ElasticController</span><span class="p">)</span> <span class="nf">Get</span><span class="p">()</span> <span class="kt">error</span> <span class="p">{</span>
-	<span class="nx">name</span> <span class="o">:=</span> <span class="nx">e</span><span class="p">.</span><span class="nf">GetParam</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">)</span>
-	<span class="nx">list</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ElasticClient</span><span class="p">.</span><span class="nf">Search</span><span class="p">().</span><span class="nf">Index</span><span class="p">(</span><span class="nx">userIndex</span><span class="p">).</span>
-		<span class="nf">Query</span><span class="p">(</span><span class="nx">elastic</span><span class="p">.</span><span class="nf">NewMatchQuery</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">,</span> <span class="nx">name</span><span class="p">)).</span>
-		<span class="nf">Sort</span><span class="p">(</span><span class="s">&#34;age&#34;</span><span class="p">,</span> <span class="kc">true</span><span class="p">).</span> <span class="c1">//根据age字段，正序
-</span><span class="c1"></span>		<span class="nf">From</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span> <span class="c1">// 从第几条开始取
-</span><span class="c1"></span>		<span class="nf">Size</span><span class="p">(</span><span class="mi">20</span><span class="p">).</span> <span class="c1">// 每页数量
-</span><span class="c1"></span>		<span class="nf">Pretty</span><span class="p">(</span><span class="kc">true</span><span class="p">).</span> <span class="c1">//返回json格式
-</span><span class="c1"></span>		<span class="nf">Do</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">Background</span><span class="p">())</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="k">return</span> <span class="nx">e</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">())</span>
-	<span class="p">}</span>
-	<span class="kd">var</span> <span class="nx">userDto</span> <span class="nx">User</span>
-	<span class="kd">var</span> <span class="nx">userList</span> <span class="p">[]</span><span class="nx">User</span>
-	<span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">v</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">list</span><span class="p">.</span><span class="nf">Each</span><span class="p">(</span><span class="nx">reflect</span><span class="p">.</span><span class="nf">TypeOf</span><span class="p">(</span><span class="nx">userDto</span><span class="p">))</span> <span class="p">{</span>
-		<span class="nx">tmp</span> <span class="o">:=</span> <span class="nx">v</span><span class="p">.(</span><span class="nx">User</span><span class="p">)</span>
-		<span class="nx">userList</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">userList</span><span class="p">,</span> <span class="nx">tmp</span><span class="p">)</span>
-	<span class="p">}</span>
-	<span class="c1">// 遍历获取结果
-</span><span class="c1"></span>	<span class="k">return</span> <span class="nx">e</span><span class="p">.</span><span class="nf">Success</span><span class="p">(</span><span class="nx">userList</span><span class="p">)</span>
+    <span class="nx">name</span> <span class="o">:=</span> <span class="nx">e</span><span class="p">.</span><span class="nf">GetParam</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">)</span>
+    <span class="nx">list</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ElasticClient</span><span class="p">.</span><span class="nf">Search</span><span class="p">().</span><span class="nf">Index</span><span class="p">(</span><span class="nx">userIndex</span><span class="p">).</span>
+        <span class="nf">Query</span><span class="p">(</span><span class="nx">elastic</span><span class="p">.</span><span class="nf">NewMatchQuery</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">,</span> <span class="nx">name</span><span class="p">)).</span>
+        <span class="nf">Sort</span><span class="p">(</span><span class="s">&#34;age&#34;</span><span class="p">,</span> <span class="kc">true</span><span class="p">).</span> <span class="c1">//根据age字段，正序
+</span><span class="c1"></span>        <span class="nf">From</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span> <span class="c1">// 从第几条开始取
+</span><span class="c1"></span>        <span class="nf">Size</span><span class="p">(</span><span class="mi">20</span><span class="p">).</span> <span class="c1">// 每页数量
+</span><span class="c1"></span>        <span class="nf">Pretty</span><span class="p">(</span><span class="kc">true</span><span class="p">).</span> <span class="c1">//返回json格式
+</span><span class="c1"></span>        <span class="nf">Do</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">Background</span><span class="p">())</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">e</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">())</span>
+    <span class="p">}</span>
+    <span class="kd">var</span> <span class="nx">userDto</span> <span class="nx">User</span>
+    <span class="kd">var</span> <span class="nx">userList</span> <span class="p">[]</span><span class="nx">User</span>
+    <span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">v</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">list</span><span class="p">.</span><span class="nf">Each</span><span class="p">(</span><span class="nx">reflect</span><span class="p">.</span><span class="nf">TypeOf</span><span class="p">(</span><span class="nx">userDto</span><span class="p">))</span> <span class="p">{</span>
+        <span class="nx">tmp</span> <span class="o">:=</span> <span class="nx">v</span><span class="p">.(</span><span class="nx">User</span><span class="p">)</span>
+        <span class="nx">userList</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">userList</span><span class="p">,</span> <span class="nx">tmp</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="c1">// 遍历获取结果
+</span><span class="c1"></span>    <span class="k">return</span> <span class="nx">e</span><span class="p">.</span><span class="nf">Success</span><span class="p">(</span><span class="nx">userList</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -679,27 +684,27 @@ go get github.com/olivere/elastic/v7
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 删除
 </span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">e</span> <span class="nx">ElasticController</span><span class="p">)</span> <span class="nf">Del</span><span class="p">()</span> <span class="kt">error</span> <span class="p">{</span>
-	<span class="nx">id</span> <span class="o">:=</span> <span class="nx">e</span><span class="p">.</span><span class="nf">GetParam</span><span class="p">(</span><span class="s">&#34;id&#34;</span><span class="p">)</span>
-	<span class="nx">name</span> <span class="o">:=</span> <span class="nx">e</span><span class="p">.</span><span class="nf">GetParam</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">)</span>
-	<span class="nx">age</span> <span class="o">:=</span> <span class="nx">e</span><span class="p">.</span><span class="nf">GetParam</span><span class="p">(</span><span class="s">&#34;age&#34;</span><span class="p">)</span>
-	<span class="kd">var</span> <span class="nx">do</span> <span class="kd">interface</span><span class="p">{}</span>
-	<span class="kd">var</span> <span class="nx">err</span> <span class="kt">error</span>
-	<span class="k">if</span> <span class="nx">id</span> <span class="o">!=</span> <span class="s">&#34;&#34;</span> <span class="p">{</span>
-		<span class="c1">// 根据主键删除
-</span><span class="c1"></span>		<span class="nx">do</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">ElasticClient</span><span class="p">.</span><span class="nf">Delete</span><span class="p">().</span><span class="nf">Index</span><span class="p">(</span><span class="nx">userIndex</span><span class="p">).</span><span class="nf">Id</span><span class="p">(</span><span class="nx">id</span><span class="p">).</span><span class="nf">Do</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">Background</span><span class="p">())</span>
-	<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="nx">name</span> <span class="o">!=</span> <span class="s">&#34;&#34;</span> <span class="o">&amp;&amp;</span> <span class="nx">age</span> <span class="o">!=</span> <span class="s">&#34;&#34;</span> <span class="p">{</span>
-		<span class="c1">// 根据名称和年龄删除
-</span><span class="c1"></span>		<span class="nx">do</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">ElasticClient</span><span class="p">.</span><span class="nf">DeleteByQuery</span><span class="p">().</span><span class="nf">Index</span><span class="p">(</span><span class="nx">userIndex</span><span class="p">).</span>
-			<span class="nf">Query</span><span class="p">(</span><span class="nx">elastic</span><span class="p">.</span><span class="nf">NewMatchQuery</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">,</span> <span class="nx">name</span><span class="p">)).</span>
-			<span class="nf">Query</span><span class="p">(</span><span class="nx">elastic</span><span class="p">.</span><span class="nf">NewTermQuery</span><span class="p">(</span><span class="s">&#34;age&#34;</span><span class="p">,</span> <span class="nx">age</span><span class="p">)).</span>
-			<span class="nf">Do</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">Background</span><span class="p">())</span>
-	<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-		<span class="k">return</span> <span class="nx">e</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="s">&#34;缺少参数信息&#34;</span><span class="p">)</span>
-	<span class="p">}</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="k">return</span> <span class="nx">e</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">())</span>
-	<span class="p">}</span>
-	<span class="k">return</span> <span class="nx">e</span><span class="p">.</span><span class="nf">Success</span><span class="p">(</span><span class="nx">do</span><span class="p">)</span>
+    <span class="nx">id</span> <span class="o">:=</span> <span class="nx">e</span><span class="p">.</span><span class="nf">GetParam</span><span class="p">(</span><span class="s">&#34;id&#34;</span><span class="p">)</span>
+    <span class="nx">name</span> <span class="o">:=</span> <span class="nx">e</span><span class="p">.</span><span class="nf">GetParam</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">)</span>
+    <span class="nx">age</span> <span class="o">:=</span> <span class="nx">e</span><span class="p">.</span><span class="nf">GetParam</span><span class="p">(</span><span class="s">&#34;age&#34;</span><span class="p">)</span>
+    <span class="kd">var</span> <span class="nx">do</span> <span class="kd">interface</span><span class="p">{}</span>
+    <span class="kd">var</span> <span class="nx">err</span> <span class="kt">error</span>
+    <span class="k">if</span> <span class="nx">id</span> <span class="o">!=</span> <span class="s">&#34;&#34;</span> <span class="p">{</span>
+        <span class="c1">// 根据主键删除
+</span><span class="c1"></span>        <span class="nx">do</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">ElasticClient</span><span class="p">.</span><span class="nf">Delete</span><span class="p">().</span><span class="nf">Index</span><span class="p">(</span><span class="nx">userIndex</span><span class="p">).</span><span class="nf">Id</span><span class="p">(</span><span class="nx">id</span><span class="p">).</span><span class="nf">Do</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">Background</span><span class="p">())</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="nx">name</span> <span class="o">!=</span> <span class="s">&#34;&#34;</span> <span class="o">&amp;&amp;</span> <span class="nx">age</span> <span class="o">!=</span> <span class="s">&#34;&#34;</span> <span class="p">{</span>
+        <span class="c1">// 根据名称和年龄删除
+</span><span class="c1"></span>        <span class="nx">do</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">ElasticClient</span><span class="p">.</span><span class="nf">DeleteByQuery</span><span class="p">().</span><span class="nf">Index</span><span class="p">(</span><span class="nx">userIndex</span><span class="p">).</span>
+            <span class="nf">Query</span><span class="p">(</span><span class="nx">elastic</span><span class="p">.</span><span class="nf">NewMatchQuery</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">,</span> <span class="nx">name</span><span class="p">)).</span>
+            <span class="nf">Query</span><span class="p">(</span><span class="nx">elastic</span><span class="p">.</span><span class="nf">NewTermQuery</span><span class="p">(</span><span class="s">&#34;age&#34;</span><span class="p">,</span> <span class="nx">age</span><span class="p">)).</span>
+            <span class="nf">Do</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">Background</span><span class="p">())</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">e</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="s">&#34;缺少参数信息&#34;</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">e</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">())</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">e</span><span class="p">.</span><span class="nf">Success</span><span class="p">(</span><span class="nx">do</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -738,31 +743,31 @@ go get github.com/olivere/elastic/v7
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 更新
 </span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">e</span> <span class="nx">ElasticController</span><span class="p">)</span> <span class="nf">Update</span><span class="p">()</span> <span class="kt">error</span> <span class="p">{</span>
-	<span class="nx">id</span> <span class="o">:=</span> <span class="nx">e</span><span class="p">.</span><span class="nf">GetParam</span><span class="p">(</span><span class="s">&#34;id&#34;</span><span class="p">)</span>
-	<span class="nx">phone</span> <span class="o">:=</span> <span class="nx">e</span><span class="p">.</span><span class="nf">GetParam</span><span class="p">(</span><span class="s">&#34;phone&#34;</span><span class="p">)</span>
-	<span class="kd">var</span> <span class="nx">do</span> <span class="kd">interface</span><span class="p">{}</span>
-	<span class="kd">var</span> <span class="nx">err</span> <span class="kt">error</span>
-	<span class="k">if</span> <span class="nx">id</span> <span class="o">!=</span> <span class="s">&#34;&#34;</span> <span class="p">{</span>
-		<span class="c1">// 根据主键更新
-</span><span class="c1"></span>		<span class="nx">do</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">ElasticClient</span><span class="p">.</span><span class="nf">Update</span><span class="p">().</span><span class="nf">Index</span><span class="p">(</span><span class="nx">userIndex</span><span class="p">).</span><span class="nf">Id</span><span class="p">(</span><span class="nx">id</span><span class="p">).</span>
-			<span class="nf">Script</span><span class="p">(</span><span class="nx">elastic</span><span class="p">.</span><span class="nf">NewScript</span><span class="p">(</span><span class="s">&#34;ctx._source.age=73&#34;</span><span class="p">)).</span>
-			<span class="nf">Script</span><span class="p">(</span><span class="nx">elastic</span><span class="p">.</span><span class="nf">NewScript</span><span class="p">(</span><span class="s">&#34;ctx._source.phone=&#39;110110110110&#39;&#34;</span><span class="p">)).</span>
-			<span class="nf">Do</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">Background</span><span class="p">())</span>
-	<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="nx">phone</span> <span class="o">!=</span> <span class="s">&#34;&#34;</span> <span class="p">{</span>
-		<span class="c1">// 根据非ID条件更新
-</span><span class="c1"></span>		<span class="nx">do</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">ElasticClient</span><span class="p">.</span><span class="nf">UpdateByQuery</span><span class="p">(</span><span class="nx">userIndex</span><span class="p">).</span><span class="nf">Query</span><span class="p">(</span><span class="nx">elastic</span><span class="p">.</span><span class="nf">NewTermQuery</span><span class="p">(</span><span class="s">&#34;phone&#34;</span><span class="p">,</span> <span class="nx">phone</span><span class="p">)).</span>
-			<span class="c1">// 通过脚本更新字段name
-</span><span class="c1"></span>			<span class="nf">Script</span><span class="p">(</span><span class="nx">elastic</span><span class="p">.</span><span class="nf">NewScript</span><span class="p">(</span><span class="s">&#34;ctx._source.name=&#39;龙少爷&#39;&#34;</span><span class="p">)).</span>
-			<span class="c1">// 如果文档版本冲突继续执行
-</span><span class="c1"></span>			<span class="nf">ProceedOnVersionConflict</span><span class="p">().</span>
-			<span class="nf">Do</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">Background</span><span class="p">())</span>
-	<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-		<span class="k">return</span> <span class="nx">e</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="s">&#34;缺少参数信息&#34;</span><span class="p">)</span>
-	<span class="p">}</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="k">return</span> <span class="nx">e</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">())</span>
-	<span class="p">}</span>
-	<span class="k">return</span> <span class="nx">e</span><span class="p">.</span><span class="nf">Success</span><span class="p">(</span><span class="nx">do</span><span class="p">)</span>
+    <span class="nx">id</span> <span class="o">:=</span> <span class="nx">e</span><span class="p">.</span><span class="nf">GetParam</span><span class="p">(</span><span class="s">&#34;id&#34;</span><span class="p">)</span>
+    <span class="nx">phone</span> <span class="o">:=</span> <span class="nx">e</span><span class="p">.</span><span class="nf">GetParam</span><span class="p">(</span><span class="s">&#34;phone&#34;</span><span class="p">)</span>
+    <span class="kd">var</span> <span class="nx">do</span> <span class="kd">interface</span><span class="p">{}</span>
+    <span class="kd">var</span> <span class="nx">err</span> <span class="kt">error</span>
+    <span class="k">if</span> <span class="nx">id</span> <span class="o">!=</span> <span class="s">&#34;&#34;</span> <span class="p">{</span>
+        <span class="c1">// 根据主键更新
+</span><span class="c1"></span>        <span class="nx">do</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">ElasticClient</span><span class="p">.</span><span class="nf">Update</span><span class="p">().</span><span class="nf">Index</span><span class="p">(</span><span class="nx">userIndex</span><span class="p">).</span><span class="nf">Id</span><span class="p">(</span><span class="nx">id</span><span class="p">).</span>
+            <span class="nf">Script</span><span class="p">(</span><span class="nx">elastic</span><span class="p">.</span><span class="nf">NewScript</span><span class="p">(</span><span class="s">&#34;ctx._source.age=73&#34;</span><span class="p">)).</span>
+            <span class="nf">Script</span><span class="p">(</span><span class="nx">elastic</span><span class="p">.</span><span class="nf">NewScript</span><span class="p">(</span><span class="s">&#34;ctx._source.phone=&#39;110110110110&#39;&#34;</span><span class="p">)).</span>
+            <span class="nf">Do</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">Background</span><span class="p">())</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="nx">phone</span> <span class="o">!=</span> <span class="s">&#34;&#34;</span> <span class="p">{</span>
+        <span class="c1">// 根据非ID条件更新
+</span><span class="c1"></span>        <span class="nx">do</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">ElasticClient</span><span class="p">.</span><span class="nf">UpdateByQuery</span><span class="p">(</span><span class="nx">userIndex</span><span class="p">).</span><span class="nf">Query</span><span class="p">(</span><span class="nx">elastic</span><span class="p">.</span><span class="nf">NewTermQuery</span><span class="p">(</span><span class="s">&#34;phone&#34;</span><span class="p">,</span> <span class="nx">phone</span><span class="p">)).</span>
+            <span class="c1">// 通过脚本更新字段name
+</span><span class="c1"></span>            <span class="nf">Script</span><span class="p">(</span><span class="nx">elastic</span><span class="p">.</span><span class="nf">NewScript</span><span class="p">(</span><span class="s">&#34;ctx._source.name=&#39;龙少爷&#39;&#34;</span><span class="p">)).</span>
+            <span class="c1">// 如果文档版本冲突继续执行
+</span><span class="c1"></span>            <span class="nf">ProceedOnVersionConflict</span><span class="p">().</span>
+            <span class="nf">Do</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">Background</span><span class="p">())</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">e</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="s">&#34;缺少参数信息&#34;</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">e</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">())</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">e</span><span class="p">.</span><span class="nf">Success</span><span class="p">(</span><span class="nx">do</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -777,7 +782,7 @@ go get github.com/olivere/elastic/v7
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2023-03-04
+        2023-03-19
         
     </span>
   </p>

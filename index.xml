@@ -94,7 +94,7 @@
       <pubDate>Fri, 17 Dec 2021 00:00:00 +0000</pubDate>
       
       <guid>https://shershon1991.github.io/post/gin%E6%A1%86%E6%9E%B6/gin%E9%9B%86%E6%88%90/05-redis/</guid>
-      <description>1.介绍 redis官网推荐使用redigo(https://github.com/gomodule/redigo)，截止到今天Github S</description>
+      <description>1.介绍 redis官网推荐使用redigo，截止到今天Github Start是8.2k，但 go-redis 使用的人更多，并且go-redis封装得更好。截</description>
     </item>
     
     <item>
