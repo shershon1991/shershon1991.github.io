@@ -44,12 +44,12 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/%E5%9F%BA%E7%A1%80%E7%AF%87/1-%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-01-01T00:00:00+00:00" />
-<meta property="article:modified_time" content="2023-03-04T13:23:23+08:00" />
+<meta property="article:modified_time" content="2023-06-17T21:49:11+08:00" />
 
 <meta itemprop="name" content="Go学习(一):Mac环境下安装配置">
 <meta itemprop="description" content="1.安装 下载地址（https://golang.org/dl/） 下载之后，双击安装； 2.验证 2.1 查看版本 1 2 3 # 查看版本 ➜ ~ go version go version go1.15.5 darwin/amd64 2.2 查看"><meta itemprop="datePublished" content="2021-01-01T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2023-03-04T13:23:23+08:00" />
-<meta itemprop="wordCount" content="683">
+<meta itemprop="dateModified" content="2023-06-17T21:49:11+08:00" />
+<meta itemprop="wordCount" content="684">
 <meta itemprop="keywords" content="Go基础," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go学习(一):Mac环境下安装配置"/>
 <meta name="twitter:description" content="1.安装 下载地址（https://golang.org/dl/） 下载之后，双击安装； 2.验证 2.1 查看版本 1 2 3 # 查看版本 ➜ ~ go version go version go1.15.5 darwin/amd64 2.2 查看"/>
@@ -133,7 +133,7 @@
             <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
             <a href="/categories/go/"> Go </a>
             </div>
-          <span class="more-meta"> 约 683 字 </span>
+          <span class="more-meta"> 约 684 字 </span>
           <span class="more-meta"> 预计阅读 2 分钟 </span>
         
       </div>
@@ -168,11 +168,6 @@
 </nav>
   </div>
 </div>
-  <div class="post-outdated">
-    <div class="hint">
-      <p>【注意】最后更新于 <span class="timeago" datetime="2023-03-04T13:23:23" title="March 4, 2023">March 4, 2023</span>，文中内容可能已过时，请谨慎使用。</p>
-    </div>
-  </div>
     <div class="post-content">
       <h1 id="1安装">1.安装</h1>
 <p><a href="https://golang.org/dl/">下载地址（https://golang.org/dl/）</a></p>
@@ -290,17 +285,11 @@ go version go1.15.5 darwin/amd64
 <h2 id="32--gopath">3.2  GOPATH</h2>
 <p>可以理解为工作目录，该目录下约定有三个子目录，分别为:<code>src、pkg、bin</code>;</p>
 <ul>
-<li>
-<p><code>src</code>: 存放源代码(比如：<code>.go .c .h .s</code>等)  按照<code>golang</code>默认约定，<code>go run，go install</code>等命令的当前工作路径（即在此路径下执行上述命令）。</p>
-</li>
-<li>
-<p><code>pkg</code>: 存放编译时生成的中间文件（比如：<code>.a</code>）</p>
-</li>
-<li>
-<p><code>bin</code>： 存放编译后生成的可执行文件（为了方便，可以把此目录加入到 <code>$PATH</code> 变量中，如果有多个<code>GOPATH</code>，那么使用<code>${GOPATH//://bin:}/bin</code>添加所有的<code>bin</code>目录）</p>
-<h2 id="33--gobin">3.3  GOBIN</h2>
-</li>
+<li><code>src</code>: 存放源代码(比如：<code>.go .c .h .s</code>等)，按照<code>golang</code>默认约定，<code>go run，go install</code>等命令的当前工作路径（即在此路径下执行上述命令）。</li>
+<li><code>pkg</code>: 存放编译时生成的中间文件（比如：<code>.a</code>）</li>
+<li><code>bin</code>： 存放编译后生成的可执行文件（为了方便，可以把此目录加入到 <code>$PATH</code> 变量中，如果有多个<code>GOPATH</code>，那么使用<code>${GOPATH//://bin:}/bin</code>添加所有的<code>bin</code>目录）</li>
 </ul>
+<h2 id="33--gobin">3.3  GOBIN</h2>
 <p>当我们使用<code>go install</code>命令编译和打包应用程序时，该命令会将编译后二进制程序文件 存放到<code>GOBIN</code>目录下，一般我们将<code>GOBIN</code>设置为<code>$GOPATH/bin</code>目录。</p>
 <h1 id="4修改配置">4.修改配置</h1>
 <h2 id="41-配置gopathgobin">4.1 配置GOPATH、GOBIN</h2>
@@ -331,7 +320,7 @@ go version go1.15.5 darwin/amd64
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2023-03-04
+        2023-06-17
         
     </span>
   </p>
