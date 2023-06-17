@@ -44,12 +44,12 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/6-bufio%E6%9C%89%E7%BC%93%E5%86%B2%E7%9A%84io/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-04-06T00:00:00+00:00" />
-<meta property="article:modified_time" content="2023-03-04T13:27:21+08:00" />
+<meta property="article:modified_time" content="2023-06-17T11:06:44+08:00" />
 
 <meta itemprop="name" content="Go扩展包(六):bufio(有缓冲的IO)">
 <meta itemprop="description" content="1.介绍 bufio包实现了有缓冲的I/O。它包装一个io.Reader或io.Writer接口对象，使用这个包可以大幅提高文件读写的效率。 1"><meta itemprop="datePublished" content="2021-04-06T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2023-03-04T13:27:21+08:00" />
-<meta itemprop="wordCount" content="2935">
+<meta itemprop="dateModified" content="2023-06-17T11:06:44+08:00" />
+<meta itemprop="wordCount" content="2938">
 <meta itemprop="keywords" content="Go扩展包," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go扩展包(六):bufio(有缓冲的IO)"/>
 <meta name="twitter:description" content="1.介绍 bufio包实现了有缓冲的I/O。它包装一个io.Reader或io.Writer接口对象，使用这个包可以大幅提高文件读写的效率。 1"/>
@@ -133,7 +133,7 @@
             <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
             <a href="/categories/go/"> Go </a>
             </div>
-          <span class="more-meta"> 约 2935 字 </span>
+          <span class="more-meta"> 约 2938 字 </span>
           <span class="more-meta"> 预计阅读 6 分钟 </span>
         
       </div>
@@ -179,8 +179,8 @@
         <li><a href="#24-读取一行readline">2.4 读取一行(<code>ReadLine</code>)</a>
           <ul>
             <li><a href="#1签名-3">1.签名</a></li>
-            <li><a href="#2当行超过了缓冲缓存时">2.当行超过了缓冲缓存时</a></li>
-            <li><a href="#3当行小于缓冲缓存时">3.当行小于缓冲缓存时</a></li>
+            <li><a href="#2当行超过了缓冲大小时">2.当行超过了缓冲大小时</a></li>
+            <li><a href="#3当行小于缓冲大小时">3.当行小于缓冲大小时</a></li>
           </ul>
         </li>
         <li><a href="#25-读取到指定的字符">2.5 读取到指定的字符</a>
@@ -204,9 +204,9 @@
         <li><a href="#31-创建写入器">3.1 创建写入器</a>
           <ul>
             <li><a href="#1创建默认缓冲大小newwriter">1.创建默认缓冲大小(<code>NewWriter</code>)</a></li>
+            <li><a href="#2创建指定缓冲大小newwriter">2.创建指定缓冲大小(<code>NewWriter</code>)</a></li>
           </ul>
         </li>
-        <li><a href="#2创建默认缓冲大小newwriter">2.创建默认缓冲大小(<code>NewWriter</code>)</a></li>
         <li><a href="#32-write">3.2 <code>Write*</code></a>
           <ul>
             <li><a href="#1方法列表">1.方法列表</a></li>
@@ -220,11 +220,6 @@
 </nav>
   </div>
 </div>
-  <div class="post-outdated">
-    <div class="hint">
-      <p>【注意】最后更新于 <span class="timeago" datetime="2023-03-04T13:27:21" title="March 4, 2023">March 4, 2023</span>，文中内容可能已过时，请谨慎使用。</p>
-    </div>
-  </div>
     <div class="post-content">
       <h1 id="1介绍">1.介绍</h1>
 <p><code>bufio</code>包实现了有缓冲的<code>I/O</code>。它包装一个<code>io.Reader</code>或<code>io.Writer</code>接口对象，使用这个包可以大幅提高文件读写的效率。</p>
@@ -232,15 +227,15 @@
 <p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/image-20210408135753993.png" alt="image-20210408135753993"></p>
 <p><strong>1.写入流程梳理:</strong></p>
 <ul>
-<li>当写入内容小于缓冲区(<code>buf</code>)的可用大小时,内容写入缓存区(<code>buf</code>)；</li>
-<li>当缓冲区(<code>buf</code>)空间不够时，一次性将缓冲区(<code>buf</code>)内容写入文件,并清空缓存区(<code>buf</code>)；</li>
+<li>当写入内容小于缓冲区(<code>buf</code>)的可用大小时,内容写入缓冲区(<code>buf</code>)；</li>
+<li>当缓冲区(<code>buf</code>)空间不够时，一次性将缓冲区(<code>buf</code>)内容写入文件,并清空缓冲区(<code>buf</code>)；</li>
 <li>当写入内容大于缓冲区(<code>buf</code>)空间时，将内容直接写入文件；</li>
 </ul>
 <p><strong>2.读取流程梳理:</strong></p>
 <ul>
-<li>当读取内容小于缓冲区(<code>buf</code>)空间时,从缓存区(<code>buf</code>)读取；</li>
+<li>当读取内容小于缓冲区(<code>buf</code>)空间时,从缓冲区(<code>buf</code>)读取；</li>
 <li>当缓冲区(<code>buf</code>)内容为空时，一次性从文件中读取大小等于缓冲区(<code>buf</code>)的内容；</li>
-<li>当写入内容大于缓冲区(<code>buf</code>)空间时，将内容直接写入文件；</li>
+<li>当读取内容大于缓冲区(<code>buf</code>)空间时，直接读取文件；</li>
 </ul>
 <p><font color=red>总结:   避免频繁操作文件、减少访问本地磁盘次数，从而提高效率。</font></p>
 <h1 id="2读取read">2.读取(<code>Read*</code>)</h1>
@@ -475,7 +470,7 @@
 <blockquote>
 <p><font color=red>官方文档中推荐使用 <code>ReadBytes('\n')</code>或<code>ReadString('\n')</code>来代替<code>ReadLine</code>。</font></p>
 </blockquote>
-<h3 id="2当行超过了缓冲缓存时">2.当行超过了缓冲缓存时</h3>
+<h3 id="2当行超过了缓冲大小时">2.当行超过了缓冲大小时</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -514,7 +509,7 @@
 </div>
 </div><p><strong>输出:</strong></p>
 <p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/image-20210410172327103.png" alt="image-20210410172327103"></p>
-<h3 id="3当行小于缓冲缓存时">3.当行小于缓冲缓存时</h3>
+<h3 id="3当行小于缓冲大小时">3.当行小于缓冲大小时</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -665,9 +660,11 @@
 </span><span class="lnt">20
 </span><span class="lnt">21
 </span><span class="lnt">22
+</span><span class="lnt">23
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go">	<span class="c1">// 设置每行超过缓冲区大小
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 设置每行超过缓冲区大小
 </span><span class="c1"></span>	<span class="nx">repeat</span> <span class="o">:=</span> <span class="nx">strings</span><span class="p">.</span><span class="nf">Repeat</span><span class="p">(</span><span class="s">&#34;Hello,Hello,Hello,Hello\n&#34;</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
 	<span class="c1">// 基于字符串创建读取器
 </span><span class="c1"></span>	<span class="nx">reader</span> <span class="o">:=</span> <span class="nx">bufio</span><span class="p">.</span><span class="nf">NewReaderSize</span><span class="p">(</span><span class="nx">strings</span><span class="p">.</span><span class="nf">NewReader</span><span class="p">(</span><span class="nx">repeat</span><span class="p">),</span><span class="mi">16</span><span class="p">)</span>
@@ -692,7 +689,7 @@
 </code></pre></td></tr></table>
 </div>
 </div><blockquote>
-<p>虽然每行超过缓冲区大小，但是依然可以整行读出</p>
+<p><font color="red">虽然每行超过缓冲区大小，但是依然可以整行读出</font></p>
 </blockquote>
 <h2 id="26-每次读取前几个字节peek">2.6 每次读取前几个字节(Peek)</h2>
 <h3 id="1签名-4">1.签名</h3>
@@ -732,20 +729,20 @@
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="c1">// 基于字符串创建读取器
-</span><span class="c1"></span>	<span class="nx">reader</span> <span class="o">:=</span> <span class="nx">bufio</span><span class="p">.</span><span class="nf">NewReaderSize</span><span class="p">(</span><span class="nx">strings</span><span class="p">.</span><span class="nf">NewReader</span><span class="p">(</span><span class="s">&#34;hello&#34;</span><span class="p">),</span><span class="mi">16</span><span class="p">)</span>
-	<span class="c1">// 读取
-</span><span class="c1"></span>	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="mi">2</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
-		<span class="nx">s</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">reader</span><span class="p">.</span><span class="nf">Peek</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>
-    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;结果: %s &#34;</span><span class="p">,</span> <span class="nx">s</span><span class="p">)</span>
-		<span class="k">if</span> <span class="nx">err</span> <span class="o">==</span> <span class="nx">io</span><span class="p">.</span><span class="nx">EOF</span> <span class="p">{</span>
-			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%s&#34;</span><span class="p">,</span><span class="s">&#34;已读完&#34;</span><span class="p">)</span>
-			<span class="k">break</span>
-		<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span><span class="p">{</span>
-			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;err:%s&#34;</span><span class="p">,</span><span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">())</span>
-			<span class="k">break</span>
-		<span class="p">}</span>
-	<span class="p">}</span>
+    <span class="c1">// 基于字符串创建读取器
+</span><span class="c1"></span>    <span class="nx">reader</span> <span class="o">:=</span> <span class="nx">bufio</span><span class="p">.</span><span class="nf">NewReaderSize</span><span class="p">(</span><span class="nx">strings</span><span class="p">.</span><span class="nf">NewReader</span><span class="p">(</span><span class="s">&#34;hello&#34;</span><span class="p">),</span><span class="mi">16</span><span class="p">)</span>
+    <span class="c1">// 读取
+</span><span class="c1"></span>    <span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="mi">2</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="nx">s</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">reader</span><span class="p">.</span><span class="nf">Peek</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;结果: %s &#34;</span><span class="p">,</span> <span class="nx">s</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nx">err</span> <span class="o">==</span> <span class="nx">io</span><span class="p">.</span><span class="nx">EOF</span> <span class="p">{</span>
+            <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%s&#34;</span><span class="p">,</span><span class="s">&#34;已读完&#34;</span><span class="p">)</span>
+            <span class="k">break</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span><span class="p">{</span>
+            <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;err:%s&#34;</span><span class="p">,</span><span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">())</span>
+            <span class="k">break</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 <span class="p">}</span>
 <span class="c1">// 输出-&gt; 结果: hello 已读完
 </span></code></pre></td></tr></table>
@@ -805,7 +802,7 @@
 </code></pre></td></tr></table>
 </div>
 </div><p>根据<code>w</code>创建一个具有默认大小缓冲的<code>*Writer</code>。默认大小:<code>4096字节</code></p>
-<h2 id="2创建默认缓冲大小newwriter">2.创建默认缓冲大小(<code>NewWriter</code>)</h2>
+<h3 id="2创建指定缓冲大小newwriter">2.创建指定缓冲大小(<code>NewWriter</code>)</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -862,7 +859,7 @@
 		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
 		<span class="k">return</span>
 	<span class="p">}</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;直接写入文件: %d&#34;</span><span class="p">,</span><span class="nx">write</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;直接写入文件: %d \n&#34;</span><span class="p">,</span><span class="nx">write</span><span class="p">)</span>
 <span class="p">}</span>
 <span class="c1">// 输出——&gt; 直接写入文件: 27
 </span></code></pre></td></tr></table>
@@ -899,7 +896,7 @@
 	<span class="p">}</span>
 	<span class="c1">// 该函数会使缓冲区的内容，直接写入文件
 </span><span class="c1"></span>	<span class="nx">_</span> <span class="p">=</span> <span class="nx">reader</span><span class="p">.</span><span class="nf">Flush</span><span class="p">()</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;Flush写入文件: %d&#34;</span><span class="p">,</span><span class="nx">write</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;Flush写入文件: %d \n&#34;</span><span class="p">,</span><span class="nx">write</span><span class="p">)</span>
 <span class="p">}</span>
 <span class="c1">// 输出-&gt; Flush写入文件: 10
 </span></code></pre></td></tr></table>
@@ -916,7 +913,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2023-03-04
+        2023-06-17
         
     </span>
   </p>
