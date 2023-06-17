@@ -6,301 +6,139 @@
     <description>Recent content in Go标准包 on Learn Go</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 03 May 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://shershon1991.github.io/tags/go%E6%A0%87%E5%87%86%E5%8C%85/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 24 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://shershon1991.github.io/tags/go%E6%A0%87%E5%87%86%E5%8C%85/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Go标准包(三十三):jsoniter</title>
-      <link>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/33-jsoniter/</link>
-      <pubDate>Mon, 03 May 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/33-jsoniter/</guid>
-      <description>1. 介绍 json-iterator是一款快且灵活的JSON解析器,不但100%兼容标准库encoding/json,而且比其更快。虽然官网说比</description>
-    </item>
-    
-    <item>
-      <title>Go标准包(三十二):go-funk</title>
-      <link>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/32-go-funk/</link>
-      <pubDate>Sun, 02 May 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/32-go-funk/</guid>
-      <description>1. 介绍 Go-funk 是基于反射(reflect )实现的一个现代Go工具库，封装了对slice/map/struct/string等的操作。 2. 下载 1 2 3 4</description>
-    </item>
-    
-    <item>
-      <title>Go标准包(三十一):trace</title>
-      <link>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/31-trace/</link>
-      <pubDate>Sat, 01 May 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/31-trace/</guid>
-      <description>1. trace说明 在pprof的分析中，能够知道一段时间内的CPU占用、内存分配、协程堆栈信息。这些信息都是一段时间内数据的汇总，但是它们并没</description>
-    </item>
-    
-    <item>
-      <title>Go标准包(三十):pprof-2</title>
-      <link>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/30-pprof-2/</link>
-      <pubDate>Fri, 30 Apr 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/30-pprof-2/</guid>
-      <description>1. 调用图说明 1.1 示例图 1.2 节点颜色 红色代表累计值cum为正，并且很大； 绿色代表累计值cum为负，并且很大； 灰色代表累计值cum可以忽略不计。 1.3 节</description>
-    </item>
-    
-    <item>
-      <title>Go标准包(二十九):pprof</title>
-      <link>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/29-pprof/</link>
-      <pubDate>Thu, 29 Apr 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/29-pprof/</guid>
-      <description>1. 介绍 Go语言中的pprof指对于指标或特征的分析（Profiling），通过分析不仅可以查找到程序中的错误（内存泄漏、race冲突、协程泄</description>
-    </item>
-    
-    <item>
-      <title>Go标准包(二十八):cobra</title>
-      <link>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/28-cobra/</link>
-      <pubDate>Wed, 28 Apr 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/28-cobra/</guid>
-      <description>介绍 cobra是一个用来构建现代CLI工具的库。相比flag标准库，它提供更多方便的特性和功能。Cobra 由 Go 项目成员和 hugo 作者 spf13 创建，已经被</description>
-    </item>
-    
-    <item>
-      <title>Go标准包(二十七):cron</title>
-      <link>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/27-cron/</link>
-      <pubDate>Tue, 27 Apr 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/27-cron/</guid>
-      <description>1.介绍 在Linux中，通过crontab命令使任务在约定的时间执行已经计划好的工作，而Go由于语言的特性，不适合直接使用crontab来管</description>
-    </item>
-    
-    <item>
-      <title>Go标准包(二十六):colly</title>
-      <link>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/26-colly/</link>
-      <pubDate>Mon, 26 Apr 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/26-colly/</guid>
-      <description>1.介绍 Colly是Golang世界中最知名的Web爬虫框架,它提供简洁的 API，拥有强劲的性能、可以自动处理 cookie&amp;amp;sess</description>
-    </item>
-    
-    <item>
-      <title>Go标准包(二十五):es</title>
-      <link>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/25-es/</link>
-      <pubDate>Sun, 25 Apr 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/25-es/</guid>
-      <description>1.介绍 Elasticsearch（ES）是一个基于Lucene构建的开源、分布式、RESTful接口的全文搜索引擎。Elasticsear</description>
-    </item>
-    
-    <item>
-      <title>Go标准包(二十四):testing</title>
-      <link>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/24-testing/</link>
+      <title>Go扩展包(二十四):testing</title>
+      <link>https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/24-testing/</link>
       <pubDate>Sat, 24 Apr 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/24-testing/</guid>
+      <guid>https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/24-testing/</guid>
       <description>1. 介绍 testing 包为Go 语言提供自动化测试的支持。通过 go test 命令来执行单元测试文件，单元测试文件命名格式为: xxx_test.go,在单元测试文件中,</description>
     </item>
     
     <item>
-      <title>Go标准包(二十三):go-redis</title>
-      <link>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/23-go-redis/</link>
-      <pubDate>Fri, 23 Apr 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/23-go-redis/</guid>
-      <description>1. 介绍 redis官网推荐使用redigo(https://github.com/gomodule/redigo)，截止到今天Github St</description>
-    </item>
-    
-    <item>
-      <title>Go标准包(二十二):jwt-go</title>
-      <link>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/22-jwt-go/</link>
-      <pubDate>Thu, 22 Apr 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/22-jwt-go/</guid>
-      <description>1. 介绍 JWT全称JSON Web Token是一种跨域认证解决方案，属于一个开放的标准，它规定了一种Token实现方式，目前多用于前后端分离项目和O</description>
-    </item>
-    
-    <item>
-      <title>Go标准包(二十一):excel</title>
-      <link>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/21-excel/</link>
-      <pubDate>Wed, 21 Apr 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/21-excel/</guid>
-      <description>1. 介绍 1. 1 什么是Excelize Excelize 是 Go 语言编写的用于操作 Office Excel 文档基础库，基于 ECMA-376，ISO/IEC 29500 国际标准。可以使用它来读取、写</description>
-    </item>
-    
-    <item>
-      <title>Go标准包(二十):math</title>
-      <link>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/20-math/</link>
+      <title>Go扩展包(二十):math</title>
+      <link>https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/20-math/</link>
       <pubDate>Tue, 20 Apr 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/20-math/</guid>
+      <guid>https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/20-math/</guid>
       <description>1. 介绍 Go标准包math,提供了基本的数学常数和数学函数。 2. 常量 2.1 整数取值 1 2 3 4 5 6 7 8 9 10 11 12 13 14 const ( MaxInt8 = 1&amp;lt;&amp;lt;7 - 1 // int8最大值 MinInt8 = -1 &amp;lt;&amp;lt;</description>
     </item>
     
     <item>
-      <title>Go标准包(十九):gorm</title>
-      <link>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/19-gorm/</link>
-      <pubDate>Mon, 19 Apr 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/19-gorm/</guid>
-      <description>1. 介绍 gorm是一个使用Go语言编写的ORM框架。 它文档齐全，对开发者友好，支持主流数据库。官方中文文档 https://gorm.io/zh_CN/docs/index.html 2. 安装 1 2 go get -u gorm.io/gorm go get -u gorm.io/driver/sqlite 3. 连接M</description>
-    </item>
-    
-    <item>
-      <title>Go标准包(十八):encoding-json</title>
-      <link>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/18-encoding-json/</link>
+      <title>Go扩展包(十八):encoding-json</title>
+      <link>https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/18-encoding-json/</link>
       <pubDate>Sun, 18 Apr 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/18-encoding-json/</guid>
+      <guid>https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/18-encoding-json/</guid>
       <description>1. 介绍 Go的标准包 encoding/json实现了json对象的编码和解码。 这篇文章主要讲的是结构体中嵌套匿名字段时的序列化和反序列化，因结</description>
     </item>
     
     <item>
-      <title>Go标准包(二):crypto-rsa</title>
-      <link>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/17-crypto-rsa/</link>
-      <pubDate>Sat, 17 Apr 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/17-crypto-rsa/</guid>
-      <description>1. 维基百科释义 RSA加密算法是一种非对称加密算法，在公开密钥加密和电子商业中被广泛使用。RSA是由罗纳德·李维斯特（Ron Rivest）、阿</description>
-    </item>
-    
-    <item>
-      <title>Go标准包(十六):crypto-aes</title>
-      <link>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/16-crypto-aes/</link>
-      <pubDate>Fri, 16 Apr 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/16-crypto-aes/</guid>
-      <description>1.介绍 高级加密标准（英语：Advanced Encryption Standard，缩写：AES），又称Rijndael加密法（荷兰语发音：[ˈrɛindaːl</description>
-    </item>
-    
-    <item>
-      <title>Go标准包(十五):os</title>
-      <link>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/15-os/</link>
+      <title>Go扩展包(十五):os</title>
+      <link>https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/15-os/</link>
       <pubDate>Thu, 15 Apr 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/15-os/</guid>
+      <guid>https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/15-os/</guid>
       <description>1.介绍 os包中提供了操作系统函数的接口，是一个比较重要的包。它的作用主要是在服务器上进行系统的基本操作，如文件操作、目录操作、执行命令、信</description>
     </item>
     
     <item>
-      <title>Go标准包(十四):bigCache</title>
-      <link>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/14-bigcache/</link>
-      <pubDate>Wed, 14 Apr 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/14-bigcache/</guid>
-      <description>1. 介绍 BigCache 是一个快速，支持并发访问，自淘汰的内存型缓存，可以在存储大量元素的同时依然保持高性能。BigCache将元素保存在堆上却避免了GC的</description>
-    </item>
-    
-    <item>
-      <title>Go标准包(十三):zap</title>
-      <link>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/13-zap/</link>
-      <pubDate>Tue, 13 Apr 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/13-zap/</guid>
-      <description>1.介绍 Zap是uber开源的日志库，支持日志级别分级 、结构化记录，对性能和内存分配做了极致的优化。目前 Star 12.8 源码地址: https://github.com/uber-go/zap 官方性能测试图 2.安</description>
-    </item>
-    
-    <item>
-      <title>Go标准包(十二):unicode</title>
-      <link>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/12-unicode/</link>
+      <title>Go扩展包(十二):unicode</title>
+      <link>https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/12-unicode/</link>
       <pubDate>Mon, 12 Apr 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/12-unicode/</guid>
+      <guid>https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/12-unicode/</guid>
       <description>1.介绍 unicode包提供了诸多处理rune字符相关功能的函数（比如区分字母和数字，或者是字母的大写和小写转换等) 2.判断函数 2.1 是否为空格</description>
     </item>
     
     <item>
-      <title>Go标准包(十一):sort</title>
-      <link>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/11-sort/</link>
+      <title>Go扩展包(十一):sort</title>
+      <link>https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/11-sort/</link>
       <pubDate>Sun, 11 Apr 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/11-sort/</guid>
+      <guid>https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/11-sort/</guid>
       <description>1.介绍 sort包实现了四种基本排序算法：插入排序、归并排序、堆排序、快速排序。 但是这四种排序方法是不公开的，它们只能在 sort 包内部使用。sor</description>
     </item>
     
     <item>
-      <title>Go标准包(十):viper</title>
-      <link>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/10-viper/</link>
-      <pubDate>Sat, 10 Apr 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/10-viper/</guid>
-      <description>1.介绍 Viper是适用于Go应用程序（包括Twelve-Factor App）的完整配置解决方案。它被设计用于在应用程序中工作，并且可以处理</description>
-    </item>
-    
-    <item>
-      <title>Go标准包(九):flag</title>
-      <link>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/9-flag/</link>
+      <title>Go扩展包(九):flag</title>
+      <link>https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/9-flag/</link>
       <pubDate>Fri, 09 Apr 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/9-flag/</guid>
+      <guid>https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/9-flag/</guid>
       <description>1.介绍 在 Go中，如果要接收命令行参数，需要使用 flag包进行解析。不同的参数类型可以通过不同的方法接收。 2.参数接受 2.1 接受方式 使用flag</description>
     </item>
     
     <item>
-      <title>Go标准包(八):sync</title>
-      <link>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/8-sync/</link>
+      <title>Go扩展包(八):sync</title>
+      <link>https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/8-sync/</link>
       <pubDate>Thu, 08 Apr 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/8-sync/</guid>
+      <guid>https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/8-sync/</guid>
       <description>1.介绍 sync包提供了互斥锁。除了Once和WaitGroup类型，其余多数适用于低水平的程序，多数情况下，高水平的同步使用channel</description>
     </item>
     
     <item>
-      <title>Go标准包(七):context(上下文)</title>
-      <link>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/7-context%E4%B8%8A%E4%B8%8B%E6%96%87/</link>
+      <title>Go扩展包(七):context(上下文)</title>
+      <link>https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/7-context%E4%B8%8A%E4%B8%8B%E6%96%87/</link>
       <pubDate>Wed, 07 Apr 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/7-context%E4%B8%8A%E4%B8%8B%E6%96%87/</guid>
+      <guid>https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/7-context%E4%B8%8A%E4%B8%8B%E6%96%87/</guid>
       <description>1.什么是上下文? 从Go 1.7开始,标准库引入context(上下文)，他主要用来在goroutine之间传递上下文信息(同步信号、超时时间</description>
     </item>
     
     <item>
-      <title>Go标准包(六):bufio(有缓冲的IO)</title>
-      <link>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/6-bufio%E6%9C%89%E7%BC%93%E5%86%B2%E7%9A%84io/</link>
+      <title>Go扩展包(六):bufio(有缓冲的IO)</title>
+      <link>https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/6-bufio%E6%9C%89%E7%BC%93%E5%86%B2%E7%9A%84io/</link>
       <pubDate>Tue, 06 Apr 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/6-bufio%E6%9C%89%E7%BC%93%E5%86%B2%E7%9A%84io/</guid>
+      <guid>https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/6-bufio%E6%9C%89%E7%BC%93%E5%86%B2%E7%9A%84io/</guid>
       <description>1.介绍 bufio包实现了有缓冲的I/O。它包装一个io.Reader或io.Writer接口对象，使用这个包可以大幅提高文件读写的效率。 1</description>
     </item>
     
     <item>
-      <title>Go标准包(五):ioutil(IO操作函数集)</title>
-      <link>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/5-ioutilio%E6%93%8D%E4%BD%9C%E5%87%BD%E6%95%B0%E9%9B%86/</link>
+      <title>Go扩展包(五):ioutil(IO操作函数集)</title>
+      <link>https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/5-ioutilio%E6%93%8D%E4%BD%9C%E5%87%BD%E6%95%B0%E9%9B%86/</link>
       <pubDate>Mon, 05 Apr 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/5-ioutilio%E6%93%8D%E4%BD%9C%E5%87%BD%E6%95%B0%E9%9B%86/</guid>
+      <guid>https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/5-ioutilio%E6%93%8D%E4%BD%9C%E5%87%BD%E6%95%B0%E9%9B%86/</guid>
       <description>1.介绍 在Go语言中，io包主要声明的是对I/O操作的基本接口，而io/ioutil包则实现了对应的方法，方便我们直接使用。 2.方法列表 方法</description>
     </item>
     
     <item>
-      <title>Go标准包(四):fmt(格式化输出)</title>
-      <link>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/4-fmt%E6%A0%BC%E5%BC%8F%E5%8C%96%E8%BE%93%E5%87%BA/</link>
+      <title>Go扩展包(四):fmt(格式化输出)</title>
+      <link>https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/4-fmt%E6%A0%BC%E5%BC%8F%E5%8C%96%E8%BE%93%E5%87%BA/</link>
       <pubDate>Sun, 04 Apr 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/4-fmt%E6%A0%BC%E5%BC%8F%E5%8C%96%E8%BE%93%E5%87%BA/</guid>
+      <guid>https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/4-fmt%E6%A0%BC%E5%BC%8F%E5%8C%96%E8%BE%93%E5%87%BA/</guid>
       <description>1.输出控制台 1.1 Printf Printf根据format参数生成格式化的字符串并写入标准输出。返回写入的字节数和遇到的任何错误。 1.format格式 动</description>
     </item>
     
     <item>
-      <title>Go标准包(三):time(时间包)</title>
-      <link>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/3-time%E6%97%B6%E9%97%B4%E5%8C%85/</link>
+      <title>Go扩展包(三):time(时间包)</title>
+      <link>https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/3-time%E6%97%B6%E9%97%B4%E5%8C%85/</link>
       <pubDate>Sat, 03 Apr 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/3-time%E6%97%B6%E9%97%B4%E5%8C%85/</guid>
+      <guid>https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/3-time%E6%97%B6%E9%97%B4%E5%8C%85/</guid>
       <description>1.获取时间 1.1 当前时间 1 2 3 4 5 6 7 8 9 10 11 12 13 14 unix := time.Now().Unix() fmt.Printf(&amp;#34;当前时间戳(单位秒): %v \n&amp;#34;,unix) nano := time.Now().UnixNano() fmt.Printf</description>
     </item>
     
     <item>
-      <title>Go标准包(二):strconv(字符串转换)</title>
-      <link>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/2-strconv%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BD%AC%E6%8D%A2/</link>
+      <title>Go扩展包(二):strconv(字符串转换)</title>
+      <link>https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/2-strconv%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BD%AC%E6%8D%A2/</link>
       <pubDate>Fri, 02 Apr 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/2-strconv%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BD%AC%E6%8D%A2/</guid>
+      <guid>https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/2-strconv%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BD%AC%E6%8D%A2/</guid>
       <description>1.转换成其他类型（Parse类函数） 1.1 转换成整型(Atoi) 1.语法 1 func Atoi(s string) (int, error) 2.使用示例 1 2 3 4 5 6 7 8 9 10 11 12 13 14 package main import ( &amp;#34;fmt&amp;#34; &amp;#34;strconv&amp;#34; ) func main()</description>
     </item>
     
     <item>
-      <title>Go标准包(一):strings(字符串操作)</title>
-      <link>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/1-strings%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%93%8D%E4%BD%9C/</link>
+      <title>Go扩展包(一):strings(字符串操作)</title>
+      <link>https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/1-strings%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%93%8D%E4%BD%9C/</link>
       <pubDate>Thu, 01 Apr 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/1-strings%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%93%8D%E4%BD%9C/</guid>
+      <guid>https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/1-strings%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%93%8D%E4%BD%9C/</guid>
       <description>1.字符串查找 strings是Go内置的标准包,主要用于字符串查找、替换、比较等。常用方法如下: 1.1 方法列表 方法名 描述 Count(s, substr string)int 返回字符串s包含字</description>
     </item>
     

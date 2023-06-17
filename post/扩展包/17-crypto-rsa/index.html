@@ -44,11 +44,11 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/17-crypto-rsa/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-04-17T00:00:00+00:00" />
-<meta property="article:modified_time" content="2023-03-07T11:08:33+08:00" />
+<meta property="article:modified_time" content="2023-06-17T13:47:34+08:00" />
 
 <meta itemprop="name" content="Go扩展包(十七):crypto-rsa">
 <meta itemprop="description" content="1. 维基百科释义 RSA加密算法是一种非对称加密算法，在公开密钥加密和电子商业中被广泛使用。RSA是由罗纳德·李维斯特（Ron Rivest）、阿"><meta itemprop="datePublished" content="2021-04-17T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2023-03-07T11:08:33+08:00" />
+<meta itemprop="dateModified" content="2023-06-17T13:47:34+08:00" />
 <meta itemprop="wordCount" content="1828">
 <meta itemprop="keywords" content="Go扩展包," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go扩展包(十七):crypto-rsa"/>
@@ -184,11 +184,6 @@
 </nav>
   </div>
 </div>
-  <div class="post-outdated">
-    <div class="hint">
-      <p>【注意】最后更新于 <span class="timeago" datetime="2023-03-07T11:08:33" title="March 7, 2023">March 7, 2023</span>，文中内容可能已过时，请谨慎使用。</p>
-    </div>
-  </div>
     <div class="post-content">
       <h1 id="1-维基百科释义">1. 维基百科释义</h1>
 <p><strong>RSA加密算法</strong>是一种<a href="https://zh.wikipedia.org/wiki/%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86%E6%BC%94%E7%AE%97%E6%B3%95">非对称加密算法</a>，在<a href="https://zh.wikipedia.org/wiki/%E5%85%AC%E5%BC%80%E5%AF%86%E9%92%A5%E5%8A%A0%E5%AF%86">公开密钥加密</a>和<a href="https://zh.wikipedia.org/wiki/%E7%94%B5%E5%AD%90%E5%95%86%E4%B8%9A">电子商业</a>中被广泛使用。RSA是由<a href="https://zh.wikipedia.org/wiki/%E7%BD%97%E7%BA%B3%E5%BE%B7%C2%B7%E6%9D%8E%E7%BB%B4%E6%96%AF%E7%89%B9">罗纳德·李维斯特</a>（Ron Rivest）、<a href="https://zh.wikipedia.org/wiki/%E9%98%BF%E8%BF%AA%C2%B7%E8%90%A8%E8%8E%AB%E5%B0%94">阿迪·萨莫尔</a>（Adi Shamir）和<a href="https://zh.wikipedia.org/wiki/%E4%BC%A6%E7%BA%B3%E5%BE%B7%C2%B7%E9%98%BF%E5%BE%B7%E6%9B%BC">伦纳德·阿德曼</a>（Leonard Adleman）在1977年一起提出的。当时他们三人都在<a href="https://zh.wikipedia.org/wiki/%E9%BA%BB%E7%9C%81%E7%90%86%E5%B7%A5%E5%AD%A6%E9%99%A2">麻省理工学院</a>工作。RSA 就是他们三人姓氏开头字母拼在一起组成的。</p>
@@ -426,14 +421,14 @@ xmutp/wmxNIQHH77
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestReadKey</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
 	<span class="c1">// pkcs1格式-私钥
 </span><span class="c1"></span>	<span class="nx">privatePKCS1KeyPath</span> <span class="o">:=</span> <span class="s">&#34;../../tmp/private_ssl.pem&#34;</span>
-	<span class="nx">privatePKCS1Key</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">crypto</span><span class="p">.</span><span class="nf">ReadRSAPKCS1PrivateKey</span><span class="p">(</span><span class="nx">privatePKCS1KeyPath</span><span class="p">)</span>
+	<span class="nx">privatePKCS1Key</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">cryptopkg</span><span class="p">.</span><span class="nf">ReadRSAPKCS1PrivateKey</span><span class="p">(</span><span class="nx">privatePKCS1KeyPath</span><span class="p">)</span>
 	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
 		<span class="nx">t</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
 	<span class="p">}</span>
 	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;PKCS1私钥: %#v\n&#34;</span><span class="p">,</span><span class="nx">privatePKCS1Key</span><span class="p">)</span>
 	<span class="c1">// pkcs8格式-公钥
 </span><span class="c1"></span>	<span class="nx">publicPKCS8KeyPath</span> <span class="o">:=</span> <span class="s">&#34;../../tmp/public_ssl.pem&#34;</span>
-	<span class="nx">publicPKCS8Key</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">crypto</span><span class="p">.</span><span class="nf">ReadRSAPublicKey</span><span class="p">(</span><span class="nx">publicPKCS8KeyPath</span><span class="p">)</span>
+	<span class="nx">publicPKCS8Key</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">cryptopkg</span><span class="p">.</span><span class="nf">ReadRSAPublicKey</span><span class="p">(</span><span class="nx">publicPKCS8KeyPath</span><span class="p">)</span>
 	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
 		<span class="nx">t</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
 	<span class="p">}</span>
@@ -508,7 +503,7 @@ xmutp/wmxNIQHH77
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestRsaEncrypt</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
 	<span class="nx">publicKeyPath</span> <span class="o">:=</span> <span class="s">&#34;../../tmp/public_ssl.pem&#34;</span>
 	<span class="nx">data</span> <span class="o">:=</span> <span class="s">&#34;123456&#34;</span>
-	<span class="nx">encrypt</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">crypto</span><span class="p">.</span><span class="nf">RSAEncrypt</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">publicKeyPath</span><span class="p">)</span>
+	<span class="nx">encrypt</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">cryptopkg</span><span class="p">.</span><span class="nf">RSAEncrypt</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">publicKeyPath</span><span class="p">)</span>
 	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
 		<span class="nx">t</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
 	<span class="p">}</span>
@@ -587,7 +582,7 @@ xmutp/wmxNIQHH77
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestRsaDecrypt</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
 	<span class="nx">privateKeyPath</span> <span class="o">:=</span> <span class="s">&#34;../../tmp/private_ssl.pem&#34;</span>
 	<span class="nx">data</span> <span class="o">:=</span> <span class="s">&#34;pUYa4set6XkBshfio5g2hzPx1tA67sxEvJBpJiuK3McJ9cPJAXzuRkWIy4s6cDQOhrPUaNXhr3M3WLHH19/eaqcNZz1yOFZwgGKmkWtdmygtLB/wrDant9uRfXrvzlV9iMq+cUlqsrwuCa0wcGEBNHRhIJOQSTs+SxaRTeoRCbU=&#34;</span>
-	<span class="nx">encrypt</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">crypto</span><span class="p">.</span><span class="nf">RSADecrypt</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">privateKeyPath</span><span class="p">)</span>
+	<span class="nx">encrypt</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">cryptopkg</span><span class="p">.</span><span class="nf">RSADecrypt</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">privateKeyPath</span><span class="p">)</span>
 	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
 		<span class="nx">t</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
 	<span class="p">}</span>
@@ -637,7 +632,7 @@ xmutp/wmxNIQHH77
 	<span class="nx">hash</span><span class="p">.</span><span class="nf">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="nx">data</span><span class="p">))</span>
 	<span class="nx">sum</span> <span class="o">:=</span> <span class="nx">hash</span><span class="p">.</span><span class="nf">Sum</span><span class="p">(</span><span class="kc">nil</span><span class="p">)</span>
 	<span class="c1">// 从1.5版本规定，使用RSASSA-PKCS1-V1_5-SIGN 方案计算签名
-</span><span class="c1"></span>	<span class="nx">signPKCS1v15</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">rsa</span><span class="p">.</span><span class="nf">SignPKCS1v15</span><span class="p">(</span><span class="nx">rand</span><span class="p">.</span><span class="nx">Reader</span><span class="p">,</span> <span class="nx">privateKey</span><span class="p">,</span> <span class="nx">crypto</span><span class="p">.</span><span class="nx">SHA256</span><span class="p">,</span> <span class="nx">sum</span><span class="p">)</span>
+</span><span class="c1"></span>	<span class="nx">signPKCS1v15</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">rsa</span><span class="p">.</span><span class="nf">SignPKCS1v15</span><span class="p">(</span><span class="nx">rand</span><span class="p">.</span><span class="nx">Reader</span><span class="p">,</span> <span class="nx">privateKey</span><span class="p">,</span> <span class="nx">cryptopkg</span><span class="p">.</span><span class="nx">SHA256</span><span class="p">,</span> <span class="nx">sum</span><span class="p">)</span>
 	<span class="c1">// 结果转成base64
 </span><span class="c1"></span>	<span class="nx">toString</span> <span class="o">:=</span> <span class="nx">base64</span><span class="p">.</span><span class="nx">StdEncoding</span><span class="p">.</span><span class="nf">EncodeToString</span><span class="p">(</span><span class="nx">signPKCS1v15</span><span class="p">)</span>
 	<span class="k">return</span> <span class="nx">toString</span><span class="p">,</span> <span class="nx">err</span>
@@ -669,7 +664,7 @@ xmutp/wmxNIQHH77
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestAddSign</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
 	<span class="nx">privateKeyPath</span> <span class="o">:=</span> <span class="s">&#34;../../tmp/private_ssl.pem&#34;</span>
 	<span class="nx">data</span> <span class="o">:=</span> <span class="s">&#34;123456&#34;</span>
-	<span class="nx">sign</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">crypto</span><span class="p">.</span><span class="nf">GetRSASign</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span><span class="nx">privateKeyPath</span><span class="p">)</span>
+	<span class="nx">sign</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">cryptopkg</span><span class="p">.</span><span class="nf">GetRSASign</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span><span class="nx">privateKeyPath</span><span class="p">)</span>
 	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
 		<span class="nx">t</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
 	<span class="p">}</span>
@@ -724,7 +719,7 @@ xmutp/wmxNIQHH77
 </span><span class="c1"></span>	<span class="nx">hash</span> <span class="o">:=</span> <span class="nx">sha256</span><span class="p">.</span><span class="nf">New</span><span class="p">()</span>
 	<span class="nx">hash</span><span class="p">.</span><span class="nf">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="nx">data</span><span class="p">))</span>
 	<span class="nx">bytes</span> <span class="o">:=</span> <span class="nx">hash</span><span class="p">.</span><span class="nf">Sum</span><span class="p">(</span><span class="kc">nil</span><span class="p">)</span>
-	<span class="nx">err</span> <span class="p">=</span> <span class="nx">rsa</span><span class="p">.</span><span class="nf">VerifyPKCS1v15</span><span class="p">(</span><span class="nx">publicKey</span><span class="p">,</span> <span class="nx">crypto</span><span class="p">.</span><span class="nx">SHA256</span><span class="p">,</span> <span class="nx">bytes</span><span class="p">,</span> <span class="nx">sign</span><span class="p">)</span>
+	<span class="nx">err</span> <span class="p">=</span> <span class="nx">rsa</span><span class="p">.</span><span class="nf">VerifyPKCS1v15</span><span class="p">(</span><span class="nx">publicKey</span><span class="p">,</span> <span class="nx">cryptopkg</span><span class="p">.</span><span class="nx">SHA256</span><span class="p">,</span> <span class="nx">bytes</span><span class="p">,</span> <span class="nx">sign</span><span class="p">)</span>
 	<span class="k">return</span> <span class="nx">err</span> <span class="o">==</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">err</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
@@ -756,7 +751,7 @@ xmutp/wmxNIQHH77
 	<span class="nx">publicKeyPath</span> <span class="o">:=</span> <span class="s">&#34;../../tmp/public_ssl.pem&#34;</span>
 	<span class="nx">data</span> <span class="o">:=</span> <span class="s">&#34;123456&#34;</span>
 	<span class="nx">sign</span> <span class="o">:=</span> <span class="s">&#34;QnGqGbIqoHjJG1l+JiaOKWBdX+h00lnKCoO2rTYKIro9hoaDj7nqmu+Mxsuo+2jumicvCNBZNOpMzYryjZf0x7Q4ycLBtqtCWuFRasiInUO7Avy19LRTjdMf2xw9968vilB/xEAQ53JXIDUVvCsMxTfpHI9oRiWEGXWNkhfkjkQ=&#34;</span>
-	<span class="nx">verifyRsaSign</span><span class="p">,</span><span class="nx">err</span> <span class="o">:=</span> <span class="nx">crypto</span><span class="p">.</span><span class="nf">VerifyRsaSign</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">publicKeyPath</span><span class="p">,</span> <span class="nx">sign</span><span class="p">)</span>
+	<span class="nx">verifyRsaSign</span><span class="p">,</span><span class="nx">err</span> <span class="o">:=</span> <span class="nx">cryptopkg</span><span class="p">.</span><span class="nf">VerifyRsaSign</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">publicKeyPath</span><span class="p">,</span> <span class="nx">sign</span><span class="p">)</span>
 	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
 		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;验签失败: %v \n&#34;</span><span class="p">,</span><span class="nx">err</span><span class="p">)</span>
 	<span class="p">}</span>
@@ -781,7 +776,7 @@ xmutp/wmxNIQHH77
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2023-03-07
+        2023-06-17
         
     </span>
   </p>

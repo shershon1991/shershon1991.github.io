@@ -44,12 +44,12 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/16-crypto-aes/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-04-16T00:00:00+00:00" />
-<meta property="article:modified_time" content="2023-03-04T13:27:21+08:00" />
+<meta property="article:modified_time" content="2023-06-17T13:49:03+08:00" />
 
 <meta itemprop="name" content="Go扩展包(十六):crypto-aes">
 <meta itemprop="description" content="1.介绍 高级加密标准（英语：Advanced Encryption Standard，缩写：AES），又称Rijndael加密法（荷兰语发音：[ˈrɛindaːl"><meta itemprop="datePublished" content="2021-04-16T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2023-03-04T13:27:21+08:00" />
-<meta itemprop="wordCount" content="3917">
+<meta itemprop="dateModified" content="2023-06-17T13:49:03+08:00" />
+<meta itemprop="wordCount" content="3909">
 <meta itemprop="keywords" content="Go扩展包," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go扩展包(十六):crypto-aes"/>
 <meta name="twitter:description" content="1.介绍 高级加密标准（英语：Advanced Encryption Standard，缩写：AES），又称Rijndael加密法（荷兰语发音：[ˈrɛindaːl"/>
@@ -133,7 +133,7 @@
             <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
             <a href="/categories/go/"> Go </a>
             </div>
-          <span class="more-meta"> 约 3917 字 </span>
+          <span class="more-meta"> 约 3909 字 </span>
           <span class="more-meta"> 预计阅读 8 分钟 </span>
         
       </div>
@@ -208,11 +208,6 @@
 </nav>
   </div>
 </div>
-  <div class="post-outdated">
-    <div class="hint">
-      <p>【注意】最后更新于 <span class="timeago" datetime="2023-03-04T13:27:21" title="March 4, 2023">March 4, 2023</span>，文中内容可能已过时，请谨慎使用。</p>
-    </div>
-  </div>
     <div class="post-content">
       <h1 id="1介绍">1.介绍</h1>
 <p><strong>高级加密标准</strong>（英语：<strong>A</strong>dvanced <strong>E</strong>ncryption <strong>S</strong>tandard，<a href="https://zh.wikipedia.org/wiki/%E7%BC%A9%E5%86%99">缩写</a>：AES），又称<strong>Rijndael加密法</strong>（荷兰语发音：[<a href="https://zh.wikipedia.org/wiki/Help:%E8%8D%B7%E8%98%AD%E8%AA%9E%E5%9C%8B%E9%9A%9B%E9%9F%B3%E6%A8%99">ˈrɛindaːl]</a>，音似英文的“Rhine doll”），是<a href="https://zh.wikipedia.org/wiki/%E7%BE%8E%E5%9B%BD%E8%81%94%E9%82%A6%E6%94%BF%E5%BA%9C">美国联邦政府</a>采用的一种<a href="https://zh.wikipedia.org/wiki/%E5%8D%80%E5%A1%8A%E5%8A%A0%E5%AF%86">区块加密</a>标准。这个标准用来替代原先的<a href="https://zh.wikipedia.org/wiki/DES">DES</a>，已经被多方分析且广为全世界所使用。经过五年的甄选流程，高级加密标准由<a href="https://zh.wikipedia.org/wiki/%E7%BE%8E%E5%9B%BD%E5%9B%BD%E5%AE%B6%E6%A0%87%E5%87%86%E4%B8%8E%E6%8A%80%E6%9C%AF%E7%A0%94%E7%A9%B6%E9%99%A2">美国国家标准与技术研究院</a>（NIST）于2001年11月26日发布于FIPS PUB 197，并在2002年5月26日成为有效的标准。现在，高级加密标准已然成为<a href="https://zh.wikipedia.org/wiki/%E5%AF%B9%E7%A7%B0%E5%AF%86%E9%92%A5%E5%8A%A0%E5%AF%86">对称密钥加密</a>中最流行的<a href="https://zh.wikipedia.org/wiki/%E6%BC%94%E7%AE%97%E6%B3%95">算法</a>之一。</p>
@@ -323,7 +318,7 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">crypto</span>
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;52lu/go-study-example/package/crypto&#34;</span>
+	<span class="s">&#34;shershon1991/go-tools/app/cryptopkg&#34;</span>
 	<span class="s">&#34;fmt&#34;</span>
 	<span class="s">&#34;strings&#34;</span>
 	<span class="s">&#34;testing&#34;</span>
@@ -332,7 +327,7 @@
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestECBEncrypt</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
 	<span class="nx">key</span> <span class="o">:=</span> <span class="nx">strings</span><span class="p">.</span><span class="nf">Repeat</span><span class="p">(</span><span class="s">&#34;a&#34;</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
 	<span class="nx">data</span> <span class="o">:=</span> <span class="s">&#34;hello word&#34;</span>
-	<span class="nx">s</span> <span class="o">:=</span> <span class="nx">crypto</span><span class="p">.</span><span class="nf">AesEncryptByECB</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">key</span><span class="p">)</span>
+	<span class="nx">s</span> <span class="o">:=</span> <span class="nx">cryptopkg</span><span class="p">.</span><span class="nf">AesEncryptByECB</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">key</span><span class="p">)</span>
 	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;加密密钥: %v \n&#34;</span><span class="p">,</span> <span class="nx">key</span><span class="p">)</span>
 	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;加密数据: %v \n&#34;</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span>
 	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;加密结果: %v \n&#34;</span><span class="p">,</span> <span class="nx">s</span><span class="p">)</span>
@@ -441,7 +436,7 @@
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestECBDecrypt</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
 	<span class="nx">key</span> <span class="o">:=</span> <span class="nx">strings</span><span class="p">.</span><span class="nf">Repeat</span><span class="p">(</span><span class="s">&#34;a&#34;</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
 	<span class="nx">data</span> <span class="o">:=</span> <span class="s">&#34;mMAsLF/fPBfUrP0mPqZm1w==&#34;</span>
-	<span class="nx">s</span> <span class="o">:=</span> <span class="nx">crypto</span><span class="p">.</span><span class="nf">AesDecryptByECB</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">key</span><span class="p">)</span>
+	<span class="nx">s</span> <span class="o">:=</span> <span class="nx">cryptopkg</span><span class="p">.</span><span class="nf">AesDecryptByECB</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">key</span><span class="p">)</span>
 	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;解密密钥: %v \n&#34;</span><span class="p">,</span> <span class="nx">key</span><span class="p">)</span>
 	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;解密数据: %v \n&#34;</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span>
 	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;解密结果: %v \n&#34;</span><span class="p">,</span> <span class="nx">s</span><span class="p">)</span>
@@ -566,7 +561,7 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">crypto</span>
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;52lu/go-study-example/package/crypto&#34;</span>
+	<span class="s">&#34;shershon1991/go-tools/app/cryptopkg&#34;</span>
 	<span class="s">&#34;fmt&#34;</span>
 	<span class="s">&#34;strings&#34;</span>
 	<span class="s">&#34;testing&#34;</span>
@@ -577,7 +572,7 @@
 	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;key: %v 长度: %d \n&#34;</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="nx">key</span><span class="p">))</span>
 	<span class="nx">text</span> <span class="o">:=</span> <span class="s">&#34;abc&#34;</span>
 	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;带加密文案: %v \n&#34;</span><span class="p">,</span> <span class="nx">text</span><span class="p">)</span>
-	<span class="nx">encrypt</span> <span class="o">:=</span> <span class="nx">crypto</span><span class="p">.</span><span class="nf">AesEncryptByCBC</span><span class="p">(</span><span class="nx">text</span><span class="p">,</span> <span class="nx">key</span><span class="p">)</span>
+	<span class="nx">encrypt</span> <span class="o">:=</span> <span class="nx">cryptopkg</span><span class="p">.</span><span class="nf">AesEncryptByCBC</span><span class="p">(</span><span class="nx">text</span><span class="p">,</span> <span class="nx">key</span><span class="p">)</span>
 	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;加密结果: %v \n&#34;</span><span class="p">,</span> <span class="nx">encrypt</span><span class="p">)</span>
 <span class="p">}</span>
 <span class="cm">/** 输出
@@ -694,7 +689,7 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">crypto</span>
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;52lu/go-study-example/package/crypto&#34;</span>
+	<span class="s">&#34;shershon1991/go-tools/app/cryptopkg&#34;</span>
 	<span class="s">&#34;fmt&#34;</span>
 	<span class="s">&#34;strings&#34;</span>
 	<span class="s">&#34;testing&#34;</span>
@@ -705,7 +700,7 @@
 	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;key: %v 长度: %d \n&#34;</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="nx">key</span><span class="p">))</span>
 	<span class="nx">text</span> <span class="o">:=</span> <span class="s">&#34;rMX6r9x+PnTOhfgDH4jjXg==&#34;</span>
 	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;待解密文案: %v \n&#34;</span><span class="p">,</span> <span class="nx">text</span><span class="p">)</span>
-	<span class="nx">decrypt</span> <span class="o">:=</span> <span class="nx">crypto</span><span class="p">.</span><span class="nf">AesDecryptByCBC</span><span class="p">(</span><span class="nx">text</span><span class="p">,</span> <span class="nx">key</span><span class="p">)</span>
+	<span class="nx">decrypt</span> <span class="o">:=</span> <span class="nx">cryptopkg</span><span class="p">.</span><span class="nf">AesDecryptByCBC</span><span class="p">(</span><span class="nx">text</span><span class="p">,</span> <span class="nx">key</span><span class="p">)</span>
 	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;解密结果: %v \n&#34;</span><span class="p">,</span> <span class="nx">decrypt</span><span class="p">)</span>
 <span class="p">}</span>
 
@@ -841,7 +836,7 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">crypto</span>
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;52lu/go-study-example/package/crypto&#34;</span>
+	<span class="s">&#34;shershon1991/go-tools/app/cryptopkg&#34;</span>
 	<span class="s">&#34;fmt&#34;</span>
 	<span class="s">&#34;strings&#34;</span>
 	<span class="s">&#34;testing&#34;</span>
@@ -850,7 +845,7 @@
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestAesEncryptByCTR</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
 	<span class="nx">key</span> <span class="o">:=</span> <span class="nx">strings</span><span class="p">.</span><span class="nf">Repeat</span><span class="p">(</span><span class="s">&#34;a&#34;</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
 	<span class="nx">data</span> <span class="o">:=</span> <span class="s">&#34;hello word&#34;</span>
-	<span class="nx">hex</span><span class="p">,</span> <span class="nx">base64</span> <span class="o">:=</span> <span class="nx">crypto</span><span class="p">.</span><span class="nf">AesEncryptByCTR</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">key</span><span class="p">)</span>
+	<span class="nx">hex</span><span class="p">,</span> <span class="nx">base64</span> <span class="o">:=</span> <span class="nx">cryptopkg</span><span class="p">.</span><span class="nf">AesEncryptByCTR</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">key</span><span class="p">)</span>
 	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;加密key: %v \n&#34;</span><span class="p">,</span> <span class="nx">key</span><span class="p">)</span>
 	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;加密key长度: %v \n&#34;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="nx">key</span><span class="p">))</span>
 	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;加密数据: %v \n&#34;</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span>
@@ -968,7 +963,7 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">crypto</span>
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;52lu/go-study-example/package/crypto&#34;</span>
+	<span class="s">&#34;shershon1991/go-tools/app/cryptopkg&#34;</span>
 	<span class="s">&#34;fmt&#34;</span>
 	<span class="s">&#34;strings&#34;</span>
 	<span class="s">&#34;testing&#34;</span>
@@ -977,7 +972,7 @@
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">TestAesDecryptByCTR</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
 	<span class="nx">key</span> <span class="o">:=</span> <span class="nx">strings</span><span class="p">.</span><span class="nf">Repeat</span><span class="p">(</span><span class="s">&#34;a&#34;</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
 	<span class="nx">data</span> <span class="o">:=</span> <span class="s">&#34;Oe2qKyQC+9KgJu8UWLgbVQ==&#34;</span>
-	<span class="nx">res</span> <span class="o">:=</span> <span class="nx">crypto</span><span class="p">.</span><span class="nf">AesDecryptByCTR</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">key</span><span class="p">)</span>
+	<span class="nx">res</span> <span class="o">:=</span> <span class="nx">cryptopkg</span><span class="p">.</span><span class="nf">AesDecryptByCTR</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">key</span><span class="p">)</span>
 	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;解密key: %v \n&#34;</span><span class="p">,</span> <span class="nx">key</span><span class="p">)</span>
 	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;解密数据: %v \n&#34;</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span>
 	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;解密结果: %v \n&#34;</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span>
@@ -993,7 +988,7 @@
 </code></pre></td></tr></table>
 </div>
 </div><h1 id="5-cfbofb">5. CFB、OFB</h1>
-<p>和<code>CTR</code>模式一样，只需要修改加密模式即可,<a href="https://github.com/52lu/go-study-example">查看具体源码 https://github.com/52lu/go-study-example</a></p>
+<p>和<code>CTR</code>模式一样，只需要修改加密模式即可</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -1049,9 +1044,9 @@
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">TestAesEncryptByOFB</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
 	<span class="nx">key</span> <span class="o">:=</span> <span class="nx">strings</span><span class="p">.</span><span class="nf">Repeat</span><span class="p">(</span><span class="s">&#34;a&#34;</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
 	<span class="nx">data</span> <span class="o">:=</span> <span class="s">&#34;123&#34;</span>
-	<span class="nx">_</span><span class="p">,</span> <span class="nx">base64</span> <span class="o">:=</span> <span class="nx">crypto</span><span class="p">.</span><span class="nf">AesEncryptByOFB</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">key</span><span class="p">)</span>
-	<span class="nx">_</span><span class="p">,</span> <span class="nx">base642</span> <span class="o">:=</span> <span class="nx">crypto</span><span class="p">.</span><span class="nf">AesEncryptByCTR</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">key</span><span class="p">)</span>
-	<span class="nx">_</span><span class="p">,</span> <span class="nx">base643</span> <span class="o">:=</span> <span class="nx">crypto</span><span class="p">.</span><span class="nf">AesEncryptByCFB</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">key</span><span class="p">)</span>
+	<span class="nx">_</span><span class="p">,</span> <span class="nx">base64</span> <span class="o">:=</span> <span class="nx">cryptopkg</span><span class="p">.</span><span class="nf">AesEncryptByOFB</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">key</span><span class="p">)</span>
+	<span class="nx">_</span><span class="p">,</span> <span class="nx">base642</span> <span class="o">:=</span> <span class="nx">cryptopkg</span><span class="p">.</span><span class="nf">AesEncryptByCTR</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">key</span><span class="p">)</span>
+	<span class="nx">_</span><span class="p">,</span> <span class="nx">base643</span> <span class="o">:=</span> <span class="nx">cryptopkg</span><span class="p">.</span><span class="nf">AesEncryptByCFB</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">key</span><span class="p">)</span>
 	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;加密key: %v \n&#34;</span><span class="p">,</span> <span class="nx">key</span><span class="p">)</span>
 	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;加密key长度: %v \n&#34;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="nx">key</span><span class="p">))</span>
 	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;加密数据: %v \n&#34;</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span>
@@ -1217,7 +1212,7 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">crypto</span>
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;52lu/go-study-example/package/crypto&#34;</span>
+	<span class="s">&#34;shershon1991/go-tools/app/cryptopkg&#34;</span>
 	<span class="s">&#34;fmt&#34;</span>
 	<span class="s">&#34;strings&#34;</span>
 	<span class="s">&#34;testing&#34;</span>
@@ -1226,12 +1221,12 @@
 	<span class="nx">key</span> <span class="o">:=</span> <span class="nx">strings</span><span class="p">.</span><span class="nf">Repeat</span><span class="p">(</span><span class="s">&#34;a&#34;</span><span class="p">,</span><span class="mi">16</span><span class="p">)</span>
 	<span class="nx">data</span> <span class="o">:=</span> <span class="s">&#34;hello word!&#34;</span>
 	<span class="c1">// 加密
-</span><span class="c1"></span>	<span class="nx">gcm</span> <span class="o">:=</span> <span class="nx">crypto</span><span class="p">.</span><span class="nf">AesEncryptByGCM</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">key</span><span class="p">)</span>
+</span><span class="c1"></span>	<span class="nx">gcm</span> <span class="o">:=</span> <span class="nx">cryptopkg</span><span class="p">.</span><span class="nf">AesEncryptByGCM</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">key</span><span class="p">)</span>
 	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;密钥key: %s \n&#34;</span><span class="p">,</span><span class="nx">key</span><span class="p">)</span>
 	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;加密数据: %s \n&#34;</span><span class="p">,</span><span class="nx">data</span><span class="p">)</span>
 	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;加密结果: %s \n&#34;</span><span class="p">,</span><span class="nx">gcm</span><span class="p">)</span>
 	<span class="c1">// 解密
-</span><span class="c1"></span>	<span class="nx">byGCM</span> <span class="o">:=</span> <span class="nx">crypto</span><span class="p">.</span><span class="nf">AesDecryptByGCM</span><span class="p">(</span><span class="nx">gcm</span><span class="p">,</span> <span class="nx">key</span><span class="p">)</span>
+</span><span class="c1"></span>	<span class="nx">byGCM</span> <span class="o">:=</span> <span class="nx">cryptopkg</span><span class="p">.</span><span class="nf">AesDecryptByGCM</span><span class="p">(</span><span class="nx">gcm</span><span class="p">,</span> <span class="nx">key</span><span class="p">)</span>
 	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;解密结果: %s \n&#34;</span><span class="p">,</span><span class="nx">byGCM</span><span class="p">)</span>
 <span class="p">}</span>
 <span class="cm">/** 输出
@@ -1257,7 +1252,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2023-03-04
+        2023-06-17
         
     </span>
   </p>
