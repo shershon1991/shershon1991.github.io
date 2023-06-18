@@ -44,11 +44,11 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/%E5%B7%A5%E5%85%B7%E7%AF%87/02-pprof/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-04-29T00:00:00+00:00" />
-<meta property="article:modified_time" content="2023-06-18T11:14:06+08:00" />
+<meta property="article:modified_time" content="2023-06-18T12:29:24+08:00" />
 
 <meta itemprop="name" content="Go工具(二):性能调试利器pprof(一)">
 <meta itemprop="description" content="1. 介绍 Go语言中的pprof指对于指标或特征的分析（Profiling），通过分析不仅可以查找到程序中的错误（内存泄漏、race冲突、协程泄"><meta itemprop="datePublished" content="2021-04-29T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2023-06-18T11:14:06+08:00" />
+<meta itemprop="dateModified" content="2023-06-18T12:29:24+08:00" />
 <meta itemprop="wordCount" content="2732">
 <meta itemprop="keywords" content="Go工具," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go工具(二):性能调试利器pprof(一)"/>
@@ -357,7 +357,7 @@
 
 <span class="kd">func</span> <span class="nf">TestRuntimePProf</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
 	<span class="c1">// 打开文件
-</span><span class="c1"></span>	<span class="nx">f</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="s">&#34;./out.pprof&#34;</span><span class="p">)</span>
+</span><span class="c1"></span>	<span class="nx">f</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="s">&#34;../profile/out.pprof&#34;</span><span class="p">)</span>
 	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
 		<span class="nx">t</span><span class="p">.</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;文件打开失败:%v&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
 		<span class="k">return</span>
@@ -407,7 +407,7 @@
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 运行</span>
-➜ go <span class="nb">test</span> pprof_test.go -v
+➜ go <span class="nb">test</span> runtime_pprof_test.go -v
 <span class="o">===</span> RUN   TestRuntimePProf
 --- PASS: TestRuntimePProf <span class="o">(</span>5.05s<span class="o">)</span>
 PASS
@@ -494,7 +494,7 @@ Entering interactive mode <span class="o">(</span><span class="nb">type</span> <
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 运行单元测试</span>
-➜ go <span class="nb">test</span> . -cpuprofile test.pprof -memprofile mem.pprof
+➜ go <span class="nb">test</span> go_test.go -cpuprofile ../profile/cpu.pprof -memprofile ../profile/mem.pprof
 <span class="c1"># 查看内存pprof</span>
 ➜ go tool pprof mem.pprof                                      
 Type: alloc_space
