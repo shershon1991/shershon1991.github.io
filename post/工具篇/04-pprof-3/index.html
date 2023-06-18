@@ -44,11 +44,11 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/%E5%B7%A5%E5%85%B7%E7%AF%87/04-pprof-3/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-05-01T00:00:00+00:00" />
-<meta property="article:modified_time" content="2023-03-07T10:57:10+08:00" />
+<meta property="article:modified_time" content="2023-06-18T11:12:40+08:00" />
 
 <meta itemprop="name" content="Go工具(四):性能调试利器pprof(三)">
 <meta itemprop="description" content="1. trace说明 在pprof的分析中，能够知道一段时间内的CPU占用、内存分配、协程堆栈信息。这些信息都是一段时间内数据的汇总，但是它们并没"><meta itemprop="datePublished" content="2021-05-01T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2023-03-07T10:57:10+08:00" />
+<meta itemprop="dateModified" content="2023-06-18T11:12:40+08:00" />
 <meta itemprop="wordCount" content="2054">
 <meta itemprop="keywords" content="Go工具," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go工具(四):性能调试利器pprof(三)"/>
@@ -164,10 +164,13 @@
         <li><a href="#42-某一时刻协程整体运行情况">4.2 某一时刻协程整体运行情况</a></li>
         <li><a href="#43-某一时刻堆内存">4.3 某一时刻堆内存</a></li>
         <li><a href="#44-某一时刻系统线程">4.4 某一时刻系统线程</a></li>
-        <li><a href="#45-查看垃圾回收">4.5 查看垃圾回收</a></li>
-        <li><a href="#1单个垃圾回收">1.单个垃圾回收</a></li>
-        <li><a href="#2查看多个垃圾回收">2.查看多个垃圾回收</a></li>
-        <li><a href="#3部分协程功能说明">3.部分协程功能说明</a></li>
+        <li><a href="#45-查看垃圾回收">4.5 查看垃圾回收</a>
+          <ul>
+            <li><a href="#1单个垃圾回收">1.单个垃圾回收</a></li>
+            <li><a href="#2查看多个垃圾回收">2.查看多个垃圾回收</a></li>
+            <li><a href="#3部分协程功能说明">3.部分协程功能说明</a></li>
+          </ul>
+        </li>
         <li><a href="#46-查看具体协程运行信息">4.6 查看具体协程运行信息</a></li>
       </ul>
     </li>
@@ -187,11 +190,6 @@
 </nav>
   </div>
 </div>
-  <div class="post-outdated">
-    <div class="hint">
-      <p>【注意】最后更新于 <span class="timeago" datetime="2023-03-07T10:57:10" title="March 7, 2023">March 7, 2023</span>，文中内容可能已过时，请谨慎使用。</p>
-    </div>
-  </div>
     <div class="post-content">
       <h1 id="1-trace说明">1. trace说明</h1>
 <p>在<code>pprof</code>的分析中，能够知道一段时间内的<code>CPU</code>占用、内存分配、协程堆栈信息。这些信息都是一段时间内数据的汇总，但是它们并没有提供整个周期内发生的事件，例如指定的<code>Goroutines</code>何时执行、执行了多长时间、什么时候陷入了堵塞、什么时候解除了堵塞、<code>GC</code>如何影响单个<code>Goroutine</code>的执行、<code>STW</code>中断花费的时间是否太长等。这就是在Go1.5之后推出的<code>trace</code>工具的强大之处，它提供了指定时间内程序发生的事件的完整信息，这些事件信息包括：</p>
@@ -310,14 +308,14 @@
 <h2 id="44-某一时刻系统线程">4.4 某一时刻系统线程</h2>
 <p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/image-20211129222055337.png" alt=""></p>
 <h2 id="45-查看垃圾回收">4.5 查看垃圾回收</h2>
-<h2 id="1单个垃圾回收">1.单个垃圾回收</h2>
+<h3 id="1单个垃圾回收">1.单个垃圾回收</h3>
 <p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/image-20211129230729540.png" alt=""></p>
-<h2 id="2查看多个垃圾回收">2.查看多个垃圾回收</h2>
+<h3 id="2查看多个垃圾回收">2.查看多个垃圾回收</h3>
 <blockquote>
 <p>选中多个垃圾回收，则可查看多个垃圾回收信息</p>
 </blockquote>
 <p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/image-20211129231221679.png" alt=""></p>
-<h2 id="3部分协程功能说明">3.部分协程功能说明</h2>
+<h3 id="3部分协程功能说明">3.部分协程功能说明</h3>
 <p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/image-20211130.png" alt=""></p>
 <ul>
 <li>
@@ -568,7 +566,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2023-03-07
+        2023-06-18
         
     </span>
   </p>
