@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Go底层探索(四):哈希表map上篇 - Learn Go</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Learn Go" /><meta name="description" content="1.介绍 Go语言中的map又被称为哈希表，是使用频率极高的一种数据结构。哈希表的原理是将多个键/值（key/value）对，分散存储在桶（b" /><meta name="keywords" content="博客, Learn Go, hugo" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.90.1 with theme even" />
+
+
+<link rel="canonical" href="https://shershon1991.github.io/post/%E8%BF%9B%E9%98%B6%E7%AF%87/%E5%BA%95%E5%B1%82%E6%8E%A2%E7%B4%A2/04-%E5%93%88%E5%B8%8C%E8%A1%A8map%E4%B8%8A%E7%AF%87/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Go底层探索(四):哈希表map上篇" />
+<meta property="og:description" content="1.介绍 Go语言中的map又被称为哈希表，是使用频率极高的一种数据结构。哈希表的原理是将多个键/值（key/value）对，分散存储在桶（b" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://shershon1991.github.io/post/%E8%BF%9B%E9%98%B6%E7%AF%87/%E5%BA%95%E5%B1%82%E6%8E%A2%E7%B4%A2/04-%E5%93%88%E5%B8%8C%E8%A1%A8map%E4%B8%8A%E7%AF%87/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2023-07-12T00:00:00+00:00" />
+<meta property="article:modified_time" content="2023-07-12T19:57:24+08:00" />
+
+<meta itemprop="name" content="Go底层探索(四):哈希表map上篇">
+<meta itemprop="description" content="1.介绍 Go语言中的map又被称为哈希表，是使用频率极高的一种数据结构。哈希表的原理是将多个键/值（key/value）对，分散存储在桶（b"><meta itemprop="datePublished" content="2023-07-12T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2023-07-12T19:57:24+08:00" />
+<meta itemprop="wordCount" content="5385">
+<meta itemprop="keywords" content="Go进阶,Go底层探索," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Go底层探索(四):哈希表map上篇"/>
+<meta name="twitter:description" content="1.介绍 Go语言中的map又被称为哈希表，是使用频率极高的一种数据结构。哈希表的原理是将多个键/值（key/value）对，分散存储在桶（b"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Learn Go</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">首页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"/><header id="header" class="header">
+    <div class="logo-wrapper">
+        <a href="/" class="logo">Learn Go</a>
+    </div>
+    <nav class="site-navbar">
+        <ul id="menu" class="menu"><li style="display:inline-block;margin-right:10px;">
+                <input type="search" class="docsearch-input" placeholder="Search"/>
+            </li><li class="menu-item">
+                <a class="menu-item-link" href="/">首页</a>
+            </li>
+            <li class="menu-item">
+                <a class="menu-item-link" href="/post/">归档</a>
+            </li>
+            <li class="menu-item">
+                <a class="menu-item-link" href="/tags/">标签</a>
+            </li>
+            <li class="menu-item">
+                <a class="menu-item-link" href="/categories/">分类</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Go底层探索(四):哈希表map上篇</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2023-07-12 </span>
+        <div class="post-category">
+            <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+            <a href="/categories/go/"> Go </a>
+            </div>
+          <span class="more-meta"> 约 5385 字 </span>
+          <span class="more-meta"> 预计阅读 11 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1介绍">1.介绍</a></li>
+    <li><a href="#2哈希函数与碰撞">2.哈希函数与碰撞</a></li>
+    <li><a href="#3拉链法">3.拉链法</a>
+      <ul>
+        <li><a href="#31-设计原理">3.1 设计原理</a></li>
+        <li><a href="#32-写入动画">3.2 写入动画</a></li>
+      </ul>
+    </li>
+    <li><a href="#4开放寻址法">4.开放寻址法</a>
+      <ul>
+        <li><a href="#41-设计原理">4.1 设计原理</a></li>
+        <li><a href="#42-写入动画">4.2 写入动画</a></li>
+      </ul>
+    </li>
+    <li><a href="#5并发冲突">5.并发冲突</a>
+      <ul>
+        <li><a href="#51-错误示例">5.1 错误示例</a></li>
+        <li><a href="#52-不支持并发读写的原因">5.2 不支持并发读写的原因</a></li>
+      </ul>
+    </li>
+    <li><a href="#6数据结构">6.数据结构</a>
+      <ul>
+        <li><a href="#61-核心结构体">6.1 核心结构体</a></li>
+        <li><a href="#62-结构示意图">6.2 结构示意图</a></li>
+        <li><a href="#63-桶结构bmap">6.3 桶结构（bmap）</a></li>
+      </ul>
+    </li>
+    <li><a href="#7初始化">7.初始化</a>
+      <ul>
+        <li><a href="#71-字面量初始化">7.1 字面量初始化</a></li>
+        <li><a href="#72-运行时">7.2 运行时</a></li>
+      </ul>
+    </li>
+    <li><a href="#8读写原理">8.读写原理</a>
+      <ul>
+        <li><a href="#81-读取">8.1 读取</a></li>
+        <li><a href="#82-写入">8.2 写入</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h1 id="1介绍">1.介绍</h1>
+<p><code>Go</code>语言中的<code>map</code>又被称为哈希表，是使用频率极高的一种数据结构。哈希表的原理是将多个<code>键/值（key/value）</code>对，分散存储在<code>桶（buckets）</code>中。</p>
+<p>通常<code>map</code>的时间复杂度为<code>O(1)</code>，通过一个键快速寻找其唯一对应的值<code>value</code>。在许多情况下，哈希表的查找速度明显快于一些搜索树形式的数据结构，被广泛应用于 关联数组、缓存、数据库缓存 等场景中。</p>
+<blockquote>
+<p>如果想要实现一个性能优异的哈希表，需要注意两个关键点 —— <font color="red">哈希函数和冲突解决方法。</font></p>
+</blockquote>
+<h1 id="2哈希函数与碰撞">2.哈希函数与碰撞</h1>
+<p>实现哈希表的关键点在于哈希函数的选择，哈希函数的选择在很大程度上能够决定哈希表的读写性能。在理想情况下，哈希函数应该能够将不同的键映射到不同的索引上，但是在实际使用时，这个理想的效果是不可能实现的。</p>
+<p>下面展示两张图，分别示意 完美哈希函数和不均匀哈希函数 计算的结果图：</p>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/perfect-hash-function-20230712.png" alt="perfect-hash-function"></p>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/bad-hash-function-20230712.png" alt="bad-hash-function"></p>
+<p><font color="red">不同的键通过哈希函数产生相同的哈希值，就是我们常听到的哈希碰撞（哈希冲突）。</font></p>
+<blockquote>
+<p>如果将 2450 个键随机分配到 100万 个桶中，则根据概率计算，至少有两个键被分配到同一个桶中的可能性有惊人的 <code>95%</code>。</p>
+</blockquote>
+<p>哈希碰撞导致同一个桶中可能存在多个元素，有多种方式可以避免哈希碰撞，一般有两种主要的策略：<font color="red">拉链法和开发寻址法。</font></p>
+<h1 id="3拉链法">3.拉链法</h1>
+<h2 id="31-设计原理">3.1 设计原理</h2>
+<p><strong>概念</strong>：将同一个桶中的元素通过链表的形式进行链接。
+<strong>优点</strong>：随着同种元素的增加，可以不断链接新的元素，同时不用预先为元素分配内存。
+<strong>缺点</strong>：需要存储额外的指针用于连接元素，这增加了整个哈希表的大小。<font color="red">同时由于链表存储的地址不连续，所以无法高效利用CPU高速缓存。</font></p>
+<h2 id="32-写入动画">3.2 写入动画</h2>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/display-link.gif" alt="display-link"></p>
+<p>以上图为例，插入元素<code>7777777</code>，经过<code>hash</code>算法之后，被散列到位置下标为<code>7</code>的位置，但是这个位置已经有数据了，所以就产生了冲突，然后通过拉链的形式，挂载在后面。</p>
+<h1 id="4开放寻址法">4.开放寻址法</h1>
+<h2 id="41-设计原理">4.1 设计原理</h2>
+<p><strong>概念</strong>：开放寻址法是一种在哈希表中解决哈希碰撞的方法，这种方法的核心思想是 <font color="red">依次探测和比较数组中的元素以判断目标键值对是否存在于哈希表中。</font>
+<strong>优点</strong>：由于存储的地址连续，可以更好地利用<code>CPU</code>高速缓存。
+<strong>缺点</strong>：当散列表中插入的数据越来越多时，散列冲突发生的可能性就会越来越大，空闲位置会越来越少，线性探测的时间就会越来越久。极端情况下，需要从头到尾探测整个散列表，所以最坏情况下的时间复杂度为<code>O(n)</code>。</p>
+<p><font color="red">@注：Go语言中的哈希表采用的是开放寻址法中的线性探测（Linear Probing）策略。</font></p>
+<blockquote>
+<p>开放寻址法中对性能影响最大的是<strong>装载因子</strong>，它是数组中元素的数量与数组大小的比值，随着装载因子的增加，线性探测的平均用时就会逐渐增加，这回影响哈希表的读写性能。当装载率超过70%后，哈希表的性能就会急剧下降，而一旦装载率达到100%，整个哈希表就会完全失效，这是查找和插入任意元素的时间复杂度都是<code>O(n)</code>，这是需要遍历数组中的全部元素，所以在实现哈希表时，一定要关注装载因子的变化。</p>
+</blockquote>
+<p><font color="green">装载因子</font>：在一个性能比较好的哈希表中，每一个桶中都应该有 <code>0~1</code> 个元素，有时会有 <code>2~3</code> 个，很少会超过这个数量。<font color="red">计算哈希、定位桶和遍历链表 三个过程是哈希表读写操作的主要开销</font>，公式：</p>
+<p><code>装载因子 = 元素数量/桶数量</code></p>
+<h2 id="42-写入动画">4.2 写入动画</h2>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/open-address-20230712.gif" alt="open-address"></p>
+<p>以上图为例，散列表的大小为<code>8</code>，黄色区域表示空闲位置，橙色区域表示已经存储了数据。目前散列表中已经存储了<code>4</code>个元素，此时元素<code>7777777</code>经过<code>hash</code>算法之后，被散列到位置下标为<code>7</code>的位置，但是这个位置已经有数据了，所以就产生了冲突，<font color="red">于是按顺序往后一个一个地找</font>，看有没有空闲的位置，此时，运气很好，正巧在下一个位置就有空闲位置，将其插入，完成了数据存储。</p>
+<h1 id="5并发冲突">5.并发冲突</h1>
+<p>和其他语言不同的是，<code>map</code>并不支持并发的读写，<code>map</code>并发读写是初级开发者经常会犯的错误。下面的示例，协程并发读写会报错为：<code>fatal error：concurrent map read and map write</code>。</p>
+<h2 id="51-错误示例">5.1 错误示例</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">TestRun</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">mp</span> <span class="o">:=</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span>
+		<span class="s">&#34;a&#34;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+		<span class="s">&#34;b&#34;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+	<span class="p">}</span>
+	<span class="k">go</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="kc">true</span> <span class="p">{</span>
+			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;a = &#34;</span><span class="p">,</span> <span class="nx">mp</span><span class="p">[</span><span class="s">&#34;a&#34;</span><span class="p">])</span>
+		<span class="p">}</span>
+	<span class="p">}()</span>
+	<span class="k">go</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="kc">true</span> <span class="p">{</span>
+			<span class="nx">mp</span><span class="p">[</span><span class="s">&#34;b&#34;</span><span class="p">]</span> <span class="p">=</span> <span class="mi">10</span>
+		<span class="p">}</span>
+	<span class="p">}()</span>
+
+	<span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nx">Second</span> <span class="o">*</span> <span class="mi">3</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;ok&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="52-不支持并发读写的原因">5.2 不支持并发读写的原因</h2>
+<p><code>Go</code>语言为什么不支持并发的读写，是一个频繁被提起的问题，我们可以在<code>Go</code>官方文档中找到问题的答案。</p>
+<p>官方文档的解释是：<font color="red">&ldquo;map不需要从多个Goroutine安全访问，在实际情况下，map可能是某些已经同步的较大数据结构或计算的一部分。因此，要求所有map操作都互斥将减慢大多数程序的速度，而只会增加少数程序的安全性。&quot;</font>，即<code>Go</code>语言只支持并发读写的原因是 <font color="red">保证大多数场景下的查询效率。</font></p>
+<h1 id="6数据结构">6.数据结构</h1>
+<h2 id="61-核心结构体">6.1 核心结构体</h2>
+<p><code>Go</code>语言运行时同时使用了多个数据结构组合表示哈希表，其中<code>runtime.hmap</code>是最核心的结构体，我们先来了解下该结构体的内部字段。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">hmap</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">count</span>     <span class="kt">int</span>
+	<span class="nx">flags</span>     <span class="kt">uint8</span>
+	<span class="nx">B</span>         <span class="kt">uint8</span>
+	<span class="nx">noverflow</span> <span class="kt">uint16</span>
+	<span class="nx">hash0</span>     <span class="kt">uint32</span>
+	<span class="nx">buckets</span>    <span class="nx">unsafe</span><span class="p">.</span><span class="nx">Pointer</span>
+	<span class="nx">oldbuckets</span> <span class="nx">unsafe</span><span class="p">.</span><span class="nx">Pointer</span>
+	<span class="nx">nevacuate</span>  <span class="kt">uintptr</span>
+	<span class="nx">extra</span> <span class="o">*</span><span class="nx">mapextra</span>
+<span class="p">}</span>
+
+<span class="kd">type</span> <span class="nx">mapextra</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">overflow</span>    <span class="o">*</span><span class="p">[]</span><span class="o">*</span><span class="nx">bmap</span>
+	<span class="nx">oldoverflow</span> <span class="o">*</span><span class="p">[]</span><span class="o">*</span><span class="nx">bmap</span>
+	<span class="nx">nextOverflow</span> <span class="o">*</span><span class="nx">bmap</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li><code>count</code>: 表示当前哈希表中的元素数量。</li>
+<li><code>flags</code>：表示当前<code>map</code>的状态（是否处于正在写入的状态等）。</li>
+<li><code>B</code>：表示当前哈希表持有的<code>buckets</code>数量，但是因为哈希表中桶的数量都是2的倍数，所以该字段存储的是指数，即<code>len(buckets) = 2^B</code>。</li>
+<li><code>noverflow</code>：代表当前<code>map</code>中溢出桶的数量，当溢出的桶太多时，<code>map</code>会进行扩容，其实质是避免溢出桶过大导致内存泄漏。</li>
+<li><code>hash0</code>：是哈希的种子，它能为哈希函数的结果引入随机性，这个值在创建哈希表时确定，并在调用哈希函数时作为参数传入。</li>
+<li><code>buckets</code>：指向当前<code>map</code>对应的桶的指针。</li>
+<li><code>oldbuckets</code>：哈希在扩容时，用于保存之前<code>buckets</code>的字段，它的大小是当前<code>buckets</code>的一半，当所有旧桶中的数据都已经转移到了新桶中时，则清空。</li>
+<li><code>nevacuate</code>：在扩容时使用，用于标记当前旧桶中小于<code>nevacuate</code>的数据都已转移到了新桶中。</li>
+<li><code>extra</code>：存储<code>map</code>中的溢出桶。</li>
+</ul>
+<h2 id="62-结构示意图">6.2 结构示意图</h2>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/hmap-and-buckets.png" alt="hmap-and-buckets"></p>
+<p>如上图所示，哈希表<code>runtime.hmap</code>的桶是<code>runtime.bmap</code>，每一个<code>runtime.bmap</code>都能存储8个键值对，当哈希表中存储的数据过多，单个桶已经装满时就会使用<code>extra.nextOverflow</code>中的桶存储溢出的数据。</p>
+<blockquote>
+<p>上述两种不同的桶在内存中是连续存储的，我们在这里将它们分别称为 正常桶和溢出桶，上图中黄色的<code>runtime.bmap</code>就是正常桶，绿色的<code>runtime.bmap</code>是溢出桶，溢出桶是在Go语言还是用C语言实现时使用的设计，由于它能够减少扩容的频率，所以一直使用至今。</p>
+</blockquote>
+<h2 id="63-桶结构bmap">6.3 桶结构（bmap）</h2>
+<p>代表桶的<code>bmap</code>结构在运行时只列出了首个字段，即一个固定长度为<code>8</code>的数组，此字段顺序存储<code>key</code>的哈希值的前<code>8</code>位。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">bmap</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">tophash</span> <span class="p">[</span><span class="nx">bucketCnt</span><span class="p">]</span><span class="kt">uint8</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>1.桶中存储的<code>key</code>和<code>value</code>到哪儿去了？</strong></p>
+<p>在运行期间，<code>runtime.bmap</code>结构体其实不止包含<code>tophash</code>字段，因为哈希表中可能存储不同类型的键值对，而且<code>Go</code>语言当时也不支持泛型，所以键值对占据的内存空间大小只能在编译时进行推导，<code>runtime.bmap</code>中的其它字段在运行时也是通过计算内存地址的方式访问的，所以它的定义中就不包含这些字段，不过我们能根据编译期间的<a href="https://github.com/golang/go/blob/ac0ba6707c1655ea4316b41d06571a0303cc60eb/src/cmd/compile/internal/gc/reflect.go#L83"><code>cmd/compile/internal/gc.bmap</code></a>函数重建它的结构。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">bmap</span> <span class="kd">struct</span> <span class="p">{</span>
+    <span class="nx">topbits</span>  <span class="p">[</span><span class="mi">8</span><span class="p">]</span><span class="kt">uint8</span>
+    <span class="nx">keys</span>     <span class="p">[</span><span class="mi">8</span><span class="p">]</span><span class="nx">keytype</span>
+    <span class="nx">values</span>   <span class="p">[</span><span class="mi">8</span><span class="p">]</span><span class="nx">valuetype</span>
+    <span class="nx">pad</span>      <span class="kt">uintptr</span>
+    <span class="nx">overflow</span> <span class="kt">uintptr</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>随着哈希表存储的数据逐渐增多，我们会扩容哈希表或者使用额外的桶存储溢出的数据，不会让单个桶中的数据超过<code>8</code>个，不过溢出桶只是临时的解决方案，创建过多的溢出桶最终也会导致哈希的扩容。</p>
+</blockquote>
+<h1 id="7初始化">7.初始化</h1>
+<h2 id="71-字面量初始化">7.1 字面量初始化</h2>
+<p>目前的现代编程语言基本都支持使用字面量的方式初始化哈希，一般都会使用<code>key: value</code>的语法来表示键值对，<code>Go</code>语言中也不例外：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">hash</span> <span class="o">:=</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span>
+	<span class="s">&#34;1&#34;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+	<span class="s">&#34;3&#34;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+	<span class="s">&#34;5&#34;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>我们需要在初始化哈希时声明键值对的类型，这种使用字面量初始化的方式最终都会通过 <a href="https://github.com/golang/go/blob/ac0ba6707c1655ea4316b41d06571a0303cc60eb/src/cmd/compile/internal/gc/sinit.go#L753"><code>cmd/compile/internal/gc.maplit</code></a> 初始化，我们来分析一下该函数初始化哈希的过程：</p>
+<p><strong>1.元素数量小于等于25时：</strong></p>
+<p>当哈希表中的元素数量<code>&lt;=25</code>个时，编译器会将字面量初始化的结构体转换成以下的代码，将所有的键值对一次加入到哈希表中：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">hash</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">int</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="nx">hash</span><span class="p">[</span><span class="s">&#34;1&#34;</span><span class="p">]</span> <span class="p">=</span> <span class="mi">2</span>
+<span class="nx">hash</span><span class="p">[</span><span class="s">&#34;3&#34;</span><span class="p">]</span> <span class="p">=</span> <span class="mi">4</span>
+<span class="nx">hash</span><span class="p">[</span><span class="s">&#34;5&#34;</span><span class="p">]</span> <span class="p">=</span> <span class="mi">6</span>
+</code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>这种初始化的方式与数组和切片几乎完全相同，由此看来集合类型的初始化在Go语言中有着相同的处理逻辑。</p>
+</blockquote>
+<p><strong>2.元素数量大于25时：</strong></p>
+<p>一旦哈希表中元素的数量超过了<code>25</code>个，编译器会选择两个数组分别存储键和值，这些键值对会通过如下的<code>for</code>循环加入哈希：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">hash</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">int</span><span class="p">,</span> <span class="mi">26</span><span class="p">)</span>
+<span class="nx">vstatk</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;1&#34;</span><span class="p">,</span> <span class="s">&#34;2&#34;</span><span class="p">,</span> <span class="s">&#34;3&#34;</span><span class="p">,</span> <span class="o">...</span> <span class="err">，</span> <span class="s">&#34;26&#34;</span><span class="p">}</span>
+<span class="nx">vstatv</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="o">...</span> <span class="p">,</span> <span class="mi">26</span><span class="p">}</span>
+<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="nx">vstak</span><span class="p">);</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+    <span class="nx">hash</span><span class="p">[</span><span class="nx">vstatk</span><span class="p">[</span><span class="nx">i</span><span class="p">]]</span> <span class="p">=</span> <span class="nx">vstatv</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>使用字面量初始化的过程都会使用<code>Go</code>语言中的关键字<code>make</code>来创建新的哈希并通过最原始的<code>[]</code>语法向哈希追加元素。</p>
+</blockquote>
+<h2 id="72-运行时">7.2 运行时</h2>
+<p>当创建的哈希被分配到栈上并且其容量小于<code>BUCKETSIZE = 8</code>时，<code>Go</code>语言在编译阶段会使用如下方式快速初始化哈希，这也是编译器对小容量哈希做的优化：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">h</span> <span class="o">*</span><span class="nx">hmap</span>
+<span class="kd">var</span> <span class="nx">hv</span> <span class="nx">hmap</span>
+<span class="kd">var</span> <span class="nx">bv</span> <span class="nx">bmap</span>
+<span class="nx">h</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">hv</span>
+<span class="nx">b</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">bv</span>
+<span class="nx">h</span><span class="p">.</span><span class="nx">buckets</span> <span class="p">=</span> <span class="nx">b</span>
+<span class="nx">h</span><span class="p">.</span><span class="nx">hash0</span> <span class="p">=</span> <span class="nf">fashtrand0</span><span class="p">()</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>除了上述特定的优化之外，无论<code>make</code>是从哪里来的，只要我们使用<code>make</code>创建哈希，<code>Go</code>语言编译器都会在类型检查期间将它们转换成<code>runtime.makemap</code>，使用字面量初始化哈希也只是语言提供的辅助工具，最后调用的都是<code>runtime.makemap</code>：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">makemap</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">maptype</span><span class="p">,</span> <span class="nx">hint</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">h</span> <span class="o">*</span><span class="nx">hmap</span><span class="p">)</span> <span class="o">*</span><span class="nx">hmap</span> <span class="p">{</span>
+	<span class="nx">mem</span><span class="p">,</span> <span class="nx">overflow</span> <span class="o">:=</span> <span class="nx">math</span><span class="p">.</span><span class="nf">MulUintptr</span><span class="p">(</span><span class="nb">uintptr</span><span class="p">(</span><span class="nx">hint</span><span class="p">),</span> <span class="nx">t</span><span class="p">.</span><span class="nx">bucket</span><span class="p">.</span><span class="nx">size</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">overflow</span> <span class="o">||</span> <span class="nx">mem</span> <span class="p">&gt;</span> <span class="nx">maxAlloc</span> <span class="p">{</span>
+		<span class="nx">hint</span> <span class="p">=</span> <span class="mi">0</span>
+	<span class="p">}</span>
+
+	<span class="k">if</span> <span class="nx">h</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">h</span> <span class="p">=</span> <span class="nb">new</span><span class="p">(</span><span class="nx">hmap</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="nx">h</span><span class="p">.</span><span class="nx">hash0</span> <span class="p">=</span> <span class="nf">fastrand</span><span class="p">()</span>
+
+	<span class="nx">B</span> <span class="o">:=</span> <span class="nb">uint8</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+	<span class="k">for</span> <span class="nf">overLoadFactor</span><span class="p">(</span><span class="nx">hint</span><span class="p">,</span> <span class="nx">B</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">B</span><span class="o">++</span>
+	<span class="p">}</span>
+	<span class="nx">h</span><span class="p">.</span><span class="nx">B</span> <span class="p">=</span> <span class="nx">B</span>
+
+	<span class="k">if</span> <span class="nx">h</span><span class="p">.</span><span class="nx">B</span> <span class="o">!=</span> <span class="mi">0</span> <span class="p">{</span>
+		<span class="kd">var</span> <span class="nx">nextOverflow</span> <span class="o">*</span><span class="nx">bmap</span>
+		<span class="nx">h</span><span class="p">.</span><span class="nx">buckets</span><span class="p">,</span> <span class="nx">nextOverflow</span> <span class="p">=</span> <span class="nf">makeBucketArray</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">h</span><span class="p">.</span><span class="nx">B</span><span class="p">,</span> <span class="kc">nil</span><span class="p">)</span>
+		<span class="k">if</span> <span class="nx">nextOverflow</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+			<span class="nx">h</span><span class="p">.</span><span class="nx">extra</span> <span class="p">=</span> <span class="nb">new</span><span class="p">(</span><span class="nx">mapextra</span><span class="p">)</span>
+			<span class="nx">h</span><span class="p">.</span><span class="nx">extra</span><span class="p">.</span><span class="nx">nextOverflow</span> <span class="p">=</span> <span class="nx">nextOverflow</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="nx">h</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>这个函数会按下面的步骤执行：</p>
+<ul>
+<li>计算哈希占用的内存是否溢出或者超出能分配的最大值</li>
+<li>调用<code>runtime.fastrand</code>来获取一个随机的哈希种子</li>
+<li>根据传入的<code>hint</code>计算出最小需要的桶的数量</li>
+<li>使用<code>runtime.makeBucketArray</code>创建用于保存桶的数组</li>
+</ul>
+<h1 id="8读写原理">8.读写原理</h1>
+<h2 id="81-读取">8.1 读取</h2>
+<p>在编译的类型检查期间，<code>hash[key]</code>以及类似的操作都会被转换成哈希的<code>OINDEXMAP</code>操作，中间代码生成阶段会在<a href="https://github.com/golang/go/blob/41d8e61a6b9d8f9db912626eb2bbc535e929fefc/src/cmd/compile/internal/gc/walk.go#L411"><code>cmd/compile/internal/gc.walkexpr</code></a> 函数中将这些<code>OINDEXMAP</code>操作转换成如下的代码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">v</span>     <span class="o">:=</span> <span class="nx">hash</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="c1">// =&gt; v     := *mapaccess1(maptype, hash, &amp;key)
+</span><span class="c1"></span><span class="nx">v</span><span class="p">,</span> <span class="nx">ok</span> <span class="o">:=</span> <span class="nx">hash</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="c1">// =&gt; v, ok := mapaccess2(maptype, hash, &amp;key)
+</span></code></pre></td></tr></table>
+</div>
+</div><p>赋值语句左侧接收参数的个数会决定使用的运行时方法：</p>
+<ul>
+<li>当接受一个参数时，会使用 <code>runtime.mapaccess1</code>，该函数仅会返回一个指向目标值的指针；</li>
+<li>当接受两个参数时，会使用 <code>runtime.mapaccess2</code>，除了返回目标值之外，它还会返回一个用于表示当前键对应的值是否存在的 <code>bool</code> 值；</li>
+</ul>
+<blockquote>
+<p><code>runtime.mapaccess1</code> 会先通过哈希表设置的哈希函数、种子获取当前键对应的哈希，再通过 <code>runtime.bucketMask</code> 和 <code>runtime.add</code> 拿到该键值对所在的桶序号和哈希高位的 8 位数字</p>
+</blockquote>
+<p><code>runtime.mapaccess1</code>源码:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">mapaccess1</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">maptype</span><span class="p">,</span> <span class="nx">h</span> <span class="o">*</span><span class="nx">hmap</span><span class="p">,</span> <span class="nx">key</span> <span class="nx">unsafe</span><span class="p">.</span><span class="nx">Pointer</span><span class="p">)</span> <span class="nx">unsafe</span><span class="p">.</span><span class="nx">Pointer</span> <span class="p">{</span>
+	<span class="nx">alg</span> <span class="o">:=</span> <span class="nx">t</span><span class="p">.</span><span class="nx">key</span><span class="p">.</span><span class="nx">alg</span>
+  <span class="c1">// 获取当前键对应的哈希
+</span><span class="c1"></span>	<span class="nx">hash</span> <span class="o">:=</span> <span class="nx">alg</span><span class="p">.</span><span class="nf">hash</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nb">uintptr</span><span class="p">(</span><span class="nx">h</span><span class="p">.</span><span class="nx">hash0</span><span class="p">))</span>
+	<span class="nx">m</span> <span class="o">:=</span> <span class="nf">bucketMask</span><span class="p">(</span><span class="nx">h</span><span class="p">.</span><span class="nx">B</span><span class="p">)</span>
+  <span class="c1">// hash&amp;m计算出key应该位于哪一个桶中
+</span><span class="c1"></span>	<span class="nx">b</span> <span class="o">:=</span> <span class="p">(</span><span class="o">*</span><span class="nx">bmap</span><span class="p">)(</span><span class="nf">add</span><span class="p">(</span><span class="nx">h</span><span class="p">.</span><span class="nx">buckets</span><span class="p">,</span> <span class="p">(</span><span class="nx">hash</span><span class="o">&amp;</span><span class="nx">m</span><span class="p">)</span><span class="o">*</span><span class="nb">uintptr</span><span class="p">(</span><span class="nx">t</span><span class="p">.</span><span class="nx">bucketsize</span><span class="p">)))</span>
+  <span class="c1">// tophash（hash）计算出hash的前8位
+</span><span class="c1"></span>	<span class="nx">top</span> <span class="o">:=</span> <span class="nf">tophash</span><span class="p">(</span><span class="nx">hash</span><span class="p">)</span>
+<span class="nx">bucketloop</span><span class="p">:</span>
+	<span class="k">for</span> <span class="p">;</span> <span class="nx">b</span> <span class="o">!=</span> <span class="kc">nil</span><span class="p">;</span> <span class="nx">b</span> <span class="p">=</span> <span class="nx">b</span><span class="p">.</span><span class="nf">overflow</span><span class="p">(</span><span class="nx">t</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="nb">uintptr</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="nx">bucketCnt</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+      <span class="c1">// 与存储在桶中的tophash进行对比
+</span><span class="c1"></span>			<span class="k">if</span> <span class="nx">b</span><span class="p">.</span><span class="nx">tophash</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">!=</span> <span class="nx">top</span> <span class="p">{</span>
+				<span class="k">if</span> <span class="nx">b</span><span class="p">.</span><span class="nx">tophash</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">==</span> <span class="nx">emptyRest</span> <span class="p">{</span>
+					<span class="k">break</span> <span class="nx">bucketloop</span>
+				<span class="p">}</span>
+				<span class="k">continue</span>
+			<span class="p">}</span>
+			<span class="nx">k</span> <span class="o">:=</span> <span class="nf">add</span><span class="p">(</span><span class="nx">unsafe</span><span class="p">.</span><span class="nf">Pointer</span><span class="p">(</span><span class="nx">b</span><span class="p">),</span> <span class="nx">dataOffset</span><span class="o">+</span><span class="nx">i</span><span class="o">*</span><span class="nb">uintptr</span><span class="p">(</span><span class="nx">t</span><span class="p">.</span><span class="nx">keysize</span><span class="p">))</span>
+			<span class="k">if</span> <span class="nx">alg</span><span class="p">.</span><span class="nf">equal</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">k</span><span class="p">)</span> <span class="p">{</span>
+				<span class="nx">v</span> <span class="o">:=</span> <span class="nf">add</span><span class="p">(</span><span class="nx">unsafe</span><span class="p">.</span><span class="nf">Pointer</span><span class="p">(</span><span class="nx">b</span><span class="p">),</span> <span class="nx">dataOffset</span><span class="o">+</span><span class="nx">bucketCnt</span><span class="o">*</span><span class="nb">uintptr</span><span class="p">(</span><span class="nx">t</span><span class="p">.</span><span class="nx">keysize</span><span class="p">)</span><span class="o">+</span><span class="nx">i</span><span class="o">*</span><span class="nb">uintptr</span><span class="p">(</span><span class="nx">t</span><span class="p">.</span><span class="nx">valuesize</span><span class="p">))</span>
+				<span class="k">return</span> <span class="nx">v</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="nx">unsafe</span><span class="p">.</span><span class="nf">Pointer</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">zeroVal</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>在<code>bucketloop</code>循环中，哈希会依次遍历正常桶和溢出桶中的数据，它会先比较哈希的高 <code>8</code> 位和桶中存储的 <code>tophash</code>，<code>Go</code>语言采用了一种简单的方式<code>hash&amp;m</code>计算出<code>key</code>应该位于哪一个桶中。获取桶的位置后，<code>tophash（hash）</code>计算出<code>hash</code>的前<code>8</code>位。接着此<code>hash</code>挨个与存储在桶中的<code>tophash</code>进行对比。如果有<code>hash</code>值相同，则会找到此<code>hash</code>值对应的<code>key</code>值并判断是否相同。如果<code>key</code>值也相同，则说明查找到了结果，返回<code>value</code>。</p>
+<p>看图加深理解：</p>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/hashmap-mapaccess.png" alt="hashmap-mapaccess"></p>
+<p>如上图所示，每一个桶都是一整片的内存空间，当发现桶中的 <code>tophash</code> 与传入键的 <code>tophash</code> 匹配之后，我们会通过指针和偏移量获取哈希中存储的键 <code>keys[0]</code> 并与 <code>key</code> 比较，如果两者相同就会获取目标值的指针 <code>values[0]</code> 并返回。</p>
+<h2 id="82-写入">8.2 写入</h2>
+<p>当形如<code>hash[key]</code>的表达式出现在赋值符号左侧时，该表达式也会在编译期间转换成 <a href="https://github.com/golang/go/blob/ac0ba6707c1655ea4316b41d06571a0303cc60eb/src/runtime/map.go#L571"><code>runtime.mapassign</code></a> 函数的调用，该函数与 <a href="https://github.com/golang/go/blob/ac0ba6707c1655ea4316b41d06571a0303cc60eb/src/runtime/map.go#L394"><code>runtime.mapaccess1</code></a> 比较相似，我们将其分成几个部分依次分析，首先是函数会根据传入的键拿到对应的哈希和桶：
+<code>src/runtime/map.go:578</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">mapassign</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">maptype</span><span class="p">,</span> <span class="nx">h</span> <span class="o">*</span><span class="nx">hmap</span><span class="p">,</span> <span class="nx">key</span> <span class="nx">unsafe</span><span class="p">.</span><span class="nx">Pointer</span><span class="p">)</span> <span class="nx">unsafe</span><span class="p">.</span><span class="nx">Pointer</span> <span class="p">{</span>
+	<span class="nx">alg</span> <span class="o">:=</span> <span class="nx">t</span><span class="p">.</span><span class="nx">key</span><span class="p">.</span><span class="nx">alg</span>
+  <span class="c1">// 先计算key的hash值
+</span><span class="c1"></span>	<span class="nx">hash</span> <span class="o">:=</span> <span class="nx">alg</span><span class="p">.</span><span class="nf">hash</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nb">uintptr</span><span class="p">(</span><span class="nx">h</span><span class="p">.</span><span class="nx">hash0</span><span class="p">))</span>
+  <span class="c1">// 标记当前map是写入状态
+</span><span class="c1"></span>	<span class="nx">h</span><span class="p">.</span><span class="nx">flags</span> <span class="p">^=</span> <span class="nx">hashWriting</span>
+
+<span class="nx">again</span><span class="p">:</span>
+  <span class="c1">// 计算对应的桶
+</span><span class="c1"></span>	<span class="nx">bucket</span> <span class="o">:=</span> <span class="nx">hash</span> <span class="o">&amp;</span> <span class="nf">bucketMask</span><span class="p">(</span><span class="nx">h</span><span class="p">.</span><span class="nx">B</span><span class="p">)</span>
+	<span class="nx">b</span> <span class="o">:=</span> <span class="p">(</span><span class="o">*</span><span class="nx">bmap</span><span class="p">)(</span><span class="nx">unsafe</span><span class="p">.</span><span class="nf">Pointer</span><span class="p">(</span><span class="nb">uintptr</span><span class="p">(</span><span class="nx">h</span><span class="p">.</span><span class="nx">buckets</span><span class="p">)</span> <span class="o">+</span> <span class="nx">bucket</span><span class="o">*</span><span class="nb">uintptr</span><span class="p">(</span><span class="nx">t</span><span class="p">.</span><span class="nx">bucketsize</span><span class="p">)))</span>
+	<span class="nx">top</span> <span class="o">:=</span> <span class="nf">tophash</span><span class="p">(</span><span class="nx">hash</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>然后通过遍历比较桶中存储的 <code>tophash</code> 和键的哈希，如果找到了相同结果就会返回目标位置的地址，获得目标地址之后会通过算术计算寻址获得键值对 <code>k</code> 和 <code>val</code>：
+<code>src/runtime/map.go:619</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">//inserti 表示目标元素的在桶中的索引
+</span><span class="c1"></span><span class="kd">var</span> <span class="nx">inserti</span> <span class="o">*</span><span class="kt">uint8</span>
+<span class="c1">// insertk 和 val`分别表示键值对的地址
+</span><span class="c1"></span><span class="kd">var</span> <span class="nx">insertk</span> <span class="nx">unsafe</span><span class="p">.</span><span class="nx">Pointer</span>
+<span class="kd">var</span> <span class="nx">val</span> <span class="nx">unsafe</span><span class="p">.</span><span class="nx">Pointer</span>
+<span class="nx">bucketloop</span><span class="p">:</span>
+<span class="k">for</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="nb">uintptr</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="nx">bucketCnt</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+  <span class="c1">// 判断 tophash 是否相等
+</span><span class="c1"></span>        <span class="k">if</span> <span class="nx">b</span><span class="p">.</span><span class="nx">tophash</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">!=</span> <span class="nx">top</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="nf">isEmpty</span><span class="p">(</span><span class="nx">b</span><span class="p">.</span><span class="nx">tophash</span><span class="p">[</span><span class="nx">i</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="nx">inserti</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
+      <span class="c1">// 插入数据inserti，insertk会记录此空元素的位置
+</span><span class="c1"></span>                <span class="nx">inserti</span> <span class="p">=</span> <span class="o">&amp;</span><span class="nx">b</span><span class="p">.</span><span class="nx">tophash</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span>
+                <span class="nx">insertk</span> <span class="p">=</span> <span class="nf">add</span><span class="p">(</span><span class="nx">unsafe</span><span class="p">.</span><span class="nf">Pointer</span><span class="p">(</span><span class="nx">b</span><span class="p">),</span> <span class="nx">dataOffset</span><span class="o">+</span><span class="nx">i</span><span class="o">*</span><span class="nb">uintptr</span><span class="p">(</span><span class="nx">t</span><span class="p">.</span><span class="nx">keysize</span><span class="p">))</span>
+                <span class="nx">val</span> <span class="p">=</span> <span class="nf">add</span><span class="p">(</span><span class="nx">unsafe</span><span class="p">.</span><span class="nf">Pointer</span><span class="p">(</span><span class="nx">b</span><span class="p">),</span> <span class="nx">dataOffset</span><span class="o">+</span><span class="nx">bucketCnt</span><span class="o">*</span><span class="nb">uintptr</span><span class="p">(</span><span class="nx">t</span><span class="p">.</span><span class="nx">keysize</span><span class="p">)</span><span class="o">+</span><span class="nx">i</span><span class="o">*</span><span class="nb">uintptr</span><span class="p">(</span><span class="nx">t</span><span class="p">.</span><span class="nx">valuesize</span><span class="p">))</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="nx">b</span><span class="p">.</span><span class="nx">tophash</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">==</span> <span class="nx">emptyRest</span> <span class="p">{</span>
+                <span class="k">break</span> <span class="nx">bucketloop</span>
+            <span class="p">}</span>
+            <span class="k">continue</span>
+        <span class="p">}</span>
+        <span class="nx">k</span> <span class="o">:=</span> <span class="nf">add</span><span class="p">(</span><span class="nx">unsafe</span><span class="p">.</span><span class="nf">Pointer</span><span class="p">(</span><span class="nx">b</span><span class="p">),</span> <span class="nx">dataOffset</span><span class="o">+</span><span class="nx">i</span><span class="o">*</span><span class="nb">uintptr</span><span class="p">(</span><span class="nx">t</span><span class="p">.</span><span class="nx">keysize</span><span class="p">))</span>
+  <span class="c1">// key 是否相等
+</span><span class="c1"></span>        <span class="k">if</span> <span class="p">!</span><span class="nx">alg</span><span class="p">.</span><span class="nf">equal</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">k</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">continue</span>
+        <span class="p">}</span>
+        <span class="nx">val</span> <span class="p">=</span> <span class="nf">add</span><span class="p">(</span><span class="nx">unsafe</span><span class="p">.</span><span class="nf">Pointer</span><span class="p">(</span><span class="nx">b</span><span class="p">),</span> <span class="nx">dataOffset</span><span class="o">+</span><span class="nx">bucketCnt</span><span class="o">*</span><span class="nb">uintptr</span><span class="p">(</span><span class="nx">t</span><span class="p">.</span><span class="nx">keysize</span><span class="p">)</span><span class="o">+</span><span class="nx">i</span><span class="o">*</span><span class="nb">uintptr</span><span class="p">(</span><span class="nx">t</span><span class="p">.</span><span class="nx">valuesize</span><span class="p">))</span>
+        <span class="k">goto</span> <span class="nx">done</span>
+    <span class="p">}</span>
+    <span class="nx">ovf</span> <span class="o">:=</span> <span class="nx">b</span><span class="p">.</span><span class="nf">overflow</span><span class="p">(</span><span class="nx">t</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nx">ovf</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="k">break</span>
+    <span class="p">}</span>
+<span class="c1">// 溢出桶变量赋值给b,开始遍历溢出桶
+</span><span class="c1"></span>    <span class="nx">b</span> <span class="p">=</span> <span class="nx">ovf</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>桶满后存到溢出桶：</strong></p>
+<p>如果当前桶已经满了，哈希会调用 <a href="https://github.com/golang/go/blob/ac0ba6707c1655ea4316b41d06571a0303cc60eb/src/runtime/map.go#L245"><code>runtime.hmap.newoverflow</code></a> 创建新桶或者使用 <a href="https://github.com/golang/go/blob/41d8e61a6b9d8f9db912626eb2bbc535e929fefc/src/runtime/map.go#L115"><code>runtime.hmap</code></a> 预先在 <code>noverflow</code> 中创建好的桶来保存数据，新创建的桶不仅会被追加到已有桶的末尾，还会增加哈希表的 <code>noverflow</code> 计数器。
+<code>src/runtime/map.go:662</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go">	<span class="k">if</span> <span class="nx">inserti</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">newb</span> <span class="o">:=</span> <span class="nx">h</span><span class="p">.</span><span class="nf">newoverflow</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span>
+		<span class="nx">inserti</span> <span class="p">=</span> <span class="o">&amp;</span><span class="nx">newb</span><span class="p">.</span><span class="nx">tophash</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+		<span class="nx">insertk</span> <span class="p">=</span> <span class="nf">add</span><span class="p">(</span><span class="nx">unsafe</span><span class="p">.</span><span class="nf">Pointer</span><span class="p">(</span><span class="nx">newb</span><span class="p">),</span> <span class="nx">dataOffset</span><span class="p">)</span>
+		<span class="nx">val</span> <span class="p">=</span> <span class="nf">add</span><span class="p">(</span><span class="nx">insertk</span><span class="p">,</span> <span class="nx">bucketCnt</span><span class="o">*</span><span class="nb">uintptr</span><span class="p">(</span><span class="nx">t</span><span class="p">.</span><span class="nx">keysize</span><span class="p">))</span>
+	<span class="p">}</span>
+
+	<span class="nf">typedmemmove</span><span class="p">(</span><span class="nx">t</span><span class="p">.</span><span class="nx">key</span><span class="p">,</span> <span class="nx">insertk</span><span class="p">,</span> <span class="nx">key</span><span class="p">)</span>
+	<span class="o">*</span><span class="nx">inserti</span> <span class="p">=</span> <span class="nx">top</span>
+	<span class="nx">h</span><span class="p">.</span><span class="nx">count</span><span class="o">++</span>
+
+<span class="nx">done</span><span class="p">:</span>
+	<span class="k">return</span> <span class="nx">val</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Learn Go</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2023-07-12
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/go%E8%BF%9B%E9%98%B6/">Go进阶</a>
+          <a href="/tags/go%E5%BA%95%E5%B1%82%E6%8E%A2%E7%B4%A2/">Go底层探索</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/%E8%BF%9B%E9%98%B6%E7%AF%87/%E5%BA%95%E5%B1%82%E6%8E%A2%E7%B4%A2/03-%E5%88%87%E7%89%87/">
+            <span class="next-text nav-default">Go底层探索(三):切片</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/shershon1991" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/shershon520" class="iconfont icon-zhihu" title="zhihu"></a>
+  <a href="https://shershon1991.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2021 - 
+    2023<span class="heart"><i class="iconfont icon-heart"></i></span><span>Learn Go</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+<script>
+    docsearch({
+        apiKey: "9f0c02b55e9885568dcbf6ef094b433c",
+        indexName: "hugo",
+        appId: "TTENARPLYL",
+        inputSelector: '.docsearch-input',
+        debug: false,
+    });
+</script>
+</body>
+</html>
