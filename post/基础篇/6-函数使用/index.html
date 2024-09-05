@@ -44,12 +44,12 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/%E5%9F%BA%E7%A1%80%E7%AF%87/6-%E5%87%BD%E6%95%B0%E4%BD%BF%E7%94%A8/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-01-06T00:00:00+00:00" />
-<meta property="article:modified_time" content="2023-03-04T13:23:22+08:00" />
+<meta property="article:modified_time" content="2024-06-12T14:52:32+08:00" />
 
 <meta itemprop="name" content="Go学习(六):函数使用">
 <meta itemprop="description" content="1.函数申明 1.1 声明语法 1 2 3 4 5 func funcName( param type ) (output1 type1, output2 type2) { //这里是处理逻辑代码 //返回多个值 return value1, value2 } 1.2 语法解析 func: 函数关键字, funcName: 指函数名，在同一个"><meta itemprop="datePublished" content="2021-01-06T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2023-03-04T13:23:22+08:00" />
-<meta itemprop="wordCount" content="2214">
+<meta itemprop="dateModified" content="2024-06-12T14:52:32+08:00" />
+<meta itemprop="wordCount" content="2227">
 <meta itemprop="keywords" content="Go基础," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go学习(六):函数使用"/>
 <meta name="twitter:description" content="1.函数申明 1.1 声明语法 1 2 3 4 5 func funcName( param type ) (output1 type1, output2 type2) { //这里是处理逻辑代码 //返回多个值 return value1, value2 } 1.2 语法解析 func: 函数关键字, funcName: 指函数名，在同一个"/>
@@ -133,7 +133,7 @@
             <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
             <a href="/categories/go/"> Go </a>
             </div>
-          <span class="more-meta"> 约 2214 字 </span>
+          <span class="more-meta"> 约 2227 字 </span>
           <span class="more-meta"> 预计阅读 5 分钟 </span>
         
       </div>
@@ -180,7 +180,7 @@
         <li><a href="#51-语法">5.1 语法</a></li>
         <li><a href="#52-使用示例">5.2 使用示例</a>
           <ul>
-            <li><a href="#1-调用匿名函数">1. 调用匿名函数</a></li>
+            <li><a href="#1-匿名函数赋值给变量">1. 匿名函数赋值给变量</a></li>
             <li><a href="#2匿名函数当参数">2.匿名函数当参数</a></li>
           </ul>
         </li>
@@ -199,7 +199,7 @@
 </div>
   <div class="post-outdated">
     <div class="hint">
-      <p>【注意】最后更新于 <span class="timeago" datetime="2023-03-04T13:23:22" title="March 4, 2023">March 4, 2023</span>，文中内容可能已过时，请谨慎使用。</p>
+      <p>【注意】最后更新于 <span class="timeago" datetime="2024-06-12T14:52:32" title="June 12, 2024">June 12, 2024</span>，文中内容可能已过时，请谨慎使用。</p>
     </div>
   </div>
     <div class="post-content">
@@ -573,7 +573,7 @@
 </code></pre></td></tr></table>
 </div>
 </div><h2 id="52-使用示例">5.2 使用示例</h2>
-<h3 id="1-调用匿名函数">1. 调用匿名函数</h3>
+<h3 id="1-匿名函数赋值给变量">1. 匿名函数赋值给变量</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -631,8 +631,8 @@
 </span><span class="c1"></span>	<span class="nx">addFunc</span> <span class="o">:=</span> <span class="kd">func</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span> <span class="kt">int</span><span class="p">)</span><span class="kt">int</span><span class="p">{</span>
 		<span class="k">return</span> <span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span>
 	<span class="p">}</span>
-	<span class="c1">// 在定义一个匿名函数接收匿名函数作为参数；
-</span><span class="c1"></span>	<span class="c1">// 下面代码，相当于先定义匿名函数f，然后在调用匿名函数f(...)
+	<span class="c1">// 再定义一个匿名函数接收匿名函数作为参数；
+</span><span class="c1"></span>	<span class="c1">// 下面代码，相当于先定义匿名函数f，然后再调用匿名函数f(...)
 </span><span class="c1"></span>	<span class="nx">total</span> <span class="o">:=</span> <span class="kd">func</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span> <span class="kt">int</span><span class="p">,</span><span class="nx">f</span> <span class="kd">func</span><span class="p">(</span><span class="kt">int</span><span class="p">,</span><span class="kt">int</span><span class="p">)</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
 		<span class="k">return</span> <span class="nf">f</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span><span class="p">)</span>
 	<span class="p">}(</span><span class="mi">10</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="nx">addFunc</span><span class="p">)</span>
@@ -666,12 +666,18 @@
 </span><span class="lnt">11
 </span><span class="lnt">12
 </span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 
+<span class="kn">import</span> <span class="s">&#34;fmt&#34;</span>
+
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="nf">factorial</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+	<span class="nx">res</span> <span class="o">:=</span> <span class="nf">factorial</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;res:%d \n&#34;</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span>
 <span class="p">}</span>
 <span class="c1">// 递归实现num的阶乘
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">factorial</span><span class="p">(</span><span class="nx">num</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
@@ -696,7 +702,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2023-03-04
+        2024-06-12
         
     </span>
   </p>
@@ -753,7 +759,7 @@
   <span class="copyright-year">
     &copy; 
     2021 - 
-    2023<span class="heart"><i class="iconfont icon-heart"></i></span><span>Learn Go</span>
+    2024<span class="heart"><i class="iconfont icon-heart"></i></span><span>Learn Go</span>
   </span>
 </div>
 

@@ -44,12 +44,12 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/%E5%9F%BA%E7%A1%80%E7%AF%87/2-%E7%A8%8B%E5%BA%8F%E7%BB%93%E6%9E%84/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-01-02T00:00:00+00:00" />
-<meta property="article:modified_time" content="2023-03-04T13:23:23+08:00" />
+<meta property="article:modified_time" content="2024-06-11T15:22:45+08:00" />
 
 <meta itemprop="name" content="Go学习(二):程序组成结构及规范说明">
 <meta itemprop="description" content="1. 程序示例 以实际代码进行讲解: 1 2 3 4 5 6 7 8 9 10 11 12 package main // 这是引入包 import &#34;fmt&#34; // 入口函数 func main() { // 定义变量 str := &#34;hello word&#34; // 输出语句 fmt.Println(str) } 2. 程序组成 2.1 包名:"><meta itemprop="datePublished" content="2021-01-02T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2023-03-04T13:23:23+08:00" />
-<meta itemprop="wordCount" content="925">
+<meta itemprop="dateModified" content="2024-06-11T15:22:45+08:00" />
+<meta itemprop="wordCount" content="926">
 <meta itemprop="keywords" content="Go基础," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go学习(二):程序组成结构及规范说明"/>
 <meta name="twitter:description" content="1. 程序示例 以实际代码进行讲解: 1 2 3 4 5 6 7 8 9 10 11 12 package main // 这是引入包 import &#34;fmt&#34; // 入口函数 func main() { // 定义变量 str := &#34;hello word&#34; // 输出语句 fmt.Println(str) } 2. 程序组成 2.1 包名:"/>
@@ -133,7 +133,7 @@
             <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
             <a href="/categories/go/"> Go </a>
             </div>
-          <span class="more-meta"> 约 925 字 </span>
+          <span class="more-meta"> 约 926 字 </span>
           <span class="more-meta"> 预计阅读 2 分钟 </span>
         
       </div>
@@ -162,7 +162,7 @@
 </div>
   <div class="post-outdated">
     <div class="hint">
-      <p>【注意】最后更新于 <span class="timeago" datetime="2023-03-04T13:23:23" title="March 4, 2023">March 4, 2023</span>，文中内容可能已过时，请谨慎使用。</p>
+      <p>【注意】最后更新于 <span class="timeago" datetime="2024-06-11T15:22:45" title="June 11, 2024">June 11, 2024</span>，文中内容可能已过时，请谨慎使用。</p>
     </div>
   </div>
     <div class="post-content">
@@ -207,7 +207,7 @@
 <li>一个可执行程序有且仅有一个<code>main</code>包。</li>
 </ul>
 <h2 id="22-导入包-import--fmt">2.2 导入包: import  &ldquo;fmt&rdquo;</h2>
-<p><code>import</code>语句用于导入该程序所依赖的包。由于本示例程序用到了<code>Println()</code>函数，所以需要导入该函数所属的<code>fmt</code>包。<code>fmt</code>包实现了格式化<code>IO（输入/输出）</code>。</p>
+<p><code>import</code>语句用于导入该程序所依赖的包。由于本示例程序用到了<code>Println()</code>函数，所以需要导入该函数所属的<code>fmt</code>包。<code>fmt</code>包实现了 <code>格式化IO（输入/输出）</code>。</p>
 <p><strong>注意事项:</strong></p>
 <ul>
 <li>通过<code>import</code>关键字来导入其他<code>非main</code>包。</li>
@@ -216,13 +216,13 @@
 <h2 id="23-主函数-func-main">2.3 主函数: func main()</h2>
 <p><code>func main()</code>是程序入口。所有<code>Go</code>函数以关键字<code>func</code>开头，每一个可执行程序都必须包含<code>main()</code>函数，通常是程序启动后第一个执行的函数，<font color=red>如果有init()函数则会先执行init()函数。</font></p>
 <h2 id="24-注释">2.4 注释</h2>
-<p>注释就是对代码的功能进行解释，方便开发人员理解被注释的代码。Go 语言中有以下两种形式。</p>
+<p>注释就是对代码的功能进行解释，方便开发人员理解被注释的代码。<code>Go</code> 语言中有以下两种形式。</p>
 <ul>
-<li>单行注释： <code>// </code>。</li>
-<li>多行注释: <code> /**/</code>,不可以嵌套使用。</li>
+<li>单行注释： <code>//</code>。</li>
+<li>多行注释: <code>/**/</code>,不可以嵌套使用。</li>
 </ul>
 <h2 id="25-语句结束">2.5 语句结束</h2>
-<p><code>Go</code>语言中<font color=red>一行代表一个语句结束。</font>每个语句不需要像<code>C</code> 家族中的其它语言一样以分号<code>;</code> 结尾。</p>
+<p><code>Go</code>语言中<font color=red>一行代表一个语句结束。</font>每个语句不需要像 <code>C</code> 家族中的其它语言一样以分号<code>;</code> 结尾。</p>
 <p>如果打算将多个语句写在同一行，它们则必须使用分号<code>;</code>人为区分；<font color=red>但在实际开发中并不鼓励这种做法。</font></p>
 <h1 id="3-可见性规则">3. 可见性规则</h1>
 <p><code>Go</code>语言中，使用<code>大小写</code>来决定标识符（常量、变量、类型、接口、结构或函数）是否可以被外部包所调用。</p>
@@ -258,19 +258,19 @@
 ├── pkg
 └── src
     ├── app
-    │   ├── controller
-    │   │   └── String.go
-    │   ├── main.go
-    │   ├── model
-    │   ├── service
-    │   └── test
+    │    ├── controller
+    │    │ └── String.go
+    │    ├── main.go
+    │    ├── model
+    │    ├── service
+    │    └── test
     └── app2
-        ├── controller
-        │   └── String.go
-        ├── main.go
-        ├── model
-        ├── service
-        └── test
+         ├── controller
+         │ └── String.go
+         ├── main.go
+         ├── model
+         ├── service
+         └── test
 </code></pre></td></tr></table>
 </div>
 </div>
@@ -284,7 +284,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2023-03-04
+        2024-06-11
         
     </span>
   </p>
@@ -341,7 +341,7 @@
   <span class="copyright-year">
     &copy; 
     2021 - 
-    2023<span class="heart"><i class="iconfont icon-heart"></i></span><span>Learn Go</span>
+    2024<span class="heart"><i class="iconfont icon-heart"></i></span><span>Learn Go</span>
   </span>
 </div>
 

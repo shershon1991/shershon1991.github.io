@@ -44,12 +44,12 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/%E5%9F%BA%E7%A1%80%E7%AF%87/3-%E5%8F%98%E9%87%8F%E4%BD%BF%E7%94%A8/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-01-03T00:00:00+00:00" />
-<meta property="article:modified_time" content="2023-06-17T21:51:50+08:00" />
+<meta property="article:modified_time" content="2024-06-11T16:05:25+08:00" />
 
 <meta itemprop="name" content="Go学习(三):变量使用">
 <meta itemprop="description" content="1.变量分类 变量的本质是计算机分配的一小块内存，专门用于存放指定数据，在程序运行过程中该数值可以发生改变；当程序运行结束，存放该数据的内存就"><meta itemprop="datePublished" content="2021-01-03T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2023-06-17T21:51:50+08:00" />
-<meta itemprop="wordCount" content="471">
+<meta itemprop="dateModified" content="2024-06-11T16:05:25+08:00" />
+<meta itemprop="wordCount" content="488">
 <meta itemprop="keywords" content="Go基础," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go学习(三):变量使用"/>
 <meta name="twitter:description" content="1.变量分类 变量的本质是计算机分配的一小块内存，专门用于存放指定数据，在程序运行过程中该数值可以发生改变；当程序运行结束，存放该数据的内存就"/>
@@ -133,7 +133,7 @@
             <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
             <a href="/categories/go/"> Go </a>
             </div>
-          <span class="more-meta"> 约 471 字 </span>
+          <span class="more-meta"> 约 488 字 </span>
           <span class="more-meta"> 预计阅读 1 分钟 </span>
         
       </div>
@@ -159,7 +159,7 @@
 </div>
   <div class="post-outdated">
     <div class="hint">
-      <p>【注意】最后更新于 <span class="timeago" datetime="2023-06-17T21:51:50" title="June 17, 2023">June 17, 2023</span>，文中内容可能已过时，请谨慎使用。</p>
+      <p>【注意】最后更新于 <span class="timeago" datetime="2024-06-11T16:05:25" title="June 11, 2024">June 11, 2024</span>，文中内容可能已过时，请谨慎使用。</p>
     </div>
   </div>
     <div class="post-content">
@@ -172,7 +172,7 @@
 </ul>
 <h1 id="2-变量声明">2. 变量声明</h1>
 <h2 id="21-使用var关键字">2.1 使用var关键字</h2>
-<p><code>var 变量名 变量类型  = [变量值]</code></p>
+<p><code>var 变量名 变量类型 = [变量值]</code></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -183,6 +183,7 @@
 </span><span class="lnt">6
 </span><span class="lnt">7
 </span><span class="lnt">8
+</span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">//定义多个变量
@@ -192,8 +193,9 @@
 </span><span class="c1"></span><span class="kd">var</span> <span class="nx">vname1</span> <span class="kt">int</span> <span class="p">=</span> <span class="mi">1</span>
 
 <span class="c1">//同时初始化多个变量
-</span><span class="c1"></span><span class="kd">var</span> <span class="nx">vname1</span><span class="p">,</span><span class="nx">vname2</span><span class="p">,</span><span class="nx">vname3</span> <span class="p">=</span> <span class="nx">v1</span><span class="p">,</span><span class="nx">v2</span><span class="p">,</span><span class="nx">v3</span> 
-</code></pre></td></tr></table>
+</span><span class="c1"></span><span class="kd">var</span> <span class="nx">vname1</span><span class="p">,</span><span class="nx">vname2</span><span class="p">,</span><span class="nx">vname3</span> <span class="p">=</span> <span class="nx">v1</span><span class="p">,</span><span class="nx">v2</span><span class="p">,</span><span class="nx">v3</span>
+<span class="c1">// 示例: var a, b, c = 3, 4, &#34;foo&#34;
+</span></code></pre></td></tr></table>
 </div>
 </div><h2 id="22-使用-">2.2 使用 :=</h2>
 <div class="highlight"><div class="chroma">
@@ -249,16 +251,16 @@
 
 <span class="c1">// 声明多个常量
 </span><span class="c1"></span><span class="kd">const</span> <span class="p">(</span>
-  <span class="nx">i</span> <span class="p">=</span> <span class="mi">100</span><span class="p">,</span>
+  <span class="nx">i</span> <span class="p">=</span> <span class="mi">100</span>
   <span class="nx">pi</span> <span class="p">=</span> <span class="mf">3.14</span>
   <span class="nx">prex</span> <span class="p">=</span> <span class="s">&#34;Go_&#34;</span>
 <span class="p">)</span>
 
 <span class="c1">// 声明多个变量
 </span><span class="c1"></span><span class="kd">var</span> <span class="p">(</span>
-  <span class="nx">a</span> <span class="kt">int</span><span class="p">,</span>
-  <span class="nx">b</span> <span class="kt">string</span> <span class="p">=</span> <span class="s">&#34;hello&#34;</span><span class="p">,</span>
-  
+  <span class="nx">a</span> <span class="kt">int</span>
+  <span class="nx">b</span> <span class="kt">string</span> <span class="p">=</span> <span class="s">&#34;hello&#34;</span>
+  <span class="nx">c</span> <span class="kt">string</span> <span class="p">=</span> <span class="s">&#34;world&#34;</span>
 <span class="p">)</span>
 </code></pre></td></tr></table>
 </div>
@@ -283,7 +285,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2023-06-17
+        2024-06-11
         
     </span>
   </p>
@@ -340,7 +342,7 @@
   <span class="copyright-year">
     &copy; 
     2021 - 
-    2023<span class="heart"><i class="iconfont icon-heart"></i></span><span>Learn Go</span>
+    2024<span class="heart"><i class="iconfont icon-heart"></i></span><span>Learn Go</span>
   </span>
 </div>
 
