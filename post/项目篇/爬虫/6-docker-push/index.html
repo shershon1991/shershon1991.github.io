@@ -44,12 +44,12 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/%E9%A1%B9%E7%9B%AE%E7%AF%87/%E7%88%AC%E8%99%AB/6-docker-push/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-08-06T00:00:00+00:00" />
-<meta property="article:modified_time" content="2024-09-05T18:05:56+08:00" />
+<meta property="article:modified_time" content="2024-09-05T18:36:03+08:00" />
 
 <meta itemprop="name" content="基金分析系统(六):通过docker-compose项目部署">
 <meta itemprop="description" content="1.项目目录 1 2 3 4 5 6 7 8 9 10 ├── Dockerfile # dockerFile文件 ├── config-dev.yaml # dev环境配置文件 ├── config-local.yaml # 本地测试文件 ├── docker-compose.yaml # docker-"><meta itemprop="datePublished" content="2021-08-06T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2024-09-05T18:05:56+08:00" />
-<meta itemprop="wordCount" content="1211">
+<meta itemprop="dateModified" content="2024-09-05T18:36:03+08:00" />
+<meta itemprop="wordCount" content="1206">
 <meta itemprop="keywords" content="Go实战," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="基金分析系统(六):通过docker-compose项目部署"/>
 <meta name="twitter:description" content="1.项目目录 1 2 3 4 5 6 7 8 9 10 ├── Dockerfile # dockerFile文件 ├── config-dev.yaml # dev环境配置文件 ├── config-local.yaml # 本地测试文件 ├── docker-compose.yaml # docker-"/>
@@ -133,7 +133,7 @@
             <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
             <a href="/categories/go/"> Go </a>
             </div>
-          <span class="more-meta"> 约 1211 字 </span>
+          <span class="more-meta"> 约 1206 字 </span>
           <span class="more-meta"> 预计阅读 3 分钟 </span>
         
       </div>
@@ -230,11 +230,9 @@
 </span><span class="lnt">30
 </span><span class="lnt">31
 </span><span class="lnt">32
-</span><span class="lnt">33
-</span><span class="lnt">34
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-dockerfile" data-lang="dockerfile"><span class="k">FROM</span><span class="s"> golang:1.16.9-stretch AS builder</span><span class="err">
+<pre tabindex="0" class="chroma"><code class="language-dockerfile" data-lang="dockerfile"><span class="k">FROM</span><span class="s"> golang:1.18.3-stretch AS builder</span><span class="err">
 </span><span class="err">
 </span><span class="err"></span><span class="c"># 环境变量</span><span class="err">
 </span><span class="err"></span><span class="k">ENV</span> <span class="nv">GO111MODULE</span><span class="o">=</span>on <span class="se">\
@@ -250,21 +248,19 @@
 </span><span class="err"></span><span class="k">COPY</span> . .<span class="err">
 </span><span class="err">
 </span><span class="err"></span><span class="c"># 下载依赖</span><span class="err">
-</span><span class="err"></span><span class="k">RUN</span> go mod download<span class="err">
+</span><span class="err"></span><span class="k">RUN</span> go mod download <span class="se">\
+</span><span class="se"></span>    <span class="o">&amp;&amp;</span> go get shershon1991/fund-analye-system/service/crawl/fund <span class="se">\
+</span><span class="se"></span>    <span class="o">&amp;&amp;</span> go get github.com/gin-gonic/gin/binding@v1.7.2<span class="err">
 </span><span class="err">
 </span><span class="err"></span><span class="c"># 编译成二进制文件,二进制文件名：app</span><span class="err">
 </span><span class="err"></span><span class="k">RUN</span> go build -o app .<span class="err">
 </span><span class="err">
 </span><span class="err">
-</span><span class="err"></span><span class="c"># --------- 二阶段，构建一个小镜像 ---------</span><span class="err">
+</span><span class="err"></span><span class="c">### --------- 二阶段，构建一个小镜像 ---------</span><span class="err">
 </span><span class="err"></span><span class="k">FROM</span><span class="s"> shershon/go-env:stretch-slim</span><span class="err">
 </span><span class="err">
 </span><span class="err"></span><span class="c"># 项目目录</span><span class="err">
 </span><span class="err"></span><span class="k">WORKDIR</span><span class="s"> /www</span><span class="err">
-</span><span class="err">
-</span><span class="err"></span><span class="c">## 复制配置文件</span><span class="err">
-</span><span class="err"></span><span class="k">ARG</span> APP_ENV<span class="err">
-</span><span class="err"></span><span class="k">COPY</span> ./config-<span class="si">${</span><span class="nv">APP_ENV</span><span class="si">}</span>.yaml /www/config.yaml<span class="err">
 </span><span class="err">
 </span><span class="err"></span><span class="c"># 从builder镜像中把二进制文件/build/app 拷贝到当前目录</span><span class="err">
 </span><span class="err"></span><span class="k">COPY</span> --from<span class="o">=</span>builder /build/app /www<span class="err">
