@@ -44,12 +44,12 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shershon1991.github.io/post/%E9%A1%B9%E7%9B%AE%E7%AF%87/%E7%88%AC%E8%99%AB/6-docker-push/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2021-08-06T00:00:00+00:00" />
-<meta property="article:modified_time" content="2023-06-17T14:14:46+08:00" />
+<meta property="article:modified_time" content="2024-09-05T18:05:56+08:00" />
 
 <meta itemprop="name" content="基金分析系统(六):通过docker-compose项目部署">
 <meta itemprop="description" content="1.项目目录 1 2 3 4 5 6 7 8 9 10 ├── Dockerfile # dockerFile文件 ├── config-dev.yaml # dev环境配置文件 ├── config-local.yaml # 本地测试文件 ├── docker-compose.yaml # docker-"><meta itemprop="datePublished" content="2021-08-06T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2023-06-17T14:14:46+08:00" />
-<meta itemprop="wordCount" content="1395">
+<meta itemprop="dateModified" content="2024-09-05T18:05:56+08:00" />
+<meta itemprop="wordCount" content="1211">
 <meta itemprop="keywords" content="Go实战," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="基金分析系统(六):通过docker-compose项目部署"/>
 <meta name="twitter:description" content="1.项目目录 1 2 3 4 5 6 7 8 9 10 ├── Dockerfile # dockerFile文件 ├── config-dev.yaml # dev环境配置文件 ├── config-local.yaml # 本地测试文件 ├── docker-compose.yaml # docker-"/>
@@ -133,7 +133,7 @@
             <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
             <a href="/categories/go/"> Go </a>
             </div>
-          <span class="more-meta"> 约 1395 字 </span>
+          <span class="more-meta"> 约 1211 字 </span>
           <span class="more-meta"> 预计阅读 3 分钟 </span>
         
       </div>
@@ -167,11 +167,6 @@
 </nav>
   </div>
 </div>
-  <div class="post-outdated">
-    <div class="warn">
-      <p>【注意】最后更新于 <span class="timeago" datetime="2023-06-17T14:14:46" title="June 17, 2023">June 17, 2023</span>，文中内容可能已过时，请谨慎使用。</p>
-    </div>
-  </div>
     <div class="post-content">
       <h1 id="1项目目录">1.项目目录</h1>
 <div class="highlight"><div class="chroma">
@@ -262,7 +257,7 @@
 </span><span class="err">
 </span><span class="err">
 </span><span class="err"></span><span class="c"># --------- 二阶段，构建一个小镜像 ---------</span><span class="err">
-</span><span class="err"></span><span class="k">FROM</span><span class="s"> registry.cn-beijing.aliyuncs.com/liuqinghui/go-env:stretch-slim</span><span class="err">
+</span><span class="err"></span><span class="k">FROM</span><span class="s"> shershon/go-env:stretch-slim</span><span class="err">
 </span><span class="err">
 </span><span class="err"></span><span class="c"># 项目目录</span><span class="err">
 </span><span class="err"></span><span class="k">WORKDIR</span><span class="s"> /www</span><span class="err">
@@ -344,85 +339,7 @@ APP_PORT=8081
 </code></pre></td></tr></table>
 </div>
 </div><h1 id="5编译docker-compose-build">5.编译<code>docker-compose build</code></h1>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span><span class="lnt">27
-</span><span class="lnt">28
-</span><span class="lnt">29
-</span><span class="lnt">30
-</span><span class="lnt">31
-</span><span class="lnt">32
-</span><span class="lnt">33
-</span><span class="lnt">34
-</span><span class="lnt">35
-</span><span class="lnt">36
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">➜ docker-compose build
-WARNING: Some networks were defined but are not used by any service: backend
-Building app
-Step 1/11 : FROM golang:1.16.9-stretch AS builder
- ---&gt; 8a22bd5879d4
-Step 2/11 : ENV <span class="nv">GO111MODULE</span><span class="o">=</span>on     <span class="nv">CGO_ENABLED</span><span class="o">=</span><span class="m">0</span>     <span class="nv">GOOS</span><span class="o">=</span>linux     <span class="nv">GOARCH</span><span class="o">=</span>amd64     <span class="nv">GOPROXY</span><span class="o">=</span><span class="s2">&#34;https://goproxy.cn,direct&#34;</span>
- ---&gt; Using cache
- ---&gt; f1201d2611b7
-Step 3/11 : WORKDIR /build
- ---&gt; Using cache
- ---&gt; 7e157372b7c9
-Step 4/11 : COPY . .
- ---&gt; 515c90ffcd8d
-Step 5/11 : RUN go mod download
- ---&gt; Running in 0a52cfdd5444
-Removing intermediate container 0a52cfdd5444
- ---&gt; 6f5f983a8fd5
-Step 6/11 : RUN go build -o app .
- ---&gt; Running in a76302af8f8e
-Removing intermediate container a76302af8f8e
- ---&gt; 7195b4de462c
-Step 7/11 : FROM registry.cn-beijing.aliyuncs.com/liuqinghui/go-env:stretch-slim
- ---&gt; f9204dd33156
-Step 8/11 : WORKDIR /www
- ---&gt; Using cache
- ---&gt; b87192a29265
-Step 9/11 : ARG APP_ENV
- ---&gt; Using cache
- ---&gt; fad4cc8a171b
-Step 10/11 : COPY ./config-<span class="si">${</span><span class="nv">APP_ENV</span><span class="si">}</span>.yaml /www/config.yaml
- ---&gt; Using cache
- ---&gt; bc7e2bb9dfcb
-Step 11/11 : COPY --from<span class="o">=</span>builder /build/app /www
- ---&gt; 951dce0d6536
-Successfully built 951dce0d6536
-Successfully tagged fund-server_app:latest
-</code></pre></td></tr></table>
-</div>
-</div><h1 id="6运行docker-compose-up--d">6.运行<code>docker-compose up -d</code></h1>
+<h1 id="6运行docker-compose-up--d">6.运行<code>docker-compose up -d</code></h1>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -673,7 +590,7 @@ Redirecting to /bin/systemctl restart firewalld.service
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2023-06-17
+        2024-09-05
         
     </span>
   </p>
