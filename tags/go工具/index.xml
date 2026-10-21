@@ -4,44 +4,37 @@
     <title>Go工具 on Learn Go</title>
     <link>https://shershon1991.github.io/tags/go%E5%B7%A5%E5%85%B7/</link>
     <description>Recent content in Go工具 on Learn Go</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
     <language>en</language>
-    <lastBuildDate>Sat, 01 May 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://shershon1991.github.io/tags/go%E5%B7%A5%E5%85%B7/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 18 Jun 2023 13:35:20 +0800</lastBuildDate>
+    <atom:link href="https://shershon1991.github.io/tags/go%E5%B7%A5%E5%85%B7/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Go工具(四):性能调试利器pprof(三)</title>
       <link>https://shershon1991.github.io/post/%E5%B7%A5%E5%85%B7%E7%AF%87/04-pprof-3/</link>
       <pubDate>Sat, 01 May 2021 00:00:00 +0000</pubDate>
-      
       <guid>https://shershon1991.github.io/post/%E5%B7%A5%E5%85%B7%E7%AF%87/04-pprof-3/</guid>
-      <description>1. trace说明 在pprof的分析中，能够知道一段时间内的CPU占用、内存分配、协程堆栈信息。这些信息都是一段时间内数据的汇总，但是它们并没</description>
+      <description>&lt;h1 id=&#34;1-trace说明&#34;&gt;1. trace说明&lt;/h1&gt;&#xA;&lt;p&gt;在&lt;code&gt;pprof&lt;/code&gt;的分析中，能够知道一段时间内的&lt;code&gt;CPU&lt;/code&gt;占用、内存分配、协程堆栈信息。这些信息都是一段时间内数据的汇总，但是它们并没有提供整个周期内发生的事件，例如指定的&lt;code&gt;Goroutines&lt;/code&gt;何时执行、执行了多长时间、什么时候陷入了堵塞、什么时候解除了堵塞、&lt;code&gt;GC&lt;/code&gt;如何影响单个&lt;code&gt;Goroutine&lt;/code&gt;的执行、&lt;code&gt;STW&lt;/code&gt;中断花费的时间是否太长等。这就是在Go1.5之后推出的&lt;code&gt;trace&lt;/code&gt;工具的强大之处，它提供了指定时间内程序发生的事件的完整信息，这些事件信息包括：&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Go工具(三):性能调试利器pprof(二)</title>
       <link>https://shershon1991.github.io/post/%E5%B7%A5%E5%85%B7%E7%AF%87/03-pprof-2/</link>
       <pubDate>Fri, 30 Apr 2021 00:00:00 +0000</pubDate>
-      
       <guid>https://shershon1991.github.io/post/%E5%B7%A5%E5%85%B7%E7%AF%87/03-pprof-2/</guid>
-      <description>1. 调用图说明 1.1 示例图 1.2 节点颜色 红色代表累计值cum为正，并且很大； 绿色代表累计值cum为负，并且很大； 灰色代表累计值cum可以忽略不计。 1.3 节</description>
+      <description>&lt;h1 id=&#34;1-调用图说明&#34;&gt;1. 调用图说明&lt;/h1&gt;&#xA;&lt;h2 id=&#34;11-示例图&#34;&gt;1.1 示例图&lt;/h2&gt;&#xA;&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/image-20211116183312048.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;&#xA;&lt;h2 id=&#34;12-节点颜色&#34;&gt;1.2 节点颜色&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;红色代表累计值cum为正，并且很大；&lt;/li&gt;&#xA;&lt;li&gt;绿色代表累计值cum为负，并且很大；&lt;/li&gt;&#xA;&lt;li&gt;灰色代表累计值cum可以忽略不计。&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;13-节点字体大小&#34;&gt;1.3 节点字体大小&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;较大的字体表示较大的当前值；&lt;/li&gt;&#xA;&lt;li&gt;较小的字体表示较小的当前值。&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;14-边框颜色&#34;&gt;1.4 边框颜色&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;当前值较大并且为正数时为红色；&lt;/li&gt;&#xA;&lt;li&gt;当前值较小并且为负数时为绿色；&lt;/li&gt;&#xA;&lt;li&gt;接近0的当前值为灰色。&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;15-箭头大小&#34;&gt;1.5 箭头大小&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;箭头&lt;strong&gt;越粗&lt;/strong&gt;代表当前的路径消耗了越多的资源；&lt;/li&gt;&#xA;&lt;li&gt;箭头越细代表当前的路径消耗了越少的资源。&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;16-箭头类型&#34;&gt;1.6 箭头类型&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;strong&gt;虚线&lt;/strong&gt;箭头表示两个节点之间的某些节点已被忽略，为间接调用；&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;实线&lt;/strong&gt;箭头表示两个节点之间为直接调用。&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h1 id=&#34;2-火焰图说明&#34;&gt;2. 火焰图说明&lt;/h1&gt;&#xA;&lt;h2 id=&#34;21-示例图&#34;&gt;2.1 示例图&lt;/h2&gt;&#xA;&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/image-20211116190502651.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Go工具(二):性能调试利器pprof(一)</title>
       <link>https://shershon1991.github.io/post/%E5%B7%A5%E5%85%B7%E7%AF%87/02-pprof/</link>
       <pubDate>Thu, 29 Apr 2021 00:00:00 +0000</pubDate>
-      
       <guid>https://shershon1991.github.io/post/%E5%B7%A5%E5%85%B7%E7%AF%87/02-pprof/</guid>
-      <description>1. 介绍 Go语言中的pprof指对于指标或特征的分析（Profiling），通过分析不仅可以查找到程序中的错误（内存泄漏、race冲突、协程泄</description>
+      <description>&lt;h1 id=&#34;1-介绍&#34;&gt;1. 介绍&lt;/h1&gt;&#xA;&lt;p&gt;&lt;code&gt;Go&lt;/code&gt;语言中的&lt;code&gt;pprof&lt;/code&gt;指对于指标或特征的分析（&lt;code&gt;Profiling&lt;/code&gt;），通过分析不仅可以查找到程序中的错误（内存泄漏、race冲突、协程泄漏），也能对程序进行优化（例如CPU利用率不足）。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Go工具(一):gvm</title>
       <link>https://shershon1991.github.io/post/%E5%B7%A5%E5%85%B7%E7%AF%87/01-gvm/</link>
       <pubDate>Mon, 01 Mar 2021 00:00:00 +0000</pubDate>
-      
       <guid>https://shershon1991.github.io/post/%E5%B7%A5%E5%85%B7%E7%AF%87/01-gvm/</guid>
-      <description>1. 什么是Gvm Go 语言版本管理器（Gvm）是管理 Go 语言环境的开源工具。Gvm 「pkgsets」 支持安装多个版本的 Go 并管理每个项目的模块。它最初</description>
+      <description>&lt;h2 id=&#34;1-什么是gvm&#34;&gt;1. 什么是Gvm&lt;/h2&gt;&#xA;&lt;p&gt;&lt;code&gt;Go&lt;/code&gt; 语言版本管理器（&lt;code&gt;Gvm&lt;/code&gt;）是管理 &lt;code&gt;Go&lt;/code&gt; 语言环境的开源工具。&lt;code&gt;Gvm 「pkgsets」&lt;/code&gt; 支持安装多个版本的 &lt;code&gt;Go&lt;/code&gt; 并管理每个项目的模块。它最初由 &lt;code&gt;Josh Bussdieker&lt;/code&gt; 开发，&lt;code&gt;Gvm&lt;/code&gt; 与 &lt;code&gt;Ruby RVM&lt;/code&gt; 类似，允许你为每个项目或一组项目创建一个开发环境，分离不同的 &lt;code&gt;Go&lt;/code&gt; 版本和包依赖关系，来提供更大的灵活性，以防不同版本造成的问题。&lt;code&gt;Gvm&lt;/code&gt; 主要有以下几个特性：&lt;/p&gt;</description>
     </item>
-    
   </channel>
 </rss>

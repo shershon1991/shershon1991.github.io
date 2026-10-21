@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Learn Go</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="" /><meta name="description" content="Learn Go" /><meta name="keywords" content="博客, Learn Go, hugo" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.160.1 with theme even" />
+
+
+<link rel="canonical" href="https://shershon1991.github.io/" />
+  <link href="https://shershon1991.github.io/index.xml" rel="alternate" type="application/rss+xml" title="Learn Go" />
+  <link href="https://shershon1991.github.io/index.xml" rel="feed" type="application/rss+xml" title="Learn Go" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.af7fd1da18d66c2b017df5b4cae508ef44cfcac3fb4c7c7a327fe4f4f9e28b08.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:url" content="https://shershon1991.github.io/">
+  <meta property="og:site_name" content="Learn Go">
+  <meta property="og:title" content="Learn Go">
+  <meta property="og:description" content="Learn Go">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="website">
+
+  <meta itemprop="name" content="Learn Go">
+  <meta itemprop="description" content="Learn Go">
+  <meta itemprop="datePublished" content="2023-07-13T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2026-10-21T14:53:25+08:00">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Learn Go">
+  <meta name="twitter:description" content="Learn Go">
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Learn Go</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">首页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Learn Go</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">首页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <section id="posts" class="posts">
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/%E6%89%A9%E5%B1%95%E5%8C%85/5-crypto-rsa/">Go扩展包(五):crypto-rsa</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2021-04-17 </span>
+      <div class="post-category">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+          <a href="/categories/go/"> Go </a>
+          </div>
+        <span class="more-meta"> 1828 words </span>
+        <span class="more-meta"> 4 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <h3 id="1-维基百科释义">1. 维基百科释义</h3>
+<p><strong>RSA加密算法</strong>是一种<a href="https://zh.wikipedia.org/wiki/%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86%E6%BC%94%E7%AE%97%E6%B3%95">非对称加密算法</a>，在<a href="https://zh.wikipedia.org/wiki/%E5%85%AC%E5%BC%80%E5%AF%86%E9%92%A5%E5%8A%A0%E5%AF%86">公开密钥加密</a>和<a href="https://zh.wikipedia.org/wiki/%E7%94%B5%E5%AD%90%E5%95%86%E4%B8%9A">电子商业</a>中被广泛使用。RSA是由<a href="https://zh.wikipedia.org/wiki/%E7%BD%97%E7%BA%B3%E5%BE%B7%C2%B7%E6%9D%8E%E7%BB%B4%E6%96%AF%E7%89%B9">罗纳德·李维斯特</a>（Ron Rivest）、<a href="https://zh.wikipedia.org/wiki/%E9%98%BF%E8%BF%AA%C2%B7%E8%90%A8%E8%8E%AB%E5%B0%94">阿迪·萨莫尔</a>（Adi Shamir）和<a href="https://zh.wikipedia.org/wiki/%E4%BC%A6%E7%BA%B3%E5%BE%B7%C2%B7%E9%98%BF%E5%BE%B7%E6%9B%BC">伦纳德·阿德曼</a>（Leonard Adleman）在1977年一起提出的。当时他们三人都在<a href="https://zh.wikipedia.org/wiki/%E9%BA%BB%E7%9C%81%E7%90%86%E5%B7%A5%E5%AD%A6%E9%99%A2">麻省理工学院</a>工作。RSA 就是他们三人姓氏开头字母拼在一起组成的。</p>
+    </div>
+    <div class="read-more">
+      <a href="/post/%E6%89%A9%E5%B1%95%E5%8C%85/5-crypto-rsa/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/%E6%89%A9%E5%B1%95%E5%8C%85/4-crypto-aes/">Go扩展包(四):crypto-aes</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2021-04-16 </span>
+      <div class="post-category">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+          <a href="/categories/go/"> Go </a>
+          </div>
+        <span class="more-meta"> 3909 words </span>
+        <span class="more-meta"> 8 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <h3 id="1介绍">1.介绍</h3>
+<p><strong>高级加密标准</strong>（英语：<strong>A</strong>dvanced <strong>E</strong>ncryption <strong>S</strong>tandard，<a href="https://zh.wikipedia.org/wiki/%E7%BC%A9%E5%86%99">缩写</a>：AES），又称<strong>Rijndael加密法</strong>（荷兰语发音：[<a href="https://zh.wikipedia.org/wiki/Help:%E8%8D%B7%E8%98%AD%E8%AA%9E%E5%9C%8B%E9%9A%9B%E9%9F%B3%E6%A8%99">ˈrɛindaːl]</a>，音似英文的“Rhine doll”），是<a href="https://zh.wikipedia.org/wiki/%E7%BE%8E%E5%9B%BD%E8%81%94%E9%82%A6%E6%94%BF%E5%BA%9C">美国联邦政府</a>采用的一种<a href="https://zh.wikipedia.org/wiki/%E5%8D%80%E5%A1%8A%E5%8A%A0%E5%AF%86">区块加密</a>标准。这个标准用来替代原先的<a href="https://zh.wikipedia.org/wiki/DES">DES</a>，已经被多方分析且广为全世界所使用。经过五年的甄选流程，高级加密标准由<a href="https://zh.wikipedia.org/wiki/%E7%BE%8E%E5%9B%BD%E5%9B%BD%E5%AE%B6%E6%A0%87%E5%87%86%E4%B8%8E%E6%8A%80%E6%9C%AF%E7%A0%94%E7%A9%B6%E9%99%A2">美国国家标准与技术研究院</a>（NIST）于2001年11月26日发布于FIPS PUB 197，并在2002年5月26日成为有效的标准。现在，高级加密标准已然成为<a href="https://zh.wikipedia.org/wiki/%E5%AF%B9%E7%A7%B0%E5%AF%86%E9%92%A5%E5%8A%A0%E5%AF%86">对称密钥加密</a>中最流行的<a href="https://zh.wikipedia.org/wiki/%E6%BC%94%E7%AE%97%E6%B3%95">算法</a>之一。</p>
+    </div>
+    <div class="read-more">
+      <a href="/post/%E6%89%A9%E5%B1%95%E5%8C%85/4-crypto-aes/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/%E6%A0%87%E5%87%86%E5%8C%85/12-os/">Go标准包(十二):os</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2021-04-15 </span>
+      <div class="post-category">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+          <a href="/categories/go/"> Go </a>
+          </div>
+        <span class="more-meta"> 2523 words </span>
+        <span class="more-meta"> 6 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <h3 id="1介绍">1.介绍</h3>
+<p><code>os</code>包中提供了操作系统函数的接口，是一个比较重要的包。它的作用主要是在服务器上进行系统的基本操作，如文件操作、目录操作、执行命令、信号与中断、进程、系统状态等等。下面分模块归纳一些常用函数。</p>
+    </div>
+    <div class="read-more">
+      <a href="/post/%E6%A0%87%E5%87%86%E5%8C%85/12-os/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/%E6%89%A9%E5%B1%95%E5%8C%85/3-bigcache/">Go扩展包(三):bigCache</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2021-04-14 </span>
+      <div class="post-category">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+          <a href="/categories/go/"> Go </a>
+          </div>
+        <span class="more-meta"> 2098 words </span>
+        <span class="more-meta"> 5 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <h3 id="1-介绍">1. 介绍</h3>
+<p><code>BigCache</code> 是一个快速，支持并发访问，自淘汰的内存型缓存，可以在存储大量元素的同时依然保持高性能。<code>BigCache</code>将元素保存在堆上却避免了<code>GC</code>的开销。<a href="https://github.com/allegro/bigcache">源码地址:https://github.com/allegro/bigcache</a></p>
+    </div>
+    <div class="read-more">
+      <a href="/post/%E6%89%A9%E5%B1%95%E5%8C%85/3-bigcache/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/%E6%89%A9%E5%B1%95%E5%8C%85/2-zap/">Go扩展包(二):zap</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2021-04-13 </span>
+      <div class="post-category">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+          <a href="/categories/go/"> Go </a>
+          </div>
+        <span class="more-meta"> 4425 words </span>
+        <span class="more-meta"> 9 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <h3 id="1介绍">1.介绍</h3>
+<p><code>Zap</code>是<code>uber</code>开源的日志库，支持日志级别分级 、结构化记录，对性能和内存分配做了极致的优化。<a href="https://github.com/uber-go/zap">目前 Star 12.8 源码地址: https://github.com/uber-go/zap</a></p>
+<p><strong>官方性能测试图</strong></p>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/20210618164446.png" alt=""></p>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/20210618164425.png" alt=""></p>
+<h3 id="2安装">2.安装</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="k">go</span><span class="w"> </span><span class="nx">get</span><span class="w"> </span><span class="o">-</span><span class="nx">u</span><span class="w"> </span><span class="k">go</span><span class="p">.</span><span class="nx">uber</span><span class="p">.</span><span class="nx">org</span><span class="o">/</span><span class="nx">zap</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="3日志记录器">3.日志记录器</h3>
+<p><code>Zap</code>提供了两种类型的日志记录器: <code>SugaredLogger</code>和<code>Logger</code>,两者对比如下：</p>
+    </div>
+    <div class="read-more">
+      <a href="/post/%E6%89%A9%E5%B1%95%E5%8C%85/2-zap/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/%E6%A0%87%E5%87%86%E5%8C%85/11-unicode/">Go标准包(十一):unicode</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2021-04-12 </span>
+      <div class="post-category">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+          <a href="/categories/go/"> Go </a>
+          </div>
+        <span class="more-meta"> 909 words </span>
+        <span class="more-meta"> 2 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <h3 id="1介绍">1.介绍</h3>
+<p><code>unicode</code>包提供了诸多处理<code>rune</code>字符相关功能的函数（比如区分字母和数字，或者是字母的大写和小写转换等)</p>
+<h3 id="2判断函数">2.判断函数</h3>
+<h4 id="21-是否为空格isspace">2.1 是否为空格(<code>IsSpace</code>)</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="nf">TestJudge</span><span class="p">(</span><span class="nx">t</span><span class="w"> </span><span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">rune1</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="sc">&#39; &#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">rune2</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="sc">&#39;h&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;[%c] 是空格? %t\n&#34;</span><span class="p">,</span><span class="nx">rune1</span><span class="p">,</span><span class="nx">unicode</span><span class="p">.</span><span class="nf">IsSpace</span><span class="p">(</span><span class="nx">rune1</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c1">// 输出 [ ] 是空格? true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;[%c] 是空格? %t\n&#34;</span><span class="p">,</span><span class="nx">rune2</span><span class="p">,</span><span class="nx">unicode</span><span class="p">.</span><span class="nf">IsSpace</span><span class="p">(</span><span class="nx">rune2</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c1">// 输出 [h] 是空格? false</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="22-是否为十进制数isdigit">2.2 是否为十进制数(<code>IsDigit</code>)</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="nx">d1</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="sc">&#39;1&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">d2</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="sc">&#39;w&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;[%c] 是十进制数? %t\n&#34;</span><span class="p">,</span><span class="nx">d1</span><span class="p">,</span><span class="nx">unicode</span><span class="p">.</span><span class="nf">IsDigit</span><span class="p">(</span><span class="nx">d1</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 输出: [1] 是十进制数? true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;[%c] 是十进制数? %t\n&#34;</span><span class="p">,</span><span class="nx">d2</span><span class="p">,</span><span class="nx">unicode</span><span class="p">.</span><span class="nf">IsDigit</span><span class="p">(</span><span class="nx">d2</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 输出: [w] 是十进制数? false</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="23-是否为数字isnumber">2.3 是否为数字(<code>IsNumber</code>)</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="nx">d1</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="sc">&#39;1&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">d2</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="sc">&#39;w&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;[%c] 是数字? %t\n&#34;</span><span class="p">,</span><span class="nx">d1</span><span class="p">,</span><span class="nx">unicode</span><span class="p">.</span><span class="nf">IsNumber</span><span class="p">(</span><span class="nx">d1</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 输出: [1] 是数字? true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;[%c] 是数字? %t\n&#34;</span><span class="p">,</span><span class="nx">d2</span><span class="p">,</span><span class="nx">unicode</span><span class="p">.</span><span class="nf">IsNumber</span><span class="p">(</span><span class="nx">d2</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 输出: [w] 是数字? false</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="24-是否为字母字符isletter">2.4 是否为字母字符(<code>IsLetter</code>)</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// 是否为字母字符</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">str1</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="sc">&#39;刘&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">str2</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="sc">&#39;l&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">str3</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="sc">&#39;W&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">str4</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="sc">&#39;!&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;[%c] 是字母? %t\n&#34;</span><span class="p">,</span><span class="nx">str1</span><span class="p">,</span><span class="nx">unicode</span><span class="p">.</span><span class="nf">IsLetter</span><span class="p">(</span><span class="nx">str1</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">// [刘] 是字母? true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;[%c] 是字母? %t\n&#34;</span><span class="p">,</span><span class="nx">str2</span><span class="p">,</span><span class="nx">unicode</span><span class="p">.</span><span class="nf">IsLetter</span><span class="p">(</span><span class="nx">str2</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">// [l] 是字母? true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;[%c] 是字母? %t\n&#34;</span><span class="p">,</span><span class="nx">str3</span><span class="p">,</span><span class="nx">unicode</span><span class="p">.</span><span class="nf">IsLetter</span><span class="p">(</span><span class="nx">str3</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">// [W] 是字母? true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;[%c] 是字母? %t\n&#34;</span><span class="p">,</span><span class="nx">str4</span><span class="p">,</span><span class="nx">unicode</span><span class="p">.</span><span class="nf">IsLetter</span><span class="p">(</span><span class="nx">str4</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">// [!] 是字母? false</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><font color=red>@注意: 汉字也是一个字母字符</font></p>
+    </div>
+    <div class="read-more">
+      <a href="/post/%E6%A0%87%E5%87%86%E5%8C%85/11-unicode/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/%E6%A0%87%E5%87%86%E5%8C%85/10-sort/">Go标准包(十):sort</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2021-04-11 </span>
+      <div class="post-category">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+          <a href="/categories/go/"> Go </a>
+          </div>
+        <span class="more-meta"> 2082 words </span>
+        <span class="more-meta"> 5 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <h3 id="1介绍">1.介绍</h3>
+<p><code>sort</code>包实现了四种基本排序算法：<code>插入排序、归并排序、堆排序、快速排序</code>。 但是这四种排序方法是不公开的，它们只能在<code> sort</code> 包内部使用。<code>sort</code> 包会根据实际数据自动选择高效的排序算法，所以在对数据集合排序时不必考虑应当选择哪一种排序方法，只要实现了 <code>sort.Interface</code> 定义的三个方法,就可以顺利对数据集合进行排序：</p>
+    </div>
+    <div class="read-more">
+      <a href="/post/%E6%A0%87%E5%87%86%E5%8C%85/10-sort/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/%E6%89%A9%E5%B1%95%E5%8C%85/1-viper/">Go扩展包(一):viper</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2021-04-10 </span>
+      <div class="post-category">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+          <a href="/categories/go/"> Go </a>
+          </div>
+        <span class="more-meta"> 2168 words </span>
+        <span class="more-meta"> 5 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <h3 id="1介绍">1.介绍</h3>
+<p><a href="https://github.com/spf13/viper">Viper</a>是适用于Go应用程序（包括<a href="https://12factor.net/zh_cn/">Twelve-Factor App</a>）的完整配置解决方案。它被设计用于在应用程序中工作，并且可以处理所有类型的配置需求和格式。目前<code>Star 15.8k</code>,它支持以下特性：</p>
+<ul>
+<li>设置默认值</li>
+<li>从<code>JSON</code>、<code>TOML</code>、<code>YAML</code>、<code>HCL</code>、<code>envfile</code>和<code>Java properties</code>格式的配置文件读取配置信息</li>
+<li>实时监控和重新读取配置文件（可选）</li>
+<li>从环境变量中读取</li>
+<li>从远程配置系统（<code>etcd</code>或<code>Consul</code>）读取并监控配置变化</li>
+<li>从命令行参数读取配置</li>
+<li>从<code>buffer</code>读取配置</li>
+<li>显式配置值</li>
+</ul>
+<h3 id="2安装">2.安装</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="k">go</span><span class="w"> </span><span class="nx">get</span><span class="w"> </span><span class="nx">github</span><span class="p">.</span><span class="nx">com</span><span class="o">/</span><span class="nx">spf13</span><span class="o">/</span><span class="nx">viper</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="3-读取yaml">3. 读取<code>yaml</code></h3>
+<p><code>viper</code>可以解析<code>JSON</code>、<code>TOML</code>、<code>YAML</code>、<code>HCL</code>、<code>envfile</code>、<code>properties</code>多种格式的配置文件,这里只演示<code>yaml</code>格式的解析,其他格式与此类似。</p>
+    </div>
+    <div class="read-more">
+      <a href="/post/%E6%89%A9%E5%B1%95%E5%8C%85/1-viper/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/%E6%A0%87%E5%87%86%E5%8C%85/9-flag/">Go标准包(九):flag</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2021-04-09 </span>
+      <div class="post-category">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+          <a href="/categories/go/"> Go </a>
+          </div>
+        <span class="more-meta"> 1934 words </span>
+        <span class="more-meta"> 4 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <h3 id="1介绍">1.介绍</h3>
+<p>在 <code>Go</code>中，如果要接收命令行参数，需要使用 <code>flag</code>包进行解析。不同的参数类型可以通过不同的方法接收。</p>
+<h3 id="2参数接受">2.参数接受</h3>
+<h4 id="21-接受方式">2.1 接受方式</h4>
+<p>使用<code>flag</code>接收参数，可以由以下三种方式接受：</p>
+    </div>
+    <div class="read-more">
+      <a href="/post/%E6%A0%87%E5%87%86%E5%8C%85/9-flag/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/%E6%A0%87%E5%87%86%E5%8C%85/8-sync/">Go标准包(八):sync</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2021-04-08 </span>
+      <div class="post-category">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+          <a href="/categories/go/"> Go </a>
+          </div>
+        <span class="more-meta"> 6637 words </span>
+        <span class="more-meta"> 14 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <h3 id="1介绍">1.介绍</h3>
+<p><code>sync</code>包提供了互斥锁。除了<code>Once</code>和<code>WaitGroup</code>类型，其余多数适用于低水平的程序，多数情况下，高水平的同步使用<code>channel</code>通信性能会更优一些。</p>
+    </div>
+    <div class="read-more">
+      <a href="/post/%E6%A0%87%E5%87%86%E5%8C%85/8-sync/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
+    </section>
+  
+  <nav class="pagination">
+    <a class="prev" href="/page/6/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text">Prev</span>
+      </a>
+    <a class="next" href="/page/8/">
+        <span class="next-text">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+  </nav>
+        </div>
+        
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/shershon1991" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/shershon520" class="iconfont icon-zhihu" title="zhihu"></a>
+  
+    <a href="/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+  
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2021 - 
+    2026<span class="heart"><i class="iconfont icon-heart"></i></span><span></span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.min.js" integrity="sha256-jwCP0NAdCBloaIWTWHmW4i3snUNMHUNO+jr9rYd2iOI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.locales.min.js" integrity="sha256-ZwofwC1Lf/faQCzN7nZtfijVV6hSwxjQMwXL4gn9qU8=" crossorigin="anonymous"></script>
+  <script>
+    var languageCode = "en".replace(/-/g, '_').replace(/_(.*)/, function ($0, $1) {return $0.replace($1, $1.toUpperCase());});
+    timeago().render(document.querySelectorAll('.timeago'), languageCode);
+    timeago.cancel();  
+  </script>
+
+
+
+<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

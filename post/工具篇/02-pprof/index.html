@@ -16,14 +16,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="Learn Go" /><meta name="description" content="1. 介绍 Go语言中的pprof指对于指标或特征的分析（Profiling），通过分析不仅可以查找到程序中的错误（内存泄漏、race冲突、协程泄" /><meta name="keywords" content="博客, Learn Go, hugo" />
+<meta name="author" content="" /><meta name="description" content="1. 介绍 Go语言中的pprof指对于指标或特征的分析（Profiling），通过分析不仅可以查找到程序中的错误（内存泄漏、race冲突、协程泄漏），也能对程序进行优化（例如CPU利用率不足）。
+" /><meta name="keywords" content="博客, Learn Go, hugo" />
 
 
 
 
 
 
-<meta name="generator" content="Hugo 0.90.1 with theme even" />
+<meta name="generator" content="Hugo 0.160.1 with theme even" />
 
 
 <link rel="canonical" href="https://shershon1991.github.io/post/%E5%B7%A5%E5%85%B7%E7%AF%87/02-pprof/" />
@@ -35,24 +36,30 @@
 
 
 
-<link href="/sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link href="/sass/main.min.af7fd1da18d66c2b017df5b4cae508ef44cfcac3fb4c7c7a327fe4f4f9e28b08.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
-<meta property="og:title" content="Go工具(二):性能调试利器pprof(一)" />
-<meta property="og:description" content="1. 介绍 Go语言中的pprof指对于指标或特征的分析（Profiling），通过分析不仅可以查找到程序中的错误（内存泄漏、race冲突、协程泄" />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://shershon1991.github.io/post/%E5%B7%A5%E5%85%B7%E7%AF%87/02-pprof/" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2021-04-29T00:00:00+00:00" />
-<meta property="article:modified_time" content="2023-06-18T12:29:24+08:00" />
+<meta property="og:url" content="https://shershon1991.github.io/post/%E5%B7%A5%E5%85%B7%E7%AF%87/02-pprof/">
+  <meta property="og:site_name" content="Learn Go">
+  <meta property="og:title" content="Go工具(二):性能调试利器pprof(一)">
+  <meta property="og:description" content="1. 介绍 Go语言中的pprof指对于指标或特征的分析（Profiling），通过分析不仅可以查找到程序中的错误（内存泄漏、race冲突、协程泄漏），也能对程序进行优化（例如CPU利用率不足）。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2021-04-29T00:00:00+00:00">
+    <meta property="article:modified_time" content="2023-06-18T12:29:24+08:00">
+    <meta property="article:tag" content="Go工具">
 
-<meta itemprop="name" content="Go工具(二):性能调试利器pprof(一)">
-<meta itemprop="description" content="1. 介绍 Go语言中的pprof指对于指标或特征的分析（Profiling），通过分析不仅可以查找到程序中的错误（内存泄漏、race冲突、协程泄"><meta itemprop="datePublished" content="2021-04-29T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2023-06-18T12:29:24+08:00" />
-<meta itemprop="wordCount" content="2732">
-<meta itemprop="keywords" content="Go工具," /><meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Go工具(二):性能调试利器pprof(一)"/>
-<meta name="twitter:description" content="1. 介绍 Go语言中的pprof指对于指标或特征的分析（Profiling），通过分析不仅可以查找到程序中的错误（内存泄漏、race冲突、协程泄"/>
+  <meta itemprop="name" content="Go工具(二):性能调试利器pprof(一)">
+  <meta itemprop="description" content="1. 介绍 Go语言中的pprof指对于指标或特征的分析（Profiling），通过分析不仅可以查找到程序中的错误（内存泄漏、race冲突、协程泄漏），也能对程序进行优化（例如CPU利用率不足）。">
+  <meta itemprop="datePublished" content="2021-04-29T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2023-06-18T12:29:24+08:00">
+  <meta itemprop="wordCount" content="2731">
+  <meta itemprop="keywords" content="Go工具">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Go工具(二):性能调试利器pprof(一)">
+  <meta name="twitter:description" content="1. 介绍 Go语言中的pprof指对于指标或特征的分析（Profiling），通过分析不仅可以查找到程序中的错误（内存泄漏、race冲突、协程泄漏），也能对程序进行优化（例如CPU利用率不足）。">
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -95,28 +102,28 @@
 
   <div class="container" id="mobile-panel">
     <header id="header" class="header">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"/><header id="header" class="header">
-    <div class="logo-wrapper">
-        <a href="/" class="logo">Learn Go</a>
-    </div>
-    <nav class="site-navbar">
-        <ul id="menu" class="menu"><li style="display:inline-block;margin-right:10px;">
-                <input type="search" class="docsearch-input" placeholder="Search"/>
-            </li><li class="menu-item">
-                <a class="menu-item-link" href="/">首页</a>
-            </li>
-            <li class="menu-item">
-                <a class="menu-item-link" href="/post/">归档</a>
-            </li>
-            <li class="menu-item">
-                <a class="menu-item-link" href="/tags/">标签</a>
-            </li>
-            <li class="menu-item">
-                <a class="menu-item-link" href="/categories/">分类</a>
-            </li>
-        </ul>
-    </nav>
-</header>
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Learn Go</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">首页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li>
+  </ul>
+</nav>
+
     </header>
 
     <main id="main" class="main">
@@ -133,14 +140,14 @@
             <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
             <a href="/categories/go/"> Go </a>
             </div>
-          <span class="more-meta"> 约 2732 字 </span>
-          <span class="more-meta"> 预计阅读 6 分钟 </span>
+          <span class="more-meta"> 2731 words </span>
+          <span class="more-meta"> 6 mins read </span>
         
       </div>
     </header>
 
     <div class="post-toc" id="post-toc">
-  <h2 class="post-toc-title">文章目录</h2>
+  <h2 class="post-toc-title">Contents</h2>
   <div class="post-toc-content always-active">
     <nav id="TableOfContents">
   <ul>
@@ -191,7 +198,7 @@
 </div>
   <div class="post-outdated">
     <div class="warn">
-      <p>【注意】最后更新于 <span class="timeago" datetime="2023-06-18T12:29:24" title="June 18, 2023">June 18, 2023</span>，文中内容可能已过时，请谨慎使用。</p>
+      <p>[NOTE] Updated <span class="timeago" datetime="2023-06-18T12:29:24" title="June 18, 2023">June 18, 2023</span>. This article may have outdated content or subject matter.</p>
     </div>
   </div>
     <div class="post-content">
@@ -262,48 +269,48 @@
 </span><span class="lnt">41
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
-
-<span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;fmt&#34;</span>
-	<span class="s">&#34;github.com/gin-gonic/gin&#34;</span>
-	<span class="s">&#34;net/http&#34;</span>
-	<span class="nx">_</span> <span class="s">&#34;net/http/pprof&#34;</span> <span class="c1">// 导入pprof
-</span><span class="c1"></span>	<span class="s">&#34;strings&#34;</span>
-	<span class="s">&#34;time&#34;</span>
-<span class="p">)</span>
-<span class="kd">func</span> <span class="nf">init</span><span class="p">()</span> <span class="p">{</span>
-	<span class="c1">//开启http端口,用协程的方式监听，否则会阻塞
-</span><span class="c1"></span>	<span class="k">go</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
-		<span class="k">if</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">http</span><span class="p">.</span><span class="nf">ListenAndServe</span><span class="p">(</span><span class="s">&#34;:6060&#34;</span><span class="p">,</span> <span class="kc">nil</span><span class="p">);</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;pprof err:&#34;</span><span class="p">,</span><span class="nx">err</span><span class="p">)</span>
-		<span class="p">}</span>
-	<span class="p">}()</span>
-<span class="p">}</span>
-<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span>  <span class="p">{</span>
-	<span class="nx">engine</span> <span class="o">:=</span> <span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span>
-	<span class="nx">engine</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/test&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">context</span> <span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
-		<span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span>
-			<span class="s">&#34;msg&#34;</span><span class="p">:</span><span class="s">&#34;success&#34;</span><span class="p">,</span>
-		<span class="p">})</span>
-	<span class="p">})</span>
-	<span class="nf">testPprofHeap</span><span class="p">()</span>
-	<span class="nx">_</span> <span class="p">=</span> <span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">(</span><span class="s">&#34;:8080&#34;</span><span class="p">)</span>
-<span class="p">}</span>
-
-<span class="c1">// 模拟内存使用增加
-</span><span class="c1"></span><span class="kd">func</span> <span class="nf">testPprofHeap</span><span class="p">()</span>  <span class="p">{</span>
-	<span class="k">go</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
-		<span class="kd">var</span> <span class="nx">stringSlice</span> <span class="p">[]</span><span class="kt">string</span>
-		<span class="k">for</span>  <span class="p">{</span>
-			<span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nx">Second</span> <span class="o">*</span><span class="mi">2</span><span class="p">)</span>
-			<span class="nx">repeat</span> <span class="o">:=</span> <span class="nx">strings</span><span class="p">.</span><span class="nf">Repeat</span><span class="p">(</span><span class="s">&#34;hello,world&#34;</span><span class="p">,</span> <span class="mi">50000</span><span class="p">)</span>
-			<span class="nx">stringSlice</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">stringSlice</span><span class="p">,</span><span class="nx">repeat</span><span class="p">)</span>
-			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;time:%d length:%d \n&#34;</span><span class="p">,</span><span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Unix</span><span class="p">(),</span><span class="nb">len</span><span class="p">(</span><span class="nx">stringSlice</span><span class="p">))</span>
-		<span class="p">}</span>
-	<span class="p">}()</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nx">main</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="s">&#34;fmt&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="s">&#34;github.com/gin-gonic/gin&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="s">&#34;net/http&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">_</span><span class="w"> </span><span class="s">&#34;net/http/pprof&#34;</span><span class="w"> </span><span class="c1">// 导入pprof</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="s">&#34;strings&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="s">&#34;time&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="nf">init</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="cp">//开启http端口,用协程的方式监听，否则会阻塞</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">go</span><span class="w"> </span><span class="kd">func</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nf">ListenAndServe</span><span class="p">(</span><span class="s">&#34;:6060&#34;</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span><span class="p">);</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;pprof err:&#34;</span><span class="p">,</span><span class="nx">err</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w">  </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">engine</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">gin</span><span class="p">.</span><span class="nf">Default</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">engine</span><span class="p">.</span><span class="nf">GET</span><span class="p">(</span><span class="s">&#34;/test&#34;</span><span class="p">,</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">context</span><span class="w"> </span><span class="o">*</span><span class="nx">gin</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nx">context</span><span class="p">.</span><span class="nf">JSON</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="nx">gin</span><span class="p">.</span><span class="nx">H</span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="s">&#34;msg&#34;</span><span class="p">:</span><span class="s">&#34;success&#34;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="p">})</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">})</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nf">testPprofHeap</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">_</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">engine</span><span class="p">.</span><span class="nf">Run</span><span class="p">(</span><span class="s">&#34;:8080&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 模拟内存使用增加</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="nf">testPprofHeap</span><span class="p">()</span><span class="w">  </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">go</span><span class="w"> </span><span class="kd">func</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="kd">var</span><span class="w"> </span><span class="nx">stringSlice</span><span class="w"> </span><span class="p">[]</span><span class="kt">string</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="k">for</span><span class="w">  </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="w"> </span><span class="o">*</span><span class="mi">2</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="nx">repeat</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">strings</span><span class="p">.</span><span class="nf">Repeat</span><span class="p">(</span><span class="s">&#34;hello,world&#34;</span><span class="p">,</span><span class="w"> </span><span class="mi">50000</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="nx">stringSlice</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">append</span><span class="p">(</span><span class="nx">stringSlice</span><span class="p">,</span><span class="nx">repeat</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;time:%d length:%d \n&#34;</span><span class="p">,</span><span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Unix</span><span class="p">(),</span><span class="nb">len</span><span class="p">(</span><span class="nx">stringSlice</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="2-访问端口">2. 访问端口</h3>
 <p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/20211115172657.png" alt=""></p>
@@ -351,44 +358,44 @@
 </span><span class="lnt">37
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">tests</span>
-
-<span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;os&#34;</span>
-	<span class="s">&#34;runtime/pprof&#34;</span>
-	<span class="s">&#34;testing&#34;</span>
-	<span class="s">&#34;time&#34;</span>
-<span class="p">)</span>
-
-<span class="kd">func</span> <span class="nf">TestRuntimePProf</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
-	<span class="c1">// 打开文件
-</span><span class="c1"></span>	<span class="nx">f</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="s">&#34;../profile/out.pprof&#34;</span><span class="p">)</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="nx">t</span><span class="p">.</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;文件打开失败:%v&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
-		<span class="k">return</span>
-	<span class="p">}</span>
-	<span class="c1">// 调用
-</span><span class="c1"></span>	<span class="nx">err</span> <span class="p">=</span> <span class="nx">pprof</span><span class="p">.</span><span class="nf">StartCPUProfile</span><span class="p">(</span><span class="nx">f</span><span class="p">)</span>
-	<span class="k">defer</span> <span class="nx">pprof</span><span class="p">.</span><span class="nf">StopCPUProfile</span><span class="p">()</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="nx">t</span><span class="p">.</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;StartCPUProfile:%v&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
-	<span class="p">}</span>
-	<span class="c1">// 测试单独函数
-</span><span class="c1"></span>	<span class="nf">testPprof</span><span class="p">()</span>
-<span class="p">}</span>
-
-<span class="c1">// 模拟内存使用增加
-</span><span class="c1"></span><span class="kd">func</span> <span class="nf">testPprof</span><span class="p">()</span> <span class="p">{</span>
-	<span class="nx">ch</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="kt">bool</span><span class="p">)</span>
-	<span class="k">go</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
-		<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="mi">20</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
-			<span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nx">Millisecond</span> <span class="o">*</span> <span class="mi">200</span><span class="p">)</span>
-		<span class="p">}</span>
-		<span class="nx">ch</span> <span class="o">&lt;-</span> <span class="kc">true</span>
-	<span class="p">}()</span>
-	<span class="o">&lt;-</span><span class="nx">ch</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nx">tests</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="s">&#34;os&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="s">&#34;runtime/pprof&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="s">&#34;testing&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="s">&#34;time&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="nf">TestRuntimePProf</span><span class="p">(</span><span class="nx">t</span><span class="w"> </span><span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// 打开文件</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">f</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">os</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="s">&#34;../profile/out.pprof&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nx">t</span><span class="p">.</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;文件打开失败:%v&#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="k">return</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// 调用</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">err</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">pprof</span><span class="p">.</span><span class="nf">StartCPUProfile</span><span class="p">(</span><span class="nx">f</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">defer</span><span class="w"> </span><span class="nx">pprof</span><span class="p">.</span><span class="nf">StopCPUProfile</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nx">t</span><span class="p">.</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;StartCPUProfile:%v&#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// 测试单独函数</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nf">testPprof</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 模拟内存使用增加</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="nf">testPprof</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">ch</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">chan</span><span class="w"> </span><span class="kt">bool</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">go</span><span class="w"> </span><span class="kd">func</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="k">for</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="p">&lt;</span><span class="w"> </span><span class="mi">20</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="o">++</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nx">Millisecond</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">200</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nx">ch</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="o">&lt;-</span><span class="nx">ch</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="2-运行测试">2. 运行测试</h3>
 <div class="highlight"><div class="chroma">
@@ -408,26 +415,24 @@
 </span><span class="lnt">13
 </span><span class="lnt">14
 </span><span class="lnt">15
-</span><span class="lnt">16
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 运行</span>
-➜ go <span class="nb">test</span> runtime_pprof_test.go -v
-<span class="o">===</span> RUN   TestRuntimePProf
---- PASS: TestRuntimePProf <span class="o">(</span>5.05s<span class="o">)</span>
-PASS
-ok      command-line-arguments  5.448s
-<span class="c1"># 查看pprof</span>
-➜ go tool pprof out.pprof      
-Type: cpu
-Time: Nov 15, <span class="m">2021</span> at 4:09pm <span class="o">(</span>CST<span class="o">)</span>
-Duration: 4.06s, Total <span class="nv">samples</span> <span class="o">=</span> <span class="m">0</span> 
-No samples were found with the default sample value type.
-Try <span class="s2">&#34;sample_index&#34;</span> <span class="nb">command</span> to analyze different sample values.
-Entering interactive mode <span class="o">(</span><span class="nb">type</span> <span class="s2">&#34;help&#34;</span> <span class="k">for</span> commands, <span class="s2">&#34;o&#34;</span> <span class="k">for</span> options<span class="o">)</span>
-<span class="o">(</span>pprof<span class="o">)</span> 
-
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 运行</span>
+</span></span><span class="line"><span class="cl">➜ go <span class="nb">test</span> runtime_pprof_test.go -v
+</span></span><span class="line"><span class="cl"><span class="o">===</span> RUN   TestRuntimePProf
+</span></span><span class="line"><span class="cl">--- PASS: TestRuntimePProf <span class="o">(</span>5.05s<span class="o">)</span>
+</span></span><span class="line"><span class="cl">PASS
+</span></span><span class="line"><span class="cl">ok      command-line-arguments  5.448s
+</span></span><span class="line"><span class="cl"><span class="c1"># 查看pprof</span>
+</span></span><span class="line"><span class="cl">➜ go tool pprof out.pprof      
+</span></span><span class="line"><span class="cl">Type: cpu
+</span></span><span class="line"><span class="cl">Time: Nov 15, <span class="m">2021</span> at 4:09pm <span class="o">(</span>CST<span class="o">)</span>
+</span></span><span class="line"><span class="cl">Duration: 4.06s, Total <span class="nv">samples</span> <span class="o">=</span> <span class="m">0</span> 
+</span></span><span class="line"><span class="cl">No samples were found with the default sample value type.
+</span></span><span class="line"><span class="cl">Try <span class="s2">&#34;sample_index&#34;</span> <span class="nb">command</span> to analyze different sample values.
+</span></span><span class="line"><span class="cl">Entering interactive mode <span class="o">(</span><span class="nb">type</span> <span class="s2">&#34;help&#34;</span> <span class="k">for</span> commands, <span class="s2">&#34;o&#34;</span> <span class="k">for</span> options<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="o">(</span>pprof<span class="o">)</span> 
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="23-使用go-test">2.3 使用<code>go test</code></h2>
 <p>使用格式 <code>go test . -x 文件</code></p>
@@ -462,28 +467,28 @@ Entering interactive mode <span class="o">(</span><span class="nb">type</span> <
 </span><span class="lnt">21
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">tests</span>
-
-<span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;strings&#34;</span>
-	<span class="s">&#34;testing&#34;</span>
-	<span class="s">&#34;time&#34;</span>
-<span class="p">)</span>
-
-<span class="kd">func</span> <span class="nf">TestWithPProf</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
-	<span class="nx">ch</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="kt">bool</span><span class="p">)</span>
-	<span class="k">go</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
-		<span class="kd">var</span> <span class="nx">stringSlice</span> <span class="p">[]</span><span class="kt">string</span>
-		<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="mi">20</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
-			<span class="nx">repeat</span> <span class="o">:=</span> <span class="nx">strings</span><span class="p">.</span><span class="nf">Repeat</span><span class="p">(</span><span class="s">&#34;hello,world&#34;</span><span class="p">,</span> <span class="mi">50000</span><span class="p">)</span>
-			<span class="nx">stringSlice</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">stringSlice</span><span class="p">,</span><span class="nx">repeat</span><span class="p">)</span>
-			<span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nx">Millisecond</span> <span class="o">*</span> <span class="mi">500</span><span class="p">)</span>
-		<span class="p">}</span>
-		<span class="nx">ch</span> <span class="o">&lt;-</span> <span class="kc">true</span>
-	<span class="p">}()</span>
-	<span class="o">&lt;-</span><span class="nx">ch</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nx">tests</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="s">&#34;strings&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="s">&#34;testing&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="s">&#34;time&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="nf">TestWithPProf</span><span class="p">(</span><span class="nx">t</span><span class="w"> </span><span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">ch</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">chan</span><span class="w"> </span><span class="kt">bool</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">go</span><span class="w"> </span><span class="kd">func</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="kd">var</span><span class="w"> </span><span class="nx">stringSlice</span><span class="w"> </span><span class="p">[]</span><span class="kt">string</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="k">for</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="p">&lt;</span><span class="w"> </span><span class="mi">20</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="o">++</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="nx">repeat</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">strings</span><span class="p">.</span><span class="nf">Repeat</span><span class="p">(</span><span class="s">&#34;hello,world&#34;</span><span class="p">,</span><span class="w"> </span><span class="mi">50000</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="nx">stringSlice</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">append</span><span class="p">(</span><span class="nx">stringSlice</span><span class="p">,</span><span class="nx">repeat</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nx">Millisecond</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">500</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nx">ch</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="o">&lt;-</span><span class="nx">ch</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="2-运行测试-1">2. 运行测试</h3>
 <div class="highlight"><div class="chroma">
@@ -498,15 +503,15 @@ Entering interactive mode <span class="o">(</span><span class="nb">type</span> <
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 运行单元测试</span>
-➜ go <span class="nb">test</span> go_test.go -cpuprofile ../profile/cpu.pprof -memprofile ../profile/mem.pprof
-<span class="c1"># 查看内存pprof</span>
-➜ go tool pprof mem.pprof                                      
-Type: alloc_space
-Time: Nov 15, <span class="m">2021</span> at 4:22pm <span class="o">(</span>CST<span class="o">)</span>
-Entering interactive mode <span class="o">(</span><span class="nb">type</span> <span class="s2">&#34;help&#34;</span> <span class="k">for</span> commands, <span class="s2">&#34;o&#34;</span> <span class="k">for</span> options<span class="o">)</span>
-<span class="o">(</span>pprof<span class="o">)</span> 
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 运行单元测试</span>
+</span></span><span class="line"><span class="cl">➜ go <span class="nb">test</span> go_test.go -cpuprofile ../profile/cpu.pprof -memprofile ../profile/mem.pprof
+</span></span><span class="line"><span class="cl"><span class="c1"># 查看内存pprof</span>
+</span></span><span class="line"><span class="cl">➜ go tool pprof mem.pprof                                      
+</span></span><span class="line"><span class="cl">Type: alloc_space
+</span></span><span class="line"><span class="cl">Time: Nov 15, <span class="m">2021</span> at 4:22pm <span class="o">(</span>CST<span class="o">)</span>
+</span></span><span class="line"><span class="cl">Entering interactive mode <span class="o">(</span><span class="nb">type</span> <span class="s2">&#34;help&#34;</span> <span class="k">for</span> commands, <span class="s2">&#34;o&#34;</span> <span class="k">for</span> options<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="o">(</span>pprof<span class="o">)</span> 
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h1 id="3-分析样本">3. 分析样本</h1>
 <p><code>pprof</code>提供了很多维度的分析，若想分析某一个维度信息，可直接使用<code>go tool pprof http://ip:port/debug/pprof/维度</code>，进入交互式分析。</p>
@@ -550,27 +555,27 @@ Entering interactive mode <span class="o">(</span><span class="nb">type</span> <
 </span><span class="lnt">20
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 进入交互命令</span>
-➜ go tool pprof http://127.0.0.1:6060/debug/pprof/heap?debug<span class="o">=</span><span class="m">1</span>
-Fetching profile over HTTP from http://127.0.0.1:6060/debug/pprof/heap?debug<span class="o">=</span><span class="m">1</span>
-Saved profile in /Users/liuqh/pprof/pprof.alloc_objects.alloc_space.inuse_objects.inuse_space.003.pb.gz
-Type: inuse_space
-Entering interactive mode <span class="o">(</span><span class="nb">type</span> <span class="s2">&#34;help&#34;</span> <span class="k">for</span> commands, <span class="s2">&#34;o&#34;</span> <span class="k">for</span> options<span class="o">)</span>
-<span class="o">(</span>pprof<span class="o">)</span> top <span class="c1"># top 列出以fat列从大到小排序的序列</span>
-Showing nodes accounting <span class="k">for</span> 11004.99kB, 100% of 11004.99kB total
-Showing top <span class="m">10</span> nodes out of <span class="m">18</span>
-      flat  flat%   sum%        cum   cum%
- 9975.41kB 90.64% 90.64%  9975.41kB 90.64%  strings.<span class="o">(</span>*Builder<span class="o">)</span>.grow
-  517.33kB  4.70% 95.35%   517.33kB  4.70%  regexp/syntax.<span class="o">(</span>*compiler<span class="o">)</span>.inst
-  512.25kB  4.65%   100%   512.25kB  4.65%  regexp.onePassCopy
-         <span class="m">0</span>     0%   100%   517.33kB  4.70%  github.com/go-playground/validator/v10.init
-         <span class="m">0</span>     0%   100%   512.25kB  4.65%  github.com/go-playground/validator/v10.init.0
-         <span class="m">0</span>     0%   100%  9975.41kB 90.64%  main.testPprofHeap.func1
-         <span class="m">0</span>     0%   100%  1029.58kB  9.36%  regexp.Compile
-         <span class="m">0</span>     0%   100%  1029.58kB  9.36%  regexp.MustCompile
-         <span class="m">0</span>     0%   100%  1029.58kB  9.36%  regexp.compile
-         <span class="m">0</span>     0%   100%   512.25kB  4.65%  regexp.compileOnePass
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 进入交互命令</span>
+</span></span><span class="line"><span class="cl">➜ go tool pprof http://127.0.0.1:6060/debug/pprof/heap?debug<span class="o">=</span><span class="m">1</span>
+</span></span><span class="line"><span class="cl">Fetching profile over HTTP from http://127.0.0.1:6060/debug/pprof/heap?debug<span class="o">=</span><span class="m">1</span>
+</span></span><span class="line"><span class="cl">Saved profile in /Users/liuqh/pprof/pprof.alloc_objects.alloc_space.inuse_objects.inuse_space.003.pb.gz
+</span></span><span class="line"><span class="cl">Type: inuse_space
+</span></span><span class="line"><span class="cl">Entering interactive mode <span class="o">(</span><span class="nb">type</span> <span class="s2">&#34;help&#34;</span> <span class="k">for</span> commands, <span class="s2">&#34;o&#34;</span> <span class="k">for</span> options<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="o">(</span>pprof<span class="o">)</span> top <span class="c1"># top 列出以fat列从大到小排序的序列</span>
+</span></span><span class="line"><span class="cl">Showing nodes accounting <span class="k">for</span> 11004.99kB, 100% of 11004.99kB total
+</span></span><span class="line"><span class="cl">Showing top <span class="m">10</span> nodes out of <span class="m">18</span>
+</span></span><span class="line"><span class="cl">      flat  flat%   sum%        cum   cum%
+</span></span><span class="line"><span class="cl"> 9975.41kB 90.64% 90.64%  9975.41kB 90.64%  strings.<span class="o">(</span>*Builder<span class="o">)</span>.grow
+</span></span><span class="line"><span class="cl">  517.33kB  4.70% 95.35%   517.33kB  4.70%  regexp/syntax.<span class="o">(</span>*compiler<span class="o">)</span>.inst
+</span></span><span class="line"><span class="cl">  512.25kB  4.65%   100%   512.25kB  4.65%  regexp.onePassCopy
+</span></span><span class="line"><span class="cl">         <span class="m">0</span>     0%   100%   517.33kB  4.70%  github.com/go-playground/validator/v10.init
+</span></span><span class="line"><span class="cl">         <span class="m">0</span>     0%   100%   512.25kB  4.65%  github.com/go-playground/validator/v10.init.0
+</span></span><span class="line"><span class="cl">         <span class="m">0</span>     0%   100%  9975.41kB 90.64%  main.testPprofHeap.func1
+</span></span><span class="line"><span class="cl">         <span class="m">0</span>     0%   100%  1029.58kB  9.36%  regexp.Compile
+</span></span><span class="line"><span class="cl">         <span class="m">0</span>     0%   100%  1029.58kB  9.36%  regexp.MustCompile
+</span></span><span class="line"><span class="cl">         <span class="m">0</span>     0%   100%  1029.58kB  9.36%  regexp.compile
+</span></span><span class="line"><span class="cl">         <span class="m">0</span>     0%   100%   512.25kB  4.65%  regexp.compileOnePass
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="1flatflatsumcumcum">1.<code>flat|flat%|sum%|cum|cum%</code></h3>
 <p>针对不同的维度，展示代表的含义也有所区别，比如:当分析维度是<code>profile</code>时，<code>flat</code>代表的是当前函数运行耗时，当分析维度是<code>heap</code>，<code>flat</code>代表的是当前函数占用内存信息，<strong>但是他们都表示的是当前函数</strong>，依次类推。</p>
@@ -620,31 +625,31 @@ Showing top <span class="m">10</span> nodes out of <span class="m">18</span>
 </span><span class="lnt">24
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 使用top -cum，根据累计占用内存排序</span>
-<span class="o">(</span>pprof<span class="o">)</span> top -cum
-Showing nodes accounting <span class="k">for</span> 11.37MB, 100% of 11.37MB total
-      flat  flat%   sum%        cum   cum%
-         <span class="m">0</span>     0%     0%    11.37MB   100%  main.testPprofHeap.func1
-         <span class="m">0</span>     0%     0%    11.37MB   100%  strings.<span class="o">(</span>*Builder<span class="o">)</span>.Grow <span class="o">(</span>inline<span class="o">)</span>
-   11.37MB   100%   100%    11.37MB   100%  strings.<span class="o">(</span>*Builder<span class="o">)</span>.grow <span class="o">(</span>inline<span class="o">)</span>
-         <span class="m">0</span>     0%   100%    11.37MB   100%  strings.Repeat
-<span class="c1"># 使用list,查看具体代码信息;</span>
-<span class="o">(</span>pprof<span class="o">)</span> list testPprofHeap
-Total: 11.37MB
-<span class="nv">ROUTINE</span> <span class="o">========================</span> main.testPprofHeap.func1 in /Users/liuqh/ProjectItem/GoItem/go-pprof/main.go
-         <span class="m">0</span>    11.37MB <span class="o">(</span>flat, cum<span class="o">)</span>   100% of Total
-         .          .     31:func testPprofHeap<span class="o">()</span>  <span class="o">{</span>
-         .          .     32:	go func<span class="o">()</span> <span class="o">{</span>
-         .          .     33:		var stringSlice <span class="o">[]</span>string
-         .          .     34:		<span class="k">for</span>  <span class="o">{</span>
-         .          .     35:			time.Sleep<span class="o">(</span>time.Second *2<span class="o">)</span>
-         .    11.37MB     36:			repeat :<span class="o">=</span> strings.Repeat<span class="o">(</span><span class="s2">&#34;hello,world&#34;</span>, 50000<span class="o">)</span>
-         .          .     37:			<span class="nv">stringSlice</span> <span class="o">=</span> append<span class="o">(</span>stringSlice,repeat<span class="o">)</span>
-         .          .     38:			fmt.Printf<span class="o">(</span><span class="s2">&#34;time:%d length:%d \n&#34;</span>,time.Now<span class="o">()</span>.Unix<span class="o">()</span>,len<span class="o">(</span>stringSlice<span class="o">))</span>
-         .          .     39:		<span class="o">}</span>
-         .          .     40:	<span class="o">}()</span>
-         .          .     41:<span class="o">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 使用top -cum，根据累计占用内存排序</span>
+</span></span><span class="line"><span class="cl"><span class="o">(</span>pprof<span class="o">)</span> top -cum
+</span></span><span class="line"><span class="cl">Showing nodes accounting <span class="k">for</span> 11.37MB, 100% of 11.37MB total
+</span></span><span class="line"><span class="cl">      flat  flat%   sum%        cum   cum%
+</span></span><span class="line"><span class="cl">         <span class="m">0</span>     0%     0%    11.37MB   100%  main.testPprofHeap.func1
+</span></span><span class="line"><span class="cl">         <span class="m">0</span>     0%     0%    11.37MB   100%  strings.<span class="o">(</span>*Builder<span class="o">)</span>.Grow <span class="o">(</span>inline<span class="o">)</span>
+</span></span><span class="line"><span class="cl">   11.37MB   100%   100%    11.37MB   100%  strings.<span class="o">(</span>*Builder<span class="o">)</span>.grow <span class="o">(</span>inline<span class="o">)</span>
+</span></span><span class="line"><span class="cl">         <span class="m">0</span>     0%   100%    11.37MB   100%  strings.Repeat
+</span></span><span class="line"><span class="cl"><span class="c1"># 使用list,查看具体代码信息;</span>
+</span></span><span class="line"><span class="cl"><span class="o">(</span>pprof<span class="o">)</span> list testPprofHeap
+</span></span><span class="line"><span class="cl">Total: 11.37MB
+</span></span><span class="line"><span class="cl"><span class="nv">ROUTINE</span> <span class="o">========================</span> main.testPprofHeap.func1 in /Users/liuqh/ProjectItem/GoItem/go-pprof/main.go
+</span></span><span class="line"><span class="cl">         <span class="m">0</span>    11.37MB <span class="o">(</span>flat, cum<span class="o">)</span>   100% of Total
+</span></span><span class="line"><span class="cl">         .          .     31:func testPprofHeap<span class="o">()</span>  <span class="o">{</span>
+</span></span><span class="line"><span class="cl">         .          .     32:	go func<span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">         .          .     33:		var stringSlice <span class="o">[]</span>string
+</span></span><span class="line"><span class="cl">         .          .     34:		<span class="k">for</span>  <span class="o">{</span>
+</span></span><span class="line"><span class="cl">         .          .     35:			time.Sleep<span class="o">(</span>time.Second *2<span class="o">)</span>
+</span></span><span class="line"><span class="cl">         .    11.37MB     36:			repeat :<span class="o">=</span> strings.Repeat<span class="o">(</span><span class="s2">&#34;hello,world&#34;</span>, 50000<span class="o">)</span>
+</span></span><span class="line"><span class="cl">         .          .     37:			<span class="nv">stringSlice</span> <span class="o">=</span> append<span class="o">(</span>stringSlice,repeat<span class="o">)</span>
+</span></span><span class="line"><span class="cl">         .          .     38:			fmt.Printf<span class="o">(</span><span class="s2">&#34;time:%d length:%d \n&#34;</span>,time.Now<span class="o">()</span>.Unix<span class="o">()</span>,len<span class="o">(</span>stringSlice<span class="o">))</span>
+</span></span><span class="line"><span class="cl">         .          .     39:		<span class="o">}</span>
+</span></span><span class="line"><span class="cl">         .          .     40:	<span class="o">}()</span>
+</span></span><span class="line"><span class="cl">         .          .     41:<span class="o">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><strong>踩坑:No source information for</strong></p>
 <p>在使用<code>list x</code>,报错:<code>No source information for</code></p>
@@ -656,11 +661,11 @@ Total: 11.37MB
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">(pprof) list testPprofHeap
-Total: 11.37MB
-No source information for main.testPprofHeap.func1
-(pprof) exit
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">(pprof) list testPprofHeap
+</span></span><span class="line"><span class="cl">Total: 11.37MB
+</span></span><span class="line"><span class="cl">No source information for main.testPprofHeap.func1
+</span></span><span class="line"><span class="cl">(pprof) exit
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><strong><font color=green>解决方法: </font></strong></p>
 <div class="highlight"><div class="chroma">
@@ -669,9 +674,9 @@ No source information for main.testPprofHeap.func1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 使用下面格式替换: go tool pprof http://127.0.0.1:6060/debug/pprof/heap</span>
-➜ go tool pprof compileName http://127.0.0.1:6060/debug/pprof/heap
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 使用下面格式替换: go tool pprof http://127.0.0.1:6060/debug/pprof/heap</span>
+</span></span><span class="line"><span class="cl">➜ go tool pprof compileName http://127.0.0.1:6060/debug/pprof/heap
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><strong><font color=red>compileName:指的是编译后的程序文件</font></strong></p>
 <h2 id="33-可视化分析">3.3 可视化分析</h2>
@@ -684,11 +689,11 @@ No source information for main.testPprofHeap.func1
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># mac </span>
-brew install graphviz
-<span class="c1"># ubuntu </span>
-sudo apt install graphviz
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># mac </span>
+</span></span><span class="line"><span class="cl">brew install graphviz
+</span></span><span class="line"><span class="cl"><span class="c1"># ubuntu </span>
+</span></span><span class="line"><span class="cl">sudo apt install graphviz
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><a href="https://graphviz.org/download/">更多安装方法:https://graphviz.org/download</a></p>
 <h3 id="2方式一web">2.方式一:<code>web</code></h3>
@@ -698,9 +703,9 @@ sudo apt install graphviz
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 在交互式命令行中输入：web,会自动打开浏览器</span>
-<span class="o">(</span>pprof<span class="o">)</span> web
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 在交互式命令行中输入：web,会自动打开浏览器</span>
+</span></span><span class="line"><span class="cl"><span class="o">(</span>pprof<span class="o">)</span> web
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/image-20211115185216123.png" alt=""></p>
 <h3 id="3方式二-http-port">3.方式二:<code>-http :port</code></h3>
@@ -710,9 +715,9 @@ sudo apt install graphviz
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 使用参数 -http :9090，直接在浏览器查询</span>
-➜ go tool pprof -http :9090  http://127.0.0.1:6060/debug/pprof/heap
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 使用参数 -http :9090，直接在浏览器查询</span>
+</span></span><span class="line"><span class="cl">➜ go tool pprof -http :9090  http://127.0.0.1:6060/debug/pprof/heap
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/image-20211115190035409.png" alt=""></p>
 <p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/image-20211115185854911.png" alt=""></p>
@@ -721,11 +726,11 @@ sudo apt install graphviz
 
     <div class="post-copyright">
   <p class="copyright-item">
-    <span class="item-title">文章作者</span>
-    <span class="item-content">Learn Go</span>
+    <span class="item-title">Author</span>
+    <span class="item-content"></span>
   </p>
   <p class="copyright-item">
-    <span class="item-title">上次更新</span>
+    <span class="item-title">LastMod</span>
     <span class="item-content">
         2023-06-18
         
@@ -739,14 +744,14 @@ sudo apt install graphviz
           <a href="/tags/go%E5%B7%A5%E5%85%B7/">Go工具</a>
           </div>
       <nav class="post-nav">
-        <a class="prev" href="/post/%E5%B7%A5%E5%85%B7%E7%AF%87/03-pprof-2/">
+        <a class="prev" href="/post/%E6%89%A9%E5%B1%95%E5%8C%85/17-pprof-2/">
             <i class="iconfont icon-left"></i>
-            <span class="prev-text nav-default">Go工具(三):性能调试利器pprof(二)</span>
-            <span class="prev-text nav-mobile">上一篇</span>
+            <span class="prev-text nav-default">Go扩展包(十七):pprof-2</span>
+            <span class="prev-text nav-mobile">Prev</span>
           </a>
-        <a class="next" href="/post/%E6%89%A9%E5%B1%95%E5%8C%85/28-cobra/">
-            <span class="next-text nav-default">Go扩展包(二十八):cobra</span>
-            <span class="next-text nav-mobile">下一篇</span>
+        <a class="next" href="/post/%E6%89%A9%E5%B1%95%E5%8C%85/16-pprof/">
+            <span class="next-text nav-default">Go扩展包(十六):pprof</span>
+            <span class="next-text nav-mobile">Next</span>
             <i class="iconfont icon-right"></i>
           </a>
       </nav>
@@ -766,16 +771,16 @@ sudo apt install graphviz
       <div class="social-links">
       <a href="https://github.com/shershon1991" class="iconfont icon-github" title="github"></a>
       <a href="https://www.zhihu.com/people/shershon520" class="iconfont icon-zhihu" title="zhihu"></a>
-  <a href="https://shershon1991.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+  
 </div>
 
 <div class="copyright">
   <span class="power-by">
-    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
   </span>
   <span class="division">|</span>
   <span class="theme-info">
-    主题 - 
+    Theme - 
     <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
   </span>
 
@@ -784,7 +789,7 @@ sudo apt install graphviz
   <span class="copyright-year">
     &copy; 
     2021 - 
-    2024<span class="heart"><i class="iconfont icon-heart"></i></span><span>Learn Go</span>
+    2026<span class="heart"><i class="iconfont icon-heart"></i></span><span></span>
   </span>
 </div>
 
@@ -794,15 +799,28 @@ sudo apt install graphviz
       <i class="iconfont icon-up"></i>
     </div>
   </div>
-  <script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
-<script>
-    docsearch({
-        apiKey: "9f0c02b55e9885568dcbf6ef094b433c",
-        indexName: "hugo",
-        appId: "TTENARPLYL",
-        inputSelector: '.docsearch-input',
-        debug: false,
-    });
-</script>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.min.js" integrity="sha256-jwCP0NAdCBloaIWTWHmW4i3snUNMHUNO+jr9rYd2iOI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.locales.min.js" integrity="sha256-ZwofwC1Lf/faQCzN7nZtfijVV6hSwxjQMwXL4gn9qU8=" crossorigin="anonymous"></script>
+  <script>
+    var languageCode = "en".replace(/-/g, '_').replace(/_(.*)/, function ($0, $1) {return $0.replace($1, $1.toUpperCase());});
+    timeago().render(document.querySelectorAll('.timeago'), languageCode);
+    timeago.cancel();  
+  </script>
+
+
+
+<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+
+
+
+
+
+
+
+
 </body>
 </html>

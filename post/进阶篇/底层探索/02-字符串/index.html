@@ -16,14 +16,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="Learn Go" /><meta name="description" content="1.介绍 @注：以下内容来自《Go语言底层原理剖析》书中的摘要信息，本人使用版本（Go1.19）与书中不一致，源码路径可能会有出入。 字符串在编" /><meta name="keywords" content="博客, Learn Go, hugo" />
+<meta name="author" content="" /><meta name="description" content="1.介绍 @注：以下内容来自《Go语言底层原理剖析》书中的摘要信息，本人使用版本（Go1.19）与书中不一致，源码路径可能会有出入。
+" /><meta name="keywords" content="博客, Learn Go, hugo" />
 
 
 
 
 
 
-<meta name="generator" content="Hugo 0.90.1 with theme even" />
+<meta name="generator" content="Hugo 0.160.1 with theme even" />
 
 
 <link rel="canonical" href="https://shershon1991.github.io/post/%E8%BF%9B%E9%98%B6%E7%AF%87/%E5%BA%95%E5%B1%82%E6%8E%A2%E7%B4%A2/02-%E5%AD%97%E7%AC%A6%E4%B8%B2/" />
@@ -35,24 +36,31 @@
 
 
 
-<link href="/sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link href="/sass/main.min.af7fd1da18d66c2b017df5b4cae508ef44cfcac3fb4c7c7a327fe4f4f9e28b08.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
-<meta property="og:title" content="Go底层探索(二):字符串" />
-<meta property="og:description" content="1.介绍 @注：以下内容来自《Go语言底层原理剖析》书中的摘要信息，本人使用版本（Go1.19）与书中不一致，源码路径可能会有出入。 字符串在编" />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://shershon1991.github.io/post/%E8%BF%9B%E9%98%B6%E7%AF%87/%E5%BA%95%E5%B1%82%E6%8E%A2%E7%B4%A2/02-%E5%AD%97%E7%AC%A6%E4%B8%B2/" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2023-03-08T00:00:00+00:00" />
-<meta property="article:modified_time" content="2023-03-09T14:21:37+08:00" />
+<meta property="og:url" content="https://shershon1991.github.io/post/%E8%BF%9B%E9%98%B6%E7%AF%87/%E5%BA%95%E5%B1%82%E6%8E%A2%E7%B4%A2/02-%E5%AD%97%E7%AC%A6%E4%B8%B2/">
+  <meta property="og:site_name" content="Learn Go">
+  <meta property="og:title" content="Go底层探索(二):字符串">
+  <meta property="og:description" content="1.介绍 @注：以下内容来自《Go语言底层原理剖析》书中的摘要信息，本人使用版本（Go1.19）与书中不一致，源码路径可能会有出入。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2023-03-08T00:00:00+00:00">
+    <meta property="article:modified_time" content="2023-03-18T18:37:44+08:00">
+    <meta property="article:tag" content="Go进阶">
+    <meta property="article:tag" content="Go底层探索">
 
-<meta itemprop="name" content="Go底层探索(二):字符串">
-<meta itemprop="description" content="1.介绍 @注：以下内容来自《Go语言底层原理剖析》书中的摘要信息，本人使用版本（Go1.19）与书中不一致，源码路径可能会有出入。 字符串在编"><meta itemprop="datePublished" content="2023-03-08T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2023-03-09T14:21:37+08:00" />
-<meta itemprop="wordCount" content="1830">
-<meta itemprop="keywords" content="Go进阶,Go底层探索," /><meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Go底层探索(二):字符串"/>
-<meta name="twitter:description" content="1.介绍 @注：以下内容来自《Go语言底层原理剖析》书中的摘要信息，本人使用版本（Go1.19）与书中不一致，源码路径可能会有出入。 字符串在编"/>
+  <meta itemprop="name" content="Go底层探索(二):字符串">
+  <meta itemprop="description" content="1.介绍 @注：以下内容来自《Go语言底层原理剖析》书中的摘要信息，本人使用版本（Go1.19）与书中不一致，源码路径可能会有出入。">
+  <meta itemprop="datePublished" content="2023-03-08T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2023-03-18T18:37:44+08:00">
+  <meta itemprop="wordCount" content="1836">
+  <meta itemprop="keywords" content="Go进阶,Go底层探索">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Go底层探索(二):字符串">
+  <meta name="twitter:description" content="1.介绍 @注：以下内容来自《Go语言底层原理剖析》书中的摘要信息，本人使用版本（Go1.19）与书中不一致，源码路径可能会有出入。">
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -95,28 +103,28 @@
 
   <div class="container" id="mobile-panel">
     <header id="header" class="header">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"/><header id="header" class="header">
-    <div class="logo-wrapper">
-        <a href="/" class="logo">Learn Go</a>
-    </div>
-    <nav class="site-navbar">
-        <ul id="menu" class="menu"><li style="display:inline-block;margin-right:10px;">
-                <input type="search" class="docsearch-input" placeholder="Search"/>
-            </li><li class="menu-item">
-                <a class="menu-item-link" href="/">首页</a>
-            </li>
-            <li class="menu-item">
-                <a class="menu-item-link" href="/post/">归档</a>
-            </li>
-            <li class="menu-item">
-                <a class="menu-item-link" href="/tags/">标签</a>
-            </li>
-            <li class="menu-item">
-                <a class="menu-item-link" href="/categories/">分类</a>
-            </li>
-        </ul>
-    </nav>
-</header>
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Learn Go</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">首页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li>
+  </ul>
+</nav>
+
     </header>
 
     <main id="main" class="main">
@@ -133,14 +141,14 @@
             <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
             <a href="/categories/go/"> Go </a>
             </div>
-          <span class="more-meta"> 约 1830 字 </span>
-          <span class="more-meta"> 预计阅读 4 分钟 </span>
+          <span class="more-meta"> 1836 words </span>
+          <span class="more-meta"> 4 mins read </span>
         
       </div>
     </header>
 
     <div class="post-toc" id="post-toc">
-  <h2 class="post-toc-title">文章目录</h2>
+  <h2 class="post-toc-title">Contents</h2>
   <div class="post-toc-content always-active">
     <nav id="TableOfContents">
   <ul>
@@ -180,7 +188,7 @@
 </div>
   <div class="post-outdated">
     <div class="warn">
-      <p>【注意】最后更新于 <span class="timeago" datetime="2023-03-09T14:21:37" title="March 9, 2023">March 9, 2023</span>，文中内容可能已过时，请谨慎使用。</p>
+      <p>[NOTE] Updated <span class="timeago" datetime="2023-03-18T18:37:44" title="March 18, 2023">March 18, 2023</span>. This article may have outdated content or subject matter.</p>
     </div>
   </div>
     <div class="post-content">
@@ -204,10 +212,10 @@
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">str</span> <span class="p">=</span> <span class="s">&#34;hello world!&#34;</span>
-<span class="c1">// 这里想把e改成o，不支持
-</span><span class="c1"></span><span class="nx">str</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">=</span> <span class="sc">&#39;o&#39;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">var</span><span class="w"> </span><span class="nx">str</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&#34;hello world!&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 这里想把e改成o，不支持</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">str</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="sc">&#39;o&#39;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="12-字符串的终止方式">1.2 字符串的终止方式</h2>
 <p>字符串的终止有两种方式：</p>
@@ -226,11 +234,11 @@
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">StringHeader</span> <span class="kd">struct</span> <span class="p">{</span>
-	<span class="nx">Data</span> <span class="kt">uintptr</span>
-	<span class="nx">Len</span>  <span class="kt">int</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">type</span><span class="w"> </span><span class="nx">StringHeader</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">Data</span><span class="w"> </span><span class="kt">uintptr</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">Len</span><span class="w">  </span><span class="kt">int</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>Data: 指向底层的字符数组</li>
@@ -256,14 +264,14 @@
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">TestRun</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
-	<span class="nx">str</span> <span class="o">:=</span> <span class="s">&#34;Go语言&#34;</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;str长度：&#34;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="nx">str</span><span class="p">))</span>
-<span class="p">}</span>
-<span class="cm">/**
-</span><span class="cm">str长度： 8
-</span><span class="cm"> */</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="nf">TestRun</span><span class="p">(</span><span class="nx">t</span><span class="w"> </span><span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">str</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&#34;Go语言&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;str长度：&#34;</span><span class="p">,</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="nx">str</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm">str长度： 8
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><h1 id="3字符串解析">3.字符串解析</h1>
 <h2 id="31-解析源码">3.1 解析源码</h2>
@@ -284,18 +292,18 @@
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">scanner</span><span class="p">)</span> <span class="nf">next</span><span class="p">()</span> <span class="p">{</span>
-<span class="o">...</span>
-    <span class="k">switch</span> <span class="nx">s</span><span class="p">.</span><span class="nx">ch</span> <span class="p">{</span>
-    <span class="k">case</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
-    <span class="o">...</span>
-    <span class="k">case</span> <span class="sc">&#39;&#34;&#39;</span><span class="p">:</span>
-        <span class="nx">s</span><span class="p">.</span><span class="nf">stdString</span><span class="p">()</span>
-    <span class="k">case</span> <span class="sc">&#39;`&#39;</span><span class="p">:</span>
-        <span class="nx">s</span><span class="p">.</span><span class="nf">rawString</span><span class="p">()</span>
-<span class="o">...</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">s</span><span class="w"> </span><span class="o">*</span><span class="nx">scanner</span><span class="p">)</span><span class="w"> </span><span class="nf">next</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="o">...</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">switch</span><span class="w"> </span><span class="nx">s</span><span class="p">.</span><span class="nx">ch</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="o">...</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;&#34;&#39;</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nx">s</span><span class="p">.</span><span class="nf">stdString</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;`&#39;</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nx">s</span><span class="p">.</span><span class="nf">rawString</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="o">...</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>根据上面源码解析可知：</p>
 <ul>
@@ -334,29 +342,29 @@
 </span><span class="lnt">22
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">scanner</span><span class="p">)</span> <span class="nf">rawString</span><span class="p">()</span> <span class="p">{</span>
-	<span class="nx">ok</span> <span class="o">:=</span> <span class="kc">true</span>
-	<span class="nx">s</span><span class="p">.</span><span class="nf">nextch</span><span class="p">()</span>
-
-	<span class="k">for</span> <span class="p">{</span>
-		<span class="k">if</span> <span class="nx">s</span><span class="p">.</span><span class="nx">ch</span> <span class="o">==</span> <span class="sc">&#39;`&#39;</span> <span class="p">{</span>
-			<span class="nx">s</span><span class="p">.</span><span class="nf">nextch</span><span class="p">()</span>
-			<span class="k">break</span>
-		<span class="p">}</span>
-		<span class="k">if</span> <span class="nx">s</span><span class="p">.</span><span class="nx">ch</span> <span class="p">&lt;</span> <span class="mi">0</span> <span class="p">{</span>
-			<span class="nx">s</span><span class="p">.</span><span class="nf">errorAtf</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s">&#34;string not terminated&#34;</span><span class="p">)</span>
-			<span class="nx">ok</span> <span class="p">=</span> <span class="kc">false</span>
-			<span class="k">break</span>
-		<span class="p">}</span>
-		<span class="nx">s</span><span class="p">.</span><span class="nf">nextch</span><span class="p">()</span>
-	<span class="p">}</span>
-	<span class="c1">// We leave CRs in the string since they are part of the
-</span><span class="c1"></span>	<span class="c1">// literal (even though they are not part of the literal
-</span><span class="c1"></span>	<span class="c1">// value).
-</span><span class="c1"></span>
-	<span class="nx">s</span><span class="p">.</span><span class="nf">setLit</span><span class="p">(</span><span class="nx">StringLit</span><span class="p">,</span> <span class="nx">ok</span><span class="p">)</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">s</span><span class="w"> </span><span class="o">*</span><span class="nx">scanner</span><span class="p">)</span><span class="w"> </span><span class="nf">rawString</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">ok</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">s</span><span class="p">.</span><span class="nf">nextch</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">for</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="k">if</span><span class="w"> </span><span class="nx">s</span><span class="p">.</span><span class="nx">ch</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="sc">&#39;`&#39;</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="nx">s</span><span class="p">.</span><span class="nf">nextch</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="k">break</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="k">if</span><span class="w"> </span><span class="nx">s</span><span class="p">.</span><span class="nx">ch</span><span class="w"> </span><span class="p">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="nx">s</span><span class="p">.</span><span class="nf">errorAtf</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;string not terminated&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="nx">ok</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="kc">false</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="k">break</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nx">s</span><span class="p">.</span><span class="nf">nextch</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// We leave CRs in the string since they are part of the</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// literal (even though they are not part of the literal</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// value).</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">s</span><span class="p">.</span><span class="nf">setLit</span><span class="p">(</span><span class="nx">StringLit</span><span class="p">,</span><span class="w"> </span><span class="nx">ok</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="33-解析函数stdstring">3.3 解析函数：stdString</h2>
 <p>双引号调用 <code>stdString</code> 函数，如果出现另一个双引号则直接退出，如果出现了 <code>\\</code>,则对后面的字符进行转义。</p>
@@ -397,42 +405,42 @@
 </span><span class="lnt">32
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">scanner</span><span class="p">)</span> <span class="nf">stdString</span><span class="p">()</span> <span class="p">{</span>
-	<span class="nx">ok</span> <span class="o">:=</span> <span class="kc">true</span>
-	<span class="nx">s</span><span class="p">.</span><span class="nf">nextch</span><span class="p">()</span>
-
-	<span class="k">for</span> <span class="p">{</span>
-		<span class="k">if</span> <span class="nx">s</span><span class="p">.</span><span class="nx">ch</span> <span class="o">==</span> <span class="sc">&#39;&#34;&#39;</span> <span class="p">{</span>
-			<span class="nx">s</span><span class="p">.</span><span class="nf">nextch</span><span class="p">()</span>
-			<span class="k">break</span>
-		<span class="p">}</span>
-		<span class="k">if</span> <span class="nx">s</span><span class="p">.</span><span class="nx">ch</span> <span class="o">==</span> <span class="sc">&#39;\\&#39;</span> <span class="p">{</span>
-			<span class="nx">s</span><span class="p">.</span><span class="nf">nextch</span><span class="p">()</span>
-			<span class="k">if</span> <span class="p">!</span><span class="nx">s</span><span class="p">.</span><span class="nf">escape</span><span class="p">(</span><span class="sc">&#39;&#34;&#39;</span><span class="p">)</span> <span class="p">{</span>
-				<span class="nx">ok</span> <span class="p">=</span> <span class="kc">false</span>
-			<span class="p">}</span>
-			<span class="k">continue</span>
-		<span class="p">}</span>
-		<span class="c1">// 双引号中不能出现换行符
-</span><span class="c1"></span>		<span class="k">if</span> <span class="nx">s</span><span class="p">.</span><span class="nx">ch</span> <span class="o">==</span> <span class="sc">&#39;\n&#39;</span> <span class="p">{</span>
-			<span class="nx">s</span><span class="p">.</span><span class="nf">errorf</span><span class="p">(</span><span class="s">&#34;newline in string&#34;</span><span class="p">)</span>
-			<span class="nx">ok</span> <span class="p">=</span> <span class="kc">false</span>
-			<span class="k">break</span>
-		<span class="p">}</span>
-		<span class="k">if</span> <span class="nx">s</span><span class="p">.</span><span class="nx">ch</span> <span class="p">&lt;</span> <span class="mi">0</span> <span class="p">{</span>
-			<span class="nx">s</span><span class="p">.</span><span class="nf">errorAtf</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s">&#34;string not terminated&#34;</span><span class="p">)</span>
-			<span class="nx">ok</span> <span class="p">=</span> <span class="kc">false</span>
-			<span class="k">break</span>
-		<span class="p">}</span>
-		<span class="nx">s</span><span class="p">.</span><span class="nf">nextch</span><span class="p">()</span>
-	<span class="p">}</span>
-
-	<span class="nx">s</span><span class="p">.</span><span class="nf">setLit</span><span class="p">(</span><span class="nx">StringLit</span><span class="p">,</span> <span class="nx">ok</span><span class="p">)</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">s</span><span class="w"> </span><span class="o">*</span><span class="nx">scanner</span><span class="p">)</span><span class="w"> </span><span class="nf">stdString</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">ok</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">s</span><span class="p">.</span><span class="nf">nextch</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">for</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="k">if</span><span class="w"> </span><span class="nx">s</span><span class="p">.</span><span class="nx">ch</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="sc">&#39;&#34;&#39;</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="nx">s</span><span class="p">.</span><span class="nf">nextch</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="k">break</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="k">if</span><span class="w"> </span><span class="nx">s</span><span class="p">.</span><span class="nx">ch</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="sc">&#39;\\&#39;</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="nx">s</span><span class="p">.</span><span class="nf">nextch</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="k">if</span><span class="w"> </span><span class="p">!</span><span class="nx">s</span><span class="p">.</span><span class="nf">escape</span><span class="p">(</span><span class="sc">&#39;&#34;&#39;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">				</span><span class="nx">ok</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="kc">false</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="k">continue</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="c1">// 双引号中不能出现换行符</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="k">if</span><span class="w"> </span><span class="nx">s</span><span class="p">.</span><span class="nx">ch</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="sc">&#39;\n&#39;</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="nx">s</span><span class="p">.</span><span class="nf">errorf</span><span class="p">(</span><span class="s">&#34;newline in string&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="nx">ok</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="kc">false</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="k">break</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="k">if</span><span class="w"> </span><span class="nx">s</span><span class="p">.</span><span class="nx">ch</span><span class="w"> </span><span class="p">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="nx">s</span><span class="p">.</span><span class="nf">errorAtf</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;string not terminated&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="nx">ok</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="kc">false</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="k">break</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nx">s</span><span class="p">.</span><span class="nf">nextch</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">s</span><span class="p">.</span><span class="nf">setLit</span><span class="p">(</span><span class="nx">StringLit</span><span class="p">,</span><span class="w"> </span><span class="nx">ok</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><blockquote>
-<p><font color=red>@注：在双引号中不能出现换行符，以下代码在编译时会报错：newline in string。这是通过对每个字符判断 r=='\n&rsquo;实现的。</font></p>
+<p><font color=red>@注：在双引号中不能出现换行符，以下代码在编译时会报错：newline in string。这是通过对每个字符判断 r==&rsquo;\n&rsquo;实现的。</font></p>
 </blockquote>
 <h1 id="4字符串拼接">4.字符串拼接</h1>
 <h2 id="41-非运行时拼接">4.1 非运行时拼接</h2>
@@ -444,10 +452,10 @@
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="nx">str</span> <span class="o">:=</span> <span class="s">&#34;hello&#34;</span> <span class="o">+</span> <span class="s">&#34;world&#34;</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">str</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&#34;hello&#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&#34;world&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>由于数字的加法操作也是使用加号操作符 <code>(+)</code>，因此编译时需要知道具体是何种操作：</p>
 <ul>
@@ -475,12 +483,12 @@
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">a</span> <span class="o">:=</span> <span class="s">&#34;hello go&#34;</span>
-<span class="c1">// a强制转换为字节数组b
-</span><span class="c1"></span><span class="nx">b</span> <span class="o">:=</span> <span class="p">[]</span><span class="nb">byte</span><span class="p">(</span><span class="nx">a</span><span class="p">)</span>
-<span class="c1">// 字节数组b强制转换为字符串c
-</span><span class="c1"></span><span class="nx">c</span> <span class="o">:=</span> <span class="nb">string</span><span class="p">(</span><span class="nx">b</span><span class="p">)</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="nx">a</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&#34;hello go&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">// a强制转换为字节数组b</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">b</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="p">[]</span><span class="nb">byte</span><span class="p">(</span><span class="nx">a</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 字节数组b强制转换为字符串c</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">c</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">string</span><span class="p">(</span><span class="nx">b</span><span class="p">)</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="51-注意事项">5.1 注意事项</h2>
 <p>字符数组和字符串的相互转换<strong>并不是简单的指针引用，而是涉及到了内存复制。</strong></p>
@@ -496,13 +504,13 @@
 
     <div class="post-copyright">
   <p class="copyright-item">
-    <span class="item-title">文章作者</span>
-    <span class="item-content">Learn Go</span>
+    <span class="item-title">Author</span>
+    <span class="item-content"></span>
   </p>
   <p class="copyright-item">
-    <span class="item-title">上次更新</span>
+    <span class="item-title">LastMod</span>
     <span class="item-content">
-        2023-03-09
+        2023-03-18
         
     </span>
   </p>
@@ -518,11 +526,11 @@
         <a class="prev" href="/post/%E8%BF%9B%E9%98%B6%E7%AF%87/%E5%BA%95%E5%B1%82%E6%8E%A2%E7%B4%A2/03-%E5%88%87%E7%89%87/">
             <i class="iconfont icon-left"></i>
             <span class="prev-text nav-default">Go底层探索(三):切片</span>
-            <span class="prev-text nav-mobile">上一篇</span>
+            <span class="prev-text nav-mobile">Prev</span>
           </a>
         <a class="next" href="/post/%E8%BF%9B%E9%98%B6%E7%AF%87/%E5%BA%95%E5%B1%82%E6%8E%A2%E7%B4%A2/01-%E7%BC%96%E8%AF%91%E5%99%A8/">
             <span class="next-text nav-default">Go底层探索(一):编译器</span>
-            <span class="next-text nav-mobile">下一篇</span>
+            <span class="next-text nav-mobile">Next</span>
             <i class="iconfont icon-right"></i>
           </a>
       </nav>
@@ -542,16 +550,16 @@
       <div class="social-links">
       <a href="https://github.com/shershon1991" class="iconfont icon-github" title="github"></a>
       <a href="https://www.zhihu.com/people/shershon520" class="iconfont icon-zhihu" title="zhihu"></a>
-  <a href="https://shershon1991.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+  
 </div>
 
 <div class="copyright">
   <span class="power-by">
-    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
   </span>
   <span class="division">|</span>
   <span class="theme-info">
-    主题 - 
+    Theme - 
     <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
   </span>
 
@@ -560,7 +568,7 @@
   <span class="copyright-year">
     &copy; 
     2021 - 
-    2024<span class="heart"><i class="iconfont icon-heart"></i></span><span>Learn Go</span>
+    2026<span class="heart"><i class="iconfont icon-heart"></i></span><span></span>
   </span>
 </div>
 
@@ -570,15 +578,28 @@
       <i class="iconfont icon-up"></i>
     </div>
   </div>
-  <script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
-<script>
-    docsearch({
-        apiKey: "9f0c02b55e9885568dcbf6ef094b433c",
-        indexName: "hugo",
-        appId: "TTENARPLYL",
-        inputSelector: '.docsearch-input',
-        debug: false,
-    });
-</script>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.min.js" integrity="sha256-jwCP0NAdCBloaIWTWHmW4i3snUNMHUNO+jr9rYd2iOI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.locales.min.js" integrity="sha256-ZwofwC1Lf/faQCzN7nZtfijVV6hSwxjQMwXL4gn9qU8=" crossorigin="anonymous"></script>
+  <script>
+    var languageCode = "en".replace(/-/g, '_').replace(/_(.*)/, function ($0, $1) {return $0.replace($1, $1.toUpperCase());});
+    timeago().render(document.querySelectorAll('.timeago'), languageCode);
+    timeago.cancel();  
+  </script>
+
+
+
+<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+
+
+
+
+
+
+
+
 </body>
 </html>

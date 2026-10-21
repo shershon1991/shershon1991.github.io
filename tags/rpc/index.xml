@@ -4,62 +4,51 @@
     <title>RPC on Learn Go</title>
     <link>https://shershon1991.github.io/tags/rpc/</link>
     <description>Recent content in RPC on Learn Go</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 25 Sep 2022 16:03:00 +0800</lastBuildDate><atom:link href="https://shershon1991.github.io/tags/rpc/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 21 Oct 2026 14:53:25 +0800</lastBuildDate>
+    <atom:link href="https://shershon1991.github.io/tags/rpc/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>RPC编程(六):gRPC中的截取器</title>
       <link>https://shershon1991.github.io/post/%E8%BF%9B%E9%98%B6%E7%AF%87/rpc/06-grpc%E4%B8%AD%E7%9A%84%E6%88%AA%E5%8F%96%E5%99%A8/</link>
       <pubDate>Sun, 25 Sep 2022 16:03:00 +0800</pubDate>
-      
       <guid>https://shershon1991.github.io/post/%E8%BF%9B%E9%98%B6%E7%AF%87/rpc/06-grpc%E4%B8%AD%E7%9A%84%E6%88%AA%E5%8F%96%E5%99%A8/</guid>
-      <description>介绍 gRPC 中的截取器，类似中间件( middleware )的功能，可以做一些前置校验的工作，比如登陆验证、日志记录、异常捕获等。 流程梳理 gRPC 中的 grpc.UnaryInterceptor 和 grpc.StreamInterceptor 分别对普通方法和</description>
+      <description>&lt;h2 id=&#34;1-介绍&#34;&gt;1. 介绍&lt;/h2&gt;&#xA;&lt;p&gt;&lt;code&gt;gRPC&lt;/code&gt; 中的截取器，类似中间件( &lt;code&gt;middleware&lt;/code&gt; )的功能，可以做一些前置校验的工作，比如登陆验证、日志记录、异常捕获等。&lt;/p&gt;&#xA;&lt;h2 id=&#34;2-流程梳理&#34;&gt;2. 流程梳理&lt;/h2&gt;&#xA;&lt;p&gt;&lt;code&gt;gRPC&lt;/code&gt; 中的 &lt;code&gt;grpc.UnaryInterceptor&lt;/code&gt; 和 &lt;code&gt;grpc.StreamInterceptor&lt;/code&gt; 分别对普通方法和流方法提供了截取器的支持。这里主要编写普通方法的截取器。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>RPC编程(五):gRPC中的token认证</title>
       <link>https://shershon1991.github.io/post/%E8%BF%9B%E9%98%B6%E7%AF%87/rpc/05-grpc%E4%B8%AD%E7%9A%84token%E8%AE%A4%E8%AF%81/</link>
       <pubDate>Fri, 23 Sep 2022 18:44:07 +0800</pubDate>
-      
       <guid>https://shershon1991.github.io/post/%E8%BF%9B%E9%98%B6%E7%AF%87/rpc/05-grpc%E4%B8%AD%E7%9A%84token%E8%AE%A4%E8%AF%81/</guid>
-      <description>介绍 gRPC 为每个 gRPC 方法调用提供了 token 认证支持，可以基于用户传入的 token 判断用户是否登录、以及权限&amp;hellip;，实现 token 认证的前提是，需要定义一个结构</description>
+      <description>&lt;h2 id=&#34;1介绍&#34;&gt;1.介绍&lt;/h2&gt;&#xA;&lt;p&gt;&lt;code&gt;gRPC&lt;/code&gt; 为每个 &lt;code&gt;gRPC&lt;/code&gt; 方法调用提供了 &lt;code&gt;token&lt;/code&gt; 认证支持，可以基于用户传入的 &lt;code&gt;token&lt;/code&gt; 判断用户是否登录、以及权限&amp;hellip;，实现 &lt;code&gt;token&lt;/code&gt; 认证的前提是，需要定义一个结构体，并实现 &lt;code&gt;grpc.PerRPCCredentials&lt;/code&gt; 接口。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>RPC编程(四):protobuf语法学习</title>
       <link>https://shershon1991.github.io/post/%E8%BF%9B%E9%98%B6%E7%AF%87/rpc/04-protobuf%E8%AF%AD%E6%B3%95%E5%AD%A6%E4%B9%A0/</link>
       <pubDate>Tue, 20 Sep 2022 11:44:00 +0000</pubDate>
-      
       <guid>https://shershon1991.github.io/post/%E8%BF%9B%E9%98%B6%E7%AF%87/rpc/04-protobuf%E8%AF%AD%E6%B3%95%E5%AD%A6%E4%B9%A0/</guid>
-      <description>介绍 ProtoBuf 是 Protocol Buffers 的简称，它是Google开发的一种数据描述语言，于2008年开源。 ProtoBuf 刚开源时的定位类似于 XML、JSON 等数据描述语言，通过附带</description>
+      <description>&lt;h2 id=&#34;1介绍&#34;&gt;1.介绍&lt;/h2&gt;&#xA;&lt;p&gt;&lt;code&gt;ProtoBuf&lt;/code&gt; 是 &lt;code&gt;Protocol Buffers&lt;/code&gt; 的简称，它是Google开发的一种数据描述语言，于2008年开源。 &lt;code&gt;ProtoBuf&lt;/code&gt; 刚开源时的定位类似于 &lt;code&gt;XML、JSON&lt;/code&gt;&#xA;等数据描述语言，通过附带工具生成代码并实现将结构化数据序列化的功能。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>RPC编程(三):gRPC快速入门</title>
       <link>https://shershon1991.github.io/post/%E8%BF%9B%E9%98%B6%E7%AF%87/rpc/03-grpc%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/</link>
       <pubDate>Tue, 20 Sep 2022 00:00:00 +0000</pubDate>
-      
       <guid>https://shershon1991.github.io/post/%E8%BF%9B%E9%98%B6%E7%AF%87/rpc/03-grpc%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/</guid>
-      <description>什么是gRPC gRPC 是一个高性能、开源、通用的 RPC 框架，由 Google 推出，基于 HTTP2 协议标准设计开发，默认采用 Protocol Buffers 数据序列化协议，支持多种开发语言。 gRPC 提供了一</description>
+      <description>&lt;h2 id=&#34;1什么是grpc&#34;&gt;1.什么是gRPC&lt;/h2&gt;&#xA;&lt;p&gt;&lt;a href=&#34;https://grpc.io&#34;&gt;gRPC&lt;/a&gt; 是一个高性能、开源、通用的 &lt;code&gt;RPC&lt;/code&gt; 框架，由 &lt;code&gt;Google&lt;/code&gt; 推出，基于 &lt;a href=&#34;https://http2.github.io&#34;&gt;HTTP2&lt;/a&gt; 协议标准设计开发，默认采用 &lt;a href=&#34;https://developers.google.com/protocol-buffers/&#34;&gt;Protocol Buffers&lt;/a&gt; 数据序列化协议，支持多种开发语言。 &lt;code&gt;gRPC&lt;/code&gt; 提供了一种简单的方法来精确地定义服务，并且为客户端和服务端自动生成可靠的功能库。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>RPC编程(二):快速入门使用</title>
       <link>https://shershon1991.github.io/post/%E8%BF%9B%E9%98%B6%E7%AF%87/rpc/02-use-rpc/</link>
       <pubDate>Fri, 02 Jul 2021 00:00:00 +0000</pubDate>
-      
       <guid>https://shershon1991.github.io/post/%E8%BF%9B%E9%98%B6%E7%AF%87/rpc/02-use-rpc/</guid>
-      <description>介绍 Go语言标准包(net/rpc)已经提供了对RPC的支持，而且支持三个级别的RPC：TCP、HTTP和JSONRPC。但Go语言的RPC</description>
+      <description>&lt;h2 id=&#34;1-介绍&#34;&gt;1. 介绍&lt;/h2&gt;&#xA;&lt;p&gt;&lt;code&gt;Go&lt;/code&gt;语言标准包(&lt;code&gt;net/rpc&lt;/code&gt;)已经提供了对&lt;code&gt;RPC&lt;/code&gt;的支持，而且支持三个级别的RPC：&lt;code&gt;TCP、HTTP和JSONRPC&lt;/code&gt;。但&lt;code&gt;Go&lt;/code&gt;语言的&lt;code&gt;RPC&lt;/code&gt;包是独一无二的&lt;code&gt;RPC&lt;/code&gt;，它和传统的RPC系统不同，它只支持Go语言开发的服务器与客户端之间的交互，因为在内部，它们采用了&lt;code&gt;Gob&lt;/code&gt;来编码。&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>RPC编程(一):初步了解RPC</title>
       <link>https://shershon1991.github.io/post/%E8%BF%9B%E9%98%B6%E7%AF%87/rpc/01-understand/</link>
       <pubDate>Thu, 01 Jul 2021 00:00:00 +0000</pubDate>
-      
       <guid>https://shershon1991.github.io/post/%E8%BF%9B%E9%98%B6%E7%AF%87/rpc/01-understand/</guid>
-      <description>什么是RPC RPC（Remote Procedure Call，远程过程调用）是一种进程间的通信方式，它是一种技术思想(概念),而不是规范，它允许程序调用另一个</description>
+      <description>&lt;h2 id=&#34;1-什么是rpc&#34;&gt;1. 什么是RPC&lt;/h2&gt;&#xA;&lt;p&gt;&lt;code&gt;RPC（Remote Procedure Call&lt;/code&gt;，远程过程调用）&lt;font color=blue&gt;&lt;b&gt;是一种进程间的通信方式，它是一种技术思想(概念),而不是规范，它允许程序调用另一个地址空间(通常是共享网络的另一台机器)的过程函数，而开发者无需额外地为这个调用过程编写网络通信相关代码细节。&lt;/b&gt;&lt;/font&gt;&lt;/p&gt;</description>
     </item>
-    
   </channel>
 </rss>

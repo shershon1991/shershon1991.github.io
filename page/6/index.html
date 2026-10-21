@@ -16,14 +16,14 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="Learn Go" /><meta name="description" content="Learn Go" /><meta name="keywords" content="博客, Learn Go, hugo" />
+<meta name="author" content="" /><meta name="description" content="Learn Go" /><meta name="keywords" content="博客, Learn Go, hugo" />
 
 
 
 
 
 
-<meta name="generator" content="Hugo 0.90.1 with theme even" />
+<meta name="generator" content="Hugo 0.160.1 with theme even" />
 
 
 <link rel="canonical" href="https://shershon1991.github.io/" />
@@ -37,19 +37,24 @@
 
 
 
-<link href="/sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link href="/sass/main.min.af7fd1da18d66c2b017df5b4cae508ef44cfcac3fb4c7c7a327fe4f4f9e28b08.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
-<meta property="og:title" content="Learn Go" />
-<meta property="og:description" content="Learn Go" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://shershon1991.github.io/" />
+<meta property="og:url" content="https://shershon1991.github.io/">
+  <meta property="og:site_name" content="Learn Go">
+  <meta property="og:title" content="Learn Go">
+  <meta property="og:description" content="Learn Go">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="website">
 
-<meta itemprop="name" content="Learn Go">
-<meta itemprop="description" content="Learn Go"><meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Learn Go"/>
-<meta name="twitter:description" content="Learn Go"/>
+  <meta itemprop="name" content="Learn Go">
+  <meta itemprop="description" content="Learn Go">
+  <meta itemprop="datePublished" content="2023-07-13T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2026-10-21T14:53:25+08:00">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Learn Go">
+  <meta name="twitter:description" content="Learn Go">
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -92,28 +97,28 @@
 
   <div class="container" id="mobile-panel">
     <header id="header" class="header">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"/><header id="header" class="header">
-    <div class="logo-wrapper">
-        <a href="/" class="logo">Learn Go</a>
-    </div>
-    <nav class="site-navbar">
-        <ul id="menu" class="menu"><li style="display:inline-block;margin-right:10px;">
-                <input type="search" class="docsearch-input" placeholder="Search"/>
-            </li><li class="menu-item">
-                <a class="menu-item-link" href="/">首页</a>
-            </li>
-            <li class="menu-item">
-                <a class="menu-item-link" href="/post/">归档</a>
-            </li>
-            <li class="menu-item">
-                <a class="menu-item-link" href="/tags/">标签</a>
-            </li>
-            <li class="menu-item">
-                <a class="menu-item-link" href="/categories/">分类</a>
-            </li>
-        </ul>
-    </nav>
-</header>
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Learn Go</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">首页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li>
+  </ul>
+</nav>
+
     </header>
 
     <main id="main" class="main">
@@ -122,144 +127,377 @@
           <section id="posts" class="posts">
     <article class="post">
   <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/%E5%9F%BA%E7%A1%80%E7%AF%87/6-%E5%87%BD%E6%95%B0%E4%BD%BF%E7%94%A8/">Go学习(六):函数使用</a></h1>
+    <h1 class="post-title"><a class="post-link" href="/post/%E6%89%A9%E5%B1%95%E5%8C%85/12-cron/">Go扩展包(十二):cron</a></h1>
     <div class="post-meta">
-      <span class="post-time"> 2021-01-06 </span>
+      <span class="post-time"> 2021-04-27 </span>
       <div class="post-category">
           <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
           <a href="/categories/go/"> Go </a>
           </div>
-        <span class="more-meta"> 约 2227 字 </span>
-        <span class="more-meta"> 预计阅读 5 分钟 </span>
+        <span class="more-meta"> 1355 words </span>
+        <span class="more-meta"> 3 mins read </span>
     </div>
   </header>
   
   <div class="post-content">
     <div class="post-summary">
-      1.函数申明 1.1 声明语法 1 2 3 4 5 func funcName( param type ) (output1 type1, output2 type2) { //这里是处理逻辑代码 //返回多个值 return value1, value2 } 1.2 语法解析 func: 函数关键字, funcName: 指函数名，在同一个
+      <h2 id="1介绍">1.介绍</h2>
+<p>在<code>Linux</code>中，通过<code>crontab</code>命令使任务在约定的时间执行已经计划好的工作，而<code>Go</code>由于语言的特性，不适合直接使用<code>crontab</code>来管理计划任务，<a href="https://github.com/robfig/cron">cron (目前 Star8.3k)</a>是一个用<code>Go</code>实现的定时任务库，支持秒级定时任务，可以满足绝大多数工作场景需求。</p>
     </div>
     <div class="read-more">
-      <a href="/post/%E5%9F%BA%E7%A1%80%E7%AF%87/6-%E5%87%BD%E6%95%B0%E4%BD%BF%E7%94%A8/" class="read-more-link">阅读更多</a>
+      <a href="/post/%E6%89%A9%E5%B1%95%E5%8C%85/12-cron/" class="read-more-link">Read more...</a>
     </div>
   </div>
 </article>
 
     <article class="post">
   <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/%E5%9F%BA%E7%A1%80%E7%AF%87/5-%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6/">Go学习(五):流程控制</a></h1>
+    <h1 class="post-title"><a class="post-link" href="/post/%E6%89%A9%E5%B1%95%E5%8C%85/11-colly/">Go扩展包(十一):colly</a></h1>
     <div class="post-meta">
-      <span class="post-time"> 2021-01-05 </span>
+      <span class="post-time"> 2021-04-26 </span>
       <div class="post-category">
           <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
           <a href="/categories/go/"> Go </a>
           </div>
-        <span class="more-meta"> 约 3555 字 </span>
-        <span class="more-meta"> 预计阅读 8 分钟 </span>
+        <span class="more-meta"> 7500 words </span>
+        <span class="more-meta"> 15 mins read </span>
     </div>
   </header>
   
   <div class="post-content">
     <div class="post-summary">
-      1.条件判断(if) 1.1 if 1.语法结构 1 2 3 if 布尔表达式 { // 布尔表达式为true时执行 } 2. 使用 1 2 3 4 a := 10 if a &gt; 3{ fmt.Println(&#34;a &gt; 3 为true&#34;
+      <h2 id="1介绍">1.介绍</h2>
+<p><code>Colly</code>是<code>Golang</code>世界中最知名的<code>Web</code>爬虫框架,它提供简洁的 API，拥有强劲的性能、可以自动处理 <code>cookie&amp;session</code>、提供灵活的扩展机制,同时支持分布式抓取和多种存储后端（如内存、<code>Redis</code>、<code>MongoDB</code>等）。</p>
     </div>
     <div class="read-more">
-      <a href="/post/%E5%9F%BA%E7%A1%80%E7%AF%87/5-%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6/" class="read-more-link">阅读更多</a>
+      <a href="/post/%E6%89%A9%E5%B1%95%E5%8C%85/11-colly/" class="read-more-link">Read more...</a>
     </div>
   </div>
 </article>
 
     <article class="post">
   <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/%E5%9F%BA%E7%A1%80%E7%AF%87/4-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/">Go学习(四):数据类型</a></h1>
+    <h1 class="post-title"><a class="post-link" href="/post/%E6%89%A9%E5%B1%95%E5%8C%85/10-es/">Go扩展包(十):es</a></h1>
     <div class="post-meta">
-      <span class="post-time"> 2021-01-04 </span>
+      <span class="post-time"> 2021-04-25 </span>
       <div class="post-category">
           <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
           <a href="/categories/go/"> Go </a>
           </div>
-        <span class="more-meta"> 约 2298 字 </span>
-        <span class="more-meta"> 预计阅读 5 分钟 </span>
+        <span class="more-meta"> 3249 words </span>
+        <span class="more-meta"> 7 mins read </span>
     </div>
   </header>
   
   <div class="post-content">
     <div class="post-summary">
-      1.类型介绍 在Go语言中，有基本数据类型（原生数据类型）和复合数据类型（派生数据类型）。 2.值类型 2.1 整型 整型分两大类： 有符号整型：int8、
+      <h2 id="1介绍">1.介绍</h2>
+<p><code>Elasticsearch（ES）</code>是一个基于<code>Lucene</code>构建的开源、分布式、<code>RESTful</code>接口的全文搜索引擎。<code>Elasticsearch</code>还是一个分布式文档数据库，其中每个字段均可被索引，而且每个字段的数据均可被搜索，<code>ES</code>能够横向扩展至数以百计的服务器存储以及处理<strong>PB</strong>级的数据。可以在极短的时间内存储、搜索和分析大量的数据。通常作为具有复杂搜索场景情况下的核心发动机。根据<code>DB-Engines</code>的排名显示，<code>Elasticsearch</code>是最受欢迎的企业搜索引擎。</p>
     </div>
     <div class="read-more">
-      <a href="/post/%E5%9F%BA%E7%A1%80%E7%AF%87/4-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" class="read-more-link">阅读更多</a>
+      <a href="/post/%E6%89%A9%E5%B1%95%E5%8C%85/10-es/" class="read-more-link">Read more...</a>
     </div>
   </div>
 </article>
 
     <article class="post">
   <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/%E5%9F%BA%E7%A1%80%E7%AF%87/3-%E5%8F%98%E9%87%8F%E4%BD%BF%E7%94%A8/">Go学习(三):变量使用</a></h1>
+    <h1 class="post-title"><a class="post-link" href="/post/%E6%A0%87%E5%87%86%E5%8C%85/15-testing/">Go标准包(十五):testing</a></h1>
     <div class="post-meta">
-      <span class="post-time"> 2021-01-03 </span>
+      <span class="post-time"> 2021-04-24 </span>
       <div class="post-category">
           <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
           <a href="/categories/go/"> Go </a>
           </div>
-        <span class="more-meta"> 约 488 字 </span>
-        <span class="more-meta"> 预计阅读 1 分钟 </span>
+        <span class="more-meta"> 3420 words </span>
+        <span class="more-meta"> 7 mins read </span>
     </div>
   </header>
   
   <div class="post-content">
     <div class="post-summary">
-      1.变量分类 变量的本质是计算机分配的一小块内存，专门用于存放指定数据，在程序运行过程中该数值可以发生改变；当程序运行结束，存放该数据的内存就
+      <h2 id="1-介绍">1. 介绍</h2>
+<p><code>testing</code> 包为<code>Go</code> 语言提供自动化测试的支持。通过 <code>go test</code> 命令来执行单元测试文件，<strong>单元测试文件命名格式为: <code>xxx_test.go</code></strong>,在单元测试文件中,根据测试类型不同可以分为:<strong>功能测试函数、基准测试函数</strong>,区别如下:</p>
     </div>
     <div class="read-more">
-      <a href="/post/%E5%9F%BA%E7%A1%80%E7%AF%87/3-%E5%8F%98%E9%87%8F%E4%BD%BF%E7%94%A8/" class="read-more-link">阅读更多</a>
+      <a href="/post/%E6%A0%87%E5%87%86%E5%8C%85/15-testing/" class="read-more-link">Read more...</a>
     </div>
   </div>
 </article>
 
     <article class="post">
   <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/%E5%9F%BA%E7%A1%80%E7%AF%87/2-%E7%A8%8B%E5%BA%8F%E7%BB%93%E6%9E%84/">Go学习(二):程序组成结构及规范说明</a></h1>
+    <h1 class="post-title"><a class="post-link" href="/post/%E6%89%A9%E5%B1%95%E5%8C%85/9-go-redis/">Go扩展包(九):go-redis</a></h1>
     <div class="post-meta">
-      <span class="post-time"> 2021-01-02 </span>
+      <span class="post-time"> 2021-04-23 </span>
       <div class="post-category">
           <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
           <a href="/categories/go/"> Go </a>
           </div>
-        <span class="more-meta"> 约 926 字 </span>
-        <span class="more-meta"> 预计阅读 2 分钟 </span>
+        <span class="more-meta"> 3797 words </span>
+        <span class="more-meta"> 8 mins read </span>
     </div>
   </header>
   
   <div class="post-content">
     <div class="post-summary">
-      1. 程序示例 以实际代码进行讲解: 1 2 3 4 5 6 7 8 9 10 11 12 package main // 这是引入包 import &#34;fmt&#34; // 入口函数 func main() { // 定义变量 str := &#34;hello word&#34; // 输出语句 fmt.Println(str) } 2. 程序组成 2.1 包名:
+      <h2 id="1-介绍">1. 介绍</h2>
+<p><code>redis</code>官网推荐使用<code>redigo</code>(<code>https://github.com/gomodule/redigo</code>)，截止到今天<code>Github Start是8.2k</code> 但<code>go-redis(https://github.com/go-redis/redis)</code>使用的人更多， 并且<code>go-redis</code>封装得更好。截止到今天<code>Github Start 是12.1k</code>。</p>
     </div>
     <div class="read-more">
-      <a href="/post/%E5%9F%BA%E7%A1%80%E7%AF%87/2-%E7%A8%8B%E5%BA%8F%E7%BB%93%E6%9E%84/" class="read-more-link">阅读更多</a>
+      <a href="/post/%E6%89%A9%E5%B1%95%E5%8C%85/9-go-redis/" class="read-more-link">Read more...</a>
     </div>
   </div>
 </article>
 
     <article class="post">
   <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/%E5%9F%BA%E7%A1%80%E7%AF%87/1-%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/">Go学习(一):Mac环境下安装配置</a></h1>
+    <h1 class="post-title"><a class="post-link" href="/post/%E6%89%A9%E5%B1%95%E5%8C%85/8-jwt-go/">Go扩展包(八):jwt-go</a></h1>
     <div class="post-meta">
-      <span class="post-time"> 2021-01-01 </span>
+      <span class="post-time"> 2021-04-22 </span>
       <div class="post-category">
           <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
           <a href="/categories/go/"> Go </a>
           </div>
-        <span class="more-meta"> 约 696 字 </span>
-        <span class="more-meta"> 预计阅读 2 分钟 </span>
+        <span class="more-meta"> 811 words </span>
+        <span class="more-meta"> 2 mins read </span>
     </div>
   </header>
   
   <div class="post-content">
     <div class="post-summary">
-      1.安装 下载地址（https://golang.org/dl/） 下载之后，双击安装； 2.验证 2.1 查看版本 1 2 3 # 查看版本 ➜ ~ go version go version go1.15.5 darwin/amd64 2.2 查看
+      <h2 id="1-介绍">1. 介绍</h2>
+<p><code>JWT</code>全称<code>JSON Web Token</code>是一种跨域认证解决方案，属于一个开放的标准，它规定了一种<code>Token</code>实现方式，目前多用于前后端分离项目和<code>OAuth2.0</code>业务场景下。</p>
     </div>
     <div class="read-more">
-      <a href="/post/%E5%9F%BA%E7%A1%80%E7%AF%87/1-%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/" class="read-more-link">阅读更多</a>
+      <a href="/post/%E6%89%A9%E5%B1%95%E5%8C%85/8-jwt-go/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/%E6%89%A9%E5%B1%95%E5%8C%85/7-excel/">Go扩展包(七):excel</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2021-04-21 </span>
+      <div class="post-category">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+          <a href="/categories/go/"> Go </a>
+          </div>
+        <span class="more-meta"> 2020 words </span>
+        <span class="more-meta"> 5 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <h2 id="1-介绍">1. 介绍</h2>
+<h3 id="1-1-什么是excelize">1. 1 什么是<code>Excelize</code></h3>
+<p><code>Excelize</code> 是 <code>Go</code> 语言编写的用于操作 <code>Office Excel </code>文档基础库，基于 <code>ECMA-376，ISO/IEC 29500</code> 国际标准。可以使用它来读取、写入由 <code>Microsoft Excel™ 2007</code> 及以上版本创建的电子表格文档。支持<code> XLSX / XLSM / XLTM / XLTX</code> 等多种文档格式，高度兼容带有样式、图片(表)、透视表、切片器等复杂组件的文档，并提供流式读写 <code>API</code>，用于处理包含大规模数据的工作簿。可应用于各类报表平台、云计算、边缘计算等系统。使用本类库要求使用的 <code>Go 语言为 1.15 或更高版本</code>。</p>
+    </div>
+    <div class="read-more">
+      <a href="/post/%E6%89%A9%E5%B1%95%E5%8C%85/7-excel/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/%E6%A0%87%E5%87%86%E5%8C%85/14-math/">Go标准包(十四):math</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2021-04-20 </span>
+      <div class="post-category">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+          <a href="/categories/go/"> Go </a>
+          </div>
+        <span class="more-meta"> 1108 words </span>
+        <span class="more-meta"> 3 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <h2 id="1-介绍">1. 介绍</h2>
+<p><code>Go</code>标准包<code>math</code>,提供了基本的数学常数和数学函数。</p>
+<h2 id="2-常量">2. 常量</h2>
+<h3 id="21-整数取值">2.1 整数取值</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">const</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nx">MaxInt8</span><span class="w">   </span><span class="p">=</span><span class="w"> </span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="mi">7</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="c1">// int8最大值</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nx">MinInt8</span><span class="w">   </span><span class="p">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">7</span><span class="w"> </span><span class="c1">// int8最小值</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nx">MaxInt16</span><span class="w">  </span><span class="p">=</span><span class="w"> </span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="mi">15</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nx">MinInt16</span><span class="w">  </span><span class="p">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">15</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nx">MaxInt32</span><span class="w">  </span><span class="p">=</span><span class="w"> </span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="mi">31</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nx">MinInt32</span><span class="w">  </span><span class="p">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">31</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nx">MaxInt64</span><span class="w">  </span><span class="p">=</span><span class="w"> </span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="mi">63</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nx">MinInt64</span><span class="w">  </span><span class="p">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">63</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nx">MaxUint8</span><span class="w">  </span><span class="p">=</span><span class="w"> </span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="mi">8</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nx">MaxUint16</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="mi">16</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nx">MaxUint32</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="mi">32</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nx">MaxUint64</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="mi">64</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">)</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="22-浮点数取值">2.2 浮点数取值</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">const</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nx">MaxFloat32</span><span class="w">             </span><span class="p">=</span><span class="w"> </span><span class="mf">3.40282346638528859811704183484516925440e+38</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nx">SmallestNonzeroFloat32</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mf">1.401298464324817070923729583289916131280e-45</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nx">MaxFloat64</span><span class="w">             </span><span class="p">=</span><span class="w"> </span><span class="mf">1.797693134862315708145274237317043567981e+308</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nx">SmallestNonzeroFloat64</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mf">4.940656458412465441765687928682213723651e-324</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">)</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="3-函数">3. 函数</h2>
+<h3 id="31-取整">3.1 取整</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// 取整</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="nf">TestRounding</span><span class="p">(</span><span class="nx">t</span><span class="w"> </span><span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// 向上取整</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;50.345,向上取整 -&gt; &#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">math</span><span class="p">.</span><span class="nf">Ceil</span><span class="p">(</span><span class="mf">50.345</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;50.745,向上取整 -&gt; &#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">math</span><span class="p">.</span><span class="nf">Ceil</span><span class="p">(</span><span class="mf">50.745</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// 向下取整</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;50.345,向上取整 -&gt; &#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">math</span><span class="p">.</span><span class="nf">Floor</span><span class="p">(</span><span class="mf">50.345</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;50.745,向上取整 -&gt; &#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">math</span><span class="p">.</span><span class="nf">Floor</span><span class="p">(</span><span class="mf">50.745</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// 四舍五入</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;50.345,四舍五入 -&gt; &#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">math</span><span class="p">.</span><span class="nf">Floor</span><span class="p">(</span><span class="mf">50.345</span><span class="o">+</span><span class="mf">0.5</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;50.745,四舍五入 -&gt; &#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">math</span><span class="p">.</span><span class="nf">Floor</span><span class="p">(</span><span class="mf">50.745</span><span class="o">+</span><span class="mf">0.5</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="cm">/** 输出
+</span></span></span><span class="line"><span class="cl"><span class="cm">=== RUN   TestRounding
+</span></span></span><span class="line"><span class="cl"><span class="cm">50.345,向上取整 -&gt;  51
+</span></span></span><span class="line"><span class="cl"><span class="cm">50.745,向上取整 -&gt;  51
+</span></span></span><span class="line"><span class="cl"><span class="cm">50.345,向上取整 -&gt;  50
+</span></span></span><span class="line"><span class="cl"><span class="cm">50.745,向上取整 -&gt;  50
+</span></span></span><span class="line"><span class="cl"><span class="cm">50.345,四舍五入 -&gt;  50
+</span></span></span><span class="line"><span class="cl"><span class="cm">50.745,四舍五入 -&gt;  51
+</span></span></span><span class="line"><span class="cl"><span class="cm">--- PASS: TestRounding (0.00s)
+</span></span></span><span class="line"><span class="cl"><span class="cm">PASS
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><font color=red>@@注意: golang没有四舍五入函数，常见处理先+0.5，然后向下取整！</font></p>
+    </div>
+    <div class="read-more">
+      <a href="/post/%E6%A0%87%E5%87%86%E5%8C%85/14-math/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/%E6%89%A9%E5%B1%95%E5%8C%85/6-gorm/">Go扩展包(六):gorm</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2021-04-19 </span>
+      <div class="post-category">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+          <a href="/categories/go/"> Go </a>
+          </div>
+        <span class="more-meta"> 5083 words </span>
+        <span class="more-meta"> 11 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <h3 id="1-介绍">1. 介绍</h3>
+<p><code>gorm</code>是一个使用<code>Go</code>语言编写的<code>ORM</code>框架。 它文档齐全，对开发者友好，支持主流数据库。<a href="https://gorm.io/zh_CN/docs/index.html">官方中文文档 https://gorm.io/zh_CN/docs/index.html</a></p>
+<h3 id="2-安装">2. 安装</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="k">go</span><span class="w"> </span><span class="nx">get</span><span class="w"> </span><span class="o">-</span><span class="nx">u</span><span class="w"> </span><span class="nx">gorm</span><span class="p">.</span><span class="nx">io</span><span class="o">/</span><span class="nx">gorm</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">go</span><span class="w"> </span><span class="nx">get</span><span class="w"> </span><span class="o">-</span><span class="nx">u</span><span class="w"> </span><span class="nx">gorm</span><span class="p">.</span><span class="nx">io</span><span class="o">/</span><span class="nx">driver</span><span class="o">/</span><span class="nx">sqlite</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="3-连接mysql">3. 连接MYSQL</h3>
+<p><code>GORM</code> 官方支持的数据库类型有： <code>MySQL, PostgreSQL, SQlite, SQL Server</code>,这里只讲常见的<code>MYSQL</code>。其他类型数据库参见<a href="https://gorm.io/zh_CN/docs/connecting_to_the_database.html">官方文档</a>。</p>
+    </div>
+    <div class="read-more">
+      <a href="/post/%E6%89%A9%E5%B1%95%E5%8C%85/6-gorm/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/%E6%A0%87%E5%87%86%E5%8C%85/13-encoding-json/">Go标准包(十三):encoding-json</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2021-04-18 </span>
+      <div class="post-category">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+          <a href="/categories/go/"> Go </a>
+          </div>
+        <span class="more-meta"> 4330 words </span>
+        <span class="more-meta"> 9 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <h3 id="1-介绍">1. 介绍</h3>
+<blockquote>
+<p><code>Go</code>的标准包 <code>encoding/json</code>实现了<code>json对象</code>的编码和解码。</p>
+</blockquote>
+<p>这篇文章主要讲的是结构体中嵌套匿名字段时的序列化和反序列化，因结构体在参与序列时会有很多细节规则，平时常用的也是结构体，至于<code>map和slice</code>可参考历史文章 <a href="https://mp.weixin.qq.com/s/lmWYxkLU4dV0h-J99Tztzg">Go学习(二十三):JSON编码解析使用</a></p>
+    </div>
+    <div class="read-more">
+      <a href="/post/%E6%A0%87%E5%87%86%E5%8C%85/13-encoding-json/" class="read-more-link">Read more...</a>
     </div>
   </div>
 </article>
@@ -269,9 +507,12 @@
   <nav class="pagination">
     <a class="prev" href="/page/5/">
         <i class="iconfont icon-left"></i>
-        <span class="prev-text">上一页</span>
+        <span class="prev-text">Prev</span>
       </a>
-    
+    <a class="next" href="/page/7/">
+        <span class="next-text">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
   </nav>
         </div>
         
@@ -283,16 +524,18 @@
       <div class="social-links">
       <a href="https://github.com/shershon1991" class="iconfont icon-github" title="github"></a>
       <a href="https://www.zhihu.com/people/shershon520" class="iconfont icon-zhihu" title="zhihu"></a>
-  <a href="https://shershon1991.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+  
+    <a href="/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+  
 </div>
 
 <div class="copyright">
   <span class="power-by">
-    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
   </span>
   <span class="division">|</span>
   <span class="theme-info">
-    主题 - 
+    Theme - 
     <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
   </span>
 
@@ -301,7 +544,7 @@
   <span class="copyright-year">
     &copy; 
     2021 - 
-    2024<span class="heart"><i class="iconfont icon-heart"></i></span><span>Learn Go</span>
+    2026<span class="heart"><i class="iconfont icon-heart"></i></span><span></span>
   </span>
 </div>
 
@@ -311,15 +554,28 @@
       <i class="iconfont icon-up"></i>
     </div>
   </div>
-  <script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
-<script>
-    docsearch({
-        apiKey: "9f0c02b55e9885568dcbf6ef094b433c",
-        indexName: "hugo",
-        appId: "TTENARPLYL",
-        inputSelector: '.docsearch-input',
-        debug: false,
-    });
-</script>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.min.js" integrity="sha256-jwCP0NAdCBloaIWTWHmW4i3snUNMHUNO+jr9rYd2iOI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.locales.min.js" integrity="sha256-ZwofwC1Lf/faQCzN7nZtfijVV6hSwxjQMwXL4gn9qU8=" crossorigin="anonymous"></script>
+  <script>
+    var languageCode = "en".replace(/-/g, '_').replace(/_(.*)/, function ($0, $1) {return $0.replace($1, $1.toUpperCase());});
+    timeago().render(document.querySelectorAll('.timeago'), languageCode);
+    timeago.cancel();  
+  </script>
+
+
+
+<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+
+
+
+
+
+
+
+
 </body>
 </html>

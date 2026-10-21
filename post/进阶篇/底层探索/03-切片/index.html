@@ -16,14 +16,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="Learn Go" /><meta name="description" content="@注：以下内容来自《Go语言底层原理剖析》、《Go语言设计与实现》书中的摘要信息，本人使用版本（Go1.19）与书中不一致，源码路径可能会有" /><meta name="keywords" content="博客, Learn Go, hugo" />
+<meta name="author" content="" /><meta name="description" content=" @注：以下内容来自《Go语言底层原理剖析》、《Go语言设计与实现》书中的摘要信息，本人使用版本（Go1.19）与书中不一致，源码路径可能会有出入。
+" /><meta name="keywords" content="博客, Learn Go, hugo" />
 
 
 
 
 
 
-<meta name="generator" content="Hugo 0.90.1 with theme even" />
+<meta name="generator" content="Hugo 0.160.1 with theme even" />
 
 
 <link rel="canonical" href="https://shershon1991.github.io/post/%E8%BF%9B%E9%98%B6%E7%AF%87/%E5%BA%95%E5%B1%82%E6%8E%A2%E7%B4%A2/03-%E5%88%87%E7%89%87/" />
@@ -35,24 +36,31 @@
 
 
 
-<link href="/sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link href="/sass/main.min.af7fd1da18d66c2b017df5b4cae508ef44cfcac3fb4c7c7a327fe4f4f9e28b08.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
-<meta property="og:title" content="Go底层探索(三):切片" />
-<meta property="og:description" content="@注：以下内容来自《Go语言底层原理剖析》、《Go语言设计与实现》书中的摘要信息，本人使用版本（Go1.19）与书中不一致，源码路径可能会有" />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://shershon1991.github.io/post/%E8%BF%9B%E9%98%B6%E7%AF%87/%E5%BA%95%E5%B1%82%E6%8E%A2%E7%B4%A2/03-%E5%88%87%E7%89%87/" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2023-03-10T00:00:00+00:00" />
-<meta property="article:modified_time" content="2023-03-10T17:18:52+08:00" />
+<meta property="og:url" content="https://shershon1991.github.io/post/%E8%BF%9B%E9%98%B6%E7%AF%87/%E5%BA%95%E5%B1%82%E6%8E%A2%E7%B4%A2/03-%E5%88%87%E7%89%87/">
+  <meta property="og:site_name" content="Learn Go">
+  <meta property="og:title" content="Go底层探索(三):切片">
+  <meta property="og:description" content="@注：以下内容来自《Go语言底层原理剖析》、《Go语言设计与实现》书中的摘要信息，本人使用版本（Go1.19）与书中不一致，源码路径可能会有出入。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2023-03-10T00:00:00+00:00">
+    <meta property="article:modified_time" content="2023-03-18T18:37:44+08:00">
+    <meta property="article:tag" content="Go进阶">
+    <meta property="article:tag" content="Go底层探索">
 
-<meta itemprop="name" content="Go底层探索(三):切片">
-<meta itemprop="description" content="@注：以下内容来自《Go语言底层原理剖析》、《Go语言设计与实现》书中的摘要信息，本人使用版本（Go1.19）与书中不一致，源码路径可能会有"><meta itemprop="datePublished" content="2023-03-10T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2023-03-10T17:18:52+08:00" />
-<meta itemprop="wordCount" content="4292">
-<meta itemprop="keywords" content="Go进阶,Go底层探索," /><meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Go底层探索(三):切片"/>
-<meta name="twitter:description" content="@注：以下内容来自《Go语言底层原理剖析》、《Go语言设计与实现》书中的摘要信息，本人使用版本（Go1.19）与书中不一致，源码路径可能会有"/>
+  <meta itemprop="name" content="Go底层探索(三):切片">
+  <meta itemprop="description" content="@注：以下内容来自《Go语言底层原理剖析》、《Go语言设计与实现》书中的摘要信息，本人使用版本（Go1.19）与书中不一致，源码路径可能会有出入。">
+  <meta itemprop="datePublished" content="2023-03-10T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2023-03-18T18:37:44+08:00">
+  <meta itemprop="wordCount" content="4292">
+  <meta itemprop="keywords" content="Go进阶,Go底层探索">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Go底层探索(三):切片">
+  <meta name="twitter:description" content="@注：以下内容来自《Go语言底层原理剖析》、《Go语言设计与实现》书中的摘要信息，本人使用版本（Go1.19）与书中不一致，源码路径可能会有出入。">
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -95,28 +103,28 @@
 
   <div class="container" id="mobile-panel">
     <header id="header" class="header">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"/><header id="header" class="header">
-    <div class="logo-wrapper">
-        <a href="/" class="logo">Learn Go</a>
-    </div>
-    <nav class="site-navbar">
-        <ul id="menu" class="menu"><li style="display:inline-block;margin-right:10px;">
-                <input type="search" class="docsearch-input" placeholder="Search"/>
-            </li><li class="menu-item">
-                <a class="menu-item-link" href="/">首页</a>
-            </li>
-            <li class="menu-item">
-                <a class="menu-item-link" href="/post/">归档</a>
-            </li>
-            <li class="menu-item">
-                <a class="menu-item-link" href="/tags/">标签</a>
-            </li>
-            <li class="menu-item">
-                <a class="menu-item-link" href="/categories/">分类</a>
-            </li>
-        </ul>
-    </nav>
-</header>
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Learn Go</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">首页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li>
+  </ul>
+</nav>
+
     </header>
 
     <main id="main" class="main">
@@ -133,14 +141,14 @@
             <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
             <a href="/categories/go/"> Go </a>
             </div>
-          <span class="more-meta"> 约 4292 字 </span>
-          <span class="more-meta"> 预计阅读 9 分钟 </span>
+          <span class="more-meta"> 4292 words </span>
+          <span class="more-meta"> 9 mins read </span>
         
       </div>
     </header>
 
     <div class="post-toc" id="post-toc">
-  <h2 class="post-toc-title">文章目录</h2>
+  <h2 class="post-toc-title">Contents</h2>
   <div class="post-toc-content always-active">
     <nav id="TableOfContents">
   <ul>
@@ -179,7 +187,7 @@
 </div>
   <div class="post-outdated">
     <div class="warn">
-      <p>【注意】最后更新于 <span class="timeago" datetime="2023-03-10T17:18:52" title="March 10, 2023">March 10, 2023</span>，文中内容可能已过时，请谨慎使用。</p>
+      <p>[NOTE] Updated <span class="timeago" datetime="2023-03-18T18:37:44" title="March 18, 2023">March 18, 2023</span>. This article may have outdated content or subject matter.</p>
     </div>
   </div>
     <div class="post-content">
@@ -196,9 +204,9 @@
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="p">[]</span><span class="kt">int</span>
-<span class="p">[]</span><span class="kd">interface</span><span class="p">{}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="p">[]</span><span class="kt">int</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">[]</span><span class="kd">interface</span><span class="p">{}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>从切片的定义，我们可以推测出，切片在编译期间生成的类型只会包含切片中的元素类型，即<code>int</code>或<code>interface{}</code>等，<a href="https://draveness.me/golang/tree/cmd/compile/internal/types.NewSlice"><code>cmd/compile/internal/types.NewSlice</code></a>就是编译期间用于创建切片类型的函数。</p>
 <div class="highlight"><div class="chroma">
@@ -227,29 +235,29 @@
 </span><span class="lnt">22
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">NewSlice</span><span class="p">(</span><span class="nx">elem</span> <span class="o">*</span><span class="nx">Type</span><span class="p">)</span> <span class="o">*</span><span class="nx">Type</span> <span class="p">{</span>
-	<span class="k">if</span> <span class="nx">t</span> <span class="o">:=</span> <span class="nx">elem</span><span class="p">.</span><span class="nx">cache</span><span class="p">.</span><span class="nx">slice</span><span class="p">;</span> <span class="nx">t</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="k">if</span> <span class="nx">t</span><span class="p">.</span><span class="nf">Elem</span><span class="p">()</span> <span class="o">!=</span> <span class="nx">elem</span> <span class="p">{</span>
-			<span class="nx">base</span><span class="p">.</span><span class="nf">Fatalf</span><span class="p">(</span><span class="s">&#34;elem mismatch&#34;</span><span class="p">)</span>
-		<span class="p">}</span>
-		<span class="k">if</span> <span class="nx">elem</span><span class="p">.</span><span class="nf">HasTParam</span><span class="p">()</span> <span class="o">!=</span> <span class="nx">t</span><span class="p">.</span><span class="nf">HasTParam</span><span class="p">()</span> <span class="o">||</span> <span class="nx">elem</span><span class="p">.</span><span class="nf">HasShape</span><span class="p">()</span> <span class="o">!=</span> <span class="nx">t</span><span class="p">.</span><span class="nf">HasShape</span><span class="p">()</span> <span class="p">{</span>
-			<span class="nx">base</span><span class="p">.</span><span class="nf">Fatalf</span><span class="p">(</span><span class="s">&#34;Incorrect HasTParam/HasShape flag for cached slice type&#34;</span><span class="p">)</span>
-		<span class="p">}</span>
-		<span class="k">return</span> <span class="nx">t</span>
-	<span class="p">}</span>
-
-	<span class="nx">t</span> <span class="o">:=</span> <span class="nf">newType</span><span class="p">(</span><span class="nx">TSLICE</span><span class="p">)</span>
-	<span class="nx">t</span><span class="p">.</span><span class="nx">extra</span> <span class="p">=</span> <span class="nx">Slice</span><span class="p">{</span><span class="nx">Elem</span><span class="p">:</span> <span class="nx">elem</span><span class="p">}</span>
-	<span class="nx">elem</span><span class="p">.</span><span class="nx">cache</span><span class="p">.</span><span class="nx">slice</span> <span class="p">=</span> <span class="nx">t</span>
-	<span class="k">if</span> <span class="nx">elem</span><span class="p">.</span><span class="nf">HasTParam</span><span class="p">()</span> <span class="p">{</span>
-		<span class="nx">t</span><span class="p">.</span><span class="nf">SetHasTParam</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span>
-	<span class="p">}</span>
-	<span class="k">if</span> <span class="nx">elem</span><span class="p">.</span><span class="nf">HasShape</span><span class="p">()</span> <span class="p">{</span>
-		<span class="nx">t</span><span class="p">.</span><span class="nf">SetHasShape</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span>
-	<span class="p">}</span>
-	<span class="k">return</span> <span class="nx">t</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="nf">NewSlice</span><span class="p">(</span><span class="nx">elem</span><span class="w"> </span><span class="o">*</span><span class="nx">Type</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="nx">Type</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">t</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">elem</span><span class="p">.</span><span class="nx">cache</span><span class="p">.</span><span class="nx">slice</span><span class="p">;</span><span class="w"> </span><span class="nx">t</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="k">if</span><span class="w"> </span><span class="nx">t</span><span class="p">.</span><span class="nf">Elem</span><span class="p">()</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nx">elem</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="nx">base</span><span class="p">.</span><span class="nf">Fatalf</span><span class="p">(</span><span class="s">&#34;elem mismatch&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="k">if</span><span class="w"> </span><span class="nx">elem</span><span class="p">.</span><span class="nf">HasTParam</span><span class="p">()</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nx">t</span><span class="p">.</span><span class="nf">HasTParam</span><span class="p">()</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nx">elem</span><span class="p">.</span><span class="nf">HasShape</span><span class="p">()</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nx">t</span><span class="p">.</span><span class="nf">HasShape</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="nx">base</span><span class="p">.</span><span class="nf">Fatalf</span><span class="p">(</span><span class="s">&#34;Incorrect HasTParam/HasShape flag for cached slice type&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="k">return</span><span class="w"> </span><span class="nx">t</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">t</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nf">newType</span><span class="p">(</span><span class="nx">TSLICE</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">t</span><span class="p">.</span><span class="nx">extra</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">Slice</span><span class="p">{</span><span class="nx">Elem</span><span class="p">:</span><span class="w"> </span><span class="nx">elem</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">elem</span><span class="p">.</span><span class="nx">cache</span><span class="p">.</span><span class="nx">slice</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">t</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">elem</span><span class="p">.</span><span class="nf">HasTParam</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nx">t</span><span class="p">.</span><span class="nf">SetHasTParam</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">elem</span><span class="p">.</span><span class="nf">HasShape</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nx">t</span><span class="p">.</span><span class="nf">SetHasShape</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="nx">t</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><blockquote>
 <p>上述方法返回结构体中的<code>Extra</code>字段是一个只包含切片内元素类型的结构，<font color=red>也就是说切片内元素的类型是在编译期间确定的</font>，编译器确定了类型之后，会将类型存储在<code>Extra</code>字段中帮助程序在运行时动态获取。</p>
@@ -265,12 +273,12 @@
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">SliceHeader</span> <span class="kd">struct</span> <span class="p">{</span>
-	<span class="nx">Data</span> <span class="kt">uintptr</span>
-	<span class="nx">Len</span>  <span class="kt">int</span>
-	<span class="nx">Cap</span>  <span class="kt">int</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">type</span><span class="w"> </span><span class="nx">SliceHeader</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">Data</span><span class="w"> </span><span class="kt">uintptr</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">Len</span><span class="w">  </span><span class="kt">int</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">Cap</span><span class="w">  </span><span class="kt">int</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li><code>Data</code>：指向数组的指针</li>
@@ -307,18 +315,18 @@
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">import</span> <span class="s">&#34;fmt&#34;</span>
-
-<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="nx">arr</span> <span class="o">:=</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">}</span>
-	<span class="nx">slice</span> <span class="o">:=</span> <span class="nx">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">1</span><span class="p">]</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">slice</span><span class="p">)</span>
-<span class="p">}</span>
-<span class="cm">/** 生成SSA
-</span><span class="cm">➜ GOSSAFUNC=main go tool compile main.go
-</span><span class="cm">dumped SSA to /Users/shershon/ProjectItem/GoItem/test/ssa.html
-</span><span class="cm"> */</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="s">&#34;fmt&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">arr</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">slice</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">1</span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">slice</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="cm">/** 生成SSA
+</span></span></span><span class="line"><span class="cl"><span class="cm">➜ GOSSAFUNC=main go tool compile main.go
+</span></span></span><span class="line"><span class="cl"><span class="cm">dumped SSA to /Users/shershon/ProjectItem/GoItem/test/ssa.html
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>通过<code>GOSSAFUNC</code>变量编译上述代码可以得到一系列<code>SSA</code>中间代码，其中<code>slice := arr[0:1]</code>语句在<code>decompose builtin</code>阶段对应的代码如下图所示：
 <img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/image-20230128205113513.png" alt=""></p>
@@ -342,20 +350,20 @@
 </span><span class="lnt">13
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">TestRun</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
-	<span class="nx">oldArr</span> <span class="o">:=</span> <span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">}</span>
-	<span class="c1">// 使用下标创建切片
-</span><span class="c1"></span>	<span class="nx">newSlice</span> <span class="o">:=</span> <span class="nx">oldArr</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;修改切片前，oldArr:&#34;</span><span class="p">,</span> <span class="nx">oldArr</span><span class="p">,</span> <span class="s">&#34; newSlice:&#34;</span><span class="p">,</span> <span class="nx">newSlice</span><span class="p">)</span>
-	<span class="c1">// 修改新切片值
-</span><span class="c1"></span>	<span class="nx">newSlice</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">=</span> <span class="mi">100</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;修改切片后，oldArr:&#34;</span><span class="p">,</span> <span class="nx">oldArr</span><span class="p">,</span> <span class="s">&#34; newSlice:&#34;</span><span class="p">,</span> <span class="nx">newSlice</span><span class="p">)</span>
-<span class="p">}</span>
-<span class="cm">/** 输出
-</span><span class="cm">修改切片前，oldArr: [1 2 3 4 5]  newSlice: [1 2 3]
-</span><span class="cm">修改切片后，oldArr: [100 2 3 4 5]  newSlice: [100 2 3]
-</span><span class="cm"> */</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="nf">TestRun</span><span class="p">(</span><span class="nx">t</span><span class="w"> </span><span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">oldArr</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// 使用下标创建切片</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">newSlice</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">oldArr</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;修改切片前，oldArr:&#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">oldArr</span><span class="p">,</span><span class="w"> </span><span class="s">&#34; newSlice:&#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">newSlice</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// 修改新切片值</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">newSlice</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">100</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;修改切片后，oldArr:&#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">oldArr</span><span class="p">,</span><span class="w"> </span><span class="s">&#34; newSlice:&#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">newSlice</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="cm">/** 输出
+</span></span></span><span class="line"><span class="cl"><span class="cm">修改切片前，oldArr: [1 2 3 4 5]  newSlice: [1 2 3]
+</span></span></span><span class="line"><span class="cl"><span class="cm">修改切片后，oldArr: [100 2 3 4 5]  newSlice: [100 2 3]
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="32-使用字面量">3.2 使用字面量</h2>
 <p>当我们使用字面量<code>[]int{1,2,3}</code>创建新切片时，<a href="https://draveness.me/golang/tree/cmd/compile/internal/gc.slicelit"><code>cmd/compile/internal/gc.slicelit</code></a>函数会在编译期间将它展开成如下所示的代码片段：</p>
@@ -370,14 +378,14 @@
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">vstat</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="kt">int</span>
-<span class="nx">vstat</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">=</span> <span class="mi">1</span>
-<span class="nx">vstat</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">=</span> <span class="mi">2</span>
-<span class="nx">vstat</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="p">=</span> <span class="mi">3</span>
-<span class="kd">var</span> <span class="nx">vauto</span> <span class="o">*</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="kt">int</span> <span class="p">=</span> <span class="nb">new</span><span class="p">([</span><span class="mi">3</span><span class="p">]</span><span class="kt">int</span><span class="p">)</span>
-<span class="o">*</span><span class="nx">vauto</span> <span class="p">=</span> <span class="nx">vstat</span>
-<span class="nx">slice</span> <span class="o">:=</span> <span class="nx">vauto</span><span class="p">[:]</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">var</span><span class="w"> </span><span class="nx">vstat</span><span class="w"> </span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="kt">int</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">vstat</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">vstat</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">2</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">vstat</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">3</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">var</span><span class="w"> </span><span class="nx">vauto</span><span class="w"> </span><span class="o">*</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="kt">int</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">new</span><span class="p">([</span><span class="mi">3</span><span class="p">]</span><span class="kt">int</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="o">*</span><span class="nx">vauto</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">vstat</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">slice</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">vauto</span><span class="p">[:]</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p><strong>对上述代码的分析:</strong></p>
 <ol>
@@ -432,42 +440,42 @@
 </span><span class="lnt">35
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">typecheck1</span><span class="p">(</span><span class="nx">n</span> <span class="o">*</span><span class="nx">Node</span><span class="p">,</span> <span class="nx">top</span> <span class="kt">int</span><span class="p">)</span> <span class="p">(</span><span class="nx">res</span> <span class="o">*</span><span class="nx">Node</span><span class="p">)</span> <span class="p">{</span>
-	<span class="k">switch</span> <span class="nx">n</span><span class="p">.</span><span class="nx">Op</span> <span class="p">{</span>
-	<span class="o">...</span>
-	<span class="k">case</span> <span class="nx">OMAKE</span><span class="p">:</span>
-		<span class="nx">args</span> <span class="o">:=</span> <span class="nx">n</span><span class="p">.</span><span class="nx">List</span><span class="p">.</span><span class="nf">Slice</span><span class="p">()</span>
-
-		<span class="nx">i</span> <span class="o">:=</span> <span class="mi">1</span>
-		<span class="k">switch</span> <span class="nx">t</span><span class="p">.</span><span class="nx">Etype</span> <span class="p">{</span>
-        <span class="c1">// 类型是切片
-</span><span class="c1"></span>		<span class="k">case</span> <span class="nx">TSLICE</span><span class="p">:</span>
-			<span class="k">if</span> <span class="nx">i</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="nx">args</span><span class="p">)</span> <span class="p">{</span>
-				<span class="nf">yyerror</span><span class="p">(</span><span class="s">&#34;missing len argument to make(%v)&#34;</span><span class="p">,</span> <span class="nx">t</span><span class="p">)</span>
-				<span class="k">return</span> <span class="nx">n</span>
-			<span class="p">}</span>
-
-			<span class="nx">l</span> <span class="p">=</span> <span class="nx">args</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span>
-			<span class="nx">i</span><span class="o">++</span>
-			<span class="kd">var</span> <span class="nx">r</span> <span class="o">*</span><span class="nx">Node</span>
-			<span class="k">if</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="nx">args</span><span class="p">)</span> <span class="p">{</span>
-				<span class="nx">r</span> <span class="p">=</span> <span class="nx">args</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span>
-			<span class="p">}</span>
-			<span class="o">...</span>
-            <span class="c1">// 切片大小len,不能超过容量cap
-</span><span class="c1"></span>			<span class="k">if</span> <span class="nf">Isconst</span><span class="p">(</span><span class="nx">l</span><span class="p">,</span> <span class="nx">CTINT</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="nx">r</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="o">&amp;&amp;</span> <span class="nf">Isconst</span><span class="p">(</span><span class="nx">r</span><span class="p">,</span> <span class="nx">CTINT</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="nx">l</span><span class="p">.</span><span class="nf">Val</span><span class="p">().</span><span class="nx">U</span><span class="p">.(</span><span class="o">*</span><span class="nx">Mpint</span><span class="p">).</span><span class="nf">Cmp</span><span class="p">(</span><span class="nx">r</span><span class="p">.</span><span class="nf">Val</span><span class="p">().</span><span class="nx">U</span><span class="p">.(</span><span class="o">*</span><span class="nx">Mpint</span><span class="p">))</span> <span class="p">&gt;</span> <span class="mi">0</span> <span class="p">{</span>
-				<span class="nf">yyerror</span><span class="p">(</span><span class="s">&#34;len larger than cap in make(%v)&#34;</span><span class="p">,</span> <span class="nx">t</span><span class="p">)</span>
-				<span class="k">return</span> <span class="nx">n</span>
-			<span class="p">}</span>
-
-			<span class="nx">n</span><span class="p">.</span><span class="nx">Left</span> <span class="p">=</span> <span class="nx">l</span>
-			<span class="nx">n</span><span class="p">.</span><span class="nx">Right</span> <span class="p">=</span> <span class="nx">r</span>
-			<span class="nx">n</span><span class="p">.</span><span class="nx">Op</span> <span class="p">=</span> <span class="nx">OMAKESLICE</span>
-		<span class="p">}</span>
-	<span class="o">...</span>
-	<span class="p">}</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="nf">typecheck1</span><span class="p">(</span><span class="nx">n</span><span class="w"> </span><span class="o">*</span><span class="nx">Node</span><span class="p">,</span><span class="w"> </span><span class="nx">top</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nx">res</span><span class="w"> </span><span class="o">*</span><span class="nx">Node</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">switch</span><span class="w"> </span><span class="nx">n</span><span class="p">.</span><span class="nx">Op</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="o">...</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">case</span><span class="w"> </span><span class="nx">OMAKE</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nx">args</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">n</span><span class="p">.</span><span class="nx">List</span><span class="p">.</span><span class="nf">Slice</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nx">i</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="k">switch</span><span class="w"> </span><span class="nx">t</span><span class="p">.</span><span class="nx">Etype</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 类型是切片</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="k">case</span><span class="w"> </span><span class="nx">TSLICE</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="k">if</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="nx">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">				</span><span class="nf">yyerror</span><span class="p">(</span><span class="s">&#34;missing len argument to make(%v)&#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">t</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">				</span><span class="k">return</span><span class="w"> </span><span class="nx">n</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="nx">l</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">args</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="nx">i</span><span class="o">++</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="kd">var</span><span class="w"> </span><span class="nx">r</span><span class="w"> </span><span class="o">*</span><span class="nx">Node</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="k">if</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="p">&lt;</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="nx">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">				</span><span class="nx">r</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">args</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="o">...</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c1">// 切片大小len,不能超过容量cap</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="k">if</span><span class="w"> </span><span class="nf">Isconst</span><span class="p">(</span><span class="nx">l</span><span class="p">,</span><span class="w"> </span><span class="nx">CTINT</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nx">r</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nf">Isconst</span><span class="p">(</span><span class="nx">r</span><span class="p">,</span><span class="w"> </span><span class="nx">CTINT</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nx">l</span><span class="p">.</span><span class="nf">Val</span><span class="p">().</span><span class="nx">U</span><span class="p">.(</span><span class="o">*</span><span class="nx">Mpint</span><span class="p">).</span><span class="nf">Cmp</span><span class="p">(</span><span class="nx">r</span><span class="p">.</span><span class="nf">Val</span><span class="p">().</span><span class="nx">U</span><span class="p">.(</span><span class="o">*</span><span class="nx">Mpint</span><span class="p">))</span><span class="w"> </span><span class="p">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">				</span><span class="nf">yyerror</span><span class="p">(</span><span class="s">&#34;len larger than cap in make(%v)&#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">t</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">				</span><span class="k">return</span><span class="w"> </span><span class="nx">n</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="nx">n</span><span class="p">.</span><span class="nx">Left</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">l</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="nx">n</span><span class="p">.</span><span class="nx">Right</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">r</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="nx">n</span><span class="p">.</span><span class="nx">Op</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">OMAKESLICE</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="o">...</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>上述函数不仅会检查<code>len</code>是否传入，还会保证传入的容量<code>cap</code>一定大于或等于<code>len</code>。除了校验参数，当前函数会将<code>OMAKE</code>节点转换成<code>OMAKESLICE</code>，中间代码生成的<a href="https://draveness.me/golang/tree/cmd/compile/internal/gc.walkexpr"><code>cmd/compile/internal/gc.walkexpr</code></a>函数会依据下面两个条件转换成<code>OMAKESLICE</code>类型的节点。</p>
 <ol>
@@ -507,29 +515,29 @@
 </span><span class="lnt">22
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="c1">// --------- 不会扩容 ---------
-</span><span class="c1"></span>	<span class="c1">// 定义切片a,容量为4
-</span><span class="c1"></span>	<span class="nx">a</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;append前,a-&gt; len:%v cap:%v value:%v \n&#34;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="nx">a</span><span class="p">),</span> <span class="nb">cap</span><span class="p">(</span><span class="nx">a</span><span class="p">),</span> <span class="nx">a</span><span class="p">)</span>
-	<span class="nx">a</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;append后,a-&gt; len:%v cap:%v value:%v \n&#34;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="nx">a</span><span class="p">),</span> <span class="nb">cap</span><span class="p">(</span><span class="nx">a</span><span class="p">),</span> <span class="nx">a</span><span class="p">)</span>
-
-	<span class="c1">// --------- 会扩容 ---------
-</span><span class="c1"></span>	<span class="c1">// 定义切片a,容量为4
-</span><span class="c1"></span>	<span class="nx">b</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;append前,b-&gt; len:%v cap:%v value:%v \n&#34;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="nx">b</span><span class="p">),</span> <span class="nb">cap</span><span class="p">(</span><span class="nx">b</span><span class="p">),</span> <span class="nx">b</span><span class="p">)</span>
-	<span class="nx">b</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">b</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;append后,b-&gt; len:%v cap:%v value:%v \n&#34;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="nx">b</span><span class="p">),</span> <span class="nb">cap</span><span class="p">(</span><span class="nx">b</span><span class="p">),</span> <span class="nx">b</span><span class="p">)</span>
-<span class="p">}</span>
-
-<span class="cm">/** 输出
-</span><span class="cm">append前,a-&gt; len:3 cap:4 value:[0 0 0]
-</span><span class="cm">append后,a-&gt; len:4 cap:4 value:[0 0 0 1]
-</span><span class="cm">append前,b-&gt; len:3 cap:3 value:[0 0 0]
-</span><span class="cm">append后,b-&gt; len:4 cap:6 value:[0 0 0 1]
-</span><span class="cm">*/</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// --------- 不会扩容 ---------</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// 定义切片a,容量为4</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">a</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;append前,a-&gt; len:%v cap:%v value:%v \n&#34;</span><span class="p">,</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="nx">a</span><span class="p">),</span><span class="w"> </span><span class="nb">cap</span><span class="p">(</span><span class="nx">a</span><span class="p">),</span><span class="w"> </span><span class="nx">a</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">a</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">append</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;append后,a-&gt; len:%v cap:%v value:%v \n&#34;</span><span class="p">,</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="nx">a</span><span class="p">),</span><span class="w"> </span><span class="nb">cap</span><span class="p">(</span><span class="nx">a</span><span class="p">),</span><span class="w"> </span><span class="nx">a</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// --------- 会扩容 ---------</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// 定义切片a,容量为4</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">b</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;append前,b-&gt; len:%v cap:%v value:%v \n&#34;</span><span class="p">,</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="nx">b</span><span class="p">),</span><span class="w"> </span><span class="nb">cap</span><span class="p">(</span><span class="nx">b</span><span class="p">),</span><span class="w"> </span><span class="nx">b</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">b</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">append</span><span class="p">(</span><span class="nx">b</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;append后,b-&gt; len:%v cap:%v value:%v \n&#34;</span><span class="p">,</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="nx">b</span><span class="p">),</span><span class="w"> </span><span class="nb">cap</span><span class="p">(</span><span class="nx">b</span><span class="p">),</span><span class="w"> </span><span class="nx">b</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="cm">/** 输出
+</span></span></span><span class="line"><span class="cl"><span class="cm">append前,a-&gt; len:3 cap:4 value:[0 0 0]
+</span></span></span><span class="line"><span class="cl"><span class="cm">append后,a-&gt; len:4 cap:4 value:[0 0 0 1]
+</span></span></span><span class="line"><span class="cl"><span class="cm">append前,b-&gt; len:3 cap:3 value:[0 0 0]
+</span></span></span><span class="line"><span class="cl"><span class="cm">append后,b-&gt; len:4 cap:6 value:[0 0 0 1]
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>代码分析：</p>
 <ul>
@@ -570,31 +578,31 @@
 </span><span class="lnt">24
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">growslice</span><span class="p">(</span><span class="nx">et</span> <span class="o">*</span><span class="nx">_type</span><span class="p">,</span> <span class="nx">old</span> <span class="nx">slice</span><span class="p">,</span> <span class="nx">cap</span> <span class="kt">int</span><span class="p">)</span> <span class="nx">slice</span> <span class="p">{</span>
-	<span class="o">...</span>
-	<span class="nx">newcap</span> <span class="o">:=</span> <span class="nx">old</span><span class="p">.</span><span class="nx">cap</span>
-	<span class="nx">doublecap</span> <span class="o">:=</span> <span class="nx">newcap</span> <span class="o">+</span> <span class="nx">newcap</span>
-    <span class="k">if</span> <span class="nx">cap</span> <span class="p">&gt;</span> <span class="nx">doublecap</span> <span class="p">{</span>
-		<span class="c1">// 如果新申请的容量cap大于旧容量old.cap的2倍，则最终的容量newcap是新申请的容量cap
-</span><span class="c1"></span>        <span class="nx">newcap</span> <span class="p">=</span> <span class="nx">cap</span>
-    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="nx">old</span><span class="p">.</span><span class="nx">cap</span> <span class="p">&lt;</span> <span class="mi">1024</span> <span class="p">{</span>
-			<span class="c1">// 如果旧切片的容量小于1024，则最终的容量是旧容量的2倍
-</span><span class="c1"></span>            <span class="nx">newcap</span> <span class="p">=</span> <span class="nx">doublecap</span>
-        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-            <span class="c1">// 旧容量开始循环增加原来的1/4，到最终容量大于或等于新申请的容量为止
-</span><span class="c1"></span>            <span class="k">for</span> <span class="mi">0</span> <span class="p">&lt;</span> <span class="nx">newcap</span> <span class="o">&amp;&amp;</span> <span class="nx">newcap</span> <span class="p">&lt;</span> <span class="nx">cap</span> <span class="p">{</span>
-                <span class="nx">newcap</span> <span class="o">+=</span> <span class="nx">newcap</span> <span class="o">/</span> <span class="mi">4</span>
-            <span class="p">}</span>
-            <span class="c1">// 容量计算值溢出，则最终的容量就是新申请的容量
-</span><span class="c1"></span>            <span class="k">if</span> <span class="nx">newcap</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="p">{</span>
-                <span class="nx">newcap</span> <span class="p">=</span> <span class="nx">cap</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="o">...</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="nf">growslice</span><span class="p">(</span><span class="nx">et</span><span class="w"> </span><span class="o">*</span><span class="nx">_type</span><span class="p">,</span><span class="w"> </span><span class="nx">old</span><span class="w"> </span><span class="nx">slice</span><span class="p">,</span><span class="w"> </span><span class="nx">cap</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="nx">slice</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="o">...</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">newcap</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">old</span><span class="p">.</span><span class="nx">cap</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">doublecap</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">newcap</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">newcap</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">cap</span><span class="w"> </span><span class="p">&gt;</span><span class="w"> </span><span class="nx">doublecap</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="c1">// 如果新申请的容量cap大于旧容量old.cap的2倍，则最终的容量newcap是新申请的容量cap</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nx">newcap</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">cap</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="nx">old</span><span class="p">.</span><span class="nx">cap</span><span class="w"> </span><span class="p">&lt;</span><span class="w"> </span><span class="mi">1024</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="c1">// 如果旧切片的容量小于1024，则最终的容量是旧容量的2倍</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="nx">newcap</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">doublecap</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c1">// 旧容量开始循环增加原来的1/4，到最终容量大于或等于新申请的容量为止</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="k">for</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">&lt;</span><span class="w"> </span><span class="nx">newcap</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nx">newcap</span><span class="w"> </span><span class="p">&lt;</span><span class="w"> </span><span class="nx">cap</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="nx">newcap</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="nx">newcap</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">4</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c1">// 容量计算值溢出，则最终的容量就是新申请的容量</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="nx">newcap</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="nx">newcap</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">cap</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="o">...</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>上述代码显示了扩容的核心逻辑，<code>Go</code>语言中切片扩容的策略整理如下：</p>
 <ul>
@@ -627,21 +635,21 @@
 </span><span class="lnt">14
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">TestCopySlice</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
-	<span class="c1">// 定义切片
-</span><span class="c1"></span>	<span class="nx">oldSli</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">300</span><span class="p">}</span>
-	<span class="c1">// 复制切片
-</span><span class="c1"></span>	<span class="nx">copySli</span> <span class="o">:=</span> <span class="nx">oldSli</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;修改前, oldSli:%v copySli:%v \n&#34;</span><span class="p">,</span> <span class="nx">oldSli</span><span class="p">,</span> <span class="nx">copySli</span><span class="p">)</span>
-	<span class="c1">// 修改复制后的切片
-</span><span class="c1"></span>	<span class="nx">copySli</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">=</span> <span class="mi">99</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;修改后, oldSli:%v copySli:%v \n&#34;</span><span class="p">,</span> <span class="nx">oldSli</span><span class="p">,</span> <span class="nx">copySli</span><span class="p">)</span>
-<span class="p">}</span>
-<span class="cm">/** 输出
-</span><span class="cm">修改前, oldSli:[100 200 300] copySli:[100 200 300]
-</span><span class="cm">修改后, oldSli:[99 200 300] copySli:[99 200 300]
-</span><span class="cm"> */</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="nf">TestCopySlice</span><span class="p">(</span><span class="nx">t</span><span class="w"> </span><span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// 定义切片</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">oldSli</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="mi">300</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// 复制切片</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">copySli</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">oldSli</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;修改前, oldSli:%v copySli:%v \n&#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">oldSli</span><span class="p">,</span><span class="w"> </span><span class="nx">copySli</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// 修改复制后的切片</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">copySli</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">99</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;修改后, oldSli:%v copySli:%v \n&#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">oldSli</span><span class="p">,</span><span class="w"> </span><span class="nx">copySli</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="cm">/** 输出
+</span></span></span><span class="line"><span class="cl"><span class="cm">修改前, oldSli:[100 200 300] copySli:[100 200 300]
+</span></span></span><span class="line"><span class="cl"><span class="cm">修改后, oldSli:[99 200 300] copySli:[99 200 300]
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>切片的复制其实也是值复制，但是这里的值复制指对于运行时<code>SliceHeader</code>结构的复制，<font color=red>但是底层指针指向的是相同的底层数组，因此可以理解为数据进行了引用传递。</font></p>
 <blockquote>
@@ -668,22 +676,22 @@
 </span><span class="lnt">15
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">TestCopySlice2</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
-	<span class="c1">// 定义切片
-</span><span class="c1"></span>	<span class="nx">oldSli</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">300</span><span class="p">}</span>
-	<span class="c1">// 使用copy复制切片
-</span><span class="c1"></span>	<span class="nx">copySli</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="nx">oldSli</span><span class="p">),</span> <span class="nb">cap</span><span class="p">(</span><span class="nx">oldSli</span><span class="p">))</span>
-	<span class="nb">copy</span><span class="p">(</span><span class="nx">copySli</span><span class="p">,</span> <span class="nx">oldSli</span><span class="p">)</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;修改前, oldSli:%v copySli:%v \n&#34;</span><span class="p">,</span> <span class="nx">oldSli</span><span class="p">,</span> <span class="nx">copySli</span><span class="p">)</span>
-	<span class="c1">// 修改复制后的切片
-</span><span class="c1"></span>	<span class="nx">copySli</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">=</span> <span class="mi">99</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;修改后, oldSli:%v copySli:%v \n&#34;</span><span class="p">,</span> <span class="nx">oldSli</span><span class="p">,</span> <span class="nx">copySli</span><span class="p">)</span>
-<span class="p">}</span>
-<span class="cm">/** 输出
-</span><span class="cm">修改前, oldSli:[100 200 300] copySli:[100 200 300]
-</span><span class="cm">修改后, oldSli:[100 200 300] copySli:[99 200 300]
-</span><span class="cm">*/</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="nf">TestCopySlice2</span><span class="p">(</span><span class="nx">t</span><span class="w"> </span><span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// 定义切片</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">oldSli</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="mi">300</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// 使用copy复制切片</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">copySli</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="nx">oldSli</span><span class="p">),</span><span class="w"> </span><span class="nb">cap</span><span class="p">(</span><span class="nx">oldSli</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nb">copy</span><span class="p">(</span><span class="nx">copySli</span><span class="p">,</span><span class="w"> </span><span class="nx">oldSli</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;修改前, oldSli:%v copySli:%v \n&#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">oldSli</span><span class="p">,</span><span class="w"> </span><span class="nx">copySli</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// 修改复制后的切片</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">copySli</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">99</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;修改后, oldSli:%v copySli:%v \n&#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">oldSli</span><span class="p">,</span><span class="w"> </span><span class="nx">copySli</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="cm">/** 输出
+</span></span></span><span class="line"><span class="cl"><span class="cm">修改前, oldSli:[100 200 300] copySli:[100 200 300]
+</span></span></span><span class="line"><span class="cl"><span class="cm">修改后, oldSli:[100 200 300] copySli:[99 200 300]
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><blockquote>
 <p><code>copy</code>函数在运行时主要调用了<code>memmove</code>函数，<font color=blue>用于实现内存的复制</font>。如果采用协程调用的方式<code>go copy(numbers1, numbers)</code>后者加入了<code>race</code>检测，则会调用运行时<a href="https://draveness.me/golang/tree/runtime.slicecopy"><code>runtime.slicecopy</code></a>函数，<font color=red>无论是编译期间拷贝还是运行时拷贝，两种拷贝方式都会通过<a href="https://draveness.me/golang/tree/runtime.memmove"><code>runtime.memmove</code></a>将整块内存的内容拷贝到目标的内存区域中</font>。</p>
@@ -693,13 +701,13 @@
 
     <div class="post-copyright">
   <p class="copyright-item">
-    <span class="item-title">文章作者</span>
-    <span class="item-content">Learn Go</span>
+    <span class="item-title">Author</span>
+    <span class="item-content"></span>
   </p>
   <p class="copyright-item">
-    <span class="item-title">上次更新</span>
+    <span class="item-title">LastMod</span>
     <span class="item-content">
-        2023-03-10
+        2023-03-18
         
     </span>
   </p>
@@ -715,11 +723,11 @@
         <a class="prev" href="/post/%E8%BF%9B%E9%98%B6%E7%AF%87/%E5%BA%95%E5%B1%82%E6%8E%A2%E7%B4%A2/04-%E5%93%88%E5%B8%8C%E8%A1%A8map%E4%B8%8A%E7%AF%87/">
             <i class="iconfont icon-left"></i>
             <span class="prev-text nav-default">Go底层探索(四):哈希表map上篇</span>
-            <span class="prev-text nav-mobile">上一篇</span>
+            <span class="prev-text nav-mobile">Prev</span>
           </a>
         <a class="next" href="/post/%E8%BF%9B%E9%98%B6%E7%AF%87/%E5%BA%95%E5%B1%82%E6%8E%A2%E7%B4%A2/02-%E5%AD%97%E7%AC%A6%E4%B8%B2/">
             <span class="next-text nav-default">Go底层探索(二):字符串</span>
-            <span class="next-text nav-mobile">下一篇</span>
+            <span class="next-text nav-mobile">Next</span>
             <i class="iconfont icon-right"></i>
           </a>
       </nav>
@@ -739,16 +747,16 @@
       <div class="social-links">
       <a href="https://github.com/shershon1991" class="iconfont icon-github" title="github"></a>
       <a href="https://www.zhihu.com/people/shershon520" class="iconfont icon-zhihu" title="zhihu"></a>
-  <a href="https://shershon1991.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+  
 </div>
 
 <div class="copyright">
   <span class="power-by">
-    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
   </span>
   <span class="division">|</span>
   <span class="theme-info">
-    主题 - 
+    Theme - 
     <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
   </span>
 
@@ -757,7 +765,7 @@
   <span class="copyright-year">
     &copy; 
     2021 - 
-    2024<span class="heart"><i class="iconfont icon-heart"></i></span><span>Learn Go</span>
+    2026<span class="heart"><i class="iconfont icon-heart"></i></span><span></span>
   </span>
 </div>
 
@@ -767,15 +775,28 @@
       <i class="iconfont icon-up"></i>
     </div>
   </div>
-  <script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
-<script>
-    docsearch({
-        apiKey: "9f0c02b55e9885568dcbf6ef094b433c",
-        indexName: "hugo",
-        appId: "TTENARPLYL",
-        inputSelector: '.docsearch-input',
-        debug: false,
-    });
-</script>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.min.js" integrity="sha256-jwCP0NAdCBloaIWTWHmW4i3snUNMHUNO+jr9rYd2iOI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.locales.min.js" integrity="sha256-ZwofwC1Lf/faQCzN7nZtfijVV6hSwxjQMwXL4gn9qU8=" crossorigin="anonymous"></script>
+  <script>
+    var languageCode = "en".replace(/-/g, '_').replace(/_(.*)/, function ($0, $1) {return $0.replace($1, $1.toUpperCase());});
+    timeago().render(document.querySelectorAll('.timeago'), languageCode);
+    timeago.cancel();  
+  </script>
+
+
+
+<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+
+
+
+
+
+
+
+
 </body>
 </html>

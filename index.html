@@ -16,14 +16,14 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="Learn Go" /><meta name="description" content="Learn Go" /><meta name="keywords" content="博客, Learn Go, hugo" />
+<meta name="author" content="" /><meta name="description" content="Learn Go" /><meta name="keywords" content="博客, Learn Go, hugo" />
 
 
 
 
 
 
-<meta name="generator" content="Hugo 0.90.1 with theme even" />
+<meta name="generator" content="Hugo 0.160.1 with theme even" />
 
 
 <link rel="canonical" href="https://shershon1991.github.io/" />
@@ -37,19 +37,24 @@
 
 
 
-<link href="/sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link href="/sass/main.min.af7fd1da18d66c2b017df5b4cae508ef44cfcac3fb4c7c7a327fe4f4f9e28b08.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
-<meta property="og:title" content="Learn Go" />
-<meta property="og:description" content="Learn Go" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://shershon1991.github.io/" />
+<meta property="og:url" content="https://shershon1991.github.io/">
+  <meta property="og:site_name" content="Learn Go">
+  <meta property="og:title" content="Learn Go">
+  <meta property="og:description" content="Learn Go">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="website">
 
-<meta itemprop="name" content="Learn Go">
-<meta itemprop="description" content="Learn Go"><meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Learn Go"/>
-<meta name="twitter:description" content="Learn Go"/>
+  <meta itemprop="name" content="Learn Go">
+  <meta itemprop="description" content="Learn Go">
+  <meta itemprop="datePublished" content="2023-07-13T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2026-10-21T14:53:25+08:00">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Learn Go">
+  <meta name="twitter:description" content="Learn Go">
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -92,28 +97,28 @@
 
   <div class="container" id="mobile-panel">
     <header id="header" class="header">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"/><header id="header" class="header">
-    <div class="logo-wrapper">
-        <a href="/" class="logo">Learn Go</a>
-    </div>
-    <nav class="site-navbar">
-        <ul id="menu" class="menu"><li style="display:inline-block;margin-right:10px;">
-                <input type="search" class="docsearch-input" placeholder="Search"/>
-            </li><li class="menu-item">
-                <a class="menu-item-link" href="/">首页</a>
-            </li>
-            <li class="menu-item">
-                <a class="menu-item-link" href="/post/">归档</a>
-            </li>
-            <li class="menu-item">
-                <a class="menu-item-link" href="/tags/">标签</a>
-            </li>
-            <li class="menu-item">
-                <a class="menu-item-link" href="/categories/">分类</a>
-            </li>
-        </ul>
-    </nav>
-</header>
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Learn Go</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">首页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li>
+  </ul>
+</nav>
+
     </header>
 
     <main id="main" class="main">
@@ -129,17 +134,20 @@
           <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
           <a href="/categories/go/"> Go </a>
           </div>
-        <span class="more-meta"> 约 3284 字 </span>
-        <span class="more-meta"> 预计阅读 7 分钟 </span>
+        <span class="more-meta"> 3284 words </span>
+        <span class="more-meta"> 7 mins read </span>
     </div>
   </header>
   
   <div class="post-content">
     <div class="post-summary">
-      1.介绍 随着哈希表中元素的逐渐增加，哈希的性能会逐渐恶化，所以我们需要更多的桶和更大的内存来保证哈希的读写性能。 2.如何触发 在每次对哈希表赋
+      <h1 id="1介绍">1.介绍</h1>
+<p>随着哈希表中元素的逐渐增加，哈希的性能会逐渐恶化，所以我们需要更多的桶和更大的内存来保证哈希的读写性能。</p>
+<h1 id="2如何触发">2.如何触发</h1>
+<p>在每次对哈希表<strong>赋值</strong>时，都会调用 <a href="https://github.com/golang/go/blob/ac0ba6707c1655ea4316b41d06571a0303cc60eb/src/runtime/map.go#L571"><code>runtime.mapassign</code></a> 函数，该函数每次都会判断是否需要扩容，主要有两个函数：<code>overLoadFactor</code>和<code>tooManyOverflowBuckets</code>：</p>
     </div>
     <div class="read-more">
-      <a href="/post/%E8%BF%9B%E9%98%B6%E7%AF%87/%E5%BA%95%E5%B1%82%E6%8E%A2%E7%B4%A2/05-%E5%93%88%E5%B8%8C%E8%A1%A8map%E4%B8%8B%E7%AF%87-%E6%89%A9%E5%AE%B9/" class="read-more-link">阅读更多</a>
+      <a href="/post/%E8%BF%9B%E9%98%B6%E7%AF%87/%E5%BA%95%E5%B1%82%E6%8E%A2%E7%B4%A2/05-%E5%93%88%E5%B8%8C%E8%A1%A8map%E4%B8%8B%E7%AF%87-%E6%89%A9%E5%AE%B9/" class="read-more-link">Read more...</a>
     </div>
   </div>
 </article>
@@ -153,17 +161,18 @@
           <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
           <a href="/categories/go/"> Go </a>
           </div>
-        <span class="more-meta"> 约 5385 字 </span>
-        <span class="more-meta"> 预计阅读 11 分钟 </span>
+        <span class="more-meta"> 5385 words </span>
+        <span class="more-meta"> 11 mins read </span>
     </div>
   </header>
   
   <div class="post-content">
     <div class="post-summary">
-      1.介绍 Go语言中的map又被称为哈希表，是使用频率极高的一种数据结构。哈希表的原理是将多个键/值（key/value）对，分散存储在桶（b
+      <h1 id="1介绍">1.介绍</h1>
+<p><code>Go</code>语言中的<code>map</code>又被称为哈希表，是使用频率极高的一种数据结构。哈希表的原理是将多个<code>键/值（key/value）</code>对，分散存储在<code>桶（buckets）</code>中。</p>
     </div>
     <div class="read-more">
-      <a href="/post/%E8%BF%9B%E9%98%B6%E7%AF%87/%E5%BA%95%E5%B1%82%E6%8E%A2%E7%B4%A2/04-%E5%93%88%E5%B8%8C%E8%A1%A8map%E4%B8%8A%E7%AF%87/" class="read-more-link">阅读更多</a>
+      <a href="/post/%E8%BF%9B%E9%98%B6%E7%AF%87/%E5%BA%95%E5%B1%82%E6%8E%A2%E7%B4%A2/04-%E5%93%88%E5%B8%8C%E8%A1%A8map%E4%B8%8A%E7%AF%87/" class="read-more-link">Read more...</a>
     </div>
   </div>
 </article>
@@ -177,17 +186,18 @@
           <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
           <a href="/categories/go/"> Go </a>
           </div>
-        <span class="more-meta"> 约 4292 字 </span>
-        <span class="more-meta"> 预计阅读 9 分钟 </span>
+        <span class="more-meta"> 4292 words </span>
+        <span class="more-meta"> 9 mins read </span>
     </div>
   </header>
   
   <div class="post-content">
     <div class="post-summary">
-      @注：以下内容来自《Go语言底层原理剖析》、《Go语言设计与实现》书中的摘要信息，本人使用版本（Go1.19）与书中不一致，源码路径可能会有
+      <blockquote>
+<p><font color=red>@注：以下内容来自《Go语言底层原理剖析》、《Go语言设计与实现》书中的摘要信息，本人使用版本（Go1.19）与书中不一致，源码路径可能会有出入。</font></p>
     </div>
     <div class="read-more">
-      <a href="/post/%E8%BF%9B%E9%98%B6%E7%AF%87/%E5%BA%95%E5%B1%82%E6%8E%A2%E7%B4%A2/03-%E5%88%87%E7%89%87/" class="read-more-link">阅读更多</a>
+      <a href="/post/%E8%BF%9B%E9%98%B6%E7%AF%87/%E5%BA%95%E5%B1%82%E6%8E%A2%E7%B4%A2/03-%E5%88%87%E7%89%87/" class="read-more-link">Read more...</a>
     </div>
   </div>
 </article>
@@ -201,17 +211,19 @@
           <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
           <a href="/categories/go/"> Go </a>
           </div>
-        <span class="more-meta"> 约 1830 字 </span>
-        <span class="more-meta"> 预计阅读 4 分钟 </span>
+        <span class="more-meta"> 1836 words </span>
+        <span class="more-meta"> 4 mins read </span>
     </div>
   </header>
   
   <div class="post-content">
     <div class="post-summary">
-      1.介绍 @注：以下内容来自《Go语言底层原理剖析》书中的摘要信息，本人使用版本（Go1.19）与书中不一致，源码路径可能会有出入。 字符串在编
+      <h1 id="1介绍">1.介绍</h1>
+<blockquote>
+<p><font color=red>@注：以下内容来自《Go语言底层原理剖析》书中的摘要信息，本人使用版本（Go1.19）与书中不一致，源码路径可能会有出入。</font></p>
     </div>
     <div class="read-more">
-      <a href="/post/%E8%BF%9B%E9%98%B6%E7%AF%87/%E5%BA%95%E5%B1%82%E6%8E%A2%E7%B4%A2/02-%E5%AD%97%E7%AC%A6%E4%B8%B2/" class="read-more-link">阅读更多</a>
+      <a href="/post/%E8%BF%9B%E9%98%B6%E7%AF%87/%E5%BA%95%E5%B1%82%E6%8E%A2%E7%B4%A2/02-%E5%AD%97%E7%AC%A6%E4%B8%B2/" class="read-more-link">Read more...</a>
     </div>
   </div>
 </article>
@@ -225,41 +237,88 @@
           <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
           <a href="/categories/go/"> Go </a>
           </div>
-        <span class="more-meta"> 约 4962 字 </span>
-        <span class="more-meta"> 预计阅读 10 分钟 </span>
+        <span class="more-meta"> 4962 words </span>
+        <span class="more-meta"> 10 mins read </span>
     </div>
   </header>
   
   <div class="post-content">
     <div class="post-summary">
-      1.什么是RPC @注: 以下内容来自本人学习《Go语言底层原理剖析》书中的摘要信息。另外这本书中使用的Go是老版本，我使用的版本是Go1.19
+      <h1 id="1什么是rpc">1.什么是RPC</h1>
+<blockquote>
+<p><strong><font color=red>@注: 以下内容来自本人学习《Go语言底层原理剖析》书中的摘要信息。另外这本书中使用的Go是老版本，我使用的版本是Go1.19，有时候源码路径可能会不一样</font></strong></p>
     </div>
     <div class="read-more">
-      <a href="/post/%E8%BF%9B%E9%98%B6%E7%AF%87/%E5%BA%95%E5%B1%82%E6%8E%A2%E7%B4%A2/01-%E7%BC%96%E8%AF%91%E5%99%A8/" class="read-more-link">阅读更多</a>
+      <a href="/post/%E8%BF%9B%E9%98%B6%E7%AF%87/%E5%BA%95%E5%B1%82%E6%8E%A2%E7%B4%A2/01-%E7%BC%96%E8%AF%91%E5%99%A8/" class="read-more-link">Read more...</a>
     </div>
   </div>
 </article>
 
     <article class="post">
   <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/%E6%89%A9%E5%B1%95%E5%8C%85/31-rocketmq/">Go扩展包(三十一):rocketmq</a></h1>
+    <h1 class="post-title"><a class="post-link" href="/post/%E6%89%A9%E5%B1%95%E5%8C%85/19-rocketmq/">Go扩展包(十九):rocketmq</a></h1>
     <div class="post-meta">
       <span class="post-time"> 2022-10-05 </span>
       <div class="post-category">
           <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
           <a href="/categories/go/"> Go </a>
           </div>
-        <span class="more-meta"> 约 3915 字 </span>
-        <span class="more-meta"> 预计阅读 8 分钟 </span>
+        <span class="more-meta"> 3915 words </span>
+        <span class="more-meta"> 8 mins read </span>
     </div>
   </header>
   
   <div class="post-content">
     <div class="post-summary">
-      介绍 本文将会介绍两种rocketmq扩展包，如下（截止到2022.10.04）： 包 文档 Star 数量 说明 apache/rocketmq-client-go https://github.com/apache/rocketmq-client-go 979 apache官方提供 aliyunmq/mq-http-go-sdk https://github.com/aliyunmq/mq-http-go-sdk 50 aliyun
+      <h1 id="介绍">介绍</h1>
+<p>本文将会介绍两种rocketmq扩展包，如下（截止到2022.10.04）：</p>
+<table>
+  <thead>
+      <tr>
+          <th>包</th>
+          <th>文档</th>
+          <th>Star 数量</th>
+          <th>说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><a href="https://github.com/apache/rocketmq-client-go">apache/rocketmq-client-go</a></td>
+          <td><a href="https://github.com/apache/rocketmq-client-go">https://github.com/apache/rocketmq-client-go</a></td>
+          <td>979</td>
+          <td>apache官方提供</td>
+      </tr>
+      <tr>
+          <td><a href="https://github.com/aliyunmq/mq-http-go-sdk">aliyunmq/mq-http-go-sdk</a></td>
+          <td><a href="https://github.com/aliyunmq/mq-http-go-sdk">https://github.com/aliyunmq/mq-http-go-sdk</a></td>
+          <td>50</td>
+          <td>aliyun.mq提供</td>
+      </tr>
+  </tbody>
+</table>
+<h1 id="下载">下载</h1>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// rocketmq-client-go</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">go</span><span class="w"> </span><span class="nx">get</span><span class="w"> </span><span class="o">-</span><span class="nx">u</span><span class="w"> </span><span class="nx">github</span><span class="p">.</span><span class="nx">com</span><span class="o">/</span><span class="nx">apache</span><span class="o">/</span><span class="nx">rocketmq</span><span class="o">-</span><span class="nx">client</span><span class="o">-</span><span class="k">go</span><span class="o">/</span><span class="nx">v2</span><span class="err">@</span><span class="nx">v2</span><span class="mf">.1.0</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 阿里云mq-http-go-sdk</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">go</span><span class="w"> </span><span class="nx">get</span><span class="w"> </span><span class="o">-</span><span class="nx">u</span><span class="w"> </span><span class="nx">github</span><span class="p">.</span><span class="nx">com</span><span class="o">/</span><span class="nx">aliyunmq</span><span class="o">/</span><span class="nx">mq</span><span class="o">-</span><span class="nx">http</span><span class="o">-</span><span class="k">go</span><span class="o">-</span><span class="nx">sdk</span><span class="err">@</span><span class="nx">v1</span><span class="mf">.0.3</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h1 id="封装代码">封装代码</h1>
+<h2 id="基于-rocketmq-client-go-的生产者封装">基于 <code>rocketmq-client-go</code> 的生产者封装</h2>
+<p>文件位置：<code>app/rocketmqpkg/produce.go</code></p>
     </div>
     <div class="read-more">
-      <a href="/post/%E6%89%A9%E5%B1%95%E5%8C%85/31-rocketmq/" class="read-more-link">阅读更多</a>
+      <a href="/post/%E6%89%A9%E5%B1%95%E5%8C%85/19-rocketmq/" class="read-more-link">Read more...</a>
     </div>
   </div>
 </article>
@@ -273,17 +332,20 @@
           <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
           <a href="/categories/go/"> Go </a>
           </div>
-        <span class="more-meta"> 约 799 字 </span>
-        <span class="more-meta"> 预计阅读 2 分钟 </span>
+        <span class="more-meta"> 813 words </span>
+        <span class="more-meta"> 2 mins read </span>
     </div>
   </header>
   
   <div class="post-content">
     <div class="post-summary">
-      介绍 gRPC 中的截取器，类似中间件( middleware )的功能，可以做一些前置校验的工作，比如登陆验证、日志记录、异常捕获等。 流程梳理 gRPC 中的 grpc.UnaryInterceptor 和 grpc.StreamInterceptor 分别对普通方法和
+      <h2 id="1-介绍">1. 介绍</h2>
+<p><code>gRPC</code> 中的截取器，类似中间件( <code>middleware</code> )的功能，可以做一些前置校验的工作，比如登陆验证、日志记录、异常捕获等。</p>
+<h2 id="2-流程梳理">2. 流程梳理</h2>
+<p><code>gRPC</code> 中的 <code>grpc.UnaryInterceptor</code> 和 <code>grpc.StreamInterceptor</code> 分别对普通方法和流方法提供了截取器的支持。这里主要编写普通方法的截取器。</p>
     </div>
     <div class="read-more">
-      <a href="/post/%E8%BF%9B%E9%98%B6%E7%AF%87/rpc/06-grpc%E4%B8%AD%E7%9A%84%E6%88%AA%E5%8F%96%E5%99%A8/" class="read-more-link">阅读更多</a>
+      <a href="/post/%E8%BF%9B%E9%98%B6%E7%AF%87/rpc/06-grpc%E4%B8%AD%E7%9A%84%E6%88%AA%E5%8F%96%E5%99%A8/" class="read-more-link">Read more...</a>
     </div>
   </div>
 </article>
@@ -297,17 +359,18 @@
           <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
           <a href="/categories/go/"> Go </a>
           </div>
-        <span class="more-meta"> 约 1463 字 </span>
-        <span class="more-meta"> 预计阅读 3 分钟 </span>
+        <span class="more-meta"> 1488 words </span>
+        <span class="more-meta"> 3 mins read </span>
     </div>
   </header>
   
   <div class="post-content">
     <div class="post-summary">
-      介绍 gRPC 为每个 gRPC 方法调用提供了 token 认证支持，可以基于用户传入的 token 判断用户是否登录、以及权限&hellip;，实现 token 认证的前提是，需要定义一个结构
+      <h2 id="1介绍">1.介绍</h2>
+<p><code>gRPC</code> 为每个 <code>gRPC</code> 方法调用提供了 <code>token</code> 认证支持，可以基于用户传入的 <code>token</code> 判断用户是否登录、以及权限&hellip;，实现 <code>token</code> 认证的前提是，需要定义一个结构体，并实现 <code>grpc.PerRPCCredentials</code> 接口。</p>
     </div>
     <div class="read-more">
-      <a href="/post/%E8%BF%9B%E9%98%B6%E7%AF%87/rpc/05-grpc%E4%B8%AD%E7%9A%84token%E8%AE%A4%E8%AF%81/" class="read-more-link">阅读更多</a>
+      <a href="/post/%E8%BF%9B%E9%98%B6%E7%AF%87/rpc/05-grpc%E4%B8%AD%E7%9A%84token%E8%AE%A4%E8%AF%81/" class="read-more-link">Read more...</a>
     </div>
   </div>
 </article>
@@ -321,17 +384,19 @@
           <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
           <a href="/categories/go/"> Go </a>
           </div>
-        <span class="more-meta"> 约 3611 字 </span>
-        <span class="more-meta"> 预计阅读 8 分钟 </span>
+        <span class="more-meta"> 3704 words </span>
+        <span class="more-meta"> 8 mins read </span>
     </div>
   </header>
   
   <div class="post-content">
     <div class="post-summary">
-      介绍 ProtoBuf 是 Protocol Buffers 的简称，它是Google开发的一种数据描述语言，于2008年开源。 ProtoBuf 刚开源时的定位类似于 XML、JSON 等数据描述语言，通过附带
+      <h2 id="1介绍">1.介绍</h2>
+<p><code>ProtoBuf</code> 是 <code>Protocol Buffers</code> 的简称，它是Google开发的一种数据描述语言，于2008年开源。 <code>ProtoBuf</code> 刚开源时的定位类似于 <code>XML、JSON</code>
+等数据描述语言，通过附带工具生成代码并实现将结构化数据序列化的功能。</p>
     </div>
     <div class="read-more">
-      <a href="/post/%E8%BF%9B%E9%98%B6%E7%AF%87/rpc/04-protobuf%E8%AF%AD%E6%B3%95%E5%AD%A6%E4%B9%A0/" class="read-more-link">阅读更多</a>
+      <a href="/post/%E8%BF%9B%E9%98%B6%E7%AF%87/rpc/04-protobuf%E8%AF%AD%E6%B3%95%E5%AD%A6%E4%B9%A0/" class="read-more-link">Read more...</a>
     </div>
   </div>
 </article>
@@ -345,257 +410,18 @@
           <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
           <a href="/categories/go/"> Go </a>
           </div>
-        <span class="more-meta"> 约 1567 字 </span>
-        <span class="more-meta"> 预计阅读 4 分钟 </span>
+        <span class="more-meta"> 1587 words </span>
+        <span class="more-meta"> 4 mins read </span>
     </div>
   </header>
   
   <div class="post-content">
     <div class="post-summary">
-      什么是gRPC gRPC 是一个高性能、开源、通用的 RPC 框架，由 Google 推出，基于 HTTP2 协议标准设计开发，默认采用 Protocol Buffers 数据序列化协议，支持多种开发语言。 gRPC 提供了一
+      <h2 id="1什么是grpc">1.什么是gRPC</h2>
+<p><a href="https://grpc.io">gRPC</a> 是一个高性能、开源、通用的 <code>RPC</code> 框架，由 <code>Google</code> 推出，基于 <a href="https://http2.github.io">HTTP2</a> 协议标准设计开发，默认采用 <a href="https://developers.google.com/protocol-buffers/">Protocol Buffers</a> 数据序列化协议，支持多种开发语言。 <code>gRPC</code> 提供了一种简单的方法来精确地定义服务，并且为客户端和服务端自动生成可靠的功能库。</p>
     </div>
     <div class="read-more">
-      <a href="/post/%E8%BF%9B%E9%98%B6%E7%AF%87/rpc/03-grpc%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/gin%E6%A1%86%E6%9E%B6/gin%E9%9B%86%E6%88%90/06-es/">Gin集成(六):集成ElasticSearch</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2022-08-28 </span>
-      <div class="post-category">
-          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
-          <a href="/categories/go/"> Go </a>
-          </div>
-        <span class="more-meta"> 约 808 字 </span>
-        <span class="more-meta"> 预计阅读 2 分钟 </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      1.介绍 ElasticSearch是一个分布式、可扩展、近实时的高性能搜索与数据分析引擎。在Go中经常使用的包有以下两个: 包 文档 Star 数量 olivere/elastic https://olivere.github.io/elastic/ 5.7k
-    </div>
-    <div class="read-more">
-      <a href="/post/gin%E6%A1%86%E6%9E%B6/gin%E9%9B%86%E6%88%90/06-es/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/gin%E6%A1%86%E6%9E%B6/gin%E9%9B%86%E6%88%90/05-redis/">Gin集成(五):集成Redis操作库</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2021-12-17 </span>
-      <div class="post-category">
-          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
-          <a href="/categories/go/"> Go </a>
-          </div>
-        <span class="more-meta"> 约 938 字 </span>
-        <span class="more-meta"> 预计阅读 2 分钟 </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      1.介绍 redis官网推荐使用redigo，截止到今天Github Start是8.2k，但 go-redis 使用的人更多，并且go-redis封装得更好。截
-    </div>
-    <div class="read-more">
-      <a href="/post/gin%E6%A1%86%E6%9E%B6/gin%E9%9B%86%E6%88%90/05-redis/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/gin%E6%A1%86%E6%9E%B6/gin%E9%9B%86%E6%88%90/04-jwt/">Gin集成(四):集成JWT</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2021-12-16 </span>
-      <div class="post-category">
-          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
-          <a href="/categories/go/"> Go </a>
-          </div>
-        <span class="more-meta"> 约 1587 字 </span>
-        <span class="more-meta"> 预计阅读 4 分钟 </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      1. 介绍 JWT全称JSON Web Token是一种跨域认证解决方案，属于一个开放的标准，它规定了一种Token实现方式，目前多用于前后端分离项目和O
-    </div>
-    <div class="read-more">
-      <a href="/post/gin%E6%A1%86%E6%9E%B6/gin%E9%9B%86%E6%88%90/04-jwt/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/gin%E6%A1%86%E6%9E%B6/gin%E9%9B%86%E6%88%90/03-gorm/">Gin集成(三):集成全功能orm框架-gorm</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2021-12-15 </span>
-      <div class="post-category">
-          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
-          <a href="/categories/go/"> Go </a>
-          </div>
-        <span class="more-meta"> 约 3551 字 </span>
-        <span class="more-meta"> 预计阅读 8 分钟 </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      1. 介绍 gorm是一个使用Go语言编写的ORM框架。 它文档齐全，对开发者友好，支持主流数据库。具体使用可参考之前的文章Go常用包(十九):全功
-    </div>
-    <div class="read-more">
-      <a href="/post/gin%E6%A1%86%E6%9E%B6/gin%E9%9B%86%E6%88%90/03-gorm/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/gin%E6%A1%86%E6%9E%B6/gin%E9%9B%86%E6%88%90/02-zap/">Gin集成(二):集成高性能日志zap</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2021-12-14 </span>
-      <div class="post-category">
-          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
-          <a href="/categories/go/"> Go </a>
-          </div>
-        <span class="more-meta"> 约 1563 字 </span>
-        <span class="more-meta"> 预计阅读 4 分钟 </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      1.项目介绍 Gin框架学习使用,并实践常用包在Gin框架中的集成和使用。源码地址: https://github.com/shershon1991/gin-api-template.git 1.1 项目结构 1 2 3 4 5 6 7 8 9 10 11 12 ├── api # 接口 ├── config
-    </div>
-    <div class="read-more">
-      <a href="/post/gin%E6%A1%86%E6%9E%B6/gin%E9%9B%86%E6%88%90/02-zap/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/gin%E6%A1%86%E6%9E%B6/gin%E9%9B%86%E6%88%90/01-viper/">Gin集成(一):集成viper配置解析包</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2021-12-13 </span>
-      <div class="post-category">
-          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
-          <a href="/categories/go/"> Go </a>
-          </div>
-        <span class="more-meta"> 约 1426 字 </span>
-        <span class="more-meta"> 预计阅读 3 分钟 </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      1.介绍 Viper是适用于Go应用程序（包括Twelve-Factor App）的完整配置解决方案。它被设计用于在应用程序中工作，并且可以处理
-    </div>
-    <div class="read-more">
-      <a href="/post/gin%E6%A1%86%E6%9E%B6/gin%E9%9B%86%E6%88%90/01-viper/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/gin%E6%A1%86%E6%9E%B6/12-%E6%9B%B4%E5%A4%9Ahttp%E6%9C%8D%E5%8A%A1%E4%BD%BF%E7%94%A8/">Gin框架(十二):更多HTTP服务使用</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2021-12-12 </span>
-      <div class="post-category">
-          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
-          <a href="/categories/go/"> Go </a>
-          </div>
-        <span class="more-meta"> 约 823 字 </span>
-        <span class="more-meta"> 预计阅读 2 分钟 </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      1.静态文件服务 1.1 代码 1 2 3 4 5 6 7 8 9 10 11 package main import &#34;github.com/gin-gonic/gin&#34; func main() { engine := gin.Default() // 静态图片 engine.Static(&#34;/img&#34;,&#34;./public/img&#34;) // 静态文件 engine.StaticFile(&#34;/favicon.ico&#34;,&#34;./public/favicon.ico&#34;) // 启动服务 _ = engine.Run() } 1.2 目录结构 1.3 请求示例 1 2 3 4 5 # 请
-    </div>
-    <div class="read-more">
-      <a href="/post/gin%E6%A1%86%E6%9E%B6/12-%E6%9B%B4%E5%A4%9Ahttp%E6%9C%8D%E5%8A%A1%E4%BD%BF%E7%94%A8/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/gin%E6%A1%86%E6%9E%B6/11-%E9%AA%8C%E8%AF%81%E5%99%A8validator/">Gin框架(十一):验证器(validator)</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2021-12-11 </span>
-      <div class="post-category">
-          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
-          <a href="/categories/go/"> Go </a>
-          </div>
-        <span class="more-meta"> 约 2918 字 </span>
-        <span class="more-meta"> 预计阅读 6 分钟 </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      1.介绍 validator是一个开源的验证器包，可以快速校验输入信息是否符合自定规则。目前Star 7.8k,源码地址: https://github.com/go-playground/validator 1.1 安装 1 go get github.com/go-playground/validator 1.2 引用
-    </div>
-    <div class="read-more">
-      <a href="/post/gin%E6%A1%86%E6%9E%B6/11-%E9%AA%8C%E8%AF%81%E5%99%A8validator/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/gin%E6%A1%86%E6%9E%B6/10-%E6%97%A5%E5%BF%97%E4%BD%BF%E7%94%A8logrus&#43;lumberjack/">Gin框架(十):日志使用(logrus&#43;lumberjack)</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2021-12-10 </span>
-      <div class="post-category">
-          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
-          <a href="/categories/go/"> Go </a>
-          </div>
-        <span class="more-meta"> 约 2236 字 </span>
-        <span class="more-meta"> 预计阅读 5 分钟 </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      1.框架自带 gin框架自带日志记录功能,通过fmt.Fprint和fmt.Fprintf来记录日志信息，默认是将日志写到终端,可以通过gin
-    </div>
-    <div class="read-more">
-      <a href="/post/gin%E6%A1%86%E6%9E%B6/10-%E6%97%A5%E5%BF%97%E4%BD%BF%E7%94%A8logrus&#43;lumberjack/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/gin%E6%A1%86%E6%9E%B6/09-basicauth%E4%B8%AD%E9%97%B4%E4%BB%B6%E4%BD%BF%E7%94%A8/">Gin框架(九):BasicAuth中间件使用</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2021-12-09 </span>
-      <div class="post-category">
-          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
-          <a href="/categories/go/"> Go </a>
-          </div>
-        <span class="more-meta"> 约 312 字 </span>
-        <span class="more-meta"> 预计阅读 1 分钟 </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      1.什么是BasicAuth? Basic Auth是一种开放平台认证方式，简单的说就是需要你输入用户名和密码才能继续访问。 2.在单路由中使用 ​ 如果需要
-    </div>
-    <div class="read-more">
-      <a href="/post/gin%E6%A1%86%E6%9E%B6/09-basicauth%E4%B8%AD%E9%97%B4%E4%BB%B6%E4%BD%BF%E7%94%A8/" class="read-more-link">阅读更多</a>
+      <a href="/post/%E8%BF%9B%E9%98%B6%E7%AF%87/rpc/03-grpc%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/" class="read-more-link">Read more...</a>
     </div>
   </div>
 </article>
@@ -605,7 +431,7 @@
   <nav class="pagination">
     
     <a class="next" href="/page/2/">
-        <span class="next-text">下一页</span>
+        <span class="next-text">Next</span>
         <i class="iconfont icon-right"></i>
       </a>
   </nav>
@@ -619,16 +445,18 @@
       <div class="social-links">
       <a href="https://github.com/shershon1991" class="iconfont icon-github" title="github"></a>
       <a href="https://www.zhihu.com/people/shershon520" class="iconfont icon-zhihu" title="zhihu"></a>
-  <a href="https://shershon1991.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+  
+    <a href="/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+  
 </div>
 
 <div class="copyright">
   <span class="power-by">
-    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
   </span>
   <span class="division">|</span>
   <span class="theme-info">
-    主题 - 
+    Theme - 
     <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
   </span>
 
@@ -637,7 +465,7 @@
   <span class="copyright-year">
     &copy; 
     2021 - 
-    2024<span class="heart"><i class="iconfont icon-heart"></i></span><span>Learn Go</span>
+    2026<span class="heart"><i class="iconfont icon-heart"></i></span><span></span>
   </span>
 </div>
 
@@ -647,15 +475,28 @@
       <i class="iconfont icon-up"></i>
     </div>
   </div>
-  <script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
-<script>
-    docsearch({
-        apiKey: "9f0c02b55e9885568dcbf6ef094b433c",
-        indexName: "hugo",
-        appId: "TTENARPLYL",
-        inputSelector: '.docsearch-input',
-        debug: false,
-    });
-</script>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.min.js" integrity="sha256-jwCP0NAdCBloaIWTWHmW4i3snUNMHUNO+jr9rYd2iOI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.locales.min.js" integrity="sha256-ZwofwC1Lf/faQCzN7nZtfijVV6hSwxjQMwXL4gn9qU8=" crossorigin="anonymous"></script>
+  <script>
+    var languageCode = "en".replace(/-/g, '_').replace(/_(.*)/, function ($0, $1) {return $0.replace($1, $1.toUpperCase());});
+    timeago().render(document.querySelectorAll('.timeago'), languageCode);
+    timeago.cancel();  
+  </script>
+
+
+
+<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+
+
+
+
+
+
+
+
 </body>
 </html>

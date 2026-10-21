@@ -16,14 +16,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="Learn Go" /><meta name="description" content="1. 什么是闭包 闭包是由函数和与其相关的引用环境组合而成的实体。在实现深约束时，需要创建一个能显式表示引用环境的东西，并将它与相关的子程序捆绑在" /><meta name="keywords" content="博客, Learn Go, hugo" />
+<meta name="author" content="" /><meta name="description" content="1. 什么是闭包 闭包是由函数和与其相关的引用环境组合而成的实体在实现深约束时，需要创建一个能显式表示引用环境的东西，并将它与相关的子程序捆绑在一起，这样捆绑起来的整体被称为闭包。函数 &#43; 引用环境 = 闭包。
+" /><meta name="keywords" content="博客, Learn Go, hugo" />
 
 
 
 
 
 
-<meta name="generator" content="Hugo 0.90.1 with theme even" />
+<meta name="generator" content="Hugo 0.160.1 with theme even" />
 
 
 <link rel="canonical" href="https://shershon1991.github.io/post/%E5%9F%BA%E7%A1%80%E7%AF%87/7-%E9%97%AD%E5%8C%85/" />
@@ -35,24 +36,30 @@
 
 
 
-<link href="/sass/main.min.b874a8796a492f0d7c86bb24c33cbf052935783a5778ebaf819a8e514bf49f10.css" rel="stylesheet">
+<link href="/sass/main.min.af7fd1da18d66c2b017df5b4cae508ef44cfcac3fb4c7c7a327fe4f4f9e28b08.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
-<meta property="og:title" content="Go学习(七):闭包使用" />
-<meta property="og:description" content="1. 什么是闭包 闭包是由函数和与其相关的引用环境组合而成的实体。在实现深约束时，需要创建一个能显式表示引用环境的东西，并将它与相关的子程序捆绑在" />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://shershon1991.github.io/post/%E5%9F%BA%E7%A1%80%E7%AF%87/7-%E9%97%AD%E5%8C%85/" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2021-01-07T00:00:00+00:00" />
-<meta property="article:modified_time" content="2023-03-02T09:23:42+08:00" />
+<meta property="og:url" content="https://shershon1991.github.io/post/%E5%9F%BA%E7%A1%80%E7%AF%87/7-%E9%97%AD%E5%8C%85/">
+  <meta property="og:site_name" content="Learn Go">
+  <meta property="og:title" content="Go学习(七):闭包使用">
+  <meta property="og:description" content="1. 什么是闭包 闭包是由函数和与其相关的引用环境组合而成的实体在实现深约束时，需要创建一个能显式表示引用环境的东西，并将它与相关的子程序捆绑在一起，这样捆绑起来的整体被称为闭包。函数 &#43; 引用环境 = 闭包。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2021-01-07T00:00:00+00:00">
+    <meta property="article:modified_time" content="2022-09-27T16:10:31+08:00">
+    <meta property="article:tag" content="Go基础">
 
-<meta itemprop="name" content="Go学习(七):闭包使用">
-<meta itemprop="description" content="1. 什么是闭包 闭包是由函数和与其相关的引用环境组合而成的实体。在实现深约束时，需要创建一个能显式表示引用环境的东西，并将它与相关的子程序捆绑在"><meta itemprop="datePublished" content="2021-01-07T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2023-03-02T09:23:42+08:00" />
-<meta itemprop="wordCount" content="1173">
-<meta itemprop="keywords" content="Go基础," /><meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Go学习(七):闭包使用"/>
-<meta name="twitter:description" content="1. 什么是闭包 闭包是由函数和与其相关的引用环境组合而成的实体。在实现深约束时，需要创建一个能显式表示引用环境的东西，并将它与相关的子程序捆绑在"/>
+  <meta itemprop="name" content="Go学习(七):闭包使用">
+  <meta itemprop="description" content="1. 什么是闭包 闭包是由函数和与其相关的引用环境组合而成的实体在实现深约束时，需要创建一个能显式表示引用环境的东西，并将它与相关的子程序捆绑在一起，这样捆绑起来的整体被称为闭包。函数 &#43; 引用环境 = 闭包。">
+  <meta itemprop="datePublished" content="2021-01-07T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2022-09-27T16:10:31+08:00">
+  <meta itemprop="wordCount" content="1172">
+  <meta itemprop="keywords" content="Go基础">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Go学习(七):闭包使用">
+  <meta name="twitter:description" content="1. 什么是闭包 闭包是由函数和与其相关的引用环境组合而成的实体在实现深约束时，需要创建一个能显式表示引用环境的东西，并将它与相关的子程序捆绑在一起，这样捆绑起来的整体被称为闭包。函数 &#43; 引用环境 = 闭包。">
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -95,28 +102,28 @@
 
   <div class="container" id="mobile-panel">
     <header id="header" class="header">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css"/><header id="header" class="header">
-    <div class="logo-wrapper">
-        <a href="/" class="logo">Learn Go</a>
-    </div>
-    <nav class="site-navbar">
-        <ul id="menu" class="menu"><li style="display:inline-block;margin-right:10px;">
-                <input type="search" class="docsearch-input" placeholder="Search"/>
-            </li><li class="menu-item">
-                <a class="menu-item-link" href="/">首页</a>
-            </li>
-            <li class="menu-item">
-                <a class="menu-item-link" href="/post/">归档</a>
-            </li>
-            <li class="menu-item">
-                <a class="menu-item-link" href="/tags/">标签</a>
-            </li>
-            <li class="menu-item">
-                <a class="menu-item-link" href="/categories/">分类</a>
-            </li>
-        </ul>
-    </nav>
-</header>
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Learn Go</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">首页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li>
+  </ul>
+</nav>
+
     </header>
 
     <main id="main" class="main">
@@ -133,39 +140,42 @@
             <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
             <a href="/categories/go/"> Go </a>
             </div>
-          <span class="more-meta"> 约 1173 字 </span>
-          <span class="more-meta"> 预计阅读 3 分钟 </span>
+          <span class="more-meta"> 1172 words </span>
+          <span class="more-meta"> 3 mins read </span>
         
       </div>
     </header>
 
     <div class="post-toc" id="post-toc">
-  <h2 class="post-toc-title">文章目录</h2>
+  <h2 class="post-toc-title">Contents</h2>
   <div class="post-toc-content always-active">
     <nav id="TableOfContents">
   <ul>
-    <li><a href="#1-什么是闭包">1. 什么是闭包</a></li>
-    <li><a href="#2--闭包和函数的区别">2.  闭包和函数的区别</a></li>
-    <li><a href="#3-使用对比">3. 使用对比</a>
+    <li>
       <ul>
-        <li><a href="#31-不使用闭包">3.1 不使用闭包</a></li>
-        <li><a href="#32-使用闭包">3.2 使用闭包</a></li>
+        <li>
+          <ul>
+            <li><a href="#1-什么是闭包">1. 什么是闭包</a></li>
+            <li><a href="#2--闭包和函数的区别">2.  闭包和函数的区别</a></li>
+            <li><a href="#3-使用对比">3. 使用对比</a></li>
+            <li><a href="#4闭包的优点">4.闭包的优点</a></li>
+          </ul>
+        </li>
       </ul>
     </li>
-    <li><a href="#4闭包的优点">4.闭包的优点</a></li>
   </ul>
 </nav>
   </div>
 </div>
   <div class="post-outdated">
     <div class="warn">
-      <p>【注意】最后更新于 <span class="timeago" datetime="2023-03-02T09:23:42" title="March 2, 2023">March 2, 2023</span>，文中内容可能已过时，请谨慎使用。</p>
+      <p>[NOTE] Updated <span class="timeago" datetime="2022-09-27T16:10:31" title="September 27, 2022">September 27, 2022</span>. This article may have outdated content or subject matter.</p>
     </div>
   </div>
     <div class="post-content">
-      <h1 id="1-什么是闭包">1. 什么是闭包</h1>
-<p><strong>闭包是由函数和与其相关的引用环境组合而成的实体</strong>。在实现深约束时，需要创建一个能显式表示引用环境的东西，并将它与相关的子程序捆绑在一起，这样捆绑起来的整体被称为闭包。<font color=red>函数 + 引用环境 = 闭包。</font></p>
-<h1 id="2--闭包和函数的区别">2.  闭包和函数的区别</h1>
+      <h3 id="1-什么是闭包">1. 什么是闭包</h3>
+<p><strong>闭包是由函数和与其相关的引用环境组合而成的实体</strong>在实现深约束时，需要创建一个能显式表示引用环境的东西，并将它与相关的子程序捆绑在一起，这样捆绑起来的整体被称为闭包。<font color=red>函数 + 引用环境 = 闭包。</font></p>
+<h3 id="2--闭包和函数的区别">2.  闭包和函数的区别</h3>
 <p>闭包只是在形式和表现上像函数，但实际上不是函数。具体区别如下:</p>
 <ul>
 <li>函数运行时只有一个实例，函数体被定义后就确定了，不会在执行时发生变化。</li>
@@ -173,9 +183,9 @@
 <li>函数本身不存储任何信息，只有与引用环境结合后形成的闭包才具有<code>记忆性</code>。</li>
 <li>函数是编译器静态的概念，而闭包是运行期动态的概念。</li>
 </ul>
-<h1 id="3-使用对比">3. 使用对比</h1>
+<h3 id="3-使用对比">3. 使用对比</h3>
 <p>开发一个简易的计数器</p>
-<h2 id="31-不使用闭包">3.1 不使用闭包</h2>
+<h4 id="31-不使用闭包">3.1 不使用闭包</h4>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -206,36 +216,36 @@
 </span><span class="lnt">26
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
-<span class="kn">import</span> <span class="s">&#34;fmt&#34;</span>
-
-<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="c1">// 从一加到十
-</span><span class="c1"></span>	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span><span class="p">&lt;</span> <span class="mi">10</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
-		<span class="nf">counter</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span>
-	<span class="p">}</span>
-<span class="p">}</span>
-<span class="c1">// 实现计数器
-</span><span class="c1"></span><span class="kd">func</span> <span class="nf">counter</span><span class="p">(</span><span class="nx">num</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
-	<span class="nx">sum</span> <span class="o">:=</span> <span class="mi">0</span>
-	<span class="nx">sum</span> <span class="o">+=</span> <span class="nx">num</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;num: %d  结果: %d \n&#34;</span><span class="p">,</span> <span class="nx">num</span><span class="p">,</span> <span class="nx">sum</span><span class="p">)</span>
-<span class="p">}</span>
-<span class="cm">/**输出:
-</span><span class="cm">num: 1  结果: 1 
-</span><span class="cm">num: 2  结果: 2 
-</span><span class="cm">num: 3  结果: 3 
-</span><span class="cm">num: 4  结果: 4 
-</span><span class="cm">num: 5  结果: 5 
-</span><span class="cm">num: 6  结果: 6 
-</span><span class="cm">num: 7  结果: 7 
-</span><span class="cm">num: 8  结果: 8 
-</span><span class="cm">num: 9  结果: 9 
-</span><span class="cm">*/</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nx">main</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="s">&#34;fmt&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// 从一加到十</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">for</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="p">&lt;</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="o">++</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nf">counter</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 实现计数器</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="nf">counter</span><span class="p">(</span><span class="nx">num</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">sum</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">0</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="nx">num</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;num: %d  结果: %d \n&#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">num</span><span class="p">,</span><span class="w"> </span><span class="nx">sum</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="cm">/**输出:
+</span></span></span><span class="line"><span class="cl"><span class="cm">num: 1  结果: 1 
+</span></span></span><span class="line"><span class="cl"><span class="cm">num: 2  结果: 2 
+</span></span></span><span class="line"><span class="cl"><span class="cm">num: 3  结果: 3 
+</span></span></span><span class="line"><span class="cl"><span class="cm">num: 4  结果: 4 
+</span></span></span><span class="line"><span class="cl"><span class="cm">num: 5  结果: 5 
+</span></span></span><span class="line"><span class="cl"><span class="cm">num: 6  结果: 6 
+</span></span></span><span class="line"><span class="cl"><span class="cm">num: 7  结果: 7 
+</span></span></span><span class="line"><span class="cl"><span class="cm">num: 8  结果: 8 
+</span></span></span><span class="line"><span class="cl"><span class="cm">num: 9  结果: 9 
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p><font color=red>由上述代码可以看出，for循环每执行一次，sum都会清零，没有实现sum累加计数。</font></p>
-<h2 id="32-使用闭包">3.2 使用闭包</h2>
+<h4 id="32-使用闭包">3.2 使用闭包</h4>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -290,62 +300,62 @@
 </span><span class="lnt">50
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
-<span class="kn">import</span> <span class="s">&#34;fmt&#34;</span>
-
-<span class="kd">func</span> <span class="nf">counterByClosure</span><span class="p">()</span> <span class="kd">func</span><span class="p">(</span><span class="nx">num</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
-	<span class="nx">sum</span> <span class="o">:=</span> <span class="mi">0</span>
-	<span class="k">return</span> <span class="kd">func</span><span class="p">(</span><span class="nx">num</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;num: %d 相加前 sum = %d  相加后 sum =  %d \n&#34;</span><span class="p">,</span><span class="nx">num</span><span class="p">,</span><span class="nx">sum</span><span class="p">,</span><span class="nx">sum</span><span class="o">+</span><span class="nx">num</span><span class="p">)</span>
-		<span class="nx">sum</span> <span class="o">+=</span> <span class="nx">num</span>
-	<span class="p">}</span>
-<span class="p">}</span>
-
-<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="c1">// 初始化闭包函数
-</span><span class="c1"></span>	<span class="nx">counterFunc</span> <span class="o">:=</span> <span class="nf">counterByClosure</span><span class="p">()</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34; ---------  再从1加到10 -------- &#34;</span><span class="p">)</span>
-	<span class="c1">// 从1加到10
-</span><span class="c1"></span>	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;=</span> <span class="mi">10</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
-		<span class="nf">counterFunc</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span>
-	<span class="p">}</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34; ---------  再从10加到20 -------- &#34;</span><span class="p">)</span>
-	<span class="c1">// 再从10加到20
-</span><span class="c1"></span>	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">10</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;=</span> <span class="mi">20</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
-		<span class="nf">counterFunc</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span>
-	<span class="p">}</span>
-<span class="p">}</span>
-<span class="cm">/**输出:
-</span><span class="cm"> ---------  再从1加到10 -------- 
-</span><span class="cm">num: 1 相加前 sum = 0  相加后 sum =  1 
-</span><span class="cm">num: 2 相加前 sum = 1  相加后 sum =  3 
-</span><span class="cm">num: 3 相加前 sum = 3  相加后 sum =  6 
-</span><span class="cm">num: 4 相加前 sum = 6  相加后 sum =  10 
-</span><span class="cm">num: 5 相加前 sum = 10  相加后 sum =  15 
-</span><span class="cm">num: 6 相加前 sum = 15  相加后 sum =  21 
-</span><span class="cm">num: 7 相加前 sum = 21  相加后 sum =  28 
-</span><span class="cm">num: 8 相加前 sum = 28  相加后 sum =  36 
-</span><span class="cm">num: 9 相加前 sum = 36  相加后 sum =  45 
-</span><span class="cm">num: 10 相加前 sum = 45  相加后 sum =  55 
-</span><span class="cm"> ---------  再从10加到20 -------- 
-</span><span class="cm">num: 10 相加前 sum = 55  相加后 sum =  65 
-</span><span class="cm">num: 11 相加前 sum = 65  相加后 sum =  76 
-</span><span class="cm">num: 12 相加前 sum = 76  相加后 sum =  88 
-</span><span class="cm">num: 13 相加前 sum = 88  相加后 sum =  101 
-</span><span class="cm">num: 14 相加前 sum = 101  相加后 sum =  115 
-</span><span class="cm">num: 15 相加前 sum = 115  相加后 sum =  130 
-</span><span class="cm">num: 16 相加前 sum = 130  相加后 sum =  146 
-</span><span class="cm">num: 17 相加前 sum = 146  相加后 sum =  163 
-</span><span class="cm">num: 18 相加前 sum = 163  相加后 sum =  181 
-</span><span class="cm">num: 19 相加前 sum = 181  相加后 sum =  200 
-</span><span class="cm">num: 20 相加前 sum = 200  相加后 sum =  220 
-</span><span class="cm">*/</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nx">main</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="s">&#34;fmt&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="nf">counterByClosure</span><span class="p">()</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">num</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">sum</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">0</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">num</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;num: %d 相加前 sum = %d  相加后 sum =  %d \n&#34;</span><span class="p">,</span><span class="nx">num</span><span class="p">,</span><span class="nx">sum</span><span class="p">,</span><span class="nx">sum</span><span class="o">+</span><span class="nx">num</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nx">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="nx">num</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// 初始化闭包函数</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">counterFunc</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nf">counterByClosure</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34; ---------  再从1加到10 -------- &#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// 从1加到10</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">for</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="o">++</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nf">counterFunc</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34; ---------  再从10加到20 -------- &#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// 再从10加到20</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">for</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">20</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="o">++</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nf">counterFunc</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="cm">/**输出:
+</span></span></span><span class="line"><span class="cl"><span class="cm"> ---------  再从1加到10 -------- 
+</span></span></span><span class="line"><span class="cl"><span class="cm">num: 1 相加前 sum = 0  相加后 sum =  1 
+</span></span></span><span class="line"><span class="cl"><span class="cm">num: 2 相加前 sum = 1  相加后 sum =  3 
+</span></span></span><span class="line"><span class="cl"><span class="cm">num: 3 相加前 sum = 3  相加后 sum =  6 
+</span></span></span><span class="line"><span class="cl"><span class="cm">num: 4 相加前 sum = 6  相加后 sum =  10 
+</span></span></span><span class="line"><span class="cl"><span class="cm">num: 5 相加前 sum = 10  相加后 sum =  15 
+</span></span></span><span class="line"><span class="cl"><span class="cm">num: 6 相加前 sum = 15  相加后 sum =  21 
+</span></span></span><span class="line"><span class="cl"><span class="cm">num: 7 相加前 sum = 21  相加后 sum =  28 
+</span></span></span><span class="line"><span class="cl"><span class="cm">num: 8 相加前 sum = 28  相加后 sum =  36 
+</span></span></span><span class="line"><span class="cl"><span class="cm">num: 9 相加前 sum = 36  相加后 sum =  45 
+</span></span></span><span class="line"><span class="cl"><span class="cm">num: 10 相加前 sum = 45  相加后 sum =  55 
+</span></span></span><span class="line"><span class="cl"><span class="cm"> ---------  再从10加到20 -------- 
+</span></span></span><span class="line"><span class="cl"><span class="cm">num: 10 相加前 sum = 55  相加后 sum =  65 
+</span></span></span><span class="line"><span class="cl"><span class="cm">num: 11 相加前 sum = 65  相加后 sum =  76 
+</span></span></span><span class="line"><span class="cl"><span class="cm">num: 12 相加前 sum = 76  相加后 sum =  88 
+</span></span></span><span class="line"><span class="cl"><span class="cm">num: 13 相加前 sum = 88  相加后 sum =  101 
+</span></span></span><span class="line"><span class="cl"><span class="cm">num: 14 相加前 sum = 101  相加后 sum =  115 
+</span></span></span><span class="line"><span class="cl"><span class="cm">num: 15 相加前 sum = 115  相加后 sum =  130 
+</span></span></span><span class="line"><span class="cl"><span class="cm">num: 16 相加前 sum = 130  相加后 sum =  146 
+</span></span></span><span class="line"><span class="cl"><span class="cm">num: 17 相加前 sum = 146  相加后 sum =  163 
+</span></span></span><span class="line"><span class="cl"><span class="cm">num: 18 相加前 sum = 163  相加后 sum =  181 
+</span></span></span><span class="line"><span class="cl"><span class="cm">num: 19 相加前 sum = 181  相加后 sum =  200 
+</span></span></span><span class="line"><span class="cl"><span class="cm">num: 20 相加前 sum = 200  相加后 sum =  220 
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><blockquote>
 <p>由于闭包函数“捕获”了和它在同一作用域的其他常量和变量，所以当闭包在任何地方被调用，闭包都可以使用这些常量或者变量。它不关心这些变量是否已经超出作用域，只要闭包还在使用这些变量，这些变量就依然存在。</p>
 </blockquote>
-<h1 id="4闭包的优点">4.闭包的优点</h1>
+<h3 id="4闭包的优点">4.闭包的优点</h3>
 <ul>
 <li>加强模块化：闭包有益于模块化编程，便于以简单的方式开发较小的模块，从而提高开发速度和程序的可复用性。和没有使用闭包的程序相比，使用闭包可将模块划分得更小。</li>
 <li>抽象: 闭包是数据和行为的组合，这使得闭包具有较好的抽象能力。</li>
@@ -356,13 +366,13 @@
 
     <div class="post-copyright">
   <p class="copyright-item">
-    <span class="item-title">文章作者</span>
-    <span class="item-content">Learn Go</span>
+    <span class="item-title">Author</span>
+    <span class="item-content"></span>
   </p>
   <p class="copyright-item">
-    <span class="item-title">上次更新</span>
+    <span class="item-title">LastMod</span>
     <span class="item-content">
-        2023-03-02
+        2022-09-27
         
     </span>
   </p>
@@ -377,11 +387,11 @@
         <a class="prev" href="/post/%E5%9F%BA%E7%A1%80%E7%AF%87/8-%E6%8C%87%E9%92%88/">
             <i class="iconfont icon-left"></i>
             <span class="prev-text nav-default">Go学习(八):指针</span>
-            <span class="prev-text nav-mobile">上一篇</span>
+            <span class="prev-text nav-mobile">Prev</span>
           </a>
         <a class="next" href="/post/%E5%9F%BA%E7%A1%80%E7%AF%87/6-%E5%87%BD%E6%95%B0%E4%BD%BF%E7%94%A8/">
             <span class="next-text nav-default">Go学习(六):函数使用</span>
-            <span class="next-text nav-mobile">下一篇</span>
+            <span class="next-text nav-mobile">Next</span>
             <i class="iconfont icon-right"></i>
           </a>
       </nav>
@@ -401,16 +411,16 @@
       <div class="social-links">
       <a href="https://github.com/shershon1991" class="iconfont icon-github" title="github"></a>
       <a href="https://www.zhihu.com/people/shershon520" class="iconfont icon-zhihu" title="zhihu"></a>
-  <a href="https://shershon1991.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+  
 </div>
 
 <div class="copyright">
   <span class="power-by">
-    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
   </span>
   <span class="division">|</span>
   <span class="theme-info">
-    主题 - 
+    Theme - 
     <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
   </span>
 
@@ -419,7 +429,7 @@
   <span class="copyright-year">
     &copy; 
     2021 - 
-    2024<span class="heart"><i class="iconfont icon-heart"></i></span><span>Learn Go</span>
+    2026<span class="heart"><i class="iconfont icon-heart"></i></span><span></span>
   </span>
 </div>
 
@@ -429,15 +439,28 @@
       <i class="iconfont icon-up"></i>
     </div>
   </div>
-  <script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
-<script>
-    docsearch({
-        apiKey: "9f0c02b55e9885568dcbf6ef094b433c",
-        indexName: "hugo",
-        appId: "TTENARPLYL",
-        inputSelector: '.docsearch-input',
-        debug: false,
-    });
-</script>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.min.js" integrity="sha256-jwCP0NAdCBloaIWTWHmW4i3snUNMHUNO+jr9rYd2iOI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.locales.min.js" integrity="sha256-ZwofwC1Lf/faQCzN7nZtfijVV6hSwxjQMwXL4gn9qU8=" crossorigin="anonymous"></script>
+  <script>
+    var languageCode = "en".replace(/-/g, '_').replace(/_(.*)/, function ($0, $1) {return $0.replace($1, $1.toUpperCase());});
+    timeago().render(document.querySelectorAll('.timeago'), languageCode);
+    timeago.cancel();  
+  </script>
+
+
+
+<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+
+
+
+
+
+
+
+
 </body>
 </html>

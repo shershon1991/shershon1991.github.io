@@ -1,0 +1,1928 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Learn Go</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="" /><meta name="description" content="Learn Go" /><meta name="keywords" content="博客, Learn Go, hugo" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.160.1 with theme even" />
+
+
+<link rel="canonical" href="https://shershon1991.github.io/" />
+  <link href="https://shershon1991.github.io/index.xml" rel="alternate" type="application/rss+xml" title="Learn Go" />
+  <link href="https://shershon1991.github.io/index.xml" rel="feed" type="application/rss+xml" title="Learn Go" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.af7fd1da18d66c2b017df5b4cae508ef44cfcac3fb4c7c7a327fe4f4f9e28b08.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:url" content="https://shershon1991.github.io/">
+  <meta property="og:site_name" content="Learn Go">
+  <meta property="og:title" content="Learn Go">
+  <meta property="og:description" content="Learn Go">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="website">
+
+  <meta itemprop="name" content="Learn Go">
+  <meta itemprop="description" content="Learn Go">
+  <meta itemprop="datePublished" content="2023-07-13T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2026-10-21T14:53:25+08:00">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Learn Go">
+  <meta name="twitter:description" content="Learn Go">
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Learn Go</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">首页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Learn Go</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">首页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <section id="posts" class="posts">
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/%E6%A0%87%E5%87%86%E5%8C%85/7-context%E4%B8%8A%E4%B8%8B%E6%96%87/">Go标准包(七):context(上下文)</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2021-04-07 </span>
+      <div class="post-category">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+          <a href="/categories/go/"> Go </a>
+          </div>
+        <span class="more-meta"> 3027 words </span>
+        <span class="more-meta"> 7 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <h3 id="1什么是上下文">1.什么是上下文?</h3>
+<p>从<code>Go 1.7</code>开始,标准库引入<code>context</code>(上下文)，他主要用来在<code>goroutine</code>之间传递上下文信息(同步信号、超时时间、截止时间、<code>Key-Val</code>值对)。</p>
+    </div>
+    <div class="read-more">
+      <a href="/post/%E6%A0%87%E5%87%86%E5%8C%85/7-context%E4%B8%8A%E4%B8%8B%E6%96%87/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/%E6%A0%87%E5%87%86%E5%8C%85/6-bufio%E6%9C%89%E7%BC%93%E5%86%B2%E7%9A%84io/">Go标准包(六):bufio(有缓冲的IO)</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2021-04-06 </span>
+      <div class="post-category">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+          <a href="/categories/go/"> Go </a>
+          </div>
+        <span class="more-meta"> 2935 words </span>
+        <span class="more-meta"> 6 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <h3 id="1介绍">1.介绍</h3>
+<p><code>bufio</code>包实现了有缓冲的<code>I/O</code>。它包装一个<code>io.Reader</code>或<code>io.Writer</code>接口对象，使用这个包可以大幅提高文件读写的效率。</p>
+<h4 id="1如何提高效率">1.如何提高效率?</h4>
+<p><img src="https://raw.githubusercontent.com/shershon1991/picImgBed/master/go/img/image-20210408135753993.png" alt="image-20210408135753993"></p>
+<p><strong>1.写入流程梳理:</strong></p>
+    </div>
+    <div class="read-more">
+      <a href="/post/%E6%A0%87%E5%87%86%E5%8C%85/6-bufio%E6%9C%89%E7%BC%93%E5%86%B2%E7%9A%84io/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/%E6%A0%87%E5%87%86%E5%8C%85/5-ioutilio%E6%93%8D%E4%BD%9C%E5%87%BD%E6%95%B0%E9%9B%86/">Go标准包(五):ioutil(IO操作函数集)</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2021-04-05 </span>
+      <div class="post-category">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+          <a href="/categories/go/"> Go </a>
+          </div>
+        <span class="more-meta"> 1423 words </span>
+        <span class="more-meta"> 3 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <h3 id="1介绍">1.介绍</h3>
+<p>在<code>Go</code>语言中，<code>io</code>包主要声明的是对<code>I/O</code>操作的基本接口，而<code>io/ioutil</code>包则实现了对应的方法，方便我们直接使用。</p>
+<h3 id="2方法列表">2.方法列表</h3>
+<table>
+  <thead>
+      <tr>
+          <th>方法名</th>
+          <th>描述</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>NopCloser</code></td>
+          <td>对<code>Reader</code>进行封装，返回一个<code>ReadCloser</code></td>
+      </tr>
+      <tr>
+          <td><code>ReadAll</code></td>
+          <td>对 <code>Reader</code> 进行读取， 直到发生错误或者遇到<code> EOF</code> 为止， 然后返回被读取的数据。</td>
+      </tr>
+      <tr>
+          <td><code>ReadFile</code></td>
+          <td>读取指定文件的内容，并返回。</td>
+      </tr>
+      <tr>
+          <td><code>ReadDir</code></td>
+          <td>读取 指定的目录， 并返回排序后的目录列表(根据名称排序)</td>
+      </tr>
+      <tr>
+          <td><code>TempDir</code></td>
+          <td>在指定目录新创建一个临时目录， 并返回该目录的路径</td>
+      </tr>
+      <tr>
+          <td><code>TempFile</code></td>
+          <td>在指定目录新创建一个临时文件， 以可读写的方式打开它， 并返回 <code>*os.File</code> 指针</td>
+      </tr>
+      <tr>
+          <td><code>WriteFile</code></td>
+          <td>将给定的数据 写入到指定文件里面。 <br/>如果文件不存在， 则去创建它； <br/>如果文件已经存在， 则再写入之前会先清空文件中已有的内容。</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="3readall">3.<code>ReadAll</code></h3>
+<h4 id="31-方法签名">3.1 方法签名</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="nf">ReadAll</span><span class="p">(</span><span class="nx">r</span><span class="w"> </span><span class="nx">io</span><span class="p">.</span><span class="nx">Reader</span><span class="p">)</span><span class="w"> </span><span class="p">([]</span><span class="kt">byte</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> 
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>ReadAll</code>从<code>r</code>读取数据直到<code>EOF</code>或<code>error</code>，返回读取内容(<code>[]byte</code>)和错误(<code>error</code>)。读取成功时<code>err返回nil</code>。<font color=purple>因为本函数定义为读取<code>r</code>直到<code>EOF</code>，它不会将读取返回的<code>EOF</code>视为应报告的错误。</font></p>
+    </div>
+    <div class="read-more">
+      <a href="/post/%E6%A0%87%E5%87%86%E5%8C%85/5-ioutilio%E6%93%8D%E4%BD%9C%E5%87%BD%E6%95%B0%E9%9B%86/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/%E6%A0%87%E5%87%86%E5%8C%85/4-fmt%E6%A0%BC%E5%BC%8F%E5%8C%96%E8%BE%93%E5%87%BA/">Go标准包(四):fmt(格式化输出)</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2021-04-04 </span>
+      <div class="post-category">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+          <a href="/categories/go/"> Go </a>
+          </div>
+        <span class="more-meta"> 2539 words </span>
+        <span class="more-meta"> 6 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <h3 id="1输出控制台">1.输出控制台</h3>
+<h4 id="11-printf">1.1 <code>Printf</code></h4>
+<p><code>Printf</code>根据<code>format</code>参数生成格式化的字符串并写入标准输出。返回写入的字节数和遇到的任何错误。</p>
+<h5 id="1format格式">1.<code>format</code>格式</h5>
+<table>
+  <thead>
+      <tr>
+          <th>动  词</th>
+          <th>功  能</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>%v </code></td>
+          <td>按值的本来值输出</td>
+      </tr>
+      <tr>
+          <td><code>%+v</code></td>
+          <td>在 %v 基础上，对结构体字段名和值进行展开</td>
+      </tr>
+      <tr>
+          <td><code>%#v</code></td>
+          <td>输出 Go 语言语法格式的值</td>
+      </tr>
+      <tr>
+          <td><code>%T </code></td>
+          <td>输出 Go 语言语法格式的类型和值</td>
+      </tr>
+      <tr>
+          <td><code>%% </code></td>
+          <td>输出 % 本体</td>
+      </tr>
+      <tr>
+          <td><code>%b </code></td>
+          <td>整型以二进制方式显示</td>
+      </tr>
+      <tr>
+          <td><code>%o </code></td>
+          <td>整型以八进制方式显示</td>
+      </tr>
+      <tr>
+          <td><code>%d </code></td>
+          <td>整型以十进制方式显示</td>
+      </tr>
+      <tr>
+          <td><code>%x </code></td>
+          <td>整型以十六进制方式显示</td>
+      </tr>
+      <tr>
+          <td><code>%X </code></td>
+          <td>整型以十六进制、字母大写方式显示</td>
+      </tr>
+      <tr>
+          <td><code>%U </code></td>
+          <td>Unicode 字符</td>
+      </tr>
+      <tr>
+          <td><code>%f </code></td>
+          <td>浮点数</td>
+      </tr>
+      <tr>
+          <td><code>%p </code></td>
+          <td>指针，十六进制方式显示</td>
+      </tr>
+      <tr>
+          <td><code>%c </code></td>
+          <td>数值对应的 Unicode 编码字符</td>
+      </tr>
+      <tr>
+          <td><code>%s </code></td>
+          <td>直接输出字符串或者[]byte</td>
+      </tr>
+      <tr>
+          <td><code>%t </code></td>
+          <td>输出值的 true 或 false</td>
+      </tr>
+  </tbody>
+</table>
+<h5 id="2打印字符串">2.打印字符串</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="nx">str</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&#34;hello word&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%%s-&gt; %s \n&#34;</span><span class="p">,</span><span class="nx">str</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%%v-&gt; %v \n&#34;</span><span class="p">,</span><span class="nx">str</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="cm">/**输出
+</span></span></span><span class="line"><span class="cl"><span class="cm">%s-&gt; hello word 
+</span></span></span><span class="line"><span class="cl"><span class="cm">%v-&gt; hello word 
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h5 id="3打印布尔类型">3.打印布尔类型</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%%t-&gt; %t \n&#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">b</span><span class="p">)</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h5 id="4打印浮点型">4.打印浮点型</h5>
+<table>
+  <thead>
+      <tr>
+          <th>格式</th>
+          <th>描述</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>%f</code></td>
+          <td>默认宽度，默认精度</td>
+      </tr>
+      <tr>
+          <td><code>%9f</code></td>
+          <td>宽度9，默认精度</td>
+      </tr>
+      <tr>
+          <td><code>%.2f</code></td>
+          <td>默认宽度，精度2</td>
+      </tr>
+      <tr>
+          <td><code>%9.2f</code></td>
+          <td>宽度9，精度2</td>
+      </tr>
+      <tr>
+          <td><code>%9.f</code></td>
+          <td>宽度9，精度0</td>
+      </tr>
+  </tbody>
+</table>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="nx">f</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mf">1.234567890</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;默认宽度，默认精度:%f \n&#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">f</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;宽度9，默认精度:%9f \n&#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">f</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;默认宽度，精度2:%.2f \n&#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">f</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;宽度9，精度2:%9.2f \n&#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">f</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;宽度9，精度0 :%9.f \n&#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">f</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="cm">/**输出
+</span></span></span><span class="line"><span class="cl"><span class="cm">默认宽度，默认精度:1.234568 
+</span></span></span><span class="line"><span class="cl"><span class="cm">宽度9，默认精度: 1.234568 
+</span></span></span><span class="line"><span class="cl"><span class="cm">默认宽度，精度2:1.23 
+</span></span></span><span class="line"><span class="cl"><span class="cm">宽度9，精度2:     1.23 
+</span></span></span><span class="line"><span class="cl"><span class="cm">宽度9，精度0 :        1 
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h5 id="5打印整数">5.打印整数</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// 定义一个整数变量</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">a</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">54321</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;十进制:%d\n&#34;</span><span class="p">,</span><span class="nx">a</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;二进制:%b\n&#34;</span><span class="p">,</span><span class="nx">a</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;八进制:%o\n&#34;</span><span class="p">,</span><span class="nx">a</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;十六进制:%x\n&#34;</span><span class="p">,</span><span class="nx">a</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;十六进制,字母大写:%X\n&#34;</span><span class="p">,</span><span class="nx">a</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="cm">/**输出
+</span></span></span><span class="line"><span class="cl"><span class="cm">十进制:54321
+</span></span></span><span class="line"><span class="cl"><span class="cm">二进制:1101010000110001
+</span></span></span><span class="line"><span class="cl"><span class="cm">八进制:152061
+</span></span></span><span class="line"><span class="cl"><span class="cm">十六进制:d431
+</span></span></span><span class="line"><span class="cl"><span class="cm">十六进制,字母大写:D431
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h5 id="6打印指针">6.打印指针</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="nx">str</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&#34;hello&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;打印指针:%p\n&#34;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">str</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="cp">//输出: 打印指针:0xc000098d50</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h5 id="7打印变量类型">7.打印变量类型</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// 数组</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">arr</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;arr类型: %T\n&#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">arr</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 映射</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">map1</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="s">&#34;张三&#34;</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="s">&#34;李四&#34;</span><span class="p">:</span><span class="w"> </span><span class="mi">23</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;map1类型: %T\n&#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">map1</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 匿名结构体</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">fruit</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">name</span><span class="w">  </span><span class="kt">string</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">price</span><span class="w"> </span><span class="kt">float64</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}{</span><span class="s">&#34;香蕉&#34;</span><span class="p">,</span><span class="w"> </span><span class="mf">4.99</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;fruit类型: %T\n&#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">fruit</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="cm">/**输出
+</span></span></span><span class="line"><span class="cl"><span class="cm">arr类型: []int
+</span></span></span><span class="line"><span class="cl"><span class="cm">map1类型: map[string]int
+</span></span></span><span class="line"><span class="cl"><span class="cm">fruit类型: struct { name string; price float64 }
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h5 id="8打印结构体">8.打印结构体</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// 定义一个匿名结构体</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">people</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">name</span><span class="p">,</span><span class="w"> </span><span class="nx">home</span><span class="p">,</span><span class="w"> </span><span class="nx">school</span><span class="w"> </span><span class="kt">string</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}{</span><span class="s">&#34;张三&#34;</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;北京&#34;</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;北京大学&#34;</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%v\n&#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">people</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%+v\n&#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">people</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%#v\n&#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">people</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="cm">/**输出
+</span></span></span><span class="line"><span class="cl"><span class="cm">{张三 北京 北京大学}
+</span></span></span><span class="line"><span class="cl"><span class="cm">{name:张三 home:北京 school:北京大学}
+</span></span></span><span class="line"><span class="cl"><span class="cm">struct { name string; home string; school string }{name:&#34;张三&#34;, home:&#34;北京&#34;, school:&#34;北京大学&#34;}
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h5 id="9打印unicode">9.打印<code>Unicode</code></h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%U\n&#34;</span><span class="p">,</span><span class="w"> </span><span class="sc">&#39;A&#39;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%c\n&#34;</span><span class="p">,</span><span class="w"> </span><span class="mi">65</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="cm">/**输出
+</span></span></span><span class="line"><span class="cl"><span class="cm">U+0041
+</span></span></span><span class="line"><span class="cl"><span class="cm">A
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="12-print">1.2 <code>Print</code></h4>
+<p><code>Print</code>: 采用默认格式将其参数格式化并写入标准输出。如果两个相邻的参数都不是字符串，会在它们的输出之间添加空格。</p>
+    </div>
+    <div class="read-more">
+      <a href="/post/%E6%A0%87%E5%87%86%E5%8C%85/4-fmt%E6%A0%BC%E5%BC%8F%E5%8C%96%E8%BE%93%E5%87%BA/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/%E6%A0%87%E5%87%86%E5%8C%85/3-time%E6%97%B6%E9%97%B4%E5%8C%85/">Go标准包(三):time(时间包)</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2021-04-03 </span>
+      <div class="post-category">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+          <a href="/categories/go/"> Go </a>
+          </div>
+        <span class="more-meta"> 2477 words </span>
+        <span class="more-meta"> 5 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <h3 id="1获取时间">1.获取时间</h3>
+<h4 id="11-当前时间">1.1 当前时间</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="nx">unix</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Unix</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;当前时间戳(单位秒): %v \n&#34;</span><span class="p">,</span><span class="nx">unix</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">nano</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">UnixNano</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;当前时间戳(单位纳秒): %v\n&#34;</span><span class="p">,</span><span class="nx">nano</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">format</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Format</span><span class="p">(</span><span class="s">&#34;2006-01-02 15:04:05&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;当前时间(Y-m-d H:i:s): %v\n&#34;</span><span class="p">,</span><span class="nx">format</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">format2</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Format</span><span class="p">(</span><span class="s">&#34;20060102150405&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;当前时间(YmdHis): %v\n&#34;</span><span class="p">,</span><span class="nx">format2</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm">当前时间戳(单位秒): 1616251448 
+</span></span></span><span class="line"><span class="cl"><span class="cm">当前时间戳(单位纳秒): 1616251448041163000
+</span></span></span><span class="line"><span class="cl"><span class="cm">当前时间(Y-m-d H:i:s): 2021-03-20 22:44:08
+</span></span></span><span class="line"><span class="cl"><span class="cm">当前时间(YmdHis): 20210320224408
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="12-当前年月日时分秒星期几">1.2 当前年、月、日、时、分、秒、星期几</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="nx">format</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Format</span><span class="p">(</span><span class="s">&#34;2006-01-02 15:04:05&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;当前时间(Y-m-d H:i:s): %v\n&#34;</span><span class="p">,</span><span class="nx">format</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;当前年: %v\n&#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Year</span><span class="p">())</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;当前月: %v\n&#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Month</span><span class="p">())</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;当前日: %v\n&#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Day</span><span class="p">())</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;当前小时: %v\n&#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Hour</span><span class="p">())</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;当前分钟: %v\n&#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Minute</span><span class="p">())</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;当前秒: %v\n&#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Second</span><span class="p">())</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;当前星期几: %v\n&#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Weekday</span><span class="p">())</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="cm">/**输出
+</span></span></span><span class="line"><span class="cl"><span class="cm">当前时间(Y-m-d H:i:s): 2021-03-21 17:32:24
+</span></span></span><span class="line"><span class="cl"><span class="cm">当前年: 2021
+</span></span></span><span class="line"><span class="cl"><span class="cm">当前月: March
+</span></span></span><span class="line"><span class="cl"><span class="cm">当前日: 21
+</span></span></span><span class="line"><span class="cl"><span class="cm">当前小时: 17
+</span></span></span><span class="line"><span class="cl"><span class="cm">当前分钟: 32
+</span></span></span><span class="line"><span class="cl"><span class="cm">当前秒: 24
+</span></span></span><span class="line"><span class="cl"><span class="cm">当前星期几: Sunday
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="13-获取时分秒">1.3 获取时分秒</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="nx">now</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">hour</span><span class="p">,</span><span class="w"> </span><span class="nx">min</span><span class="p">,</span><span class="w"> </span><span class="nx">sec</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">now</span><span class="p">.</span><span class="nf">Clock</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;时间:%v   huor: %v min:%v sec:%v \n&#34;</span><span class="p">,</span><span class="nx">now</span><span class="p">,</span><span class="nx">hour</span><span class="p">,</span><span class="nx">min</span><span class="p">,</span><span class="nx">sec</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="cp">//时间:2021-03-22 23:18:43.245006 +0800 CST m=+0.000108086   huor: 23 min:18 sec:43</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="14-创建指定时间">1.4 创建指定时间</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="nx">date</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nf">Date</span><span class="p">(</span><span class="mi">2020</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">23</span><span class="p">,</span><span class="mi">13</span><span class="p">,</span><span class="mi">53</span><span class="p">,</span><span class="mi">32</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="nx">time</span><span class="p">.</span><span class="nx">Local</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;类型: %T , %v &#34;</span><span class="p">,</span><span class="nx">date</span><span class="p">,</span><span class="nx">date</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 输出:类型: time.Time , 2020-08-23 13:53:32 +0800 CST </span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="15-获取所属第几周">1.5 获取所属第几周</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// 获取当前时间是，今年的第几周</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">week</span><span class="p">,</span><span class="w"> </span><span class="nx">w</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">ISOWeek</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;year: %v w:%v \n&#34;</span><span class="p">,</span><span class="nx">week</span><span class="p">,</span><span class="nx">w</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">// year: 2021 w:12 </span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="16-获取x年的第几天">1.6 获取x年的第几天</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="nx">num</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">YearDay</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;今天是今年的第 %v 天 \n&#34;</span><span class="p">,</span><span class="nx">num</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 今天是今年的第 81 天 </span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="2字符串转时间">2.字符串转时间</h3>
+<h4 id="21-字符串转时间类型">2.1 字符串转时间类型</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="nx">str</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&#34;1616319808&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">unix</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">strconv</span><span class="p">.</span><span class="nf">ParseInt</span><span class="p">(</span><span class="nx">str</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">64</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">format</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nf">Unix</span><span class="p">(</span><span class="nx">unix</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;字符串时间戳-&gt; 类型:%T 值:%v \n&#34;</span><span class="p">,</span><span class="nx">format</span><span class="p">,</span><span class="nx">format</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 字符串时间,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">strDate</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&#34;2019-04-10 12:54:03&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 注意layout格式需要和字符串时间格式一致</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">location</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nf">Parse</span><span class="p">(</span><span class="s">&#34;2006-01-02 15:04:05&#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">strDate</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;字符串时间-&gt; 类型:%T 值:%v \n&#34;</span><span class="p">,</span><span class="nx">location</span><span class="p">,</span><span class="nx">location</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm">字符串时间戳-&gt; 类型:time.Time 值:2021-03-21 17:43:28 +0800 CST 
+</span></span></span><span class="line"><span class="cl"><span class="cm">字符串时间-&gt; 类型:time.Time 值:2019-04-10 12:54:03 +0000 UTC 
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="22-格式化时间">2.2 格式化时间</h4>
+<p><code>Format</code>根据<code>layout</code>指定的格式返回<code>t</code>代表的时间点的格式化文本表示；<code>Format</code>中内置了几个固定的<code>layout</code>常量。</p>
+    </div>
+    <div class="read-more">
+      <a href="/post/%E6%A0%87%E5%87%86%E5%8C%85/3-time%E6%97%B6%E9%97%B4%E5%8C%85/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/%E6%A0%87%E5%87%86%E5%8C%85/2-strconv%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BD%AC%E6%8D%A2/">Go标准包(二):strconv(字符串转换)</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2021-04-02 </span>
+      <div class="post-category">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+          <a href="/categories/go/"> Go </a>
+          </div>
+        <span class="more-meta"> 2835 words </span>
+        <span class="more-meta"> 6 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <h3 id="1转换成其他类型parse类函数">1.转换成其他类型（Parse类函数）</h3>
+<h4 id="11-转换成整型atoi">1.1 转换成整型(Atoi)</h4>
+<h5 id="1语法">1.语法</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="nf">Atoi</span><span class="p">(</span><span class="nx">s</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h5 id="2使用示例">2.使用示例</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nx">main</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="s">&#34;fmt&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="s">&#34;strconv&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// 将字符串转成整型</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">s</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&#34;666&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">sInt</span><span class="p">,</span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">strconv</span><span class="p">.</span><span class="nf">Atoi</span><span class="p">(</span><span class="nx">s</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;将字符串:%s 转成整型:%d 类型: %T \n&#34;</span><span class="p">,</span><span class="nx">s</span><span class="p">,</span><span class="nx">sInt</span><span class="p">,</span><span class="nx">sInt</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="cp">//将字符串:666 转成整型:666 类型: int</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="12-解析成整型parseint">1.2 解析成整型(ParseInt)</h4>
+<h5 id="1语法-1">1.语法</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="nf">ParseInt</span><span class="p">(</span><span class="nx">s</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">base</span><span class="w"> </span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="nx">bitSize</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nx">i</span><span class="w"> </span><span class="kt">int64</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>base</code>:表示进制(2到36)。如果base=0,则根据字符串前缀判断,<code>0x</code>:表示十六进制、<code>0</code>:表示八进制、其他代表十进制。</p>
+    </div>
+    <div class="read-more">
+      <a href="/post/%E6%A0%87%E5%87%86%E5%8C%85/2-strconv%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BD%AC%E6%8D%A2/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/%E6%A0%87%E5%87%86%E5%8C%85/1-strings%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%93%8D%E4%BD%9C/">Go标准包(一):strings(字符串操作)</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2021-04-01 </span>
+      <div class="post-category">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+          <a href="/categories/go/"> Go </a>
+          </div>
+        <span class="more-meta"> 8397 words </span>
+        <span class="more-meta"> 17 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <h3 id="1字符串查找">1.字符串查找</h3>
+<p><code>strings</code>是Go内置的标准包,主要用于字符串查找、替换、比较等。常用方法如下:</p>
+<h4 id="11-方法列表">1.1 方法列表</h4>
+<table>
+  <thead>
+      <tr>
+          <th>方法名</th>
+          <th>描述</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>Count(s, substr string)int</code></td>
+          <td>返回字符串s包含字符串substr的个数</td>
+      </tr>
+      <tr>
+          <td><code>Contains(s, substr string)bool</code></td>
+          <td>判断字符串s是否包含substr字符串</td>
+      </tr>
+      <tr>
+          <td><code>ContainsAny(s, chars string)bool</code></td>
+          <td>判断字符串s是否包含chars字符串中的任意一个字符</td>
+      </tr>
+      <tr>
+          <td><code>ContainsRune(s string, r rune)bool</code></td>
+          <td>判断字符串s是否包含unicode的码值r</td>
+      </tr>
+      <tr>
+          <td><code>LastIndex(s, substr string)int</code></td>
+          <td>返回字符串s中字符串substr最后一次出现的位置</td>
+      </tr>
+      <tr>
+          <td><code>Index(s, substr string)int</code></td>
+          <td>返回字符串s中字符串substr首次出现的位置</td>
+      </tr>
+      <tr>
+          <td><code>IndexByte(s string, c byte)int</code></td>
+          <td>返回字符串s中字符c首次出现的位置</td>
+      </tr>
+      <tr>
+          <td><code>IndexRune(s string, r rune)int</code></td>
+          <td>返回unicode的码值r在字符串s中首次出现的位置</td>
+      </tr>
+      <tr>
+          <td><code>IndexAny(s, chars string)int</code></td>
+          <td>返回字符串chars中的任意一个字符unicode码值,<br>在s中首次出现的位置</td>
+      </tr>
+      <tr>
+          <td><code>LastIndexAny(s, chars string)int</code></td>
+          <td>返回字符串chars中的任意一个字符unicode码值,<br/>在s中最后一次出现的位置</td>
+      </tr>
+      <tr>
+          <td><code>LastIndexByte(s string, c byte)int</code></td>
+          <td>返回字符串s中字符c最后一次出现的位置</td>
+      </tr>
+      <tr>
+          <td><code>HasPrefix(s, prefix string)bool</code></td>
+          <td>判断字符串s是否有前缀prefix</td>
+      </tr>
+      <tr>
+          <td><code>HasSuffix(s, suffix string)bool</code></td>
+          <td>判断字符串s是否有后缀suffix</td>
+      </tr>
+      <tr>
+          <td><code>IndexFunc(s string, f func(r)bool)int</code></td>
+          <td>返回字符串s中满足函数f(r)==true,<br/>字符首次出现的位置</td>
+      </tr>
+      <tr>
+          <td><code>LastIndexFunc(s string, f func(r)bool)int</code></td>
+          <td>返回字符串s中满足函数f(r)==true ,<br>字符最后一次出现的位置</td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="12-使用示例">1.2 使用示例</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span><span class="lnt">73
+</span><span class="lnt">74
+</span><span class="lnt">75
+</span><span class="lnt">76
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nx">main</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="s">&#34;fmt&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="s">&#34;strings&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="s">&#34;unicode&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// 返回字符串s包含字符串substr的个数</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">s</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&#34;hello word&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;字符串:%s,o出现数量: %d\n&#34;</span><span class="p">,</span><span class="nx">s</span><span class="p">,</span><span class="nx">strings</span><span class="p">.</span><span class="nf">Count</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span><span class="s">&#34;o&#34;</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// 判断字符串s是否包含substr字符串</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;字符串:%s 是否包含%s ? %t \n&#34;</span><span class="p">,</span><span class="nx">s</span><span class="p">,</span><span class="s">&#34;word&#34;</span><span class="p">,</span><span class="nx">strings</span><span class="p">.</span><span class="nf">Contains</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span><span class="s">&#34;word&#34;</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;字符串:%s 是否包含%s ? %t \n&#34;</span><span class="p">,</span><span class="nx">s</span><span class="p">,</span><span class="s">&#34;go&#34;</span><span class="p">,</span><span class="nx">strings</span><span class="p">.</span><span class="nf">Contains</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span><span class="s">&#34;go&#34;</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// 判断字符串s是否包含chars字符串中的任意一个字符</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;字符串:%s 是否包含%s中的任意一个字符 ? %t \n&#34;</span><span class="p">,</span><span class="nx">s</span><span class="p">,</span><span class="s">&#34;go&#34;</span><span class="p">,</span><span class="nx">strings</span><span class="p">.</span><span class="nf">ContainsAny</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span><span class="s">&#34;go&#34;</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;字符串:%s 是否包含%s中的任意一个字符 ? %t \n&#34;</span><span class="p">,</span><span class="nx">s</span><span class="p">,</span><span class="s">&#34;gg&#34;</span><span class="p">,</span><span class="nx">strings</span><span class="p">.</span><span class="nf">ContainsAny</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span><span class="s">&#34;gg&#34;</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// 判断字符串s是否包含unicode的码值r</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">r</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="sc">&#39;w&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;字符串:%s 是否包含unicode的码值%c? %t \n&#34;</span><span class="p">,</span><span class="nx">s</span><span class="p">,</span><span class="nx">r</span><span class="p">,</span><span class="nx">strings</span><span class="p">.</span><span class="nf">ContainsRune</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span><span class="nx">r</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;字符串:%s 是否包含unicode的码值%d? %t \n&#34;</span><span class="p">,</span><span class="nx">s</span><span class="p">,</span><span class="mi">119</span><span class="p">,</span><span class="nx">strings</span><span class="p">.</span><span class="nf">ContainsRune</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span><span class="mi">119</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// 返回字符串s中字符串substr最后一次出现的位置</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;在字符串%s中,字符串%s最后一次出现的位置? %d \n&#34;</span><span class="p">,</span><span class="nx">s</span><span class="p">,</span><span class="s">&#34;o&#34;</span><span class="p">,</span><span class="nx">strings</span><span class="p">.</span><span class="nf">LastIndex</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span><span class="s">&#34;o&#34;</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// 返回字符串s中字符串substr首次出现的位置</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;在字符串%s中,字符串%s首次出现的位置? %d \n&#34;</span><span class="p">,</span><span class="nx">s</span><span class="p">,</span><span class="s">&#34;o&#34;</span><span class="p">,</span><span class="nx">strings</span><span class="p">.</span><span class="nf">Index</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span><span class="s">&#34;o&#34;</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// 返回字符串s中字符c首次出现的位置</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="kd">var</span><span class="w"> </span><span class="nx">b</span><span class="w"> </span><span class="kt">byte</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="sc">&#39;l&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;在字符串%s中,字符%c首次出现的位置? %d \n&#34;</span><span class="p">,</span><span class="nx">s</span><span class="p">,</span><span class="nx">b</span><span class="p">,</span><span class="nx">strings</span><span class="p">.</span><span class="nf">IndexByte</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span><span class="nx">b</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// 返回字符串s中字符c最后一次出现的位置</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;在字符串%s中,字符%c最后一次出现的位置? %d \n&#34;</span><span class="p">,</span><span class="nx">s</span><span class="p">,</span><span class="nx">b</span><span class="p">,</span><span class="nx">strings</span><span class="p">.</span><span class="nf">LastIndexByte</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span><span class="nx">b</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// 返回unicode的码值r在字符串s中首次出现的位置</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;在字符串%s中,unicode的码值%d(%c)首次出现的位置? %d \n&#34;</span><span class="p">,</span><span class="nx">s</span><span class="p">,</span><span class="mi">104</span><span class="p">,</span><span class="mi">104</span><span class="p">,</span><span class="nx">strings</span><span class="p">.</span><span class="nf">IndexRune</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span><span class="mi">104</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// 返回字符串chars中的任意一个字符unicode码值,在s中首次出现的位置</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">s3</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&#34;rd&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;返回字符串%s中的任意一个字符unicode码值(%s)首次出现的位置? %d \n&#34;</span><span class="p">,</span><span class="nx">s</span><span class="p">,</span><span class="nx">s3</span><span class="p">,</span><span class="nx">strings</span><span class="p">.</span><span class="nf">LastIndexAny</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span><span class="nx">s3</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// 判断字符串s是否有前缀prefix</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">a</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&#34;VIP001&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;字符串:%s 是否有前缀%s ? %t \n&#34;</span><span class="p">,</span><span class="nx">a</span><span class="p">,</span><span class="s">&#34;vip&#34;</span><span class="p">,</span><span class="nx">strings</span><span class="p">.</span><span class="nf">HasPrefix</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="s">&#34;vip&#34;</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;字符串:%s 是否有前缀%s ? %t \n&#34;</span><span class="p">,</span><span class="nx">a</span><span class="p">,</span><span class="s">&#34;VIP&#34;</span><span class="p">,</span><span class="nx">strings</span><span class="p">.</span><span class="nf">HasPrefix</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="s">&#34;VIP&#34;</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// 判断字符串s是否有后缀suffix</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">sn</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&#34;K011_Mn&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;字符串:%s 是否有后缀%s ? %t \n&#34;</span><span class="p">,</span><span class="nx">sn</span><span class="p">,</span><span class="s">&#34;MN&#34;</span><span class="p">,</span><span class="nx">strings</span><span class="p">.</span><span class="nf">HasSuffix</span><span class="p">(</span><span class="nx">sn</span><span class="p">,</span><span class="s">&#34;MN&#34;</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;字符串:%s 是否有后缀%s ? %t \n&#34;</span><span class="p">,</span><span class="nx">sn</span><span class="p">,</span><span class="s">&#34;Mn&#34;</span><span class="p">,</span><span class="nx">strings</span><span class="p">.</span><span class="nf">HasSuffix</span><span class="p">(</span><span class="nx">sn</span><span class="p">,</span><span class="s">&#34;Mn&#34;</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// 返回字符串s中满足函数f(r)==true,字符首次出现的位置 (判断第一个汉字的位置)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">f</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">c</span><span class="w"> </span><span class="kt">rune</span><span class="p">)</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="k">return</span><span class="w"> </span><span class="nx">unicode</span><span class="p">.</span><span class="nf">Is</span><span class="p">(</span><span class="nx">unicode</span><span class="p">.</span><span class="nx">Han</span><span class="p">,</span><span class="nx">c</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">s4</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&#34;go!中国人&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;字符串:%s 首次出现汉字的位置%d \n&#34;</span><span class="p">,</span><span class="nx">s4</span><span class="p">,</span><span class="nx">strings</span><span class="p">.</span><span class="nf">IndexFunc</span><span class="p">(</span><span class="nx">s4</span><span class="p">,</span><span class="nx">f</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;字符串:%s 最后一次出现汉字的位置%d \n&#34;</span><span class="p">,</span><span class="nx">s4</span><span class="p">,</span><span class="nx">strings</span><span class="p">.</span><span class="nf">LastIndexFunc</span><span class="p">(</span><span class="nx">s4</span><span class="p">,</span><span class="nx">f</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="cm">/** 输出
+</span></span></span><span class="line"><span class="cl"><span class="cm">  字符串:hello word,o出现数量: 2
+</span></span></span><span class="line"><span class="cl"><span class="cm">  字符串:hello word 是否包含word ? true 
+</span></span></span><span class="line"><span class="cl"><span class="cm">  字符串:hello word 是否包含go ? false 
+</span></span></span><span class="line"><span class="cl"><span class="cm">  字符串:hello word 是否包含go中的任意一个字符 ? true 
+</span></span></span><span class="line"><span class="cl"><span class="cm">  字符串:hello word 是否包含gg中的任意一个字符 ? false 
+</span></span></span><span class="line"><span class="cl"><span class="cm">  字符串:hello word 是否包含unicode的码值w? true 
+</span></span></span><span class="line"><span class="cl"><span class="cm">  字符串:hello word 是否包含unicode的码值119? true 
+</span></span></span><span class="line"><span class="cl"><span class="cm">  在字符串hello word中,字符串o最后一次出现的位置? 7 
+</span></span></span><span class="line"><span class="cl"><span class="cm">  在字符串hello word中,字符串o首次出现的位置? 4 
+</span></span></span><span class="line"><span class="cl"><span class="cm">  在字符串hello word中,字符l首次出现的位置? 2 
+</span></span></span><span class="line"><span class="cl"><span class="cm">  在字符串hello word中,字符l最后一次出现的位置? 3 
+</span></span></span><span class="line"><span class="cl"><span class="cm">  在字符串hello word中,unicode的码值104(h)首次出现的位置? 0 
+</span></span></span><span class="line"><span class="cl"><span class="cm">  返回字符串hello word中的任意一个字符unicode码值(rd)首次出现的位置? 9 
+</span></span></span><span class="line"><span class="cl"><span class="cm">  字符串:VIP001 是否有前缀vip ? false 
+</span></span></span><span class="line"><span class="cl"><span class="cm">  字符串:VIP001 是否有前缀VIP ? true 
+</span></span></span><span class="line"><span class="cl"><span class="cm">  字符串:K011_Mn 是否有后缀MN ? false 
+</span></span></span><span class="line"><span class="cl"><span class="cm">  字符串:K011_Mn 是否有后缀Mn ? true 
+</span></span></span><span class="line"><span class="cl"><span class="cm">  字符串:go!中国人 首次出现汉字的位置3 
+</span></span></span><span class="line"><span class="cl"><span class="cm">  字符串:go!中国人 最后一次出现汉字的位置9 
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="2-字符串分割">2. 字符串分割</h3>
+<h4 id="21-方法列表">2.1 方法列表</h4>
+<table>
+  <thead>
+      <tr>
+          <th style="text-align: left">方法名</th>
+          <th>描述</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><code>Fields(s string)[]string</code></td>
+          <td>将字符串s以空白字符分割，返回切片</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>FieldsFunc(s string, f func(r) bool)[]string</code></td>
+          <td>将字符串s以满足<code>f(r)==true</code>的字符分割，<br/>分割后返回切片</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>Split(s,sep string)[]string</code></td>
+          <td>将字符串s以sep作为分割符进行分割，<br/><font color=red>分割后字符最后去掉sep</font>,返回切片</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>SplitAfter(s,sep string)[]string</code></td>
+          <td>将字符串s以sep作为分割符进行分割，<br/><font color=green>分割后字符最后加上sep</font>,返回切片</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>SplitAfterN(s,sep string, n int)[]string</code></td>
+          <td>将字符串s以sep作为分割符进行分割，<br/><font color=green>分割后字符最后加上sep</font>,n决定分割成切片长度</td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><code>SplitN(s,sep string, n int)[]string</code></td>
+          <td>将字符串s以sep作为分割符进行分割，<br/><font color=red>分割后字符最后去掉sep</font>,n决定分割成切片长度</td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="22-使用示例">2.2 使用示例</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nx">main</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="s">&#34;fmt&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="s">&#34;strings&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="s">&#34;unicode&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">s</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&#34;Go! Go! 中国人!&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// 将字符串s以空白字符分割，返回切片</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">slice</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">strings</span><span class="p">.</span><span class="nf">Fields</span><span class="p">(</span><span class="nx">s</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;将字符串:【%s】以空白字符分割，返回切片:%v \n&#34;</span><span class="p">,</span><span class="nx">s</span><span class="p">,</span><span class="nx">slice</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// 将字符串s以满足f(r)==true的字符分割，分割后返回切片。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// 以特殊符号分割</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nx">f</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">r</span><span class="w"> </span><span class="kt">rune</span><span class="p">)</span><span class="w"> </span><span class="kt">bool</span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    	</span><span class="c1">// 不是字母，也不是数字</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    	</span><span class="k">return</span><span class="w"> </span><span class="p">!</span><span class="nx">unicode</span><span class="p">.</span><span class="nf">IsLetter</span><span class="p">(</span><span class="nx">r</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="p">!</span><span class="nx">unicode</span><span class="p">.</span><span class="nf">IsNumber</span><span class="p">(</span><span class="nx">r</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">ss</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&#34;张三@19*BeiJing&amp;高中生|男(打球&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">slice2</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">strings</span><span class="p">.</span><span class="nf">FieldsFunc</span><span class="p">(</span><span class="nx">ss</span><span class="p">,</span><span class="nx">f</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;将字符串:【%s】 以满足f(r)==true【不是数字和字母都是分隔符】的字符分割，返回切片:%v \n&#34;</span><span class="p">,</span><span class="nx">ss</span><span class="p">,</span><span class="nx">slice2</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// 将字符串s以sep作为分割符进行分割，分割后字符最后去掉sep</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">s2</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&#34;@123@张@AB@001&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">sep1</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&#34;@&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">slic1</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">strings</span><span class="p">.</span><span class="nf">Split</span><span class="p">(</span><span class="nx">s2</span><span class="p">,</span><span class="nx">sep1</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;将字符串:【%s】以%s进行分割，分割后最后去掉:%s 返回切片: %v 切片长度: %d \n&#34;</span><span class="p">,</span><span class="nx">s2</span><span class="p">,</span><span class="nx">sep1</span><span class="p">,</span><span class="nx">sep1</span><span class="p">,</span><span class="nx">slic1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="nx">slic1</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// 将字符串s以sep作为分割符进行分割，分割后字符最后加上sep,返回切片</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">slic2</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">strings</span><span class="p">.</span><span class="nf">SplitAfter</span><span class="p">(</span><span class="nx">s2</span><span class="p">,</span><span class="nx">sep1</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;将字符串:【%s】以%s进行分割，分割后最后加上:%s 返回切片: %v 切片长度: %d \n&#34;</span><span class="p">,</span><span class="nx">s2</span><span class="p">,</span><span class="nx">sep1</span><span class="p">,</span><span class="nx">sep1</span><span class="p">,</span><span class="nx">slic2</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="nx">slic2</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// 将字符串s以sep作为分割符进行分割，分割后字符最后加上sep,n决定分割成切片长度</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;将字符串:【%s】以%s进行分割，指定分割切片长度%d: %v 分割后加上%s \n&#34;</span><span class="p">,</span><span class="nx">s2</span><span class="p">,</span><span class="nx">sep1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="nx">strings</span><span class="p">.</span><span class="nf">SplitAfterN</span><span class="p">(</span><span class="nx">s2</span><span class="p">,</span><span class="nx">sep1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="nx">sep1</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;将字符串:【%s】以%s进行分割，指定分割切片长度%d: %v 分割后加上%s \n&#34;</span><span class="p">,</span><span class="nx">s2</span><span class="p">,</span><span class="nx">sep1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="nx">strings</span><span class="p">.</span><span class="nf">SplitAfterN</span><span class="p">(</span><span class="nx">s2</span><span class="p">,</span><span class="nx">sep1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="nx">sep1</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;将字符串:【%s】以%s进行分割，指定分割切片长度%d: %v 分割后加上%s \n&#34;</span><span class="p">,</span><span class="nx">s2</span><span class="p">,</span><span class="nx">sep1</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="nx">strings</span><span class="p">.</span><span class="nf">SplitAfterN</span><span class="p">(</span><span class="nx">s2</span><span class="p">,</span><span class="nx">sep1</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span><span class="nx">sep1</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;将字符串:【%s】以%s进行分割，指定分割切片长度%d: %v 分割后加上%s \n&#34;</span><span class="p">,</span><span class="nx">s2</span><span class="p">,</span><span class="nx">sep1</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="nx">strings</span><span class="p">.</span><span class="nf">SplitAfterN</span><span class="p">(</span><span class="nx">s2</span><span class="p">,</span><span class="nx">sep1</span><span class="p">,</span><span class="mi">6</span><span class="p">),</span><span class="nx">sep1</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// 将字符串s以sep作为分割符进行分割，分割后字符最后去掉sep,n决定分割成切片长度</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;将字符串:【%s】以%s进行分割，指定分割切片长度%d: %v 分割后去掉%s \n&#34;</span><span class="p">,</span><span class="nx">s2</span><span class="p">,</span><span class="nx">sep1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="nx">strings</span><span class="p">.</span><span class="nf">SplitN</span><span class="p">(</span><span class="nx">s2</span><span class="p">,</span><span class="nx">sep1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="nx">sep1</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;将字符串:【%s】以%s进行分割，指定分割切片长度%d: %v 分割后去掉%s \n&#34;</span><span class="p">,</span><span class="nx">s2</span><span class="p">,</span><span class="nx">sep1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="nx">strings</span><span class="p">.</span><span class="nf">SplitN</span><span class="p">(</span><span class="nx">s2</span><span class="p">,</span><span class="nx">sep1</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span><span class="nx">sep1</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;将字符串:【%s】以%s进行分割，指定分割切片长度%d: %v 分割后去掉%s \n&#34;</span><span class="p">,</span><span class="nx">s2</span><span class="p">,</span><span class="nx">sep1</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="nx">strings</span><span class="p">.</span><span class="nf">SplitN</span><span class="p">(</span><span class="nx">s2</span><span class="p">,</span><span class="nx">sep1</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span><span class="nx">sep1</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="cm">/** 输出
+</span></span></span><span class="line"><span class="cl"><span class="cm">将字符串:【Go! Go! 中国人!】以空白字符分割，返回切片:[Go! Go! 中国人!] 
+</span></span></span><span class="line"><span class="cl"><span class="cm">将字符串:【张三@19*BeiJing&amp;高中生|男(打球】 以满足f(r)==true【不是数字和字母都是分隔符】的字符分割，返回切片:[张三 19 BeiJing 高中生 男 打球] 
+</span></span></span><span class="line"><span class="cl"><span class="cm">将字符串:【@123@张@AB@001】以@进行分割，分割后最后去掉:@ 返回切片: [ 123 张 AB 001] 切片长度: 5 
+</span></span></span><span class="line"><span class="cl"><span class="cm">将字符串:【@123@张@AB@001】以@进行分割，分割后最后加上:@ 返回切片: [@ 123@ 张@ AB@ 001] 切片长度: 5 
+</span></span></span><span class="line"><span class="cl"><span class="cm">将字符串:【@123@张@AB@001】以@进行分割，指定分割切片长度0: [] 分割后加上@ 
+</span></span></span><span class="line"><span class="cl"><span class="cm">将字符串:【@123@张@AB@001】以@进行分割，指定分割切片长度1: [@123@张@AB@001] 分割后加上@ 
+</span></span></span><span class="line"><span class="cl"><span class="cm">将字符串:【@123@张@AB@001】以@进行分割，指定分割切片长度5: [@ 123@ 张@ AB@ 001] 分割后加上@ 
+</span></span></span><span class="line"><span class="cl"><span class="cm">将字符串:【@123@张@AB@001】以@进行分割，指定分割切片长度6: [@ 123@ 张@ AB@ 001] 分割后加上@ 
+</span></span></span><span class="line"><span class="cl"><span class="cm">将字符串:【@123@张@AB@001】以@进行分割，指定分割切片长度1: [@123@张@AB@001] 分割后去掉@ 
+</span></span></span><span class="line"><span class="cl"><span class="cm">将字符串:【@123@张@AB@001】以@进行分割，指定分割切片长度3: [ 123 张@AB@001] 分割后去掉@ 
+</span></span></span><span class="line"><span class="cl"><span class="cm">将字符串:【@123@张@AB@001】以@进行分割，指定分割切片长度5: [ 123 张 AB 001] 分割后去掉@ 
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="3大小写切换">3.大小写切换</h3>
+<h4 id="31-方法列表">3.1 方法列表</h4>
+<table>
+  <thead>
+      <tr>
+          <th>方法名</th>
+          <th>描述</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>Title(s string)string</code></td>
+          <td>将字符串s每个单词首字母大写</td>
+      </tr>
+      <tr>
+          <td><code>ToLower(s string)string</code></td>
+          <td>将字符串s转换成小写返回</td>
+      </tr>
+      <tr>
+          <td><code>ToLowerSpecial(c unicode.SpecialCase,s string)string</code></td>
+          <td>将字符串s中所有字符串按c指定的<br/>映射转换成小写返回</td>
+      </tr>
+      <tr>
+          <td><code>ToTitle(s string)string</code></td>
+          <td>将字符串s转换成大写返回</td>
+      </tr>
+      <tr>
+          <td><code>ToTitleSpecial(c unicode.SpecialCase,s string) string</code></td>
+          <td>将字符串s中所有的字符按c指定的<br/>映射转换成大写返回</td>
+      </tr>
+      <tr>
+          <td><code>ToUpper(s string)string</code></td>
+          <td>将字符串s转换成大写返回</td>
+      </tr>
+      <tr>
+          <td><code>ToUpperSpecial(c unicode.SpecialCase,s string) string</code></td>
+          <td>将字符串s中所有的字符按c指定的<br/>映射转换成大写返回</td>
+      </tr>
+  </tbody>
+</table>
+<h4 id="32-使用示例">3.2 使用示例</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nx">main</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="s">&#34;fmt&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="s">&#34;strings&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">str</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&#34;hello word&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">str1</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&#34;HELLO WORD&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// Title(s string) string: 每个单词首字母大写</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;Title-&gt;将字符串%s 每个单词首字母大写: %s\n&#34;</span><span class="p">,</span><span class="nx">str</span><span class="p">,</span><span class="nx">strings</span><span class="p">.</span><span class="nf">Title</span><span class="p">(</span><span class="nx">str</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// ToLower(s string) string : 将字符串s转换成小写返回</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;ToLower-&gt;将字符串%s 转换成小写返回: %s\n&#34;</span><span class="p">,</span><span class="nx">str1</span><span class="p">,</span><span class="nx">strings</span><span class="p">.</span><span class="nf">ToLower</span><span class="p">(</span><span class="nx">str1</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// ToTitle(s string)string: 将字符串s转换成大写返回</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;ToTitle-&gt;将字符串%s 转换成大写返回: %s\n&#34;</span><span class="p">,</span><span class="nx">str</span><span class="p">,</span><span class="nx">strings</span><span class="p">.</span><span class="nf">ToTitle</span><span class="p">(</span><span class="nx">str</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// ToUpper(s string)string: 将字符串s转换成大写返回</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;ToUpper-&gt;将字符串%s 转换成大写返回: %s\n&#34;</span><span class="p">,</span><span class="nx">str</span><span class="p">,</span><span class="nx">strings</span><span class="p">.</span><span class="nf">ToUpper</span><span class="p">(</span><span class="nx">str</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="cm">/**输出
+</span></span></span><span class="line"><span class="cl"><span class="cm">Title-&gt;将字符串hello word 每个单词首字母大写: Hello Word
+</span></span></span><span class="line"><span class="cl"><span class="cm">ToLower-&gt;将字符串HELLO WORD 转换成小写返回: hello word
+</span></span></span><span class="line"><span class="cl"><span class="cm">ToTitle-&gt;将字符串hello word 转换成大写返回: HELLO WORD
+</span></span></span><span class="line"><span class="cl"><span class="cm">ToUpper-&gt;将字符串hello word 转换成大写返回: HELLO WORD
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="33-totitle和toupper的区别">3.3 ToTitle和ToUpper的区别</h4>
+<p>大部分情况下， <code>ToUpper</code> 与 <code>ToTitle</code> 返回值相同，但在处理某些<code>unicode</code>编码字符则不同,示例如下:</p>
+    </div>
+    <div class="read-more">
+      <a href="/post/%E6%A0%87%E5%87%86%E5%8C%85/1-strings%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%93%8D%E4%BD%9C/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/%E5%B7%A5%E5%85%B7%E7%AF%87/01-gvm/">Go工具(一):gvm</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2021-03-01 </span>
+      <div class="post-category">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+          <a href="/categories/go/"> Go </a>
+          </div>
+        <span class="more-meta"> 913 words </span>
+        <span class="more-meta"> 2 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <h2 id="1-什么是gvm">1. 什么是Gvm</h2>
+<p><code>Go</code> 语言版本管理器（<code>Gvm</code>）是管理 <code>Go</code> 语言环境的开源工具。<code>Gvm 「pkgsets」</code> 支持安装多个版本的 <code>Go</code> 并管理每个项目的模块。它最初由 <code>Josh Bussdieker</code> 开发，<code>Gvm</code> 与 <code>Ruby RVM</code> 类似，允许你为每个项目或一组项目创建一个开发环境，分离不同的 <code>Go</code> 版本和包依赖关系，来提供更大的灵活性，以防不同版本造成的问题。<code>Gvm</code> 主要有以下几个特性：</p>
+    </div>
+    <div class="read-more">
+      <a href="/post/%E5%B7%A5%E5%85%B7%E7%AF%87/01-gvm/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/%E5%AE%9E%E6%93%8D%E7%AF%87/4-%E9%81%8D%E5%8E%86%E4%BD%BF%E7%94%A8/">Go实操(四):遍历使用</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2021-02-04 </span>
+      <div class="post-category">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+          <a href="/categories/go/"> Go </a>
+          </div>
+        <span class="more-meta"> 1578 words </span>
+        <span class="more-meta"> 4 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <h3 id="1-遍历字符串string">1. 遍历字符串(string)</h3>
+<h4 id="11-统计长度后遍历">1.1 统计长度后遍历</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="nf">ForString</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">str</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&#34;hello word&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="cp">//1.统计长度后遍历</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">length</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="nx">str</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">for</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="p">&lt;</span><span class="w"> </span><span class="nx">length</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="o">++</span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;字符: %c &#34;</span><span class="p">,</span><span class="nx">str</span><span class="p">[</span><span class="nx">i</span><span class="p">])</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="12-转为byte后遍历">1.2 转为byte后遍历</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="nf">ForString</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">str</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&#34;hello word&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">strByte</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="p">[]</span><span class="nb">byte</span><span class="p">(</span><span class="nx">str</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">for</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="nx">v</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">strByte</span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;字符: %c &#34;</span><span class="p">,</span><span class="nx">v</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="2-遍历数组array">2. 遍历数组(array)</h3>
+<h4 id="21-遍历一维数组">2.1 遍历一维数组</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="nf">ForArray</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="cp">//遍历一维数组</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">arr</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">for</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">v</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">arr</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;元素: %v &#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">v</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="22-遍历二维数组">2.2 遍历二维数组</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="nf">ForArray</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="cp">//遍历二维数组</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">arr2</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">5</span><span class="p">]</span><span class="kt">int</span><span class="p">{{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="mi">9</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">}}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">arr2</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">for</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">arr</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">arr2</span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="k">for</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">v</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">arr</span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;v: %v &#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">v</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="3-遍历切片slice">3. 遍历切片(slice)</h3>
+<h4 id="31-遍历一维切片">3.1 遍历一维切片</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="nf">ForSlice</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="cp">//遍历一维切片</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">slice</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;张三&#34;</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;李四&#34;</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;王五&#34;</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;费六&#34;</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">for</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">v</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">slice</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;姓名:&#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">v</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="32-遍历二维切片">3.2 遍历二维切片</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="nf">ForSlice</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="cp">//遍历多维切片</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">slice2</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="p">[][]</span><span class="kt">string</span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="p">{</span><span class="s">&#34;张三&#34;</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;李四&#34;</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;王五&#34;</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;费六&#34;</span><span class="p">},</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="p">{</span><span class="s">&#34;小花&#34;</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;小兰&#34;</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;小雨&#34;</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;小丽&#34;</span><span class="p">},</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">for</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">slice</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">slice2</span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="c1">// 循环嵌套</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="k">for</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="nx">name</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">slice</span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;姓名:&#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="4-遍历映射map">4. 遍历映射（map）</h3>
+<h4 id="41-遍历一维map">4.1 遍历一维map</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">type</span><span class="w"> </span><span class="nx">Student</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">ClassName</span><span class="w"> </span><span class="kt">string</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">Fraction</span><span class="w">  </span><span class="kt">int</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="nf">ForMap</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">m</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="nx">Student</span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="s">&#34;张三&#34;</span><span class="p">:</span><span class="w"> </span><span class="nx">Student</span><span class="p">{</span><span class="s">&#34;一A年级&#34;</span><span class="p">,</span><span class="w"> </span><span class="mi">68</span><span class="p">},</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="s">&#34;李速&#34;</span><span class="p">:</span><span class="w"> </span><span class="nx">Student</span><span class="p">{</span><span class="s">&#34;一B年级&#34;</span><span class="p">,</span><span class="w"> </span><span class="mi">72</span><span class="p">},</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="s">&#34;小丽&#34;</span><span class="p">:</span><span class="w"> </span><span class="nx">Student</span><span class="p">{</span><span class="s">&#34;一A年级&#34;</span><span class="p">,</span><span class="w"> </span><span class="mi">65</span><span class="p">},</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">for</span><span class="w"> </span><span class="nx">name</span><span class="p">,</span><span class="w"> </span><span class="nx">stu</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">m</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;姓名:&#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;班级:&#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">stu</span><span class="p">.</span><span class="nx">ClassName</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;分数:&#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">stu</span><span class="p">.</span><span class="nx">Fraction</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="42-遍历多维map">4.2 遍历多维map</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">type</span><span class="w"> </span><span class="nx">Student</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">ClassName</span><span class="w"> </span><span class="kt">string</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">Fraction</span><span class="w">  </span><span class="kt">int</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="nf">ForMap</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// 遍历多维map</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">m2</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="kd">map</span><span class="p">[</span><span class="kt">int</span><span class="p">]</span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="nx">Student</span><span class="p">{}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">m2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="nx">Student</span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="s">&#34;李速&#34;</span><span class="p">:</span><span class="w"> </span><span class="nx">Student</span><span class="p">{</span><span class="s">&#34;一B年级&#34;</span><span class="p">,</span><span class="w"> </span><span class="mi">72</span><span class="p">},</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">m2</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="nx">Student</span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="s">&#34;张三&#34;</span><span class="p">:</span><span class="w"> </span><span class="nx">Student</span><span class="p">{</span><span class="s">&#34;一A年级&#34;</span><span class="p">,</span><span class="w"> </span><span class="mi">68</span><span class="p">},</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">m2</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="nx">Student</span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="s">&#34;小丽&#34;</span><span class="p">:</span><span class="w"> </span><span class="nx">Student</span><span class="p">{</span><span class="s">&#34;一A年级&#34;</span><span class="p">,</span><span class="w"> </span><span class="mi">65</span><span class="p">},</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">for</span><span class="w"> </span><span class="nx">sort</span><span class="p">,</span><span class="w"> </span><span class="nx">m</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">m2</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="k">for</span><span class="w"> </span><span class="nx">name</span><span class="p">,</span><span class="nx">stu</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">m</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;排名:&#34;</span><span class="p">,</span><span class="nx">sort</span><span class="p">,</span><span class="s">&#34;姓名:&#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;班级:&#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">stu</span><span class="p">.</span><span class="nx">ClassName</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;分数:&#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">stu</span><span class="p">.</span><span class="nx">Fraction</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="5遍历结构struct">5.遍历结构（struct）</h3>
+<h4 id="51-常结构遍历">5.1 常结构遍历</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">type</span><span class="w"> </span><span class="nx">People</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">Name</span><span class="w"> </span><span class="kt">string</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">Age</span><span class="w"> </span><span class="kt">int</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">Sex</span><span class="w"> </span><span class="kt">string</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="nf">ForStruct</span><span class="p">()</span><span class="w">  </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">boy</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">People</span><span class="p">{</span><span class="s">&#34;李四&#34;</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;男&#34;</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">v</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">reflect</span><span class="p">.</span><span class="nf">ValueOf</span><span class="p">(</span><span class="nx">boy</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">t</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">reflect</span><span class="p">.</span><span class="nf">TypeOf</span><span class="p">(</span><span class="nx">boy</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">for</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="p">&lt;</span><span class="w"> </span><span class="nx">t</span><span class="p">.</span><span class="nf">NumField</span><span class="p">()</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="o">++</span><span class="w">  </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;字段名:&#34;</span><span class="p">,</span><span class="nx">t</span><span class="p">.</span><span class="nf">Field</span><span class="p">(</span><span class="nx">i</span><span class="p">).</span><span class="nx">Name</span><span class="p">,</span><span class="s">&#34;字段值:&#34;</span><span class="p">,</span><span class="nx">v</span><span class="p">.</span><span class="nf">Field</span><span class="p">(</span><span class="nx">i</span><span class="p">).</span><span class="nf">Interface</span><span class="p">())</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm">输出:
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="52-嵌套结构遍历">5.2 嵌套结构遍历</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">type</span><span class="w"> </span><span class="nx">People</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">Name</span><span class="w"> </span><span class="kt">string</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">Age</span><span class="w">  </span><span class="kt">int</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">Sex</span><span class="w">  </span><span class="kt">string</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">type</span><span class="w"> </span><span class="nx">Girl</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">Like</span><span class="w"> </span><span class="kt">string</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">People</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="nf">ForStruct</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="cp">//嵌套结构体</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">g</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">Girl</span><span class="p">{</span><span class="s">&#34;唱歌&#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">People</span><span class="p">{</span><span class="s">&#34;小花&#34;</span><span class="p">,</span><span class="w"> </span><span class="mi">18</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;女&#34;</span><span class="p">}}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">gv</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">reflect</span><span class="p">.</span><span class="nf">ValueOf</span><span class="p">(</span><span class="nx">g</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">gt</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">reflect</span><span class="p">.</span><span class="nf">TypeOf</span><span class="p">(</span><span class="nx">g</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">for</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="p">&lt;</span><span class="w"> </span><span class="nx">gv</span><span class="p">.</span><span class="nf">NumField</span><span class="p">();</span><span class="w"> </span><span class="nx">i</span><span class="o">++</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="cp">//判断是否是结构体</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="k">if</span><span class="w"> </span><span class="nx">gv</span><span class="p">.</span><span class="nf">Field</span><span class="p">(</span><span class="nx">i</span><span class="p">).</span><span class="nf">Type</span><span class="p">().</span><span class="nf">Kind</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nx">reflect</span><span class="p">.</span><span class="nx">Struct</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="nx">structFiled</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">gv</span><span class="p">.</span><span class="nf">Field</span><span class="p">(</span><span class="nx">i</span><span class="p">).</span><span class="nf">Type</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="k">for</span><span class="w"> </span><span class="nx">j</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="nx">j</span><span class="w"> </span><span class="p">&lt;</span><span class="w"> </span><span class="nx">structFiled</span><span class="p">.</span><span class="nf">NumField</span><span class="p">();</span><span class="w"> </span><span class="nx">j</span><span class="o">++</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">				</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;嵌套结构==&gt;&#34;</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;字段名:&#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">structFiled</span><span class="p">.</span><span class="nf">Field</span><span class="p">(</span><span class="nx">i</span><span class="p">).</span><span class="nx">Name</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;字段值:&#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">gv</span><span class="p">.</span><span class="nf">Field</span><span class="p">(</span><span class="nx">i</span><span class="p">).</span><span class="nf">Field</span><span class="p">(</span><span class="nx">j</span><span class="p">).</span><span class="nf">Interface</span><span class="p">())</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="k">continue</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;外层结构==&gt;&#34;</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;字段名:&#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">gt</span><span class="p">.</span><span class="nf">Field</span><span class="p">(</span><span class="nx">i</span><span class="p">).</span><span class="nx">Name</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;字段值:&#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">gv</span><span class="p">.</span><span class="nf">Field</span><span class="p">(</span><span class="nx">i</span><span class="p">).</span><span class="nf">Interface</span><span class="p">())</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div>
+    </div>
+    <div class="read-more">
+      <a href="/post/%E5%AE%9E%E6%93%8D%E7%AF%87/4-%E9%81%8D%E5%8E%86%E4%BD%BF%E7%94%A8/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/%E5%AE%9E%E6%93%8D%E7%AF%87/3-map%E4%BD%BF%E7%94%A8/">Go实操(三):Map使用</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2021-02-03 </span>
+      <div class="post-category">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
+          <a href="/categories/go/"> Go </a>
+          </div>
+        <span class="more-meta"> 114 words </span>
+        <span class="more-meta"> 1 min read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <h3 id="1创建">1.创建</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">countryMap = make(map[string]string)
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="2插入">2.插入</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">/* map 插入 key-value  */
+</span></span><span class="line"><span class="cl">countryMap[&#34;ShengRI&#34;] = &#34;1988-04-09&#34;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="3取值">3.取值</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">/* 使用 key 输出 map 值 */
+</span></span><span class="line"><span class="cl">for country := range countryMap {
+</span></span><span class="line"><span class="cl">fmt.Println(&#34;Capital of&#34;,country,&#34;is&#34;,countryMap[country])
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="4key是否存在">4.key是否存在</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">/* 查看元素在集合中是否存在 */
+</span></span><span class="line"><span class="cl">captial, ok := countryMap[&#34;ShengRI&#34;]
+</span></span><span class="line"><span class="cl">/* 如果 ok 是 true, 则存在，否则不存在 */
+</span></span><span class="line"><span class="cl">if(ok){
+</span></span><span class="line"><span class="cl">   fmt.Println(&#34;Capital of United States is&#34;, captial)
+</span></span><span class="line"><span class="cl">} else {
+</span></span><span class="line"><span class="cl">   fmt.Println(&#34;is not ok&#34;)
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
+</div>
+</div>
+    </div>
+    <div class="read-more">
+      <a href="/post/%E5%AE%9E%E6%93%8D%E7%AF%87/3-map%E4%BD%BF%E7%94%A8/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
+    </section>
+  
+  <nav class="pagination">
+    <a class="prev" href="/page/7/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text">Prev</span>
+      </a>
+    <a class="next" href="/page/9/">
+        <span class="next-text">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+  </nav>
+        </div>
+        
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/shershon1991" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/shershon520" class="iconfont icon-zhihu" title="zhihu"></a>
+  
+    <a href="/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+  
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2021 - 
+    2026<span class="heart"><i class="iconfont icon-heart"></i></span><span></span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.min.js" integrity="sha256-jwCP0NAdCBloaIWTWHmW4i3snUNMHUNO+jr9rYd2iOI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.locales.min.js" integrity="sha256-ZwofwC1Lf/faQCzN7nZtfijVV6hSwxjQMwXL4gn9qU8=" crossorigin="anonymous"></script>
+  <script>
+    var languageCode = "en".replace(/-/g, '_').replace(/_(.*)/, function ($0, $1) {return $0.replace($1, $1.toUpperCase());});
+    timeago().render(document.querySelectorAll('.timeago'), languageCode);
+    timeago.cancel();  
+  </script>
+
+
+
+<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>
