@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>Gin框架(二):启动流程分析 - Learn Go</title>
+  <title>Gin框架(二):启动流程分析 - Let&#39;s Go!</title>
   <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -17,7 +17,7 @@
 
 
 <meta name="author" content="" /><meta name="description" content="1.启动服务 1.1 服务源码 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 package main // 引入gin框架 import &#34;github.com/gin-gonic/gin&#34; func main() { // 创建一个默认的路由引擎 engine := gin.Default() // 注册Get路由 engine.GET(&#34;/&#34;, func(ctx *gin.Context) { ctx.JSON(200,gin.H{ &#34;msg&#34;:&#34;请求成功&#34;, }) }) // 默认监听的是 0.0.0.0:8080 _ = engine.Run() } 1.2 启动输出 1 2 3 4 5 6 7 8 9 10 ➜ go run main.go [GIN-debug] [WARNING] Creating an Engine instance with the Logger and Recovery middleware already attached. [GIN-debug] [WARNING] Running in &#34;debug&#34; mode. Switch to &#34;release&#34; mode in production. - using env: export GIN_MODE=release - using code: gin.SetMode(gin.ReleaseMode) [GIN-debug] GET / --&gt; main.main.func1 (3 handlers) [GIN-debug] Environment variable PORT is undefined. Using port :8080 by default [GIN-debug] Listening and serving HTTP on :8080 2.代码分析 2.1 import &ldquo;github.com/gin-gonic/gin&rdquo; 在引入Gin框架时，包内相关的init()方法都会被执行；经查找发现下面两个init方法;
-" /><meta name="keywords" content="博客, Learn Go, hugo" />
+" /><meta name="keywords" content="博客, Let&#39;s Go!, hugo" />
 
 
 
@@ -41,7 +41,7 @@
 
 
 <meta property="og:url" content="https://shershon1991.github.io/post/gin%E6%A1%86%E6%9E%B6/02-%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B%E5%88%86%E6%9E%90/">
-  <meta property="og:site_name" content="Learn Go">
+  <meta property="og:site_name" content="Let&#39;s Go!">
   <meta property="og:title" content="Gin框架(二):启动流程分析">
   <meta property="og:description" content="1.启动服务 1.1 服务源码 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 package main // 引入gin框架 import &#34;github.com/gin-gonic/gin&#34; func main() { // 创建一个默认的路由引擎 engine := gin.Default() // 注册Get路由 engine.GET(&#34;/&#34;, func(ctx *gin.Context) { ctx.JSON(200,gin.H{ &#34;msg&#34;:&#34;请求成功&#34;, }) }) // 默认监听的是 0.0.0.0:8080 _ = engine.Run() } 1.2 启动输出 1 2 3 4 5 6 7 8 9 10 ➜ go run main.go [GIN-debug] [WARNING] Creating an Engine instance with the Logger and Recovery middleware already attached. [GIN-debug] [WARNING] Running in &#34;debug&#34; mode. Switch to &#34;release&#34; mode in production. - using env: export GIN_MODE=release - using code: gin.SetMode(gin.ReleaseMode) [GIN-debug] GET / --&gt; main.main.func1 (3 handlers) [GIN-debug] Environment variable PORT is undefined. Using port :8080 by default [GIN-debug] Listening and serving HTTP on :8080 2.代码分析 2.1 import “github.com/gin-gonic/gin” 在引入Gin框架时，包内相关的init()方法都会被执行；经查找发现下面两个init方法;">
   <meta property="og:locale" content="en">
@@ -74,7 +74,7 @@
 <body>
   <div id="mobile-navbar" class="mobile-navbar">
   <div class="mobile-header-logo">
-    <a href="/" class="logo">Learn Go</a>
+    <a href="/" class="logo">Let&#39;s Go!</a>
   </div>
   <div class="mobile-navbar-icon">
     <span></span>
@@ -103,7 +103,7 @@
   <div class="container" id="mobile-panel">
     <header id="header" class="header">
         <div class="logo-wrapper">
-  <a href="/" class="logo">Learn Go</a>
+  <a href="/" class="logo">Let&#39;s Go!</a>
 </div>
 
 

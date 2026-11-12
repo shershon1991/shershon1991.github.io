@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>Go扩展包(十四):go-funk - Learn Go</title>
+  <title>Go扩展包(十四):go-funk - Let&#39;s Go!</title>
   <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -18,7 +18,7 @@
 
 <meta name="author" content="" /><meta name="description" content="1. 介绍 Go-funk 是基于反射(reflect )实现的一个现代Go工具库，封装了对slice/map/struct/string等的操作。
 2. 下载 1 2 3 4 # 下载 go get github.com/thoas/go-funk # 引入 import github.com/thoas/go-funk 3. 切片(slice)操作 3.1 判断元素是否存在 funk.Contains: 接收任意类型。 funk.ContainsX: X代表具体类型，如:ContainsInt、ContainsString... 1 2 3 4 5 6 7 8 9 10 11 12 13 func TestExist(t *testing.T) { // 判断任意类型 fmt.Println(&#34;str-&gt;&#34;, funk.Contains([]string{&#34;a&#34;, &#34;b&#34;}, &#34;a&#34;)) // int 类型 fmt.Println(&#34;int-&gt;&#34;, funk.ContainsInt([]int{1, 2}, 1)) } /**输出 === RUN TestExist str-&gt; true int-&gt; true --- PASS: TestExist (0.00s) PASS */ 3.2 查找元素第一次出现位置 funk.IndexOf: 接收任意类型,不存在则返回-1。 funk.IndexOfX: X代表具体类型,不存在则返回-1。 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 func TestIndexOf(t *testing.T) { strArr := []string{&#34;go&#34;, &#34;java&#34;, &#34;c&#34;, &#34;java&#34;} // 具体类型 fmt.Println(&#34;c: &#34;, funk.IndexOfString(strArr, &#34;c&#34;)) // 验证第一次出现位置 fmt.Println(&#34;java: &#34;, funk.IndexOfString(strArr, &#34;java&#34;)) // 任意类型 fmt.Println(&#34;go: &#34;, funk.IndexOf(strArr, &#34;go&#34;)) // 不存在时返回-1 fmt.Println(&#34;php: &#34;, funk.IndexOfString(strArr, &#34;php&#34;)) } /**输出 === RUN TestIndexOf c: 2 java: 1 go: 0 php: -1 --- PASS: TestIndexOf (0.00s) PASS */ 3.3 查找元素最后一次出现位置 funk.LastIndexOf: 接收任意类型,不存在则返回-1。 funk.LastIndexOfX: X代表具体类型,不存在则返回-1。 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 // 查找元素最后一次出现的位置 func TestLastOf(t *testing.T) { strArr := []string{&#34;go&#34;, &#34;java&#34;, &#34;c&#34;, &#34;java&#34;} // 具体类型 fmt.Println(&#34;c: &#34;, funk.LastIndexOfString(strArr, &#34;c&#34;)) // 验证第一次出现位置 fmt.Println(&#34;java: &#34;, funk.LastIndexOfString(strArr, &#34;java&#34;)) // 任意类型 fmt.Println(&#34;go: &#34;, funk.LastIndexOf(strArr, &#34;go&#34;)) // 不存在时返回-1 fmt.Println(&#34;php: &#34;, funk.LastIndexOf(strArr, &#34;php&#34;)) } /**输出 === RUN TestLastOf c: 2 java: 3 go: 0 php: -1 --- PASS: TestLastOf (0.00s) PASS */ 3.4 批量查找(都有则True) func Every(in interface{}, elements ...interface{}) bool
-" /><meta name="keywords" content="博客, Learn Go, hugo" />
+" /><meta name="keywords" content="博客, Let&#39;s Go!, hugo" />
 
 
 
@@ -42,22 +42,22 @@
 
 
 <meta property="og:url" content="https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/14-go-funk/">
-  <meta property="og:site_name" content="Learn Go">
+  <meta property="og:site_name" content="Let&#39;s Go!">
   <meta property="og:title" content="Go扩展包(十四):go-funk">
   <meta property="og:description" content="1. 介绍 Go-funk 是基于反射(reflect )实现的一个现代Go工具库，封装了对slice/map/struct/string等的操作。
 2. 下载 1 2 3 4 # 下载 go get github.com/thoas/go-funk # 引入 import github.com/thoas/go-funk 3. 切片(slice)操作 3.1 判断元素是否存在 funk.Contains: 接收任意类型。 funk.ContainsX: X代表具体类型，如:ContainsInt、ContainsString... 1 2 3 4 5 6 7 8 9 10 11 12 13 func TestExist(t *testing.T) { // 判断任意类型 fmt.Println(&#34;str-&gt;&#34;, funk.Contains([]string{&#34;a&#34;, &#34;b&#34;}, &#34;a&#34;)) // int 类型 fmt.Println(&#34;int-&gt;&#34;, funk.ContainsInt([]int{1, 2}, 1)) } /**输出 === RUN TestExist str-&gt; true int-&gt; true --- PASS: TestExist (0.00s) PASS */ 3.2 查找元素第一次出现位置 funk.IndexOf: 接收任意类型,不存在则返回-1。 funk.IndexOfX: X代表具体类型,不存在则返回-1。 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 func TestIndexOf(t *testing.T) { strArr := []string{&#34;go&#34;, &#34;java&#34;, &#34;c&#34;, &#34;java&#34;} // 具体类型 fmt.Println(&#34;c: &#34;, funk.IndexOfString(strArr, &#34;c&#34;)) // 验证第一次出现位置 fmt.Println(&#34;java: &#34;, funk.IndexOfString(strArr, &#34;java&#34;)) // 任意类型 fmt.Println(&#34;go: &#34;, funk.IndexOf(strArr, &#34;go&#34;)) // 不存在时返回-1 fmt.Println(&#34;php: &#34;, funk.IndexOfString(strArr, &#34;php&#34;)) } /**输出 === RUN TestIndexOf c: 2 java: 1 go: 0 php: -1 --- PASS: TestIndexOf (0.00s) PASS */ 3.3 查找元素最后一次出现位置 funk.LastIndexOf: 接收任意类型,不存在则返回-1。 funk.LastIndexOfX: X代表具体类型,不存在则返回-1。 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 // 查找元素最后一次出现的位置 func TestLastOf(t *testing.T) { strArr := []string{&#34;go&#34;, &#34;java&#34;, &#34;c&#34;, &#34;java&#34;} // 具体类型 fmt.Println(&#34;c: &#34;, funk.LastIndexOfString(strArr, &#34;c&#34;)) // 验证第一次出现位置 fmt.Println(&#34;java: &#34;, funk.LastIndexOfString(strArr, &#34;java&#34;)) // 任意类型 fmt.Println(&#34;go: &#34;, funk.LastIndexOf(strArr, &#34;go&#34;)) // 不存在时返回-1 fmt.Println(&#34;php: &#34;, funk.LastIndexOf(strArr, &#34;php&#34;)) } /**输出 === RUN TestLastOf c: 2 java: 3 go: 0 php: -1 --- PASS: TestLastOf (0.00s) PASS */ 3.4 批量查找(都有则True) func Every(in interface{}, elements ...interface{}) bool">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="post">
-    <meta property="article:published_time" content="2021-05-02T00:00:00+00:00">
-    <meta property="article:modified_time" content="2026-10-21T14:45:14+08:00">
+    <meta property="article:published_time" content="2021-04-29T00:00:00+00:00">
+    <meta property="article:modified_time" content="2026-11-12T14:42:56+08:00">
     <meta property="article:tag" content="Go扩展包">
 
   <meta itemprop="name" content="Go扩展包(十四):go-funk">
   <meta itemprop="description" content="1. 介绍 Go-funk 是基于反射(reflect )实现的一个现代Go工具库，封装了对slice/map/struct/string等的操作。
 2. 下载 1 2 3 4 # 下载 go get github.com/thoas/go-funk # 引入 import github.com/thoas/go-funk 3. 切片(slice)操作 3.1 判断元素是否存在 funk.Contains: 接收任意类型。 funk.ContainsX: X代表具体类型，如:ContainsInt、ContainsString... 1 2 3 4 5 6 7 8 9 10 11 12 13 func TestExist(t *testing.T) { // 判断任意类型 fmt.Println(&#34;str-&gt;&#34;, funk.Contains([]string{&#34;a&#34;, &#34;b&#34;}, &#34;a&#34;)) // int 类型 fmt.Println(&#34;int-&gt;&#34;, funk.ContainsInt([]int{1, 2}, 1)) } /**输出 === RUN TestExist str-&gt; true int-&gt; true --- PASS: TestExist (0.00s) PASS */ 3.2 查找元素第一次出现位置 funk.IndexOf: 接收任意类型,不存在则返回-1。 funk.IndexOfX: X代表具体类型,不存在则返回-1。 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 func TestIndexOf(t *testing.T) { strArr := []string{&#34;go&#34;, &#34;java&#34;, &#34;c&#34;, &#34;java&#34;} // 具体类型 fmt.Println(&#34;c: &#34;, funk.IndexOfString(strArr, &#34;c&#34;)) // 验证第一次出现位置 fmt.Println(&#34;java: &#34;, funk.IndexOfString(strArr, &#34;java&#34;)) // 任意类型 fmt.Println(&#34;go: &#34;, funk.IndexOf(strArr, &#34;go&#34;)) // 不存在时返回-1 fmt.Println(&#34;php: &#34;, funk.IndexOfString(strArr, &#34;php&#34;)) } /**输出 === RUN TestIndexOf c: 2 java: 1 go: 0 php: -1 --- PASS: TestIndexOf (0.00s) PASS */ 3.3 查找元素最后一次出现位置 funk.LastIndexOf: 接收任意类型,不存在则返回-1。 funk.LastIndexOfX: X代表具体类型,不存在则返回-1。 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 // 查找元素最后一次出现的位置 func TestLastOf(t *testing.T) { strArr := []string{&#34;go&#34;, &#34;java&#34;, &#34;c&#34;, &#34;java&#34;} // 具体类型 fmt.Println(&#34;c: &#34;, funk.LastIndexOfString(strArr, &#34;c&#34;)) // 验证第一次出现位置 fmt.Println(&#34;java: &#34;, funk.LastIndexOfString(strArr, &#34;java&#34;)) // 任意类型 fmt.Println(&#34;go: &#34;, funk.LastIndexOf(strArr, &#34;go&#34;)) // 不存在时返回-1 fmt.Println(&#34;php: &#34;, funk.LastIndexOf(strArr, &#34;php&#34;)) } /**输出 === RUN TestLastOf c: 2 java: 3 go: 0 php: -1 --- PASS: TestLastOf (0.00s) PASS */ 3.4 批量查找(都有则True) func Every(in interface{}, elements ...interface{}) bool">
-  <meta itemprop="datePublished" content="2021-05-02T00:00:00+00:00">
-  <meta itemprop="dateModified" content="2026-10-21T14:45:14+08:00">
+  <meta itemprop="datePublished" content="2021-04-29T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2026-11-12T14:42:56+08:00">
   <meta itemprop="wordCount" content="6405">
   <meta itemprop="keywords" content="Go扩展包">
   <meta name="twitter:card" content="summary">
@@ -78,7 +78,7 @@
 <body>
   <div id="mobile-navbar" class="mobile-navbar">
   <div class="mobile-header-logo">
-    <a href="/" class="logo">Learn Go</a>
+    <a href="/" class="logo">Let&#39;s Go!</a>
   </div>
   <div class="mobile-navbar-icon">
     <span></span>
@@ -107,7 +107,7 @@
   <div class="container" id="mobile-panel">
     <header id="header" class="header">
         <div class="logo-wrapper">
-  <a href="/" class="logo">Learn Go</a>
+  <a href="/" class="logo">Let&#39;s Go!</a>
 </div>
 
 
@@ -139,7 +139,7 @@
       <h1 class="post-title">Go扩展包(十四):go-funk</h1>
 
       <div class="post-meta">
-        <span class="post-time"> 2021-05-02 </span>
+        <span class="post-time"> 2021-04-29 </span>
         <div class="post-category">
             <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
             <a href="/categories/go/"> Go </a>
@@ -2086,7 +2086,7 @@
   <p class="copyright-item">
     <span class="item-title">LastMod</span>
     <span class="item-content">
-        2026-10-21
+        2026-11-12
         
     </span>
   </p>
@@ -2098,13 +2098,13 @@
           <a href="/tags/go%E6%89%A9%E5%B1%95%E5%8C%85/">Go扩展包</a>
           </div>
       <nav class="post-nav">
-        <a class="prev" href="/post/%E6%89%A9%E5%B1%95%E5%8C%85/15-jsoniter/">
+        <a class="prev" href="/post/%E5%B7%A5%E5%85%B7%E7%AF%87/02-pprof/">
             <i class="iconfont icon-left"></i>
-            <span class="prev-text nav-default">Go扩展包(十五):jsoniter</span>
+            <span class="prev-text nav-default">Go工具(二):性能调试利器pprof(一)</span>
             <span class="prev-text nav-mobile">Prev</span>
           </a>
-        <a class="next" href="/post/%E5%B7%A5%E5%85%B7%E7%AF%87/04-pprof-3/">
-            <span class="next-text nav-default">Go工具(四):性能调试利器pprof(三)</span>
+        <a class="next" href="/post/%E6%89%A9%E5%B1%95%E5%8C%85/13-cobra/">
+            <span class="next-text nav-default">Go扩展包(十三):cobra</span>
             <span class="next-text nav-mobile">Next</span>
             <i class="iconfont icon-right"></i>
           </a>

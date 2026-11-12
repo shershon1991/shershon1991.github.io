@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>基金分析系统(三):爬取基金收益榜单 - Learn Go</title>
+  <title>基金分析系统(三):爬取基金收益榜单 - Let&#39;s Go!</title>
   <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -18,7 +18,7 @@
 
 <meta name="author" content="" /><meta name="description" content="1.流程介绍 2.页面分析 3. 爬虫脚本 3.1 编写结构体 代码文件位置：service/crawl/fund/top_crawl.go
 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 // 对应每一行的基金信息 type fundItem struct { FundCode string `selector:&#34;td:nth-of-type(1)&#34;` FundName string `selector:&#34;td:nth-of-type(2)&#34;` NetWorth string `selector:&#34;td:nth-of-type(3) &gt; span.fb&#34;` TopDate string `selector:&#34;td:nth-of-type(3) &gt; span.date&#34;` DayChange string `selector:&#34;td:nth-of-type(4)&#34;` WeekChange string `selector:&#34;td:nth-of-type(5)&#34;` MouthChange string `selector:&#34;td:nth-of-type(6)&#34;` ThreeMouthChange string `selector:&#34;td:nth-of-type(7)&#34;` SixMouthChange string `selector:&#34;td:nth-of-type(8)&#34;` YearChange string `selector:&#34;td:nth-of-type(9)&#34;` TwoYearChange string `selector:&#34;td:nth-of-type(10)&#34;` ThreeYearChange string `selector:&#34;td:nth-of-type(11)&#34;` CurrentChange string `selector:&#34;td:nth-of-type(12)&#34;` CreateChange string `selector:&#34;td:nth-of-type(13)&#34;` } type TopCrawlService struct { Item []*fundItem `selector:&#34;tr&#34;` } td:nth-of-type(n)代表每行的第n列，@注意：这里的NetWorth和TopDate,取的都是第3列的数据
-" /><meta name="keywords" content="博客, Learn Go, hugo" />
+" /><meta name="keywords" content="博客, Let&#39;s Go!, hugo" />
 
 
 
@@ -42,7 +42,7 @@
 
 
 <meta property="og:url" content="https://shershon1991.github.io/post/%E9%A1%B9%E7%9B%AE%E7%AF%87/%E7%88%AC%E8%99%AB/3-fund-top/">
-  <meta property="og:site_name" content="Learn Go">
+  <meta property="og:site_name" content="Let&#39;s Go!">
   <meta property="og:title" content="基金分析系统(三):爬取基金收益榜单">
   <meta property="og:description" content="1.流程介绍 2.页面分析 3. 爬虫脚本 3.1 编写结构体 代码文件位置：service/crawl/fund/top_crawl.go
 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 // 对应每一行的基金信息 type fundItem struct { FundCode string `selector:&#34;td:nth-of-type(1)&#34;` FundName string `selector:&#34;td:nth-of-type(2)&#34;` NetWorth string `selector:&#34;td:nth-of-type(3) &gt; span.fb&#34;` TopDate string `selector:&#34;td:nth-of-type(3) &gt; span.date&#34;` DayChange string `selector:&#34;td:nth-of-type(4)&#34;` WeekChange string `selector:&#34;td:nth-of-type(5)&#34;` MouthChange string `selector:&#34;td:nth-of-type(6)&#34;` ThreeMouthChange string `selector:&#34;td:nth-of-type(7)&#34;` SixMouthChange string `selector:&#34;td:nth-of-type(8)&#34;` YearChange string `selector:&#34;td:nth-of-type(9)&#34;` TwoYearChange string `selector:&#34;td:nth-of-type(10)&#34;` ThreeYearChange string `selector:&#34;td:nth-of-type(11)&#34;` CurrentChange string `selector:&#34;td:nth-of-type(12)&#34;` CreateChange string `selector:&#34;td:nth-of-type(13)&#34;` } type TopCrawlService struct { Item []*fundItem `selector:&#34;tr&#34;` } td:nth-of-type(n)代表每行的第n列，@注意：这里的NetWorth和TopDate,取的都是第3列的数据">
@@ -78,7 +78,7 @@
 <body>
   <div id="mobile-navbar" class="mobile-navbar">
   <div class="mobile-header-logo">
-    <a href="/" class="logo">Learn Go</a>
+    <a href="/" class="logo">Let&#39;s Go!</a>
   </div>
   <div class="mobile-navbar-icon">
     <span></span>
@@ -107,7 +107,7 @@
   <div class="container" id="mobile-panel">
     <header id="header" class="header">
         <div class="logo-wrapper">
-  <a href="/" class="logo">Learn Go</a>
+  <a href="/" class="logo">Let&#39;s Go!</a>
 </div>
 
 

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>Go学习(二十六):Md5-Sha1-Base64 - Learn Go</title>
+  <title>Go学习(二十六):Md5-Sha1-Base64 - Let&#39;s Go!</title>
   <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -16,7 +16,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="" /><meta name="description" content="1.生成Md5 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 package main import ( &#34;crypto/md5&#34; &#34;fmt&#34; &#34;io&#34; ) func main() { str := &#34;Hello Word&#34; // 方法一 sum := md5.Sum([]byte(str)) // 转成16进制 md51 := fmt.Sprintf(&#34;%x&#34;, sum) fmt.Println(&#34;方法一: &#34; &#43; md51) // 方法二 hash := md5.New() // 将str写入到hash _, err := io.WriteString(hash, str) if err != nil { fmt.Println(err.Error()) } // 转成16进制 md52 := fmt.Sprintf(&#34;%x&#34;,hash.Sum(nil)) fmt.Println(&#34;方法二: &#34; &#43; md52) } /** 输出 方法一: ed0a96e83ab7b0910fcbcc131b2e6b82 方法二: ed0a96e83ab7b0910fcbcc131b2e6b82 */ 2.生成Sha1 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 package main import ( &#34;crypto/sha1&#34; &#34;fmt&#34; &#34;io&#34; ) func main() { str := &#34;1234&#34; // 方法一 sum := sha1.Sum([]byte(str)) // 转成16进制 shaA := fmt.Sprintf(&#34;%x&#34;, sum) fmt.Println(&#34;方法一: &#34; &#43; shaA) // 方法二 hash := sha1.New() _, err := io.WriteString(hash, str) if err != nil { fmt.Println(err.Error()) } // 转成16进制 shaB := fmt.Sprintf(&#34;%x&#34;,hash.Sum(nil)) fmt.Println(&#34;方法二: &#34; &#43; shaB) } /** 输出 方法一: 7110eda4d09e062aa5e4a390b0a572ac0d2c0220 方法二: 7110eda4d09e062aa5e4a390b0a572ac0d2c0220 */ 3.Base64编码和解码 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 package main import ( &#34;encoding/base64&#34; &#34;fmt&#34; ) func main() { str := &#34;1234&#34; // 方法一 // Base64编码 base64EncodeStr := base64.StdEncoding.EncodeToString([]byte(str)) fmt.Printf(&#34;方法一,Base64编码: %v \n&#34;,base64EncodeStr) // Base64解码 decodeString, err := base64.StdEncoding.DecodeString(base64EncodeStr) if err != nil { fmt.Println(err.Error()) } fmt.Printf(&#34;方法一,Base64解码: %s \n&#34;,decodeString) // 方法二:使用兼容URL的base64编码和解码 toString := base64.URLEncoding.EncodeToString([]byte(str)) fmt.Printf(&#34;方法二,Base64编码: %v \n&#34;,toString) bytes, _ := base64.URLEncoding.DecodeString(toString) fmt.Printf(&#34;方法二,Base64解码: %s \n&#34;,bytes) } /**输出 方法一,Base64编码: MTIzNA== 方法一,Base64解码: 1234 方法二,Base64编码: MTIzNA== 方法二,Base64解码: 1234 */ " /><meta name="keywords" content="博客, Learn Go, hugo" />
+<meta name="author" content="" /><meta name="description" content="1.生成Md5 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 package main import ( &#34;crypto/md5&#34; &#34;fmt&#34; &#34;io&#34; ) func main() { str := &#34;Hello Word&#34; // 方法一 sum := md5.Sum([]byte(str)) // 转成16进制 md51 := fmt.Sprintf(&#34;%x&#34;, sum) fmt.Println(&#34;方法一: &#34; &#43; md51) // 方法二 hash := md5.New() // 将str写入到hash _, err := io.WriteString(hash, str) if err != nil { fmt.Println(err.Error()) } // 转成16进制 md52 := fmt.Sprintf(&#34;%x&#34;,hash.Sum(nil)) fmt.Println(&#34;方法二: &#34; &#43; md52) } /** 输出 方法一: ed0a96e83ab7b0910fcbcc131b2e6b82 方法二: ed0a96e83ab7b0910fcbcc131b2e6b82 */ 2.生成Sha1 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 package main import ( &#34;crypto/sha1&#34; &#34;fmt&#34; &#34;io&#34; ) func main() { str := &#34;1234&#34; // 方法一 sum := sha1.Sum([]byte(str)) // 转成16进制 shaA := fmt.Sprintf(&#34;%x&#34;, sum) fmt.Println(&#34;方法一: &#34; &#43; shaA) // 方法二 hash := sha1.New() _, err := io.WriteString(hash, str) if err != nil { fmt.Println(err.Error()) } // 转成16进制 shaB := fmt.Sprintf(&#34;%x&#34;,hash.Sum(nil)) fmt.Println(&#34;方法二: &#34; &#43; shaB) } /** 输出 方法一: 7110eda4d09e062aa5e4a390b0a572ac0d2c0220 方法二: 7110eda4d09e062aa5e4a390b0a572ac0d2c0220 */ 3.Base64编码和解码 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 package main import ( &#34;encoding/base64&#34; &#34;fmt&#34; ) func main() { str := &#34;1234&#34; // 方法一 // Base64编码 base64EncodeStr := base64.StdEncoding.EncodeToString([]byte(str)) fmt.Printf(&#34;方法一,Base64编码: %v \n&#34;,base64EncodeStr) // Base64解码 decodeString, err := base64.StdEncoding.DecodeString(base64EncodeStr) if err != nil { fmt.Println(err.Error()) } fmt.Printf(&#34;方法一,Base64解码: %s \n&#34;,decodeString) // 方法二:使用兼容URL的base64编码和解码 toString := base64.URLEncoding.EncodeToString([]byte(str)) fmt.Printf(&#34;方法二,Base64编码: %v \n&#34;,toString) bytes, _ := base64.URLEncoding.DecodeString(toString) fmt.Printf(&#34;方法二,Base64解码: %s \n&#34;,bytes) } /**输出 方法一,Base64编码: MTIzNA== 方法一,Base64解码: 1234 方法二,Base64编码: MTIzNA== 方法二,Base64解码: 1234 */ " /><meta name="keywords" content="博客, Let&#39;s Go!, hugo" />
 
 
 
@@ -40,7 +40,7 @@
 
 
 <meta property="og:url" content="https://shershon1991.github.io/post/%E5%9F%BA%E7%A1%80%E7%AF%87/26-md5-sha1-base64/">
-  <meta property="og:site_name" content="Learn Go">
+  <meta property="og:site_name" content="Let&#39;s Go!">
   <meta property="og:title" content="Go学习(二十六):Md5-Sha1-Base64">
   <meta property="og:description" content="1.生成Md5 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 package main import ( &#34;crypto/md5&#34; &#34;fmt&#34; &#34;io&#34; ) func main() { str := &#34;Hello Word&#34; // 方法一 sum := md5.Sum([]byte(str)) // 转成16进制 md51 := fmt.Sprintf(&#34;%x&#34;, sum) fmt.Println(&#34;方法一: &#34; &#43; md51) // 方法二 hash := md5.New() // 将str写入到hash _, err := io.WriteString(hash, str) if err != nil { fmt.Println(err.Error()) } // 转成16进制 md52 := fmt.Sprintf(&#34;%x&#34;,hash.Sum(nil)) fmt.Println(&#34;方法二: &#34; &#43; md52) } /** 输出 方法一: ed0a96e83ab7b0910fcbcc131b2e6b82 方法二: ed0a96e83ab7b0910fcbcc131b2e6b82 */ 2.生成Sha1 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 package main import ( &#34;crypto/sha1&#34; &#34;fmt&#34; &#34;io&#34; ) func main() { str := &#34;1234&#34; // 方法一 sum := sha1.Sum([]byte(str)) // 转成16进制 shaA := fmt.Sprintf(&#34;%x&#34;, sum) fmt.Println(&#34;方法一: &#34; &#43; shaA) // 方法二 hash := sha1.New() _, err := io.WriteString(hash, str) if err != nil { fmt.Println(err.Error()) } // 转成16进制 shaB := fmt.Sprintf(&#34;%x&#34;,hash.Sum(nil)) fmt.Println(&#34;方法二: &#34; &#43; shaB) } /** 输出 方法一: 7110eda4d09e062aa5e4a390b0a572ac0d2c0220 方法二: 7110eda4d09e062aa5e4a390b0a572ac0d2c0220 */ 3.Base64编码和解码 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 package main import ( &#34;encoding/base64&#34; &#34;fmt&#34; ) func main() { str := &#34;1234&#34; // 方法一 // Base64编码 base64EncodeStr := base64.StdEncoding.EncodeToString([]byte(str)) fmt.Printf(&#34;方法一,Base64编码: %v \n&#34;,base64EncodeStr) // Base64解码 decodeString, err := base64.StdEncoding.DecodeString(base64EncodeStr) if err != nil { fmt.Println(err.Error()) } fmt.Printf(&#34;方法一,Base64解码: %s \n&#34;,decodeString) // 方法二:使用兼容URL的base64编码和解码 toString := base64.URLEncoding.EncodeToString([]byte(str)) fmt.Printf(&#34;方法二,Base64编码: %v \n&#34;,toString) bytes, _ := base64.URLEncoding.DecodeString(toString) fmt.Printf(&#34;方法二,Base64解码: %s \n&#34;,bytes) } /**输出 方法一,Base64编码: MTIzNA== 方法一,Base64解码: 1234 方法二,Base64编码: MTIzNA== 方法二,Base64解码: 1234 */">
   <meta property="og:locale" content="en">
@@ -73,7 +73,7 @@
 <body>
   <div id="mobile-navbar" class="mobile-navbar">
   <div class="mobile-header-logo">
-    <a href="/" class="logo">Learn Go</a>
+    <a href="/" class="logo">Let&#39;s Go!</a>
   </div>
   <div class="mobile-navbar-icon">
     <span></span>
@@ -102,7 +102,7 @@
   <div class="container" id="mobile-panel">
     <header id="header" class="header">
         <div class="logo-wrapper">
-  <a href="/" class="logo">Learn Go</a>
+  <a href="/" class="logo">Let&#39;s Go!</a>
 </div>
 
 

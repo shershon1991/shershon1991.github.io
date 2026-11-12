@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>Go标准包(十四):math - Learn Go</title>
+  <title>Go标准包(十四):math - Let&#39;s Go!</title>
   <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -18,7 +18,7 @@
 
 <meta name="author" content="" /><meta name="description" content="1. 介绍 Go标准包math,提供了基本的数学常数和数学函数。
 2. 常量 2.1 整数取值 1 2 3 4 5 6 7 8 9 10 11 12 13 14 const ( MaxInt8 = 1&lt;&lt;7 - 1 // int8最大值 MinInt8 = -1 &lt;&lt; 7 // int8最小值 MaxInt16 = 1&lt;&lt;15 - 1 MinInt16 = -1 &lt;&lt; 15 MaxInt32 = 1&lt;&lt;31 - 1 MinInt32 = -1 &lt;&lt; 31 MaxInt64 = 1&lt;&lt;63 - 1 MinInt64 = -1 &lt;&lt; 63 MaxUint8 = 1&lt;&lt;8 - 1 MaxUint16 = 1&lt;&lt;16 - 1 MaxUint32 = 1&lt;&lt;32 - 1 MaxUint64 = 1&lt;&lt;64 - 1 ) 2.2 浮点数取值 1 2 3 4 5 6 const ( MaxFloat32 = 3.40282346638528859811704183484516925440e&#43;38 SmallestNonzeroFloat32 = 1.401298464324817070923729583289916131280e-45 MaxFloat64 = 1.797693134862315708145274237317043567981e&#43;308 SmallestNonzeroFloat64 = 4.940656458412465441765687928682213723651e-324 ) 3. 函数 3.1 取整 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 // 取整 func TestRounding(t *testing.T) { // 向上取整 fmt.Println(&#34;50.345,向上取整 -&gt; &#34;, math.Ceil(50.345)) fmt.Println(&#34;50.745,向上取整 -&gt; &#34;, math.Ceil(50.745)) // 向下取整 fmt.Println(&#34;50.345,向上取整 -&gt; &#34;, math.Floor(50.345)) fmt.Println(&#34;50.745,向上取整 -&gt; &#34;, math.Floor(50.745)) // 四舍五入 fmt.Println(&#34;50.345,四舍五入 -&gt; &#34;, math.Floor(50.345&#43;0.5)) fmt.Println(&#34;50.745,四舍五入 -&gt; &#34;, math.Floor(50.745&#43;0.5)) } /** 输出 === RUN TestRounding 50.345,向上取整 -&gt; 51 50.745,向上取整 -&gt; 51 50.345,向上取整 -&gt; 50 50.745,向上取整 -&gt; 50 50.345,四舍五入 -&gt; 50 50.745,四舍五入 -&gt; 51 --- PASS: TestRounding (0.00s) PASS */ @@注意: golang没有四舍五入函数，常见处理先&#43;0.5，然后向下取整！
-" /><meta name="keywords" content="博客, Learn Go, hugo" />
+" /><meta name="keywords" content="博客, Let&#39;s Go!, hugo" />
 
 
 
@@ -42,7 +42,7 @@
 
 
 <meta property="og:url" content="https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/14-math/">
-  <meta property="og:site_name" content="Learn Go">
+  <meta property="og:site_name" content="Let&#39;s Go!">
   <meta property="og:title" content="Go标准包(十四):math">
   <meta property="og:description" content="1. 介绍 Go标准包math,提供了基本的数学常数和数学函数。
 2. 常量 2.1 整数取值 1 2 3 4 5 6 7 8 9 10 11 12 13 14 const ( MaxInt8 = 1&lt;&lt;7 - 1 // int8最大值 MinInt8 = -1 &lt;&lt; 7 // int8最小值 MaxInt16 = 1&lt;&lt;15 - 1 MinInt16 = -1 &lt;&lt; 15 MaxInt32 = 1&lt;&lt;31 - 1 MinInt32 = -1 &lt;&lt; 31 MaxInt64 = 1&lt;&lt;63 - 1 MinInt64 = -1 &lt;&lt; 63 MaxUint8 = 1&lt;&lt;8 - 1 MaxUint16 = 1&lt;&lt;16 - 1 MaxUint32 = 1&lt;&lt;32 - 1 MaxUint64 = 1&lt;&lt;64 - 1 ) 2.2 浮点数取值 1 2 3 4 5 6 const ( MaxFloat32 = 3.40282346638528859811704183484516925440e&#43;38 SmallestNonzeroFloat32 = 1.401298464324817070923729583289916131280e-45 MaxFloat64 = 1.797693134862315708145274237317043567981e&#43;308 SmallestNonzeroFloat64 = 4.940656458412465441765687928682213723651e-324 ) 3. 函数 3.1 取整 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 // 取整 func TestRounding(t *testing.T) { // 向上取整 fmt.Println(&#34;50.345,向上取整 -&gt; &#34;, math.Ceil(50.345)) fmt.Println(&#34;50.745,向上取整 -&gt; &#34;, math.Ceil(50.745)) // 向下取整 fmt.Println(&#34;50.345,向上取整 -&gt; &#34;, math.Floor(50.345)) fmt.Println(&#34;50.745,向上取整 -&gt; &#34;, math.Floor(50.745)) // 四舍五入 fmt.Println(&#34;50.345,四舍五入 -&gt; &#34;, math.Floor(50.345&#43;0.5)) fmt.Println(&#34;50.745,四舍五入 -&gt; &#34;, math.Floor(50.745&#43;0.5)) } /** 输出 === RUN TestRounding 50.345,向上取整 -&gt; 51 50.745,向上取整 -&gt; 51 50.345,向上取整 -&gt; 50 50.745,向上取整 -&gt; 50 50.345,四舍五入 -&gt; 50 50.745,四舍五入 -&gt; 51 --- PASS: TestRounding (0.00s) PASS */ @@注意: golang没有四舍五入函数，常见处理先&#43;0.5，然后向下取整！">
@@ -78,7 +78,7 @@
 <body>
   <div id="mobile-navbar" class="mobile-navbar">
   <div class="mobile-header-logo">
-    <a href="/" class="logo">Learn Go</a>
+    <a href="/" class="logo">Let&#39;s Go!</a>
   </div>
   <div class="mobile-navbar-icon">
     <span></span>
@@ -107,7 +107,7 @@
   <div class="container" id="mobile-panel">
     <header id="header" class="header">
         <div class="logo-wrapper">
-  <a href="/" class="logo">Learn Go</a>
+  <a href="/" class="logo">Let&#39;s Go!</a>
 </div>
 
 

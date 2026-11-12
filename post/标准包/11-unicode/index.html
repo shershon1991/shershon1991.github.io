@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>Go标准包(十一):unicode - Learn Go</title>
+  <title>Go标准包(十一):unicode - Let&#39;s Go!</title>
   <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -18,7 +18,7 @@
 
 <meta name="author" content="" /><meta name="description" content="1.介绍 unicode包提供了诸多处理rune字符相关功能的函数（比如区分字母和数字，或者是字母的大写和小写转换等)
 2.判断函数 2.1 是否为空格(IsSpace) 1 2 3 4 5 6 7 8 func TestJudge(t *testing.T) { rune1 := &#39; &#39; rune2 := &#39;h&#39; fmt.Printf(&#34;[%c] 是空格? %t\n&#34;,rune1,unicode.IsSpace(rune1)) // 输出 [ ] 是空格? true fmt.Printf(&#34;[%c] 是空格? %t\n&#34;,rune2,unicode.IsSpace(rune2)) // 输出 [h] 是空格? false } 2.2 是否为十进制数(IsDigit) 1 2 3 4 5 6 d1 := &#39;1&#39; d2 := &#39;w&#39; fmt.Printf(&#34;[%c] 是十进制数? %t\n&#34;,d1,unicode.IsDigit(d1)) // 输出: [1] 是十进制数? true fmt.Printf(&#34;[%c] 是十进制数? %t\n&#34;,d2,unicode.IsDigit(d2)) // 输出: [w] 是十进制数? false 2.3 是否为数字(IsNumber) 1 2 3 4 5 6 d1 := &#39;1&#39; d2 := &#39;w&#39; fmt.Printf(&#34;[%c] 是数字? %t\n&#34;,d1,unicode.IsNumber(d1)) // 输出: [1] 是数字? true fmt.Printf(&#34;[%c] 是数字? %t\n&#34;,d2,unicode.IsNumber(d2)) // 输出: [w] 是数字? false 2.4 是否为字母字符(IsLetter) 1 2 3 4 5 6 7 8 9 10 11 12 13 // 是否为字母字符 str1 := &#39;刘&#39; str2 := &#39;l&#39; str3 := &#39;W&#39; str4 := &#39;!&#39; fmt.Printf(&#34;[%c] 是字母? %t\n&#34;,str1,unicode.IsLetter(str1)) // [刘] 是字母? true fmt.Printf(&#34;[%c] 是字母? %t\n&#34;,str2,unicode.IsLetter(str2)) // [l] 是字母? true fmt.Printf(&#34;[%c] 是字母? %t\n&#34;,str3,unicode.IsLetter(str3)) // [W] 是字母? true fmt.Printf(&#34;[%c] 是字母? %t\n&#34;,str4,unicode.IsLetter(str4)) // [!] 是字母? false @注意: 汉字也是一个字母字符
-" /><meta name="keywords" content="博客, Learn Go, hugo" />
+" /><meta name="keywords" content="博客, Let&#39;s Go!, hugo" />
 
 
 
@@ -42,7 +42,7 @@
 
 
 <meta property="og:url" content="https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/11-unicode/">
-  <meta property="og:site_name" content="Learn Go">
+  <meta property="og:site_name" content="Let&#39;s Go!">
   <meta property="og:title" content="Go标准包(十一):unicode">
   <meta property="og:description" content="1.介绍 unicode包提供了诸多处理rune字符相关功能的函数（比如区分字母和数字，或者是字母的大写和小写转换等)
 2.判断函数 2.1 是否为空格(IsSpace) 1 2 3 4 5 6 7 8 func TestJudge(t *testing.T) { rune1 := &#39; &#39; rune2 := &#39;h&#39; fmt.Printf(&#34;[%c] 是空格? %t\n&#34;,rune1,unicode.IsSpace(rune1)) // 输出 [ ] 是空格? true fmt.Printf(&#34;[%c] 是空格? %t\n&#34;,rune2,unicode.IsSpace(rune2)) // 输出 [h] 是空格? false } 2.2 是否为十进制数(IsDigit) 1 2 3 4 5 6 d1 := &#39;1&#39; d2 := &#39;w&#39; fmt.Printf(&#34;[%c] 是十进制数? %t\n&#34;,d1,unicode.IsDigit(d1)) // 输出: [1] 是十进制数? true fmt.Printf(&#34;[%c] 是十进制数? %t\n&#34;,d2,unicode.IsDigit(d2)) // 输出: [w] 是十进制数? false 2.3 是否为数字(IsNumber) 1 2 3 4 5 6 d1 := &#39;1&#39; d2 := &#39;w&#39; fmt.Printf(&#34;[%c] 是数字? %t\n&#34;,d1,unicode.IsNumber(d1)) // 输出: [1] 是数字? true fmt.Printf(&#34;[%c] 是数字? %t\n&#34;,d2,unicode.IsNumber(d2)) // 输出: [w] 是数字? false 2.4 是否为字母字符(IsLetter) 1 2 3 4 5 6 7 8 9 10 11 12 13 // 是否为字母字符 str1 := &#39;刘&#39; str2 := &#39;l&#39; str3 := &#39;W&#39; str4 := &#39;!&#39; fmt.Printf(&#34;[%c] 是字母? %t\n&#34;,str1,unicode.IsLetter(str1)) // [刘] 是字母? true fmt.Printf(&#34;[%c] 是字母? %t\n&#34;,str2,unicode.IsLetter(str2)) // [l] 是字母? true fmt.Printf(&#34;[%c] 是字母? %t\n&#34;,str3,unicode.IsLetter(str3)) // [W] 是字母? true fmt.Printf(&#34;[%c] 是字母? %t\n&#34;,str4,unicode.IsLetter(str4)) // [!] 是字母? false @注意: 汉字也是一个字母字符">
@@ -78,7 +78,7 @@
 <body>
   <div id="mobile-navbar" class="mobile-navbar">
   <div class="mobile-header-logo">
-    <a href="/" class="logo">Learn Go</a>
+    <a href="/" class="logo">Let&#39;s Go!</a>
   </div>
   <div class="mobile-navbar-icon">
     <span></span>
@@ -107,7 +107,7 @@
   <div class="container" id="mobile-panel">
     <header id="header" class="header">
         <div class="logo-wrapper">
-  <a href="/" class="logo">Learn Go</a>
+  <a href="/" class="logo">Let&#39;s Go!</a>
 </div>
 
 

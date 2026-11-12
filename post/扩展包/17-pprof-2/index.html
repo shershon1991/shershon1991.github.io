@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>Go扩展包(十七):pprof-2 - Learn Go</title>
+  <title>Go扩展包(十七):pprof-2 - Let&#39;s Go!</title>
   <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -16,7 +16,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="" /><meta name="description" content="1. 调用图说明 1.1 示例图 1.2 节点颜色 红色代表累计值cum为正，并且很大； 绿色代表累计值cum为负，并且很大； 灰色代表累计值cum可以忽略不计。 1.3 节点字体大小 较大的字体表示较大的当前值； 较小的字体表示较小的当前值。 1.4 边框颜色 当前值较大并且为正数时为红色； 当前值较小并且为负数时为绿色； 接近0的当前值为灰色。 1.5 箭头大小 箭头越粗代表当前的路径消耗了越多的资源； 箭头越细代表当前的路径消耗了越少的资源。 1.6 箭头类型 虚线箭头表示两个节点之间的某些节点已被忽略，为间接调用； 实线箭头表示两个节点之间为直接调用。 2. 火焰图说明 2.1 示例图 " /><meta name="keywords" content="博客, Learn Go, hugo" />
+<meta name="author" content="" /><meta name="description" content="1. 调用图说明 1.1 示例图 1.2 节点颜色 红色代表累计值cum为正，并且很大； 绿色代表累计值cum为负，并且很大； 灰色代表累计值cum可以忽略不计。 1.3 节点字体大小 较大的字体表示较大的当前值； 较小的字体表示较小的当前值。 1.4 边框颜色 当前值较大并且为正数时为红色； 当前值较小并且为负数时为绿色； 接近0的当前值为灰色。 1.5 箭头大小 箭头越粗代表当前的路径消耗了越多的资源； 箭头越细代表当前的路径消耗了越少的资源。 1.6 箭头类型 虚线箭头表示两个节点之间的某些节点已被忽略，为间接调用； 实线箭头表示两个节点之间为直接调用。 2. 火焰图说明 2.1 示例图 " /><meta name="keywords" content="博客, Let&#39;s Go!, hugo" />
 
 
 
@@ -40,20 +40,20 @@
 
 
 <meta property="og:url" content="https://shershon1991.github.io/post/%E6%89%A9%E5%B1%95%E5%8C%85/17-pprof-2/">
-  <meta property="og:site_name" content="Learn Go">
+  <meta property="og:site_name" content="Let&#39;s Go!">
   <meta property="og:title" content="Go扩展包(十七):pprof-2">
   <meta property="og:description" content="1. 调用图说明 1.1 示例图 1.2 节点颜色 红色代表累计值cum为正，并且很大； 绿色代表累计值cum为负，并且很大； 灰色代表累计值cum可以忽略不计。 1.3 节点字体大小 较大的字体表示较大的当前值； 较小的字体表示较小的当前值。 1.4 边框颜色 当前值较大并且为正数时为红色； 当前值较小并且为负数时为绿色； 接近0的当前值为灰色。 1.5 箭头大小 箭头越粗代表当前的路径消耗了越多的资源； 箭头越细代表当前的路径消耗了越少的资源。 1.6 箭头类型 虚线箭头表示两个节点之间的某些节点已被忽略，为间接调用； 实线箭头表示两个节点之间为直接调用。 2. 火焰图说明 2.1 示例图">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="post">
-    <meta property="article:published_time" content="2021-04-30T00:00:00+00:00">
-    <meta property="article:modified_time" content="2026-10-21T14:45:14+08:00">
+    <meta property="article:published_time" content="2021-05-02T00:00:00+00:00">
+    <meta property="article:modified_time" content="2026-11-12T14:42:56+08:00">
     <meta property="article:tag" content="Go扩展包">
 
   <meta itemprop="name" content="Go扩展包(十七):pprof-2">
   <meta itemprop="description" content="1. 调用图说明 1.1 示例图 1.2 节点颜色 红色代表累计值cum为正，并且很大； 绿色代表累计值cum为负，并且很大； 灰色代表累计值cum可以忽略不计。 1.3 节点字体大小 较大的字体表示较大的当前值； 较小的字体表示较小的当前值。 1.4 边框颜色 当前值较大并且为正数时为红色； 当前值较小并且为负数时为绿色； 接近0的当前值为灰色。 1.5 箭头大小 箭头越粗代表当前的路径消耗了越多的资源； 箭头越细代表当前的路径消耗了越少的资源。 1.6 箭头类型 虚线箭头表示两个节点之间的某些节点已被忽略，为间接调用； 实线箭头表示两个节点之间为直接调用。 2. 火焰图说明 2.1 示例图">
-  <meta itemprop="datePublished" content="2021-04-30T00:00:00+00:00">
-  <meta itemprop="dateModified" content="2026-10-21T14:45:14+08:00">
+  <meta itemprop="datePublished" content="2021-05-02T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2026-11-12T14:42:56+08:00">
   <meta itemprop="wordCount" content="2946">
   <meta itemprop="keywords" content="Go扩展包">
   <meta name="twitter:card" content="summary">
@@ -73,7 +73,7 @@
 <body>
   <div id="mobile-navbar" class="mobile-navbar">
   <div class="mobile-header-logo">
-    <a href="/" class="logo">Learn Go</a>
+    <a href="/" class="logo">Let&#39;s Go!</a>
   </div>
   <div class="mobile-navbar-icon">
     <span></span>
@@ -102,7 +102,7 @@
   <div class="container" id="mobile-panel">
     <header id="header" class="header">
         <div class="logo-wrapper">
-  <a href="/" class="logo">Learn Go</a>
+  <a href="/" class="logo">Let&#39;s Go!</a>
 </div>
 
 
@@ -134,7 +134,7 @@
       <h1 class="post-title">Go扩展包(十七):pprof-2</h1>
 
       <div class="post-meta">
-        <span class="post-time"> 2021-04-30 </span>
+        <span class="post-time"> 2021-05-02 </span>
         <div class="post-category">
             <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
             <a href="/categories/go/"> Go </a>
@@ -913,7 +913,7 @@
   <p class="copyright-item">
     <span class="item-title">LastMod</span>
     <span class="item-content">
-        2026-10-21
+        2026-11-12
         
     </span>
   </p>
@@ -925,13 +925,13 @@
           <a href="/tags/go%E6%89%A9%E5%B1%95%E5%8C%85/">Go扩展包</a>
           </div>
       <nav class="post-nav">
-        <a class="prev" href="/post/%E5%B7%A5%E5%85%B7%E7%AF%87/03-pprof-2/">
+        <a class="prev" href="/post/%E6%89%A9%E5%B1%95%E5%8C%85/18-trace/">
             <i class="iconfont icon-left"></i>
-            <span class="prev-text nav-default">Go工具(三):性能调试利器pprof(二)</span>
+            <span class="prev-text nav-default">Go扩展包(十八):trace</span>
             <span class="prev-text nav-mobile">Prev</span>
           </a>
-        <a class="next" href="/post/%E5%B7%A5%E5%85%B7%E7%AF%87/02-pprof/">
-            <span class="next-text nav-default">Go工具(二):性能调试利器pprof(一)</span>
+        <a class="next" href="/post/%E5%B7%A5%E5%85%B7%E7%AF%87/04-pprof-3/">
+            <span class="next-text nav-default">Go工具(四):性能调试利器pprof(三)</span>
             <span class="next-text nav-mobile">Next</span>
             <i class="iconfont icon-right"></i>
           </a>

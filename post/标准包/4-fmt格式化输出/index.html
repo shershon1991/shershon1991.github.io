@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>Go标准包(四):fmt(格式化输出) - Learn Go</title>
+  <title>Go标准包(四):fmt(格式化输出) - Let&#39;s Go!</title>
   <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -18,7 +18,7 @@
 
 <meta name="author" content="" /><meta name="description" content="1.输出控制台 1.1 Printf Printf根据format参数生成格式化的字符串并写入标准输出。返回写入的字节数和遇到的任何错误。
 1.format格式 动 词 功 能 %v 按值的本来值输出 %&#43;v 在 %v 基础上，对结构体字段名和值进行展开 %#v 输出 Go 语言语法格式的值 %T 输出 Go 语言语法格式的类型和值 %% 输出 % 本体 %b 整型以二进制方式显示 %o 整型以八进制方式显示 %d 整型以十进制方式显示 %x 整型以十六进制方式显示 %X 整型以十六进制、字母大写方式显示 %U Unicode 字符 %f 浮点数 %p 指针，十六进制方式显示 %c 数值对应的 Unicode 编码字符 %s 直接输出字符串或者[]byte %t 输出值的 true 或 false 2.打印字符串 1 2 3 4 5 6 7 str := &#34;hello word&#34; fmt.Printf(&#34;%%s-&gt; %s \n&#34;,str) fmt.Printf(&#34;%%v-&gt; %v \n&#34;,str) /**输出 %s-&gt; hello word %v-&gt; hello word */ 3.打印布尔类型 1 fmt.Printf(&#34;%%t-&gt; %t \n&#34;, b) 4.打印浮点型 格式 描述 %f 默认宽度，默认精度 %9f 宽度9，默认精度 %.2f 默认宽度，精度2 %9.2f 宽度9，精度2 %9.f 宽度9，精度0 1 2 3 4 5 6 7 8 9 10 11 12 13 f := 1.234567890 fmt.Printf(&#34;默认宽度，默认精度:%f \n&#34;, f) fmt.Printf(&#34;宽度9，默认精度:%9f \n&#34;, f) fmt.Printf(&#34;默认宽度，精度2:%.2f \n&#34;, f) fmt.Printf(&#34;宽度9，精度2:%9.2f \n&#34;, f) fmt.Printf(&#34;宽度9，精度0 :%9.f \n&#34;, f) /**输出 默认宽度，默认精度:1.234568 宽度9，默认精度: 1.234568 默认宽度，精度2:1.23 宽度9，精度2: 1.23 宽度9，精度0 : 1 */ 5.打印整数 1 2 3 4 5 6 7 8 9 10 11 12 13 14 // 定义一个整数变量 a := 54321 fmt.Printf(&#34;十进制:%d\n&#34;,a) fmt.Printf(&#34;二进制:%b\n&#34;,a) fmt.Printf(&#34;八进制:%o\n&#34;,a) fmt.Printf(&#34;十六进制:%x\n&#34;,a) fmt.Printf(&#34;十六进制,字母大写:%X\n&#34;,a) /**输出 十进制:54321 二进制:1101010000110001 八进制:152061 十六进制:d431 十六进制,字母大写:D431 */ 6.打印指针 1 2 3 str := &#34;hello&#34; fmt.Printf(&#34;打印指针:%p\n&#34;, &amp;str) //输出: 打印指针:0xc000098d50 7.打印变量类型 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 // 数组 arr := []int{1, 2, 3, 4, 5, 6} fmt.Printf(&#34;arr类型: %T\n&#34;, arr) // 映射 map1 := map[string]int{ &#34;张三&#34;: 20, &#34;李四&#34;: 23, } fmt.Printf(&#34;map1类型: %T\n&#34;, map1) // 匿名结构体 fruit := struct { name string price float64 }{&#34;香蕉&#34;, 4.99} fmt.Printf(&#34;fruit类型: %T\n&#34;, fruit) /**输出 arr类型: []int map1类型: map[string]int fruit类型: struct { name string; price float64 } */ 8.打印结构体 1 2 3 4 5 6 7 8 9 10 11 12 // 定义一个匿名结构体 people := struct { name, home, school string }{&#34;张三&#34;, &#34;北京&#34;, &#34;北京大学&#34;} fmt.Printf(&#34;%v\n&#34;, people) fmt.Printf(&#34;%&#43;v\n&#34;, people) fmt.Printf(&#34;%#v\n&#34;, people) /**输出 {张三 北京 北京大学} {name:张三 home:北京 school:北京大学} struct { name string; home string; school string }{name:&#34;张三&#34;, home:&#34;北京&#34;, school:&#34;北京大学&#34;} */ 9.打印Unicode 1 2 3 4 5 6 fmt.Printf(&#34;%U\n&#34;, &#39;A&#39;) fmt.Printf(&#34;%c\n&#34;, 65) /**输出 U&#43;0041 A */ 1.2 Print Print: 采用默认格式将其参数格式化并写入标准输出。如果两个相邻的参数都不是字符串，会在它们的输出之间添加空格。
-" /><meta name="keywords" content="博客, Learn Go, hugo" />
+" /><meta name="keywords" content="博客, Let&#39;s Go!, hugo" />
 
 
 
@@ -42,7 +42,7 @@
 
 
 <meta property="og:url" content="https://shershon1991.github.io/post/%E6%A0%87%E5%87%86%E5%8C%85/4-fmt%E6%A0%BC%E5%BC%8F%E5%8C%96%E8%BE%93%E5%87%BA/">
-  <meta property="og:site_name" content="Learn Go">
+  <meta property="og:site_name" content="Let&#39;s Go!">
   <meta property="og:title" content="Go标准包(四):fmt(格式化输出)">
   <meta property="og:description" content="1.输出控制台 1.1 Printf Printf根据format参数生成格式化的字符串并写入标准输出。返回写入的字节数和遇到的任何错误。
 1.format格式 动 词 功 能 %v 按值的本来值输出 %&#43;v 在 %v 基础上，对结构体字段名和值进行展开 %#v 输出 Go 语言语法格式的值 %T 输出 Go 语言语法格式的类型和值 %% 输出 % 本体 %b 整型以二进制方式显示 %o 整型以八进制方式显示 %d 整型以十进制方式显示 %x 整型以十六进制方式显示 %X 整型以十六进制、字母大写方式显示 %U Unicode 字符 %f 浮点数 %p 指针，十六进制方式显示 %c 数值对应的 Unicode 编码字符 %s 直接输出字符串或者[]byte %t 输出值的 true 或 false 2.打印字符串 1 2 3 4 5 6 7 str := &#34;hello word&#34; fmt.Printf(&#34;%%s-&gt; %s \n&#34;,str) fmt.Printf(&#34;%%v-&gt; %v \n&#34;,str) /**输出 %s-&gt; hello word %v-&gt; hello word */ 3.打印布尔类型 1 fmt.Printf(&#34;%%t-&gt; %t \n&#34;, b) 4.打印浮点型 格式 描述 %f 默认宽度，默认精度 %9f 宽度9，默认精度 %.2f 默认宽度，精度2 %9.2f 宽度9，精度2 %9.f 宽度9，精度0 1 2 3 4 5 6 7 8 9 10 11 12 13 f := 1.234567890 fmt.Printf(&#34;默认宽度，默认精度:%f \n&#34;, f) fmt.Printf(&#34;宽度9，默认精度:%9f \n&#34;, f) fmt.Printf(&#34;默认宽度，精度2:%.2f \n&#34;, f) fmt.Printf(&#34;宽度9，精度2:%9.2f \n&#34;, f) fmt.Printf(&#34;宽度9，精度0 :%9.f \n&#34;, f) /**输出 默认宽度，默认精度:1.234568 宽度9，默认精度: 1.234568 默认宽度，精度2:1.23 宽度9，精度2: 1.23 宽度9，精度0 : 1 */ 5.打印整数 1 2 3 4 5 6 7 8 9 10 11 12 13 14 // 定义一个整数变量 a := 54321 fmt.Printf(&#34;十进制:%d\n&#34;,a) fmt.Printf(&#34;二进制:%b\n&#34;,a) fmt.Printf(&#34;八进制:%o\n&#34;,a) fmt.Printf(&#34;十六进制:%x\n&#34;,a) fmt.Printf(&#34;十六进制,字母大写:%X\n&#34;,a) /**输出 十进制:54321 二进制:1101010000110001 八进制:152061 十六进制:d431 十六进制,字母大写:D431 */ 6.打印指针 1 2 3 str := &#34;hello&#34; fmt.Printf(&#34;打印指针:%p\n&#34;, &amp;str) //输出: 打印指针:0xc000098d50 7.打印变量类型 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 // 数组 arr := []int{1, 2, 3, 4, 5, 6} fmt.Printf(&#34;arr类型: %T\n&#34;, arr) // 映射 map1 := map[string]int{ &#34;张三&#34;: 20, &#34;李四&#34;: 23, } fmt.Printf(&#34;map1类型: %T\n&#34;, map1) // 匿名结构体 fruit := struct { name string price float64 }{&#34;香蕉&#34;, 4.99} fmt.Printf(&#34;fruit类型: %T\n&#34;, fruit) /**输出 arr类型: []int map1类型: map[string]int fruit类型: struct { name string; price float64 } */ 8.打印结构体 1 2 3 4 5 6 7 8 9 10 11 12 // 定义一个匿名结构体 people := struct { name, home, school string }{&#34;张三&#34;, &#34;北京&#34;, &#34;北京大学&#34;} fmt.Printf(&#34;%v\n&#34;, people) fmt.Printf(&#34;%&#43;v\n&#34;, people) fmt.Printf(&#34;%#v\n&#34;, people) /**输出 {张三 北京 北京大学} {name:张三 home:北京 school:北京大学} struct { name string; home string; school string }{name:&#34;张三&#34;, home:&#34;北京&#34;, school:&#34;北京大学&#34;} */ 9.打印Unicode 1 2 3 4 5 6 fmt.Printf(&#34;%U\n&#34;, &#39;A&#39;) fmt.Printf(&#34;%c\n&#34;, 65) /**输出 U&#43;0041 A */ 1.2 Print Print: 采用默认格式将其参数格式化并写入标准输出。如果两个相邻的参数都不是字符串，会在它们的输出之间添加空格。">
@@ -78,7 +78,7 @@
 <body>
   <div id="mobile-navbar" class="mobile-navbar">
   <div class="mobile-header-logo">
-    <a href="/" class="logo">Learn Go</a>
+    <a href="/" class="logo">Let&#39;s Go!</a>
   </div>
   <div class="mobile-navbar-icon">
     <span></span>
@@ -107,7 +107,7 @@
   <div class="container" id="mobile-panel">
     <header id="header" class="header">
         <div class="logo-wrapper">
-  <a href="/" class="logo">Learn Go</a>
+  <a href="/" class="logo">Let&#39;s Go!</a>
 </div>
 
 
