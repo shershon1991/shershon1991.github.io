@@ -48,14 +48,14 @@
   <meta property="og:type" content="article">
     <meta property="article:section" content="post">
     <meta property="article:published_time" content="2021-01-19T00:00:00+00:00">
-    <meta property="article:modified_time" content="2022-09-27T16:10:31+08:00">
+    <meta property="article:modified_time" content="2026-11-13T14:10:41+08:00">
     <meta property="article:tag" content="Go基础">
 
   <meta itemprop="name" content="Go学习(十九):并发编程-sync包">
   <meta itemprop="description" content="1.介绍 sync包提供了互斥锁。除了Once和WaitGroup类型，其余多数适用于低水平的程序，多数情况下，高水平的同步使用channel通信性能会更优一些。">
   <meta itemprop="datePublished" content="2021-01-19T00:00:00+00:00">
-  <meta itemprop="dateModified" content="2022-09-27T16:10:31+08:00">
-  <meta itemprop="wordCount" content="4798">
+  <meta itemprop="dateModified" content="2026-11-13T14:10:41+08:00">
+  <meta itemprop="wordCount" content="4795">
   <meta itemprop="keywords" content="Go基础">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Go学习(十九):并发编程-sync包">
@@ -140,7 +140,7 @@
             <a href="/categories/%E7%BC%96%E7%A8%8B/"> 编程 </a>
             <a href="/categories/go/"> Go </a>
             </div>
-          <span class="more-meta"> 4798 words </span>
+          <span class="more-meta"> 4795 words </span>
           <span class="more-meta"> 10 mins read </span>
         
       </div>
@@ -169,11 +169,6 @@
 </nav>
   </div>
 </div>
-  <div class="post-outdated">
-    <div class="warn">
-      <p>[NOTE] Updated <span class="timeago" datetime="2022-09-27T16:10:31" title="September 27, 2022">September 27, 2022</span>. This article may have outdated content or subject matter.</p>
-    </div>
-  </div>
     <div class="post-content">
       <h3 id="1介绍">1.介绍</h3>
 <p><code>sync</code>包提供了互斥锁。除了<code>Once</code>和<code>WaitGroup</code>类型，其余多数适用于低水平的程序，多数情况下，高水平的同步使用<code>channel</code>通信性能会更优一些。</p>
@@ -1065,7 +1060,7 @@
 </div><h3 id="5条件变量cond">5.条件变量(Cond)</h3>
 <h4 id="51-介绍">5.1 介绍</h4>
 <p>与互斥锁不同，条件变量的作用并不是保证在同一时刻仅有一个线程访问某一个共享数据，而是在对应的共享数据的状态发生变化时，通知其他因此而被阻塞的线程。<font color=red>条件变量总是与互斥锁组合使用，互斥锁为共享数据的访问提供互斥支持，而条件变量可以就共享数据的状态的变化向相关线程发出通知。</font></p>
-<p>**使用场景: ** 我需要完成一项任务，但是这项任务需要满足一定条件才可以执行，否则我就等着。</p>
+<p><strong>使用场景:</strong> 我需要完成一项任务，但是这项任务需要满足一定条件才可以执行，否则我就等着。</p>
 <h4 id="52-方法列表">5.2 方法列表</h4>
 <table>
   <thead>
@@ -1302,7 +1297,7 @@
   <p class="copyright-item">
     <span class="item-title">LastMod</span>
     <span class="item-content">
-        2022-09-27
+        2026-11-13
         
     </span>
   </p>
