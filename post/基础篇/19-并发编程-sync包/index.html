@@ -48,13 +48,13 @@
   <meta property="og:type" content="article">
     <meta property="article:section" content="post">
     <meta property="article:published_time" content="2021-01-19T00:00:00+00:00">
-    <meta property="article:modified_time" content="2026-11-13T14:10:41+08:00">
+    <meta property="article:modified_time" content="2026-11-13T14:20:01+08:00">
     <meta property="article:tag" content="Go基础">
 
   <meta itemprop="name" content="Go学习(十九):并发编程-sync包">
   <meta itemprop="description" content="1.介绍 sync包提供了互斥锁。除了Once和WaitGroup类型，其余多数适用于低水平的程序，多数情况下，高水平的同步使用channel通信性能会更优一些。">
   <meta itemprop="datePublished" content="2021-01-19T00:00:00+00:00">
-  <meta itemprop="dateModified" content="2026-11-13T14:10:41+08:00">
+  <meta itemprop="dateModified" content="2026-11-13T14:20:01+08:00">
   <meta itemprop="wordCount" content="4795">
   <meta itemprop="keywords" content="Go基础">
   <meta name="twitter:card" content="summary">
@@ -1209,7 +1209,7 @@
 <p><code>sync.Once</code> 是使Go方法只执行一次的对象实现，作用与 <code>init</code> 函数类似,但也有所不同。区别如下:</p>
 <ul>
 <li><strong>init</strong> 函数是在文件包首次被加载的时候执行，且只执行一次</li>
-<li><strong>sync.Onc</strong> 是在代码运行中需要的时候执行，且只执行一次</li>
+<li><strong>sync.Once</strong> 是在代码运行中需要的时候执行，且只执行一次</li>
 </ul>
 <h4 id="61-方法介绍">6.1 方法介绍</h4>
 <table>
