@@ -1,5 +1,5 @@
-# Go学习文档博客
-Go学习文档，使用Hugo + Even Theme + GitHub Pages搭建
+# Let's Go
+Go文档，使用Hugo + Even Theme + GitHub Pages搭建
 
 https://shershon1991.github.io/
 
